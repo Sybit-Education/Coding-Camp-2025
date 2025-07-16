@@ -1,6 +1,6 @@
 services:
   1200-jahre-radolfzell-frontend:
-    image: docker pull ghcr.io/sybit-education/coding-camp-2025:main
+    image: ghcr.io/sybit-education/coding-camp-2025:main
     container_name: 1200-jahre-radolfzell-frontend
     restart: unless-stopped
     networks:
@@ -9,12 +9,13 @@ services:
       com.centurylinklabs.watchtower.enable: true
       io.portainer.accesscontrol.teams: azubis
       traefik.enable: true
-      traefik.http.routers.1200-jahre-radolfzell-frontend.entrypoints: websecure
+      traefik.http.routers.1200-jahre-radolfzell-frontend.entrypoints: web-secure
       traefik.http.routers.1200-jahre-radolfzell-frontend.rule: Host(`1200-jahre-radolfzell.sybit.education`)
       traefik.http.routers.1200-jahre-radolfzell-frontend.tls: true
+      traefik.http.routers.1200-jahre-radolfzell-frontend.middlewares: secHeaders@file
       traefik.http.services.1200-jahre-radolfzell-frontend.loadbalancer.server.port: 80
       traefik.http.services.1200-jahre-radolfzell-frontend.loadbalancer.server.scheme: http
 
 networks:
-  traefik:
+  traefik_net:
     external: true
