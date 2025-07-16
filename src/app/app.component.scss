@@ -1,0 +1,21 @@
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+app-header {
+  flex-shrink: 0;
+}
+
+main {
+  flex: 1;
+}
+
+app-footer {
+  flex-shrink: 0;
+}
+
+.carousel-layout {
+  height: 100vh;
+}

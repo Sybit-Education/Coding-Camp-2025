@@ -1,0 +1,37 @@
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  - project: "sybit/education/infrastructure"
+    file: "/gitlab/Angular/dependency-track-export.gitlab-ci.yml"
+    ref: "main"
+  - project: "sybit/education/infrastructure"
+    file: "/gitlab/Angular/build.gitlab-ci.yml"
+    ref: "main"
+  - project: "sybit/education/infrastructure"
+    file: "/gitlab/Angular/security-scan.gitlab-ci.yml"
+    ref: "main"
+  - project: "sybit/education/infrastructure"
+    file: "/gitlab/Angular/lint.gitlab-ci.yml"
+    ref: "main"
+  - project: "sybit/education/infrastructure"
+    file: "/gitlab/Angular/sonar-qube.gitlab-ci.yml"
+    ref: "main"
+  - project: "sybit/education/infrastructure"
+    file: "/gitlab/Docker/docker.gitlab-ci.yml"
+    ref: "main"
+  - project: "sybit/education/infrastructure"
+    file: "/gitlab/Docker/watchtower-update.gitlab-ci.yml"
+    ref: "main"
+
+stages:
+  - build
+  - code-quality
+  - security
+  - test
+  - deploy
+
+variables:
+  NODE_VERSION: 22
+
+default:
+  tags:
+    - education

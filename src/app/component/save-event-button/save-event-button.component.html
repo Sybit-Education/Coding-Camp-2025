@@ -1,0 +1,12 @@
+<button
+  (click)="toggleSave()"
+  [class]="getButtonClass() + ' ' + getButtonColors()"
+  [disabled]="!eventId"
+>
+  @if (size === 'small') {
+    <span class="text-lg">{{ isSaved ? '⭐' : '☆' }}</span>
+  } @else {
+    <span class="text-xl">{{ isSaved ? '⭐' : '☆' }}</span>
+    <span>{{ isSaved ? 'Event gespeichert' : 'Event speichern' }}</span>
+  }
+</button>

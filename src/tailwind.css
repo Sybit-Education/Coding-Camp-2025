@@ -1,0 +1,22 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-dark-red: #c52f5a;
+  --color-light-blue: #979bcf;
+  --color-coral: #f78864;
+  --color-indigo: #2d398e;
+  --color-indigo-light: #5a66b8;
+  --color-yellow: #f4d42b;
+
+  --font-family-spezia: SpeziaWide, ui-sans-serif, system-ui, sans-serif;
+
+  --colors-primary: var(--color-dark-red);
+  --colors-secondary: var(--color-coral);
+  --colors-accent: var(--color-yellow);
+  --colors-indigo: var(--color-indigo);
+  --colors-indigo-light: var(--color-indigo-light);
+  --colors-light-blue: var(--color-light-blue);
+  --colors-dark-red: var(--color-dark-red);
+  --colors-coral: var(--color-coral);
+  --colors-yellow: var(--color-yellow);
+}

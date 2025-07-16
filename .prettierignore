@@ -1,0 +1,13 @@
+.vim
+.idea
+.vscode
+.tests
+.storybook
+deployment
+out-tsc
+dist
+coverage
+node_modules
+documentation.json
+.gitlab-ci.yml
+.gitignore

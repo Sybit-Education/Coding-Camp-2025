@@ -1,0 +1,47 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "schedule": [
+    "at any time"
+  ],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "major": {
+    "minimumReleaseAge": "14 days"
+  },
+  "minor": {
+    "minimumReleaseAge": "7 days"
+  },
+  "packageRules": [
+    {
+      "groupName": "Angular",
+      "matchPackageNames": [
+        "@angular"
+      ],
+      "major": {
+        "enabled": false
+      }
+    },
+    {
+      "groupName": "eslint",
+      "matchPackageNames": [
+        "/eslint/"
+      ]
+    },
+    {
+      "groupName": "karma",
+      "matchPackageNames": [
+        "/karma/"
+      ]
+    }
+  ],
+  "patch": {
+    "groupName": "dependencies (patch)",
+    "groupSlug": "patch",
+    "minimumReleaseAge": "3 days"
+  },
+  "prCreation": "immediate",
+  "prHourlyLimit": 10,
+  "timezone": "Europe/Berlin",
+  "updateInternalDeps": true
+}
