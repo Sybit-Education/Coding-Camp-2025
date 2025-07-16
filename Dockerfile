@@ -9,7 +9,7 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
-RUN ng build --configuration=${environment}
+RUN ng build --configuration=production
 
 RUN cp -r /app/dist/1200-jahre-radolfzell/browser/* /app/dist/1200-jahre-radolfzell/
 

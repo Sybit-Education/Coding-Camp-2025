@@ -1,16 +1,16 @@
 services:
   1200-jahre-radolfzell-frontend:
-    image: registry.gitlab.sybit.dev/sybit/education/sybit-coding-camp/coding-camp-2025/1200-jahre-radolfzell:latest
+    image: ghcr.io/sybit-education/Coding-Camp-2025:main
     container_name: 1200-jahre-radolfzell-frontend
     restart: unless-stopped
     networks:
-      - traefik
+      - traefik_net
     labels:
       com.centurylinklabs.watchtower.enable: true
       io.portainer.accesscontrol.teams: azubis
       traefik.enable: true
       traefik.http.routers.1200-jahre-radolfzell-frontend.entrypoints: websecure
-      traefik.http.routers.1200-jahre-radolfzell-frontend.rule: Host(`1200-jahre-radolfzell.namibia.sybit.de`)
+      traefik.http.routers.1200-jahre-radolfzell-frontend.rule: Host(`1200-jahre-radolfzell.sybit.education`)
       traefik.http.routers.1200-jahre-radolfzell-frontend.tls: true
       traefik.http.services.1200-jahre-radolfzell-frontend.loadbalancer.server.port: 80
       traefik.http.services.1200-jahre-radolfzell-frontend.loadbalancer.server.scheme: http
