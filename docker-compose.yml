@@ -1,6 +1,6 @@
 services:
   1200-jahre-radolfzell-frontend:
-    image: ghcr.io/sybit-education/Coding-Camp-2025:main
+    image: docker pull ghcr.io/sybit-education/coding-camp-2025:main
     container_name: 1200-jahre-radolfzell-frontend
     restart: unless-stopped
     networks:
