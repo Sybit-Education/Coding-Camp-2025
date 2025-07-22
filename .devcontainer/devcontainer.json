@@ -5,8 +5,19 @@
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
 	"features": {
-		"ghcr.io/devcontainers-extra/features/angular-cli:2": {},
-		"ghcr.io/devcontainers-extra/features/prettier:1": {}
+		"ghcr.io/devcontainers-extra/features/angular-cli:2": {
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers-extra/features/prettier:1": {
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers/features/github-cli:1": {
+			"installDirectlyFromGitHubRelease": true,
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers-extra/features/gitomatic:1": {
+			"version": "latest"
+		}
 	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
