@@ -15,9 +15,6 @@
 			"installDirectlyFromGitHubRelease": true,
 			"version": "latest"
 		},
-		"ghcr.io/devcontainers-extra/features/gitomatic:1": {
-			"version": "latest"
-		},
 		"git-lfs": "latest"
 	},
 
