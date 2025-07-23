@@ -27,7 +27,7 @@
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "npm install",
 	"onCreateCommand": "sudo cp .devcontainer/welcome-message.txt /usr/local/etc/vscode-dev-containers/first-run-notice.txt",
-    "waitFor": "postCreateCommand",
+	"waitFor": "postCreateCommand",
 
 	// Configure tool-specific properties.
 	// "customizations": {},
