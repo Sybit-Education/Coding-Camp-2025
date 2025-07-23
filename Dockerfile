@@ -1,6 +1,6 @@
 FROM node:lts AS build-stage
 
-ARG environment=staging
+ARG environment=production
 WORKDIR /app
 
 RUN npm i -g @angular/cli
