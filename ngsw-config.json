@@ -32,7 +32,7 @@
       "updateMode": "prefetch",
       "resources": {
         "files": [
-          "/app/locale/*.json"
+          "/assets/i18n/*.json"
         ]
       }
     }

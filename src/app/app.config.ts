@@ -9,7 +9,7 @@ import { routes } from './app.routes'
 
 // Factory-Funktion für den TranslateLoader
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, './app/locale/', '.json')
+  return new TranslateHttpLoader(http)
 }
 
 export const appConfig: ApplicationConfig = {

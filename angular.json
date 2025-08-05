@@ -30,8 +30,8 @@
               },
               {
                 "glob": "**/*.json",
-                "input": "src/app/locale",
-                "output": "/app/locale"
+                "input": "src/assets/i18n",
+                "output": "/assets/i18n"
               }
             ],
             "styles": [
