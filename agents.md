@@ -21,8 +21,8 @@
    - Für komplexe Flows: NgRx oder ComponentStore  
    - Alternativ Signals oder rxResource für zoneless Change Detection  
 8. **Internationalisierung (I18n)**:  
-   - `ng add @angular/localize` oder ngx‑translate/Transloco  
-   - Nutze `i18n`‑Attribute oder `TranslateService` mit JSON‑Dateien  
+   - Verwende `ngx-translate` für die Übersetzungsverwaltung
+   - Nutze `TranslateService` mit JSON‑Dateien für Übersetzungen
    - Aktivierung von ESLint‑Regeln wie `@angular-eslint/template/i18n` ([i18n Best Practices])  
    - Build‑Konfigurationen für mindestens zwei Sprachen (`de`, `en`)  
 9. **Barrierefreiheit (Accessibility / A11y)**:  
