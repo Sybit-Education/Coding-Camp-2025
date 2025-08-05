@@ -32,7 +32,7 @@ Basierend auf den Anforderungen in `agents.md` fehlen noch folgende Komponenten 
 - [ ] Keine Vorbereitung für Server-Side Rendering (SSR)
 
 ## SurrealDB Integration
-- [ ] Live-Query-Funktionalität nicht vollständig implementiert
+- [ ] Live-Query-Funktionalität nicht vollständigy implementiert
 - [ ] Authentifizierung über SurrealDB nicht implementiert
 
 ## Nächste Schritte
