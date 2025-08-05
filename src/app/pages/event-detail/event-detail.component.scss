@@ -1,37 +1,36 @@
 .event-container {
-    display: grid;
-    grid-template-areas: 
-        "title title"
-        "picture picture"
-        "info info"
-        "description description"
-        "map map";
-    grid-template-rows: 80px 3fr 1fr 2fr 2fr;
+  display: grid;
+  grid-template-areas:
+    'title title'
+    'picture picture'
+    'info info'
+    'description description'
+    'map map';
+  grid-template-rows: 80px 3fr 1fr auto auto;
 }
 
 .title {
-    grid-area: title;
-    font-family: 'Meta Pro';
+  grid-area: title;
 }
 
 .info {
-    grid-area: info;
+  grid-area: info;
 }
 
 .picture {
-    grid-area: picture;
+  grid-area: picture;
 }
 
 .picture img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
 }
 
 .description {
-    grid-area: description;
+  grid-area: description;
 }
 
 .map {
-    grid-area: map;
+  grid-area: map;
 }
