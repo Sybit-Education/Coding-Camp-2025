@@ -1,22 +1,43 @@
 @import 'tailwindcss';
 
+/* Logofarben */
+
 @theme {
-  --color-dark-red: #c52f5a;
-  --color-light-blue: #979bcf;
-  --color-coral: #f78864;
-  --color-indigo: #2d398e;
-  --color-indigo-light: #5a66b8;
-  --color-yellow: #f4d42b;
+  --color-dark-pink: #c70d56; 
+  --color-indigo-light: #6d7cbc; 
+  --color-peach: #f18b70; 
+  --color-dark-blue: #3b4ea3; 
+  --color-yellow: #fdc61a; 
 
-  --font-family-spezia: SpeziaWide, ui-sans-serif, system-ui, sans-serif;
+  --font-family-spezia: Meta Pro, ui-sans-serif, system-ui, sans-serif;
 
-  --colors-primary: var(--color-dark-red);
-  --colors-secondary: var(--color-coral);
+  --colors-primary: var(--color-dark-pink);
+  --colors-secondary: var(--color-peach);
   --colors-accent: var(--color-yellow);
-  --colors-indigo: var(--color-indigo);
-  --colors-indigo-light: var(--color-indigo-light);
-  --colors-light-blue: var(--color-light-blue);
-  --colors-dark-red: var(--color-dark-red);
-  --colors-coral: var(--color-coral);
+  --colors-indigo: var(--color-dark-blue);
+  --colors-light-blue: var(--color-indigo-light);
+  --colors-dark-red: var(--color-dark-pink);
+  --colors-coral: var(--color-peach);
   --colors-yellow: var(--color-yellow);
 }
+
+
+  /* Hintergrund */
+
+@theme {
+  --color-pink: #f197c0; 
+  --color-light-blue: #a7b1db; 
+  --color-peach-light: #fbd2bc; 
+  --color-orange-light: #f5ae8e; 
+
+  --font-family-spezia: Meta Pro, ui-sans-serif, system-ui, sans-serif;
+
+  --colors-primary: var(--color-color-pink);
+  --colors-secondary: var(--color-peach);
+  --colors-accent: var(--color-yellow);
+  --colors-indigo: var(--color-dark-blue);
+  --colors-light-blue: var(--color-light-blue);
+  --colors-dark-red: var(--color-color-pink);
+  --colors-coral: var(--color-peach-light);
+}
+
