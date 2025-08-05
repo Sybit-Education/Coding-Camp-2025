@@ -6,9 +6,16 @@
     <ul>
       <li>Preis</li>
       <li>Ort</li>
-      <li>Wann</li>
+      <li>Wann:</li>
     </ul>
   </div>
+<div class="info2 flex items-end justify-end rounded-2xl p-4 text-xl">
+    <ul>
+        <li>25€</li>
+        <li>Radofzell</li>
+        <li>05.08.2026</li>
+    </ul>
+</div>
   <div class="picture p-4">
     <img
       class="rounded-2xl"
@@ -22,7 +29,14 @@
       eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
     </p>
   </div>
-  <div class="map p-4">
+  <div class="map p-4 ">
+    <!--<app-calendar
+    [title]="'Mein Event'"
+  [description]="'Details zum Event'"
+  [location]="'Berlin, Deutschland'"
+  [startDateTime]="'2025-08-10T15:00:00'"
+  [endDateTime]="'2025-08-10T16:00:00'">
+    </app-calendar>-->
     <app-map [coordinates]="[47.734855, 8.971706]"></app-map>
   </div>
-</div>
+</div> 

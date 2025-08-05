@@ -3,10 +3,11 @@
   grid-template-areas:
     'title title'
     'picture picture'
-    'info info'
+    'info info2'
     'description description'
     'map map';
   grid-template-rows: 80px 3fr 1fr auto auto;
+  grid-template-columns: 2fr 2fr;
 }
 
 .title {
