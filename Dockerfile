@@ -14,7 +14,7 @@ RUN ng build --configuration=production
 RUN cp -r /app/dist/1200-jahre-radolfzell/browser/* /app/dist/1200-jahre-radolfzell/
 
 
-FROM nginx:stable AS production-stage
+FROM nginx:alpine-slim AS production-stage
 
 WORKDIR /usr/share/nginx/html
 RUN rm -rf ./*
