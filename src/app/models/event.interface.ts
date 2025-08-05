@@ -11,7 +11,7 @@ export enum EventType {
   TANZ = 'Tanz',
 }
 
-export interface Event {
+export interface Event extends Record<string, unknown> {
   id: string
   title: string
   description: string
