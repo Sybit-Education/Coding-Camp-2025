@@ -1,34 +1,40 @@
-import { Injectable, inject } from '@angular/core'
+import { Injectable, inject, OnInit } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 import { BehaviorSubject, Observable } from 'rxjs'
 
 @Injectable({
   providedIn: 'root',
 })
-export class I18nService {
+export class I18nService implements OnInit {
   private translateService = inject(TranslateService)
   private currentLangSubject = new BehaviorSubject<string>('de')
   
   currentLang$ = this.currentLangSubject.asObservable()
 
   constructor() {
+    this.initializeTranslation();
+  }
+
+  ngOnInit(): void {
+    // Wird durch den Konstruktor bereits aufgerufen
+  }
+
+  private initializeTranslation(): void {
     // Verfügbare Sprachen festlegen
-    this.translateService.addLangs(['de', 'en'])
+    this.translateService.addLangs(['de', 'en']);
     
-    // Standardsprache festlegen
-    this.translateService.setDefaultLang('de')
+    // Fallback-Sprache festlegen (statt setDefaultLang)
+    this.translateService.setDefaultLang('de');
     
     // Browser-Sprache erkennen oder Standardsprache verwenden
-    const browserLang = this.translateService.getBrowserLang()
-    const initialLang = browserLang && ['de', 'en'].includes(browserLang) ? browserLang : 'de'
+    const browserLang = this.translateService.getBrowserLang();
+    const initialLang = browserLang && ['de', 'en'].includes(browserLang) ? browserLang : 'de';
     
-    this.use(initialLang)
+    // Gespeicherte Sprache aus localStorage verwenden, falls vorhanden
+    const savedLang = localStorage.getItem('selectedLanguage');
     
-    // Speichern der ausgewählten Sprache im localStorage
-    const savedLang = localStorage.getItem('selectedLanguage')
-    if (savedLang) {
-      this.use(savedLang)
-    }
+    // Sprache setzen
+    this.use(savedLang || initialLang);
   }
 
   /**
