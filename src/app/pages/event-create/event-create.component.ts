@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common'
-import { Component} from '@angular/core'
+import { Component, inject} from '@angular/core'
 import { FormsModule } from '@angular/forms'
+import { EventService } from '../../services/event.service'
+import { EventType } from '../../models/event.interface'
 
 @Component({
   selector: 'app-event-create',
@@ -9,8 +11,29 @@ import { FormsModule } from '@angular/forms'
   styleUrl: './event-create.component.scss',
 })
 export class EventCreateComponent {
+
+  private eventService: EventService = inject(EventService)
+
   eventname=""
   description=""
   placename=""
   placeadress=""
+  organizer=""
+  organizername=""
+  organizerphone=""
+  organizermail=""
+  organizeradress=""
+  price=""
+  eventTypes: EventType[] = []
+
+   ngOnInit(){
+    this.initialzeTypes()
+  }
+
+
+  async initialzeTypes() {
+    this.eventTypes =  await this.eventService.getAllEventTypes()
+  }
+
+ 
 }

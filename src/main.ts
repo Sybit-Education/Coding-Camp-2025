@@ -5,6 +5,7 @@ import { provideAppInitializer, inject, isDevMode } from '@angular/core'
 import { provideServiceWorker } from '@angular/service-worker'
 import { provideRouter } from '@angular/router'
 import { routes } from './app/app.routes'
+import { EventService } from './app/services/event.service'
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -12,6 +13,9 @@ bootstrapApplication(AppComponent, {
     provideAppInitializer(() => {
       const surrealdb = inject(SurrealdbService)
       return surrealdb.initialize()
+    }),
+    provideAppInitializer(() => {
+      inject(EventService)
     }),
     SurrealdbService,
     provideServiceWorker('ngsw-worker.js', {

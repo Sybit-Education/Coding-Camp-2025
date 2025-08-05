@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
-import { Event } from '../models/event.interface'
+import { Event, EventType } from '../models/event.interface'
 import { surql } from 'surrealdb'
 
 @Injectable({
@@ -26,6 +26,17 @@ export class EventService {
             id: item['id']?.toString() || '',
           }) as Event,
       )
+    } catch (error) {
+      throw new Error(`Fehler beim Laden der Events: ${error}`)
+    }
+  }
+
+  async getAllEventTypes(): Promise<EventType[]> {
+    try {
+      const result = await this.surrealdb.getAll('event_type')
+      return (result || []).map(
+        (item: Record<string, unknown>) => item['name'] as string
+      ) as unknown as EventType[]
     } catch (error) {
       throw new Error(`Fehler beim Laden der Events: ${error}`)
     }
