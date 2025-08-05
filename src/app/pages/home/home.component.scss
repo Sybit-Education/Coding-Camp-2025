@@ -5,4 +5,12 @@
 .home-container {
   padding: 1rem;
   overflow-x: hidden;
+  justify-content: center;
+  
+}
+
+.image{
+  display: flex;
+  width: 40vw;
+  justify-content: center;
 }
