@@ -82,13 +82,13 @@ DEFINE FIELD OVERWRITE location ON event TYPE option<record<location>>;
 DEFINE FIELD OVERWRITE media ON event TYPE option<array<record<media>>>;
 
 
+
 DEFINE TABLE OVERWRITE organizer TYPE NORMAL SCHEMAFULL
     PERMISSIONS
         FOR create, select FULL,
         FOR update, delete WHERE $auth != NONE;
 DEFINE FIELD OVERWRITE id ON organizer;
-DEFINE FIELD OVERWRITE lastname ON organizer TYPE string;
-DEFINE FIELD OVERWRITE firstname ON organizer TYPE option<string>;
+DEFINE FIELD OVERWRITE name ON organizer TYPE string;
 DEFINE FIELD OVERWRITE email ON organizer TYPE option<string>;
 DEFINE FIELD OVERWRITE phonenumber ON organizer TYPE option<number>;
 
