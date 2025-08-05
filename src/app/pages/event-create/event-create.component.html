@@ -1,0 +1,58 @@
+<h1>Event erstellen</h1>
+<form>
+    <div>
+        <label for="eventName">Event-Name: </label>
+        <input id="eventName" name="eventName" type="text" [(ngModel)]="eventname">
+    </div>
+    <div class="pl-10">
+        <details>
+            <summary>Zeit</summary>
+            <p>Zeitraum</p>
+            <p>Datum</p>
+        </details>
+    </div>
+    <div>
+        <label for="description">Eventbeschreibung: </label>
+        <input id="description" name="description" type="text" [(ngModel)]="description">
+    </div>
+    <div class="pl-10">
+        <details>
+            <summary>Ort</summary>
+            <p><label for="placename">Ortsname: </label>
+                <input id="placename" name="placename" type="text" [(ngModel)]="placename">
+            </p>
+            <p><label for="placeadress">Adresse: </label>
+                <input id="placeadess" name="placeadress" type="text" [(ngModel)]="placeadress">
+            </p>
+        </details>
+    </div>
+    <div id="choose-category" class="z-10 w-48 bg-white rounded-lg shadow-sm dark:bg-gray-100 text-center">
+        <h1>Kategorien</h1>
+        <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="choose-category">
+            <li>
+                <div class="flex items-center p-2 rounded-sm hover:bg-gray-100 dark:hover:bg-gray-300">
+                    <input id="checkbox-culture" type="checkbox" value=""
+                        class="w-4 h-4 text-light-blue bg-gray-100 border-gray-300 rounded-sm dark:bg-gray-600 dark:border-gray-500">
+                    <label for="checkbox-culture"
+                        class="w-full ms-2 text-sm font-medium text-gray-900 rounded-sm dark:text-gray-700">Kultur</label>
+                </div>
+            </li>
+            <li>
+                <div class="flex items-center p-2 rounded-sm hover:bg-gray-100 dark:hover:bg-gray-300">
+                    <input id="checkbox-history" type="checkbox" value=""
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm dark:bg-gray-600 dark:border-gray-500">
+                    <label for="checkbox-history"
+                        class="w-full ms-2 text-sm font-medium text-gray-900 rounded-sm dark:text-gray-700">Geschichte</label>
+                </div>
+            </li>
+            <li>
+                <div class="flex items-center p-2 rounded-sm hover:bg-gray-100 dark:hover:bg-gray-300">
+                    <input id="checkbox-unfolding" type="checkbox" value=""
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm dark:bg-gray-600 dark:border-gray-500">
+                    <label for="checkbox-unfolding"
+                        class="w-full ms-2 text-sm font-medium text-gray-900 rounded-sm dark:text-gray-700">Entfaltung</label>
+                </div>
+            </li>
+        </ul>
+    </div>
+</form>

@@ -20,5 +20,3 @@ bootstrapApplication(AppComponent, {
     }),
   ],
 })
-
-

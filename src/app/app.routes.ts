@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router'
 import { HomeComponent } from './pages/home/home.component'
 import { AboutComponent } from './pages/about/about.component'
+import { EventCreateComponent } from './pages/event-create/event-create.component'
 
 export const routes: Routes = [
   {
@@ -10,6 +11,10 @@ export const routes: Routes = [
   {
     path: 'about',
     component: AboutComponent,
+  },
+  {
+    path: 'create-event',
+    component: EventCreateComponent,
   },
   {
     path: 'event/:id',
