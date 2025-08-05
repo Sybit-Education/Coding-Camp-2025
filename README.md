@@ -60,7 +60,7 @@ For more information on using the Angular CLI, including detailed command refere
 
 DB Script
 
-```bash
+```sql
 DEFINE TABLE OVERWRITE event TYPE NORMAL SCHEMAFULL
     PERMISSIONS
         FOR create, select FULL,
@@ -80,7 +80,6 @@ DEFINE FIELD OVERWRITE organizer ON event TYPE option<record<organizer>>;
 DEFINE FIELD OVERWRITE event_type ON event TYPE option<record<event_type>>;
 DEFINE FIELD OVERWRITE location ON event TYPE option<record<location>>;
 DEFINE FIELD OVERWRITE media ON event TYPE option<array<record<media>>>;
-
 
 
 DEFINE TABLE OVERWRITE organizer TYPE NORMAL SCHEMAFULL
