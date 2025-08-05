@@ -1,76 +1,144 @@
-<h1>Event erstellen</h1>
-<form>
-    <div>
-        <label for="eventName">Event-Name: </label>
-        <input id="eventName" name="eventName" type="text" [(ngModel)]="eventname">
-    </div>
-    <div>
-        <label for="date">Datum: </label>
-        <input id="date" type="date">
-        <label for="time">Uhrzeit: </label>
-        <input id="time" type="time">
-    </div>
-    <div>
-        <label for="price">Kosten: </label>
-        <input id="price" name="price" type="text" [(ngModel)]="price">
-    </div>
-    <div>
-        <details>
-            <summary>Ort</summary>
-            <p><label for="placename">Ortsname: </label>
-                <input id="placename" name="placename" type="text" [(ngModel)]="placename">
-            </p>
-            <p><label for="placeadress">Adresse: </label>
-                <input id="placeadess" name="placeadress" type="text" [(ngModel)]="placeadress">
-            </p>
-        </details>
-    </div>
-    <div>
-        <label for="description">Eventbeschreibung: </label>
-        <input id="description" name="description" type="text" [(ngModel)]="description">
-    </div>
-    <div id="choose-category" class="z-10 w-75 bg-white rounded-lg shadow-sm dark:bg-gray-100">
-        <h1 class=" text-center text-sm font-medium text-gray-900 dark:text-gray-700">Kategorien</h1>
-        <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="choose-category">
-            <li *ngFor="eventType of eventTypes; let i = index">
-                <div class="flex items-center p-2 rounded-sm hover:bg-gray-100 dark:hover:bg-gray-300">
-                    <input id="checkbox{{i}}" type="checkbox" value=""
-                        class="w-4 h-4 text-light-blue bg-gray-100 border-gray-300 rounded-sm dark:bg-gray-600 dark:border-gray-500">
-                    <label for="checkbox{{i}}"
-                        class="w-full ms-2 text-sm font-medium text-gray-900 rounded-sm dark:text-gray-700">{{eventTypes[i]}}</label>
-                </div>
-            </li>
-        </ul>
-    </div>
-    <div>
-        <select>
-            <option selected>Art des Events</option>
-            <div *ngFor="eventType of eventTypes; let i = index">
-                <option>
-                    {{eventTypes[i]}}
-                </option>
+<div class="bg-light-blue flex justify-center p-5 text-shadow-gray-500 leading-relaxed">
+    <form class="grid sm:grid-cols-[1fr] md:grid-cols-[1fr_1fr] gap-[3rem] rounded-2xl bg-white p-6 text-black">
+        <div class="flex flex-col">
+            <div>
+                <label for="eventName">Event-Name: </label>
+                <input id="eventName" name="eventName" type="text" [(ngModel)]="eventname"
+                    class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" />
             </div>
-        </select>
-    </div>
-    <div>
-        <label for="organizer">Veranstalter: </label>
-        <input id="organizer" name="organizer" type="text" [(ngModel)]="organizer">
-    </div>
-    <div>
-        <details>
-            <summary>Kontakt zum Veranstalter</summary>
-            <p><label for="organizername">Ansprechpartner: </label>
-                <input id="organizername" name="organizername" type="text" [(ngModel)]="organizername">
-            </p>
-            <p><label for="organizerphone">Telefonnummer: </label>
-                <input id="organizerphone" name="organizerphone" type="text" [(ngModel)]="organizerphone">
-            </p>
-            <p><label for="organizermail">E-Mail: </label>
-                <input id="organizermail" name="organizermail" type="text" [(ngModel)]="organizermail">
-            </p>
-            <p><label for="organizeradress">Adresse: </label>
-                <input id="organizeradress" name="organizeradress" type="text" [(ngModel)]="organizeradress">
-            </p>
-        </details>
-    </div>
-</form>
+            <div>
+                <label for="organizer">Veranstalter: </label>
+                <input id="organizer" name="organizer" type="text" [(ngModel)]="organizer"
+                    class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" />
+            </div>
+            <div>
+                <label for="description">Eventbeschreibung: </label>
+                <textarea id="description" name="description" type="text" [(ngModel)]="description"
+                    class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600"></textarea>
+            </div>
+            <div id="choose-category" class="z-10 w-75 rounded-lg bg-white shadow-sm dark:bg-gray-100">
+                <h1 class="text-center text-sm font-medium text-gray-900 dark:text-gray-700">
+                    Kategorien
+                </h1>
+                <ul class="space-y-1 p-3 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="choose-category">
+                    <li *ngFor="eventType of eventTypes; let i = index">
+                        <div class="flex items-center rounded-sm p-2 hover:bg-gray-100 dark:hover:bg-gray-300">
+                            <input id="checkbox{{ i }}" type="checkbox" value=""
+                                class="text-light-blue h-4 w-4 rounded-sm border-gray-300 bg-gray-100 dark:border-gray-500 dark:bg-gray-600" />
+                            <label for="checkbox{{ i }}"
+                                class="ms-2 w-full rounded-sm text-sm font-medium text-gray-900 dark:text-gray-700">{{
+                                eventTypes[i] }}</label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="grid grid-cols-[1fr_1fr] gap-[1rem]">
+                <label for="date">Startdatum: </label>
+                <input id="date" type="date" class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" />
+                <label for="time">Startzeit: </label>
+                <input id="time" type="time" class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" />
+            </div>
+            <div *ngIf="false" class="grid grid-cols-[1fr_1fr] gap-[1rem]">
+                <label for="date">Enddatum: </label>
+                <input id="date" type="date" class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" />
+                <label for="time">Endzeit: </label>
+                <input id="time" type="time" class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" />
+            </div>
+
+            <div>
+                <label for="price">Preis (€): </label>
+                <input id="price" name="price" type="number" min="0" step="0.01" placeholder="0.00" [(ngModel)]="price"
+                    class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" />
+            </div>
+            <div>
+                <label for="moreInfoLink">Mehr Infos: </label>
+                <input id="moreInfoLink" name="moreInfoLink" type="text" placeholder="https://..."
+                    [(ngModel)]="moreInfoLink"
+                    class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" />
+            </div>
+        </div>
+
+        <div class="flex flex-col">
+            <div>
+                <select name="location" id="location"
+                    class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600"
+                    placeholder="Location wählen..." [(ngModel)]="selectedLocation" (change)="setLocation()">
+                    <option selected>Location wählen...</option>
+                    <div *ngFor="let location of locations; let i = index">
+                        <option>
+                            {{ locations[i].name }}
+                        </option>
+                    </div>
+                </select>
+                <button type="submit" class="btn btn-primary" style="margin-top: 5px;"
+                    (click)="newLocation = !newLocation">
+                    Location erstellen
+                </button>
+            </div>
+
+            <div *ngIf="newLocation">
+                <div>
+                    <label for="locationName">Location-Name</label>
+                    <input type="text" id="locationName" name="locationName"
+                        class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600"
+                        placeholder="Name der Location" [(ngModel)]="locationName" required />
+                </div>
+
+                <div>
+                    <label for="address">Adresse</label>
+                    <input type="text" id="address" name="address"
+                        class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600"
+                        placeholder="Straße und Hausnummer" [(ngModel)]="address" />
+                </div>
+
+                <div class="grid gid-cols-[1fr_1fr] gap-[1rem]">
+                    <div>
+                        <label for="postalCode">PLZ</label>
+                        <input type="text" id="postalCode" name="postalCode"
+                            class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" [(ngModel)]="plz"
+                            required />
+                    </div>
+                    <div>
+                        <label for="city">Stadt</label>
+                        <input type="text" id="city" name="city"
+                            class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600"
+                            [(ngModel)]="city" />
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <select>
+                    <option selected>Art des Events</option>
+                    <div *ngFor="eventType of eventTypes; let i = index">
+                        <option>
+                            {{ eventTypes[i] }}
+                        </option>
+                    </div>
+                </select>
+            </div>
+
+            <div>
+                <details>
+                    <summary>Kontakt zum Veranstalter</summary>
+                    <p>
+                        <label for="organizername">Ansprechpartner: </label>
+                        <input id="organizername" name="organizername" type="text" [(ngModel)]="organizername" />
+                    </p>
+                    <p>
+                        <label for="organizerphone">Telefonnummer: </label>
+                        <input id="organizerphone" name="organizerphone" type="text" [(ngModel)]="organizerphone" />
+                    </p>
+                    <p>
+                        <label for="organizermail">E-Mail: </label>
+                        <input id="organizermail" name="organizermail" type="text" [(ngModel)]="organizermail" />
+                    </p>
+                    <p>
+                        <label for="organizeradress">Adresse: </label>
+                        <input id="organizeradress" name="organizeradress" type="text" [(ngModel)]="organizeradress" />
+                    </p>
+                </details>
+            </div>
+        </div>
+    </form>
+</div>

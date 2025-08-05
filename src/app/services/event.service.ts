@@ -7,14 +7,11 @@ import { surql } from 'surrealdb'
   providedIn: 'root',
 })
 export class EventService {
-
   private surrealdb: SurrealdbService = inject(SurrealdbService)
-
 
   async getEventByID(id: string): Promise<Event> {
     return await this.surrealdb.getById<Event>(id)
   }
-
 
   async getAllEvents(): Promise<Event[]> {
     try {
@@ -35,13 +32,12 @@ export class EventService {
     try {
       const result = await this.surrealdb.getAll('event_type')
       return (result || []).map(
-        (item: Record<string, unknown>) => item['name'] as string
+        (item: Record<string, unknown>) => item['name'] as string,
       ) as unknown as EventType[]
     } catch (error) {
       throw new Error(`Fehler beim Laden der Events: ${error}`)
     }
   }
-
 
   /**
    * BSP payload für create:
