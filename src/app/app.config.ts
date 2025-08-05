@@ -8,8 +8,8 @@ import { HttpClient } from '@angular/common/http'
 import { routes } from './app.routes'
 
 // Factory-Funktion für den TranslateLoader
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http)
+export function HttpLoaderFactory() {
+  return new TranslateHttpLoader()
 }
 
 export const appConfig: ApplicationConfig = {
@@ -24,7 +24,7 @@ export const appConfig: ApplicationConfig = {
         loader: {
           provide: TranslateLoader,
           useFactory: HttpLoaderFactory,
-          deps: [HttpClient]
+          deps: []
         }
       })
     }
