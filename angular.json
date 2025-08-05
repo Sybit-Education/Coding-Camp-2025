@@ -27,6 +27,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*.json",
+                "input": "src/app/locale",
+                "output": "/app/locale"
               }
             ],
             "styles": [
@@ -58,6 +63,16 @@
               ],
               "outputHashing": "all",
               "serviceWorker": "ngsw-config.json"
+            },
+            "production-de": {
+              "extends": "production",
+              "i18nFile": "src/app/locale/de.json",
+              "i18nLocale": "de"
+            },
+            "production-en": {
+              "extends": "production",
+              "i18nFile": "src/app/locale/en.json",
+              "i18nLocale": "en"
             },
             "staging": {
               "optimization": false,
@@ -92,7 +107,10 @@
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n"
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "1200-jahre-radolfzell:build"
+          }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",

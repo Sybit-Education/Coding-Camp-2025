@@ -3,10 +3,10 @@
 Basierend auf den Anforderungen in `agents.md` fehlen noch folgende Komponenten oder Implementierungen:
 
 ## Internationalisierung (I18n)
-- [ ] `ngx-translate` ist nicht installiert oder konfiguriert
-- [ ] Keine Übersetzungsdateien im `locale/` Verzeichnis vorhanden
-- [ ] Keine Verwendung von `TranslateService` in den Komponenten
-- [ ] Keine Build-Konfigurationen für mehrere Sprachen (de, en)
+- [x] `ngx-translate` ist installiert und konfiguriert
+- [x] Übersetzungsdateien im `locale/` Verzeichnis vorhanden
+- [x] Verwendung von `TranslateService` in den Komponenten
+- [x] Build-Konfigurationen für mehrere Sprachen (de, en)
 
 ## Barrierefreiheit (A11y)
 - [ ] Keine Skip-Links für Tastaturnavigation
