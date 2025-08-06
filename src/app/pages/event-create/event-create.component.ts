@@ -1,10 +1,10 @@
-import { CommonModule } from '@angular/common'
 import { Component, inject, OnInit } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { EventService } from '../../services/event.service'
 import { EventType } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
 import { Organizer } from '../../models/organizer.interface'
+import { CommonModule } from '@angular/common'
 
 @Component({
   selector: 'app-event-create',
@@ -23,7 +23,6 @@ export class EventCreateComponent implements OnInit {
   organizername = ''
   organizerphone = ''
   organizermail = ''
-  organizeradress = ''
   price = ''
   eventTypes: EventType[] = []
   moreInfoLink = ''
@@ -33,6 +32,7 @@ export class EventCreateComponent implements OnInit {
   organizerName = ''
   selectedLocation?: string
   selectedOrganizer?: string
+  kp?: string
 
 
   locations: Location[] = []
