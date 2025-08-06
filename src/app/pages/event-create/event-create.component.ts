@@ -22,24 +22,23 @@ export class EventCreateComponent implements OnInit {
   private readonly organizerService: OrganizerService = inject(OrganizerService)
   private readonly topicService: TopicService = inject(TopicService)
 
-  eventname = ''
-  description = ''
-  placename = ''
-  placeadress = ''
-  organizer = ''
-  organizername = ''
-  organizerphone = ''
-  organizermail = ''
-  price = ''
-  moreInfoLink = ''
-  locationName = ''
-  organizerName = ''
-  selectedLocation?: string
-  selectedOrganizer?: string
-  kp?: string
-  address = ''
+  eventname: string | null = null
+  description: string | null = null
+  placename: string | null = null
+  placeadress: string | null = null
+  organizer: string | null = null
+  organizername: string | null = null
+  organizerphone : string | null = null
+  organizermail : string | null = null
+  price: string | null = null
+  moreInfoLink: string | null = null
+  locationName: string | null = null
+  organizerName: string | null = null
+  selectedLocation: string | null = null
+  selectedOrganizer: string | null = null
+  address: string | null = null
   plz = 0
-  city = ''
+  city: string | null = null
 
   newLocation = false
   newOrganizer = false
@@ -48,6 +47,7 @@ export class EventCreateComponent implements OnInit {
   locations: Location[] = []
   organizers: Organizer[] = []
   topics: Topic[] = []
+eventType: string | null = null
 
   ngOnInit() {
     this.initialzeTypes()
@@ -86,18 +86,32 @@ export class EventCreateComponent implements OnInit {
 
   async saveLocation() {
     const location: Location = {
-      name: this.locationName,
-      street: this.address,
+      name: this.locationName!,
+      street: this.address!,
       zip_code: Number(this.plz),
-      city: this.city
+      city: this.city!
     }
 
     try{
-      console.log('new Event: ', location)
       const savedLocation = await this.locationService.postLocation(location);
       console.log("Saved Location ", savedLocation)
     } catch (error) {
       console.error('Fehler beim Speichern:', error);
+    }
+  }
+
+  async saveOrganizer() {
+    const organizer: Organizer = {
+      name: this.organizername!,
+      email: this.organizermail!,
+      phonenumber: Number(this.organizerphone)
+    }
+
+    try {
+      const savedOrganizer = await this.organizerService.postOrganizer(organizer);
+      console.log("Saved Organizer ", savedOrganizer)
+    } catch (error) {
+      console.error('Fehler beim Speichern:', error)
     }
   }
 }

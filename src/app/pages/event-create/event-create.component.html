@@ -13,6 +13,7 @@
           type="text"
           [(ngModel)]="eventname"
           class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600"
+          required
         />
       </div>
       <br />
@@ -34,7 +35,7 @@
         </select>
         <button
           type="submit"
-          class="btn btn-primary cursor-pointer rounded-2xl bg-[var(--colors-light-blue)]"
+          class="btn btn-primary cursor-pointer rounded-2xl bg-[var(--colors-light-blue)] p-2"
           style="margin-top: 5px"
           (click)="newOrganizer = !newOrganizer"
         >
@@ -51,6 +52,7 @@
             type="text"
             [(ngModel)]="organizername"
             class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600"
+            required
           />
         </p>
         <p>
@@ -58,7 +60,7 @@
           <input
             id="organizerphone"
             name="organizerphone"
-            type="text"
+            type="number"
             [(ngModel)]="organizerphone"
             class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600"
           />
@@ -121,7 +123,7 @@
         </select>
         <button
           type="submit"
-          class="btn btn-primary cursor-pointer rounded-2xl bg-[var(--colors-light-blue)]"
+          class="btn btn-primary cursor-pointer rounded-2xl bg-[var(--colors-light-blue)] p-2"
           style="margin-top: 5px"
           (click)="newLocation = !newLocation"
         >
@@ -159,7 +161,7 @@
           <div>
             <label for="postalCode">PLZ</label>
             <input
-              type="text"
+              type="number"
               id="postalCode"
               name="postalCode"
               class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600"
@@ -212,13 +214,13 @@
         <h1
           class="text-center text-sm font-medium text-gray-900 dark:text-gray-700"
         >
-          Thema des Events
+          Themen des Events
         </h1>
         <ul
           class="space-y-1 p-3 text-sm text-gray-700 dark:text-gray-200"
           aria-labelledby="choose-category"
         >
-          <li *ngFor="eventType of eventTypes; let i = index">
+          <li *ngFor="let topic of topics; let i = index">
             <div
               class="flex items-center rounded-sm p-2 hover:bg-gray-100 dark:hover:bg-gray-300"
             >
@@ -231,7 +233,7 @@
               <label
                 for="checkbox{{ i }}"
                 class="ms-2 w-full cursor-pointer rounded-sm text-sm font-medium text-gray-900 dark:text-gray-700"
-                >{{ eventTypes[i] }}</label
+                >{{ topics[i] }}</label
               >
             </div>
           </li>
@@ -241,12 +243,12 @@
       <div>
         <select
           class="p-[0.75rem 1rem] w-[100%] cursor-pointer rounded-[6px] border-2 border-gray-600"
-          [(ngModel)]="kp"
+          [(ngModel)]="eventType"
           name="kp"
           id="kp"
         >
           <option value="" selected>Art des Events</option>
-          <div *ngFor="eventType of eventTypes; let i = index">
+          <div *ngFor="let eventType of eventTypes; let i = index">
             <option>
               {{ eventTypes[i] }}
             </option>
@@ -265,12 +267,13 @@
           class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600"
         />
       </div>
+      <br>
       <div>
         <button
           type="submit"
-          class="btn btn-primary cursor-pointer rounded-2xl bg-[var(--colors-light-blue)]"
+          class="btn btn-primary cursor-pointer rounded-2xl bg-[var(--colors-light-blue)] w-[100%] p-5"
           style="margin-top: 5px"
-          (click)="saveLocation()"
+          (click)="saveOrganizer()"
         >
           Event erstellen
         </button>
