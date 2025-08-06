@@ -1,0 +1,37 @@
+.event-container {
+  display: grid;
+  grid-template-areas:
+    'title title'
+    'picture picture'
+    'info info2'
+    'description description'
+    'map map';
+  grid-template-rows: 80px 3fr 1fr auto auto;
+  grid-template-columns: 2fr 2fr;
+}
+
+.title {
+  grid-area: title;
+}
+
+.info {
+  grid-area: info;
+}
+
+.picture {
+  grid-area: picture;
+}
+
+.picture img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.description {
+  grid-area: description;
+}
+
+.map {
+  grid-area: map;
+}
