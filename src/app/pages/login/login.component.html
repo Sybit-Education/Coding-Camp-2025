@@ -3,10 +3,10 @@
     <form>
       <label for="username" class="block text-x1 fon-semibold mb-2 text-xl">Username:</label>
       <input 	class= "-webkit-box-decoration-break: slice;box-decoration-break: slice; border-2 border-black rounded w-80 h-12 text-lg px-4 mb-6" type="text" id="username" name="username"><br>
-
+<div>
 <div class="relative">
-      <label for="pwd" class="block text-x1 fon-semibold mb-2 text-xl">Password:</label>
-      <input class= "-webkit-box-decoration-break: slice;box-decoration-break: slice; border-2 border-black rounded w-80 h-12 text-lg px-4 mb-6 peer block w-full appearance-none " [type]="showPassword ? 'text' : 'Password'" id="pwd" name="pwd">
+      <input  [type]="showPassword ? 'text' : 'Password'" id="pwd" name="pwd" class= "peer block w-full appearance-none rounded-lg border-1 border-gray-300 bg-transparent px-2.5 pt-4 pb-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none">
+        <label for="pwd" class="absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4">Password:</label>
       <button type="button" (click)="togglePassword()" class="absolute inset-y-0 right-0 z-20">
                 <svg
                   class="size-3.5 shrink-0"
@@ -52,6 +52,7 @@
                 </svg>
               </button>
               </div>
+</div>
       <div>
         <br>
       </div>
