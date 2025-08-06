@@ -1,0 +1,18 @@
+<div class="fixed bottom-4 inset-x-0 flex justify-center px-4">
+  <div
+    class="flex w-full max-w-md justify-around items-center
+           bg-white/30 backdrop-blur-xl border border-white/20
+           rounded-2xl py-3 shadow-lg"
+  >
+    <ng-container *ngFor="let item of items; let i = index">
+      <button
+        class="flex flex-col items-center transition"
+        [ngClass]="activeIndex === i ? 'text-blue-500 scale-110' : 'text-gray-800 hover:text-blue-500'"
+        (click)="setActive(i)"
+      >
+        <span class="w-6 h-6" [innerHTML]="item.icon"></span>
+        <span class="text-xs mt-1">{{ item.label }}</span>
+      </button>
+    </ng-container>
+  </div>
+</div>
