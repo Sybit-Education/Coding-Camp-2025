@@ -1,37 +1,61 @@
 .event-container {
-  display: grid;
+  grid-template-columns: 1fr;
   grid-template-areas:
-    'title title'
-    'picture picture'
-    'info info2'
-    'description description'
-    'map map';
-  grid-template-rows: 80px 3fr 1fr auto auto;
-  grid-template-columns: 2fr 2fr;
+  "info-card"
+  "description"
+  "map"
+  "contact";
 }
 
-.title {
-  grid-area: title;
+@media (width >= 64rem) {
+  .event-container {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 2fr auto 1fr;
+  grid-template-areas:
+  "info-card description"
+  "info-card map"
+  "info-card contact";
+  }
 }
 
-.info {
-  grid-area: info;
+@media (width >= 80rem) {
+  .event-container {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 2fr auto 1fr;
+  grid-template-areas:
+  "info-card description"
+  "info-card map"
+  "info-card contact";
+  padding-left: 10vw;
+  padding-right: 10vw;
+  }
 }
 
-.picture {
-  grid-area: picture;
+@media (width >= 120rem) {
+  .event-container {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto 1fr;
+  grid-template-areas:
+  "info-card description"
+  "info-card map"
+  "info-card contact";
+  padding-left: 20vw;
+  padding-right: 20vw;
+  }
 }
 
-.picture img {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
+.info-card{
+  grid-area: info-card;
 }
 
-.description {
+.desc{
   grid-area: description;
 }
 
-.map {
+.map{
   grid-area: map;
+}
+
+.contact{
+  grid-area: contact;
 }
