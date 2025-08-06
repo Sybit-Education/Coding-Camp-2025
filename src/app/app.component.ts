@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common'
 import { HeaderComponent } from './component/header/header.component'
 import { FooterComponent } from './component/footer/footer.component'
 import { filter } from 'rxjs/operators'
+import { BottomNavComponent } from "./component/bottom-nav/bottom-nav.component";
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent],
+  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent, BottomNavComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
