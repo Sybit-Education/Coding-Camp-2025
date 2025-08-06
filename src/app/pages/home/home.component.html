@@ -10,10 +10,14 @@
   </h1>
   
   <div class="flex grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 overflow-x-auto scroll-smooth scrollbar-hide">
-    <app-event-card class="w-full"></app-event-card>
-    <app-event-card class="w-full"></app-event-card>
-    <app-event-card class="w-full"></app-event-card>
-    <app-event-card class="w-full"></app-event-card>
+    <app-event-card
+      class="w-full"
+      *ngFor="let event of limitedEvents"
+      [title]="event.title"
+      [date]="event.date"
+      [location]="event.location"
+      [price]="event.price"
+    ></app-event-card>
   </div>
 
   <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 ml-5">
