@@ -1,40 +1,3 @@
-.event-container {
-  display: grid;
-  grid-template-areas:
-    'title title'
-    'picture picture'
-    'dash dash'
-    'info info'
-    'description description'
-    'map map'
-    'termin termin'
-    'kontaktdaten kontaktdaten';
-
-  grid-template-rows: 80px auto auto auto auto auto 1fr;
-  grid-template-rows: 80px 3fr 1fr auto auto auto;
-  grid-template-columns: 2fr 2fr;
-}
-
-.title {
-  grid-area: title;
-}
-
-.picture {
-  grid-area: picture;
-}
-
-.description {
-  grid-area: description;
-}
-
-.map {
-  grid-area: map;
-}
-
-.kontaktdaten {
-  grid-area: kontaktdaten;
-}
-
 .dash {
   grid-area: dash;
   width: full;
@@ -44,6 +7,3 @@
   border-color: gray;
 }
 
-.termin {
-  grid-area: termin;
-}

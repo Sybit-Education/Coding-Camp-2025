@@ -1,19 +1,4 @@
 <div class="event-container min-h-[80vh] w-[100vw] gap-5 px-6 py-6">
-
-  <div class="dash"></div>
-
-  <div class="description rounded-2xl bg-gray-100 p-4 shadow-2xl">
-    <div class="flex w-full h-[30px] justify-center items-center">
-      <p class="text-2xl font-bold text-center pt-4 text-blue-900">Beschreibung</p>
-    </div>
-     <div class="dash">
-    <div class="mx-auto my-4 w-[75%] border-t border-blue-900"></div>
-    </div>
-    <p>
-      Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-      eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-    </p>
-  </div>
   <div class="picture rounded-2xl bg-gray-100 shadow-2xl">
     <img
       class="w-full rounded-t-2xl object-cover"
@@ -21,7 +6,7 @@
       [src]="mediaUrl"
     />
     <div class="flex w-full h-[30px] justify-center items-center">
-      <p class="text-2xl font-bold text-center pt-4 text-blue-900">Lange Shoppingnacht</p>
+      <p class="text-2xl font-bold text-center pt-4 text-blue-900">{{ event?.name }}</p>
     </div>
      <div class="dash">
     <div class="mx-auto mt-4 w-[75%] border-t border-blue-900"></div>
@@ -36,7 +21,7 @@
           </div>
           <div>
             <p class="text-left text-base font-bold">Wann?</p>
-            <p class="text-left text-sm">{ event?.date_start | date: 'dd.MM.yyyy' }}
+            <p class="text-left text-sm">{{ event?.date_start | date: 'dd.MM.yyyy' }}
               @if (event?.date_end && event?.date_end !== event?.date_start) {
               - {{ event?.date_end | date: 'dd.MM.yyyy' }}
               }</p>
@@ -71,45 +56,51 @@
             <p>👥</p>
           </div>
           <div>
-            <p class="text-left text-base font-bold">Preis</p>
-            <p class="text-left text-sm">@if (event?.price! > 0) { {{ event?.price }} } @else { {{ "kostenlos" }} }</p>
+            <p class="text-left text-base font-bold">Veranstalter</p>
+            <p class="text-left text-sm">ORGANZIER</p>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="dash">
-    <div class="mx-auto my-4 w-full border-t border-gray-400"></div>
-  </div>
-  <div class="map p-4">
-    <p class="justify-center text-center text-3xl font-bold">
-      Anreise & Treffpunkt
+
+  <div class="description rounded-2xl p-4 mt-10">
+    <div class="flex w-full h-[30px] justify-center items-center">
+      <p class="text-2xl font-bold text-center pt-4 text-blue-900">Beschreibung</p>
+    </div>
+    <div class="mx-auto my-4 w-[75%] border-t border-blue-900"></div>
+    <p>
+      {{ event?.description }}
     </p>
-    <div class="mx-auto my-4 w-full border-t border-gray-400"></div>
+  </div>
+
+  <div class="map p-4">
+    <div class="flex w-full h-[30px] justify-center items-center">
+      <p class="text-2xl font-bold text-center pt-4 text-blue-900">Anreise</p>
+    </div>
+    <div class="mx-auto my-4 w-[75%] border-t border-blue-900"></div>
 
     @if (location?.geo_point) {
-    <div class="pt-10 map p-4">
+    <div class="map p-4">
       <app-map
-        [coordinates]="location?.geo_point?.point || [0, 0]"
+        [coordinates]="[location!.geo_point!.point[1], location!.geo_point!.point[0]]"
       ></app-map>
     </div>
     }
   </div>
-  <div class="termin justify-center text-center">
+  <!-- <div class="termin justify-center text-center">
     <p class="text-4xl font-bold">Nächster Termin</p>
     <div class="mx-auto my-4 w-full border-t border-gray-400"></div>
     <p class="text-2xl">Mittwoch</p>
     <p class="text-3xl font-bold">06.08.2025</p>
     <p class="text-xl">ganztags</p>
     <div class="mx-auto my-4 w-full border-t border-gray-400"></div>
-  </div>
-  <div class="kontaktdaten rounded-2xl shadow-2xl bg-gray-100">
+  </div> -->
+  <div class="rounded-2xl bg-gray-100 shadow-2xl">
     <div class="flex w-full h-[30px] justify-center items-center">
       <p class="text-2xl font-bold text-center pt-4 text-blue-900">Kontaktdaten</p>
     </div>
-     <div class="dash">
     <div class="mx-auto mt-4 w-[75%] border-t border-blue-900"></div>
-    </div>
     <div class="flex justify-between">
       <div class="grid grid-cols-1 gap-4 rounded-2xl p-4 text-right text-xl">
         <div class="grid grid-cols-2">
