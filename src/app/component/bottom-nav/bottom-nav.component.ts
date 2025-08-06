@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Component } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { RouterModule } from '@angular/router'
 
 /**
  * Interface zur Definition der Navigationspunkte.
@@ -10,16 +10,16 @@ export interface BottomNavItem {
   /**
    * Beschriftung des Menüeintrags
    */
-  label: string;
+  label: string
   /**
    * Zielroute für den Angular Router
    */
-  route: string;
+  route: string
   /**
    * Schlüssel des Icons. Dieser Name muss mit dem Namen übereinstimmen,
    * unter dem das Icon in ``provideIcons`` registriert wurde (z.B. 'home').
    */
-  icon: string;
+  icon: string
 }
 
 @Component({
@@ -30,5 +30,4 @@ export interface BottomNavItem {
   templateUrl: './bottom-nav.component.html',
   styleUrls: ['./bottom-nav.component.scss'],
 })
-export class BottomNavComponent {
-}
+export class BottomNavComponent {}
