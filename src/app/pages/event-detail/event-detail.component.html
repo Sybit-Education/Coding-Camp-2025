@@ -13,7 +13,7 @@
     </div>
     <div class="flex justify-between">
       <div class="grid grid-cols-1 gap-4 rounded-2xl p-4 text-right text-xl">
-        <div class="grid grid-cols-2">
+        <div class="grid grid-cols-[1fr_3fr]">
           <div
             class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-amber-300"
           >
@@ -27,7 +27,7 @@
               }</p>
           </div>
         </div>
-        <div class="grid grid-cols-2">
+        <div class="grid grid-cols-[1fr_3fr]">
           <div
             class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-red-300"
           >
@@ -38,7 +38,7 @@
             <p class="text-left text-sm">{{ location?.name }}</p>
           </div>
         </div>
-        <div class="grid grid-cols-2">
+        <div class="grid grid-cols-[1fr_3fr]">
           <div
             class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-green-300"
           >
@@ -49,7 +49,7 @@
             <p class="text-left text-sm">@if (event?.price! > 0) { {{ event?.price }} } @else { {{ "kostenlos" }} }</p>
           </div>
         </div>
-        <div class="grid grid-cols-2">
+        <div class="grid grid-cols-[1fr_3fr]">
           <div
             class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-purple-400"
           >
@@ -57,7 +57,7 @@
           </div>
           <div>
             <p class="text-left text-base font-bold">Veranstalter</p>
-            <p class="text-left text-sm">ORGANZIER</p>
+            <p class="text-left text-sm">{{ organizer?.name }}</p>
           </div>
         </div>
       </div>
@@ -88,14 +88,6 @@
     </div>
     }
   </div>
-  <!-- <div class="termin justify-center text-center">
-    <p class="text-4xl font-bold">Nächster Termin</p>
-    <div class="mx-auto my-4 w-full border-t border-gray-400"></div>
-    <p class="text-2xl">Mittwoch</p>
-    <p class="text-3xl font-bold">06.08.2025</p>
-    <p class="text-xl">ganztags</p>
-    <div class="mx-auto my-4 w-full border-t border-gray-400"></div>
-  </div> -->
   <div class="rounded-2xl bg-gray-100 shadow-2xl">
     <div class="flex w-full h-[30px] justify-center items-center">
       <p class="text-2xl font-bold text-center pt-4 text-blue-900">Kontaktdaten</p>
@@ -103,29 +95,7 @@
     <div class="mx-auto mt-4 w-[75%] border-t border-blue-900"></div>
     <div class="flex justify-between">
       <div class="grid grid-cols-1 gap-4 rounded-2xl p-4 text-right text-xl">
-        <div class="grid grid-cols-2">
-          <div
-            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-amber-300"
-          >
-            <p>☎️</p>
-          </div>
-          <div>
-            <p class="text-left text-base font-bold">Telefonnummer</p>
-            <p class="text-left text-sm">+49123456789</p>
-          </div>
-        </div>
-        <div class="grid grid-cols-2">
-          <div
-            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-red-300"
-          >
-            <p>📧</p>
-          </div>
-          <div>
-            <p class="text-left text-base font-bold">Email</p>
-            <p class="text-left text-sm">blablabla&#64;gmail.com</p>
-          </div>
-        </div>
-        <div class="grid grid-cols-2">
+        <div class="grid grid-cols-[1fr_3fr]">
           <div
             class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-purple-400"
           >
@@ -133,9 +103,35 @@
           </div>
           <div>
             <p class="text-left text-base font-bold">Name</p>
-            <p class="text-left text-sm">Oleg</p>
+            <p class="text-left text-sm">{{ organizer?.name }}</p>
           </div>
         </div>
+        @if (organizer?.email) {
+        <div class="grid grid-cols-[1fr_3fr]">
+          <div
+            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-red-300"
+          >
+            <p>📧</p>
+          </div>
+          <div>
+            <p class="text-left text-base font-bold">Email</p>
+            <p class="text-left text-sm">{{ organizer?.email }}</p>
+          </div>
+        </div>
+        }
+        @if (organizer?.phonenumber) {
+        <div class="grid grid-cols-[1fr_3fr]">
+          <div
+            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-amber-300"
+          >
+            <p>☎️</p>
+          </div>
+          <div>
+            <p class="text-left text-base font-bold">Email</p>
+            <p class="text-left text-sm">{{ organizer?.phonenumber }}</p>
+          </div>
+        </div>
+        }
       </div>
     </div>
   </div>

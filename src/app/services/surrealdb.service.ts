@@ -24,7 +24,6 @@ export class SurrealdbService extends Surreal {
     recordId: string
   ): Promise<T> {
     const result = await super.select<T>(new StringRecordId(recordId))
-    console.log('search for id: ', recordId,'\nsurreal service: ', result)
     return result as T
   }
 
