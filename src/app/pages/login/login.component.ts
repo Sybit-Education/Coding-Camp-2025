@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'
 
 @Component({
   selector: 'app-login',
@@ -6,8 +6,8 @@ import { Component } from '@angular/core';
   templateUrl: './login.component.html',
 })
 export class LoginComponent {
-  showPassword= false;
-  togglePassword(): void{
+  showPassword = false
+  togglePassword(): void {
     this.showPassword = !this.showPassword
   }
 }
