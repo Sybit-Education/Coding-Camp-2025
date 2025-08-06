@@ -164,7 +164,6 @@
               name="postalCode"
               class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600"
               [(ngModel)]="plz"
-              required
             />
           </div>
           <div>
@@ -271,6 +270,7 @@
           type="submit"
           class="btn btn-primary cursor-pointer rounded-2xl bg-[var(--colors-light-blue)]"
           style="margin-top: 5px"
+          (click)="saveLocation()"
         >
           Event erstellen
         </button>

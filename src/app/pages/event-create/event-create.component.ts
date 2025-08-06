@@ -83,4 +83,21 @@ export class EventCreateComponent implements OnInit {
       this.organizerName = this.selectedOrganizer
     }
   }
+
+  async saveLocation() {
+    const location: Location = {
+      name: this.locationName,
+      street: this.address,
+      zip_code: Number(this.plz),
+      city: this.city
+    }
+
+    try{
+      console.log('new Event: ', location)
+      const savedLocation = await this.locationService.postLocation(location);
+      console.log("Saved Location ", savedLocation)
+    } catch (error) {
+      console.error('Fehler beim Speichern:', error);
+    }
+  }
 }
