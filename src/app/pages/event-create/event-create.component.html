@@ -1,10 +1,45 @@
-<div class="bg-light-blue flex justify-center p-5 text-shadow-gray-500 leading-relaxed">
+<div class="bg-[var(--colors-light-blue)] flex justify-center p-5 text-shadow-gray-500 leading-relaxed">
     <form class="grid sm:grid-cols-[1fr] md:grid-cols-[1fr_1fr] gap-[3rem] rounded-2xl bg-white p-6 text-black">
         <div class="flex flex-col">
             <div>
                 <label for="eventName">Event-Name: </label>
                 <input id="eventName" name="eventName" type="text" [(ngModel)]="eventname"
                     class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" />
+            </div>
+            <br>
+            <div>
+                <select name="organizer" id="organizer"
+                    class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600 cursor-pointer"
+                    placeholder="Veranstalter wählen..." [(ngModel)]="selectedOrganizer" (change)="setOrganizer()">
+                    <option selected>Veranstalter wählen...</option>
+                    <div *ngFor="let organizer of organizers; let i = index">
+                        <option>
+                            {{ organizers[i].name }}
+                        </option>
+                    </div>
+                </select>
+                <button type="submit" class="btn btn-primary bg-[var(--colors-light-blue)] rounded-2xl cursor-pointer"
+                    style="margin-top: 5px;" (click)="newOrganizer = !newOrganizer">
+                    Neuen Veranstalter erstellen
+                </button>
+            </div>
+            <br>
+            <div *ngIf="newOrganizer" class="border-black border-2 rounded-xl p-2">
+                <p>
+                    <label for="organizername">Name: </label>
+                    <input id="organizername" name="organizername" type="text" [(ngModel)]="organizername"
+                        class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" />
+                </p>
+                <p>
+                    <label for="organizerphone">Telefonnummer: </label>
+                    <input id="organizerphone" name="organizerphone" type="text" [(ngModel)]="organizerphone"
+                        class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" />
+                </p>
+                <p>
+                    <label for="organizermail">E-Mail: </label>
+                    <input id="organizermail" name="organizermail" type="text" [(ngModel)]="organizermail"
+                        class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" />
+                </p>
             </div>
             <br>
             <div class="grid grid-cols-[1fr_1fr] gap-[1rem]">
@@ -31,7 +66,7 @@
                         </option>
                     </div>
                 </select>
-                <button type="submit" class="btn btn-primary bg-light-blue rounded-2xl cursor-pointer"
+                <button type="submit" class="btn btn-primary bg-[var(--colors-light-blue)] rounded-2xl cursor-pointer"
                     style="margin-top: 5px;" (click)="newLocation = !newLocation">
                     Neue Location erstellen
                 </button>
@@ -72,13 +107,14 @@
                 <input id="price" name="price" type="number" min="0" step="0.01" placeholder="0.00" [(ngModel)]="price"
                     class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" />
             </div>
+        </div>
+        <div class="flex flex-col">
             <div>
                 <label for="description">Eventbeschreibung: </label>
                 <textarea id="description" name="description" type="text" [(ngModel)]="description"
                     class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600"></textarea>
             </div>
-        </div>
-        <div class="flex flex-col">
+            <br>
             <div id="choose-category" class="z-10 w-75 rounded-lg bg-white shadow-sm dark:bg-gray-100">
                 <h1 class="text-center text-sm font-medium text-gray-900 dark:text-gray-700">
                     Thema des Events
@@ -87,7 +123,7 @@
                     <li *ngFor="eventType of eventTypes; let i = index">
                         <div class="flex items-center rounded-sm p-2 hover:bg-gray-100 dark:hover:bg-gray-300">
                             <input id="checkbox{{ i }}" type="checkbox" value=""
-                                class="text-light-blue h-4 w-4 rounded-sm border-gray-300 bg-gray-100 dark:border-gray-500 dark:bg-gray-600 cursor-pointer" />
+                                class="text-[var(--colors-light-blue)] h-4 w-4 rounded-sm border-gray-300 bg-gray-100 dark:border-gray-500 dark:bg-gray-600 cursor-pointer" />
                             <label for="checkbox{{ i }}"
                                 class="ms-2 w-full rounded-sm text-sm font-medium text-gray-900 dark:text-gray-700 cursor-pointer">{{
                                 eventTypes[i] }}</label>
@@ -109,48 +145,13 @@
             </div>
             <br>
             <div>
-                <select name="organizer" id="organizer"
-                    class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600 cursor-pointer"
-                    placeholder="Veranstalter wählen..." [(ngModel)]="selectedOrganizer" (change)="setOrganizer()">
-                    <option selected>Veranstalter wählen...</option>
-                    <div *ngFor="let organizer of organizers; let i = index">
-                        <option>
-                            {{ organizers[i].name }}
-                        </option>
-                    </div>
-                </select>
-                <button type="submit" class="btn btn-primary bg-light-blue rounded-2xl cursor-pointer"
-                    style="margin-top: 5px;" (click)="newOrganizer = !newOrganizer">
-                    Neuen Veranstalter erstellen
-                </button>
-            </div>
-            <br>
-            <div *ngIf="newOrganizer" class="border-black border-2 rounded-xl p-2">
-                <p>
-                    <label for="organizername">Ansprechpartner: </label>
-                    <input id="organizername" name="organizername" type="text" [(ngModel)]="organizername"
-                        class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" />
-                </p>
-                <p>
-                    <label for="organizerphone">Telefonnummer: </label>
-                    <input id="organizerphone" name="organizerphone" type="text" [(ngModel)]="organizerphone"
-                        class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" />
-                </p>
-                <p>
-                    <label for="organizermail">E-Mail: </label>
-                    <input id="organizermail" name="organizermail" type="text" [(ngModel)]="organizermail"
-                        class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" />
-                </p>
-
-            </div>
-            <div>
                 <label for="moreInfoLink">Mehr Infos: </label>
                 <input id="moreInfoLink" name="moreInfoLink" type="text" placeholder="https://..."
                     [(ngModel)]="moreInfoLink"
                     class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" />
             </div>
             <div>
-                 <button type="submit" class="btn btn-primary bg-light-blue rounded-2xl cursor-pointer"
+                <button type="submit" class="btn btn-primary bg-[var(--colors-light-blue)] rounded-2xl cursor-pointer"
                     style="margin-top: 5px;">
                     Event erstellen
                 </button>
