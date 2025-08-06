@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 export interface BottomNavItem {
   label: string;
@@ -17,12 +18,40 @@ export interface BottomNavItem {
   standalone: true,
   imports: [CommonModule, RouterModule]
 })
-export class BottomNavComponent {
+export class BottomNavComponent implements OnInit, OnChanges {
   constructor(private sanitizer: DomSanitizer, private router: Router) {
     // Sanitize all icons on initialization
+    this.sanitizeIcons();
+  }
+
+  ngOnInit(): void {
+    // Listen to router events to update active index based on current route
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.updateActiveIndexFromRoute();
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // Re-sanitize icons if items change
+    if (changes['items']) {
+      this.sanitizeIcons();
+    }
+  }
+
+  private sanitizeIcons(): void {
     this.items.forEach(item => {
       item.safeIcon = this.sanitizer.bypassSecurityTrustHtml(item.icon);
     });
+  }
+
+  private updateActiveIndexFromRoute(): void {
+    const currentUrl = this.router.url;
+    const index = this.items.findIndex(item => item.route === currentUrl);
+    if (index !== -1) {
+      this.activeIndex = index;
+    }
   }
   @Input() items: BottomNavItem[] = [
     {
@@ -70,7 +99,28 @@ export class BottomNavComponent {
   setActive(index: number, route?: string) {
     this.activeIndex = index;
     if (route) {
-      this.router.navigate([route]);
+      this.router.navigate([route], { 
+        state: { navigationSource: 'bottomNav' }
+      });
     }
+    // Announce navigation for screen readers
+    this.announceNavigation(this.items[index].label);
+  }
+
+  /**
+   * Announces navigation changes to screen readers
+   */
+  private announceNavigation(destination: string): void {
+    const announcement = document.createElement('div');
+    announcement.setAttribute('aria-live', 'assertive');
+    announcement.setAttribute('class', 'sr-only');
+    announcement.textContent = `Navigiere zu ${destination}`;
+    
+    document.body.appendChild(announcement);
+    
+    // Remove after announcement is read
+    setTimeout(() => {
+      document.body.removeChild(announcement);
+    }, 1000);
   }
 }

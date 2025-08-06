@@ -1,16 +1,20 @@
-<div class="fixed bottom-4 inset-x-0 flex justify-center px-4">
+<nav class="fixed bottom-4 inset-x-0 flex justify-center px-4" aria-label="Hauptnavigation">
   <div
     class="flex w-full max-w-md justify-around items-center
            bg-white/30 backdrop-blur-xl border border-white/20
            rounded-2xl py-3 shadow-lg"
+    role="menubar"
   >
     <ng-container *ngFor="let item of items; let i = index">
       <button
         class="flex flex-col items-center transition"
         [ngClass]="activeIndex === i ? 'text-blue-500 scale-110' : 'text-gray-800 hover:text-blue-500'"
         (click)="setActive(i, item.route)"
+        [attr.aria-label]="item.label"
+        [attr.aria-current]="activeIndex === i ? 'page' : null"
+        role="menuitem"
       >
-        <span class="w-6 h-6" [innerHTML]="item.safeIcon"></span>
+        <span class="w-6 h-6" [innerHTML]="item.safeIcon" aria-hidden="true"></span>
         <span class="text-xs mt-1">{{ item.label }}</span>
       </button>
     </ng-container>
