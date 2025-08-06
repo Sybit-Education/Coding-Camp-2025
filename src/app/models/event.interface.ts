@@ -9,23 +9,28 @@ export enum EventType {
   AUSSTELLUNG = 'Ausstellung',
   WORKSHOP = 'Workshop',
   TANZ = 'Tanz',
+  UNKNOWN = ''
 }
 
 export interface Event extends Record<string, unknown> {
   id: string
-  title: string
+  name: string
   description: string
   location: {
-    name: string
-    street: string
-    city: string
-    coordinates?: GeoPoint
+    id: string
+    tb: string
   }
   date_start: string
   date_end: string
-  price: string
-  organizer: string
-  image: string
+  price: number
+  organizer: {
+    id: string
+    tb: string
+  }
+  media: {
+    id: string
+    tb: string
+  }[]
   type: EventType
 }
 
