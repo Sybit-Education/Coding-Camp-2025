@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router'
 import { HomeComponent } from './pages/home/home.component'
 import { AboutComponent } from './pages/about/about.component'
+import { EventDetailPageComponent } from './pages/event-detail/event-detail.component'
 
 export const routes: Routes = [
   {
@@ -13,9 +14,7 @@ export const routes: Routes = [
   },
   {
     path: 'event/:id',
-    loadComponent: () =>
-      import('./pages/event-detail/event-detail.component').then(
-        (m) => m.EventDetailPageComponent,
-      ),
+    component: EventDetailPageComponent,
   },
+
 ]

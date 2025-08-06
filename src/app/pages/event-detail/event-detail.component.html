@@ -1,46 +1,46 @@
 <div class="event-container min-h-[80vh] w-full gap-5" style="padding-left: 1rem; padding-right: 1rem;">
   <div class="title flex items-center justify-center text-xl">
-    <p class="text-2xl">Event</p>
+    <p class="text-2xl">{{ event?.name }}</p>
   </div>
   <div class="info flex justify-between w-full">
     <div class="flex items-center justify-start p-4 text-xl">
       <ul>
-        <li>Preis</li>
+        <li>Preis:</li>
         <li>Ort</li>
         <li>Wann:</li>
       </ul>
     </div>
     <div class="flex items-end justify-end p-4 text-xl">
         <ul>
-            <li>25€</li>
-            <li>Radofzell</li>
-            <li>05.08.2026</li>
+            <li>
+                  @if (event?.price! > 0) { {{ event?.price }} } @else { {{ "kostenlos" }} }
+                </li>
+            <li>{{ location?.name }}</li>
+            <li>{{ event?.date_start | date: 'dd.MM.yyyy' }}
+                  @if (event?.date_end && event?.date_end !== event?.date_start) {
+                    - {{ event?.date_end | date: 'dd.MM.yyyy' }}
+                  }</li>
         </ul>
     </div>
-  </div>
-  <div class="calendar">
-    <app-add-to-calendar
-      [title]="'Meeting mit dem Team'"
-      [start]="'2025-08-15T09:00:00'"
-      [end]="'2025-08-15T10:00:00'"
-      [location]="'Berlin, Büro'"
-      [description]="'Monatliches Team-Meeting.'"
-    ></app-add-to-calendar>
   </div>
   <div class="picture p-4">
     <img
       class="rounded-2xl"
       alt=""
-      src="https://www.radolfzell-tourismus.de/_Resources/Persistent/5974c694442edefd3aece5bb44fce833b556d910/Wasserspielplatz_TSR%2C%20KuhnleKn%C3%B6dler_37-1000x667.jpg"
+      [src]="mediaUrl"
     />
   </div>
   <div class="description p-4">
     <p>
-      Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-      eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+      {{ event?.description }}
     </p>
   </div>
-  <div class="map p-4 ">
-    <app-map [coordinates]="[47.734855, 8.971706]"></app-map>
-  </div>
+  @if (location?.geo_point) {
+          <div class="pt-10 map p-4">
+            <app-map
+              [coordinates]="location?.geo_point?.point || [0, 0]"
+            ></app-map>
+          </div>
+        }
+
 </div>

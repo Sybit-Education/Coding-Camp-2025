@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import Surreal from 'surrealdb'
+import Surreal, { StringRecordId } from 'surrealdb'
 import { environment } from '../../environments/environment.production'
 
 @Injectable({
@@ -23,8 +23,9 @@ export class SurrealdbService extends Surreal {
   async getById<T extends Record<string, unknown>>(
     recordId: string
   ): Promise<T> {
-    const result = await super.select<T>(recordId) 
-    return result[0]
+    const result = await super.select<T>(new StringRecordId(recordId))
+    console.log('search for id: ', recordId,'\nsurreal service: ', result)
+    return result as T
   }
 
   // 2) Alle Einträge einer Tabelle holen

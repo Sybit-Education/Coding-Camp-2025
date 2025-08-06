@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
 import { Event } from '../models/event.interface'
+import { Location } from '../models/location.interface'
 import { surql } from 'surrealdb'
 
 @Injectable({
@@ -8,11 +9,21 @@ import { surql } from 'surrealdb'
 })
 export class EventService {
 
-  private surrealdb: SurrealdbService = inject(SurrealdbService)
+  private readonly surrealdb: SurrealdbService = inject(SurrealdbService)
+
 
 
   async getEventByID(id: string): Promise<Event> {
-    return await this.surrealdb.getById<Event>(id)
+    const result = await this.surrealdb.getById<Event>('event:'+id)
+    console.log('event service: ', result)
+    return result
+  }
+
+  async getLocationByID(id: string): Promise<Location> {
+    console.log(id)
+    const result = await this.surrealdb.getById<Location>('location:'+id)
+    console.log('event service: ', result)
+    return result
   }
 
 
@@ -34,7 +45,7 @@ export class EventService {
 
   /**
    * BSP payload für create:
-   * 
+   *
    * id: event.id,
       name: event['name'],
       description: event['description'],

@@ -4,7 +4,6 @@
     'title title'
     'picture picture'
     'info info'
-    'calendar calendar'
     'description description'
     'map map';
   grid-template-rows: 80px 3fr 1fr auto auto auto;
@@ -27,10 +26,6 @@
   height: 100%;
   width: 100%;
   object-fit: cover;
-}
-
-.calendar {
-  grid-area: calendar;
 }
 
 .description {
