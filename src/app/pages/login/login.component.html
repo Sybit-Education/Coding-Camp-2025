@@ -1,12 +1,13 @@
 <div class="flex items-center justify-center h-300 bg-indigo">
   <div class="bg-white p-10 rounded-xl shadow-xl text-center">
     <form>
-      <label for="username" class="block text-x1 fon-semibold mb-2">Username:</label>
+      <label for="username" class="block text-x1 fon-semibold mb-2 text-xl">Username:</label>
       <input 	class= "-webkit-box-decoration-break: slice;box-decoration-break: slice; border-2 border-black rounded w-80 h-12 text-lg px-4 mb-6" type="text" id="username" name="username"><br>
-      <label for="pwd" class=""block text-1 font-semibold mb-2>Password:</label><br>
-      <input class= "-webkit-box-decoration-break: slice;box-decoration-break: slice; border-2 border-black rounded w-80 h-12 text-lg px-4 mb-6" type="password" id="pwd" name="pwd">
-      <button type="button" (click)="togglePassword()"class="absolute inset-y-0 right-0 z-20 flex cursor-pointer items-center rounded-e-md px-3 text-gray-400 focus:text-blue-600 focus:outline-hidden"
-              >
+
+<div class="relative">
+      <label for="pwd" class="block text-x1 fon-semibold mb-2 text-xl">Password:</label>
+      <input class= "-webkit-box-decoration-break: slice;box-decoration-break: slice; border-2 border-black rounded w-80 h-12 text-lg px-4 mb-6 peer block w-full appearance-none " [type]="showPassword ? 'text' : 'Password'" id="pwd" name="pwd">
+      <button type="button" (click)="togglePassword()" class="absolute inset-y-0 right-0 z-20">
                 <svg
                   class="size-3.5 shrink-0"
                   width="24"
@@ -50,6 +51,7 @@
                   ></circle>
                 </svg>
               </button>
+              </div>
       <div>
         <br>
       </div>
