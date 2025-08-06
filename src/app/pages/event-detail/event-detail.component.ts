@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 import { MapComponent } from '../../component/map/map.component'
 import { CalenderComponent } from '../../component/calender/calendar.component'
-import { AboutComponent } from "../about/about.component";
+import { AboutComponent } from '../about/about.component'
 
 @Component({
   selector: 'app-event-detail-page',
