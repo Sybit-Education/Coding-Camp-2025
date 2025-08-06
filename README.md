@@ -61,8 +61,7 @@ For more information on using the Angular CLI, including detailed command refere
 DB Script
 
 ```sql
-DEFINE TABLE OVERWRITE event TYPE NORMAL SCHEMAFULL
-    PERMISSIONS
+PERMISSIONS
         FOR create, select FULL,
         FOR update, delete WHERE $auth != NONE;
 DEFINE FIELD OVERWRITE id ON event;
@@ -76,10 +75,22 @@ DEFINE FIELD OVERWRITE age ON event TYPE option<int>;
 DEFINE FIELD OVERWRITE restriction ON event TYPE option<string>;
 DEFINE FIELD OVERWRITE draft ON event TYPE option<bool>;
 
+
+
 DEFINE FIELD OVERWRITE organizer ON event TYPE record<organizer>;
 DEFINE FIELD OVERWRITE event_type ON event TYPE option<record<event_type>>;
 DEFINE FIELD OVERWRITE location ON event TYPE option<record<location>>;
+DEFINE FIELD OVERWRITE topic ON event TYPE option<array<record<topic>>>;
 DEFINE FIELD OVERWRITE media ON event TYPE option<array<record<media>>>;
+
+
+
+DEFINE TABLE OVERWRITE topic TYPE NORMAL SCHEMAFULL
+    PERMISSIONS
+        FOR create, select FULL,
+        FOR update, delete WHERE $auth != NONE;
+DEFINE FIELD OVERWRITE id ON organizer;
+DEFINE FIELD OVERWRITE name ON organizer TYPE string;
 
 
 
@@ -93,12 +104,18 @@ DEFINE FIELD OVERWRITE email ON organizer TYPE option<string>;
 DEFINE FIELD OVERWRITE phonenumber ON organizer TYPE option<number>;
 
 
+
+
+
 DEFINE TABLE OVERWRITE event_type TYPE NORMAL SCHEMAFULL
     PERMISSIONS
         FOR create, select FULL,
         FOR update, delete WHERE $auth != NONE;
 DEFINE FIELD OVERWRITE id ON event_type;
 DEFINE FIELD OVERWRITE name ON event_type TYPE string;
+
+
+
 
 
 DEFINE TABLE OVERWRITE location TYPE NORMAL SCHEMAFULL
@@ -112,7 +129,12 @@ DEFINE FIELD OVERWRITE city ON location TYPE option<string> DEFAULT Radolfzell;
 DEFINE FIELD OVERWRITE zip_code ON location TYPE option<string> DEFAULT "78315";
 DEFINE FIELD OVERWRITE geo_point ON location TYPE option<point>;
 
+
+
 DEFINE FIELD OVERWRITE media ON location TYPE option<array<record<media>>>;
+
+
+
 
 
 DEFINE TABLE OVERWRITE media TYPE NORMAL SCHEMAFULL
@@ -125,6 +147,9 @@ DEFINE FIELD OVERWRITE fileName ON media TYPE option<string>;
 DEFINE FIELD OVERWRITE fileType ON media TYPE option<string>;
 
 
+
+
+
 DEFINE TABLE OVERWRITE user TYPE NORMAL SCHEMAFULL
     PERMISSIONS
         FOR select WHERE $auth == id,
@@ -133,11 +158,17 @@ DEFINE FIELD OVERWRITE id ON user;
 DEFINE FIELD OVERWRITE name ON user TYPE string;
 DEFINE FIELD OVERWRITE password ON user TYPE string VALUE crypto::argon2::generate($value);
 
+
+
 DEFINE INDEX OVERWRITE name ON user FIELDS name UNIQUE;
+
+
 
 DEFINE ACCESS OVERWRITE user ON DATABASE TYPE RECORD SIGNIN (
   SELECT * FROM user WHERE name = $username AND crypto::argon2::compare(password, $password)
 );
+
+
 
 DEFINE FUNCTION OVERWRITE fn::normalize($name: string, $seperator: option<string>) {
     LET $result = $name.lowercase().replace("ä", "ae").replace("ö", "oe").replace("ü", "ue").slug();
