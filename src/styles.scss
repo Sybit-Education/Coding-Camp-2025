@@ -12,10 +12,6 @@
   font-style: bold;
 }
 
-:root {
-  font-family: var(--font-family-meta-pro)
-}
-
 :root{
   --color-dark-pink: #c70d56; 
   --color-indigo-light: #6d7cbc; 
@@ -23,7 +19,7 @@
   --color-dark-blue: #3b4ea3; 
   --color-yellow: #fdc61a; 
 
-  --font-family-meta-pro: "Meta Pro", ui-sans-serif, system-ui, sans-serif;
+  --font-family-spezia: Meta Pro, ui-sans-serif, system-ui, sans-serif;
 
   --colors-primary: var(--color-dark-pink);
   --colors-secondary: var(--color-peach);
@@ -38,6 +34,8 @@
   --color-light-blue: #a7b1db; 
   --color-peach-light: #fbd2bc; 
   --color-orange-light: #f5ae8e; 
+
+  --font-family-spezia: Meta Pro, ui-sans-serif, system-ui, sans-serif;
 
   --colors-bg-primary: var(--color-pink);
   --colors-bg-secondary: var(--color-peach);
