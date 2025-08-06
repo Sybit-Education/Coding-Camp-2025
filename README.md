@@ -76,7 +76,7 @@ DEFINE FIELD OVERWRITE age ON event TYPE option<int>;
 DEFINE FIELD OVERWRITE restriction ON event TYPE option<string>;
 DEFINE FIELD OVERWRITE draft ON event TYPE option<bool>;
 
-DEFINE FIELD OVERWRITE organizer ON event TYPE option<record<organizer>>;
+DEFINE FIELD OVERWRITE organizer ON event TYPE record<organizer>;
 DEFINE FIELD OVERWRITE event_type ON event TYPE option<record<event_type>>;
 DEFINE FIELD OVERWRITE location ON event TYPE option<record<location>>;
 DEFINE FIELD OVERWRITE media ON event TYPE option<array<record<media>>>;
