@@ -29,4 +29,3 @@ export class HomeComponent {
     return this.events.slice(0, 4);
   }
 }
-
