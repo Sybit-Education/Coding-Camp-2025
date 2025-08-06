@@ -8,7 +8,7 @@ import { routes } from './app/app.routes'
 import localeDe from '@angular/common/locales/de';
 import { registerLocaleData } from '@angular/common'
 
-registerLocaleData(localeDe); // TODO: Change when i18n got implemented - important for date.pipe.ts
+registerLocaleData(localeDe); // TODO: Change when i18n/localizer got implemented - important for date.pipe.ts
 
 bootstrapApplication(AppComponent, {
   providers: [
