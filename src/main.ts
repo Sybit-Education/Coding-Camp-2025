@@ -6,18 +6,21 @@ import { provideServiceWorker } from '@angular/service-worker'
 import { provideRouter } from '@angular/router'
 import { routes } from './app/app.routes'
 import { EventService } from './app/services/event.service'
+import { LocationService } from './app/services/location.service'
+import { OrganizerService } from './app/services/organizer.service'
+import { TopicService } from './app/services/topic.service'
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes),
     provideAppInitializer(() => {
       const surrealdb = inject(SurrealdbService)
+      inject(EventService)
+      inject(LocationService)
+      inject(OrganizerService)
+      inject(TopicService)
       return surrealdb.initialize()
     }),
-    provideAppInitializer(() => {
-      inject(EventService)
-    }),
-    SurrealdbService,
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',
