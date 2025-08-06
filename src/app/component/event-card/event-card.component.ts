@@ -7,5 +7,4 @@ import { CommonModule } from '@angular/common'
   imports: [CommonModule],
   templateUrl: './event-card.component.html',
 })
-export class EventCardComponent {
-}
+export class EventCardComponent {}
