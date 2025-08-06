@@ -6,11 +6,12 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { EventService } from '../../services/event.service'
 import { CommonModule } from '@angular/common'
 import { Organizer } from '../../models/organizer.interface'
+import { DateTimeRangePipe } from '../../services/date.pipe'
 
 @Component({
   selector: 'app-event-detail-page',
   standalone: true,
-  imports: [MapComponent, CommonModule],
+  imports: [MapComponent, CommonModule, DateTimeRangePipe],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
 })
