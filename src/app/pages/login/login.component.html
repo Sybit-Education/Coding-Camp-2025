@@ -1,8 +1,9 @@
 <div class="bg-indigo flex h-300 items-center justify-center">
   <div class="rounded-xl bg-white p-10 text-center shadow-xl">
-    <form>
+    <form class=" " (ngSubmit)="handleLogin()">
       <div class="relative  mb-4">
         <input
+        [(ngModel)]="loginParams.username"
           type="text"
           id="username"
           name="username"
@@ -17,6 +18,7 @@
       </div>
       <div class="relative">
         <input
+        [(ngModel)]="loginParams.password"
           [type]="showPassword ? 'text' : 'Password'"
           id="pwd"
           name="pwd"
@@ -80,11 +82,12 @@
       <div>
         <br />
       </div>
-      <input
-        type="button"
-        value="Login"
-        class="mb-5 h-10 w-50 rounded border-2 border-black px-3 text-lg"
-      />
+      <button
+              type="submit"
+              class="w-full cursor-pointer rounded-lg border border-gray-400 bg-gray-100 px-5 py-2.5 text-center text-sm font-medium text-black transition-all duration-300 hover:border-gray-800 md:text-base lg:text-base xl:text-base 2xl:text-base"
+            >
+              Einloggen
+            </button>
     </form>
   </div>
 </div>
