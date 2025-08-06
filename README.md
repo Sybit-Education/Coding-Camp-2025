@@ -61,6 +61,7 @@ For more information on using the Angular CLI, including detailed command refere
 DB Script
 
 ```sql
+DEFINE TABLE OVERWRITE event TYPE NORMAL SCHEMAFULL
 PERMISSIONS
         FOR create, select FULL,
         FOR update, delete WHERE $auth != NONE;
