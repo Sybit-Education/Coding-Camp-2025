@@ -1,47 +1,61 @@
 .event-container {
-  display: grid;
+  grid-template-columns: 1fr;
   grid-template-areas:
-    'title title'
-    'picture picture'
-    'dash dash'
-    'description description'
-    'map map'
-    'termin termin'
-    'kontaktdaten kontaktdaten';
-
-  grid-template-rows: 80px auto auto auto auto auto 1fr;
-  grid-template-columns: 2fr 2fr;
+  "info-card"
+  "description"
+  "map"
+  "contact";
 }
 
-.title {
-  grid-area: title;
+@media (width >= 64rem) {
+  .event-container {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 2fr auto 1fr;
+  grid-template-areas:
+  "info-card description"
+  "info-card map"
+  "info-card contact";
+  }
 }
 
-.picture {
-  grid-area: picture;
+@media (width >= 80rem) {
+  .event-container {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 2fr auto 1fr;
+  grid-template-areas:
+  "info-card description"
+  "info-card map"
+  "info-card contact";
+  padding-left: 10vw;
+  padding-right: 10vw;
+  }
 }
 
-.description {
+@media (width >= 120rem) {
+  .event-container {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto 1fr;
+  grid-template-areas:
+  "info-card description"
+  "info-card map"
+  "info-card contact";
+  padding-left: 20vw;
+  padding-right: 20vw;
+  }
+}
+
+.info-card{
+  grid-area: info-card;
+}
+
+.desc{
   grid-area: description;
 }
 
-.map {
+.map{
   grid-area: map;
 }
 
-.kontaktdaten {
-  grid-area: kontaktdaten;
-}
-
-.dash {
-  grid-area: dash;
-  width: full;
-  max-width: auto;
-  border-top: 1;
-  margin: 4;
-  border-color: gray;
-}
-
-.termin {
-  grid-area: termin;
+.contact{
+  grid-area: contact;
 }
