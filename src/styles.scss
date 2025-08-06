@@ -1,3 +1,5 @@
+/*
+
 @font-face {
   font-family: 'Meta Pro';
   src: url('/src/assets/fonts/metapro_normal.otf') format('opentype');
@@ -46,8 +48,10 @@
   --colors-bg-coral: var(--color-peach-light);
 }
 
+
 @layer utilities {
-  /* === Textfarben === */
+  
+  
   .text-primary         { color: var(--colors-primary); }
   .text-secondary       { color: var(--colors-secondary); }
   .text-accent          { color: var(--colors-accent); }
@@ -61,7 +65,7 @@
   .text-peach-light     { color: var(--color-peach-light); }
   .text-orange-light    { color: var(--color-orange-light); }
 
-  /* === Hintergrundfarben === */
+  
   .bg-primary           { background-color: var(--colors-primary); }
   .bg-secondary         { background-color: var(--colors-secondary); }
   .bg-accent            { background-color: var(--colors-accent); }
@@ -75,3 +79,4 @@
   .bg-peach-light       { background-color: var(--color-peach-light); }
   .bg-orange-light      { background-color: var(--color-orange-light); }
 }
+*/
