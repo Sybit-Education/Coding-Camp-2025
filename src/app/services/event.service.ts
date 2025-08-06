@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { inject, Injectable } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
 import { Event } from '../models/event.interface'
 import { surql } from 'surrealdb'
@@ -7,11 +7,18 @@ import { surql } from 'surrealdb'
   providedIn: 'root',
 })
 export class EventService {
-  constructor(private readonly surrealdb: SurrealdbService) {}
+
+  private surrealdb: SurrealdbService = inject(SurrealdbService)
+
+
+  async getEventByID(id: string): Promise<Event> {
+    return await this.surrealdb.getById<Event>(id)
+  }
+
 
   async getAllEvents(): Promise<Event[]> {
     try {
-      const result = await this.surrealdb.select('event')
+      const result = await this.surrealdb.getAll<Event>('event')
       return (result || []).map(
         (item: Record<string, unknown>) =>
           ({
@@ -24,6 +31,22 @@ export class EventService {
     }
   }
 
+
+  /**
+   * BSP payload für create:
+   * 
+   * id: event.id,
+      name: event['name'],
+      description: event['description'],
+      location: event['location'],
+      date_start: event['date_start'],
+      date_end: event['date_end'],
+      price: event['price'],
+      organizer: event['organizer'],
+      media: event['media'],
+      event_type: event['event_type'],
+   */
+
   async getEventsWithLocation(): Promise<Event[]> {
     try {
       const result = await this.surrealdb.query(
@@ -35,9 +58,5 @@ export class EventService {
         `Fehler beim Laden der Events mit Standortdetails: ${error}`,
       )
     }
-  }
-
-  async initializeDatabase(): Promise<void> {
-    await this.surrealdb.initialize()
   }
 }
