@@ -23,4 +23,14 @@
   <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 ml-5">
     Kategorien
   </h1>
+  <div class="grid grid-cols-3 mr-5">
+    <app-kategorie-card 
+      class="w-full"
+      *ngFor="let kategorie of kategorien"
+      [kategorie]="kategorie.name"
+      
+    ></app-kategorie-card>
+    
+    
+  </div>
 </div>

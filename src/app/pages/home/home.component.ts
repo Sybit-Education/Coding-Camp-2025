@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { CommonModule } from '@angular/common';
 import { EventCardComponent } from "../../component/event-card/event-card.component";
+import { KategorieCardComponent } from "../../component/kategorie-card/kategorie-card.component";
 
 interface Event {
   title: string;
@@ -9,10 +10,14 @@ interface Event {
   price: string;
 }
 
+interface Kategorie {
+  name: string;
+}
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [EventCardComponent, CommonModule],
+  imports: [EventCardComponent, CommonModule, KategorieCardComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -28,4 +33,22 @@ export class HomeComponent {
   get limitedEvents(): Event[] {
     return this.events.slice(0, 4);
   }
+
+  kategorien: Kategorie[] = [
+    { name: 'Ü18' },
+    { name: 'Kostenlos' },
+    { name: 'Für die ganze Familie' },
+    { name: 'Kultur' },
+    { name: 'Geschichte' },
+    { name: 'Entfaltung' },
+    { name: 'Barrierefrei' },
+  ];
+
+  get getKategorien(): Kategorie[] {
+    return this.kategorien;
+  }
+
+
 }
+
+
