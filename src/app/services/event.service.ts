@@ -9,6 +9,7 @@ import { surql } from 'surrealdb'
 export class EventService {
   private surrealdb: SurrealdbService = inject(SurrealdbService)
 
+  //************** GET **************
   async getEventByID(id: string): Promise<Event> {
     return await this.surrealdb.getById<Event>(id)
   }
@@ -39,6 +40,21 @@ export class EventService {
     }
   }
 
+  async getEventsWithLocation(): Promise<Event[]> {
+    try {
+      const result = await this.surrealdb.query(
+        surql`select *,location.* FROM event;`,
+      )
+      return Array.isArray(result?.[0]) ? result[0] : []
+    } catch (error) {
+      throw new Error(
+        `Fehler beim Laden der Events mit Standortdetails: ${error}`,
+      )
+    }
+  }
+
+  //************** POST **************
+  
   /**
    * BSP payload für create:
    * 
@@ -53,17 +69,4 @@ export class EventService {
       media: event['media'],
       event_type: event['event_type'],
    */
-
-  async getEventsWithLocation(): Promise<Event[]> {
-    try {
-      const result = await this.surrealdb.query(
-        surql`select *,location.* FROM event;`,
-      )
-      return Array.isArray(result?.[0]) ? result[0] : []
-    } catch (error) {
-      throw new Error(
-        `Fehler beim Laden der Events mit Standortdetails: ${error}`,
-      )
-    }
-  }
 }
