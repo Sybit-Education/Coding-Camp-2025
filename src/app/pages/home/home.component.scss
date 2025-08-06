@@ -1,7 +1,8 @@
-.event-row {     
+.event-row {    
   display: flex;
-  gap: 0.5rem;
+  gap: 1rem;
 }
+
 .home-container {
   overflow-x: hidden;
   justify-content: center;
@@ -9,17 +10,21 @@
 }
 
 .scrollbar-hide {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* IE 10+ */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Edge */
+  display: none;
 }
 
 .card-snap {
   scroll-snap-type: x mandatory;
-  scroll-snap-align: center;
+  scroll-snap-align: start;
   scroll-padding: 1rem;
   scroll-snap-stop: always;
+}
+
+.event-card {
+  scroll-snap-align: center;
 }

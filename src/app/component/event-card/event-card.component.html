@@ -1,14 +1,15 @@
 <div
-  (click)="onCardClick()"
-  (keyup.enter)="onCardClick()"
   tabindex="0"
   role="button"
-  class="w-[60vw] aspect-[16/9] bg-white shadow-md rounded-lg p-4 flex items-center justify-center m-5 mr-8 cursor-pointer hover:scale-105 transition-all"
+  (click)="onCardClick()"
+  (keyup.enter)="onCardClick()"
+  class="bg-white rounded-2xl shadow-lg p-6 cursor-pointer flex flex-col justify-center items-center h-full
+         transition-all duration-300 ease-in-out
+         hover:scale-[1.02] focus:scale-[1.02] active:scale-95
+         hover:shadow-xl focus:shadow-xl
+         border border-gray-100"
 >
-  <div class="align-middle">
-    <p class="text-gray-500 ml-5.5">{{ title }}</p>
-    <p class="text-gray-500">🕝 {{ date }}</p>
-    <p class="text-gray-500">🏠 {{ location }}</p>
-    <p class="text-gray-500">💶 {{ price }}</p>
+  <div class="flex flex-col justify-center items-center text-center h-full">
+    <h2 class="text-base font-semibold text-gray-800 leading-tight">{{ title }}</h2>
   </div>
 </div>

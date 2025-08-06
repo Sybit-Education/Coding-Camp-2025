@@ -10,10 +10,7 @@ import { CommonModule } from '@angular/common'
   styleUrls: ['./event-card.component.scss'],
 })
 export class EventCardComponent {
-  @Input() title!: string;
-  @Input() date!: string;
-  @Input() location!: string;
-  @Input() price!: string;
+  @Input() title: string = '';
   @Input() eventId?: string;
 
   constructor(private router: Router) {}
