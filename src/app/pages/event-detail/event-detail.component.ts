@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { EventService } from '../../services/event.service'
 import { CommonModule } from '@angular/common'
 import { Organizer } from '../../models/organizer.interface'
+import { LocationService } from '../../services/location.service'
+import { OrganizerService } from '../../services/organizer.service'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -25,6 +27,8 @@ export class EventDetailPageComponent implements OnInit {
   mediaUrl: string | null = null
 
   private readonly eventService = inject(EventService)
+  private readonly locationService = inject(LocationService)
+  private readonly organizerService = inject(OrganizerService)
   private readonly route = inject(ActivatedRoute)
   private readonly router = inject(Router)
 
@@ -39,7 +43,7 @@ export class EventDetailPageComponent implements OnInit {
 
   async loadType(typeId: string) {
     try {
-      const type = await this.eventService.getTypeByID(typeId!)
+      const type = await this.eventService.getEventTypeByID(typeId!)
       if (type) {
         this.type = type as EventType
       } else {
@@ -52,7 +56,7 @@ export class EventDetailPageComponent implements OnInit {
 
   async loadLocation(locationId: string) {
     try {
-      const foundLocation = await this.eventService.getLocationByID(locationId)
+      const foundLocation = await this.locationService.getLocationByID(locationId)
 
       if (foundLocation) {
         this.location = foundLocation
@@ -66,7 +70,7 @@ export class EventDetailPageComponent implements OnInit {
 
   async loadOrganizer(organizerId: string) {
     try {
-      const foundOrganizer = await this.eventService.getOrganizerByID(organizerId)
+      const foundOrganizer = await this.organizerService.getOrganizerByID(organizerId)
 
       if (foundOrganizer) {
         this.organizer = foundOrganizer

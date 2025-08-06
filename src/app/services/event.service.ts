@@ -1,11 +1,8 @@
 import { inject, Injectable } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
 import { Event, EventType } from '../models/event.interface'
-import { Location } from '../models/location.interface'
 import { surql } from 'surrealdb'
 import { TypeDB } from '../models/typeDB.interface'
-import { Organizer } from '../models/organizer.interface'
-
 @Injectable({
   providedIn: 'root',
 })
@@ -42,6 +39,12 @@ export class EventService {
     } catch (error) {
       throw new Error(`Fehler beim Laden der Events: ${error}`)
     }
+  }
+
+  async getEventTypeByID(id: string): Promise<EventType> {
+    const result = await this.surrealdb.getById<TypeDB>('event:'+id)
+    const eventType = result.name as unknown as EventType
+    return /^[A-Z_]+$/.test(eventType) ? eventType : EventType.UNKNOWN
   }
 
   async getEventsWithLocation(): Promise<Event[]> {
