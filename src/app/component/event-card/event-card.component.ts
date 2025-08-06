@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common'
 
 @Component({
@@ -13,4 +14,13 @@ export class EventCardComponent {
   @Input() date!: string;
   @Input() location!: string;
   @Input() price!: string;
+  @Input() eventId?: string;
+
+  constructor(private router: Router) {}
+
+  onCardClick() {
+    if (this.eventId) {
+      this.router.navigate(['/event', this.eventId]);
+    }
+  }
 }

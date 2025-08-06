@@ -1,8 +1,9 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EventCardComponent } from "../../component/event-card/event-card.component";
+import { EventCardComponent } from '../../component/event-card/event-card.component';
 
-interface Event {
+interface DummyEvent {
+  id: string;
   title: string;
   date: string;
   location: string;
@@ -17,15 +18,20 @@ interface Event {
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-  events: Event[] = [
-    { title: 'Konzert', date: '30.12.2025', location: 'Altstadt', price: '30€' },
-    { title: 'Theater', date: '02.01.2026', location: 'Innenstadt', price: '25€' },
-    { title: 'Lesung', date: '15.01.2026', location: 'Bücherei', price: '10€' },
-    { title: 'Open-Air', date: '05.02.2026', location: 'Marktplatz', price: 'Gratis' },
-    { title: 'Festival', date: '20.03.2026', location: 'Seeufer', price: '45€' },
+  events: DummyEvent[] = [
+    {
+      id: 'gi9bmmtwk2xjgwdk9jgx', // echte Event-ID für Routing
+      title: 'Konzert am See',
+      date: '30.12.2025',
+      location: 'Altstadt',
+      price: '30€',
+    },
+    {
+      id: 'dummy-2',
+      title: 'Theaterabend',
+      date: '01.01.2026',
+      location: 'Innenstadt',
+      price: '25€',
+    },
   ];
-
-  get limitedEvents(): Event[] {
-    return this.events.slice(0, 4);
-  }
 }

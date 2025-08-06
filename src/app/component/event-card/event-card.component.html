@@ -1,6 +1,12 @@
-<div class="w-[60vw] aspect-[16/9] bg-white shadow-md rounded-lg p-4 flex items-center justify-center m-5 mr-8">
+<div
+  (click)="onCardClick()"
+  (keyup.enter)="onCardClick()"
+  tabindex="0"
+  role="button"
+  class="w-[60vw] aspect-[16/9] bg-white shadow-md rounded-lg p-4 flex items-center justify-center m-5 mr-8 cursor-pointer hover:scale-105 transition-all"
+>
   <div class="align-middle">
-    <p class="text-gray-500 items-center justify-center ml-5.5">{{ title }}</p>
+    <p class="text-gray-500 ml-5.5">{{ title }}</p>
     <p class="text-gray-500">🕝 {{ date }}</p>
     <p class="text-gray-500">🏠 {{ location }}</p>
     <p class="text-gray-500">💶 {{ price }}</p>
