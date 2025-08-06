@@ -10,7 +10,6 @@ import { OrganizerService } from '../../services/organizer.service'
 import { TopicService } from '../../services/topic.service'
 import { Topic } from '../../models/topic.interface'
 
-
 @Component({
   selector: 'app-event-create',
   imports: [FormsModule, CommonModule],
@@ -18,12 +17,10 @@ import { Topic } from '../../models/topic.interface'
   styleUrl: './event-create.component.scss',
 })
 export class EventCreateComponent implements OnInit {
-
   private readonly eventService: EventService = inject(EventService)
   private readonly locationService: LocationService = inject(LocationService)
   private readonly organizerService: OrganizerService = inject(OrganizerService)
   private readonly topicService: TopicService = inject(TopicService)
-
 
   eventname = ''
   description = ''
@@ -40,9 +37,9 @@ export class EventCreateComponent implements OnInit {
   selectedLocation?: string
   selectedOrganizer?: string
   kp?: string
-  address = ""
+  address = ''
   plz = 0
-  city = ""
+  city = ''
 
   newLocation = false
   newOrganizer = false

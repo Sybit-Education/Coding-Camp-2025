@@ -54,7 +54,7 @@ export class EventService {
   }
 
   //************** POST **************
-  
+
   /**
    * BSP payload für create:
    * 

@@ -12,12 +12,12 @@
   font-style: bold;
 }
 
-:root{
-  --color-dark-pink: #c70d56; 
-  --color-indigo-light: #6d7cbc; 
-  --color-peach: #f18b70; 
-  --color-dark-blue: #3b4ea3; 
-  --color-yellow: #fdc61a; 
+:root {
+  --color-dark-pink: #c70d56;
+  --color-indigo-light: #6d7cbc;
+  --color-peach: #f18b70;
+  --color-dark-blue: #3b4ea3;
+  --color-yellow: #fdc61a;
 
   --font-family-spezia: Meta Pro, ui-sans-serif, system-ui, sans-serif;
 
@@ -29,11 +29,11 @@
   --colors-dark-red: var(--color-dark-pink);
   --colors-coral: var(--color-peach);
   --colors-yellow: var(--color-yellow);
-  
-  --color-pink: #f197c0; 
-  --color-light-blue: #a7b1db; 
-  --color-peach-light: #fbd2bc; 
-  --color-orange-light: #f5ae8e; 
+
+  --color-pink: #f197c0;
+  --color-light-blue: #a7b1db;
+  --color-peach-light: #fbd2bc;
+  --color-orange-light: #f5ae8e;
 
   --font-family-spezia: Meta Pro, ui-sans-serif, system-ui, sans-serif;
 
@@ -46,11 +46,9 @@
   --colors-bg-coral: var(--color-peach-light);
 }
 
-
-
 /*
 @layer utilities {
- */ /* === Textfarben === *//*
+ */ /* === Textfarben === */ /*
   .text-primary         { color: var(--colors-primary); }
   .text-secondary       { color: var(--colors-secondary); }
   .text-accent          { color: var(--colors-accent); }
@@ -64,7 +62,7 @@
   .text-peach-light     { color: var(--color-peach-light); }
   .text-orange-light    { color: var(--color-orange-light); }
 */
-  /* === Hintergrundfarben === *//*
+/* === Hintergrundfarben === */ /*
   .bg-primary           { background-color: var(--colors-primary); }
   .bg-secondary         { background-color: var(--colors-secondary); }
   .bg-accent            { background-color: var(--colors-accent); }
