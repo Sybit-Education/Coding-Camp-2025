@@ -72,7 +72,7 @@
                 </select>
                 <button type="submit" class="btn btn-primary" style="margin-top: 5px;"
                     (click)="newLocation = !newLocation">
-                    Location erstellen
+                    Neue Location
                 </button>
             </div>
 
@@ -101,8 +101,8 @@
                     <div>
                         <label for="city">Stadt</label>
                         <input type="text" id="city" name="city"
-                            class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600"
-                            [(ngModel)]="city" />
+                            class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" [(ngModel)]="city"
+                            required />
                     </div>
                 </div>
             </div>
@@ -117,27 +117,39 @@
                     </div>
                 </select>
             </div>
-
             <div>
-                <details>
-                    <summary>Kontakt zum Veranstalter</summary>
-                    <p>
-                        <label for="organizername">Ansprechpartner: </label>
-                        <input id="organizername" name="organizername" type="text" [(ngModel)]="organizername" />
-                    </p>
-                    <p>
-                        <label for="organizerphone">Telefonnummer: </label>
-                        <input id="organizerphone" name="organizerphone" type="text" [(ngModel)]="organizerphone" />
-                    </p>
-                    <p>
-                        <label for="organizermail">E-Mail: </label>
-                        <input id="organizermail" name="organizermail" type="text" [(ngModel)]="organizermail" />
-                    </p>
-                    <p>
-                        <label for="organizeradress">Adresse: </label>
-                        <input id="organizeradress" name="organizeradress" type="text" [(ngModel)]="organizeradress" />
-                    </p>
-                </details>
+                <select name="organizer" id="organizer"
+                    class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600"
+                    placeholder="Veranstalter wählen..." [(ngModel)]="selectedOrganizer" (change)="setOrganizer()">
+                    <option selected>Veranstalter wählen...</option>
+                    <div *ngFor="let organizer of organizers; let i = index">
+                        <option>
+                            {{ organizers[i].name }}
+                        </option>
+                    </div>
+                </select>
+                <button type="submit" class="btn btn-primary" style="margin-top: 5px;"
+                    (click)="newOrganizer = !newOrganizer">
+                    Neuer Veranstalter
+                </button>
+            </div>
+            <div *ngIf="newOrganizer">
+                <p>
+                    <label for="organizername">Ansprechpartner: </label>
+                    <input id="organizername" name="organizername" type="text" [(ngModel)]="organizername"
+                        class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" />
+                </p>
+                <p>
+                    <label for="organizerphone">Telefonnummer: </label>
+                    <input id="organizerphone" name="organizerphone" type="text" [(ngModel)]="organizerphone"
+                        class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" />
+                </p>
+                <p>
+                    <label for="organizermail">E-Mail: </label>
+                    <input id="organizermail" name="organizermail" type="text" [(ngModel)]="organizermail"
+                        class="p-[0.75rem 1rem] w-[100%] rounded-[6px] border-2 border-gray-600" />
+                </p>
+
             </div>
         </div>
     </form>

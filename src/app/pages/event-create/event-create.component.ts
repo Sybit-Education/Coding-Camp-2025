@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms'
 import { EventService } from '../../services/event.service'
 import { EventType } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
+import { Organizer } from '../../models/organizer.interface'
 
 @Component({
   selector: 'app-event-create',
@@ -27,14 +28,19 @@ export class EventCreateComponent implements OnInit {
   eventTypes: EventType[] = []
   moreInfoLink = ''
   newLocation = false
+  newOrganizer = false
   locationName = ''
+  organizerName = ''
   selectedLocation?: string
+  selectedOrganizer?: string
 
 
   locations: Location[] = []
   address = ""
   plz = 0
   city = ""
+
+  organizers: Organizer[] = []
   ngOnInit() {
     this.initialzeTypes()
     this.initialzeLocations()
@@ -52,6 +58,12 @@ export class EventCreateComponent implements OnInit {
   setLocation() {
     if (this.selectedLocation) {
       this.locationName = this.selectedLocation
+    }
+  }
+
+    setOrganizer() {
+    if (this.selectedOrganizer) {
+      this.organizerName = this.selectedOrganizer
     }
   }
 }
