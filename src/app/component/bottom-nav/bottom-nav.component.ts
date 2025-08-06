@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Router, RouterModule } from '@angular/router';
 
 export interface BottomNavItem {
   label: string;
@@ -14,10 +15,10 @@ export interface BottomNavItem {
   templateUrl: './bottom-nav.component.html',
   styleUrls: ['./bottom-nav.component.scss'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, RouterModule]
 })
 export class BottomNavComponent {
-  constructor(private sanitizer: DomSanitizer) {
+  constructor(private sanitizer: DomSanitizer, private router: Router) {
     // Sanitize all icons on initialization
     this.items.forEach(item => {
       item.safeIcon = this.sanitizer.bypassSecurityTrustHtml(item.icon);
@@ -35,7 +36,8 @@ export class BottomNavComponent {
                      1.125 1.125 1.125H9.75V15a2.25 2.25 0 114.5
                      0v6h4.125c.621 0 1.125-.504
                      1.125-1.125V9.75" />
-             </svg>`
+             </svg>`,
+      route: '/'
     },
     {
       label: 'Suchen',
@@ -45,7 +47,8 @@ export class BottomNavComponent {
                 <path stroke-linecap="round" stroke-linejoin="round"
                   d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5
                      4.5a7.5 7.5 0 0012.15 12.15z" />
-             </svg>`
+             </svg>`,
+      route: '/search'
     },
     {
       label: 'Mehr',
@@ -57,13 +60,17 @@ export class BottomNavComponent {
                      0 010 1.5zm5.25 0a.75.75 0 110-1.5.75.75
                      0 010 1.5zm5.25 0a.75.75 0 110-1.5.75.75
                      0 010 1.5z" />
-             </svg>`
+             </svg>`,
+      route: '/more'
     }
   ];
 
   @Input() activeIndex = 0;
 
-  setActive(index: number) {
+  setActive(index: number, route?: string) {
     this.activeIndex = index;
+    if (route) {
+      this.router.navigate([route]);
+    }
   }
 }
