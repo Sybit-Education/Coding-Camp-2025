@@ -17,7 +17,8 @@ export class EventCardComponent {
 
   onCardClick() {
     if (this.eventId) {
-      this.router.navigate(['/event', this.eventId]);
+      const cleanedId = this.eventId.replace(/^event:/, '');
+      this.router.navigate(['/event', cleanedId]);
     }
   }
 }
