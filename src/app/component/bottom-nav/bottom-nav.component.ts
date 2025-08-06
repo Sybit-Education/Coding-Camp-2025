@@ -1,9 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 export interface BottomNavItem {
   label: string;
   icon: string; // Heroicons SVG als String oder Name aus einem Icon-Set
+  safeIcon?: SafeHtml; // Sanitized icon
   route?: string; // Optionaler Router-Link
 }
 
@@ -15,6 +17,12 @@ export interface BottomNavItem {
   imports: [CommonModule]
 })
 export class BottomNavComponent {
+  constructor(private sanitizer: DomSanitizer) {
+    // Sanitize all icons on initialization
+    this.items.forEach(item => {
+      item.safeIcon = this.sanitizer.bypassSecurityTrustHtml(item.icon);
+    });
+  }
   @Input() items: BottomNavItem[] = [
     {
       label: 'Home',

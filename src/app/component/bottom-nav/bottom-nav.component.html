@@ -10,7 +10,7 @@
         [ngClass]="activeIndex === i ? 'text-blue-500 scale-110' : 'text-gray-800 hover:text-blue-500'"
         (click)="setActive(i)"
       >
-        <span class="w-6 h-6" [innerHTML]="item.icon"></span>
+        <span class="w-6 h-6" [innerHTML]="item.safeIcon"></span>
         <span class="text-xs mt-1">{{ item.label }}</span>
       </button>
     </ng-container>
