@@ -1,35 +1,88 @@
 <div class="event-container min-h-[80vh] w-[100vw] gap-5 px-6 py-6">
-  <div class="title flex items-center justify-center rounded-2xl text-xl">
-    <p class="] text-2xl">Event</p>
-  </div>
-  <div class="info flex items-center justify-start rounded-2xl p-4 text-xl">
-    <ul>
-      <li>Preis</li>
-      <li>Ort</li>
-      <li>Wann:</li>
-    </ul>
-  </div>
-  <div class="info2 flex items-end justify-end rounded-2xl p-4 text-xl">
-    <ul>
-      <li>25€</li>
-      <li>Radofzell</li>
-      <li>05.08.2026</li>
-    </ul>
-  </div>
-  <div class="picture p-4">
-    <img
-      class="rounded-2xl"
-      alt=""
-      src="https://www.radolfzell-tourismus.de/_Resources/Persistent/5974c694442edefd3aece5bb44fce833b556d910/Wasserspielplatz_TSR%2C%20KuhnleKn%C3%B6dler_37-1000x667.jpg"
-    />
-  </div>
-  <div class="description p-4">
+
+  <div class="dash"></div>
+
+  <div class="description rounded-2xl bg-gray-100 p-4 shadow-2xl">
+    <div class="flex w-full h-[30px] justify-center items-center">
+      <p class="text-2xl font-bold text-center pt-4 text-blue-900">Beschreibung</p>
+    </div>
+     <div class="dash">
+    <div class="mx-auto my-4 w-[75%] border-t border-blue-900"></div>
+    </div>
     <p>
       Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
       eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
     </p>
   </div>
+  <div class="picture rounded-2xl bg-gray-100 shadow-2xl">
+    <img
+      class="w-full rounded-t-2xl object-cover"
+      alt=""
+      src="https://www.radolfzell-tourismus.de/_Resources/Persistent/5974c694442edefd3aece5bb44fce833b556d910/Wasserspielplatz_TSR%2C%20KuhnleKn%C3%B6dler_37-1000x667.jpg"
+    />
+    <div class="flex w-full h-[30px] justify-center items-center">
+      <p class="text-2xl font-bold text-center pt-4 text-blue-900">Lange Shoppingnacht</p>
+    </div>
+     <div class="dash">
+    <div class="mx-auto mt-4 w-[75%] border-t border-blue-900"></div>
+    </div>
+    <div class="flex justify-between">
+      <div class="grid grid-cols-1 gap-4 rounded-2xl p-4 text-right text-xl">
+        <div class="grid grid-cols-2">
+          <div
+            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-amber-300"
+          >
+            <p>📅</p>
+          </div>
+          <div>
+            <p class="text-left text-base font-bold">Datum</p>
+            <p class="text-left text-sm">05.08.2025</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2">
+          <div
+            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-red-300"
+          >
+            <p>📍</p>
+          </div>
+          <div>
+            <p class="text-left text-base font-bold">Ort</p>
+            <p class="text-left text-sm">Konzertsegel</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2">
+          <div
+            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-green-300"
+          >
+            <p>💶</p>
+          </div>
+          <div>
+            <p class="text-left text-base font-bold">Preis</p>
+            <p class="text-left text-sm">5€</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2">
+          <div
+            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-purple-400"
+          >
+            <p>👥</p>
+          </div>
+          <div>
+            <p class="text-left text-base font-bold">Preis</p>
+            <p class="text-left text-sm">5€</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="dash">
+    <div class="mx-auto my-4 w-full border-t border-gray-400"></div>
+  </div>
   <div class="map p-4">
+    <p class="justify-center text-center text-3xl font-bold">
+      Anreise & Treffpunkt
+    </p>
+    <div class="mx-auto my-4 w-full border-t border-gray-400"></div>
     <!--<app-calendar
     [title]="'Mein Event'"
   [description]="'Details zum Event'"
@@ -37,6 +90,60 @@
   [startDateTime]="'2025-08-10T15:00:00'"
   [endDateTime]="'2025-08-10T16:00:00'">
     </app-calendar>-->
+
     <app-map [coordinates]="[47.734855, 8.971706]"></app-map>
+  </div>
+  <div class="termin justify-center text-center">
+    <p class="text-4xl font-bold">Nächster Termin</p>
+    <div class="mx-auto my-4 w-full border-t border-gray-400"></div>
+    <p class="text-2xl">Mittwoch</p>
+    <p class="text-3xl font-bold">06.08.2025</p>
+    <p class="text-xl">ganztags</p>
+    <div class="mx-auto my-4 w-full border-t border-gray-400"></div>
+  </div>
+  <div class="kontaktdaten rounded-2xl shadow-2xl bg-gray-100">
+    <div class="flex w-full h-[30px] justify-center items-center">
+      <p class="text-2xl font-bold text-center pt-4 text-blue-900">Kontaktdaten</p>
+    </div>
+     <div class="dash">
+    <div class="mx-auto mt-4 w-[75%] border-t border-blue-900"></div>
+    </div>
+    <div class="flex justify-between">
+      <div class="grid grid-cols-1 gap-4 rounded-2xl p-4 text-right text-xl">
+        <div class="grid grid-cols-2">
+          <div
+            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-amber-300"
+          >
+            <p>☎️</p>
+          </div>
+          <div>
+            <p class="text-left text-base font-bold">Telefonnummer</p>
+            <p class="text-left text-sm">+49123456789</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2">
+          <div
+            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-red-300"
+          >
+            <p>📧</p>
+          </div>
+          <div>
+            <p class="text-left text-base font-bold">Email</p>
+            <p class="text-left text-sm">blablabla&#64;gmail.com</p>
+          </div>
+        </div>    
+        <div class="grid grid-cols-2">
+          <div
+            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-purple-400"
+          >
+            <p>👤</p>
+          </div>
+          <div>
+            <p class="text-left text-base font-bold">Name</p>
+            <p class="text-left text-sm">Oleg</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

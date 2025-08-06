@@ -1,0 +1,19 @@
+.event-row {     
+  display: flex;
+  gap: 0.5rem; 
+}
+.home-container {
+  overflow-x: hidden;
+  justify-content: center;
+  align-items: center;
+}
+
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+

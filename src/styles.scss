@@ -13,13 +13,17 @@
 }
 
 :root {
-  --color-dark-pink: #c70d56;
-  --color-indigo-light: #6d7cbc;
-  --color-peach: #f18b70;
-  --color-dark-blue: #3b4ea3;
-  --color-yellow: #fdc61a;
+  font-family: var(--font-family-meta-pro)
+}
 
-  --font-family-spezia: Meta Pro, ui-sans-serif, system-ui, sans-serif;
+:root{
+  --color-dark-pink: #c70d56; 
+  --color-indigo-light: #6d7cbc; 
+  --color-peach: #f18b70; 
+  --color-dark-blue: #3b4ea3; 
+  --color-yellow: #fdc61a; 
+
+  --font-family-meta-pro: "Meta Pro", ui-sans-serif, system-ui, sans-serif;
 
   --colors-primary: var(--color-dark-pink);
   --colors-secondary: var(--color-peach);
@@ -35,8 +39,6 @@
   --color-peach-light: #fbd2bc;
   --color-orange-light: #f5ae8e;
 
-  --font-family-spezia: Meta Pro, ui-sans-serif, system-ui, sans-serif;
-
   --colors-bg-primary: var(--color-pink);
   --colors-bg-secondary: var(--color-peach);
   --colors-bg-accent: var(--color-yellow);
@@ -48,7 +50,9 @@
 
 /*
 @layer utilities {
- */ /* === Textfarben === */ /*
+  
+  
+ */ /* === Textfarben === *//*
   .text-primary         { color: var(--colors-primary); }
   .text-secondary       { color: var(--colors-secondary); }
   .text-accent          { color: var(--colors-accent); }
@@ -61,8 +65,8 @@
   .text-indigo-light    { color: var(--color-light-blue); }
   .text-peach-light     { color: var(--color-peach-light); }
   .text-orange-light    { color: var(--color-orange-light); }
-*/
-/* === Hintergrundfarben === */ /*
+
+  
   .bg-primary           { background-color: var(--colors-primary); }
   .bg-secondary         { background-color: var(--colors-secondary); }
   .bg-accent            { background-color: var(--colors-accent); }

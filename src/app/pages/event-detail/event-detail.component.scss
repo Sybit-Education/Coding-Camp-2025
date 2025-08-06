@@ -3,10 +3,13 @@
   grid-template-areas:
     'title title'
     'picture picture'
-    'info info2'
+    'dash dash'
     'description description'
-    'map map';
-  grid-template-rows: 80px 3fr 1fr auto auto;
+    'map map'
+    'termin termin'
+    'kontaktdaten kontaktdaten';
+
+  grid-template-rows: 80px auto auto auto auto auto 1fr;
   grid-template-columns: 2fr 2fr;
 }
 
@@ -14,18 +17,8 @@
   grid-area: title;
 }
 
-.info {
-  grid-area: info;
-}
-
 .picture {
   grid-area: picture;
-}
-
-.picture img {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
 }
 
 .description {
@@ -34,4 +27,21 @@
 
 .map {
   grid-area: map;
+}
+
+.kontaktdaten {
+  grid-area: kontaktdaten;
+}
+
+.dash {
+  grid-area: dash;
+  width: full;
+  max-width: auto;
+  border-top: 1;
+  margin: 4;
+  border-color: gray;
+}
+
+.termin {
+  grid-area: termin;
 }
