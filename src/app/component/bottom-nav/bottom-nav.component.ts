@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 export interface BottomNavItem {
   label: string;
@@ -9,7 +10,9 @@ export interface BottomNavItem {
 @Component({
   selector: 'app-bottom-nav',
   templateUrl: './bottom-nav.component.html',
-  styleUrls: ['./bottom-nav.component.scss']
+  styleUrls: ['./bottom-nav.component.scss'],
+  standalone: true,
+  imports: [CommonModule]
 })
 export class BottomNavComponent {
   @Input() items: BottomNavItem[] = [
