@@ -68,8 +68,8 @@
             <p>👥</p>
           </div>
           <div>
-            <p class="text-left text-base font-bold">Preis</p>
-            <p class="text-left text-sm">5€</p>
+            <p class="text-left text-base font-bold">Organisator</p>
+            <p class="text-left text-sm">Stadt Radolfzell</p>
           </div>
         </div>
       </div>
@@ -83,13 +83,7 @@
       Anreise & Treffpunkt
     </p>
     <div class="mx-auto my-4 w-full border-t border-gray-400"></div>
-    <!--<app-calendar
-    [title]="'Mein Event'"
-  [description]="'Details zum Event'"
-  [location]="'Berlin, Deutschland'"
-  [startDateTime]="'2025-08-10T15:00:00'"
-  [endDateTime]="'2025-08-10T16:00:00'">
-    </app-calendar>-->
+    
 
     <app-map [coordinates]="[47.734855, 8.971706]"></app-map>
   </div>
@@ -141,9 +135,22 @@
           <div>
             <p class="text-left text-base font-bold">Name</p>
             <p class="text-left text-sm">Oleg</p>
+            
           </div>
         </div>
       </div>
     </div>
-  </div>
 </div>
+       <div class="kalendertaste flex justify-center mt-6 mb-4">
+  <app-calendar
+    [title]="'Mein Event'"
+  [description]="'Details zum Event'"
+  [location]="'Berlin, Deutschland'"
+  [startDateTime]="'2025-08-10T15:00:00'"
+  [endDateTime]="'2025-08-10T16:00:00'">
+    </app-calendar>
+ 
+  </div>
+  </div>
+  
+

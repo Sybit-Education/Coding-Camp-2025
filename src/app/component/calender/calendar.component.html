@@ -1,13 +1,13 @@
 <div class="relative inline-block">
   <button
     class="rounded bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
-    (click)="getGoogleCalendarUrl()"
+    (click)="toggleMenu()"
   >
     📅 Zum Kalender hinzufügen
   </button>
 
+  @if (menuOpen) {
   <ul
-    ngIf="menuOpen"
     class="absolute left-0 z-10 mt-2 w-48 rounded border border-gray-200 bg-white shadow-lg"
   >
     <li>
@@ -39,4 +39,5 @@
       </button>
     </li>
   </ul>
+}
 </div>

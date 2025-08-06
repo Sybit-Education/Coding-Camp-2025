@@ -4,10 +4,12 @@
     'title title'
     'picture picture'
     'dash dash'
+    'kalendertaste kalendertaste'
     'description description'
     'map map'
     'termin termin'
     'kontaktdaten kontaktdaten';
+   
 
   grid-template-rows: 80px auto auto auto auto auto 1fr;
   grid-template-columns: 2fr 2fr;
@@ -44,4 +46,8 @@
 
 .termin {
   grid-area: termin;
+}
+
+.kalendertaste {
+  grid-area: kalendertaste;
 }
