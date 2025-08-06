@@ -11,7 +11,7 @@ export class EventService {
 
   //************** GET **************
   async getEventByID(id: string): Promise<Event> {
-    const result = await this.surrealdb.getById<Event>('event:'+id)
+    const result = await this.surrealdb.getById<Event>('event:' + id)
     return result
   }
 
@@ -30,19 +30,19 @@ export class EventService {
     }
   }
 
-  async getAllEventTypes(): Promise<EventType[]> {
+  async getAllEventTypes(): Promise<TypeDB[]> {
     try {
       const result = await this.surrealdb.getAll('event_type')
       return (result || []).map(
         (item: Record<string, unknown>) => item['name'] as string,
-      ) as unknown as EventType[]
+      ) as unknown as TypeDB[]
     } catch (error) {
       throw new Error(`Fehler beim Laden der Events: ${error}`)
     }
   }
 
   async getEventTypeByID(id: string): Promise<EventType> {
-    const result = await this.surrealdb.getById<TypeDB>('event:'+id)
+    const result = await this.surrealdb.getById<TypeDB>('event:' + id)
     const eventType = result.name as unknown as EventType
     return /^[A-Z_]+$/.test(eventType) ? eventType : EventType.UNKNOWN
   }
@@ -62,18 +62,7 @@ export class EventService {
 
   //************** POST **************
 
-  /**
-   * BSP payload für create:
-   *
-   * id: event.id,
-      name: event['name'],
-      description: event['description'],
-      location: event['location'],
-      date_start: event['date_start'],
-      date_end: event['date_end'],
-      price: event['price'],
-      organizer: event['organizer'],
-      media: event['media'],
-      event_type: event['event_type'],
-   */
+  async postEvent(event: Event) {
+    return await this.surrealdb.post<Event>('event', event)
+  }
 }

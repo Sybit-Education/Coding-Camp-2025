@@ -1,6 +1,6 @@
-.event-row {     
+.event-row {
   display: flex;
-  gap: 0.5rem; 
+  gap: 0.5rem;
 }
 .home-container {
   overflow-x: hidden;
@@ -10,10 +10,9 @@
 
 .scrollbar-hide {
   scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* IE 10+ */
+  -ms-overflow-style: none; /* IE 10+ */
 }
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Edge */
 }
-

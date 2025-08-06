@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input } from '@angular/core'
 import { CommonModule } from '@angular/common'
 
 @Component({
@@ -9,8 +9,8 @@ import { CommonModule } from '@angular/common'
   styleUrls: ['./event-card.component.scss'],
 })
 export class EventCardComponent {
-  @Input() title!: string;
-  @Input() date!: string;
-  @Input() location!: string;
-  @Input() price!: string;
+  @Input() title!: string
+  @Input() date!: string
+  @Input() location!: string
+  @Input() price!: string
 }

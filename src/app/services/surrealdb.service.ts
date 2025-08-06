@@ -26,8 +26,8 @@ export class SurrealdbService extends Surreal {
       variables: {
         username: username,
         password: password,
-      }
-    });
+      },
+    })
     return jwtToken
   }
 

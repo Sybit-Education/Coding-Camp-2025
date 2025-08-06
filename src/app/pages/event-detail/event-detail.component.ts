@@ -56,7 +56,8 @@ export class EventDetailPageComponent implements OnInit {
 
   async loadLocation(locationId: string) {
     try {
-      const foundLocation = await this.locationService.getLocationByID(locationId)
+      const foundLocation =
+        await this.locationService.getLocationByID(locationId)
 
       if (foundLocation) {
         this.location = foundLocation
@@ -70,7 +71,8 @@ export class EventDetailPageComponent implements OnInit {
 
   async loadOrganizer(organizerId: string) {
     try {
-      const foundOrganizer = await this.organizerService.getOrganizerByID(organizerId)
+      const foundOrganizer =
+        await this.organizerService.getOrganizerByID(organizerId)
 
       if (foundOrganizer) {
         this.organizer = foundOrganizer
@@ -88,10 +90,15 @@ export class EventDetailPageComponent implements OnInit {
 
       if (foundEvent) {
         this.event = foundEvent
-        this.mediaUrl = this.mediaBaseUrl + foundEvent.media[0].id.replace(/_(?=[^_]*$)/, '.')
-        this.loadLocation(foundEvent.location.id)
-        this.loadOrganizer(foundEvent.organizer.id)
-        this.loadType(this.event?.type)
+        this.mediaUrl =
+          this.mediaBaseUrl +
+          String(foundEvent.media[0].id).replace(/_(?=[^_]*$)/, '.')
+        const locationId = String(this.event?.['location']?.id)
+        const organizerId = String(this.event?.['organizer']?.id)
+        const typeId = String(this.event?.['event_type']?.id)
+        this.loadLocation(locationId)
+        this.loadOrganizer(organizerId)
+        this.loadType(typeId)
       } else {
         this.error = 'Event nicht gefunden'
       }
@@ -103,6 +110,4 @@ export class EventDetailPageComponent implements OnInit {
   goBack() {
     this.router.navigate(['/'])
   }
-
-
 }

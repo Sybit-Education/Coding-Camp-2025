@@ -1,15 +1,19 @@
-<div class="container mx-auto px-4 py-4 max-w-5xl justify-center items-center realtive h-64 ">
+<div
+  class="realtive container mx-auto h-64 max-w-5xl items-center justify-center px-4 py-4"
+>
   <img
     src="icons/icon-144x144.png"
     alt="1200 Jahre Radolfzell"
-    class="w-32 h-32 object-cover rounded-lg mb-3 max-w-full max-h-full mx-auto"
+    class="mx-auto mb-3 h-32 max-h-full w-32 max-w-full rounded-lg object-cover"
   />
 
-  <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-4  ml-5">
+  <h1 class="mb-4 ml-5 text-xl font-bold text-gray-800 md:text-2xl lg:text-3xl">
     Aktuelle Events
   </h1>
-  
-  <div class="flex grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 overflow-x-auto scroll-smooth scrollbar-hide">
+
+  <div
+    class="scrollbar-hide mb-8 flex grid-cols-1 gap-4 overflow-x-auto scroll-smooth md:grid-cols-2 lg:grid-cols-3"
+  >
     <app-event-card
       class="w-full"
       *ngFor="let event of limitedEvents"
@@ -20,7 +24,7 @@
     ></app-event-card>
   </div>
 
-  <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 ml-5">
+  <h1 class="mb-4 ml-5 text-xl font-bold text-gray-800 md:text-2xl lg:text-3xl">
     Kategorien
   </h1>
 </div>

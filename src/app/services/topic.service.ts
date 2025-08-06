@@ -16,17 +16,16 @@ export class TopicService {
 
   async getAllTopics(): Promise<Topic[]> {
     try {
-      const result = await this.surrealdb.getAll<Topic>('event')
+      const result = await this.surrealdb.getAll<Topic>('topic')
       return (result || []).map(
         (item: Record<string, unknown>) =>
           ({
             ...item,
             id: item['id']?.toString() || '',
-            name: item['name']?.toString || '',
           }) as unknown as Topic,
       )
     } catch (error) {
-      throw new Error(`Fehler beim Laden der Events: ${error}`)
+      throw new Error(`Fehler beim Laden der Topics: ${error}`)
     }
   }
 

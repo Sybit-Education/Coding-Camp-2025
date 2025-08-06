@@ -25,7 +25,7 @@ export class OrganizerService {
           }) as unknown as Organizer,
       )
     } catch (error) {
-      throw new Error(`Fehler beim Laden der Events: ${error}`)
+      throw new Error(`Fehler beim Laden der Organizer: ${error}`)
     }
   }
 

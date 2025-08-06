@@ -13,17 +13,17 @@
 }
 
 :root {
-  font-family: var(--font-family-meta-pro)
+  font-family: var(--font-family-meta-pro);
 }
 
-:root{
-  --color-dark-pink: #c70d56; 
-  --color-indigo-light: #6d7cbc; 
-  --color-peach: #f18b70; 
-  --color-dark-blue: #3b4ea3; 
-  --color-yellow: #fdc61a; 
+:root {
+  --color-dark-pink: #c70d56;
+  --color-indigo-light: #6d7cbc;
+  --color-peach: #f18b70;
+  --color-dark-blue: #3b4ea3;
+  --color-yellow: #fdc61a;
 
-  --font-family-meta-pro: "Meta Pro", ui-sans-serif, system-ui, sans-serif;
+  --font-family-meta-pro: 'Meta Pro', ui-sans-serif, system-ui, sans-serif;
 
   --colors-primary: var(--color-dark-pink);
   --colors-secondary: var(--color-peach);
@@ -52,7 +52,7 @@
 @layer utilities {
   
   
- */ /* === Textfarben === *//*
+ */ /* === Textfarben === */ /*
   .text-primary         { color: var(--colors-primary); }
   .text-secondary       { color: var(--colors-secondary); }
   .text-accent          { color: var(--colors-accent); }

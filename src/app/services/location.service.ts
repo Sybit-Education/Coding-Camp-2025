@@ -25,7 +25,7 @@ export class LocationService {
           }) as unknown as Location,
       )
     } catch (error) {
-      throw new Error(`Fehler beim Laden der Events: ${error}`)
+      throw new Error(`Fehler beim Laden der Locations: ${error}`)
     }
   }
 
