@@ -1,6 +1,6 @@
 <div class="relative inline-block">
   <button
-    class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded"
+    class="rounded bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
     (click)="getGoogleCalendarUrl()"
   >
     📅 Zum Kalender hinzufügen
@@ -8,14 +8,14 @@
 
   <ul
     ngIf="menuOpen"
-    class="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg z-10"
+    class="absolute left-0 z-10 mt-2 w-48 rounded border border-gray-200 bg-white shadow-lg"
   >
     <li>
       <a
         [href]="getGoogleCalendarUrl()"
         target="_blank"
         rel="noopener"
-        class="block px-4 py-2 hover:bg-gray-100 text-gray-800"
+        class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
         (click)="closeMenu()"
         >Google Calendar</a
       >
@@ -25,7 +25,7 @@
         [href]="getOutlookCalendarUrl()"
         target="_blank"
         rel="noopener"
-        class="block px-4 py-2 hover:bg-gray-100 text-gray-800"
+        class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
         (click)="closeMenu()"
         >Outlook</a
       >
@@ -33,7 +33,7 @@
     <li>
       <button
         (click)="downloadICS(); closeMenu()"
-        class="w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-800"
+        class="w-full px-4 py-2 text-left text-gray-800 hover:bg-gray-100"
       >
         Apple
       </button>

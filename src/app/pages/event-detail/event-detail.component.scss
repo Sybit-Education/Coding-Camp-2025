@@ -5,12 +5,11 @@
     'picture picture'
     'dash dash'
     'description description'
-    'info info2'
     'map map'
     'termin termin'
     'kontaktdaten kontaktdaten';
-    
-  grid-template-rows: 80px auto auto auto auto auto 1fr ;
+
+  grid-template-rows: 80px auto auto auto auto auto 1fr;
   grid-template-columns: 2fr 2fr;
 }
 
@@ -18,18 +17,8 @@
   grid-area: title;
 }
 
-.info {
-  grid-area: info;
-}
-
 .picture {
   grid-area: picture;
-}
-
-.picture img {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
 }
 
 .description {
@@ -42,7 +31,6 @@
 
 .kontaktdaten {
   grid-area: kontaktdaten;
-  background-color: lightgray;
 }
 
 .dash {
