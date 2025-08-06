@@ -3,10 +3,14 @@
   grid-template-areas:
     'title title'
     'picture picture'
-    'info info2'
+    'dash dash'
     'description description'
-    'map map';
-  grid-template-rows: 80px 3fr 1fr auto auto;
+    'info info2'
+    'map map'
+    'termin termin'
+    'kontaktdaten kontaktdaten';
+    
+  grid-template-rows: 80px auto auto auto auto auto 1fr ;
   grid-template-columns: 2fr 2fr;
 }
 
@@ -34,4 +38,22 @@
 
 .map {
   grid-area: map;
+}
+
+.kontaktdaten {
+  grid-area: kontaktdaten;
+  background-color: lightgray;
+}
+
+.dash {
+  grid-area: dash;
+  width: full;
+  max-width: auto;
+  border-top: 1;
+  margin: 4;
+  border-color: gray;
+}
+
+.termin {
+  grid-area: termin;
 }
