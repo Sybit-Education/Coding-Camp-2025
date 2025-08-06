@@ -1,6 +1,6 @@
 .event-row {     
   display: flex;
-  gap: 0.5rem; 
+  gap: 0.5rem;
 }
 .home-container {
   overflow-x: hidden;
@@ -17,3 +17,8 @@
   display: none; /* Chrome, Safari, Edge */
 }
 
+.card-snap {
+  scroll-snap-type: x mandatory;
+  scroll-snap-align: center;
+  scroll-padding: 1rem;
+}
