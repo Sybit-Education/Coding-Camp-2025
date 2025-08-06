@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 
+
 @Component({
   selector: 'app-kategorie-card',
   imports: [],
@@ -8,4 +9,5 @@ import { Component, Input } from '@angular/core';
 })
 export class KategorieCardComponent {
   @Input() kategorie = '';
+  @Input() color = '';
 }

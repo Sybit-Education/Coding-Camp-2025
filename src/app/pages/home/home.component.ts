@@ -12,6 +12,7 @@ interface Event {
 
 interface Kategorie {
   name: string;
+  color: string; 
 }
 
 @Component({
@@ -35,13 +36,13 @@ export class HomeComponent {
   }
 
   kategorien: Kategorie[] = [
-    { name: 'Ü18' },
-    { name: 'Kostenlos' },
-    { name: 'Für die ganze Familie' },
-    { name: 'Kultur' },
-    { name: 'Geschichte' },
-    { name: 'Entfaltung' },
-    { name: 'Barrierefrei' },
+    { name: 'Ü18' , color: 'bg-[#FF5733]' },
+    { name: 'Kostenlos' , color: 'bg-[#33FF57]' },
+    { name: 'Für die ganze Familie' , color: 'bg-[#3357FF]' },
+    { name: 'Kultur' , color: 'bg-[#FF33A1]' },
+    { name: 'Geschichte' , color: 'bg-[#FF8C33]' },
+    { name: 'Entfaltung' , color: 'bg-[#33FFF5]' },
+    { name: 'Barrierefrei' , color: 'bg-[#F533FF]' },
   ];
 
   get getKategorien(): Kategorie[] {
