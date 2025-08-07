@@ -48,8 +48,23 @@ export class I18nService implements OnInit {
     // Aktualisiere das LOCALE_ID für Angular-interne Formatierungen
     document.documentElement.lang = lang;
     
-    // Erzwinge ein Neuladen der Komponenten, die Datums- und Zahlenformatierungen verwenden
-    window.dispatchEvent(new CustomEvent('languageChanged', { detail: lang }));
+    // Aktualisiere das LOCALE_ID dynamisch
+    this.updateLocaleId(lang);
+  }
+  
+  /**
+   * Aktualisiert das LOCALE_ID dynamisch, um Datums- und Zahlenformatierungen zu aktualisieren
+   */
+  private updateLocaleId(lang: string): void {
+    // Bestimme das Locale basierend auf der Sprache
+    let locale = 'de-DE';
+    switch (lang) {
+      case 'en': locale = 'en-GB'; break;
+      case 'fr': locale = 'fr-FR'; break;
+    }
+    
+    // Setze das Locale für die Anwendung
+    document.documentElement.setAttribute('lang', locale);
   }
 
   /**

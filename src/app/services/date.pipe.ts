@@ -1,15 +1,18 @@
 // date-time-range.pipe.ts
-import { Pipe, PipeTransform, inject } from '@angular/core';
+import { Pipe, PipeTransform, inject, OnDestroy } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { I18nService } from './translate.service';
+import { Subscription } from 'rxjs';
 
 @Pipe({
   name: 'dateTimeRange',
   standalone: true,
-  pure: true,
+  pure: false, // Impure pipe, um auf Sprachänderungen zu reagieren
 })
 export class DateTimeRangePipe implements PipeTransform {
   private i18nService = inject(I18nService);
+  private lastStart: string | Date | null = null;
+  private lastEnd: string | Date | null = null;
 
   transform(
     startIso: string | Date | null,
