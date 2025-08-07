@@ -11,13 +11,13 @@ import { DateTimeRangePipe } from '../../services/date.pipe';
   styleUrls: ['./event-card.component.scss'],
 })
 export class EventCardComponent {
-  @Input() title: string = '';
+  @Input() title = '';
   @Input() eventId?: string;
 
   @Input() date_start: string | Date | null = null;
   @Input() date_end?: string | Date | null;
 
-  @Input() locationName: string = '';
+  @Input() locationName = '';
 
   constructor(private router: Router) {}
 

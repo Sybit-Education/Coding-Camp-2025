@@ -7,6 +7,7 @@ import { EventService } from '../../services/event.service'
 import { CommonModule } from '@angular/common'
 import { Organizer } from '../../models/organizer.interface'
 import { DateTimeRangePipe } from '../../services/date.pipe'
+import { LoginService } from '../../services/login.service'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -28,6 +29,9 @@ export class EventDetailPageComponent implements OnInit {
   private readonly eventService = inject(EventService)
   private readonly route = inject(ActivatedRoute)
   private readonly router = inject(Router)
+  private readonly loginservice = inject(LoginService)
+
+  protected isLoggedIn = false
 
   ngOnInit(): void {
     const eventId = this.route.snapshot.paramMap.get('id')
@@ -36,6 +40,7 @@ export class EventDetailPageComponent implements OnInit {
     } else {
       this.error = 'Event ID nicht gefunden'
     }
+    this.isLoggedIn = this.loginservice.canActivate(this.route.snapshot)
   }
 
   async loadType(typeId: string) {
@@ -101,5 +106,8 @@ export class EventDetailPageComponent implements OnInit {
     this.router.navigate(['/'])
   }
 
+redirect(){
+  this.router.navigate(['/'])
 
+  }
 }
