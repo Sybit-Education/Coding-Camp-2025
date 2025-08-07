@@ -26,7 +26,7 @@ export class UploadImageComponent {
 
   dragedImage = false
   isHovering = false
-  media: boolean = false
+  media = false
   pic?: Media
 
   onDragOver(event: DragEvent) {
@@ -52,17 +52,18 @@ export class UploadImageComponent {
   private async saveImage(file: File) {
     const base64 = await this.fileToBase64(file)
 
-    const media: Media = {
-      id: (this.eventName.replace(/[^a-zA-Z0-9]/g, '_') +
-        '_' +
-        file.name.split(';')[0].split('/')[1]) as unknown as RecordId<'media'>,
+    console.log('fileName: ', base64.split(';')[0].split('/')[1])
 
+    const media: Media = {
       fileName: file.name,
       fileType: file.type,
       file: base64,
     }
 
     this.pic = media
+    console.log('media from child: ', media)
+
+    this.image.emit(this.pic)
 
     //this.mediaService.postMedia(media)
 

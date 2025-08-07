@@ -17,6 +17,7 @@ import { Decimal, RecordId } from 'surrealdb'
 import { UploadImageComponent } from '../../component/upload-image/upload-image.component'
 import { CommonModule } from '@angular/common'
 import { Media } from '../../models/media.model'
+import { MediaService } from '../../services/media.service'
 
 @Component({
   selector: 'app-event-create',
@@ -31,6 +32,7 @@ export class EventCreateComponent implements OnInit {
   private readonly locationService = inject(LocationService)
   private readonly organizerService = inject(OrganizerService)
   private readonly topicService = inject(TopicService)
+  private readonly mediaService = inject(MediaService)
 
   // Form-Felder
   eventname = ''
@@ -76,7 +78,7 @@ export class EventCreateComponent implements OnInit {
 
   //Draft?
   draft = false
-  media: RecordId<'media'>[] | undefined
+  media: Media[] = []
   timePeriode = false
 
   ngOnInit() {
@@ -109,7 +111,10 @@ export class EventCreateComponent implements OnInit {
   }
 
   handleImage(media: Media) {
-    this.image = media
+    if (media) {
+      this.media.push(media)
+    }
+    console.log('mediaIds form Handle: ', media)
   }
 
   setOrganizer(organizer: Organizer) {
@@ -217,6 +222,8 @@ export class EventCreateComponent implements OnInit {
     // Preis in Decimal umwandeln
     const priceDec = this.price ? new Decimal(this.price) : undefined
 
+    const mediaIds: RecordId<'media'>[] = this.getMediaIds()
+
     const payload: AppEvent = {
       name: this.eventname,
       date_start: start,
@@ -229,7 +236,7 @@ export class EventCreateComponent implements OnInit {
       event_type: this.selectedEventType.id,
       location: this.selectedLocation.id!,
       topic: this.selectedTopics.map((t) => t.id!),
-      media: this.media!,
+      media: mediaIds!,
       age: this.age != null ? this.age : undefined,
       restriction: this.restriction || undefined,
     }
@@ -240,5 +247,24 @@ export class EventCreateComponent implements OnInit {
     } catch (err) {
       console.error('Fehler beim Erstellen des Events:', err)
     }
+  }
+
+  getMediaIds(): RecordId<'media'>[] {
+    const ids: RecordId<'media'>[] = []
+
+    this.media.forEach(async (med) => {
+      med.id = (this.eventname.replace(/[^a-zA-Z0-9]/g, '_') +
+        '_' +
+        med.fileType.split('/')[1]) as unknown as RecordId<'media'>
+
+      const result = await this.mediaService.postMedia(med)
+      if (result.id) {
+        ids.push(result.id)
+      }
+    })
+
+    console.log('media after setting id', this.media)
+
+    return ids
   }
 }
