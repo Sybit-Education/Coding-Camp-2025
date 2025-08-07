@@ -1,4 +1,4 @@
-<main class="event-container min-h-[80vh] w-[100vw] gap-5 px-6 py-6 grid" lang="de">
+<main class="event-container min-h-[80vh] w-[100vw] grid" lang="de">
   <!-- Skip-Link für Screenreader -->
   <a href="#event-content" class="sr-only focus:not-sr-only focus:absolute focus:p-2 focus:bg-white focus:z-50">
     Zum Veranstaltungsinhalt springen
@@ -10,12 +10,12 @@
       [alt]="event?.name ? 'Bild der Veranstaltung: ' + event.name : 'Veranstaltungsbild'"
       [src]="mediaUrl"
     />
-    <div class="flex w-full justify-center items-center">
-      <h1 class="px-2 text-2xl font-bold text-center pt-4 text-blue-900">{{ event?.name }}</h1>
-    </div>
-     <div class="dash">
+
+    <h1 class="flex w-full  text-2xl font-bold  pt-4 text-blue-900">{{ event?.name }}</h1>
+
+     <hr class="dash">
     <div class="mx-auto mt-4 w-[75%] border-t border-blue-900"></div>
-    </div>
+    </hr>
     <div class="flex justify-between">
       <div class="grid grid-cols-1 gap-4 rounded-2xl p-4 text-right text-xl w-full">
         <div class="grid grid-cols-[1fr_3fr]">
@@ -167,8 +167,8 @@
   </section>
 
   <div class="mt-8 mb-20 flex justify-center">
-    <button 
-      (click)="goBack()" 
+    <button
+      (click)="goBack()"
       class="px-6 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
       aria-label="Zurück zur Übersicht"
     >
