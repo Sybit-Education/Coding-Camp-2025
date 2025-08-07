@@ -23,7 +23,7 @@ export class EventService {
           ({
             ...item,
             id: item['id']?.toString() || '',
-          } as unknown as Event),
+          }) as unknown as Event,
       )
     } catch (error) {
       throw new Error(`Fehler beim Laden der Events: ${error}`)
@@ -61,12 +61,11 @@ export class EventService {
     return await this.surrealdb.post<Event>('event', event)
   }
 
-async updateEvent(id: string, event: Event): Promise<Event> {
-  if (!id) {
-    throw new Error('❌ Event ID is required for update')
+  async updateEvent(id: string, event: Event): Promise<Event> {
+    if (!id) {
+      throw new Error('❌ Event ID is required for update')
+    }
+
+    return await this.surrealdb.postUpdate<Event>(id, event)
   }
-
-  return await this.surrealdb.postUpdate<Event>(id, event)
-}
-
 }

@@ -57,16 +57,18 @@ export class SurrealdbService extends Surreal {
     return await super.insert<T>(table, payload)
   }
 
-async postUpdate<T extends Record<string, unknown>>(
-  id: string,
-  payload?: T,
-): Promise<T> {
+  async postUpdate<T extends Record<string, unknown>>(
+    id: string,
+    payload?: T,
+  ): Promise<T> {
+    console.log('📤 postUpdate(): Updating record', id, payload)
 
-  console.log('📤 postUpdate(): Updating record', id, payload)
-
-
-const result = await this.update<T>(new StringRecordId('event:' + id), payload)
-console.log('update result:', result)
-  // SurrealDB gibt ein Array zurück, daher das erste Element nehmen
-return Array.isArray(result) ? result[0] : result}
+    const result = await this.update<T>(
+      new StringRecordId('event:' + id),
+      payload,
+    )
+    console.log('update result:', result)
+    // SurrealDB gibt ein Array zurück, daher das erste Element nehmen
+    return Array.isArray(result) ? result[0] : result
+  }
 }

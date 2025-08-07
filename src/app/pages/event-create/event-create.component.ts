@@ -277,19 +277,21 @@ export class EventCreateComponent implements OnInit {
     if (this.event?.id !== null) {
       try {
         console.log('Updating existing event:', this.event!.id!.id)
-        await this.eventService.updateEvent(this.event!.id!.id.toString(), payload)
+        await this.eventService.updateEvent(
+          this.event!.id!.id.toString(),
+          payload,
+        )
       } catch (err) {
         console.error('Fehler beim Aktualisieren des Events:', err)
         return
       }
     } else {
-
-    try {
-      const created = await this.eventService.postEvent(payload)
-      console.log('Event created:', created)
-    } catch (err) {
-      console.error('Fehler beim Erstellen des Events:', err)
+      try {
+        const created = await this.eventService.postEvent(payload)
+        console.log('Event created:', created)
+      } catch (err) {
+        console.error('Fehler beim Erstellen des Events:', err)
+      }
     }
   }
-}
 }
