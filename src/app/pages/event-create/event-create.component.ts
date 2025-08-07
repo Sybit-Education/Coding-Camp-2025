@@ -1,14 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core'
+import { Component, DestroyRef, inject, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { FormsModule } from '@angular/forms'
-
-// Services
 import { EventService } from '../../services/event.service'
 import { LocationService } from '../../services/location.service'
 import { OrganizerService } from '../../services/organizer.service'
 import { TopicService } from '../../services/topic.service'
-
-// Interfaces
+import { ActivatedRoute } from '@angular/router'
 import { Event as AppEvent } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
 import { Organizer } from '../../models/organizer.interface'
@@ -23,11 +20,17 @@ import { Decimal, RecordId } from 'surrealdb'
   templateUrl: './event-create.component.html',
 })
 export class EventCreateComponent implements OnInit {
+  event: AppEvent | null = null
+
   // Services
   private readonly eventService = inject(EventService)
   private readonly locationService = inject(LocationService)
   private readonly organizerService = inject(OrganizerService)
   private readonly topicService = inject(TopicService)
+  constructor(
+    private readonly destroyRef: DestroyRef,
+    private readonly route: ActivatedRoute,
+  ) {}
 
   // Form-Felder
   eventname = ''
@@ -75,8 +78,70 @@ export class EventCreateComponent implements OnInit {
   media: RecordId<'media'>[] | undefined
   timePeriode = false
 
-  ngOnInit() {
-    this.initializeData()
+  async ngOnInit() {
+    await this.initializeData()
+    const id = this.route.snapshot.queryParams['id']
+    if (id) {
+      await this.loadEvent(id)
+    }
+  }
+
+  private async loadEvent(id: string) {
+    try {
+      const event = await this.eventService.getEventByID(id.split(':')[1])
+      if (!event) return
+      this.event = event
+
+      // Felder befüllen
+      this.eventname = event.name
+      this.description = event.description ?? null
+      this.moreInfoLink = event.more_info_link ?? null
+      this.price = event.price?.toString() ?? null
+      this.age = event.age ?? null
+      this.restriction = event.restriction ?? null
+      this.draft = event.draft ?? false
+      this.media = event.media
+
+      // Datum & Zeit splitten
+      const start = new Date(event.date_start)
+      this.dateStart = start.toISOString().split('T')[0]
+      this.timeStart = start.toTimeString().slice(0, 5)
+
+      if (event.date_end) {
+        const end = new Date(event.date_end)
+        this.dateEnd = end.toISOString().split('T')[0]
+        this.timeEnd = end.toTimeString().slice(0, 5)
+        this.timePeriode = true
+      }
+
+      // Organizer, Location, EventType, Topics aus Listen suchen
+      const organizerId = String(event.organizer.id)
+      this.selectedOrganizer =
+        this.organizers.find((o) => String(o.id?.id) === organizerId) || null
+      this.setOrganizer(this.selectedOrganizer)
+
+      const locationId = String(event.location.id)
+      this.selectedLocation =
+        this.locations.find((l) => String(l.id?.id) === locationId) || null
+      this.setLocation(this.selectedLocation)
+
+      const eventTypeId = String(event.event_type?.id)
+      this.selectedEventType =
+        this.eventTypes.find((e) => String(e.id?.id) === eventTypeId) || null
+      this.setEventType(this.selectedEventType)
+
+      const topicIds = event.topic || []
+      for (const topicId of topicIds) {
+        const topic = this.topics.find(
+          (t) => String(t.id?.id) === String(topicId?.id ?? topicId),
+        )
+        if (topic) {
+          this.selectedTopics.push(topic)
+        }
+      }
+    } catch (err) {
+      console.error('Fehler beim Laden des Events:', err)
+    }
   }
 
   // Initial-Daten laden
@@ -87,11 +152,12 @@ export class EventCreateComponent implements OnInit {
     this.topics = await this.topicService.getAllTopics()
     console.log('loaded organizer: ', this.organizers)
     console.log('loaded locations: ', this.locations)
+    console.log('loaded Eventtypes: ', this.eventTypes)
     console.log('loaded topics: ', this.topics)
   }
 
   // Auswahl-Handler
-  setLocation(location: Location) {
+  setLocation(location: Location | null) {
     this.selectedLocation = location
 
     if (location) {
@@ -100,11 +166,10 @@ export class EventCreateComponent implements OnInit {
       this.plz = location.zip_code ?? ''
       this.city = location.city ?? ''
     }
-
     console.log('selected Location:', this.selectedLocation)
   }
 
-  setOrganizer(organizer: Organizer) {
+  setOrganizer(organizer: Organizer | null) {
     this.selectedOrganizer = organizer
 
     if (organizer) {
@@ -112,34 +177,25 @@ export class EventCreateComponent implements OnInit {
       this.organizerphone = organizer.phonenumber ?? ''
       this.organizermail = organizer.email ?? ''
     }
-
     console.log('selected Organizer:', this.selectedOrganizer)
   }
 
-  setEventType(eventType: TypeDB) {
+  setEventType(eventType: TypeDB | null) {
     this.selectedEventType = eventType
-
     console.log('selected eventType:', this.selectedEventType)
   }
 
   toggleTopicSelection(event: Event, topic: Topic) {
-    const checkbox = event['target'] as HTMLInputElement
-
-    if (checkbox.checked) {
+    const checked = (event.target as HTMLInputElement).checked
+    if (checked) {
       this.selectedTopics.push(topic)
     } else {
-      this.selectedTopics = this.selectedTopics.filter(
-        (top) => top.id !== topic.id,
-      )
+      this.selectedTopics = this.selectedTopics.filter((t) => t.id !== topic.id)
     }
-
-    console.log('selected topics: ', this.selectedTopics)
   }
 
   // Speichern
   async saveLocation() {
-
-    console.log('name: ', this.locationName, 'street: ', this.address, 'zip_code: ', this.plz, 'city: ', this.city)
     const location: Location = {
       name: this.locationName!,
       street: this.address!,
@@ -150,10 +206,10 @@ export class EventCreateComponent implements OnInit {
     try {
       const savedLocation = await this.locationService.postLocation(location)
       console.log('Saved Location:', savedLocation)
+      this.selectedLocation = savedLocation
     } catch (error) {
       console.error('Fehler beim Speichern der Location:', error)
     }
-    this.selectedLocation = this.saveLocation as unknown as Location
   }
 
   async saveOrganizer() {
@@ -174,16 +230,14 @@ export class EventCreateComponent implements OnInit {
   }
 
   async saveEvent() {
-    if(!this.selectedLocation)
-    {
+    if (!this.selectedLocation) {
       await this.saveLocation()
     }
 
-    if(!this.selectedOrganizer)
-    {
+    if (!this.selectedOrganizer) {
       await this.saveOrganizer()
     }
-    
+
     if (
       !this.selectedLocation ||
       !this.selectedOrganizer ||
@@ -220,6 +274,16 @@ export class EventCreateComponent implements OnInit {
       restriction: this.restriction || undefined,
     }
 
+    if (this.event?.id !== null) {
+      try {
+        console.log('Updating existing event:', this.event!.id!.id)
+        await this.eventService.updateEvent(this.event!.id!.id.toString(), payload)
+      } catch (err) {
+        console.error('Fehler beim Aktualisieren des Events:', err)
+        return
+      }
+    } else {
+
     try {
       const created = await this.eventService.postEvent(payload)
       console.log('Event created:', created)
@@ -227,4 +291,5 @@ export class EventCreateComponent implements OnInit {
       console.error('Fehler beim Erstellen des Events:', err)
     }
   }
+}
 }

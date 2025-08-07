@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
-import { Event, EventType } from '../models/event.interface'
+import { Event } from '../models/event.interface'
 import { surql } from 'surrealdb'
 import { TypeDB } from '../models/typeDB.interface'
 @Injectable({
@@ -23,7 +23,7 @@ export class EventService {
           ({
             ...item,
             id: item['id']?.toString() || '',
-          }) as Event,
+          } as unknown as Event),
       )
     } catch (error) {
       throw new Error(`Fehler beim Laden der Events: ${error}`)
@@ -32,19 +32,14 @@ export class EventService {
 
   async getAllEventTypes(): Promise<TypeDB[]> {
     try {
-      const result = await this.surrealdb.getAll('event_type')
-      return (result || []).map(
-        (item: Record<string, unknown>) => item['name'] as string,
-      ) as unknown as TypeDB[]
+      return await this.surrealdb.getAll('event_type')
     } catch (error) {
       throw new Error(`Fehler beim Laden der Events: ${error}`)
     }
   }
 
-  async getEventTypeByID(id: string): Promise<EventType> {
-    const result = await this.surrealdb.getById<TypeDB>('event:' + id)
-    const eventType = result.name as unknown as EventType
-    return /^[A-Z_]+$/.test(eventType) ? eventType : EventType.UNKNOWN
+  async getEventTypeByID(id: string): Promise<TypeDB> {
+    return await this.surrealdb.getById<TypeDB>('event_type:' + id)
   }
 
   async getEventsWithLocation(): Promise<Event[]> {
@@ -65,4 +60,13 @@ export class EventService {
   async postEvent(event: Event) {
     return await this.surrealdb.post<Event>('event', event)
   }
+
+async updateEvent(id: string, event: Event): Promise<Event> {
+  if (!id) {
+    throw new Error('❌ Event ID is required for update')
+  }
+
+  return await this.surrealdb.postUpdate<Event>(id, event)
+}
+
 }

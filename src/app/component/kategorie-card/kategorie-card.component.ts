@@ -1,5 +1,4 @@
-import { Component, Input } from '@angular/core';
-
+import { Component, Input } from '@angular/core'
 
 @Component({
   selector: 'app-kategorie-card',
@@ -7,6 +6,6 @@ import { Component, Input } from '@angular/core';
   templateUrl: './kategorie-card.component.html',
 })
 export class KategorieCardComponent {
-  @Input() kategorie = '';
-  @Input() color = '';
+  @Input() kategorie = ''
+  @Input() color = ''
 }

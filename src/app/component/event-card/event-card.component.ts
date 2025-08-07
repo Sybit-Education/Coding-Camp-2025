@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Input } from '@angular/core'
+import { Router } from '@angular/router'
 import { CommonModule } from '@angular/common'
-import { DateTimeRangePipe } from '../../services/date.pipe';
+import { DateTimeRangePipe } from '../../services/date.pipe'
 
 @Component({
   selector: 'app-event-card',
@@ -11,20 +11,20 @@ import { DateTimeRangePipe } from '../../services/date.pipe';
   styleUrls: ['./event-card.component.scss'],
 })
 export class EventCardComponent {
-  @Input() title = '';
-  @Input() eventId?: string;
+  @Input() title = ''
+  @Input() eventId?: string
 
-  @Input() date_start: string | Date | null = null;
-  @Input() date_end?: string | Date | null;
+  @Input() date_start: string | Date | null = null
+  @Input() date_end?: string | Date | null
 
-  @Input() locationName = '';
+  @Input() locationName = ''
 
   constructor(private router: Router) {}
 
   onCardClick() {
     if (this.eventId) {
-      const cleanedId = this.eventId.replace(/^event:/, '');
-      this.router.navigate(['/event', cleanedId]);
+      const cleanedId = this.eventId.replace(/^event:/, '')
+      this.router.navigate(['/event', cleanedId])
     }
   }
 }

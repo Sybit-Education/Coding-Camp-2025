@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core'
 import { MapComponent } from '../../component/map/map.component'
-import { Event, EventType } from '../../models/event.interface'
+import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
 import { ActivatedRoute, Router } from '@angular/router'
 import { EventService } from '../../services/event.service'
@@ -10,6 +10,7 @@ import { LocationService } from '../../services/location.service'
 import { OrganizerService } from '../../services/organizer.service'
 import { DateTimeRangePipe } from '../../services/date.pipe'
 import { LoginService } from '../../services/login.service'
+import { TypeDB } from '../../models/typeDB.interface'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -22,7 +23,7 @@ export class EventDetailPageComponent implements OnInit {
   event: Event | null = null
   location: Location | null = null
   organizer: Organizer | null = null
-  type: EventType | null = null
+  type: TypeDB | null = null
   error: string | null = null
 
   mediaBaseUrl = 'https://1200-jahre-radolfzell.sybit.education/media/'
@@ -51,7 +52,7 @@ export class EventDetailPageComponent implements OnInit {
     try {
       const type = await this.eventService.getEventTypeByID(typeId!)
       if (type) {
-        this.type = type as EventType
+        this.type = type as TypeDB
       } else {
         this.error = 'Event Type nicht gefunden'
       }
@@ -96,6 +97,8 @@ export class EventDetailPageComponent implements OnInit {
 
       if (foundEvent) {
         this.event = foundEvent
+
+        console.log('Geladenes Event:', this.event)
         this.mediaUrl =
           this.mediaBaseUrl +
           String(foundEvent.media[0].id).replace(/_(?=[^_]*$)/, '.')
@@ -117,8 +120,12 @@ export class EventDetailPageComponent implements OnInit {
     this.router.navigate(['/'])
   }
 
-redirect(){
-  this.router.navigate(['/'])
-
+  redirect() {
+    console.log('Redirect triggered with ID:', this.event?.id)
+    this.router.navigate(['/create-event'], {
+      queryParams: {
+        id: this.event!.id,
+      },
+    })
   }
 }

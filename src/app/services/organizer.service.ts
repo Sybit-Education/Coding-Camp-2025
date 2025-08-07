@@ -11,7 +11,7 @@ export class OrganizerService {
   //************** GET **************
 
   async getOrganizerByID(id: string): Promise<Organizer> {
-    return await this.surrealdb.getById<Organizer>(id)
+    return await this.surrealdb.getById<Organizer>('organizer:' + id)
   }
 
   async getAllOrganizers(): Promise<Organizer[]> {
@@ -20,7 +20,7 @@ export class OrganizerService {
       return (result || []).map(
         (item: Record<string, unknown>) =>
           ({
-            ...item
+            ...item,
           }) as unknown as Organizer,
       )
     } catch (error) {

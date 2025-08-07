@@ -20,7 +20,7 @@ export class TopicService {
       return (result || []).map(
         (item: Record<string, unknown>) =>
           ({
-            ...item
+            ...item,
           }) as unknown as Topic,
       )
     } catch (error) {

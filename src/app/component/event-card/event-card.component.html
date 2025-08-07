@@ -3,14 +3,13 @@
   role="button"
   (click)="onCardClick()"
   (keyup.enter)="onCardClick()"
-  class="bg-white rounded-2xl shadow-lg p-6 cursor-pointer flex flex-col justify-start items-start h-full
-         transition-all duration-300 ease-in-out
-         hover:scale-[1.02] focus:scale-[1.02] active:scale-95
-         hover:shadow-xl focus:shadow-xl border border-gray-100"
+  class="flex h-full cursor-pointer flex-col items-start justify-start rounded-2xl border border-gray-100 bg-white p-6 shadow-lg transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl focus:scale-[1.02] focus:shadow-xl active:scale-95"
 >
   <div class="flex flex-col gap-2 text-left">
-    <p class="text-gray-700 text-base">🪧 {{ title }}</p>
-    <p class="text-gray-700 text-base">📅 {{ date_start | dateTimeRange:date_end }}</p>
-    <p class="text-gray-700 text-base">📍 {{ locationName }}</p>
+    <p class="text-base text-gray-700">🪧 {{ title }}</p>
+    <p class="text-base text-gray-700">
+      📅 {{ date_start | dateTimeRange: date_end }}
+    </p>
+    <p class="text-base text-gray-700">📍 {{ locationName }}</p>
   </div>
 </div>

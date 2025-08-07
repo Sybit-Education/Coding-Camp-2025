@@ -10,18 +10,18 @@
   Corporate‑Designs.
 -->
 <header
-  class="fixed top-0 left-0 w-full backdrop-blur-[6px] flex flex-col justify-center overflow-hidden z-500 transition-all duration-1200"
+  class="fixed top-0 left-0 z-500 flex w-full flex-col justify-center overflow-hidden backdrop-blur-[6px] transition-all duration-1200"
   [ngClass]="{
-    'h-[70px] items-start pl-4 bg-transparent': isShrunk,
-    'h-[240px] items-center bg-[#fbd2bc]/90': !isShrunk
+    'h-[70px] items-start bg-transparent pl-4': isShrunk,
+    'h-[240px] items-center bg-[#fbd2bc]/90': !isShrunk,
   }"
 >
   <!-- Logo-Container: richtet das Logo zentriert oder links aus -->
   <div
-    class="w-full flex items-center relative z-10 transition-all duration-1200"
+    class="relative z-10 flex w-full items-center transition-all duration-1200"
     [ngClass]="{
       'justify-start': isShrunk,
-      'justify-center': !isShrunk
+      'justify-center': !isShrunk,
     }"
   >
     <img
@@ -30,7 +30,7 @@
       class="transition-all duration-50"
       [ngClass]="{
         'w-[120px]': isShrunk,
-        'w-[80%] max-w-[380px]': !isShrunk
+        'w-[80%] max-w-[380px]': !isShrunk,
       }"
     />
   </div>
@@ -39,8 +39,8 @@
     *ngIf="showWave"
     class="absolute bottom-0 left-0 w-full"
     [ngClass]="{
-    'h-[0px]': isShrunk,
-    'h-[220px]': !isShrunk
+      'h-[0px]': isShrunk,
+      'h-[220px]': !isShrunk,
     }"
     viewBox="0 0 100 10"
     preserveAspectRatio="none"

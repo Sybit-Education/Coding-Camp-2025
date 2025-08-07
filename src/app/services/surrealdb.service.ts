@@ -39,6 +39,7 @@ export class SurrealdbService extends Surreal {
   async getById<T extends Record<string, unknown>>(
     recordId: string,
   ): Promise<T> {
+    console.log('📥 getById(): Fetching record with ID', recordId)
     const result = await super.select<T>(new StringRecordId(recordId))
     return result as T
   }
@@ -55,4 +56,17 @@ export class SurrealdbService extends Surreal {
   ): Promise<T[]> {
     return await super.insert<T>(table, payload)
   }
+
+async postUpdate<T extends Record<string, unknown>>(
+  id: string,
+  payload?: T,
+): Promise<T> {
+
+  console.log('📤 postUpdate(): Updating record', id, payload)
+
+
+const result = await this.update<T>(new StringRecordId('event:' + id), payload)
+console.log('update result:', result)
+  // SurrealDB gibt ein Array zurück, daher das erste Element nehmen
+return Array.isArray(result) ? result[0] : result}
 }

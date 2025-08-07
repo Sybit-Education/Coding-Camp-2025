@@ -11,7 +11,8 @@ export class LocationService {
   //************** GET **************
 
   async getLocationByID(id: string): Promise<Location> {
-    return await this.surrealdb.getById<Location>(id)
+    console.log('Loading location with ID:', id)
+    return await this.surrealdb.getById<Location>('location:' + id)
   }
 
   async getAllLocations(): Promise<Location[]> {
@@ -20,7 +21,7 @@ export class LocationService {
       return (result || []).map(
         (item: Record<string, unknown>) =>
           ({
-            ...item
+            ...item,
           }) as unknown as Location,
       )
     } catch (error) {

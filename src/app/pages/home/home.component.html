@@ -1,13 +1,17 @@
-<div class="container mx-auto px-4 py-4 max-w-5xl justify-center items-center relative">
+<div
+  class="relative container mx-auto max-w-5xl items-center justify-center px-4 py-4"
+>
   <div class="p-4">
-    <h1 class="text-xl font-bold mb-4 text-left">Aktuelle Events</h1>
+    <h1 class="mb-4 text-left text-xl font-bold">Aktuelle Events</h1>
 
-    <div class="w-full overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 -mx-4 scrollbar-hide card-snap">
-      <div class="flex gap-2 px-4 min-w-max event-row">
+    <div
+      class="scrollbar-hide card-snap -mx-4 w-full snap-x snap-mandatory overflow-x-auto scroll-smooth pb-4"
+    >
+      <div class="event-row flex min-w-max gap-2 px-4">
         <app-event-card
           *ngFor="let event of events; let i = index"
           class="flex-shrink-0 snap-center"
-          [class]="getCardClass(i)"
+          [class]="getCardClass()"
           [title]="event.name"
           [eventId]="event.id"
           [date_start]="event.date_start"
@@ -17,9 +21,8 @@
       </div>
     </div>
 
-    <h1 class="text-xl font-bold mb-4 text-left">Kategorien</h1>
+    <h1 class="mb-4 text-left text-xl font-bold">Kategorien</h1>
 
     <app-kategorie-card></app-kategorie-card>
-    
   </div>
 </div>
