@@ -332,7 +332,10 @@
         />
       </div>
 
-      <app-upload-image [eventName]="eventname"></app-upload-image>
+      <app-upload-image
+        [eventName]="eventname"
+        (image)="handleImage($event)"
+      ></app-upload-image>
 
       <!-- Button: Event erstellen -->
       <div>

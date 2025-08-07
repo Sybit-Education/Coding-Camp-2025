@@ -16,6 +16,7 @@ import { TypeDB } from '../../models/typeDB.interface'
 import { Decimal, RecordId } from 'surrealdb'
 import { UploadImageComponent } from '../../component/upload-image/upload-image.component'
 import { CommonModule } from '@angular/common'
+import { Media } from '../../models/media.model'
 
 @Component({
   selector: 'app-event-create',
@@ -71,6 +72,7 @@ export class EventCreateComponent implements OnInit {
   organizers: Organizer[] = []
   eventTypes: TypeDB[] = []
   topics: Topic[] = []
+  image: Media | null = null
 
   //Draft?
   draft = false
@@ -104,6 +106,10 @@ export class EventCreateComponent implements OnInit {
     }
 
     console.log('selected Location:', this.selectedLocation)
+  }
+
+  handleImage(media: Media) {
+    this.image = media
   }
 
   setOrganizer(organizer: Organizer) {
