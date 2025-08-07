@@ -21,14 +21,14 @@ export class I18nService implements OnInit {
 
   private initializeTranslation(): void {
     // Verfügbare Sprachen festlegen
-    this.translateService.addLangs(['de', 'en']);
+    this.translateService.addLangs(['de', 'en', 'fr']);
     
     // Fallback-Sprache festlegen (statt setDefaultLang)
     this.translateService.setDefaultLang('de');
     
     // Browser-Sprache erkennen oder Standardsprache verwenden
     const browserLang = this.translateService.getBrowserLang();
-    const initialLang = browserLang && ['de', 'en'].includes(browserLang) ? browserLang : 'de';
+    const initialLang = browserLang && ['de', 'en', 'fr'].includes(browserLang) ? browserLang : 'de';
     
     // Gespeicherte Sprache aus localStorage verwenden, falls vorhanden
     const savedLang = localStorage.getItem('selectedLanguage');
