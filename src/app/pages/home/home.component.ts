@@ -7,6 +7,7 @@ import { LocationService } from '../../services/location.service';
 import { KategorieCardComponent } from "../../component/kategorie-card/kategorie-card.component";
 import { TopicService } from '../../services/topic.service';
 import { Topic } from '../../models/topic.interface';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface EventWithResolvedLocation extends Event {
   locationName: string;

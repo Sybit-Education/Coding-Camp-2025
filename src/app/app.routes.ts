@@ -45,7 +45,7 @@ export const routes: Routes = [
   },
   {
     path: 'impressum',
-    component: ImpressumComponent,
+    component: PlaceholderComponent,
   },
   {
     path: 'datenschutz',
