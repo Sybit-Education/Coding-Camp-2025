@@ -51,7 +51,13 @@
           </div>
           <div>
             <h2 class="text-left text-base font-bold">Preis</h2>
-            <p class="text-left text-sm">@if (event?.price !== null && +event?.price! > 0) { {{ event?.price }} } @else { {{ "kostenlos" }} }</p>
+            <p class="text-left text-sm">
+              @if (event?.price !== null && +event?.price! > 0) {
+                {{ event?.price }}
+              } @else {
+                kostenlos
+              }
+            </p>
           </div>
         </div>
         <div class="grid grid-cols-[1fr_3fr]">
