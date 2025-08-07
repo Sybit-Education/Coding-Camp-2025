@@ -1,31 +1,46 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EventCardComponent } from "../../component/event-card/event-card.component";
+import { EventCardComponent } from '../../component/event-card/event-card.component';
+import { EventService } from '../../services/event.service';
+import { Event } from '../../models/event.interface';
+import { KategorieCardComponent } from "../../component/kategorie-card/kategorie-card.component";
 
-interface Event {
-  title: string;
-  date: string;
-  location: string;
-  price: string;
+interface EventWithResolvedLocation extends Event {
+  locationName: string;
 }
+
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [EventCardComponent, CommonModule],
+  imports: [EventCardComponent, CommonModule, KategorieCardComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent {
-  events: Event[] = [
-    { title: 'Konzert', date: '30.12.2025', location: 'Altstadt', price: '30€' },
-    { title: 'Theater', date: '02.01.2026', location: 'Innenstadt', price: '25€' },
-    { title: 'Lesung', date: '15.01.2026', location: 'Bücherei', price: '10€' },
-    { title: 'Open-Air', date: '05.02.2026', location: 'Marktplatz', price: 'Gratis' },
-    { title: 'Festival', date: '20.03.2026', location: 'Seeufer', price: '45€' },
-  ];
+export class HomeComponent implements OnInit {
+  events: EventWithResolvedLocation[] = [];
 
-  get limitedEvents(): Event[] {
-    return this.events.slice(0, 4);
+  constructor(private eventService: EventService) {}
+
+  async ngOnInit() {
+    try {
+      const rawEvents = await this.eventService.getAllEvents();
+
+      this.events = await Promise.all(
+        rawEvents.map(async (event) => {
+          const location = await this.eventService.getLocationByID(event.location.id);
+          return {
+            ...event,
+            locationName: location?.name ?? 'Unbekannter Ort',
+          };
+        })
+      );
+    } catch (error) {
+      console.error('Fehler beim Laden der Events:', error);
+    }
+  }
+
+  getCardClass(index: number): string {
+    return 'w-[calc(100vw-6rem)] h-[280px]';
   }
 }

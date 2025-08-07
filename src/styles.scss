@@ -102,3 +102,12 @@
   @apply bg-cover bg-center;
   background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201200%20800%22%20preserveAspectRatio%3D%22xMidYMid%20slice%22%3E%3Crect%20width%3D%221200%22%20height%3D%22800%22%20fill%3D%22%23fbd2bc%22/%3E%3Cpath%20d%3D%22M900%200%20A400%20400%200%200%201%20500%20400%20L500%200%20Z%22%20fill%3D%22%23ff8a70%22%20opacity%3D%220.65%22/%3E%3Cpath%20d%3D%22M0%20600%20A500%20500%200%200%200%20600%201100%20L0%201100%20Z%22%20fill%3D%22%2372bdbb%22%20opacity%3D%220.65%22/%3E%3Cpath%20d%3D%22M1200%20300%20A300%20300%200%200%201%20900%20600%20L900%20300%20Z%22%20fill%3D%22%23fdc519%22%20opacity%3D%220.55%22/%3E%3C/svg%3E");
 }
+
+@layer utilities {
+  .bg-wave {
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http://www.w3.org/2000/svg%27%20viewBox%3D%270%200%201200%20120%27%3E%3Cpath%20fill%3D%27%236d7cbc%27%20d%3D%27M0%20100%20C300%200%20900%2C0%201200%2C100%20L1200%2C120%20L0%2C120%20Z%27/%3E%3C/svg%3E");
+  }
+}
