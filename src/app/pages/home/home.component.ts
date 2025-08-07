@@ -10,10 +10,6 @@ interface Event {
   price: string;
 }
 
-interface Kategorie {
-  name: string;
-  color: string; 
-}
 
 @Component({
   selector: 'app-home',
@@ -34,22 +30,6 @@ export class HomeComponent {
   get limitedEvents(): Event[] {
     return this.events.slice(0, 4);
   }
-
-  kategorien: Kategorie[] = [
-    { name: 'Ü18' , color: 'bg-[#FF5733]' },
-    { name: 'Kostenlos' , color: 'bg-[#33FF57]' },
-    { name: 'Für die ganze Familie' , color: 'bg-[#3357FF]' },
-    { name: 'Kultur' , color: 'bg-[#FF33A1]' },
-    { name: 'Geschichte' , color: 'bg-[#FF8C33]' },
-    { name: 'Entfaltung' , color: 'bg-[#33FFF5]' },
-    { name: 'Barrierefrei' , color: 'bg-[#F533FF]' },
-  ];
-
-  get getKategorien(): Kategorie[] {
-    return this.kategorien;
-  }
-
-
 }
 
 
