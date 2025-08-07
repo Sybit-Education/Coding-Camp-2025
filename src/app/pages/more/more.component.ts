@@ -1,6 +1,8 @@
 import { Component } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { Router, RouterModule } from '@angular/router'
+// Für eine vollständige Implementierung würde LiveAnnouncer importiert werden
+// import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 interface MoreMenuItem {
   title: string
@@ -31,6 +33,20 @@ export class MoreComponent {
    */
   navigateTo(route: string): void {
     this.router.navigate([route]);
+    // Ankündigung für Screenreader
+    this.announceNavigation(route);
+  }
+
+  /**
+   * Kündigt die Navigation für Screenreader an
+   * @param route Die Zielroute
+   */
+  private announceNavigation(route: string): void {
+    const menuItem = this.menuItems.find(item => item.route === route);
+    if (menuItem) {
+      // In einer vollständigen Implementierung würde hier LiveAnnouncer verwendet werden
+      console.log(`Navigiere zu: ${menuItem.title}`);
+    }
   }
   menuItems: MoreMenuItem[] = [
     {
