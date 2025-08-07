@@ -1,0 +1,13 @@
+<div>
+  <div
+    class="dropzone"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+    [class.hovering]="isHovering"
+  >
+    <p *ngIf="!previewUrl">Bild hierher ziehen oder klicken</p>
+    <img *ngIf="previewUrl" [src]="previewUrl" alt="Vorschau" />
+    <input type="file" (change)="onFileSelected($event)" #fileInput />
+  </div>
+</div>

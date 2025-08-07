@@ -1,5 +1,5 @@
 <div
-  class="flex justify-center bg-[var(--colors-light-blue)] p-5 text-lg leading-relaxed text-shadow-gray-500"
+  class="flex flex-col items-center justify-center bg-[var(--colors-light-blue)] p-5 text-lg leading-relaxed text-shadow-gray-500"
 >
   <form
     class="grid gap-[3rem] rounded-2xl bg-white p-6 text-black sm:grid-cols-[1fr] md:w-[75%] md:grid-cols-[1fr_1fr]"
@@ -344,4 +344,8 @@
       </div>
     </div>
   </form>
+
+  <div class="h-[300px] w-[300px] bg-amber-300">
+    <app-upload-image [eventName]="eventname"></app-upload-image>
+  </div>
 </div>

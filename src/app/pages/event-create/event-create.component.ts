@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core'
-import { CommonModule } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 
 // Services
@@ -15,11 +14,13 @@ import { Organizer } from '../../models/organizer.interface'
 import { Topic } from '../../models/topic.interface'
 import { TypeDB } from '../../models/typeDB.interface'
 import { Decimal, RecordId } from 'surrealdb'
+import { UploadImageComponent } from '../../component/upload-image/upload-image.component'
+import { CommonModule } from '@angular/common'
 
 @Component({
   selector: 'app-event-create',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, UploadImageComponent, CommonModule],
   templateUrl: './event-create.component.html',
   styleUrl: './event-create.component.scss',
 })
@@ -137,8 +138,16 @@ export class EventCreateComponent implements OnInit {
 
   // Speichern
   async saveLocation() {
-
-    console.log('name: ', this.locationName, 'street: ', this.address, 'zip_code: ', this.plz, 'city: ', this.city)
+    console.log(
+      'name: ',
+      this.locationName,
+      'street: ',
+      this.address,
+      'zip_code: ',
+      this.plz,
+      'city: ',
+      this.city,
+    )
     const location: Location = {
       name: this.locationName!,
       street: this.address!,
@@ -173,16 +182,14 @@ export class EventCreateComponent implements OnInit {
   }
 
   async saveEvent() {
-    if(!this.selectedLocation)
-    {
+    if (!this.selectedLocation) {
       await this.saveLocation()
     }
 
-    if(!this.selectedOrganizer)
-    {
+    if (!this.selectedOrganizer) {
       await this.saveOrganizer()
     }
-    
+
     if (
       !this.selectedLocation ||
       !this.selectedOrganizer ||
