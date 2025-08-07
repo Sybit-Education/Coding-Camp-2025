@@ -1,5 +1,6 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { I18nService } from '../../services/translate.service';
 
 // -----------------------------------------------------------------------------
 // HeaderComponent
@@ -45,6 +46,19 @@ interface LogoSet {
 })
 export class HeaderComponent implements OnInit {
   /**
+   * Verfügbare Sprachen mit Flaggen-Icons
+   */
+  languages = [
+    { code: 'de', name: 'Deutsch', flag: 'assets/flags/de.svg' },
+    { code: 'en', name: 'English', flag: 'assets/flags/gb.svg' },
+    { code: 'fr', name: 'Français', flag: 'assets/flags/fr.svg' }
+  ];
+
+  /**
+   * Aktuell ausgewählte Sprache
+   */
+  currentLang: string;
+  /**
    * Bündel aller möglichen Logovarianten. Per Default wird die transparente
    * PNG‑Datei aus dem Assets‑Ordner verwendet. Der Benutzer kann dieses
    * Objekt überschreiben, um eigene Dateipfade oder weitere Reduktionsstufen
@@ -87,6 +101,14 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.updateState();
+  }
+
+  /**
+   * Wechselt die aktuelle Sprache und aktualisiert die Anzeige
+   */
+  switchLanguage(lang: string): void {
+    this.i18nService.use(lang);
+    this.currentLang = lang;
   }
 
   /**
