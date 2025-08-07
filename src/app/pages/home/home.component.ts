@@ -1,8 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EventCardComponent } from '../../component/event-card/event-card.component';
 import { EventService } from '../../services/event.service';
 import { Event } from '../../models/event.interface';
+import { Location } from '../../models/location.interface';
+import { LocationService } from '../../services/location.service';
 import { KategorieCardComponent } from "../../component/kategorie-card/kategorie-card.component";
 import { LocationService } from '../../services/location.service';
 import { TopicService } from '../../services/topic.service';
@@ -23,7 +25,7 @@ interface Kategorie {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [EventCardComponent, CommonModule, KategorieCardComponent],
+  imports: [CommonModule, EventCardComponent, KategorieCardComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
