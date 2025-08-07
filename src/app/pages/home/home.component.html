@@ -1,7 +1,9 @@
 <div class="container mx-auto px-4 py-4 max-w-5xl justify-center items-center relative">
-  <div class="p-4">
-    <h1 class="text-xl font-bold mb-4 text-left">Aktuelle Events</h1>
 
+<div class="p-4">
+    <h1 class="text-xl font-bold mb-4 text-left">{{ 'home.current' | translate }}</h1>
+
+    <!-- Horizontaler Scroll-Container für Events -->
     <div class="w-full overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 -mx-4 scrollbar-hide card-snap">
       <div class="flex gap-2 px-4 min-w-max event-row">
         <app-event-card
@@ -17,9 +19,11 @@
       </div>
     </div>
 
-    <h1 class="text-xl font-bold mb-4 text-left">Kategorien</h1>
+    <h1 class="text-xl font-bold mb-4 text-left">
+      {{ 'home.categories' | translate }}
+    </h1>
 
     <app-kategorie-card></app-kategorie-card>
-    
+
   </div>
 </div>
