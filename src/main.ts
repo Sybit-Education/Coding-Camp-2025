@@ -1,12 +1,18 @@
 import { bootstrapApplication } from '@angular/platform-browser'
 import { AppComponent } from './app/app.component'
 import { SurrealdbService } from './app/services/surrealdb.service'
-import { provideAppInitializer, inject, isDevMode } from '@angular/core'
+import { provideAppInitializer, inject, isDevMode, LOCALE_ID } from '@angular/core'
 import { provideServiceWorker } from '@angular/service-worker'
+import { provideRouter } from '@angular/router'
 import { appConfig } from './app/app.config'
+import localeDe from '@angular/common/locales/de';
+import { registerLocaleData } from '@angular/common'
+
+registerLocaleData(localeDe); // TODO: Change when i18n/localizer got implemented - important for date.pipe.ts
 
 bootstrapApplication(AppComponent, {
   providers: [
+    { provide: LOCALE_ID, useValue: 'de-DE' },
     ...appConfig.providers,
     provideAppInitializer(() => {
       const surrealdb = inject(SurrealdbService)
@@ -19,5 +25,3 @@ bootstrapApplication(AppComponent, {
     }),
   ],
 })
-
-

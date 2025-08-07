@@ -7,5 +7,4 @@ import { Component } from '@angular/core'
   templateUrl: './save-event-button.component.html',
   styleUrl: './save-event-button.component.scss',
 })
-export class SaveEventButtonComponent {
-}
+export class SaveEventButtonComponent {}

@@ -1,0 +1,61 @@
+.event-container {
+  grid-template-columns: 1fr;
+  grid-template-areas:
+  "info-card"
+  "description"
+  "map"
+  "contact";
+}
+
+@media (width >= 64rem) {
+  .event-container {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 2fr auto 1fr;
+  grid-template-areas:
+  "info-card description"
+  "info-card map"
+  "info-card contact";
+  }
+}
+
+@media (width >= 80rem) {
+  .event-container {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 2fr auto 1fr;
+  grid-template-areas:
+  "info-card description"
+  "info-card map"
+  "info-card contact";
+  padding-left: 10vw;
+  padding-right: 10vw;
+  }
+}
+
+@media (width >= 120rem) {
+  .event-container {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto 1fr;
+  grid-template-areas:
+  "info-card description"
+  "info-card map"
+  "info-card contact";
+  padding-left: 20vw;
+  padding-right: 20vw;
+  }
+}
+
+.info-card{
+  grid-area: info-card;
+}
+
+.desc{
+  grid-area: description;
+}
+
+.map{
+  grid-area: map;
+}
+
+.contact{
+  grid-area: contact;
+}

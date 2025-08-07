@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import Surreal from 'surrealdb'
+import Surreal, { StringRecordId, Token } from 'surrealdb'
 import { environment } from '../../environments/environment.production'
 
 @Injectable({
@@ -19,12 +19,29 @@ export class SurrealdbService extends Surreal {
     await this.ready
   }
 
+  async login(username: string, password: string) {
+    const jwtToken = await super.signin({
+      namespace: environment.surrealDbNamespace,
+      database: environment.surrealDbDatabase,
+      access: 'user',
+      variables: {
+        username: username,
+        password: password,
+      }
+    });
+    return jwtToken
+  }
+
+  override async authenticate(token: Token): Promise<true> {
+    return await super.authenticate(token)
+  }
+
   // 1) Einen Eintrag nach ID holen
   async getById<T extends Record<string, unknown>>(
     recordId: string
   ): Promise<T> {
-    const result = await super.select<T>(recordId) 
-    return result[0]
+    const result = await super.select<T>(new StringRecordId(recordId))
+    return result as T
   }
 
   // 2) Alle Einträge einer Tabelle holen
