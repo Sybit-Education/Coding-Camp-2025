@@ -21,7 +21,6 @@ import { Decimal, RecordId } from 'surrealdb'
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './event-create.component.html',
-  styleUrl: './event-create.component.scss',
 })
 export class EventCreateComponent implements OnInit {
   // Services
