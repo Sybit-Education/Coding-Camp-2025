@@ -9,8 +9,10 @@
          hover:shadow-xl focus:shadow-xl border border-gray-100"
 >
   <div class="flex flex-col gap-2 text-left">
-    <p class="text-gray-700 text-base">🪧 {{ title }}</p>
-    <p class="text-gray-700 text-base">📅 {{ date_start | dateTimeRange:date_end }}</p>
-    <p class="text-gray-700 text-base">📍 {{ locationName }}</p>
+    <div class="inset-0 bg-cover bg-center" style="background-image: url('/icons/icon-512x512.png')">
+      <p class="text-gray-700 text-base">🪧 {{ title }}</p>
+      <p class="text-gray-700 text-base">📅 {{ date_start | dateTimeRange:date_end }}</p>
+      <p class="text-gray-700 text-base">📍 {{ locationName }}</p>
+    </div>
   </div>
 </div>
