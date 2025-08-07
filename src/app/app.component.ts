@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
   title = '1200-jahre-radolfzell'
   isCarouselPage = false
 
-  constructor(private router: Router) {}
+  constructor(private readonly router: Router) {}
 
   ngOnInit() {
     this.router.events

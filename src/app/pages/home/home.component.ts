@@ -18,7 +18,7 @@ interface EventWithResolvedLocation extends Event {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, EventCardComponent, KategorieCardComponent],
+  imports: [EventCardComponent, CommonModule, KategorieCardComponent, TranslateModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
