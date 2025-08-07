@@ -56,5 +56,8 @@
       "TITLE": "Privacy Policy",
       "DESCRIPTION": "Information about data protection and data processing."
     }
+  },
+  "home": {
+    "current": "Aktuelles"
   }
 }
