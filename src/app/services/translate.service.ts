@@ -70,7 +70,7 @@ export class I18nService implements OnInit {
   /**
    * Verfügbare Sprachen abrufen
    */
-  getLangs(): string[] {
+  getLangs(): readonly string[] {
     return this.translateService.getLangs()
   }
 }

@@ -26,7 +26,7 @@ export class LanguageSwitcherComponent {
   private i18nService = inject(I18nService)
   
   currentLang = this.i18nService.getCurrentLang()
-  availableLanguages = this.i18nService.getLangs()
+  availableLanguages = [...this.i18nService.getLangs()]
 
   // Mapping für Sprachen zu Flaggen und Titeln
   private langMap = {
