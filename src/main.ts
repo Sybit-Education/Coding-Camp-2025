@@ -3,7 +3,6 @@ import { AppComponent } from './app/app.component'
 import { SurrealdbService } from './app/services/surrealdb.service'
 import { provideAppInitializer, inject, isDevMode, LOCALE_ID } from '@angular/core'
 import { provideServiceWorker } from '@angular/service-worker'
-import { provideRouter } from '@angular/router'
 import { appConfig } from './app/app.config'
 import localeDe from '@angular/common/locales/de';
 import { registerLocaleData } from '@angular/common'
