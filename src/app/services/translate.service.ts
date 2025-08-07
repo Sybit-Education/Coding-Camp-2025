@@ -44,6 +44,12 @@ export class I18nService implements OnInit {
     this.translateService.use(lang)
     this.currentLangSubject.next(lang)
     localStorage.setItem('selectedLanguage', lang)
+    
+    // Aktualisiere das LOCALE_ID für Angular-interne Formatierungen
+    document.documentElement.lang = lang;
+    
+    // Erzwinge ein Neuladen der Komponenten, die Datums- und Zahlenformatierungen verwenden
+    window.dispatchEvent(new CustomEvent('languageChanged', { detail: lang }));
   }
 
   /**

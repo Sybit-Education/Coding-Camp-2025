@@ -38,6 +38,11 @@ export class LanguageSwitcherComponent {
   switchLanguage(lang: string): void {
     this.i18nService.use(lang)
     this.currentLang = lang
+    
+    // Aktualisiere die Anzeige aller Komponenten, die Datums- und Zahlenformatierungen verwenden
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
   }
 
   getFlagPath(lang: string): string {

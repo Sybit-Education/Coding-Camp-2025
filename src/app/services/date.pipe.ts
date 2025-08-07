@@ -19,6 +19,7 @@ export class DateTimeRangePipe implements PipeTransform {
     if (!startIso) return '';
 
     // Verwende die aktuelle Sprache für die Formatierung, falls keine Locale angegeben wurde
+    // Wir holen die aktuelle Sprache direkt vom Service, um immer den aktuellen Wert zu haben
     const currentLang = this.i18nService.getCurrentLang();
     const effectiveLocale = locale || this.getLocaleFromLang(currentLang);
     
