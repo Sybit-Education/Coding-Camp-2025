@@ -1,24 +1,29 @@
-<div class="container mx-auto px-4 py-4 max-w-5xl justify-center items-center realtive h-64 ">
+<div class="container mx-auto px-4 py-4 max-w-5xl justify-center items-center relative">
 
-  <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-4  ml-5">
-    Aktuelles
-  </h1>
-
-  <div class="flex grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 overflow-x-auto scroll-smooth scrollbar-hide">
-    <app-event-card
-      class="w-full"
-      *ngFor="let event of limitedEvents"
-      [title]="event.title"
-      [date]="event.date"
-      [location]="event.location"
-      [price]="event.price"
-    ></app-event-card>
-  </div>
-
-  <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 ml-5">
-    Kategorien
-  </h1>
-  
-  <app-kategorie-card></app-kategorie-card>
+<div class="p-4">
+    <h1 class="text-xl font-bold mb-4 text-left">Aktuelle Events</h1>
     
+    <!-- Horizontaler Scroll-Container für Events -->
+    <div class="w-full overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 -mx-4 scrollbar-hide card-snap">
+      <div class="flex gap-2 px-4 min-w-max event-row">
+        <app-event-card
+          *ngFor="let event of events; let i = index"
+          class="flex-shrink-0 snap-center"
+          [class]="getCardClass(i)"
+          [title]="event.name"
+          [eventId]="event.id"
+          [date_start]="event.date_start"
+          [date_end]="event.date_end"
+          [locationName]="event.locationName"
+        ></app-event-card>
+      </div>
+    </div>
+    
+    <h1 class="text-xl font-bold mb-4 text-left">
+      Kategorien
+    </h1>
+
+  <app-kategorie-card></app-kategorie-card>
+
+  </div>
 </div>
