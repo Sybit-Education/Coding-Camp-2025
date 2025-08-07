@@ -38,5 +38,23 @@
     "favorites": "Favorites",
     "search": "Search",
     "more": "More"
+  },
+  "MORE": {
+    "TEAM": {
+      "TITLE": "The Team",
+      "DESCRIPTION": "Meet the team behind the 1200 Years Radolfzell app."
+    },
+    "SPONSOR": {
+      "TITLE": "The Sponsor",
+      "DESCRIPTION": "Information about our sponsors and supporters."
+    },
+    "IMPRINT": {
+      "TITLE": "Imprint",
+      "DESCRIPTION": "Legal information and contact details."
+    },
+    "PRIVACY": {
+      "TITLE": "Privacy Policy",
+      "DESCRIPTION": "Information about data protection and data processing."
+    }
   }
 }

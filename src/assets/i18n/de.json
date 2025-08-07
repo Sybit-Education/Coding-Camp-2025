@@ -38,5 +38,23 @@
     "favorites": "Favoriten",
     "search": "Suche",
     "more": "Mehr"
+  },
+  "MORE": {
+    "TEAM": {
+      "TITLE": "Das Team",
+      "DESCRIPTION": "Lernen Sie das Team hinter der 1200-Jahre-Radolfzell App kennen."
+    },
+    "SPONSOR": {
+      "TITLE": "Der Sponsor",
+      "DESCRIPTION": "Informationen über unsere Sponsoren und Unterstützer."
+    },
+    "IMPRINT": {
+      "TITLE": "Impressum",
+      "DESCRIPTION": "Rechtliche Informationen und Kontaktdaten."
+    },
+    "PRIVACY": {
+      "TITLE": "Datenschutz",
+      "DESCRIPTION": "Informationen zum Datenschutz und zur Datenverarbeitung."
+    }
   }
 }
