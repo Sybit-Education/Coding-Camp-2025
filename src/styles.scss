@@ -47,12 +47,14 @@
   --colors-bg-dark-red: var(--color-color-pink);
   --colors-bg-coral: var(--color-peach-light);
 }
-
 /*
+
 @layer utilities {
   
+  */
+  /* === Textfarben === */
+  /*
   
- */ /* === Textfarben === */ /*
   .text-primary         { color: var(--colors-primary); }
   .text-secondary       { color: var(--colors-secondary); }
   .text-accent          { color: var(--colors-accent); }
@@ -79,5 +81,7 @@
   .bg-indigo-light      { background-color: var(--color-light-blue); }
   .bg-peach-light       { background-color: var(--color-peach-light); }
   .bg-orange-light      { background-color: var(--color-orange-light); }
+  
+  
 }
 */
