@@ -23,7 +23,13 @@
       Kategorien
     </h1>
 
-  <app-kategorie-card color="#fdc61a" text="Ü18"></app-kategorie-card>
+    <div class="grid grid-cols-3 mr-5 text-gray-750 "> 
+      <app-kategorie-card
+        *ngFor="let kategorie of kategorien"
+        [color]="kategorie.color"
+        [text]="kategorie.text">
+      </app-kategorie-card>
+    </div>
 
   </div>
 </div>
