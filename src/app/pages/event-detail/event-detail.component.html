@@ -1,16 +1,18 @@
-<div class="event-container grid min-h-[80vh] w-[100vw] gap-5 px-6 py-6">
+<div class="event-container min-h-[80vh] w-[100vw] gap-5 px-6 py-6 grid">
   <div class="info-card rounded-2xl bg-gray-100 shadow-2xl">
-    <img class="rounded-t-2xl object-cover sm:w-full" alt="" [src]="mediaUrl" />
-    <div class="flex h-[30px] w-full items-center justify-center">
-      <p class="pt-4 text-center text-2xl font-bold text-blue-900">
-        {{ event?.name }}
-      </p>
+    <img
+      class="sm:w-full rounded-t-2xl object-cover"
+      alt=""
+      [src]="mediaUrl"
+    />
+    <div class="flex w-full justify-center items-center">
+      <p class="px-2 text-2xl font-bold text-center pt-4 text-blue-900">{{ event?.name }}</p>
     </div>
-    <div class="dash">
-      <div class="mx-auto mt-4 w-[75%] border-t border-blue-900"></div>
+     <div class="dash">
+    <div class="mx-auto mt-4 w-[75%] border-t border-blue-900"></div>
     </div>
     <div class="flex justify-between">
-      <div class="grid grid-cols-1 gap-4 rounded-2xl p-4 text-right text-xl">
+      <div class="grid grid-cols-1 gap-4 rounded-2xl p-4 text-right text-xl w-full">
         <div class="grid grid-cols-[1fr_3fr]">
           <div
             class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-amber-300"
@@ -19,12 +21,7 @@
           </div>
           <div>
             <p class="text-left text-base font-bold">Wann?</p>
-            <p class="text-left text-sm">
-              {{ event?.date_start | date: 'dd.MM.yyyy' }}
-              @if (event?.date_end && event?.date_end !== event?.date_start) {
-                - {{ event?.date_end | date: 'dd.MM.yyyy' }}
-              }
-            </p>
+            <p class="text-left text-sm">{{ event?.date_start! | dateTimeRange : event?.date_end }}</p>
           </div>
         </div>
         <div class="grid grid-cols-[1fr_3fr]">
@@ -46,13 +43,7 @@
           </div>
           <div>
             <p class="text-left text-base font-bold">Preis</p>
-            <p class="text-left text-sm">
-              @if (event?.price !== null && +event?.price! > 0) {
-                {{ event?.price }}
-              } @else {
-                {{ 'kostenlos' }}
-              }
-            </p>
+            <p class="text-left text-sm">@if (event?.price !== null && +event?.price! > 0) { {{ event?.price }} } @else { {{ "kostenlos" }} }</p>
           </div>
         </div>
         <div class="grid grid-cols-[1fr_3fr]">
@@ -70,11 +61,9 @@
     </div>
   </div>
 
-  <div class="desc mt-10 rounded-2xl p-4">
-    <div class="flex h-[30px] w-full items-center justify-center">
-      <p class="pt-4 text-center text-2xl font-bold text-blue-900">
-        Beschreibung
-      </p>
+  <div class="desc rounded-2xl p-4 mt-10">
+    <div class="flex w-full h-[30px] justify-center items-center">
+      <p class="text-2xl font-bold text-center pt-4 text-blue-900">Beschreibung</p>
     </div>
     <div class="mx-auto my-4 w-[75%] border-t border-blue-900"></div>
     <p>
@@ -83,31 +72,26 @@
   </div>
 
   <div class="map p-4">
-    <div class="flex h-[30px] w-full items-center justify-center">
-      <p class="pt-4 text-center text-2xl font-bold text-blue-900">Anreise</p>
+    <div class="flex w-full h-[30px] justify-center items-center">
+      <p class="text-2xl font-bold text-center pt-4 text-blue-900">Anreise</p>
     </div>
-    <div class="mx-auto my-4 w-[75%] border-t border-blue-900"></div>
+    <div class="mx-auto my-4 w-[75%] border-t nborder-blue-900"></div>
 
     @if (location?.geo_point) {
-      <div class="map p-4">
-        <app-map
-          [coordinates]="[
-            location!.geo_point!.point[1],
-            location!.geo_point!.point[0],
-          ]"
-        ></app-map>
-      </div>
+    <div class="map p-4">
+      <app-map
+        [coordinates]="[location!.geo_point!.point[1], location!.geo_point!.point[0]]"
+      ></app-map>
+    </div>
     }
   </div>
-  <div class="contact rounded-2xl bg-gray-100 shadow-2xl">
-    <div class="flex h-[30px] w-full items-center justify-center">
-      <p class="pt-4 text-center text-2xl font-bold text-blue-900">
-        Kontaktdaten
-      </p>
+  <div class="contact rounded-2xl bg-gray-100 shadow-2xl mb-18">
+    <div class="flex w-full h-[30px] justify-center items-center">
+      <p class="text-2xl font-bold text-center pt-4 text-blue-900">Kontaktdaten</p>
     </div>
     <div class="mx-auto mt-4 w-[75%] border-t border-blue-900"></div>
     <div class="flex justify-between">
-      <div class="grid grid-cols-1 gap-4 rounded-2xl p-4 text-right text-xl">
+      <div class="grid grid-cols-1 gap-4 rounded-2xl p-4 text-right text-xl w-full">
         <div class="grid grid-cols-[1fr_3fr]">
           <div
             class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-purple-400"
@@ -120,30 +104,30 @@
           </div>
         </div>
         @if (organizer?.email) {
-          <div class="grid grid-cols-[1fr_3fr]">
-            <div
-              class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-red-300"
-            >
-              <p>📧</p>
-            </div>
-            <div>
-              <p class="text-left text-base font-bold">Email</p>
-              <p class="text-left text-sm">{{ organizer?.email }}</p>
-            </div>
+        <div class="grid grid-cols-[1fr_3fr]">
+          <div
+            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-red-300"
+          >
+            <p>📧</p>
           </div>
+          <div>
+            <p class="text-left text-base font-bold">Email</p>
+            <p class="text-left text-sm">{{ organizer?.email }}</p>
+          </div>
+        </div>
         }
         @if (organizer?.phonenumber) {
-          <div class="grid grid-cols-[1fr_3fr]">
-            <div
-              class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-amber-300"
-            >
-              <p>☎️</p>
-            </div>
-            <div>
-              <p class="text-left text-base font-bold">Email</p>
-              <p class="text-left text-sm">{{ organizer?.phonenumber }}</p>
-            </div>
+        <div class="grid grid-cols-[1fr_3fr]">
+          <div
+            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-amber-300"
+          >
+            <p>☎️</p>
           </div>
+          <div>
+            <p class="text-left text-base font-bold">Email</p>
+            <p class="text-left text-sm">{{ organizer?.phonenumber }}</p>
+          </div>
+        </div>
         }
       </div>
     </div>

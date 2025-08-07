@@ -24,7 +24,6 @@ import { MediaService } from '../../services/media.service'
   standalone: true,
   imports: [FormsModule, UploadImageComponent, CommonModule],
   templateUrl: './event-create.component.html',
-  styleUrl: './event-create.component.scss',
 })
 export class EventCreateComponent implements OnInit {
   // Services

@@ -35,7 +35,7 @@ export const routes: Routes = [
   },
   {
     path: 'team',
-    component: PlaceholderComponent,
+    component: DevsComponent,
   },
   {
     path: 'sponsor',
@@ -52,10 +52,6 @@ export const routes: Routes = [
   {
     path: 'event/:id',
     component: EventDetailPageComponent,
-  },
-  {
-    path: 'devs',
-    component: DevsComponent,
   },
   {
     path: 'login',
