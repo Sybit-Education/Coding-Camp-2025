@@ -25,9 +25,9 @@
 
     <div class="grid grid-cols-3 mr-5 text-gray-750 "> 
       <app-kategorie-card
-        *ngFor="let kategorie of kategorien"
+        *ngFor="let kategorie of getTopics()"
         [color]="kategorie.color"
-        [text]="kategorie.text">
+        [text]="kategorie.name">
       </app-kategorie-card>
     </div>
 
