@@ -2,7 +2,7 @@
   Die Navigationsleiste am unteren Bildschirmrand im Jubiläums‑Look.
   Sie verwendet halbtransparentes Blau (#3b4ea3) als Hintergrund,
   eine magenta Wellenform (#c70d56) als gestalterisches Element
-  und markiert den aktiven Link mit Gelb (#fdc61a).
+  und markiert den aktiven Link mit Gelb (#3b4ea3).
 -->
 <nav class="fixed inset-x-0 bottom-5 z-500 flex justify-center p-4">
   <div
@@ -26,8 +26,8 @@
       <a
         routerLink="/"
         [routerLinkActiveOptions]="{ exact: true }"
-        routerLinkActive="text-[#fdc61a] scale-110"
-        class="relative flex transform flex-col items-center text-[#3b4ea3] transition hover:text-[#c70d56]"
+        routerLinkActive="text-[#c70d56] bg-[#ffffff40] rounded-xl scale-110"
+        class="relative flex transform flex-col items-center m-1 p-0.5 text-[#3b4ea3] transition hover:text-[#c70d56]"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -50,7 +50,7 @@
     <span>
       <a
         routerLink="/favourites"
-        routerLinkActive="text-[#fdc61a] scale-110"
+        routerLinkActive="text-[#c70d56] scale-110"
         class="relative flex transform flex-col items-center text-[#3b4ea3] transition hover:text-[#c70d56]"
       >
         <svg
@@ -74,7 +74,7 @@
     <span>
       <a
         routerLink="/search"
-        routerLinkActive="text-[#fdc61a] scale-110"
+        routerLinkActive="text-[#c70d56] scale-110"
         class="relative flex transform flex-col items-center text-[#3b4ea3] transition hover:text-[#c70d56]"
       >
         <svg
@@ -98,7 +98,7 @@
     <span>
       <a
         routerLink="/more"
-        routerLinkActive="text-[#fdc61a] scale-110"
+        routerLinkActive="text-[#c70d56] scale-110"
         class="relative flex transform flex-col items-center text-[#3b4ea3] transition hover:text-[#c70d56]"
       >
         <svg
