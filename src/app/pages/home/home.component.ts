@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { EventCardComponent } from '../../component/event-card/event-card.component';
 import { EventService } from '../../services/event.service';
 import { Event } from '../../models/event.interface';
-import { Location } from '../../models/location.interface';
 import { LocationService } from '../../services/location.service';
 import { KategorieCardComponent } from "../../component/kategorie-card/kategorie-card.component";
 import { TopicService } from '../../services/topic.service';
@@ -13,12 +12,7 @@ interface EventWithResolvedLocation extends Event {
   locationName: string;
 }
 
-/*
-interface Kategorie {
-  color: string;
-  text: string;
-}
-  */
+
 
 
 @Component({
@@ -52,7 +46,6 @@ export class HomeComponent implements OnInit {
       this.events = await Promise.all(
         rawEvents.map(async (event) => {
           const location = await this.locationService.getLocationByID(String(event.location.id));
-          //this.topicService.getAllTopics() // diese Zeile für das beckommen aller topics
           return {
             ...event,
             locationName: location?.name ?? 'Unbekannter Ort',
@@ -72,21 +65,6 @@ export class HomeComponent implements OnInit {
     console.log(this.topics);
     return this.topics;
   }
-
-  /*
-  kategorien: Kategorie[] = [
-  { color: '#fdc61a', text: 'Ü18' },
-  { color: '#389d73', text: 'Kostenlos' },
-  { color: '#FF33A1', text: 'Für die ganze Familie' },
-  { color: '#f5a48e', text: 'Kultur' },
-  { color: '#72bdbb', text: 'Geschichte' },
-  { color: '#6f77b8', text: 'Entfaltung' },
-  { color: '#f197c0', text: 'Barrierefrei' },
-  ];
-  */
-
-  
-
 
 
 
