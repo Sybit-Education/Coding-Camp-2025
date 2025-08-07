@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core'
+import { Component, inject, OnInit, OnDestroy } from '@angular/core'
 import { MapComponent } from '../../component/map/map.component'
 import { Event, EventType } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
@@ -9,6 +9,8 @@ import { Organizer } from '../../models/organizer.interface'
 import { LocationService } from '../../services/location.service'
 import { OrganizerService } from '../../services/organizer.service'
 import { DateTimeRangePipe } from '../../services/date.pipe'
+// Für eine vollständige Implementierung würde LiveAnnouncer importiert werden
+// import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 @Component({
   selector: 'app-event-detail-page',
@@ -17,7 +19,7 @@ import { DateTimeRangePipe } from '../../services/date.pipe'
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
 })
-export class EventDetailPageComponent implements OnInit {
+export class EventDetailPageComponent implements OnInit, OnDestroy {
   event: Event | null = null
   location: Location | null = null
   organizer: Organizer | null = null
@@ -39,7 +41,17 @@ export class EventDetailPageComponent implements OnInit {
       this.loadEvent(eventId)
     } else {
       this.error = 'Event ID nicht gefunden'
+      this.announceError('Event ID nicht gefunden')
     }
+  }
+
+  /**
+   * Kündigt Fehler für Screenreader an
+   * @param message Die Fehlermeldung
+   */
+  private announceError(message: string): void {
+    // In einer vollständigen Implementierung würde hier LiveAnnouncer verwendet werden
+    console.error(`Fehler: ${message}`);
   }
 
   async loadType(typeId: string) {
@@ -91,24 +103,40 @@ export class EventDetailPageComponent implements OnInit {
 
       if (foundEvent) {
         this.event = foundEvent
-        this.mediaUrl =
-          this.mediaBaseUrl +
-          String(foundEvent.media[0].id).replace(/_(?=[^_]*$)/, '.')
+        
+        if (foundEvent.media && foundEvent.media.length > 0) {
+          this.mediaUrl =
+            this.mediaBaseUrl +
+            String(foundEvent.media[0].id).replace(/_(?=[^_]*$)/, '.')
+        }
+        
         const locationId = String(this.event?.['location']?.id)
         const organizerId = String(this.event?.['organizer']?.id)
         const typeId = String(this.event?.['event_type']?.id)
-        this.loadLocation(locationId)
-        this.loadOrganizer(organizerId)
-        this.loadType(typeId)
+        
+        await Promise.all([
+          this.loadLocation(locationId),
+          this.loadOrganizer(organizerId),
+          this.loadType(typeId)
+        ])
+        
+        document.title = `${this.event.name} - 1200 Jahre Radolfzell`
       } else {
         this.error = 'Event nicht gefunden'
+        this.announceError('Event nicht gefunden')
       }
     } catch (err) {
       this.error = `Fehler beim Laden: ${err}`
+      this.announceError(`Fehler beim Laden: ${err}`)
     }
   }
 
   goBack() {
     this.router.navigate(['/'])
+  }
+
+  ngOnDestroy(): void {
+    // Titel zurücksetzen
+    document.title = '1200 Jahre Radolfzell'
   }
 }
