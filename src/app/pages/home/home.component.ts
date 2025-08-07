@@ -21,7 +21,7 @@ interface EventWithResolvedLocation extends Event {
 export class HomeComponent implements OnInit {
   events: EventWithResolvedLocation[] = [];
 
-  constructor(private eventService: EventService) {}
+  constructor(private readonly eventService: EventService) {}
 
   async ngOnInit() {
     try {
