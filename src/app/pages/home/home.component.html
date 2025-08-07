@@ -1,29 +1,44 @@
-<div class="container mx-auto px-4 py-4 max-w-5xl justify-center items-center relative">
+<main class="container mx-auto px-4 py-4 max-w-5xl justify-center items-center relative">
+  <!-- Skip-Link für Screenreader -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:p-2 focus:bg-white focus:z-50">
+    Zum Hauptinhalt springen
+  </a>
 
-<div class="p-4">
-    <h1 class="text-xl font-bold mb-4 text-left">Aktuelle Events</h1>
-    
-    <!-- Horizontaler Scroll-Container für Events -->
-    <div class="w-full overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 -mx-4 scrollbar-hide card-snap">
-      <div class="flex gap-2 px-4 min-w-max event-row">
-        <app-event-card
-          *ngFor="let event of events; let i = index"
-          class="flex-shrink-0 snap-center"
-          [class]="getCardClass(i)"
-          [title]="event.name"
-          [eventId]="event.id"
-          [date_start]="event.date_start"
-          [date_end]="event.date_end"
-          [locationName]="event.locationName"
-        ></app-event-card>
+  <div id="main-content" class="p-4">
+    <section aria-labelledby="events-heading">
+      <h1 id="events-heading" class="text-xl font-bold mb-4 text-left">Aktuelle Events</h1>
+      
+      <!-- Horizontaler Scroll-Container für Events -->
+      <div 
+        class="w-full overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 -mx-4 scrollbar-hide card-snap"
+        role="region" 
+        aria-label="Veranstaltungen"
+        tabindex="0">
+        <div class="flex gap-2 px-4 min-w-max event-row">
+          <app-event-card
+            *ngFor="let event of events; let i = index"
+            class="flex-shrink-0 snap-center"
+            [class]="getCardClass(i)"
+            [title]="event.name"
+            [eventId]="event.id"
+            [date_start]="event.date_start"
+            [date_end]="event.date_end"
+            [locationName]="event.locationName"
+            [attr.tabindex]="0"
+            [attr.aria-label]="'Veranstaltung: ' + event.name + ' am ' + (event.date_start | date:'dd.MM.yyyy') + ' in ' + event.locationName"
+            (keydown)="onKeyDown($event, event.id)"
+            role="button"
+          ></app-event-card>
+        </div>
       </div>
-    </div>
+    </section>
     
-    <h1 class="text-xl font-bold mb-4 text-left">
-      Kategorien
-    </h1>
+    <section aria-labelledby="categories-heading">
+      <h1 id="categories-heading" class="text-xl font-bold mb-4 text-left">
+        Kategorien
+      </h1>
 
-  <app-kategorie-card></app-kategorie-card>
-
+      <app-kategorie-card></app-kategorie-card>
+    </section>
   </div>
-</div>
+</main>

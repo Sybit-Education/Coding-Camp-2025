@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 import { EventCardComponent } from '../../component/event-card/event-card.component';
 import { EventService } from '../../services/event.service';
 import { Event } from '../../models/event.interface';
@@ -14,7 +15,7 @@ interface EventWithResolvedLocation extends Event {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [EventCardComponent, CommonModule, KategorieCardComponent],
+  imports: [EventCardComponent, CommonModule, KategorieCardComponent, DatePipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -23,8 +24,15 @@ export class HomeComponent implements OnInit {
 
   private readonly eventService: EventService = inject(EventService)
   private readonly locationService: LocationService = inject(LocationService)
+  private readonly router: Router = inject(Router)
 
-  async ngOnInit() {
+  ngOnInit() {
+    this.loadEvents().catch(error => {
+      console.error('Fehler beim Laden der Events:', error);
+    });
+  }
+
+  private async loadEvents(): Promise<void> {
     try {
       const rawEvents = await this.eventService.getAllEvents();
 
@@ -38,11 +46,27 @@ export class HomeComponent implements OnInit {
         })
       );
     } catch (error) {
-      console.error('Fehler beim Laden der Events:', error);
+      throw error;
     }
   }
 
   getCardClass(index: number): string {
     return 'w-[calc(100vw-6rem)] h-[280px]';
+  }
+
+  /**
+   * Behandelt Tastaturereignisse für die Event-Karten
+   * @param event Das Tastaturereignis
+   * @param eventId Die ID des Events
+   */
+  onKeyDown(event: KeyboardEvent, eventId?: string): void {
+    // Enter oder Space aktiviert den Klick auf die Karte
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      if (eventId) {
+        const cleanedId = eventId.replace(/^event:/, '');
+        this.router.navigate(['/event', cleanedId]);
+      }
+    }
   }
 }
