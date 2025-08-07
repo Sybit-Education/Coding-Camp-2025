@@ -1,3 +1,5 @@
+import { Decimal, RecordId } from 'surrealdb'
+
 export enum EventType {
   FUEHRUNG = 'Führung',
   FESTIVAL = 'Festival',
@@ -9,29 +11,25 @@ export enum EventType {
   AUSSTELLUNG = 'Ausstellung',
   WORKSHOP = 'Workshop',
   TANZ = 'Tanz',
-  UNKNOWN = ''
+  UNKNOWN = '',
 }
 
 export interface Event extends Record<string, unknown> {
-  id: string
+  id?: string
   name: string
-  description: string
-  location: {
-    id: string
-    tb: string
-  }
-  date_start: string
-  date_end: string
-  price: number
-  organizer: {
-    id: string
-    tb: string
-  }
-  media: {
-    id: string
-    tb: string
-  }[]
-  type: EventType
+  date_end?: Date
+  date_start: Date
+  description?: string
+  more_info_link?: string
+  price?: Decimal
+  age?: number
+  restriction?: string
+  draft: boolean
+  organizer: RecordId<'organizer'>
+  event_type?: RecordId<'event_type'>
+  location: RecordId<'location'>
+  topic?: RecordId<'topic'>[]
+  media: RecordId<'media'>[]
 }
 
 export interface GeoPoint {
