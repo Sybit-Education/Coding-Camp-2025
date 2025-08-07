@@ -4,6 +4,7 @@ import { EventCardComponent } from '../../component/event-card/event-card.compon
 import { EventService } from '../../services/event.service';
 import { Event } from '../../models/event.interface';
 import { KategorieCardComponent } from "../../component/kategorie-card/kategorie-card.component";
+import { TranslateModule } from '@ngx-translate/core';
 
 interface EventWithResolvedLocation extends Event {
   locationName: string;
@@ -13,7 +14,7 @@ interface EventWithResolvedLocation extends Event {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [EventCardComponent, CommonModule, KategorieCardComponent],
+  imports: [EventCardComponent, CommonModule, KategorieCardComponent, TranslateModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })

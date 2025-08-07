@@ -56,5 +56,9 @@
       "TITLE": "Datenschutz",
       "DESCRIPTION": "Informationen zum Datenschutz und zur Datenverarbeitung."
     }
+  },
+  "home": {
+    "current": "Aktuelles",
+    "categories": "Kategorien"
   }
 }

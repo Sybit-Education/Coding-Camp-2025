@@ -56,5 +56,9 @@
       "TITLE": "Politique de confidentialité",
       "DESCRIPTION": "Informations sur la protection des données et le traitement des données."
     }
+  },
+  "home": {
+    "current": "Événements actuels",
+    "categories": "Catégories"
   }
 }

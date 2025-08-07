@@ -58,6 +58,7 @@
     }
   },
   "home": {
-    "current": "Aktuelles"
+    "current": "Current Events",
+    "categories": "Categories"
   }
 }
