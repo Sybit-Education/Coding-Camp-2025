@@ -12,12 +12,12 @@ import { I18nService } from '../../services/translate.service'
         *ngFor="let lang of availableLanguages"
         (click)="switchLanguage(lang)"
         [attr.aria-pressed]="currentLang === lang"
-        class="px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-        [class.bg-blue-500]="currentLang === lang"
-        [class.text-white]="currentLang === lang"
-        [class.bg-gray-200]="currentLang !== lang"
+        class="w-8 h-8 rounded-full overflow-hidden border-2 hover:scale-110 transition-transform focus:outline-none focus:ring-2 focus:ring-blue-500"
+        [class.border-blue-500]="currentLang === lang"
+        [class.border-transparent]="currentLang !== lang"
+        [title]="getLangTitle(lang)"
       >
-        {{ lang.toUpperCase() }}
+        <img [src]="getFlagPath(lang)" [alt]="getLangTitle(lang)" class="w-full h-full object-cover">
       </button>
     </div>
   `,
@@ -28,8 +28,23 @@ export class LanguageSwitcherComponent {
   currentLang = this.i18nService.getCurrentLang()
   availableLanguages = this.i18nService.getLangs()
 
+  // Mapping für Sprachen zu Flaggen und Titeln
+  private langMap = {
+    'de': { flag: 'assets/flags/de.svg', title: 'Deutsch' },
+    'en': { flag: 'assets/flags/gb.svg', title: 'English' },
+    'fr': { flag: 'assets/flags/fr.svg', title: 'Français' }
+  };
+
   switchLanguage(lang: string): void {
     this.i18nService.use(lang)
     this.currentLang = lang
+  }
+
+  getFlagPath(lang: string): string {
+    return this.langMap[lang as keyof typeof this.langMap]?.flag || '';
+  }
+
+  getLangTitle(lang: string): string {
+    return this.langMap[lang as keyof typeof this.langMap]?.title || lang.toUpperCase();
   }
 }

@@ -1,6 +1,7 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { I18nService } from '../../services/translate.service';
+import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
 
 // -----------------------------------------------------------------------------
 // HeaderComponent
@@ -40,20 +41,11 @@ interface LogoSet {
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LanguageSwitcherComponent],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  /**
-   * Verfügbare Sprachen mit Flaggen-Icons
-   */
-  languages = [
-    { code: 'de', name: 'Deutsch', flag: 'assets/flags/de.svg' },
-    { code: 'en', name: 'English', flag: 'assets/flags/gb.svg' },
-    { code: 'fr', name: 'Français', flag: 'assets/flags/fr.svg' }
-  ];
-
   /**
    * Aktuell ausgewählte Sprache
    */
@@ -107,13 +99,6 @@ export class HeaderComponent implements OnInit {
     this.updateState();
   }
 
-  /**
-   * Wechselt die aktuelle Sprache und aktualisiert die Anzeige
-   */
-  switchLanguage(lang: string): void {
-    this.i18nService.use(lang);
-    this.currentLang = lang;
-  }
 
   /**
    * Listener für Scrollereignisse: prüft bei jedem Scrollen, ob der
