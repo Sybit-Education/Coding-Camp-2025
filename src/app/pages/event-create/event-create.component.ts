@@ -87,6 +87,8 @@ export class EventCreateComponent implements OnInit {
     this.locations = await this.locationService.getAllLocations()
     this.eventTypes = await this.eventService.getAllEventTypes()
     this.topics = await this.topicService.getAllTopics()
+    console.log('loaded organizer: ', this.organizers)
+    console.log('loaded locations: ', this.locations)
     console.log('loaded topics: ', this.topics)
   }
 
