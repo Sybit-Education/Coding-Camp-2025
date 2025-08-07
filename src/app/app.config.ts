@@ -32,7 +32,7 @@ export const appConfig: ApplicationConfig = {
           useFactory: createTranslateLoader,
           deps: [HttpClient]
         },
-        defaultLanguage: 'de'
+        fallbackLang: 'de'
       })
     )
   ],
