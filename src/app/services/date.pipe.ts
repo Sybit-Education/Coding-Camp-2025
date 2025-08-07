@@ -9,10 +9,24 @@ import { Subscription } from 'rxjs';
   standalone: true,
   pure: false, // Impure pipe, um auf Sprachänderungen zu reagieren
 })
-export class DateTimeRangePipe implements PipeTransform {
+export class DateTimeRangePipe implements PipeTransform, OnDestroy {
   private i18nService = inject(I18nService);
+  private langChangeSub: Subscription;
   private lastStart: string | Date | null = null;
   private lastEnd: string | Date | null = null;
+
+  constructor() {
+    // Abonniere Sprachänderungen
+    this.langChangeSub = this.i18nService.currentLang$.subscribe(() => {
+      // Die Pipe wird automatisch neu ausgewertet, wenn sich die Sprache ändert
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.langChangeSub) {
+      this.langChangeSub.unsubscribe();
+    }
+  }
 
   transform(
     startIso: string | Date | null,
