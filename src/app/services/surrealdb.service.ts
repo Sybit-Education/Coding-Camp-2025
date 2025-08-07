@@ -6,7 +6,6 @@ import { environment } from '../../environments/environment.production'
   providedIn: 'root',
 })
 export class SurrealdbService extends Surreal {
-
   constructor() {
     super()
   }
@@ -27,8 +26,8 @@ export class SurrealdbService extends Surreal {
       variables: {
         username: username,
         password: password,
-      }
-    });
+      },
+    })
     return jwtToken
   }
 
@@ -38,24 +37,22 @@ export class SurrealdbService extends Surreal {
 
   // 1) Einen Eintrag nach ID holen
   async getById<T extends Record<string, unknown>>(
-    recordId: string
+    recordId: string,
   ): Promise<T> {
     const result = await super.select<T>(new StringRecordId(recordId))
     return result as T
   }
 
   // 2) Alle Einträge einer Tabelle holen
-  async getAll<T extends Record<string, unknown>>(
-  table: string
-): Promise<T[]> {
-  return await super.select<T>(table);
-}
+  async getAll<T extends Record<string, unknown>>(table: string): Promise<T[]> {
+    return await super.select<T>(table)
+  }
 
   // 3) Einfügen und die neuen Datensätze zurückbekommen
   async post<T extends Record<string, unknown>>(
     table: string,
-    payload?: T | T[]
+    payload?: T | T[],
   ): Promise<T[]> {
-    return await super.insert<T>(table, payload);
+    return await super.insert<T>(table, payload)
   }
 }
