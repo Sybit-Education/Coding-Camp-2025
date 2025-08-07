@@ -1,36 +1,17 @@
 import { inject, Injectable } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
 import { Event, EventType } from '../models/event.interface'
-import { Location } from '../models/location.interface'
 import { surql } from 'surrealdb'
 import { TypeDB } from '../models/typeDB.interface'
-import { Organizer } from '../models/organizer.interface'
-
 @Injectable({
   providedIn: 'root',
 })
 export class EventService {
+  private surrealdb: SurrealdbService = inject(SurrealdbService)
 
-  private readonly surrealdb: SurrealdbService = inject(SurrealdbService)
-
+  //************** GET **************
   async getEventByID(id: string): Promise<Event> {
-    const result = await this.surrealdb.getById<Event>('event:'+id)
-    return result
-  }
-
-  async getLocationByID(id: string): Promise<Location> {
-    const result = await this.surrealdb.getById<Location>('location:'+id)
-    return result
-  }
-
-   async getTypeByID(id: string): Promise<EventType> {
-    const result = await this.surrealdb.getById<TypeDB>('event:'+id)
-    const eventType = result.name as unknown as EventType
-    return /^[A-Z_]+$/.test(eventType) ? eventType : EventType.UNKNOWN
-  }
-
-  async getOrganizerByID(id: string): Promise<Organizer> {
-    const result = await this.surrealdb.getById<Organizer>('organizer:'+id)
+    const result = await this.surrealdb.getById<Event>('event:' + id)
     return result
   }
 
@@ -49,21 +30,22 @@ export class EventService {
     }
   }
 
+  async getAllEventTypes(): Promise<TypeDB[]> {
+    try {
+      const result = await this.surrealdb.getAll('event_type')
+      return (result || []).map(
+        (item: Record<string, unknown>) => item['name'] as string,
+      ) as unknown as TypeDB[]
+    } catch (error) {
+      throw new Error(`Fehler beim Laden der Events: ${error}`)
+    }
+  }
 
-  /**
-   * BSP payload für create:
-   *
-   * id: event.id,
-      name: event['name'],
-      description: event['description'],
-      location: event['location'],
-      date_start: event['date_start'],
-      date_end: event['date_end'],
-      price: event['price'],
-      organizer: event['organizer'],
-      media: event['media'],
-      event_type: event['event_type'],
-   */
+  async getEventTypeByID(id: string): Promise<EventType> {
+    const result = await this.surrealdb.getById<TypeDB>('event:' + id)
+    const eventType = result.name as unknown as EventType
+    return /^[A-Z_]+$/.test(eventType) ? eventType : EventType.UNKNOWN
+  }
 
   async getEventsWithLocation(): Promise<Event[]> {
     try {
@@ -76,5 +58,11 @@ export class EventService {
         `Fehler beim Laden der Events mit Standortdetails: ${error}`,
       )
     }
+  }
+
+  //************** POST **************
+
+  async postEvent(event: Event) {
+    return await this.surrealdb.post<Event>('event', event)
   }
 }

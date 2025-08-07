@@ -1,4 +1,3 @@
-
 import { RecordId } from 'surrealdb'
 export interface TypeDB extends Record<string, unknown> {
   id: RecordId<'event_type'>
