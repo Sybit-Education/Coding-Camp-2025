@@ -1,16 +1,15 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EventCardComponent } from '../../component/event-card/event-card.component';
 import { EventService } from '../../services/event.service';
 import { Event } from '../../models/event.interface';
+import { LocationService } from '../../services/location.service';
 import { KategorieCardComponent } from "../../component/kategorie-card/kategorie-card.component";
 import { TranslateModule } from '@ngx-translate/core';
-import { LocationService } from '../../services/location.service';
 
 interface EventWithResolvedLocation extends Event {
   locationName: string;
 }
-
 
 @Component({
   selector: 'app-home',
@@ -22,8 +21,8 @@ interface EventWithResolvedLocation extends Event {
 export class HomeComponent implements OnInit {
   events: EventWithResolvedLocation[] = [];
 
-  private readonly eventService: EventService = inject(EventService)
-  private readonly locationService: LocationService = inject(LocationService)
+  private readonly eventService = inject(EventService);
+  private readonly locationService = inject(LocationService);
 
   ngOnInit() {
     this.loadEvents().catch(error => {
