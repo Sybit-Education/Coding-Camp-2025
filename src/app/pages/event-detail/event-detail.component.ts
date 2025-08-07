@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { EventService } from '../../services/event.service'
 import { CommonModule } from '@angular/common'
 import { Organizer } from '../../models/organizer.interface'
+import { LocationService } from '../../services/location.service'
+import { OrganizerService } from '../../services/organizer.service'
 import { DateTimeRangePipe } from '../../services/date.pipe'
 
 @Component({
@@ -26,6 +28,8 @@ export class EventDetailPageComponent implements OnInit {
   mediaUrl: string | null = null
 
   private readonly eventService = inject(EventService)
+  private readonly locationService = inject(LocationService)
+  private readonly organizerService = inject(OrganizerService)
   private readonly route = inject(ActivatedRoute)
   private readonly router = inject(Router)
 
@@ -40,7 +44,7 @@ export class EventDetailPageComponent implements OnInit {
 
   async loadType(typeId: string) {
     try {
-      const type = await this.eventService.getTypeByID(typeId!)
+      const type = await this.eventService.getEventTypeByID(typeId!)
       if (type) {
         this.type = type as EventType
       } else {
@@ -53,7 +57,8 @@ export class EventDetailPageComponent implements OnInit {
 
   async loadLocation(locationId: string) {
     try {
-      const foundLocation = await this.eventService.getLocationByID(locationId)
+      const foundLocation =
+        await this.locationService.getLocationByID(locationId)
 
       if (foundLocation) {
         this.location = foundLocation
@@ -67,7 +72,8 @@ export class EventDetailPageComponent implements OnInit {
 
   async loadOrganizer(organizerId: string) {
     try {
-      const foundOrganizer = await this.eventService.getOrganizerByID(organizerId)
+      const foundOrganizer =
+        await this.organizerService.getOrganizerByID(organizerId)
 
       if (foundOrganizer) {
         this.organizer = foundOrganizer
@@ -85,10 +91,15 @@ export class EventDetailPageComponent implements OnInit {
 
       if (foundEvent) {
         this.event = foundEvent
-        this.mediaUrl = this.mediaBaseUrl + foundEvent.media[0].id.replace(/_(?=[^_]*$)/, '.')
-        this.loadLocation(foundEvent.location.id)
-        this.loadOrganizer(foundEvent.organizer.id)
-        this.loadType(this.event?.type)
+        this.mediaUrl =
+          this.mediaBaseUrl +
+          String(foundEvent.media[0].id).replace(/_(?=[^_]*$)/, '.')
+        const locationId = String(this.event?.['location']?.id)
+        const organizerId = String(this.event?.['organizer']?.id)
+        const typeId = String(this.event?.['event_type']?.id)
+        this.loadLocation(locationId)
+        this.loadOrganizer(organizerId)
+        this.loadType(typeId)
       } else {
         this.error = 'Event nicht gefunden'
       }
@@ -100,6 +111,4 @@ export class EventDetailPageComponent implements OnInit {
   goBack() {
     this.router.navigate(['/'])
   }
-
-
 }

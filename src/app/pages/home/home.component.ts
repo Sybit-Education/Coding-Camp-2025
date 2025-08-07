@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EventCardComponent } from '../../component/event-card/event-card.component';
 import { EventService } from '../../services/event.service';
 import { Event } from '../../models/event.interface';
 import { KategorieCardComponent } from "../../component/kategorie-card/kategorie-card.component";
+import { LocationService } from '../../services/location.service';
 
 interface EventWithResolvedLocation extends Event {
   locationName: string;
@@ -20,7 +21,8 @@ interface EventWithResolvedLocation extends Event {
 export class HomeComponent implements OnInit {
   events: EventWithResolvedLocation[] = [];
 
-  constructor(private eventService: EventService) {}
+  private readonly eventService: EventService = inject(EventService)
+  private readonly locationService: LocationService = inject(LocationService)
 
   async ngOnInit() {
     try {
@@ -28,7 +30,7 @@ export class HomeComponent implements OnInit {
 
       this.events = await Promise.all(
         rawEvents.map(async (event) => {
-          const location = await this.eventService.getLocationByID(event.location.id);
+          const location = await this.locationService.getLocationByID(String(event.location.id));
           return {
             ...event,
             locationName: location?.name ?? 'Unbekannter Ort',
