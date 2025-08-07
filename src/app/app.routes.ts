@@ -7,6 +7,7 @@ import { EventDetailPageComponent } from './pages/event-detail/event-detail.comp
 import { DevsComponent } from './pages/devs/devs.component'
 import { LoginPageComponent } from './pages/login/login.component'
 import { ImpressumComponent } from './pages/impressum/impressum.component'
+import { DatenschutzComponent } from './pages/datenschutz/datenschutz.component'
 
 export const routes: Routes = [
   {
@@ -43,7 +44,7 @@ export const routes: Routes = [
   },
   {
     path: 'datenschutz',
-    component: PlaceholderComponent,
+    component: DatenschutzComponent,
   },
   {
     path: 'event/:id',
