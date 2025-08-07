@@ -92,6 +92,7 @@ DEFINE TABLE OVERWRITE topic TYPE NORMAL SCHEMAFULL
         FOR update, delete WHERE $auth != NONE;
 DEFINE FIELD OVERWRITE id ON organizer;
 DEFINE FIELD OVERWRITE name ON organizer TYPE string;
+DEFINE FIELD OVERWRITE color ON organizer TYPE string;
 
 
 
