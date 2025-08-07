@@ -57,7 +57,7 @@ export class HeaderComponent implements OnInit {
   /**
    * Aktuell ausgewählte Sprache
    */
-  currentLang: string;
+  currentLang: string = '';
   /**
    * Bündel aller möglichen Logovarianten. Per Default wird die transparente
    * PNG‑Datei aus dem Assets‑Ordner verwendet. Der Benutzer kann dieses
@@ -98,6 +98,10 @@ export class HeaderComponent implements OnInit {
    * bestimmt und in updateState() gesetzt.
    */
   currentSrc = '';
+
+  constructor(private i18nService: I18nService) {
+    this.currentLang = this.i18nService.getCurrentLang();
+  }
 
   ngOnInit(): void {
     this.updateState();
