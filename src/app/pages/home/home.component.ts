@@ -36,7 +36,15 @@ export class HomeComponent implements OnInit {
 
   topics: Topic[] = [];
 
-  async ngOnInit() {
+  ngOnInit() {
+    this.initilizeData();
+  }
+
+  async initilizeData() {
+    console.log('onInit: HomeComponent');
+
+    this.topics = await this.topicService.getAllTopics();
+    console.log('onInit: ',this.topics);
     try {
       const rawEvents = await this.eventService.getAllEvents();
 
@@ -50,7 +58,7 @@ export class HomeComponent implements OnInit {
           };
         })
       );
-      this.topics = await this.topicService.getAllTopics();
+      
     } catch (error) {
       console.error('Fehler beim Laden der Events:', error);
     }
