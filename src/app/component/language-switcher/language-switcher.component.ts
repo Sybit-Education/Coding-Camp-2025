@@ -7,7 +7,7 @@ import { I18nService } from '../../services/translate.service'
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="flex items-center space-x-2" role="radiogroup" aria-label="Sprache auswählen" i18n-aria-label>
+    <div class="flex items-center space-x-2" role="radiogroup" aria-label="Sprache auswählen">
       <button
         *ngFor="let lang of availableLanguages"
         (click)="switchLanguage(lang)"
@@ -30,9 +30,9 @@ export class LanguageSwitcherComponent {
 
   // Mapping für Sprachen zu Flaggen und Titeln
   private readonly langMap = {
-    'de': { flag: '/flags/de.svg', title: 'Deutsch' },
-    'en': { flag: '/flags/gb.svg', title: 'English' },
-    'fr': { flag: '/flags/fr.svg', title: 'Français' }
+    'de': { flag: 'assets/flags/de.svg', title: 'Deutsch' },
+    'en': { flag: 'assets/flags/gb.svg', title: 'English' },
+    'fr': { flag: 'assets/flags/fr.svg', title: 'Français' }
   };
 
   switchLanguage(lang: string): void {

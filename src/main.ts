@@ -5,13 +5,27 @@ import { provideAppInitializer, inject, isDevMode, LOCALE_ID } from '@angular/co
 import { provideServiceWorker } from '@angular/service-worker'
 import { appConfig } from './app/app.config'
 import localeDe from '@angular/common/locales/de';
+import localeEn from '@angular/common/locales/en';
+import localeFr from '@angular/common/locales/fr';
 import { registerLocaleData } from '@angular/common'
 
-registerLocaleData(localeDe); // TODO: Change when i18n/localizer got implemented - important for date.pipe.ts
+// Registriere alle unterstützten Locales für Datums- und Zahlenformatierung
+registerLocaleData(localeDe);
+registerLocaleData(localeEn);
+registerLocaleData(localeFr);
 
 bootstrapApplication(AppComponent, {
   providers: [
-    { provide: LOCALE_ID, useValue: 'de-DE' },
+    // Das LOCALE_ID wird für Angular-interne Formatierungen verwendet
+    // Die Standardsprache ist Deutsch, kann aber durch die Sprachumschaltung geändert werden
+    { provide: LOCALE_ID, useFactory: () => {
+      const savedLang = localStorage.getItem('selectedLanguage');
+      switch (savedLang) {
+        case 'en': return 'en-GB';
+        case 'fr': return 'fr-FR';
+        default: return 'de-DE';
+      }
+    }},
     ...appConfig.providers,
     provideAppInitializer(() => {
       const surrealdb = inject(SurrealdbService)
