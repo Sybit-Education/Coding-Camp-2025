@@ -7,8 +7,6 @@ import { PlaceholderComponent } from './pages/placeholder/placeholder.component'
 import { EventDetailPageComponent } from './pages/event-detail/event-detail.component'
 import { DevsComponent } from './pages/devs/devs.component'
 import { LoginPageComponent } from './pages/login/login.component'
-import { KategorieCardComponent } from './component/kategorie-card/kategorie-card.component'
-import { KategorieComponent } from './page/kategorie/kategorie.component'
 
 export const routes: Routes = [
   {
@@ -59,8 +57,4 @@ export const routes: Routes = [
     path: 'login',
     component: LoginPageComponent,
   },
-  {
-    path: 'kategorie/:id',
-    component: KategorieComponent,
-  }
 ]
