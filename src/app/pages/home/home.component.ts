@@ -33,8 +33,7 @@ export class HomeComponent implements OnInit {
   }
 
   private async loadEvents(): Promise<void> {
-    try {
-      const rawEvents = await this.eventService.getAllEvents();
+    const rawEvents = await this.eventService.getAllEvents();
 
     this.events = await Promise.all(
       rawEvents.map(async (event) => {

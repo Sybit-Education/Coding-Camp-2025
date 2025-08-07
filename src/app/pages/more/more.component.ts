@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { RouterModule } from '@angular/router'
+import { Router, RouterModule } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 
 interface MoreMenuItem {
@@ -24,7 +24,7 @@ interface MoreMenuItem {
   ],
 })
 export class MoreComponent {
-  constructor(private router: Router) {}
+  constructor(private readonly router: Router) {}
 
   /**
    * Navigiert zu einer bestimmten Route
