@@ -1,0 +1,347 @@
+<div
+  class="flex justify-center bg-[var(--colors-light-blue)] p-5 pt-10 text-lg leading-relaxed text-shadow-gray-500"
+>
+  <form
+    class="grid gap-[3rem] rounded-2xl bg-white p-6 text-black sm:grid-cols-[1fr] md:w-[75%] md:grid-cols-[1fr_1fr]"
+  >
+    <!-- Linke Spalte mit vertikalem Abstand -->
+    <div class="flex flex-col space-y-4">
+      <!-- Event Name -->
+      <div>
+        <label for="eventName">Event-Name:</label>
+        <input
+          id="eventName"
+          name="eventName"
+          type="text"
+          [(ngModel)]="eventname"
+          class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+          required
+        />
+      </div>
+
+      <!-- Veranstalter Auswahl -->
+      <div>
+        <select
+          id="organizer"
+          name="organizer"
+          [(ngModel)]="selectedOrganizer"
+          (ngModelChange)="setOrganizer($event)"
+          class="p-[0.75rem 1rem] w-full cursor-pointer rounded-[6px] border-2 border-gray-600"
+        >
+          <option [ngValue]="null">Veranstalter wählen...</option>
+          <option *ngFor="let organizer of organizers" [ngValue]="organizer">
+            {{ organizer.name }}
+          </option>
+        </select>
+        <button
+          type="button"
+          class="mt-2 w-[50%] rounded-2xl bg-[var(--colors-light-blue)] p-2"
+          (click)="newOrganizer = !newOrganizer"
+        >
+          Neuen Veranstalter erstellen
+        </button>
+      </div>
+
+      <!-- Neuer Veranstalter -->
+      <div
+        *ngIf="newOrganizer"
+        class="space-y-2 rounded-xl border-2 border-black p-2"
+      >
+        <p>
+          <label for="organizername">Name:</label>
+          <input
+            id="organizername"
+            name="organizername"
+            type="text"
+            [(ngModel)]="organizername"
+            class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+            required
+          />
+        </p>
+        <p>
+          <label for="organizerphone">Telefonnummer:</label>
+          <input
+            id="organizerphone"
+            name="organizerphone"
+            type="number"
+            [(ngModel)]="organizerphone"
+            class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+          />
+        </p>
+        <p>
+          <label for="organizermail">E-Mail:</label>
+          <input
+            id="organizermail"
+            name="organizermail"
+            type="text"
+            [(ngModel)]="organizermail"
+            class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+          />
+        </p>
+      </div>
+
+      <!-- Datum und Zeit -->
+      <div class="grid grid-cols-2 gap-[1rem]">
+        <div>
+          <label for="date">Startdatum:</label>
+          <input
+            id="date"
+            type="date"
+            [(ngModel)]="dateStart"
+            name="dateStart"
+            class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+          />
+        </div>
+        <div>
+          <label for="time">Startzeit:</label>
+          <input
+            id="time"
+            type="time"
+            [(ngModel)]="timeStart"
+            name="timeStart"
+            class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+          />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-[1rem]" *ngIf="timePeriode">
+        <div>
+          <label for="date">Enddatum:</label>
+          <input
+            id="date"
+            type="date"
+            [(ngModel)]="dateEnd"
+            name="dateStart"
+            class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+          />
+        </div>
+        <div>
+          <label for="time">Endzeit:</label>
+          <input
+            id="time"
+            type="time"
+            [(ngModel)]="timeEnd"
+            name="timeStart"
+            class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+          />
+        </div>
+      </div>
+      <div class="grid grid-cols-[1rem_1rem]">
+        <input
+          id="timePeriode"
+          name="timePeriode"
+          type="checkbox"
+          [(ngModel)]="timePeriode"
+          class="h-4 w-4 cursor-pointer rounded-sm border-gray-300 bg-gray-100 text-[var(--colors-light-blue)]"
+        />
+        <label
+          for="timePeriode"
+          class="ms-2 w-full cursor-pointer text-sm font-medium text-gray-900 dark:text-gray-700"
+        >
+          Zeitspanne
+        </label>
+      </div>
+
+      <!-- Location Auswahl -->
+      <div>
+        <select
+          id="location"
+          name="location"
+          [(ngModel)]="selectedLocation"
+          (ngModelChange)="setLocation($event)"
+          class="p-[0.75rem 1rem] w-full cursor-pointer rounded-[6px] border-2 border-gray-600"
+        >
+          <option [ngValue]="null">Location wählen ...</option>
+          <option *ngFor="let location of locations" [ngValue]="location">
+            {{ location.name }}
+          </option>
+        </select>
+        <button
+          type="button"
+          class="mt-2 w-[50%] rounded-2xl bg-[var(--colors-light-blue)] p-2"
+          (click)="newLocation = !newLocation"
+        >
+          Neue Location erstellen
+        </button>
+      </div>
+
+      <!-- Neue Location -->
+      <div
+        *ngIf="newLocation"
+        class="space-y-2 rounded-xl border-2 border-black p-2"
+      >
+        <label for="locationName">Location-Name</label>
+        <input
+          id="locationName"
+          name="locationName"
+          type="text"
+          [(ngModel)]="locationName"
+          placeholder="Name der Location"
+          class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+        />
+        <label for="address">Adresse</label>
+        <input
+          id="address"
+          name="address"
+          type="text"
+          [(ngModel)]="address"
+          placeholder="Straße und Hausnummer"
+          class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+        />
+        <div class="grid grid-cols-2 gap-[1rem]">
+          <div>
+            <label for="postalCode">PLZ</label>
+            <input
+              id="postalCode"
+              name="plz"
+              type="number"
+              [(ngModel)]="plz"
+              class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+            />
+          </div>
+          <div>
+            <label for="city">Stadt</label>
+            <input
+              id="city"
+              name="city"
+              type="text"
+              [(ngModel)]="city"
+              required
+              class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Mindestalter -->
+      <div>
+        <label for="age">Mindestalter:</label>
+        <input
+          id="age"
+          name="age"
+          type="number"
+          min="0"
+          [(ngModel)]="age"
+          class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+          placeholder="z. B. 18"
+        />
+      </div>
+
+      <!-- Preis -->
+      <div>
+        <label for="price">Preis (€):</label>
+        <input
+          id="price"
+          name="price"
+          type="number"
+          min="0"
+          step="0.01"
+          placeholder="0.00"
+          [(ngModel)]="price"
+          class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+        />
+      </div>
+    </div>
+
+    <!-- Rechte Spalte mit vertikalem Abstand -->
+    <div class="flex flex-col space-y-4">
+      <!-- Beschreibung -->
+      <div>
+        <label for="description">Eventbeschreibung:</label>
+        <textarea
+          id="description"
+          name="description"
+          [(ngModel)]="description"
+          class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+        ></textarea>
+      </div>
+
+      <!-- Einschränkungen -->
+      <div>
+        <label for="restriction">Einschränkungen:</label>
+        <input
+          id="restriction"
+          name="restriction"
+          type="text"
+          [(ngModel)]="restriction"
+          class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+          placeholder="z. B. Treppen"
+        />
+      </div>
+
+      <!-- Themen -->
+      <div
+        id="choose-category"
+        class="rounded-lg bg-white shadow-sm dark:bg-gray-100"
+      >
+        <h1
+          class="text-center text-sm font-medium text-gray-900 dark:text-gray-700"
+        >
+          Themen des Events
+        </h1>
+        <ul class="space-y-1 p-3 text-sm text-gray-700 dark:text-gray-200">
+          <li *ngFor="let topic of topics">
+            <div
+              class="flex items-center rounded-sm p-2 hover:bg-gray-100 dark:hover:bg-gray-300"
+            >
+              <input
+                id="checkbox{{ topic.id }}"
+                type="checkbox"
+                [value]="topic.id"
+                (change)="toggleTopicSelection($event, topic)"
+                [checked]="selectedTopics!.includes(topic)"
+                class="h-4 w-4 cursor-pointer rounded-sm border-gray-300 bg-gray-100 text-[var(--colors-light-blue)]"
+              />
+              <label
+                for="checkbox{{ topic.id }}"
+                class="ms-2 w-full cursor-pointer text-sm font-medium text-gray-900 dark:text-gray-700"
+              >
+                {{ topic.name }}
+              </label>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Event-Typ -->
+      <div>
+        <select
+          id="kp"
+          name="kp"
+          [(ngModel)]="eventType"
+          (ngModelChange)="setEventType($event)"
+          class="p-[0.75rem 1rem] border-Gray-600 w-full cursor-pointer rounded-[6px] border-2"
+        >
+          <option [ngValue]="null">Art des Events</option>
+          <option *ngFor="let eventType of eventTypes" [ngValue]="eventType">
+            {{ eventType }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Mehr Infos -->
+      <div>
+        <label for="moreInfoLink">Mehr Infos:</label>
+        <input
+          id="moreInfoLink"
+          name="moreInfoLink"
+          type="text"
+          placeholder="https://..."
+          [(ngModel)]="moreInfoLink"
+          class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+        />
+      </div>
+
+      <!-- Button: Event erstellen -->
+      <div>
+        <button
+          type="submit"
+          class="w-full cursor-pointer rounded-2xl bg-[var(--colors-light-blue)] p-5"
+          (click)="saveEvent()"
+        >
+          Event erstellen
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
