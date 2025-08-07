@@ -30,9 +30,9 @@ export class LanguageSwitcherComponent {
 
   // Mapping für Sprachen zu Flaggen und Titeln
   private readonly langMap = {
-    'de': { flag: '/flags/de.svg', title: 'Deutsch' },
-    'en': { flag: '/flags/gb.svg', title: 'English' },
-    'fr': { flag: '/flags/fr.svg', title: 'Français' }
+    'de': { flag: 'assets/flags/de.svg', title: 'Deutsch' },
+    'en': { flag: 'assets/flags/gb.svg', title: 'English' },
+    'fr': { flag: 'assets/flags/fr.svg', title: 'Français' }
   };
 
   switchLanguage(lang: string): void {
