@@ -49,7 +49,7 @@ export class HeaderComponent implements OnInit {
   /**
    * Aktuell ausgewählte Sprache
    */
-  currentLang: string = '';
+  currentLang = '';
   /**
    * Bündel aller möglichen Logovarianten. Per Default wird die transparente
    * PNG‑Datei aus dem Assets‑Ordner verwendet. Der Benutzer kann dieses
@@ -91,7 +91,7 @@ export class HeaderComponent implements OnInit {
    */
   currentSrc = '';
 
-  constructor(private i18nService: I18nService) {
+  constructor(private readonly i18nService: I18nService) {
     this.currentLang = this.i18nService.getCurrentLang();
   }
 

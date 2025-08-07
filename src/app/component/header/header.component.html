@@ -16,6 +16,8 @@
     'h-[240px] items-center bg-[#fbd2bc]/90': !isShrunk
   }"
 >
+    <!-- Sprachumschalter oben rechts -->
+    <app-language-switcher class="absolute top-1 right-4 z-20"></app-language-switcher>
   <!-- Logo-Container: richtet das Logo zentriert oder links aus -->
   <div
     class="w-full flex items-center relative z-10 transition-all duration-1200"
@@ -24,10 +26,6 @@
       'justify-center': !isShrunk
     }"
   >
-    <!-- Sprachumschalter oben rechts -->
-    <div class="absolute top-2 right-4">
-      <app-language-switcher></app-language-switcher>
-    </div>
     <img
       [src]="currentSrc"
       alt="1200 Jahre Radolfzell"
