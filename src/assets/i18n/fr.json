@@ -1,0 +1,64 @@
+{
+  "COMMON": {
+    "SAVE": "Enregistrer",
+    "CANCEL": "Annuler",
+    "BACK": "Retour",
+    "NEXT": "Suivant",
+    "SKIP_TO_MAIN": "Passer au contenu principal"
+  },
+  "HEADER": {
+    "TITLE": "1200 Ans de Radolfzell",
+    "HOME": "Accueil",
+    "EVENTS": "Événements",
+    "ABOUT": "À propos"
+  },
+  "HOME": {
+    "WELCOME": "Bienvenue à 1200 Ans de Radolfzell",
+    "INTRO": "Découvrez l'histoire et les événements autour de l'anniversaire"
+  },
+  "EVENTS": {
+    "TITLE": "Événements",
+    "NO_EVENTS": "Aucun événement trouvé",
+    "LOCATION": "Lieu",
+    "DATE": "Date",
+    "SAVE_EVENT": "Enregistrer l'événement",
+    "REMOVE_EVENT": "Supprimer l'événement"
+  },
+  "ABOUT": {
+    "TITLE": "À propos de nous",
+    "CONTENT": "La ville de Radolfzell sur le lac de Constance célèbre son 1200e anniversaire"
+  },
+  "FOOTER": {
+    "COPYRIGHT": "© 2025 Ville de Radolfzell",
+    "IMPRINT": "Mentions légales",
+    "PRIVACY": "Politique de confidentialité"
+  },
+  "bottom-nav": {
+    "home": "Accueil",
+    "favorites": "Favoris",
+    "search": "Recherche",
+    "more": "Plus"
+  },
+  "MORE": {
+    "TEAM": {
+      "TITLE": "L'équipe",
+      "DESCRIPTION": "Découvrez l'équipe derrière l'application 1200 Ans de Radolfzell."
+    },
+    "SPONSOR": {
+      "TITLE": "Le sponsor",
+      "DESCRIPTION": "Informations sur nos sponsors et soutiens."
+    },
+    "IMPRINT": {
+      "TITLE": "Mentions légales",
+      "DESCRIPTION": "Informations légales et coordonnées."
+    },
+    "PRIVACY": {
+      "TITLE": "Politique de confidentialité",
+      "DESCRIPTION": "Informations sur la protection des données et le traitement des données."
+    }
+  },
+  "home": {
+    "current": "Événements actuels",
+    "categories": "Catégories"
+  }
+}

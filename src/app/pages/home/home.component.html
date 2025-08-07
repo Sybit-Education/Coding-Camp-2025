@@ -1,15 +1,10 @@
-<main class="container mx-auto px-4 py-4 max-w-5xl justify-center items-center relative">
-  <!-- Skip-Link für Screenreader -->
-  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:p-2 focus:bg-white focus:z-50">
-    Zum Hauptinhalt springen
-  </a>
-
-  <div id="main-content" class="p-4">
-    <section aria-labelledby="events-heading">
-      <h1 id="events-heading" class="text-xl font-bold mb-4 text-left">Aktuelle Events</h1>
+<div class="container mx-auto px-4 py-4 max-w-5xl justify-center items-center relative">
+  <div class="p-4">
+    <h1 class="text-xl font-bold mb-4 text-left">Aktuelle Events</h1>
 
       <!-- Horizontaler Scroll-Container für Events -->
-      <div
+      <!-- Horizontaler Scroll-Container für Events -->
+    <div
         class="w-full overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 -mx-4 scrollbar-hide card-snap"
         role="region"
         aria-label="Veranstaltungen"
@@ -33,12 +28,10 @@
       </div>
     </section>
 
-    <section aria-labelledby="categories-heading">
-      <h1 id="categories-heading" class="text-xl font-bold mb-4 text-left">
-        Kategorien
-      </h1>
+    <h1 class="text-xl font-bold mb-4 text-left">Kategorien</h1>
 
       <app-kategorie-card></app-kategorie-card>
-    </section>
+</section>
   </div>
 </main>
+

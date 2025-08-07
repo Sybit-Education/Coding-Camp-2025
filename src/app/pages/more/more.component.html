@@ -4,7 +4,7 @@
     Zum Hauptinhalt springen
   </a>
 
-  <h1 id="main-content" class="mb-6 text-2xl font-bold text-[#3b4ea3]">Mehr</h1>
+  <h1 id="main-content" class="mb-6 text-2xl font-bold text-[#3b4ea3]">{{ 'bottom-nav.more' | translate }}</h1>
 
   <nav class="grid gap-4" aria-label="Weitere Optionen" role="navigation">
     <a
@@ -34,8 +34,8 @@
         </svg>
       </div>
       <div>
-        <h2 class="text-xl font-semibold text-[#3b4ea3]" id="menu-item-{{i}}">{{ item.title }}</h2>
-        <p class="mt-1 text-gray-600">{{ item.description }}</p>
+        <h2 class="text-xl font-semibold text-[#3b4ea3]" id="menu-item-{{i}}">{{ item.title | translate }}</h2>
+        <p class="mt-1 text-gray-600">{{ item.description | translate }}</p>
       </div>
       <div class="ml-auto text-[#3b4ea3]" aria-hidden="true">
         <svg

@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 import { EventCardComponent } from '../../component/event-card/event-card.component';
 import { EventService } from '../../services/event.service';
 import { Event } from '../../models/event.interface';
-import { Location } from '../../models/location.interface';
 import { LocationService } from '../../services/location.service';
 import { KategorieCardComponent } from "../../component/kategorie-card/kategorie-card.component";
+import { TranslateModule } from '@ngx-translate/core';
 
 interface EventWithResolvedLocation extends Event {
   locationName: string;
@@ -15,7 +15,7 @@ interface EventWithResolvedLocation extends Event {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, EventCardComponent, KategorieCardComponent, DatePipe],
+  imports: [EventCardComponent, CommonModule, KategorieCardComponent, DatePipe, TranslateModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -36,47 +36,18 @@ export class HomeComponent implements OnInit {
     try {
       const rawEvents = await this.eventService.getAllEvents();
 
-      this.events = await Promise.all(
-        rawEvents.map(async (event) => {
-          let locationId = '';
-          
-          // Prüfen, ob location ein Objekt mit id ist oder direkt ein String
-          if (typeof event.location === 'object' && event.location !== null && 'id' in event.location) {
-            locationId = String(event.location.id);
-          } else {
-            locationId = String(event.location);
-          }
-          
-          const location = await this.locationService.getLocationByID(locationId);
-          return {
-            ...event,
-            locationName: location?.name ?? 'Unbekannter Ort',
-          };
-        })
-      );
-    } catch (error) {
-      console.error('Fehler beim Laden der Events:', error);
-      this.events = [];
-    }
+    this.events = await Promise.all(
+      rawEvents.map(async (event) => {
+        const location = await this.locationService.getLocationByID(String(event.location.id));
+        return {
+          ...event,
+          locationName: location?.name ?? 'Unbekannter Ort',
+        };
+      })
+    );
   }
 
   getCardClass(index: number): string {
     return 'w-[calc(100vw-6rem)] h-[280px]';
-  }
-
-  /**
-   * Behandelt Tastaturereignisse für die Event-Karten
-   * @param event Das Tastaturereignis
-   * @param eventId Die ID des Events
-   */
-  onKeyDown(event: KeyboardEvent, eventId?: string): void {
-    // Enter oder Space aktiviert den Klick auf die Karte
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      if (eventId) {
-        const cleanedId = eventId.replace(/^event:/, '');
-        this.router.navigate(['/event', cleanedId]);
-      }
-    }
   }
 }
