@@ -32,5 +32,8 @@
     "COPYRIGHT": "© 2025 City of Radolfzell",
     "IMPRINT": "Imprint",
     "PRIVACY": "Privacy Policy"
+  },
+  "bottom-nav": {
+    "home": "Home"
   }
 }
