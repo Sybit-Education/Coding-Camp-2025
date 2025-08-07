@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { RouterModule } from '@angular/router'
+import { Router, RouterModule } from '@angular/router'
 
 interface MoreMenuItem {
   title: string
@@ -23,6 +23,15 @@ interface MoreMenuItem {
   ],
 })
 export class MoreComponent {
+  constructor(private router: Router) {}
+
+  /**
+   * Navigiert zu einer bestimmten Route
+   * @param route Die Zielroute
+   */
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
   menuItems: MoreMenuItem[] = [
     {
       title: 'Das Team',

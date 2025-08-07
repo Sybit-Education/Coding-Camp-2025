@@ -1,13 +1,22 @@
-<div class="container mx-auto p-4 pb-20">
-  <h1 class="mb-6 text-2xl font-bold text-[#3b4ea3]">Mehr</h1>
+<main class="container mx-auto p-4 pb-20">
+  <!-- Skip-Link für Screenreader -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:p-2 focus:bg-white focus:z-50">
+    Zum Hauptinhalt springen
+  </a>
 
-  <div class="grid gap-4">
+  <h1 id="main-content" class="mb-6 text-2xl font-bold text-[#3b4ea3]">Mehr</h1>
+
+  <nav class="grid gap-4" aria-label="Weitere Optionen">
     <a
-      *ngFor="let item of menuItems"
+      *ngFor="let item of menuItems; let i = index"
       [routerLink]="[item.route]"
-      class="flex items-center rounded-lg bg-white p-4 shadow-md transition-shadow hover:shadow-lg"
+      class="flex items-center rounded-lg bg-white p-4 shadow-md transition-shadow hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#3b4ea3] focus:ring-opacity-50"
+      [attr.aria-label]="item.title + ': ' + item.description"
+      tabindex="0"
+      (keydown.enter)="navigateTo(item.route)"
+      (keydown.space)="$event.preventDefault(); navigateTo(item.route)"
     >
-      <div class="mr-4 text-[#3b4ea3]">
+      <div class="mr-4 text-[#3b4ea3]" aria-hidden="true">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -15,6 +24,8 @@
           stroke-width="1.5"
           stroke="currentColor"
           class="size-8"
+          role="img"
+          [attr.aria-label]="'Icon für ' + item.title"
         >
           <path
             stroke-linecap="round"
@@ -27,7 +38,7 @@
         <h2 class="text-xl font-semibold text-[#3b4ea3]">{{ item.title }}</h2>
         <p class="mt-1 text-gray-600">{{ item.description }}</p>
       </div>
-      <div class="ml-auto text-[#3b4ea3]">
+      <div class="ml-auto text-[#3b4ea3]" aria-hidden="true">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -44,5 +55,5 @@
         </svg>
       </div>
     </a>
-  </div>
-</div>
+  </nav>
+</main>
