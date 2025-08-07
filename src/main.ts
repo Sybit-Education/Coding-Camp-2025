@@ -8,6 +8,10 @@ import localeDe from '@angular/common/locales/de';
 import localeEn from '@angular/common/locales/en';
 import localeFr from '@angular/common/locales/fr';
 import { registerLocaleData } from '@angular/common'
+import { EventService } from './app/services/event.service'
+import { LocationService } from './app/services/location.service'
+import { OrganizerService } from './app/services/organizer.service'
+import { TopicService } from './app/services/topic.service'
 
 // Registriere alle unterstützten Locales für Datums- und Zahlenformatierung
 registerLocaleData(localeDe);
@@ -29,9 +33,12 @@ bootstrapApplication(AppComponent, {
     ...appConfig.providers,
     provideAppInitializer(() => {
       const surrealdb = inject(SurrealdbService)
+      inject(EventService)
+      inject(LocationService)
+      inject(OrganizerService)
+      inject(TopicService)
       return surrealdb.initialize()
     }),
-    SurrealdbService,
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',

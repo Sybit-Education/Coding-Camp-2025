@@ -1,0 +1,21 @@
+// tailwind.config.ts
+
+import type { Config } from 'tailwindcss'
+
+const config: Config = {
+  content: [
+    "./src/**/*.{html,ts,scss, css}" // alle Angular-Komponenten und Templates
+  ],
+  theme: {
+    extend: {
+      backgroundImage: {
+        geschichte: `url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201200%20800%22%20preserveAspectRatio%3D%22xMidYMid%20slice%22%3E%0A%20%20%3C%21--%20Background%20base%20--%3E%0A%20%20%3Crect%20width%3D%221200%22%20height%3D%22800%22%20fill%3D%22%23ef859c%22%20/%3E%0A%0A%20%20%3C%21--%20Top%E2%80%91right%20quarter%20circle%20in%20cool%20green%20--%3E%0A%20%20%3Cpath%20d%3D%22M1200%200%20A600%20600%200%200%201%20600%20600%20L600%200%20Z%22%20fill%3D%22%2372bdbb%22%20opacity%3D%220.75%22%20/%3E%0A%0A%20%20%3C%21--%20Bottom%E2%80%91left%20quarter%20circle%20in%20deep%20crimson%20--%3E%0A%20%20%3Cpath%20d%3D%22M0%20200%20A600%20600%200%200%200%20600%20800%20L0%20800%20Z%22%20fill%3D%22%23c70d56%22%20opacity%3D%220.75%22%20/%3E%0A%0A%20%20%3C%21--%20Bottom%E2%80%91right%20quarter%20circle%20in%20royal%20blue%20--%3E%0A%20%20%3Cpath%20d%3D%22M600%20800%20A600%20600%200%200%200%201200%20200%20L1200%20800%20Z%22%20fill%3D%22%233b4ea3%22%20opacity%3D%220.60%22%20/%3E%0A%3C/svg%3E")`,
+        kultur: `url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201200%20800%22%20preserveAspectRatio%3D%22xMidYMid%20slice%22%3E%0A%20%20%3Crect%20width%3D%221200%22%20height%3D%22800%22%20fill%3D%22%23f5a48e%22%20/%3E%0A%0A%20%20%3C%21--%20Large%20top%E2%80%91left%20arc%20in%20rich%20purple%20--%3E%0A%20%20%3Cpath%20d%3D%22M0%200%20A600%20600%200%200%201%20600%20600%20L600%200%20Z%22%20fill%3D%22%23af69a8%22%20opacity%3D%220.65%22%20/%3E%0A%0A%20%20%3C%21--%20Bottom%E2%80%91right%20arc%20in%20soft%20coral%20pink%20--%3E%0A%20%20%3Cpath%20d%3D%22M1200%20400%20A400%20400%200%200%200%20800%20800%20L1200%20800%20Z%22%20fill%3D%22%23e17589%22%20opacity%3D%220.70%22%20/%3E%0A%0A%20%20%3C%21--%20Lower%E2%80%91centre%20arc%20in%20lavender%20--%3E%0A%20%20%3Cpath%20d%3D%22M600%20800%20A300%20300%200%200%201%20300%20500%20L300%20800%20Z%22%20fill%3D%22%236d7cbc%22%20opacity%3D%220.60%22%20/%3E%0A%3C/svg%3E")`,
+        entfaltung: `url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201200%20800%22%20preserveAspectRatio%3D%22xMidYMid%20slice%22%3E%0A%20%20%3Crect%20width%3D%221200%22%20height%3D%22800%22%20fill%3D%22%23fdc519%22%20/%3E%0A%0A%20%20%3C%21--%20Top%E2%80%91left%20arc%20in%20lively%20red%20--%3E%0A%20%20%3Cpath%20d%3D%22M0%200%20A500%20500%200%200%201%20500%20500%20L500%200%20Z%22%20fill%3D%22%23ed695a%22%20opacity%3D%220.70%22%20/%3E%0A%0A%20%20%3C%21--%20Bottom%E2%80%91right%20arc%20in%20fresh%20mint%20green%20--%3E%0A%20%20%3Cpath%20d%3D%22M700%20800%20A500%20500%200%200%200%201200%20300%20L1200%20800%20Z%22%20fill%3D%22%2398cfbd%22%20opacity%3D%220.70%22%20/%3E%0A%0A%20%20%3C%21--%20Bottom%E2%80%91left%20arc%20in%20warm%20blue%20--%3E%0A%20%20%3Cpath%20d%3D%22M0%20800%20A600%20600%200%200%201%20600%20200%20L600%20800%20Z%22%20fill%3D%22%236f77b8%22%20opacity%3D%220.60%22%20/%3E%0A%3C/svg%3E")`,
+        general: `url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201200%20800%22%20preserveAspectRatio%3D%22xMidYMid%20slice%22%3E%0A%20%20%3C%21--%20Soft%20rose%20base%20--%3E%0A%20%20%3Crect%20width%3D%221200%22%20height%3D%22800%22%20fill%3D%22%23fbd2bc%22%20/%3E%0A%0A%20%20%3C%21--%20Upper%E2%80%91right%20arc%20in%20apricot%20coral%20--%3E%0A%20%20%3Cpath%20d%3D%22M900%200%20A400%20400%200%200%201%20500%20400%20L500%200%20Z%22%20fill%3D%22%23ff8a70%22%20opacity%3D%220.65%22%20/%3E%0A%0A%20%20%3C%21--%20Lower%E2%80%91left%20arc%20in%20muted%20teal%20--%3E%0A%20%20%3Cpath%20d%3D%22M0%20600%20A500%20500%200%200%200%20600%201100%20L0%201100%20Z%22%20fill%3D%22%2372bdbb%22%20opacity%3D%220.65%22%20/%3E%0A%0A%20%20%3C%21--%20Centre%E2%80%91right%20arc%20in%20golden%20yellow%20--%3E%0A%20%20%3Cpath%20d%3D%22M1200%20300%20A300%20300%200%200%201%20900%20600%20L900%20300%20Z%22%20fill%3D%22%23fdc519%22%20opacity%3D%220.55%22%20/%3E%0A%3C/svg%3E")`
+      }
+    }
+  },
+  plugins: []
+}
+export default config
