@@ -23,7 +23,7 @@ export class EventCardComponent implements OnInit, OnDestroy {
   location: Location | null = null;
   eventType: EventType | null = null;
   isSaved = false;
-  mediaUrl = '';
+  mediaUrl: string | null = null;
 
   private subscription?: Subscription;
 
@@ -32,16 +32,11 @@ export class EventCardComponent implements OnInit, OnDestroy {
   private readonly localStorageService = inject(LocalStorageService);
   private readonly mediaService = inject(MediaService);
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     if (this.event?.id) {
       this.initializeSavedState();
-      this.initializeEventDetails();
+      await this.initializeEventDetails();
     }
-    
-    // Setze Media URL (mit Fallback)
-    this.mediaUrl = this.mediaService.getMediaUrlFromString(
-      this.event?.media?.[0]?.file || (this.event?.media as any)
-    );
   }
 
   private initializeSavedState(): void {
@@ -59,16 +54,18 @@ export class EventCardComponent implements OnInit, OnDestroy {
     if (!this.event) return;
 
     try {
-      // Parallel laden von Location und EventType
-      const [location, eventType] = await Promise.all([
+      const [location, eventType, mediaUrl] = await Promise.all([
         this.loadLocation(),
-        this.loadEventType()
+        this.loadEventType(),
+        this.loadMedia()
       ]);
 
       this.location = location;
       this.eventType = eventType;
+      this.mediaUrl = mediaUrl;
     } catch (error) {
-      console.warn('Fehler beim Laden der Event-Details:', error);
+      console.error('Fehler beim Laden der Event-Details:', error);
+      this.mediaUrl = null;
     }
   }
 
@@ -76,7 +73,8 @@ export class EventCardComponent implements OnInit, OnDestroy {
     if (!this.event?.location) return null;
     
     try {
-      const locationId = this.event.location as unknown as string;
+      const locationRecord = this.event.location as any;
+      const locationId = locationRecord.tb + ':' + locationRecord.id;
       return await this.surrealDBService.getById<Location>(locationId);
     } catch (error) {
       console.warn('Fehler beim Laden der Location:', error);
@@ -88,7 +86,8 @@ export class EventCardComponent implements OnInit, OnDestroy {
     if (!this.event?.event_type) return null;
 
     try {
-      const typeId = this.event.event_type as unknown as string;
+      const typeRecord = this.event.event_type as any;
+      const typeId = typeRecord.tb + ':' + typeRecord.id;
       const result = await this.surrealDBService.getById<{name: string}>(typeId);
       return (result?.name as EventType) || EventType.UNKNOWN;
     } catch (error) {
@@ -97,10 +96,14 @@ export class EventCardComponent implements OnInit, OnDestroy {
     }
   }
 
+  private async loadMedia(): Promise<string | null> {
+    if (!this.event?.media || this.event.media.length === 0) return null;
+    return await this.mediaService.getFirstMediaUrl(this.event.media);
+  }
+
   onCardClick(): void {
     if (!this.event?.id) return;
 
-    // ID bereinigen falls nötig
     const eventId = this.event.id as unknown as string;
     const cleanedId = eventId.replace(/^event:/, '');
     
