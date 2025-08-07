@@ -25,22 +25,24 @@ export class HomeComponent implements OnInit {
   private readonly eventService: EventService = inject(EventService)
   private readonly locationService: LocationService = inject(LocationService)
 
-  async ngOnInit() {
-    try {
-      const rawEvents = await this.eventService.getAllEvents();
-
-      this.events = await Promise.all(
-        rawEvents.map(async (event) => {
-          const location = await this.locationService.getLocationByID(String(event.location.id));
-          return {
-            ...event,
-            locationName: location?.name ?? 'Unbekannter Ort',
-          };
-        })
-      );
-    } catch (error) {
+  ngOnInit() {
+    this.loadEvents().catch(error => {
       console.error('Fehler beim Laden der Events:', error);
-    }
+    });
+  }
+
+  private async loadEvents(): Promise<void> {
+    const rawEvents = await this.eventService.getAllEvents();
+
+    this.events = await Promise.all(
+      rawEvents.map(async (event) => {
+        const location = await this.locationService.getLocationByID(String(event.location.id));
+        return {
+          ...event,
+          locationName: location?.name ?? 'Unbekannter Ort',
+        };
+      })
+    );
   }
 
   getCardClass(index: number): string {
