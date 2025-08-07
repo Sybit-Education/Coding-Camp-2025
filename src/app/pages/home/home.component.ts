@@ -3,15 +3,17 @@ import { CommonModule } from '@angular/common';
 import { EventCardComponent } from '../../component/event-card/event-card.component';
 import { EventService } from '../../services/event.service';
 import { Event } from '../../models/event.interface';
+import { KategorieCardComponent } from "../../component/kategorie-card/kategorie-card.component";
 
 interface EventWithResolvedLocation extends Event {
   locationName: string;
 }
 
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [EventCardComponent, CommonModule],
+  imports: [EventCardComponent, CommonModule, KategorieCardComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
