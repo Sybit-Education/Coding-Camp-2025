@@ -6,10 +6,14 @@
 
   <article id="event-content" class="info-card rounded-2xl bg-gray-100 shadow-2xl">
     <img
+      *ngIf="mediaUrl"
       class="sm:w-full rounded-t-2xl object-cover"
       [alt]="event?.name ? 'Bild der Veranstaltung: ' + event.name : 'Veranstaltungsbild'"
       [src]="mediaUrl"
     />
+    <div *ngIf="!mediaUrl" class="sm:w-full rounded-t-2xl bg-gray-200 h-48 flex items-center justify-center">
+      <span class="text-gray-500">Kein Bild verfügbar</span>
+    </div>
 
     <h1 class="flex w-full  text-2xl font-bold  pt-4 text-blue-900">{{ event?.name }}</h1>
 
@@ -90,7 +94,7 @@
     <div class="flex w-full h-[30px] justify-center items-center">
       <h2 id="directions-heading" class="text-2xl font-bold text-center pt-4 text-blue-900">Anreise</h2>
     </div>
-    <div class="mx-auto my-4 w-[75%] border-t nborder-blue-900"></div>
+    <div class="mx-auto my-4 w-[75%] border-t border-blue-900"></div>
 
     @if (location?.geo_point) {
     <div class="map p-4">

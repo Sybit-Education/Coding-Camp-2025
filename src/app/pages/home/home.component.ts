@@ -33,18 +33,31 @@ export class HomeComponent implements OnInit {
   }
 
   private async loadEvents(): Promise<void> {
-    const rawEvents = await this.eventService.getAllEvents();
+    try {
+      const rawEvents = await this.eventService.getAllEvents();
 
-    this.events = await Promise.all(
-      rawEvents.map(async (event) => {
-        const locationId = event.location as unknown as string;
-        const location: Location = await this.locationService.getLocationByID(locationId);
-        return {
-          ...event,
-          locationName: location?.name ?? 'Unbekannter Ort',
-        };
-      })
-    );
+      this.events = await Promise.all(
+        rawEvents.map(async (event) => {
+          let locationId = '';
+          
+          // Prüfen, ob location ein Objekt mit id ist oder direkt ein String
+          if (typeof event.location === 'object' && event.location !== null && 'id' in event.location) {
+            locationId = String(event.location.id);
+          } else {
+            locationId = String(event.location);
+          }
+          
+          const location = await this.locationService.getLocationByID(locationId);
+          return {
+            ...event,
+            locationName: location?.name ?? 'Unbekannter Ort',
+          };
+        })
+      );
+    } catch (error) {
+      console.error('Fehler beim Laden der Events:', error);
+      this.events = [];
+    }
   }
 
   getCardClass(index: number): string {
