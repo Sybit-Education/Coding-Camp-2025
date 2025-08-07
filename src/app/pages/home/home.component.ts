@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { CommonModule } from '@angular/common';
 import { EventCardComponent } from "../../component/event-card/event-card.component";
+import { KategorieCardComponent } from "../../component/kategorie-card/kategorie-card.component";
 
 interface Event {
   title: string;
@@ -9,10 +10,11 @@ interface Event {
   price: string;
 }
 
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [EventCardComponent, CommonModule],
+  imports: [EventCardComponent, CommonModule, KategorieCardComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -29,3 +31,5 @@ export class HomeComponent {
     return this.events.slice(0, 4);
   }
 }
+
+
