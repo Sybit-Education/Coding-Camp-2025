@@ -13,17 +13,17 @@
 }
 
 :root {
-  font-family: var(--font-family-meta-pro)
+  font-family: var(--font-family-meta-pro);
 }
 
-:root{
-  --color-dark-pink: #c70d56; 
-  --color-indigo-light: #6d7cbc; 
-  --color-peach: #f18b70; 
-  --color-dark-blue: #3b4ea3; 
-  --color-yellow: #fdc61a; 
+:root {
+  --color-dark-pink: #c70d56;
+  --color-indigo-light: #6d7cbc;
+  --color-peach: #f18b70;
+  --color-dark-blue: #3b4ea3;
+  --color-yellow: #fdc61a;
 
-  --font-family-meta-pro: "Meta Pro", ui-sans-serif, system-ui, sans-serif;
+  --font-family-meta-pro: 'Meta Pro', ui-sans-serif, system-ui, sans-serif;
 
   --colors-primary: var(--color-dark-pink);
   --colors-secondary: var(--color-peach);
@@ -33,11 +33,11 @@
   --colors-dark-red: var(--color-dark-pink);
   --colors-coral: var(--color-peach);
   --colors-yellow: var(--color-yellow);
-  
-  --color-pink: #f197c0; 
-  --color-light-blue: #a7b1db; 
-  --color-peach-light: #fbd2bc; 
-  --color-orange-light: #f5ae8e; 
+
+  --color-pink: #f197c0;
+  --color-light-blue: #a7b1db;
+  --color-peach-light: #fbd2bc;
+  --color-orange-light: #f5ae8e;
 
   --colors-bg-primary: var(--color-pink);
   --colors-bg-secondary: var(--color-peach);
