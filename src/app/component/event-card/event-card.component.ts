@@ -18,6 +18,7 @@ export class EventCardComponent {
   @Input() date_end?: string | Date | null;
 
   @Input() locationName = '';
+  @Input() mediaUrl: string | null = null;
 
   constructor(private router: Router) {}
 

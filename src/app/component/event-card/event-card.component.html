@@ -8,11 +8,15 @@
          hover:scale-[1.02] focus:scale-[1.02] active:scale-95
          hover:shadow-xl focus:shadow-xl border border-gray-100"
 >
-  <div class="flex flex-col gap-2 text-left">
-    <div class="inset-0 bg-cover bg-center" style="background-image: url('/icons/icon-512x512.png')">
-      <p class="text-gray-700 text-base">🪧 {{ title }}</p>
-      <p class="text-gray-700 text-base">📅 {{ date_start | dateTimeRange:date_end }}</p>
-      <p class="text-gray-700 text-base">📍 {{ locationName }}</p>
-    </div>
+  <div class="flex flex-col gap-2 text-left w-full">
+    <img
+      *ngIf="mediaUrl"
+      class="rounded-xl w-full h-[120px] object-cover mb-2"
+      [src]="mediaUrl"
+      alt="Event Bild"
+    />
+    <p class="text-gray-700 text-base">🪧 {{ title }}</p>
+    <p class="text-gray-700 text-base">📅 {{ date_start | dateTimeRange:date_end }}</p>
+    <p class="text-gray-700 text-base">📍 {{ locationName }}</p>
   </div>
 </div>
