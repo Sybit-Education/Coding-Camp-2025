@@ -6,7 +6,6 @@ import { Event } from '../../models/event.interface';
 import { Location } from '../../models/location.interface';
 import { LocationService } from '../../services/location.service';
 import { KategorieCardComponent } from "../../component/kategorie-card/kategorie-card.component";
-import { LocationService } from '../../services/location.service';
 import { TopicService } from '../../services/topic.service';
 import { Topic } from '../../models/topic.interface';
 
