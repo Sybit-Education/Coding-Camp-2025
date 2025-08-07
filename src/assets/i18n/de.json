@@ -32,5 +32,11 @@
     "COPYRIGHT": "© 2025 Stadt Radolfzell",
     "IMPRINT": "Impressum",
     "PRIVACY": "Datenschutz"
+  },
+  "bottom-nav": {
+    "home": "Startseite",
+    "favorites": "Favoriten",
+    "search": "Suche",
+    "more": "Mehr"
   }
 }

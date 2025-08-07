@@ -32,5 +32,11 @@
     "COPYRIGHT": "© 2025 Ville de Radolfzell",
     "IMPRINT": "Mentions légales",
     "PRIVACY": "Politique de confidentialité"
+  },
+  "bottom-nav": {
+    "home": "Accueil",
+    "favorites": "Favoris",
+    "search": "Recherche",
+    "more": "Plus"
   }
 }

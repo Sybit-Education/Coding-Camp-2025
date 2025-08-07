@@ -34,6 +34,9 @@
     "PRIVACY": "Privacy Policy"
   },
   "bottom-nav": {
-    "home": "Home"
+    "home": "Home",
+    "favorites": "Favorites",
+    "search": "Search",
+    "more": "More"
   }
 }

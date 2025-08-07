@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
+import { TranslateModule } from '@ngx-translate/core'
 
 /**
  * Interface zur Definition der Navigationspunkte.
@@ -26,7 +27,7 @@ export interface BottomNavItem {
   selector: 'app-bottom-nav',
   // Die Komponente ist standalone und importiert alle benötigten Module selbst.
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './bottom-nav.component.html',
   styleUrls: ['./bottom-nav.component.scss'],
 })
