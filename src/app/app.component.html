@@ -1,9 +1,11 @@
-<div class="app-container" [class.carousel-layout]="isCarouselPage">
+<div class="app-container bg-[#fffff]/90" [class.carousel-layout]="isCarouselPage">
   <app-header></app-header>
 
-  <main>
+  <main class="pt-[220px]">
     <router-outlet />
   </main>
-  
+
   <app-footer></app-footer>
+  <app-bottom-nav></app-bottom-nav>
 </div>
+
