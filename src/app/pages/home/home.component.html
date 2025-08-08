@@ -6,10 +6,11 @@
     <div class="w-full overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 -mx-4 scrollbar-hide card-snap">
       <div class="flex gap-2 px-4 min-w-max event-row">
         <app-event-card
-          *ngFor="let event of events; let i = index"
+          *ngFor="let event of displayEvents; let i = index"
           class="flex-shrink-0 snap-center"
           [class]="getCardClass(i)"
-          [event]="event"
+          [event]="i < 4 ? event : null"
+          [isMoreCard]="i >= 4"
         ></app-event-card>
       </div>
     </div>

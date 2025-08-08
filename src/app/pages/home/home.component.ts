@@ -1,26 +1,37 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EventCardComponent } from '../../component/event-card/event-card.component';
-import { EventService } from '../../services/event.service';
-import { Event } from '../../models/event.interface';
-import { KategorieCardComponent } from "../../component/kategorie-card/kategorie-card.component";
-import { TopicService } from '../../services/topic.service';
-import { Topic } from '../../models/topic.interface';
 import { TranslateModule } from '@ngx-translate/core';
+
+import { EventCardComponent } from '../../component/event-card/event-card.component';
+import { KategorieCardComponent } from "../../component/kategorie-card/kategorie-card.component";
+
+import { EventService } from '../../services/event.service';
+import { TopicService } from '../../services/topic.service';
+
+import { Event } from '../../models/event.interface';
+import { Topic } from '../../models/topic.interface';
+
+type EventOrMore = Event & { isMore?: boolean };
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [EventCardComponent, CommonModule, KategorieCardComponent, TranslateModule],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    EventCardComponent,
+    KategorieCardComponent
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
   events: Event[] = [];
+  displayEvents: EventOrMore[] = [];
   topics: Topic[] = [];
 
-  private readonly eventService: EventService = inject(EventService);
-  private readonly topicService: TopicService = inject(TopicService);
+  private readonly eventService = inject(EventService);
+  private readonly topicService = inject(TopicService);
 
   ngOnInit() {
     this.initializeData();
@@ -32,8 +43,15 @@ export class HomeComponent implements OnInit {
         this.eventService.getAllEvents(),
         this.topicService.getAllTopics()
       ]);
-      
+
       this.events = this.getUpcomingEvents(allEvents);
+
+      this.displayEvents = this.events.slice(0, 4);
+
+      if (this.events.length > 4) {
+        this.displayEvents.push({} as Event); 
+}
+
       this.topics = topics;
     } catch (error) {
       console.error('Fehler beim Laden der Daten:', error);
@@ -43,16 +61,16 @@ export class HomeComponent implements OnInit {
   private getUpcomingEvents(events: Event[]): Event[] {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    
+
     return events
       .filter(event => {
         const eventStartDate = new Date(event.date_start);
         const eventStartDay = new Date(eventStartDate.getFullYear(), eventStartDate.getMonth(), eventStartDate.getDate());
-        
+
         if (eventStartDay < today) {
           return false;
         }
-        
+
         if (event.date_end) {
           const eventEndDate = new Date(event.date_end);
           return eventEndDate > now;
@@ -66,15 +84,10 @@ export class HomeComponent implements OnInit {
         const dateA = new Date(a.date_start);
         const dateB = new Date(b.date_start);
         return dateA.getTime() - dateB.getTime();
-      })
-      .slice(0, 4);
+      });
   }
 
   getCardClass(index: number): string {
     return 'w-[calc(100vw-6rem)] h-[280px]';
-  }
-
-  getTopics() {
-    return this.topics;
   }
 }
