@@ -75,6 +75,6 @@ export class SurrealdbService extends Surreal {
     )
     console.log('update result:', result)
     // SurrealDB gibt ein Array zurück, daher das erste Element nehmen
-    return result
+    return Array.isArray(result) ? result[0] : result
   }
 }

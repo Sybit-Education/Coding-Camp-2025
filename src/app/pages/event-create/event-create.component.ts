@@ -281,10 +281,11 @@ export class EventCreateComponent implements OnInit {
     if (this.eventId !== undefined) {
       try {
         console.log('Updating existing event:', this.eventId)
-        await this.eventService.updateEvent(
+        const updated = await this.eventService.updateEvent(
           this.eventId,
           payload,
         )
+        console.log('Event updated:', updated)
       } catch (err) {
         console.error('Fehler beim Aktualisieren des Events:', err)
         return
