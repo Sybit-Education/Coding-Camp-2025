@@ -7,6 +7,8 @@ import { PlaceholderComponent } from './pages/placeholder/placeholder.component'
 import { EventDetailPageComponent } from './pages/event-detail/event-detail.component'
 import { DevsComponent } from './pages/devs/devs.component'
 import { LoginPageComponent } from './pages/login/login.component'
+import { ImpressumComponent } from './pages/impressum/impressum.component'
+import { DatenschutzComponent } from './pages/datenschutz/datenschutz.component'
 import { LoginService } from './services/login.service'
 import { FavouritesComponent } from './pages/favourites/favourites.component'
 
@@ -42,7 +44,7 @@ export const routes: Routes = [
   },
   {
     path: 'datenschutz',
-    component: PlaceholderComponent,
+    component: DatenschutzComponent,
   },
   {
     path: 'event/:id',

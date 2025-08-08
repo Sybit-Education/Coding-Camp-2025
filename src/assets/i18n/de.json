@@ -57,6 +57,9 @@
     "current": "Aktuelles",
     "categories": "Kategorien"
   },
+  "i18y": {
+    "to-main-content": "Zum Hauptinhalt springen"
+  },
   "footer": {
     "datenschutz": "Datenschutz",
     "impressum": "Impressum"

@@ -12,6 +12,7 @@ import { EventService } from './app/services/event.service'
 import { LocationService } from './app/services/location.service'
 import { OrganizerService } from './app/services/organizer.service'
 import { TopicService } from './app/services/topic.service'
+import { MediaService } from './app/services/media.service'
 
 // Registriere alle unterstützten Locales für Datums- und Zahlenformatierung
 registerLocaleData(localeDe);
@@ -37,6 +38,7 @@ bootstrapApplication(AppComponent, {
       inject(LocationService)
       inject(OrganizerService)
       inject(TopicService)
+      inject(MediaService)
       return surrealdb.initialize()
     }),
     provideServiceWorker('ngsw-worker.js', {
