@@ -10,11 +10,12 @@ import { LocationService } from '../../services/location.service'
 import { OrganizerService } from '../../services/organizer.service'
 import { DateTimeRangePipe } from '../../services/date.pipe'
 import { RecordId, StringRecordId } from 'surrealdb'
+import { TeilenComponent } from "../../component/teilen/teilen.component";
 
 @Component({
   selector: 'app-event-detail-page',
   standalone: true,
-  imports: [MapComponent, CommonModule, DateTimeRangePipe],
+  imports: [MapComponent, CommonModule, DateTimeRangePipe, TeilenComponent],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
 })
@@ -24,6 +25,7 @@ export class EventDetailPageComponent implements OnInit {
   organizer: Organizer | null = null
   type: EventType | null = null
   error: string | null = null
+  eventId = ""
 
   mediaBaseUrl = 'https://1200-jahre-radolfzell.sybit.education/media/'
   mediaUrl: string | null = null
@@ -35,9 +37,9 @@ export class EventDetailPageComponent implements OnInit {
   private readonly router = inject(Router)
 
   ngOnInit(): void {
-    const eventId = this.route.snapshot.paramMap.get('id')
-    if (eventId) {
-      const recordID = new StringRecordId('event:' + eventId)
+    this.eventId = this.route.snapshot.paramMap.get('id')!
+    if (this.eventId) {
+      const recordID = new StringRecordId('event:' + this.eventId)
       this.loadEvent(recordID)
     } else {
       this.error = 'Event ID nicht gefunden'
@@ -117,10 +119,4 @@ export class EventDetailPageComponent implements OnInit {
   goBack() {
     this.router.navigate(['/'])
   }
-
-  sharePage() {
-    
-  }
-
-
 }

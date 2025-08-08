@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-teilen',
@@ -6,5 +6,14 @@ import { Component } from '@angular/core';
   templateUrl: './teilen.component.html',
 })
 export class TeilenComponent {
+
+  @Input() eventId = ""
+
+
+  sharePage() {
+    const link =  'https://https://1200-jahre-radolfzell.sybit.education/event/' + this.eventId
+
+    navigator.clipboard.writeText(link)
+  }
 
 }
