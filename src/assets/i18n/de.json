@@ -44,10 +44,6 @@
       "TITLE": "Das Team",
       "DESCRIPTION": "Lernen Sie das Team hinter der 1200-Jahre-Radolfzell App kennen."
     },
-    "SPONSOR": {
-      "TITLE": "Der Sponsor",
-      "DESCRIPTION": "Informationen über unsere Sponsoren und Unterstützer."
-    },
     "IMPRINT": {
       "TITLE": "Impressum",
       "DESCRIPTION": "Rechtliche Informationen und Kontaktdaten."
@@ -60,5 +56,9 @@
   "home": {
     "current": "Aktuelles",
     "categories": "Kategorien"
+  },
+  "footer": {
+    "datenschutz": "Datenschutz",
+    "impressum": "Impressum"
   }
 }

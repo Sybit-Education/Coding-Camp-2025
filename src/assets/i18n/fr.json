@@ -44,10 +44,6 @@
       "TITLE": "L'équipe",
       "DESCRIPTION": "Découvrez l'équipe derrière l'application 1200 Ans de Radolfzell."
     },
-    "SPONSOR": {
-      "TITLE": "Le sponsor",
-      "DESCRIPTION": "Informations sur nos sponsors et soutiens."
-    },
     "IMPRINT": {
       "TITLE": "Mentions légales",
       "DESCRIPTION": "Informations légales et coordonnées."
@@ -60,5 +56,9 @@
   "home": {
     "current": "Événements actuels",
     "categories": "Catégories"
+  },
+  "footer": {
+    "datenschutz": "Mentions légales",
+    "impressum": "Politique de confidentialité"
   }
 }
