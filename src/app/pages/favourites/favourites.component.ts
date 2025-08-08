@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { Event } from '../../models/event.interface'
 import { Router } from '@angular/router'
-import { DateTimeRangePipe } from '../../services/date.pipe'
 import { FavoriteService } from '../../services/favorite.service'
 import { Subscription } from 'rxjs'
 import { EventCardComponent } from '../../component/event-card/event-card.component'
@@ -10,7 +9,7 @@ import { EventCardComponent } from '../../component/event-card/event-card.compon
 @Component({
   selector: 'app-favourites',
   standalone: true,
-  imports: [CommonModule, DateTimeRangePipe, EventCardComponent],
+  imports: [CommonModule, EventCardComponent],
   templateUrl: './favourites.component.html',
   styles: [`
     .line-clamp-2 {
@@ -31,13 +30,13 @@ export class FavouritesComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     console.log('FavouritesComponent initialized');
-    
+
     // Abonniere Änderungen an den Favoriten
     this.subscription = this.favoriteService.favoriteEvents$.subscribe(events => {
       console.log('Received favorite events:', events);
       this.favouriteEvents = events;
     });
-    
+
     // Abonniere den Ladezustand
     this.subscription.add(
       this.favoriteService.loading$.subscribe(loading => {
@@ -45,12 +44,12 @@ export class FavouritesComponent implements OnInit, OnDestroy {
         this.loading = loading;
       })
     );
-    
+
     // Lade die Favoriten mit einem kleinen Timeout
     setTimeout(() => {
       console.log('Explicitly loading favorite events from component');
       this.favoriteService.loadFavoriteEvents();
-      
+
       // Sicherheits-Timeout: Setze loading auf false nach 2 Sekunden, falls es hängen bleibt
       setTimeout(() => {
         if (this.loading) {
@@ -82,7 +81,7 @@ export class FavouritesComponent implements OnInit, OnDestroy {
       this.favoriteService.removeFromFavorites(eventId);
     }
   }
-  
+
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();

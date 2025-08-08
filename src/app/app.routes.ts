@@ -8,6 +8,7 @@ import { EventDetailPageComponent } from './pages/event-detail/event-detail.comp
 import { DevsComponent } from './pages/devs/devs.component'
 import { LoginPageComponent } from './pages/login/login.component'
 import { LoginService } from './services/login.service'
+import { FavouritesComponent } from './pages/favourites/favourites.component'
 
 export const routes: Routes = [
   {
@@ -16,7 +17,7 @@ export const routes: Routes = [
   },
   {
     path: 'favourites',
-    component: AboutComponent,
+    component: FavouritesComponent,
   },
   {
     path: 'about',
