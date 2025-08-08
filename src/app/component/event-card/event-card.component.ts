@@ -105,7 +105,7 @@ export class EventCardComponent implements OnInit, OnDestroy {
 
   onCardClick(): void {
   if (this.isMoreCard) {
-    this.router.navigate(['/kategorie']);
+    this.router.navigate(['/event/bh83eggbmhuyb33kbl39']);
     return;
   }
 
