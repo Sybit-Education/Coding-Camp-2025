@@ -4,21 +4,26 @@
     Zum Hauptinhalt springen
   </a>
 
+  <!-- Aktuelle Events -->
   <section aria-labelledby="events-heading">
-    <h1 class="text-xl font-bold mb-4 text-left">{{ 'home.current' | translate }}</h1>
+    <h1 id="events-heading" class="text-xl font-bold mb-4 text-left">
+      {{ 'home.current' | translate }}
+    </h1>
 
     <!-- Horizontaler Scroll-Container für Events -->
     <div
       class="w-full overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 -mx-4 scrollbar-hide card-snap"
       role="region"
       aria-label="Veranstaltungen"
-      tabindex="0">
+      tabindex="0"
+    >
       <div class="flex gap-2 px-4 min-w-max event-row">
         <app-event-card
-          *ngFor="let event of events; let i = index"
+          *ngFor="let event of displayEvents; let i = index"
           class="flex-shrink-0 snap-center"
           [class]="getCardClass()"
-          [event]="event"
+          [event]="event.isMore ? null : event"
+          [isMoreCard]="!!event.isMore"
           [attr.tabindex]="0"
           [attr.aria-label]="'Veranstaltung: ' + event.name + ' am ' + (event.date_start | date:'dd.MM.yyyy')"
           (keydown)="onKeyDown($event, event.id)"
@@ -27,18 +32,15 @@
     </div>
   </section>
 
+  <!-- Kategorien -->
   <section aria-labelledby="categories-heading">
-    <h1 class="text-xl font-bold mb-4 text-left">
+    <h1 id="categories-heading" class="text-xl font-bold mb-4 text-left">
       {{ 'home.categories' | translate }}
     </h1>
 
     <div class="grid grid-cols-3 mr-5 text-gray-750 ">
-      <app-kategorie-card
-        *ngFor="let kategorie of topics"
-        [color]="kategorie.color"
-        [text]="kategorie.name">
+      <app-kategorie-card *ngFor="let kategorie of topics" [color]="kategorie.color" [text]="kategorie.name" [id]="kategorie.id!" >
       </app-kategorie-card>
     </div>
 </section>
 </main>
-

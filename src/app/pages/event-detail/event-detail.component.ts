@@ -12,11 +12,12 @@ import { DateTimeRangePipe } from '../../services/date.pipe'
 import { RecordId, StringRecordId } from 'surrealdb'
 import { LoginService } from '../../services/login.service'
 import { TypeDB } from '../../models/typeDB.interface'
+import { FavoriteButtonComponent } from '../../component/favorite-button/favorite-button.component'
 
 @Component({
   selector: 'app-event-detail-page',
   standalone: true,
-  imports: [MapComponent, CommonModule, DateTimeRangePipe],
+  imports: [MapComponent, CommonModule, DateTimeRangePipe, FavoriteButtonComponent],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
 })
@@ -38,8 +39,11 @@ export class EventDetailPageComponent implements OnInit {
   private readonly loginservice = inject(LoginService)
 
   protected isLoggedIn = false
+evntIdString: string|undefined
 
   ngOnInit(): void {
+
+    this.evntIdString = String(this.event?.id?.id)
     const eventId = this.route.snapshot.paramMap.get('id')
     if (eventId) {
       const recordID = new StringRecordId('event:' + eventId)

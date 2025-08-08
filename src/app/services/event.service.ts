@@ -18,7 +18,12 @@ export class EventService {
   async getAllEvents(): Promise<Event[]> {
     try {
       const result = await this.surrealdb.getAll<Event>('event')
-      return result
+      return (result || []).map(
+        (item: Record<string, unknown>) =>
+          ({
+            ...item
+          }) as Event,
+      )
     } catch (error) {
       throw new Error(`Fehler beim Laden der Events: ${error}`)
     }

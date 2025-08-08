@@ -19,13 +19,11 @@ export class MediaService {
     try {
       const result = await this.surrealdb.getAll<Event>('event')
       return (result || []).map(
-  (item) =>
-    ({
-      ...item,
-      id: item['id']?.toString() || '',
-    } as unknown as Event)
-);
-
+        (item: Record<string, unknown>) =>
+          ({
+            ...item,
+          }) as Event,
+      )
     } catch (error) {
       throw new Error(`Fehler beim Laden der Events: ${error}`)
     }

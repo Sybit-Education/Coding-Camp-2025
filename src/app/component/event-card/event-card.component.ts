@@ -26,6 +26,8 @@ export class EventCardComponent implements OnInit, OnDestroy {
   isSaved = false;
   mediaUrl: string | null = null;
 
+  @Input() isMoreCard = false;
+
   private subscription?: Subscription;
 
   private readonly surrealDBService = inject(SurrealdbService);
@@ -102,13 +104,14 @@ export class EventCardComponent implements OnInit, OnDestroy {
   }
 
   onCardClick(): void {
-    if (!this.event?.id) return;
+    if (!this.event) {
+      this.router.navigate(['/kategorie']);
+      return;
+    }
 
-
-    const cleanedId = this.event.id.id 
-    
+    const cleanedId = this.event.id!.id
     this.router.navigate(['/event', cleanedId]);
-  }
+}
 
   ngOnDestroy(): void {
     this.subscription?.unsubscribe();
