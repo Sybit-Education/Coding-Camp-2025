@@ -19,10 +19,6 @@ export const routes: Routes = [
     component: AboutComponent,
   },
   {
-    path: 'search',
-    component: AboutComponent,
-  },
-  {
     path: 'about',
     component: AboutComponent,
   },
@@ -38,10 +34,6 @@ export const routes: Routes = [
   {
     path: 'team',
     component: DevsComponent,
-  },
-  {
-    path: 'sponsor',
-    component: PlaceholderComponent,
   },
   {
     path: 'impressum',

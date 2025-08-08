@@ -1,5 +1,5 @@
 <div
-  class="flex justify-center bg-[var(--colors-light-blue)] p-5 pt-10 text-lg leading-relaxed text-shadow-gray-500"
+  class="flex flex-col items-center justify-center bg-[var(--colors-light-blue)] p-5 text-lg leading-relaxed text-shadow-gray-500"
 >
   <form
     class="grid gap-[3rem] rounded-2xl bg-white p-6 text-black sm:grid-cols-[1fr] md:w-[75%] md:grid-cols-[1fr_1fr]"
@@ -332,6 +332,11 @@
           class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
         />
       </div>
+
+      <app-upload-image
+        [eventName]="eventname"
+        (image)="handleImage($event)"
+      ></app-upload-image>
 
       <!-- Button: Event erstellen -->
       <div>

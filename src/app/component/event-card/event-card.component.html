@@ -1,15 +1,49 @@
 <div
-  tabindex="0"
-  role="button"
   (click)="onCardClick()"
   (keyup.enter)="onCardClick()"
-  class="flex h-full cursor-pointer flex-col items-start justify-start rounded-2xl border border-gray-100 bg-white p-6 shadow-lg transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-xl focus:scale-[1.02] focus:shadow-xl active:scale-95"
+  (keyup.space)="onCardClick()"
+  tabindex="0"
+  role="button"
+  [attr.aria-label]="'Event: ' + (event?.name || 'Event Name')"
+  class="bg-white focus:ring-opacity-50 w-full transform cursor-pointer overflow-hidden rounded-2xl shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl focus:ring-2 focus:ring-yellow-400 focus:outline-none border border-gray-100"
 >
-  <div class="flex flex-col gap-2 text-left">
-    <p class="text-base text-gray-700">🪧 {{ title }}</p>
-    <p class="text-base text-gray-700">
-      📅 {{ date_start | dateTimeRange: date_end }}
-    </p>
-    <p class="text-base text-gray-700">📍 {{ locationName }}</p>
+  <div class="relative h-[120px] w-full overflow-hidden bg-gray-300" *ngIf="mediaUrl">
+    <img
+      [src]="mediaUrl"
+      [alt]="event?.name || 'Event Bild'"
+      class="h-full w-full object-cover"
+      loading="lazy"
+    />
+  </div>
+
+  <div class="space-y-2 p-4">
+    <div class="flex items-center justify-between">
+      <h3 class="line-clamp-2 flex-1 text-base font-semibold text-gray-800 leading-tight">
+        {{ event?.name || 'Event Name' }}
+      </h3>
+      @if (isSaved) {
+        <div class="ml-2 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-yellow-400 shadow-lg">
+          <span class="text-gray-800 flex items-center justify-center text-xs font-bold">⭐</span>
+        </div>
+      }
+    </div>
+
+    <div class="flex items-center text-gray-700">
+      <div class="mr-2 flex h-6 w-6 items-center justify-center text-sm">
+        <span>📅</span>
+      </div>
+      <span class="text-sm">
+        {{ (event?.date_start || null) | dateTimeRange : (event?.date_end || null) }}
+      </span>
+    </div>
+
+    <div class="flex items-center text-gray-700">
+      <div class="mr-2 flex h-6 w-6 items-center justify-center text-sm">
+        <span>📍</span>
+      </div>
+      <span class="text-sm">
+        {{ location?.name || 'Ort wird bekannt gegeben' }}
+      </span>
+    </div>
   </div>
 </div>

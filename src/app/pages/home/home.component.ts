@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { EventCardComponent } from '../../component/event-card/event-card.component';
 import { EventService } from '../../services/event.service';
 import { Event } from '../../models/event.interface';
-import { LocationService } from '../../services/location.service';
 import { KategorieCardComponent } from "../../component/kategorie-card/kategorie-card.component";
 import { TopicService } from '../../services/topic.service';
 import { Topic } from '../../models/topic.interface';
@@ -25,49 +24,38 @@ interface EventWithResolvedLocation extends Event {
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
-  events: EventWithResolvedLocation[] = []
+  events: Event[] = [];
+  topics: Topic[] = []
 
-  private readonly eventService: EventService = inject(EventService)
-  private readonly locationService: LocationService = inject(LocationService)
+  private readonly eventService: EventService = inject(EventService);
   private readonly topicService: TopicService = inject(TopicService);
 
-  topics: Topic[] = [];
-
   ngOnInit() {
-    this.initilizeData();
+    this.initializeData();
   }
 
-  async initilizeData() {
-
-    this.topics = await this.topicService.getAllTopics();
-
+  async initializeData() {
+    console.log('onInit: HomeComponent');
+    
     try {
-      const rawEvents = await this.eventService.getAllEvents()
-      console.log(rawEvents);
-
-      this.events = await Promise.all(
-        rawEvents.map(async (event) => {
-          const location = await this.locationService.getLocationByID(event.location);
-          return {
-            ...event,
-            locationName: location?.name ?? 'Unbekannter Ort',
-          };
-        })
-      );
-
+        const [events, topics] = await Promise.all([
+        this.eventService.getAllEvents(),
+        this.topicService.getAllTopics()
+      ]);
+      
+      this.events = events;
+      this.topics = topics;
+      
     } catch (error) {
-      console.error('Fehler beim Laden der Events:', error)
+      console.error('Fehler beim Laden der Daten:', error);
     }
   }
 
   getCardClass(): string {
     return 'w-[calc(100vw-6rem)] h-[280px]'
   }
+
   getTopics() {
-    console.log(this.topics);
     return this.topics;
   }
-
-
-
 }

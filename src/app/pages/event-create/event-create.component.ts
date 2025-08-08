@@ -1,5 +1,4 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core'
-import { CommonModule } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { EventService } from '../../services/event.service'
 import { LocationService } from '../../services/location.service'
@@ -12,6 +11,10 @@ import { Organizer } from '../../models/organizer.interface'
 import { Topic } from '../../models/topic.interface'
 import { TypeDB } from '../../models/typeDB.interface'
 import { Decimal, RecordId, StringRecordId} from 'surrealdb'
+import { UploadImageComponent } from '../../component/upload-image/upload-image.component'
+import { CommonModule } from '@angular/common'
+import { Media } from '../../models/media.model'
+import { MediaService } from '../../services/media.service'
 
 @Component({
   selector: 'app-event-create',
@@ -27,6 +30,8 @@ export class EventCreateComponent implements OnInit {
   private readonly locationService = inject(LocationService)
   private readonly organizerService = inject(OrganizerService)
   private readonly topicService = inject(TopicService)
+    private readonly mediaService = inject(MediaService)
+
   constructor(
     private readonly destroyRef: DestroyRef,
     private readonly route: ActivatedRoute,
@@ -272,7 +277,7 @@ export class EventCreateComponent implements OnInit {
       event_type: this.selectedEventType.id,
       location: this.selectedLocation.id!,
       topic: this.selectedTopics.map((t) => t.id!),
-      media: this.media!,
+      media: mediaIds,
       age: this.age ?? undefined,
       restriction: this.restriction || undefined,
     }
@@ -302,5 +307,22 @@ export class EventCreateComponent implements OnInit {
         console.error('Fehler beim Erstellen des Events:', err)
       }
     }
+  }
+
+    async getMediaIds(): Promise<RecordId<'media'>[]> {
+    return Promise.all(
+    this.media.map(async (med) => {
+      med.id = (
+        this.eventname.replace(/[^a-zA-Z0-9]/g, '_') +
+        '_' +
+        med.fileType.split('/')[1]
+      ) as unknown as RecordId<'media'>;
+
+      const result = await this.mediaService.postMedia(med);
+      console.log('result from creation of media: ', result);
+
+      return result.id!;
+    })
+  );
   }
 }
