@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { EventCardComponent } from '../../component/event-card/event-card.component';
 import { EventService } from '../../services/event.service';
@@ -13,7 +13,7 @@ import { LocationService } from '../../services/location.service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [EventCardComponent, CommonModule, KategorieCardComponent, DatePipe, TranslateModule, RouterModule],
+  imports: [EventCardComponent, CommonModule, KategorieCardComponent, TranslateModule, RouterModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -62,6 +62,20 @@ export class HomeComponent implements OnInit {
     return this.topics;
   }
 
-
+  /**
+   * Behandelt Tastaturereignisse für die Event-Karten
+   * @param event Das Tastaturereignis
+   * @param eventId Die ID des Events
+   */
+  onKeyDown(event: KeyboardEvent, eventId?: string): void {
+    // Enter oder Space aktiviert den Klick auf die Karte
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      if (eventId) {
+        const cleanedId = eventId.replace(/^event:/, '');
+        this.router.navigate(['/event', cleanedId]);
+      }
+    }
+  }
 
 }

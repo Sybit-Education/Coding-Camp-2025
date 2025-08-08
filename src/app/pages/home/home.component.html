@@ -20,7 +20,7 @@
           [class]="getCardClass(i)"
           [event]="event"
           [attr.tabindex]="0"
-          [attr.aria-label]="'Veranstaltung: ' + event.name + ' am ' + (event.date_start | date:'dd.MM.yyyy') + ' in ' + event.locationName"
+          [attr.aria-label]="'Veranstaltung: ' + event.name + ' am ' + (event.date_start | date:'dd.MM.yyyy')"
           (keydown)="onKeyDown($event, event.id)"
           role="button"
         ></app-event-card>
