@@ -60,5 +60,16 @@
   "footer": {
     "datenschutz": "Mentions légales",
     "impressum": "Politique de confidentialité"
+  },
+  "FAVORITES": {
+    "TITLE": "Mes Favoris",
+    "LOADING": "Chargement des favoris...",
+    "EMPTY": {
+      "TITLE": "Vous n'avez pas encore enregistré de favoris.",
+      "DESCRIPTION": "Ajoutez des événements à vos favoris pour les voir ici.",
+      "BUTTON": "Aller à l'aperçu"
+    },
+    "REMOVE": "Retirer des favoris",
+    "ADD": "Ajouter aux favoris"
   }
 }

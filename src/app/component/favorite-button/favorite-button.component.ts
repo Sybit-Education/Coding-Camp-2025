@@ -2,17 +2,18 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { Subscription } from 'rxjs'
 import { FavoriteService } from '../../services/favorite.service'
+import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-favorite-button',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   template: `
     <button
       *ngIf="eventId"
       (click)="toggleFavorite($event)"
       class="ml-2 focus:outline-none"
-      [title]="isFavorite ? 'Aus Favoriten entfernen' : 'Zu Favoriten hinzufügen'"
+      [title]="(isFavorite ? 'FAVORITES.REMOVE' : 'FAVORITES.ADD') | translate"
     >
       <!-- Solid star when favorited -->
       <svg *ngIf="isFavorite" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FFD700"

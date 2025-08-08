@@ -5,11 +5,12 @@ import { Router } from '@angular/router'
 import { FavoriteService } from '../../services/favorite.service'
 import { Subscription } from 'rxjs'
 import { EventCardComponent } from '../../component/event-card/event-card.component'
+import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-favourites',
   standalone: true,
-  imports: [CommonModule, EventCardComponent],
+  imports: [CommonModule, EventCardComponent, TranslateModule],
   templateUrl: './favourites.component.html',
   styles: [`
     .line-clamp-2 {
