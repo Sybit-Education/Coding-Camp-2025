@@ -1,0 +1,64 @@
+{
+  "COMMON": {
+    "SAVE": "Save",
+    "CANCEL": "Cancel",
+    "BACK": "Back",
+    "NEXT": "Next",
+    "SKIP_TO_MAIN": "Skip to main content"
+  },
+  "HEADER": {
+    "TITLE": "1200 Years Radolfzell",
+    "HOME": "Home",
+    "EVENTS": "Events",
+    "ABOUT": "About"
+  },
+  "HOME": {
+    "WELCOME": "Welcome to 1200 Years Radolfzell",
+    "INTRO": "Discover the history and events around the anniversary"
+  },
+  "EVENTS": {
+    "TITLE": "Events",
+    "NO_EVENTS": "No events found",
+    "LOCATION": "Location",
+    "DATE": "Date",
+    "SAVE_EVENT": "Save event",
+    "REMOVE_EVENT": "Remove event"
+  },
+  "ABOUT": {
+    "TITLE": "About us",
+    "CONTENT": "The city of Radolfzell on Lake Constance celebrates its 1200th anniversary"
+  },
+  "FOOTER": {
+    "COPYRIGHT": "© 2025 City of Radolfzell",
+    "IMPRINT": "Imprint",
+    "PRIVACY": "Privacy Policy"
+  },
+  "bottom-nav": {
+    "home": "Home",
+    "favorites": "Favorites",
+    "search": "Search",
+    "more": "More"
+  },
+  "MORE": {
+    "TEAM": {
+      "TITLE": "The Team",
+      "DESCRIPTION": "Meet the team behind the 1200 Years Radolfzell app."
+    },
+    "IMPRINT": {
+      "TITLE": "Imprint",
+      "DESCRIPTION": "Legal information and contact details."
+    },
+    "PRIVACY": {
+      "TITLE": "Privacy Policy",
+      "DESCRIPTION": "Information about data protection and data processing."
+    }
+  },
+  "home": {
+    "current": "Current Events",
+    "categories": "Categories"
+  },
+  "footer": {
+    "datenschutz": "Privacy Policy",
+    "impressum": "Imprint"
+  }
+}

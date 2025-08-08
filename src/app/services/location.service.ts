@@ -1,0 +1,43 @@
+import { inject, Injectable } from '@angular/core'
+import { SurrealdbService } from './surrealdb.service'
+import { Location } from '../models/location.interface'
+import { RecordId, StringRecordId } from 'surrealdb'
+
+@Injectable({
+  providedIn: 'root',
+})
+export class LocationService {
+  private readonly surrealdb: SurrealdbService = inject(SurrealdbService)
+
+  //************** GET **************
+
+  async getLocationByID(
+    id: RecordId<'location'> | StringRecordId,
+  ): Promise<Location> {
+    return await this.surrealdb.getByRecordId<Location>(id)
+  }
+
+  async getAllLocations(): Promise<Location[]> {
+    try {
+      const result = await this.surrealdb.getAll<Location>('location')
+      return (result || []).map(
+        (item: Record<string, unknown>) =>
+          ({
+            ...item,
+          }) as unknown as Location,
+      )
+    } catch (error) {
+      throw new Error(`Fehler beim Laden der Locations: ${error}`)
+    }
+  }
+
+  //************** POST **************
+
+  async postLocation(location: Location): Promise<Location> {
+    const result: Location[] = await this.surrealdb.post<Location>(
+      'location',
+      location,
+    )
+    return result[0]
+  }
+}

@@ -1,5 +1,7 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { I18nService } from '../../services/translate.service';
+import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
 
 // -----------------------------------------------------------------------------
 // HeaderComponent
@@ -39,11 +41,15 @@ interface LogoSet {
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LanguageSwitcherComponent],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
+  /**
+   * Aktuell ausgewählte Sprache
+   */
+  currentLang = '';
   /**
    * Bündel aller möglichen Logovarianten. Per Default wird die transparente
    * PNG‑Datei aus dem Assets‑Ordner verwendet. Der Benutzer kann dieses
@@ -65,7 +71,7 @@ export class HeaderComponent implements OnInit {
   /**
    * Abstand in Pixeln, ab dem der Header schrumpft. Standard: 120px.
    */
-  @Input() shrinkThreshold = 120;
+  @Input() shrinkThreshold = 20;
 
   /**
    * Steuerung, ob die Wellenform unter dem Header angezeigt wird. Kann
@@ -85,9 +91,14 @@ export class HeaderComponent implements OnInit {
    */
   currentSrc = '';
 
+  constructor(private readonly i18nService: I18nService) {
+    this.currentLang = this.i18nService.getCurrentLang();
+  }
+
   ngOnInit(): void {
     this.updateState();
   }
+
 
   /**
    * Listener für Scrollereignisse: prüft bei jedem Scrollen, ob der

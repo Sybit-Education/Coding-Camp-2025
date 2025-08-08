@@ -40,6 +40,7 @@ module.exports = tseslint.config(
     ],
     rules: {
       "@angular-eslint/template/accessibility-interaction-support-focus": ["off"],
+      "@angular-eslint/template/i18n": ["error"],
     },
   }
 );

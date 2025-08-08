@@ -6,7 +6,10 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { EventService } from '../../services/event.service'
 import { CommonModule } from '@angular/common'
 import { Organizer } from '../../models/organizer.interface'
+import { LocationService } from '../../services/location.service'
+import { OrganizerService } from '../../services/organizer.service'
 import { DateTimeRangePipe } from '../../services/date.pipe'
+import { RecordId, StringRecordId } from 'surrealdb'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -26,34 +29,42 @@ export class EventDetailPageComponent implements OnInit {
   mediaUrl: string | null = null
 
   private readonly eventService = inject(EventService)
+  private readonly locationService = inject(LocationService)
+  private readonly organizerService = inject(OrganizerService)
   private readonly route = inject(ActivatedRoute)
   private readonly router = inject(Router)
 
   ngOnInit(): void {
     const eventId = this.route.snapshot.paramMap.get('id')
     if (eventId) {
-      this.loadEvent(eventId)
+      const recordID = new StringRecordId('event:' + eventId)
+      this.loadEvent(recordID)
     } else {
       this.error = 'Event ID nicht gefunden'
     }
   }
 
-  async loadType(typeId: string) {
-    try {
-      const type = await this.eventService.getTypeByID(typeId!)
-      if (type) {
-        this.type = type as EventType
-      } else {
-        this.error = 'Event Type nicht gefunden'
+  async loadType(typeId: RecordId<'event_type'> | undefined) {
+    if (typeId) {
+      try {
+        const type = await this.eventService.getEventTypeByID(typeId)
+        if (type) {
+          this.type = type as EventType
+        } else {
+          this.error = 'Event Type nicht gefunden'
+        }
+      } catch (err) {
+        this.error = `Fehler beim Laden des Event Types: ${err}`
       }
-    } catch (err) {
-      this.error = `Fehler beim Laden des Event Types: ${err}`
+    } else {
+      this.error = 'Event Type ID nicht gefunden'
     }
   }
 
-  async loadLocation(locationId: string) {
+  async loadLocation(locationId: RecordId<'location'>) {
     try {
-      const foundLocation = await this.eventService.getLocationByID(locationId)
+      const foundLocation =
+        await this.locationService.getLocationByID(locationId)
 
       if (foundLocation) {
         this.location = foundLocation
@@ -65,9 +76,10 @@ export class EventDetailPageComponent implements OnInit {
     }
   }
 
-  async loadOrganizer(organizerId: string) {
+  async loadOrganizer(organizerId: RecordId<'organizer'>) {
     try {
-      const foundOrganizer = await this.eventService.getOrganizerByID(organizerId)
+      const foundOrganizer =
+        await this.organizerService.getOrganizerByID(organizerId)
 
       if (foundOrganizer) {
         this.organizer = foundOrganizer
@@ -79,16 +91,21 @@ export class EventDetailPageComponent implements OnInit {
     }
   }
 
-  private async loadEvent(eventId: string) {
+  private async loadEvent(eventId: RecordId<'event'> | StringRecordId) {
     try {
       const foundEvent = await this.eventService.getEventByID(eventId)
 
       if (foundEvent) {
         this.event = foundEvent
-        this.mediaUrl = this.mediaBaseUrl + foundEvent.media[0].id.replace(/_(?=[^_]*$)/, '.')
-        this.loadLocation(foundEvent.location.id)
-        this.loadOrganizer(foundEvent.organizer.id)
-        this.loadType(this.event?.type)
+        this.mediaUrl =
+          this.mediaBaseUrl +
+          String(foundEvent.media[0].id).replace(/_(?=[^_]*$)/, '.')
+        const locationId = this.event?.['location']
+        const organizerId = this.event?.['organizer']
+        const typeId = this.event?.['event_type']
+        this.loadLocation(locationId)
+        this.loadOrganizer(organizerId)
+        this.loadType(typeId)
       } else {
         this.error = 'Event nicht gefunden'
       }
@@ -100,6 +117,4 @@ export class EventDetailPageComponent implements OnInit {
   goBack() {
     this.router.navigate(['/'])
   }
-
-
 }

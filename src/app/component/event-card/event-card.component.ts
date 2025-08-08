@@ -1,16 +1,116 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common'
+import { Component, Input, OnInit, OnDestroy, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+
+import { Event, EventType } from '../../models/event.interface';
+import { Location } from '../../models/location.interface';
+import { DateTimeRangePipe } from '../../services/date.pipe';
+import { SurrealdbService } from '../../services/surrealdb.service';
+import { LocationService } from '../../services/location.service';
+import { LocalStorageService } from '../../services/local-storage.service';
+import { MediaService } from '../../services/media.service';
 
 @Component({
   selector: 'app-event-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DateTimeRangePipe],
   templateUrl: './event-card.component.html',
   styleUrls: ['./event-card.component.scss'],
 })
-export class EventCardComponent {
-  @Input() title!: string;
-  @Input() date!: string;
-  @Input() location!: string;
-  @Input() price!: string;
+export class EventCardComponent implements OnInit, OnDestroy {
+  @Input() event: Event | null = null;
+
+  location: Location | null = null;
+  eventType: EventType | null = null;
+  isSaved = false;
+  mediaUrl: string | null = null;
+
+  private subscription?: Subscription;
+
+  private readonly surrealDBService = inject(SurrealdbService);
+  private readonly locationService = inject(LocationService);
+  private readonly router = inject(Router);
+  private readonly localStorageService = inject(LocalStorageService);
+  private readonly mediaService = inject(MediaService);
+
+  async ngOnInit(): Promise<void> {
+    if (this.event?.id) {
+      this.initializeSavedState();
+      await this.initializeEventDetails();
+    }
+  }
+
+  private initializeSavedState(): void {
+    if (!this.event?.id) return;
+
+    const eventId = this.event.id as unknown as string;
+    this.isSaved = this.localStorageService.isEventSaved(eventId);
+
+    this.subscription = this.localStorageService.savedEvents$.subscribe(() => {
+      this.isSaved = this.localStorageService.isEventSaved(eventId);
+    });
+  }
+
+  private async initializeEventDetails(): Promise<void> {
+    if (!this.event) return;
+
+    try {
+      const [location, eventType, mediaUrl] = await Promise.all([
+        this.loadLocation(),
+        this.loadEventType(),
+        this.loadMedia()
+      ]);
+
+      this.location = location;
+      this.eventType = eventType;
+      this.mediaUrl = mediaUrl;
+    } catch (error) {
+      console.error('Fehler beim Laden der Event-Details:', error);
+      this.mediaUrl = null;
+    }
+  }
+
+  private async loadLocation(): Promise<Location | null> {
+    if (!this.event?.location) return null;
+    
+    try {
+      return await this.locationService.getLocationByID(this.event.location);
+    } catch (error) {
+      console.warn('Fehler beim Laden der Location:', error);
+      return null;
+    }
+  }
+
+  private async loadEventType(): Promise<EventType | null> {
+    if (!this.event?.event_type) return null;
+
+    try {
+      const typeRecord = this.event.event_type as any;
+      const typeId = typeRecord.tb + ':' + typeRecord.id;
+      const result = await this.surrealDBService.getById<{name: string}>(typeId);
+      return (result?.name as EventType) || EventType.UNKNOWN;
+    } catch (error) {
+      console.warn('Fehler beim Laden des Event Types:', error);
+      return EventType.UNKNOWN;
+    }
+  }
+
+  private async loadMedia(): Promise<string | null> {
+    if (!this.event?.media || this.event.media.length === 0) return null;
+    return await this.mediaService.getFirstMediaUrl(this.event.media);
+  }
+
+  onCardClick(): void {
+    if (!this.event?.id) return;
+
+    const eventId = this.event.id as unknown as string;
+    const cleanedId = eventId.replace(/^event:/, '');
+    
+    this.router.navigate(['/event', cleanedId]);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
+  }
 }
