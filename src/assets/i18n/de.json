@@ -63,5 +63,17 @@
   "footer": {
     "datenschutz": "Datenschutz",
     "impressum": "Impressum"
+  },
+  "FAVORITES": {
+    "TITLE": "Meine Favoriten",
+    "LOADING": "Lade Favoriten...",
+    "EMPTY": {
+      "TITLE": "Du hast noch keine Favoriten gespeichert.",
+      "DESCRIPTION": "Füge Events zu deinen Favoriten hinzu, um sie hier zu sehen.",
+      "BUTTON": "Zur Übersicht"
+    },
+    "REMOVE": "Aus Favoriten entfernen",
+    "ADD": "Zu Favoriten hinzufügen",
+    "LOCAL_STORAGE_NOTICE": "Hinweis: Favoriten werden nur lokal auf diesem Gerät gespeichert."
   }
 }
