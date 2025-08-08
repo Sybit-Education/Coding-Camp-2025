@@ -1,14 +1,5 @@
 import { CommonModule } from '@angular/common'
-import {
-  Component,
-  EventEmitter,
-  inject,
-  Input,
-  Output,
-  output,
-} from '@angular/core'
-import { RecordId } from 'surrealdb'
-import { SurrealdbService } from '../../services/surrealdb.service'
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core'
 import { Media } from '../../models/media.model'
 import { MediaService } from '../../services/media.service'
 
@@ -50,7 +41,7 @@ export class UploadImageComponent {
   }
 
   private async saveImage(file: File) {
-    const base64 = await this.fileToBase64(file)
+    const base64 = (await this.fileToBase64(file)).split(',')[1]
 
     console.log('fileName: ', base64.split(';')[0].split('/')[1])
 

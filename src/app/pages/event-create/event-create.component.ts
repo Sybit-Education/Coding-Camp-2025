@@ -161,10 +161,10 @@ export class EventCreateComponent implements OnInit {
       this.city,
     )
     const location: Location = {
-      name: this.locationName!,
-      street: this.address!,
-      zip_code: String(this.plz!),
-      city: this.city!,
+      name: this.locationName,
+      street: this.address,
+      zip_code: String(this.plz),
+      city: this.city,
     }
 
     try {
@@ -221,7 +221,8 @@ export class EventCreateComponent implements OnInit {
     // Preis in Decimal umwandeln
     const priceDec = this.price ? new Decimal(this.price) : undefined
 
-    const mediaIds: RecordId<'media'>[] = this.getMediaIds()
+    const mediaIds: RecordId<'media'>[] = await this.getMediaIds() as unknown as RecordId<'media'>[]
+    console.log('found mediaIds: ', mediaIds)
 
     const payload: AppEvent = {
       name: this.eventname,
@@ -235,8 +236,8 @@ export class EventCreateComponent implements OnInit {
       event_type: this.selectedEventType.id,
       location: this.selectedLocation.id!,
       topic: this.selectedTopics.map((t) => t.id!),
-      media: mediaIds!,
-      age: this.age != null ? this.age : undefined,
+      media: mediaIds,
+      age: this.age ?? undefined,
       restriction: this.restriction || undefined,
     }
 
@@ -248,22 +249,20 @@ export class EventCreateComponent implements OnInit {
     }
   }
 
-  getMediaIds(): RecordId<'media'>[] {
-    const ids: RecordId<'media'>[] = []
-
-    this.media.forEach(async (med) => {
-      med.id = (this.eventname.replace(/[^a-zA-Z0-9]/g, '_') +
+  async getMediaIds(): Promise<RecordId<'media'>[]> {
+    return Promise.all(
+    this.media.map(async (med) => {
+      med.id = (
+        this.eventname.replace(/[^a-zA-Z0-9]/g, '_') +
         '_' +
-        med.fileType.split('/')[1]) as unknown as RecordId<'media'>
+        med.fileType.split('/')[1]
+      ) as unknown as RecordId<'media'>;
 
-      const result = await this.mediaService.postMedia(med)
-      if (result.id) {
-        ids.push(result.id)
-      }
+      const result = await this.mediaService.postMedia(med);
+      console.log('result from creation of media: ', result);
+
+      return result.id!;
     })
-
-    console.log('media after setting id', this.media)
-
-    return ids
+  );
   }
 }
