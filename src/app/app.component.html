@@ -1,11 +1,11 @@
 <div class="app-container bg-[#fffff]/90" [class.carousel-layout]="isCarouselPage">
   <app-header></app-header>
 
-  <main class="pt-[220px]">
+  <main class="pt-[220px] min-h-[calc(100dvh-(--spacing(8)))]">
     <router-outlet />
   </main>
 
-  <app-footer></app-footer>
+  <app-footer class="py-3"></app-footer>
   <app-bottom-nav></app-bottom-nav>
 </div>
 

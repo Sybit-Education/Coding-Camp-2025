@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router'
 import { HomeComponent } from './pages/home/home.component'
 import { AboutComponent } from './pages/about/about.component'
+import { EventCreateComponent } from './pages/event-create/event-create.component'
 import { MoreComponent } from './pages/more/more.component'
 import { PlaceholderComponent } from './pages/placeholder/placeholder.component'
 import { EventDetailPageComponent } from './pages/event-detail/event-detail.component'
@@ -8,6 +9,7 @@ import { DevsComponent } from './pages/devs/devs.component'
 import { LoginPageComponent } from './pages/login/login.component'
 import { ImpressumComponent } from './pages/impressum/impressum.component'
 import { DatenschutzComponent } from './pages/datenschutz/datenschutz.component'
+import { LoginService } from './services/login.service'
 
 export const routes: Routes = [
   {
@@ -27,12 +29,17 @@ export const routes: Routes = [
     component: AboutComponent,
   },
   {
+    path: 'create-event',
+    component: EventCreateComponent,
+    canActivate: [LoginService]
+  },
+  {
     path: 'more',
     component: MoreComponent,
   },
   {
     path: 'team',
-    component: PlaceholderComponent,
+    component: DevsComponent,
   },
   {
     path: 'sponsor',
@@ -40,7 +47,7 @@ export const routes: Routes = [
   },
   {
     path: 'impressum',
-    component: ImpressumComponent,
+    component: PlaceholderComponent,
   },
   {
     path: 'datenschutz',
@@ -49,10 +56,6 @@ export const routes: Routes = [
   {
     path: 'event/:id',
     component: EventDetailPageComponent,
-  },
-  {
-    path: 'devs',
-    component: DevsComponent,
   },
   {
     path: 'login',

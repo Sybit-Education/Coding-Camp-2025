@@ -1,0 +1,68 @@
+{
+  "COMMON": {
+    "SAVE": "Speichern",
+    "CANCEL": "Abbrechen",
+    "BACK": "Zurück",
+    "NEXT": "Weiter",
+    "SKIP_TO_MAIN": "Zum Hauptinhalt springen"
+  },
+  "HEADER": {
+    "TITLE": "1200 Jahre Radolfzell",
+    "HOME": "Startseite",
+    "EVENTS": "Veranstaltungen",
+    "ABOUT": "Über uns"
+  },
+  "HOME": {
+    "WELCOME": "Willkommen bei 1200 Jahre Radolfzell",
+    "INTRO": "Entdecken Sie die Geschichte und Veranstaltungen rund um das Jubiläum"
+  },
+  "EVENTS": {
+    "TITLE": "Veranstaltungen",
+    "NO_EVENTS": "Keine Veranstaltungen gefunden",
+    "LOCATION": "Ort",
+    "DATE": "Datum",
+    "SAVE_EVENT": "Veranstaltung speichern",
+    "REMOVE_EVENT": "Veranstaltung entfernen"
+  },
+  "ABOUT": {
+    "TITLE": "Über uns",
+    "CONTENT": "Die Stadt Radolfzell am Bodensee feiert ihr 1200-jähriges Jubiläum"
+  },
+  "FOOTER": {
+    "COPYRIGHT": "© 2025 Stadt Radolfzell",
+    "IMPRINT": "Impressum",
+    "PRIVACY": "Datenschutz"
+  },
+  "bottom-nav": {
+    "home": "Home",
+    "favorites": "Favoriten",
+    "search": "Suche",
+    "more": "Mehr"
+  },
+  "MORE": {
+    "TEAM": {
+      "TITLE": "Das Team",
+      "DESCRIPTION": "Lernen Sie das Team hinter der 1200-Jahre-Radolfzell App kennen."
+    },
+    "SPONSOR": {
+      "TITLE": "Der Sponsor",
+      "DESCRIPTION": "Informationen über unsere Sponsoren und Unterstützer."
+    },
+    "IMPRINT": {
+      "TITLE": "Impressum",
+      "DESCRIPTION": "Rechtliche Informationen und Kontaktdaten."
+    },
+    "PRIVACY": {
+      "TITLE": "Datenschutz",
+      "DESCRIPTION": "Informationen zum Datenschutz und zur Datenverarbeitung."
+    }
+  },
+  "home": {
+    "current": "Aktuelles",
+    "categories": "Kategorien"
+  },
+  "footer": {
+    "datenschutz": "Datenschutz",
+    "impressum": "Impressum"
+  }
+}
