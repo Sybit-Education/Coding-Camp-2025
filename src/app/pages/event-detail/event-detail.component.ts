@@ -10,11 +10,12 @@ import { LocationService } from '../../services/location.service'
 import { OrganizerService } from '../../services/organizer.service'
 import { DateTimeRangePipe } from '../../services/date.pipe'
 import { RecordId, StringRecordId } from 'surrealdb'
+import { FavoriteButtonComponent } from '../../component/favorite-button/favorite-button.component'
 
 @Component({
   selector: 'app-event-detail-page',
   standalone: true,
-  imports: [MapComponent, CommonModule, DateTimeRangePipe],
+  imports: [MapComponent, CommonModule, DateTimeRangePipe, FavoriteButtonComponent],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
 })

@@ -10,6 +10,7 @@ import { LoginPageComponent } from './pages/login/login.component'
 import { ImpressumComponent } from './pages/impressum/impressum.component'
 import { DatenschutzComponent } from './pages/datenschutz/datenschutz.component'
 import { LoginService } from './services/login.service'
+import { FavouritesComponent } from './pages/favourites/favourites.component'
 
 export const routes: Routes = [
   {
@@ -18,7 +19,7 @@ export const routes: Routes = [
   },
   {
     path: 'favourites',
-    component: AboutComponent,
+    component: FavouritesComponent,
   },
   {
     path: 'about',
