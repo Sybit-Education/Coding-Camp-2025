@@ -106,7 +106,6 @@ export class HomeComponent implements OnInit {
   getTopics() {
     return this.topics;
   }
-<<<<<<< HEAD
 
   /**
    * Behandelt Tastaturereignisse für die Event-Karten
@@ -124,6 +123,3 @@ export class HomeComponent implements OnInit {
   }
 
 }
-=======
-}
->>>>>>> 8003f01f383d5587e1914c08e3e3e70725e3ec26

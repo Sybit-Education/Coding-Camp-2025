@@ -35,20 +35,9 @@
       {{ 'home.categories' | translate }}
     </h1>
 
-<<<<<<< HEAD
     <div class="grid grid-cols-3 mr-5 text-gray-750 ">
       <app-kategorie-card *ngFor="let kategorie of topics" [color]="kategorie.color" [text]="kategorie.name" [id]="kategorie.id!" >
       </app-kategorie-card>
     </div>
 </section>
-=======
-    <div class="grid grid-cols-3 mr-5 text-gray-750">
-      <app-kategorie-card
-        *ngFor="let kategorie of topics"
-        [color]="kategorie.color"
-        [text]="kategorie.name">
-      </app-kategorie-card>
-    </div>
-  </section>
->>>>>>> 8003f01f383d5587e1914c08e3e3e70725e3ec26
 </main>
