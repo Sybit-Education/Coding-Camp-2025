@@ -82,8 +82,15 @@ export class FavoriteService {
         }
       }
 
-      console.log(`Loaded ${events.length} favorite events`);
-      this.favoriteEventsSubject.next(events);
+      // Sortiere Events nach Startdatum (aufsteigend)
+      const sortedEvents = events.sort((a, b) => {
+        const dateA = a.date_start instanceof Date ? a.date_start : new Date(a.date_start);
+        const dateB = b.date_start instanceof Date ? b.date_start : new Date(b.date_start);
+        return dateA.getTime() - dateB.getTime();
+      });
+      
+      console.log(`Loaded and sorted ${sortedEvents.length} favorite events`);
+      this.favoriteEventsSubject.next(sortedEvents);
     } catch (error) {
       console.error('Fehler beim Laden der Favoriten:', error);
       this.favoriteEventsSubject.next([]);
