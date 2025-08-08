@@ -71,7 +71,7 @@ export class HeaderComponent implements OnInit {
   /**
    * Abstand in Pixeln, ab dem der Header schrumpft. Standard: 120px.
    */
-  @Input() shrinkThreshold = 120;
+  @Input() shrinkThreshold = 20;
 
   /**
    * Steuerung, ob die Wellenform unter dem Header angezeigt wird. Kann

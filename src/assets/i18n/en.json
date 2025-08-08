@@ -60,8 +60,23 @@
   "category": {
     "title": "Kategorie"
   },
+  "i18y": {
+    "to-main-content": "Skip to main content"
+  },
   "footer": {
     "datenschutz": "Privacy Policy",
     "impressum": "Imprint"
+  },
+  "FAVORITES": {
+    "TITLE": "My Favorites",
+    "LOADING": "Loading favorites...",
+    "EMPTY": {
+      "TITLE": "You haven't saved any favorites yet.",
+      "DESCRIPTION": "Add events to your favorites to see them here.",
+      "BUTTON": "Go to overview"
+    },
+    "REMOVE": "Remove from favorites",
+    "ADD": "Add to favorites",
+    "LOCAL_STORAGE_NOTICE": "Note: Favorites are only stored locally on this device."
   }
 }

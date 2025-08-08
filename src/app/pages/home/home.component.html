@@ -1,20 +1,34 @@
-<div class="container mx-auto px-4 py-4 max-w-8xl justify-center items-center relative lg:w-480">
+<main class="container mx-auto px-4 py-4 max-w-5xl justify-center items-center relative">
+  <!-- Skip-Link für Screenreader -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:p-2 focus:bg-white focus:z-50">
+    Zum Hauptinhalt springen
+  </a>
 
-  <div class="p-4">
+  <section aria-labelledby="events-heading">
     <h1 class="text-xl font-bold mb-4 text-left">{{ 'home.current' | translate }}</h1>
 
     <!-- Horizontaler Scroll-Container für Events -->
-    <div class="w-full overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 -mx-4 scrollbar-hide card-snap">
+    <div
+      class="w-full overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 -mx-4 scrollbar-hide card-snap"
+      role="region"
+      aria-label="Veranstaltungen"
+      tabindex="0">
       <div class="flex gap-2 px-4 min-w-max event-row">
         <app-event-card
           *ngFor="let event of events; let i = index"
           class="flex-shrink-0 snap-center"
           [class]="getCardClass(i)"
           [event]="event"
+          [attr.tabindex]="0"
+          [attr.aria-label]="'Veranstaltung: ' + event.name + ' am ' + (event.date_start | date:'dd.MM.yyyy')"
+          (keydown)="onKeyDown($event, event.id)"
+          role="button"
         ></app-event-card>
       </div>
     </div>
+  </section>
 
+  <section aria-labelledby="categories-heading">
     <h1 class="text-xl font-bold mb-4 text-left">
       {{ 'home.categories' | translate }}
     </h1>
@@ -23,6 +37,5 @@
       <app-kategorie-card *ngFor="let kategorie of topics" [color]="kategorie.color" [text]="kategorie.name" [id]="kategorie.id!" >
       </app-kategorie-card>
     </div>
-
-  </div>
-</div>
+</section>
+</main>
