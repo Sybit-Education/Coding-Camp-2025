@@ -30,8 +30,7 @@ export class HomeComponent implements OnInit {
     console.log('onInit: HomeComponent');
     
     try {
-      // Parallel laden für bessere Performance
-      const [events, topics] = await Promise.all([
+        const [events, topics] = await Promise.all([
         this.eventService.getAllEvents(),
         this.topicService.getAllTopics()
       ]);
@@ -39,8 +38,6 @@ export class HomeComponent implements OnInit {
       this.events = events;
       this.topics = topics;
       
-      console.log('Events geladen:', this.events.length);
-      console.log('Topics geladen:', this.topics);
     } catch (error) {
       console.error('Fehler beim Laden der Daten:', error);
     }
