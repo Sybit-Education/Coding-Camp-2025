@@ -3,41 +3,57 @@ import { CommonModule } from '@angular/common';
 import { EventCardComponent } from '../../component/event-card/event-card.component';
 import { EventService } from '../../services/event.service';
 import { Event } from '../../models/event.interface';
-import { Location } from '../../models/location.interface';
 import { LocationService } from '../../services/location.service';
 import { KategorieCardComponent } from "../../component/kategorie-card/kategorie-card.component";
+import { TopicService } from '../../services/topic.service';
+import { Topic } from '../../models/topic.interface';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface EventWithResolvedLocation extends Event {
   locationName: string;
 }
 
+
+
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, EventCardComponent, KategorieCardComponent],
+  imports: [EventCardComponent, CommonModule, KategorieCardComponent, TranslateModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
   events: EventWithResolvedLocation[] = [];
 
-  private readonly eventService = inject(EventService);
-  private readonly locationService = inject(LocationService);
+  private readonly eventService: EventService = inject(EventService)
+  private readonly locationService: LocationService = inject(LocationService)
+  private readonly topicService: TopicService = inject(TopicService);
 
-  async ngOnInit(): Promise<void> {
+  topics: Topic[] = [];
+
+  ngOnInit() {
+    this.initilizeData();
+  }
+
+  async initilizeData() {
+    console.log('onInit: HomeComponent');
+
+    this.topics = await this.topicService.getAllTopics();
+    console.log('onInit: ',this.topics);
     try {
       const rawEvents = await this.eventService.getAllEvents();
 
       this.events = await Promise.all(
         rawEvents.map(async (event) => {
-          const locationId = event.location as unknown as string;
-          const location: Location = await this.locationService.getLocationByID(locationId);
+          const location = await this.locationService.getLocationByID(event.location);
           return {
             ...event,
             locationName: location?.name ?? 'Unbekannter Ort',
           };
         })
       );
+
     } catch (error) {
       console.error('Fehler beim Laden der Events:', error);
     }
@@ -46,4 +62,11 @@ export class HomeComponent implements OnInit {
   getCardClass(index: number): string {
     return 'w-[calc(100vw-6rem)] h-[280px]';
   }
+  getTopics() {
+    console.log(this.topics);
+    return this.topics;
+  }
+
+
+
 }

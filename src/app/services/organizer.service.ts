@@ -1,17 +1,18 @@
 import { inject, Injectable } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
 import { Organizer } from '../models/organizer.interface'
+import { RecordId } from 'surrealdb'
 
 @Injectable({
   providedIn: 'root',
 })
 export class OrganizerService {
-  private surrealdb: SurrealdbService = inject(SurrealdbService)
+  private readonly surrealdb: SurrealdbService = inject(SurrealdbService)
 
   //************** GET **************
 
-  async getOrganizerByID(id: string): Promise<Organizer> {
-    return await this.surrealdb.getById<Organizer>(id)
+  async getOrganizerByID(id: RecordId<'organizer'>): Promise<Organizer> {
+    return await this.surrealdb.getByRecordId<Organizer>(id)
   }
 
   async getAllOrganizers(): Promise<Organizer[]> {
