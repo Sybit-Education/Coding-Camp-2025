@@ -57,6 +57,9 @@
     "current": "Événements actuels",
     "categories": "Catégories"
   },
+  "i18y": {
+    "to-main-content": "Accéder au contenu principal"
+  },
   "footer": {
     "datenschutz": "Mentions légales",
     "impressum": "Politique de confidentialité"
