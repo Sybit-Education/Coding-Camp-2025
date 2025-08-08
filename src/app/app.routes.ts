@@ -40,10 +40,6 @@ export const routes: Routes = [
     component: DevsComponent,
   },
   {
-    path: 'sponsor',
-    component: PlaceholderComponent,
-  },
-  {
     path: 'impressum',
     component: PlaceholderComponent,
   },
