@@ -18,6 +18,6 @@ export class KategorieCardComponent{
   constructor(private router: Router) {}
 
   goToKategorie() {
-    this.router.navigate(['/kategorie'], { queryParams: { id: this.id, name: this.text } });
+    this.router.navigate(['/kategorie'], { queryParams: { id: this.id.id, name: this.text } });
   }
 }

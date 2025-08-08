@@ -10,6 +10,7 @@ import { Topic } from '../../models/topic.interface';
 
 
 import { Event as AppEvent } from '../../models/event.interface';
+import { RecordIdValue } from 'surrealdb';
 
 interface EventWithResolvedLocation extends AppEvent {
   locationName: string;
@@ -26,7 +27,7 @@ export class KategorieComponent  implements OnInit {
   events: EventWithResolvedLocation[] = [];
 
   topics: Topic[] = [];
-  id: string | null = null;
+  id: RecordIdValue | null = null;
   name: string | null = null;
   
   constructor(private route: ActivatedRoute) {}
@@ -34,13 +35,16 @@ export class KategorieComponent  implements OnInit {
   async ngOnInit() {
 
     console.log('onInit: KategorieComponent');
-    await this.initilizeData();
+    
 
     console.log('onInit: KategorieComponent evetns:', this.events);
     this.route.queryParams.subscribe(params => {
       this.id = params['id'] || null;
       this.name = params['name'] || null;
+
+      console.log('onInit: KategorieComponent id:', this.id, 'name:', this.name);
   })
+  await this.initilizeData();
   }
   private readonly eventService: EventService = inject(EventService)
   private readonly locationService: LocationService = inject(LocationService)
@@ -54,7 +58,7 @@ export class KategorieComponent  implements OnInit {
     this.topics = await this.topicService.getAllTopics();
     console.log('onInit: ',this.topics);
     try {
-    const rawEvents = (await this.eventService.getAllEvents()).filter(event => event['topics']?.some(topic => topic.id === this.id));
+    const rawEvents = (await this.eventService.getAllEvents()).filter(event => event.topic?.some(topic => topic.id === this.id));
       console.log('Events aus Service kategorie:', rawEvents);
 
       this.events = await Promise.all(
