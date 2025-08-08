@@ -1,15 +1,43 @@
-import { Injectable, inject } from '@angular/core';
-import { Media } from '../models/media.interface';
-import { SurrealdbService } from './surrealdb.service';
-import { RecordId } from 'surrealdb';
-
+import { inject, Injectable } from '@angular/core'
+import { SurrealdbService } from './surrealdb.service'
+import { Event } from '../models/event.interface'
+import { Media } from '../models/media.model'
+import { RecordId } from 'surrealdb'
 @Injectable({
   providedIn: 'root',
 })
 export class MediaService {
-  private readonly surrealdbService = inject(SurrealdbService);
+  private readonly surrealdb: SurrealdbService = inject(SurrealdbService)
 
-  async getMediaUrl(mediaRecordId: RecordId<'media'> | string | any | undefined): Promise<string | null> {
+  //************** GET **************
+  async getMediaByID(id: string): Promise<Event> {
+    const result = await this.surrealdb.getById<Event>('event:' + id)
+    return result
+  }
+
+  async getAllMedias(): Promise<Event[]> {
+    try {
+      const result = await this.surrealdb.getAll<Event>('event')
+      return (result || []).map(
+        (item: Record<string, unknown>) =>
+          ({
+            ...item,
+            id: item['id']?.toString() || '',
+          }) as Event,
+      )
+    } catch (error) {
+      throw new Error(`Fehler beim Laden der Events: ${error}`)
+    }
+  }
+
+  //************** POST **************
+
+  async postMedia(media: Media) {
+    const result = await this.surrealdb.post<Media>('media', media)
+    return result[0]
+  }
+
+   async getMediaUrl(mediaRecordId: RecordId<'media'> | string | undefined): Promise<string | null> {
     if (!mediaRecordId) return null;
     
     try {
@@ -23,7 +51,7 @@ export class MediaService {
         return null;
       }
       
-      const media = await this.surrealdbService.getById<Media>(mediaId);
+      const media = await this.surrealdb.getById<Media>(mediaId);
       
       if (media?.file) {
         return this.convertBase64ToDataUrl(media.file);
