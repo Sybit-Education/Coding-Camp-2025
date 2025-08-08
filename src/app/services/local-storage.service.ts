@@ -7,15 +7,15 @@ import { Event } from '../models/event.interface'
 })
 export class LocalStorageService {
   private readonly SAVED_EVENTS_KEY = 'saved_events'
-  private savedEventsSubject = new BehaviorSubject<string[]>(
+  private readonly savedEventsSubject = new BehaviorSubject<string[]>(
     this.getSavedEventIds(),
   )
 
   savedEvents$ = this.savedEventsSubject.asObservable()
 
-  saveEvent(eventId: string): void {
+  saveEvent(eventId: string | undefined): void {
     const savedIds = this.getSavedEventIds()
-    if (!savedIds.includes(eventId)) {
+    if (eventId && !savedIds.includes(eventId)) {
       savedIds.push(eventId)
       this.setSavedEventIds(savedIds)
       this.savedEventsSubject.next(savedIds)
@@ -23,7 +23,7 @@ export class LocalStorageService {
     }
   }
 
-  unsaveEvent(eventId: string): void {
+  unsaveEvent(eventId: string | undefined): void {
     const savedIds = this.getSavedEventIds()
     const filteredIds = savedIds.filter((id) => id !== eventId)
     this.setSavedEventIds(filteredIds)
@@ -31,8 +31,8 @@ export class LocalStorageService {
     console.log(`Event ${eventId} aus Favoriten entfernt`)
   }
 
-  isEventSaved(eventId: string): boolean {
-    return this.getSavedEventIds().includes(eventId)
+  isEventSaved(eventId: string | undefined): boolean {
+    return this.getSavedEventIds().includes(eventId!)
   }
 
   getSavedEventIds(): string[] {
