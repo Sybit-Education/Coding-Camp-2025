@@ -5,11 +5,12 @@ import { Router } from '@angular/router'
 import { DateTimeRangePipe } from '../../services/date.pipe'
 import { FavoriteService } from '../../services/favorite.service'
 import { Subscription } from 'rxjs'
+import { EventCardComponent } from '../../component/event-card/event-card.component'
 
 @Component({
   selector: 'app-favourites',
   standalone: true,
-  imports: [CommonModule, DateTimeRangePipe],
+  imports: [CommonModule, DateTimeRangePipe, EventCardComponent],
   templateUrl: './favourites.component.html',
   styles: [`
     .line-clamp-2 {
