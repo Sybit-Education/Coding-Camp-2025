@@ -55,7 +55,7 @@ export class EventDetailPageComponent implements OnInit {
       try {
         const type = await this.eventService.getEventTypeByID(typeId)
         if (type) {
-          this.type = type as TypeDB
+          this.type = type as unknown as TypeDB
         } else {
           this.error = 'Event Type nicht gefunden'
         }

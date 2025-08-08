@@ -64,7 +64,7 @@ export class SurrealdbService extends Surreal {
   }
 
   async postUpdate<T extends Record<string, unknown>>(
-    id: RecordId<'string'>,
+    id: string,
     payload?: T,
   ): Promise<T> {
     console.log('📤 postUpdate(): Updating record', id, payload)
@@ -75,6 +75,5 @@ export class SurrealdbService extends Surreal {
     )
     console.log('update result:', result)
     // SurrealDB gibt ein Array zurück, daher das erste Element nehmen
-    return result
-  }
+    return Array.isArray(result) ? result[0] : result  }
 }

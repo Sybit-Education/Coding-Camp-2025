@@ -82,18 +82,21 @@ export class DateTimeRangePipe implements PipeTransform, OnDestroy {
     
     // Sprachspezifische Formatierung für Zeitbereiche am selben Tag
     switch (currentLang) {
-      case 'en':
+      case 'en': {
         const sEn = formatDate(start, "MMMM d, y – h:mm", locale);
         const eEn = formatDate(end, "h:mm a", locale);
         return `${sEn} to ${eEn}`;
-      case 'fr':
+      }
+      case 'fr': {
         const sFr = formatDate(start, "d MMMM y – HH'h'mm", locale);
         const eFr = formatDate(end, "HH'h'mm", locale);
         return `${sFr} à ${eFr}`;
-      default: // Deutsch
+      }
+      default: { // Deutsch
         const sDe = formatDate(start, "d. MMMM y – HH:mm", locale);
         const eDe = formatDate(end, "HH:mm", locale);
         return `${sDe} bis ${eDe} Uhr`;
+      }
     }
   }
 
@@ -102,18 +105,21 @@ export class DateTimeRangePipe implements PipeTransform, OnDestroy {
     
     // Sprachspezifische Formatierung für mehrtägige Zeitbereiche
     switch (currentLang) {
-      case 'en':
+      case 'en': {
         const sEn = formatDate(start, "MMMM d, y – h:mm a", locale);
         const eEn = formatDate(end, "MMMM d, y – h:mm a", locale);
         return `${sEn} to ${eEn}`;
-      case 'fr':
+      }
+      case 'fr': {
         const sFr = formatDate(start, "d MMMM y – HH'h'mm", locale);
         const eFr = formatDate(end, "d MMMM y – HH'h'mm", locale);
         return `${sFr} au ${eFr}`;
-      default: // Deutsch
+      }
+      default: { // Deutsch
         const sDe = formatDate(start, "d. MMMM y – HH:mm 'Uhr'", locale);
         const eDe = formatDate(end, "d. MMMM y – HH:mm 'Uhr'", locale);
         return `${sDe} bis ${eDe}`;
+      }
     }
   }
 }

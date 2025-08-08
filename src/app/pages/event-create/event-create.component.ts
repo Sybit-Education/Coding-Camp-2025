@@ -11,7 +11,7 @@ import { Location } from '../../models/location.interface'
 import { Organizer } from '../../models/organizer.interface'
 import { Topic } from '../../models/topic.interface'
 import { TypeDB } from '../../models/typeDB.interface'
-import { Decimal, RecordId } from 'surrealdb'
+import { Decimal, RecordId, StringRecordId} from 'surrealdb'
 
 @Component({
   selector: 'app-event-create',
@@ -81,15 +81,16 @@ export class EventCreateComponent implements OnInit {
 
   async ngOnInit() {
     await this.initializeData()
-    const id = this.route.snapshot.queryParams['id']
-    if (id) {
-      await this.loadEvent(id)
+    const eventId = this.route.snapshot.queryParams['id']
+    if (eventId) {
+      const recordID = new StringRecordId(eventId)
+      await this.loadEvent(recordID)
     }
   }
 
-  private async loadEvent(id: string) {
+  private async loadEvent(eventId: RecordId<'event'> | StringRecordId) {
     try {
-      const event = await this.eventService.getEventByID(id)
+      const event = await this.eventService.getEventByID(eventId)
       if (!event) return
       this.event = event
 

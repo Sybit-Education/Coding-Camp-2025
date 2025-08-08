@@ -23,7 +23,7 @@ export class LocationService {
       return (result || []).map(
         (item: Record<string, unknown>) =>
           ({
-            ...item,,
+            ...item,
           }) as unknown as Location,
       )
     } catch (error) {

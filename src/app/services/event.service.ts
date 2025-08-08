@@ -64,6 +64,8 @@ export class EventService {
   }
 
   async updateEvent(id: RecordId<'event'>, event: Event): Promise<Event> {
-    return await this.surrealdb.postUpdate<Event>(id, event)
+    const stringId = new StringRecordId(id)
+    const testId = stringId.toString()
+    return await this.surrealdb.postUpdate<Event>(testId, event)
   }
 }
