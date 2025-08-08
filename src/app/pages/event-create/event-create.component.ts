@@ -293,6 +293,7 @@ export class EventCreateComponent implements OnInit {
     } else {
       try {
         const created = await this.eventService.postEvent(payload)
+        this.eventId = created[0].id
         console.log('Event created:', created)
       } catch (err) {
         console.error('Fehler beim Erstellen des Events:', err)
