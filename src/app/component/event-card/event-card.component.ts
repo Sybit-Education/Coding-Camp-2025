@@ -104,8 +104,8 @@ export class EventCardComponent implements OnInit, OnDestroy {
   onCardClick(): void {
     if (!this.event?.id) return;
 
-    const eventId = this.event.id as unknown as string;
-    const cleanedId = eventId.replace(/^event:/, '');
+
+    const cleanedId = this.event.id.id 
     
     this.router.navigate(['/event', cleanedId]);
   }

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core'
+import { Component, inject, OnInit } from '@angular/core'
 import { MapComponent } from '../../component/map/map.component'
 import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
@@ -20,7 +20,7 @@ import { TypeDB } from '../../models/typeDB.interface'
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
 })
-export class EventDetailPageComponent implements OnInit, OnDestroy {
+export class EventDetailPageComponent implements OnInit {
   event: Event | null = null
   location: Location | null = null
   organizer: Organizer | null = null

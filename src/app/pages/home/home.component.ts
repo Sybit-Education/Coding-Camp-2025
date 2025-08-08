@@ -9,6 +9,7 @@ import { TopicService } from '../../services/topic.service';
 import { Topic } from '../../models/topic.interface';
 import { TranslateModule } from '@ngx-translate/core';
 import { LocationService } from '../../services/location.service';
+import { RecordId } from 'surrealdb';
 
 
 
@@ -71,13 +72,12 @@ export class HomeComponent implements OnInit {
    * @param event Das Tastaturereignis
    * @param eventId Die ID des Events
    */
-  onKeyDown(event: KeyboardEvent, eventId?: string): void {
+  onKeyDown(event: KeyboardEvent, eventId?: RecordId<'event'>): void {
     // Enter oder Space aktiviert den Klick auf die Karte
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       if (eventId) {
-        const cleanedId = eventId.replace(/^event:/, '');
-        this.router.navigate(['/event', cleanedId]);
+        this.router.navigate(['/event', eventId.id]);
       }
     }
   }
