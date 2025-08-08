@@ -26,7 +26,7 @@ export class MediaService {
       const media = await this.surrealdbService.getById<Media>(mediaId);
       
       if (media?.file) {
-        return this.convertBase64ToDataUrl(media.file, media.fileType);
+        return this.convertBase64ToDataUrl(media.file);
       }
       
       return null;
@@ -41,21 +41,8 @@ export class MediaService {
     return await this.getMediaUrl(mediaArray[0]);
   }
 
-  private convertBase64ToDataUrl(base64: string, fileType?: string): string {
+  private convertBase64ToDataUrl(base64: string): string {
     if (base64.startsWith('data:')) return base64;
-    const mimeType = this.getMimeType(fileType);
-    return `data:${mimeType};base64,${base64}`;
-  }
-
-  private getMimeType(fileType?: string): string {
-    if (!fileType) return 'image/jpeg';
-    
-    const type = fileType.toLowerCase();
-    if (type.includes('png')) return 'image/png';
-    if (type.includes('gif')) return 'image/gif';
-    if (type.includes('webp')) return 'image/webp';
-    if (type.includes('svg')) return 'image/svg+xml';
-    
-    return 'image/jpeg';
+    return `data:image/jpeg;base64,${base64}`;
   }
 }

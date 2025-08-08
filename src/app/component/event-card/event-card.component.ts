@@ -7,6 +7,7 @@ import { Event, EventType } from '../../models/event.interface';
 import { Location } from '../../models/location.interface';
 import { DateTimeRangePipe } from '../../services/date.pipe';
 import { SurrealdbService } from '../../services/surrealdb.service';
+import { LocationService } from '../../services/location.service';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { MediaService } from '../../services/media.service';
 
@@ -28,6 +29,7 @@ export class EventCardComponent implements OnInit, OnDestroy {
   private subscription?: Subscription;
 
   private readonly surrealDBService = inject(SurrealdbService);
+  private readonly locationService = inject(LocationService);
   private readonly router = inject(Router);
   private readonly localStorageService = inject(LocalStorageService);
   private readonly mediaService = inject(MediaService);
@@ -75,7 +77,7 @@ export class EventCardComponent implements OnInit, OnDestroy {
     try {
       const locationRecord = this.event.location as any;
       const locationId = locationRecord.tb + ':' + locationRecord.id;
-      return await this.surrealDBService.getById<Location>(locationId);
+      return await this.locationService.getLocationByID(locationId);
     } catch (error) {
       console.warn('Fehler beim Laden der Location:', error);
       return null;
