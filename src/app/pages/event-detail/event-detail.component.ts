@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core'
+import { Component, inject, OnInit, OnDestroy } from '@angular/core'
 import { MapComponent } from '../../component/map/map.component'
 import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
@@ -20,7 +20,7 @@ import { TypeDB } from '../../models/typeDB.interface'
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
 })
-export class EventDetailPageComponent implements OnInit {
+export class EventDetailPageComponent implements OnInit, OnDestroy {
   event: Event | null = null
   location: Location | null = null
   organizer: Organizer | null = null
@@ -46,8 +46,18 @@ export class EventDetailPageComponent implements OnInit {
       this.loadEvent(recordID)
     } else {
       this.error = 'Event ID nicht gefunden'
+      this.announceError('Event ID nicht gefunden')
     }
     this.isLoggedIn = this.loginservice.canActivate(this.route.snapshot)
+  }
+
+  /**
+   * Kündigt Fehler für Screenreader an
+   * @param message Die Fehlermeldung
+   */
+  private announceError(message: string): void {
+    // In einer vollständigen Implementierung würde hier LiveAnnouncer verwendet werden
+    console.error(`Fehler: ${message}`);
   }
 
   async loadType(typeId: RecordId<'event_type'> | undefined) {
@@ -111,14 +121,21 @@ export class EventDetailPageComponent implements OnInit {
         const locationId = this.event?.['location']
         const organizerId = this.event?.['organizer']
         const typeId = this.event?.['event_type']
-        this.loadLocation(locationId)
-        this.loadOrganizer(organizerId)
-        this.loadType(typeId)
+
+        await Promise.all([
+          this.loadLocation(locationId),
+          this.loadOrganizer(organizerId),
+          this.loadType(typeId)
+        ])
+
+        document.title = `${this.event.name} - 1200 Jahre Radolfzell`
       } else {
         this.error = 'Event nicht gefunden'
+        this.announceError('Event nicht gefunden')
       }
     } catch (err) {
       this.error = `Fehler beim Laden: ${err}`
+      this.announceError(`Fehler beim Laden: ${err}`)
     }
   }
 
@@ -133,5 +150,6 @@ export class EventDetailPageComponent implements OnInit {
         id: this.event!.id,
       },
     })
+
   }
 }
