@@ -37,8 +37,11 @@ export class FavoriteService {
       
       if (savedEventIds.length === 0) {
         this.favoriteEventsSubject.next([]);
+        this.loadingSubject.next(false);
         return;
       }
+      
+      console.log('Loading favorite events for IDs:', savedEventIds);
       
       // Lade jedes Event einzeln
       const eventPromises = savedEventIds.map(id => {
@@ -49,6 +52,7 @@ export class FavoriteService {
       const events = await Promise.all(eventPromises);
       const validEvents = events.filter(event => event !== null) as Event[];
       
+      console.log('Loaded favorite events:', validEvents);
       this.favoriteEventsSubject.next(validEvents);
     } catch (error) {
       console.error('Fehler beim Laden der Favoriten:', error);
