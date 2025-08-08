@@ -60,5 +60,11 @@
   "home": {
     "current": "Current Events",
     "categories": "Categories"
+  },
+  "category": {
+    "title": "Kategorie"
+  },
+  "kategorie": {
+    "title": "categorie"
   }
 }
