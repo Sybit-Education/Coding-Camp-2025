@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core'
+import { Component, inject, OnInit } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { EventService } from '../../services/event.service'
 import { LocationService } from '../../services/location.service'
@@ -11,15 +11,15 @@ import { Organizer } from '../../models/organizer.interface'
 import { Topic } from '../../models/topic.interface'
 import { TypeDB } from '../../models/typeDB.interface'
 import { Decimal, RecordId, StringRecordId} from 'surrealdb'
-import { UploadImageComponent } from '../../component/upload-image/upload-image.component'
 import { CommonModule } from '@angular/common'
 import { Media } from '../../models/media.model'
 import { MediaService } from '../../services/media.service'
+import { UploadImageComponent } from '../../component/upload-image/upload-image.component'
 
 @Component({
   selector: 'app-event-create',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, UploadImageComponent],
   templateUrl: './event-create.component.html',
 })
 export class EventCreateComponent implements OnInit {
@@ -33,7 +33,6 @@ export class EventCreateComponent implements OnInit {
     private readonly mediaService = inject(MediaService)
 
   constructor(
-    private readonly destroyRef: DestroyRef,
     private readonly route: ActivatedRoute,
   ) {}
 
@@ -78,10 +77,11 @@ export class EventCreateComponent implements OnInit {
   organizers: Organizer[] = []
   eventTypes: TypeDB[] = []
   topics: Topic[] = []
+  image: Media | null = null
 
   //Draft?
   draft = false
-  media: RecordId<'media'>[] | undefined
+  media: Media[] = []
   timePeriode = false
 
   async ngOnInit() {
@@ -108,7 +108,6 @@ export class EventCreateComponent implements OnInit {
       this.age = event.age ?? null
       this.restriction = event.restriction ?? null
       this.draft = event.draft ?? false
-      this.media = event.media
 
       // Datum & Zeit splitten
       const start = new Date(event.date_start)
@@ -265,6 +264,9 @@ export class EventCreateComponent implements OnInit {
     // Preis in Decimal umwandeln
     const priceDec = this.price ? new Decimal(this.price) : undefined
 
+    const mediaIds: RecordId<'media'>[] = await this.getMediaIds() as unknown as RecordId<'media'>[]
+    console.log('found mediaIds: ', mediaIds)
+
     const payload: AppEvent = {
       name: this.eventname,
       date_start: start,
@@ -311,7 +313,7 @@ export class EventCreateComponent implements OnInit {
 
     async getMediaIds(): Promise<RecordId<'media'>[]> {
     return Promise.all(
-    this.media.map(async (med) => {
+    this.media!.map(async (med) => {
       med.id = (
         this.eventname.replace(/[^a-zA-Z0-9]/g, '_') +
         '_' +
@@ -324,5 +326,11 @@ export class EventCreateComponent implements OnInit {
       return result.id!;
     })
   );
+  }
+    handleImage(media: Media) {
+    if (media) {
+      this.media.push(media)
+    }
+    console.log('mediaIds form Handle: ', media)
   }
 }

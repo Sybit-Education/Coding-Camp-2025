@@ -9,7 +9,7 @@
         <app-event-card
           *ngFor="let event of events; let i = index"
           class="flex-shrink-0 snap-center"
-          [class]="getCardClass(i)"
+          [class]="getCardClass()"
           [event]="event"
         ></app-event-card>
       </div>

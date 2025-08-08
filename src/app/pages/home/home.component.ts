@@ -9,10 +9,6 @@ import { Topic } from '../../models/topic.interface';
 import { TranslateModule } from '@ngx-translate/core';
 
 
-interface EventWithResolvedLocation extends Event {
-  locationName: string
-}
-
 
 
 
