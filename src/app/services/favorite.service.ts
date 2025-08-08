@@ -19,45 +19,69 @@ export class FavoriteService {
   favoriteEvents$ = this.favoriteEventsSubject.asObservable();
 
   constructor() {
+    console.log('FavoriteService initialized');
+    
+    // Initialisiere den Service mit einem leeren Array
+    this.favoriteEventsSubject.next([]);
+    
     // Abonniere Änderungen an gespeicherten Events
     this.localStorageService.savedEvents$.subscribe(() => {
+      console.log('Saved events changed, reloading favorites');
       this.loadFavoriteEvents();
     });
+    
+    // Lade Favoriten beim Start
+    setTimeout(() => {
+      this.loadFavoriteEvents();
+    }, 0);
   }
 
   /**
    * Lädt alle favorisierten Events
    */
   async loadFavoriteEvents(): Promise<void> {
+    console.log('Starting to load favorite events');
     this.loadingSubject.next(true);
 
     try {
       // Hole alle gespeicherten Event-IDs
       const savedEventIds = this.localStorageService.getSavedEventIds();
+      console.log('Retrieved saved event IDs:', savedEventIds);
 
       if (savedEventIds.length === 0) {
+        console.log('No saved events found');
         this.favoriteEventsSubject.next([]);
         this.loadingSubject.next(false);
         return;
       }
 
-      console.log('Loading favorite events for IDs:', savedEventIds);
-
       // Lade jedes Event einzeln
-      const eventPromises = savedEventIds.map(id => {
-        const recordId = new StringRecordId(`event:${id}`);
-        return this.eventService.getEventByID(recordId);
-      });
+      const events: Event[] = [];
+      
+      for (const id of savedEventIds) {
+        try {
+          console.log(`Loading event with ID: event:${id}`);
+          const recordId = new StringRecordId(`event:${id}`);
+          const event = await this.eventService.getEventByID(recordId);
+          
+          if (event) {
+            console.log(`Successfully loaded event: ${event.name}`);
+            events.push(event);
+          } else {
+            console.log(`Event with ID ${id} not found`);
+          }
+        } catch (err) {
+          console.error(`Error loading event with ID ${id}:`, err);
+        }
+      }
 
-      const events = await Promise.all(eventPromises);
-      const validEvents = events.filter(event => event !== null) as Event[];
-
-      console.log('Loaded favorite events:', validEvents);
-      this.favoriteEventsSubject.next(validEvents);
+      console.log(`Loaded ${events.length} favorite events`);
+      this.favoriteEventsSubject.next(events);
     } catch (error) {
       console.error('Fehler beim Laden der Favoriten:', error);
       this.favoriteEventsSubject.next([]);
     } finally {
+      console.log('Finished loading favorite events, setting loading to false');
       this.loadingSubject.next(false);
     }
   }

@@ -46,8 +46,11 @@ export class FavouritesComponent implements OnInit, OnDestroy {
       })
     );
     
-    // Lade die Favoriten
-    this.favoriteService.loadFavoriteEvents();
+    // Lade die Favoriten mit einem kleinen Timeout
+    setTimeout(() => {
+      console.log('Explicitly loading favorite events from component');
+      this.favoriteService.loadFavoriteEvents();
+    }, 100);
   }
 
   navigateToEvent(event: Event): void {
