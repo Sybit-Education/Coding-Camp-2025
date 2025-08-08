@@ -9,7 +9,7 @@ import { StringRecordId } from 'surrealdb';
   providedIn: 'root'
 })
 export class FavoriteService {
-  private readonly localStorageService = inject(LocalStorageService);
+  readonly localStorageService = inject(LocalStorageService);
   private readonly eventService = inject(EventService);
 
   private readonly loadingSubject = new BehaviorSubject<boolean>(false);

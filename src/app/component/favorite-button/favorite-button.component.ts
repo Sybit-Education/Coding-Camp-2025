@@ -44,15 +44,30 @@ export class FavoriteButtonComponent implements OnInit, OnDestroy {
     if (this.eventId) {
       console.log('FavoriteButton initialized with eventId:', this.eventId);
       
-      this.isFavorite = this.favoriteService.isEventFavorite(this.eventId.toString());
-      console.log('Is favorite?', this.isFavorite);
-
+      // Initialer Status
+      this.updateFavoriteStatus();
+      
       // Subscribe to changes in saved events
       this.subscription = this.favoriteService.favoriteEvents$.subscribe(() => {
-        this.isFavorite = this.favoriteService.isEventFavorite(this.eventId!.toString());
+        this.updateFavoriteStatus();
       });
+      
+      // Subscribe to localStorage changes directly
+      this.subscription.add(
+        this.favoriteService.localStorageService.savedEvents$.subscribe(() => {
+          this.updateFavoriteStatus();
+        })
+      );
     } else {
       console.warn('FavoriteButton initialized without eventId');
+    }
+  }
+  
+  private updateFavoriteStatus(): void {
+    if (this.eventId) {
+      const currentStatus = this.favoriteService.isEventFavorite(this.eventId.toString());
+      console.log(`Updating favorite status for ${this.eventId}: ${currentStatus}`);
+      this.isFavorite = currentStatus;
     }
   }
 
@@ -65,8 +80,8 @@ export class FavoriteButtonComponent implements OnInit, OnDestroy {
 
     this.favoriteService.toggleFavorite(this.eventId.toString());
     
-    // Aktualisiere den Status sofort
-    this.isFavorite = !this.isFavorite;
+    // Der Status wird durch die Subscription aktualisiert
+    // Wir setzen ihn nicht direkt, um Inkonsistenzen zu vermeiden
   }
 
   ngOnDestroy(): void {
