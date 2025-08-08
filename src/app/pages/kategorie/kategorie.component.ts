@@ -27,6 +27,7 @@ export class KategorieComponent  implements OnInit {
 
   topics: Topic[] = [];
   id: string | null = null;
+  name: string | null = null;
   
   constructor(private route: ActivatedRoute) {}
 
@@ -38,9 +39,9 @@ export class KategorieComponent  implements OnInit {
     console.log('onInit: KategorieComponent evetns:', this.events);
     this.route.queryParams.subscribe(params => {
       this.id = params['id'] || null;
-    });
+      this.name = params['name'] || null;
+  })
   }
-
   private readonly eventService: EventService = inject(EventService)
   private readonly locationService: LocationService = inject(LocationService)
   private readonly topicService: TopicService = inject(TopicService);
@@ -53,7 +54,7 @@ export class KategorieComponent  implements OnInit {
     this.topics = await this.topicService.getAllTopics();
     console.log('onInit: ',this.topics);
     try {
-      const rawEvents = await this.eventService.getAllEvents();
+    const rawEvents = (await this.eventService.getAllEvents()).filter(event => event['topics']?.some(topic => topic.id === this.id));
       console.log('Events aus Service kategorie:', rawEvents);
 
       this.events = await Promise.all(

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { RecordId } from 'surrealdb';
 
 @Component({
   selector: 'app-kategorie-card',
@@ -12,11 +13,11 @@ import { Router } from '@angular/router';
 export class KategorieCardComponent{
   @Input() text!: string; 
   @Input() color = '';
-  @Input() id!: string;
+  @Input() id!: RecordId<'topic'>;
 
   constructor(private router: Router) {}
 
   goToKategorie() {
-    this.router.navigate(['/kategorie'], { queryParams: { id: this.text } });
+    this.router.navigate(['/kategorie'], { queryParams: { id: this.id, name: this.text } });
   }
 }
