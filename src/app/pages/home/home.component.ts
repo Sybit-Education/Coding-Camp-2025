@@ -1,7 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
-
 import { EventCardComponent } from '../../component/event-card/event-card.component';
 import { KategorieCardComponent } from "../../component/kategorie-card/kategorie-card.component";
 
@@ -12,6 +10,7 @@ import { Event } from '../../models/event.interface';
 import { Topic } from '../../models/topic.interface';
 
 type EventOrMore = Event & { isMore?: boolean };
+import { LocationService } from '../../services/location.service';
 
 @Component({
   selector: 'app-home',
@@ -21,7 +20,7 @@ type EventOrMore = Event & { isMore?: boolean };
     TranslateModule,
     EventCardComponent,
     KategorieCardComponent
-  ],
+  , RouterModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -30,16 +29,21 @@ export class HomeComponent implements OnInit {
   displayEvents: EventOrMore[] = [];
   topics: Topic[] = [];
 
-  private readonly eventService = inject(EventService);
-  private readonly topicService = inject(TopicService);
+  private readonly eventService = inject(EventService)
+  private readonly locationService: LocationService = inject(LocationService)
+  private readonly topicService = inject(TopicService)
+  private readonly router: Router = inject(Router)
+
 
   ngOnInit() {
     this.initializeData();
   }
 
   async initializeData() {
+    console.log('onInit: HomeComponent');
+
     try {
-      const [allEvents, topics] = await Promise.all([
+        const [events, topics] = await Promise.all([
         this.eventService.getAllEvents(),
         this.topicService.getAllTopics()
       ]);
@@ -53,6 +57,7 @@ export class HomeComponent implements OnInit {
 }
 
       this.topics = topics;
+
     } catch (error) {
       console.error('Fehler beim Laden der Daten:', error);
     }
@@ -89,5 +94,9 @@ export class HomeComponent implements OnInit {
 
   getCardClass(index: number): string {
     return 'w-[calc(100vw-6rem)] h-[280px]';
+  }
+
+  getTopics() {
+    return this.topics;
   }
 }
