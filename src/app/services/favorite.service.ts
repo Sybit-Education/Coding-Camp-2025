@@ -63,8 +63,12 @@ export class FavoriteService {
       
       for (const id of savedEventIds) {
         try {
-          console.log(`Loading event with ID: event:${id}`);
-          const recordId = new StringRecordId(`event:${id}`);
+          console.log(`Loading event with ID: ${id}`);
+          // Prüfe, ob die ID bereits das "event:"-Präfix hat
+          const recordId = id.startsWith('event:') 
+            ? new StringRecordId(id)
+            : new StringRecordId(`event:${id}`);
+            
           const event = await this.eventService.getEventByID(recordId);
           
           if (event) {

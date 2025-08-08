@@ -63,8 +63,10 @@ export class FavouritesComponent implements OnInit, OnDestroy {
 
   navigateToEvent(event: Event): void {
     if (event.id) {
-      const eventId = event.id.toString().replace('event:', '');
-      this.router.navigate(['/event', eventId]);
+      const eventId = event.id.toString();
+      // Für die Navigation müssen wir das "event:" Präfix entfernen, da die Route es nicht erwartet
+      const routeId = eventId.replace(/^event:/, '');
+      this.router.navigate(['/event', routeId]);
     }
   }
 
@@ -76,7 +78,7 @@ export class FavouritesComponent implements OnInit, OnDestroy {
     event.stopPropagation(); // Verhindert Navigation zum Event
 
     if (favouriteEvent.id) {
-      const eventId = favouriteEvent.id.toString().replace('event:', '');
+      const eventId = favouriteEvent.id.toString();
       this.favoriteService.removeFromFavorites(eventId);
     }
   }

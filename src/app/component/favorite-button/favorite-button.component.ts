@@ -44,15 +44,12 @@ export class FavoriteButtonComponent implements OnInit, OnDestroy {
     if (this.eventId) {
       console.log('FavoriteButton initialized with eventId:', this.eventId);
       
-      // Bereinige die Event-ID (entferne "event:" Präfix)
-      const cleanId = this.eventId.toString().replace(/^event:/, '');
-      
-      this.isFavorite = this.favoriteService.isEventFavorite(cleanId);
+      this.isFavorite = this.favoriteService.isEventFavorite(this.eventId.toString());
       console.log('Is favorite?', this.isFavorite);
 
       // Subscribe to changes in saved events
       this.subscription = this.favoriteService.favoriteEvents$.subscribe(() => {
-        this.isFavorite = this.favoriteService.isEventFavorite(cleanId);
+        this.isFavorite = this.favoriteService.isEventFavorite(this.eventId!.toString());
       });
     } else {
       console.warn('FavoriteButton initialized without eventId');
@@ -64,11 +61,9 @@ export class FavoriteButtonComponent implements OnInit, OnDestroy {
     
     if (!this.eventId) return;
     
-    // Bereinige die Event-ID (entferne "event:" Präfix)
-    const cleanId = this.eventId.toString().replace(/^event:/, '');
-    console.log('Toggle favorite for eventId:', cleanId);
+    console.log('Toggle favorite for eventId:', this.eventId.toString());
 
-    this.favoriteService.toggleFavorite(cleanId);
+    this.favoriteService.toggleFavorite(this.eventId.toString());
     
     // Aktualisiere den Status sofort
     this.isFavorite = !this.isFavorite;
