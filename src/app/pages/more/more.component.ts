@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { RouterModule } from '@angular/router'
+import { Router, RouterModule } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 
 interface MoreMenuItem {
@@ -24,6 +24,29 @@ interface MoreMenuItem {
   ],
 })
 export class MoreComponent {
+  constructor(private readonly router: Router) {}
+
+  /**
+   * Navigiert zu einer bestimmten Route
+   * @param route Die Zielroute
+   */
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+    // Ankündigung für Screenreader
+    this.announceNavigation(route);
+  }
+
+  /**
+   * Kündigt die Navigation für Screenreader an
+   * @param route Die Zielroute
+   */
+  private announceNavigation(route: string): void {
+    const menuItem = this.menuItems.find(item => item.route === route);
+    if (menuItem) {
+      // In einer vollständigen Implementierung würde hier LiveAnnouncer verwendet werden
+      console.log(`Navigiere zu: ${menuItem.title}`);
+    }
+  }
   menuItems: MoreMenuItem[] = [
     {
       title: 'MORE.TEAM.TITLE',
