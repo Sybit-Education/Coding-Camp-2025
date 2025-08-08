@@ -70,6 +70,7 @@
       "BUTTON": "Zur Übersicht"
     },
     "REMOVE": "Aus Favoriten entfernen",
-    "ADD": "Zu Favoriten hinzufügen"
+    "ADD": "Zu Favoriten hinzufügen",
+    "LOCAL_STORAGE_NOTICE": "Hinweis: Favoriten werden nur lokal auf diesem Gerät gespeichert."
   }
 }

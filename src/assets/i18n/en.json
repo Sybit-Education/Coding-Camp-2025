@@ -70,6 +70,7 @@
       "BUTTON": "Go to overview"
     },
     "REMOVE": "Remove from favorites",
-    "ADD": "Add to favorites"
+    "ADD": "Add to favorites",
+    "LOCAL_STORAGE_NOTICE": "Note: Favorites are only stored locally on this device."
   }
 }
