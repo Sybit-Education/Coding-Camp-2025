@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import Surreal, { StringRecordId, Token } from 'surrealdb'
+import Surreal, { RecordId, StringRecordId, Token } from 'surrealdb'
 import { environment } from '../../environments/environment.production'
 
 @Injectable({
@@ -58,17 +58,17 @@ export class SurrealdbService extends Surreal {
   }
 
   async postUpdate<T extends Record<string, unknown>>(
-    id: string,
+    id: RecordId<'string'>,
     payload?: T,
   ): Promise<T> {
     console.log('📤 postUpdate(): Updating record', id, payload)
 
-    const result = await this.update<T>(
-      new StringRecordId('event:' + id),
+    const result = await super.update<T>(
+      id,
       payload,
     )
     console.log('update result:', result)
     // SurrealDB gibt ein Array zurück, daher das erste Element nehmen
-    return Array.isArray(result) ? result[0] : result
+    return result
   }
 }

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
 import { Event } from '../models/event.interface'
-import { surql } from 'surrealdb'
+import { surql, RecordId } from 'surrealdb'
 import { TypeDB } from '../models/typeDB.interface'
 @Injectable({
   providedIn: 'root',
@@ -61,11 +61,7 @@ export class EventService {
     return await this.surrealdb.post<Event>('event', event)
   }
 
-  async updateEvent(id: string, event: Event): Promise<Event> {
-    if (!id) {
-      throw new Error('❌ Event ID is required for update')
-    }
-
+  async updateEvent(id: RecordId<'event'>, event: Event): Promise<Event> {
     return await this.surrealdb.postUpdate<Event>(id, event)
   }
 }

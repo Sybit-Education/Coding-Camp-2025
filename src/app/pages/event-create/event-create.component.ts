@@ -33,6 +33,7 @@ export class EventCreateComponent implements OnInit {
   ) {}
 
   // Form-Felder
+  eventId: RecordId<'event'> | null = null
   eventname = ''
   description: string | null = null
   placename: string | null = null
@@ -88,11 +89,12 @@ export class EventCreateComponent implements OnInit {
 
   private async loadEvent(id: string) {
     try {
-      const event = await this.eventService.getEventByID(id.split(':')[1])
+      const event = await this.eventService.getEventByID(id)
       if (!event) return
       this.event = event
 
       // Felder befüllen
+      this.eventId = event.id!
       this.eventname = event.name
       this.description = event.description ?? null
       this.moreInfoLink = event.more_info_link ?? null
@@ -274,11 +276,11 @@ export class EventCreateComponent implements OnInit {
       restriction: this.restriction || undefined,
     }
 
-    if (this.event?.id !== null) {
+    if (this.eventId !== null) {
       try {
-        console.log('Updating existing event:', this.event!.id!.id)
+        console.log('Updating existing event:', this.event!.id)
         await this.eventService.updateEvent(
-          this.event!.id!.id.toString(),
+          this.eventId!,
           payload,
         )
       } catch (err) {

@@ -13,7 +13,7 @@
           class="flex-shrink-0 snap-center"
           [class]="getCardClass()"
           [title]="event.name"
-          [eventId]="event.id"
+          [eventId]="event.id!.id.toString()"
           [date_start]="event.date_start"
           [date_end]="event.date_end"
           [locationName]="event.locationName"
