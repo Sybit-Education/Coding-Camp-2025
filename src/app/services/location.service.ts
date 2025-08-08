@@ -6,7 +6,7 @@ import { Location } from '../models/location.interface'
   providedIn: 'root',
 })
 export class LocationService {
-  private surrealdb: SurrealdbService = inject(SurrealdbService)
+  private readonly surrealdb: SurrealdbService = inject(SurrealdbService)
 
   //************** GET **************
 

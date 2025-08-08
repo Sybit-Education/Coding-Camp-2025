@@ -60,5 +60,8 @@
   "home": {
     "current": "Événements actuels",
     "categories": "Catégories"
+  },
+  "i18y": {
+    "to-main-content": "Accéder au contenu principal"
   }
 }
