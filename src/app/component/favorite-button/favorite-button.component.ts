@@ -42,11 +42,17 @@ export class FavoriteButtonComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (this.eventId) {
       console.log('FavoriteButton initialized with eventId:', this.eventId);
-      this.isFavorite = this.localStorageService.isEventSaved(this.eventId);
+      
+      // Stelle sicher, dass die ID im richtigen Format ist (ohne "event:" Präfix)
+      const cleanId = this.eventId.replace(/^event:/, '');
+      console.log('Clean eventId for checking favorites:', cleanId);
+      
+      this.isFavorite = this.localStorageService.isEventSaved(cleanId);
+      console.log('Is favorite?', this.isFavorite);
       
       // Subscribe to changes in saved events
       this.subscription = this.localStorageService.savedEvents$.subscribe(() => {
-        this.isFavorite = this.localStorageService.isEventSaved(this.eventId);
+        this.isFavorite = this.localStorageService.isEventSaved(cleanId);
       });
     } else {
       console.warn('FavoriteButton initialized without eventId');
@@ -56,12 +62,14 @@ export class FavoriteButtonComponent implements OnInit, OnDestroy {
   toggleFavorite(event: Event): void {
     event.stopPropagation(); // Verhindert, dass das Event-Klick-Event ausgelöst wird
     
-    console.log('Toggle favorite for eventId:', this.eventId);
+    // Stelle sicher, dass die ID im richtigen Format ist (ohne "event:" Präfix)
+    const cleanId = this.eventId.replace(/^event:/, '');
+    console.log('Toggle favorite for eventId:', cleanId);
     
     if (this.isFavorite) {
-      this.localStorageService.unsaveEvent(this.eventId);
+      this.localStorageService.unsaveEvent(cleanId);
     } else {
-      this.localStorageService.saveEvent(this.eventId);
+      this.localStorageService.saveEvent(cleanId);
     }
     
     // Aktualisiere den Status sofort
