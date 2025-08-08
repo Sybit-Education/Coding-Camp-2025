@@ -60,5 +60,9 @@
   "home": {
     "current": "Événements actuels",
     "categories": "Catégories"
+  },
+  "footer": {
+    "datenschutz": "Mentions légales",
+    "impressum": "Politique de confidentialité"
   }
 }

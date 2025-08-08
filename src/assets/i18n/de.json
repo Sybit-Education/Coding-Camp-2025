@@ -60,5 +60,9 @@
   "home": {
     "current": "Aktuelles",
     "categories": "Kategorien"
+  },
+  "footer": {
+    "datenschutz": "Datenschutz",
+    "impressum": "Impressum"
   }
 }
