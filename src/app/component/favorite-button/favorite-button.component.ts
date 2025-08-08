@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { LocalStorageService } from '../../services/local-storage.service'
 import { Subscription } from 'rxjs'
+import { FavoriteService } from '../../services/favorite.service'
 
 @Component({
   selector: 'app-favorite-button',
@@ -38,18 +38,21 @@ export class FavoriteButtonComponent implements OnInit, OnDestroy {
   isFavorite = false;
   private subscription?: Subscription;
 
-  constructor(private readonly localStorageService: LocalStorageService) {}
+  constructor(private readonly favoriteService: FavoriteService) {}
 
   ngOnInit(): void {
     if (this.eventId) {
       console.log('FavoriteButton initialized with eventId:', this.eventId);
-
-      this.isFavorite = this.localStorageService.isEventSaved(this.eventId);
+      
+      // Bereinige die Event-ID (entferne "event:" Präfix)
+      const cleanId = this.eventId.toString().replace(/^event:/, '');
+      
+      this.isFavorite = this.favoriteService.isEventFavorite(cleanId);
       console.log('Is favorite?', this.isFavorite);
 
       // Subscribe to changes in saved events
-      this.subscription = this.localStorageService.savedEvents$.subscribe(() => {
-        this.isFavorite = this.localStorageService.isEventSaved(this.eventId);
+      this.subscription = this.favoriteService.favoriteEvents$.subscribe(() => {
+        this.isFavorite = this.favoriteService.isEventFavorite(cleanId);
       });
     } else {
       console.warn('FavoriteButton initialized without eventId');
@@ -58,15 +61,15 @@ export class FavoriteButtonComponent implements OnInit, OnDestroy {
 
   toggleFavorite(event: Event): void {
     event.stopPropagation(); // Verhindert, dass das Event-Klick-Event ausgelöst wird
+    
+    if (!this.eventId) return;
+    
+    // Bereinige die Event-ID (entferne "event:" Präfix)
+    const cleanId = this.eventId.toString().replace(/^event:/, '');
+    console.log('Toggle favorite for eventId:', cleanId);
 
-    console.log('Toggle favorite for eventId:', this.eventId);
-
-    if (this.isFavorite) {
-      this.localStorageService.unsaveEvent(this.eventId);
-    } else {
-      this.localStorageService.saveEvent(this.eventId);
-    }
-
+    this.favoriteService.toggleFavorite(cleanId);
+    
     // Aktualisiere den Status sofort
     this.isFavorite = !this.isFavorite;
   }
