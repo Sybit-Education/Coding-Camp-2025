@@ -92,5 +92,16 @@
     "newlocationaddressexample": "Straße und Hausnummer",
     "ageexample": "z. B. 18",
     "description": "Eventbeschreibung"
+  },
+  "dev": {
+    "text1": "Diese Website wurde im Rahmen des SYBIT Coding Camps 2025 entwickelt ",
+    "text2": " von jungen Talenten, die mit Neugier, Disziplin und Kreativität ihre ersten Schritte in der professionellen Softwareentwicklung gegangen sind. Unser Ziel war es, nicht nur Code zu schreiben, sondern etwas Sinnvolles zu erschaffen, das funktioniert, nützlich ist und unsere Ideen sichtbar macht.",
+    "text3": "Ein besonderer Dank gilt allen Teilnehmern, die mit Leidenschaft, Teamgeist und Ausdauer an diesem Projekt gearbeitet haben. Jede Komponente, jede Zeile Code und jede Entscheidung dahinter spiegelt den Lernprozess und das Engagement aller Beteiligten wider.",
+    "patrticptants": "Teilnehmer:innen",
+    "patrticptantslist": "Kaan Gel, Luisa Karsniqi, Sebastian Keller, Tomash Fedak, Leonard Röpcke, Jamal Blank, Adriano Mestre und Sasha (Oleksandr) Pavchak",
+    "coaches": "Coaches von SYBIT",
+    "coacheslist": "Felix Klein, Max Eichelmann, Yannik Deschler, Yannik Schwarz, Max Buhl, Elias Frank, Noel Wölfle und Stephan Strittmatter",
+    "headline": "👨‍💻 Unsere Entwickler",
+    "altpicture": "Gruppenfoto aller Teilnehmer des Coding Camps"
   }
 }
