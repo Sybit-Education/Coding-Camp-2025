@@ -18,13 +18,7 @@ export class EventService {
   async getAllEvents(): Promise<Event[]> {
     try {
       const result = await this.surrealdb.getAll<Event>('event')
-      return (result || []).map(
-        (item: Record<string, unknown>) =>
-          ({
-            ...item,
-            id: item['id']?.toString() || '',
-          }) as unknown as Event,
-      )
+      return result
     } catch (error) {
       throw new Error(`Fehler beim Laden der Events: ${error}`)
     }
@@ -64,8 +58,6 @@ export class EventService {
   }
 
   async updateEvent(id: RecordId<'event'>, event: Event): Promise<Event> {
-    const stringId = new StringRecordId(id)
-    const testId = stringId.toString()
-    return await this.surrealdb.postUpdate<Event>(testId, event)
+    return await this.surrealdb.postUpdate<Event>(id, event)
   }
 }

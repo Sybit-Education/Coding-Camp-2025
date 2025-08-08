@@ -38,12 +38,12 @@ export class HomeComponent implements OnInit {
   }
 
   async initilizeData() {
-    console.log('onInit: HomeComponent');
 
     this.topics = await this.topicService.getAllTopics();
-    console.log('onInit: ',this.topics);
+
     try {
       const rawEvents = await this.eventService.getAllEvents()
+      console.log(rawEvents);
 
       this.events = await Promise.all(
         rawEvents.map(async (event) => {

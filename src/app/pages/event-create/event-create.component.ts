@@ -33,7 +33,7 @@ export class EventCreateComponent implements OnInit {
   ) {}
 
   // Form-Felder
-  eventId: RecordId<'event'> | null = null
+  eventId: RecordId<'event'> | undefined = undefined
   eventname = ''
   description: string | null = null
   placename: string | null = null
@@ -261,6 +261,7 @@ export class EventCreateComponent implements OnInit {
     const priceDec = this.price ? new Decimal(this.price) : undefined
 
     const payload: AppEvent = {
+      id: this.eventId ?? undefined,
       name: this.eventname,
       date_start: start,
       date_end: end,
@@ -273,15 +274,15 @@ export class EventCreateComponent implements OnInit {
       location: this.selectedLocation.id!,
       topic: this.selectedTopics.map((t) => t.id!),
       media: this.media!,
-      age: this.age != null ? this.age : undefined,
+      age: this.age ?? undefined,
       restriction: this.restriction || undefined,
     }
 
-    if (this.eventId !== null) {
+    if (this.eventId !== undefined) {
       try {
-        console.log('Updating existing event:', this.event!.id)
+        console.log('Updating existing event:', this.eventId)
         await this.eventService.updateEvent(
-          this.eventId!,
+          this.eventId,
           payload,
         )
       } catch (err) {
