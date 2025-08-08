@@ -48,7 +48,7 @@ export class LocalStorageService {
 
   filterSavedEvents(events: Event[]): Event[] {
     const savedIds = this.getSavedEventIds()
-    return events.filter((event) => event.id && savedIds.includes(event.id))
+    return events.filter((event) => event.id && savedIds.includes(String(event.id)))
   }
 
   getSavedEventsCount(): number {

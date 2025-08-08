@@ -9,6 +9,7 @@ import { KategorieCardComponent } from "../../component/kategorie-card/kategorie
 import { EventService } from '../../services/event.service';
 import { TopicService } from '../../services/topic.service';
 import { LocationService } from '../../services/location.service';
+import { RecordId } from 'surrealdb';
 
 import { Event } from '../../models/event.interface';
 import { Topic } from '../../models/topic.interface';
@@ -105,4 +106,20 @@ export class HomeComponent implements OnInit {
   getTopics() {
     return this.topics;
   }
+
+  /**
+   * Behandelt Tastaturereignisse für die Event-Karten
+   * @param event Das Tastaturereignis
+   * @param eventId Die ID des Events
+   */
+  onKeyDown(event: KeyboardEvent, eventId?: RecordId<'event'>): void {
+    // Enter oder Space aktiviert den Klick auf die Karte
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      if (eventId) {
+        this.router.navigate(['/event', eventId.id]);
+      }
+    }
+  }
+
 }

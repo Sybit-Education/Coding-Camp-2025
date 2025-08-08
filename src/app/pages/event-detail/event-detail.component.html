@@ -15,7 +15,7 @@
         <span class="text-gray-500">Kein Bild verfügbar</span>
       </div>
       <div class="flex w-full justify-left items-center">
-        <app-favorite-button *ngIf="event?.id" class="px-2 pt-4" [eventId]="event?.id"></app-favorite-button>
+        <app-favorite-button *ngIf="event?.id" class="px-2 pt-4" [eventId]="evntIdString"></app-favorite-button>
         <h1 class="flex w-full  text-2xl font-bold  px-2 pt-4 text-blue-900">{{ event?.name }}</h1>
       </div>
 

@@ -57,6 +57,9 @@
     "current": "Current Events",
     "categories": "Categories"
   },
+  "category": {
+    "title": "Kategorie"
+  },
   "i18y": {
     "to-main-content": "Skip to main content"
   },

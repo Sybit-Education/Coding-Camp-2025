@@ -34,8 +34,11 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   private readonly organizerService = inject(OrganizerService)
   private readonly route = inject(ActivatedRoute)
   private readonly router = inject(Router)
+evntIdString: string|undefined
 
   ngOnInit(): void {
+
+    this.evntIdString = String(this.event?.id?.id)
     const eventId = this.route.snapshot.paramMap.get('id')
     if (eventId) {
       const recordID = new StringRecordId('event:' + eventId)
