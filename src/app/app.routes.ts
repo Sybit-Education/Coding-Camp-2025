@@ -19,10 +19,6 @@ export const routes: Routes = [
     component: AboutComponent,
   },
   {
-    path: 'search',
-    component: AboutComponent,
-  },
-  {
     path: 'about',
     component: AboutComponent,
   },
