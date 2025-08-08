@@ -64,5 +64,37 @@
   "footer": {
     "datenschutz": "Datenschutz",
     "impressum": "Impressum"
+  },
+  "create-event": {
+    "eventname": "Eventname:",
+    "organizer": "Veranstalter wählen...",
+    "neworganizer": "Neuen Veranstalter erstellen",
+    "neworganizername": "Name",
+    "neworganizerphone": "Telefonnummer",
+    "neworganizermail": "E-Mail",
+    "startdate": "Startdatum",
+    "starttime": "Startzeit",
+    "enddate": "Enddatum",
+    "endtime": "Endzeit",
+    "timespan": "Zeitspanne",
+    "location": "Ort wählen...",
+    "newlocation": "Neuen Ort erstellen",
+    "newlocationname": "Ortsname",
+    "newlocationaddress": "Adresse",
+    "newlocationplz": "PLZ",
+    "newlocationcity": "Stadt",
+    "age": "Mindestalter",
+    "price": "Preis (€)",
+    "restrictions": "Einschränkungen",
+    "restrictionsexample": "z. B. Treppen",
+    "topics": "Themen des Events",
+    "eventtype": "Art des Events",
+    "moreinfo": "Mehr Infos",
+    "moreinfoexample": "https://...",
+    "createevent": "Event erstellen",
+    "newlocationnameexample": "Name des Ortes",
+    "newlocationaddressexample": "Straße und Hausnummer",
+    "ageexample": "z. B. 18",
+    "description": "Eventbeschreibung"
   }
 }

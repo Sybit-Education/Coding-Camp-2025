@@ -64,5 +64,37 @@
   "footer": {
     "datenschutz": "Privacy Policy",
     "impressum": "Imprint"
+  },
+  "create-event": {
+    "eventname": "Event name:",
+    "organizer": "Select organizer...",
+    "neworganizer": "Create new organizer",
+    "neworganizername": "Name",
+    "neworganizerphone": "Phone number",
+    "neworganizermail": "e-mail",
+    "startdate": "Start date",
+    "starttime": "Start time",
+    "enddate": "End date",
+    "endtime": "End time",
+    "timespan": "Time span",
+    "location": "Select location...",
+    "newlocation": "Create new location",
+    "newlocationname": "Location name",
+    "newlocationaddress": "Address",
+    "newlocationplz": "Zip code",
+    "newlocationcity": "City",
+    "age": "Minimum age",
+    "price": "Price (€)",
+    "restrictions": "Restrictions",
+    "restrictionsexample": "e. g. stairs",
+    "topics": "Topics of the Event",
+    "eventtype": "Type of event",
+    "moreinfo": "More info",
+    "moreinfoexample": "https://...",
+    "createevent": "Create event",
+    "newlocationnameexample": "Name of the location",
+    "newlocationaddressexample": "Street and house number",
+    "ageexample": "e. g. 18",
+    "description": "Event description"
   }
 }

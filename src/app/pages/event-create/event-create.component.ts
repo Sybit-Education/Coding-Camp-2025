@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { FormsModule } from '@angular/forms'
+import { TranslateModule } from '@ngx-translate/core';
 
 // Services
 import { EventService } from '../../services/event.service'
@@ -19,7 +20,7 @@ import { Decimal, RecordId } from 'surrealdb'
 @Component({
   selector: 'app-event-create',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, TranslateModule],
   templateUrl: './event-create.component.html',
 })
 export class EventCreateComponent implements OnInit {
