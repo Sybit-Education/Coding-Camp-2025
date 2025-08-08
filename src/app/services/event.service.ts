@@ -1,17 +1,17 @@
 import { inject, Injectable } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
-import { Event } from '../models/event.interface'
-import { surql, RecordId } from 'surrealdb'
+import { Event, EventType } from '../models/event.interface'
+import { RecordId, StringRecordId, surql } from 'surrealdb'
 import { TypeDB } from '../models/typeDB.interface'
 @Injectable({
   providedIn: 'root',
 })
 export class EventService {
-  private surrealdb: SurrealdbService = inject(SurrealdbService)
+  private readonly surrealdb: SurrealdbService = inject(SurrealdbService)
 
   //************** GET **************
-  async getEventByID(id: string): Promise<Event> {
-    const result = await this.surrealdb.getById<Event>('event:' + id)
+  async getEventByID(id: RecordId<'event'> | StringRecordId): Promise<Event> {
+    const result = await this.surrealdb.getByRecordId<Event>(id)
     return result
   }
 
@@ -38,8 +38,10 @@ export class EventService {
     }
   }
 
-  async getEventTypeByID(id: string): Promise<TypeDB> {
-    return await this.surrealdb.getById<TypeDB>('event_type:' + id)
+  async getEventTypeByID(id: RecordId<'event_type'> | StringRecordId): Promise<EventType> {
+    const result = await this.surrealdb.getByRecordId<TypeDB>(id)
+    const eventType = result.name as unknown as EventType
+    return /^[A-Z_]+$/.test(eventType) ? eventType : EventType.UNKNOWN
   }
 
   async getEventsWithLocation(): Promise<Event[]> {

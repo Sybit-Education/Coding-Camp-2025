@@ -9,6 +9,7 @@ import { Organizer } from '../../models/organizer.interface'
 import { LocationService } from '../../services/location.service'
 import { OrganizerService } from '../../services/organizer.service'
 import { DateTimeRangePipe } from '../../services/date.pipe'
+import { RecordId, StringRecordId } from 'surrealdb'
 import { LoginService } from '../../services/login.service'
 import { TypeDB } from '../../models/typeDB.interface'
 
@@ -41,27 +42,32 @@ export class EventDetailPageComponent implements OnInit {
   ngOnInit(): void {
     const eventId = this.route.snapshot.paramMap.get('id')
     if (eventId) {
-      this.loadEvent(eventId)
+      const recordID = new StringRecordId('event:' + eventId)
+      this.loadEvent(recordID)
     } else {
       this.error = 'Event ID nicht gefunden'
     }
     this.isLoggedIn = this.loginservice.canActivate(this.route.snapshot)
   }
 
-  async loadType(typeId: string) {
-    try {
-      const type = await this.eventService.getEventTypeByID(typeId!)
-      if (type) {
-        this.type = type as TypeDB
-      } else {
-        this.error = 'Event Type nicht gefunden'
+  async loadType(typeId: RecordId<'event_type'> | undefined) {
+    if (typeId) {
+      try {
+        const type = await this.eventService.getEventTypeByID(typeId)
+        if (type) {
+          this.type = type as TypeDB
+        } else {
+          this.error = 'Event Type nicht gefunden'
+        }
+      } catch (err) {
+        this.error = `Fehler beim Laden des Event Types: ${err}`
       }
-    } catch (err) {
-      this.error = `Fehler beim Laden des Event Types: ${err}`
+    } else {
+      this.error = 'Event Type ID nicht gefunden'
     }
   }
 
-  async loadLocation(locationId: string) {
+  async loadLocation(locationId: RecordId<'location'>) {
     try {
       const foundLocation =
         await this.locationService.getLocationByID(locationId)
@@ -76,7 +82,7 @@ export class EventDetailPageComponent implements OnInit {
     }
   }
 
-  async loadOrganizer(organizerId: string) {
+  async loadOrganizer(organizerId: RecordId<'organizer'>) {
     try {
       const foundOrganizer =
         await this.organizerService.getOrganizerByID(organizerId)
@@ -91,7 +97,7 @@ export class EventDetailPageComponent implements OnInit {
     }
   }
 
-  private async loadEvent(eventId: string) {
+  private async loadEvent(eventId: RecordId<'event'> | StringRecordId) {
     try {
       const foundEvent = await this.eventService.getEventByID(eventId)
 
@@ -102,9 +108,9 @@ export class EventDetailPageComponent implements OnInit {
         this.mediaUrl =
           this.mediaBaseUrl +
           String(foundEvent.media[0].id).replace(/_(?=[^_]*$)/, '.')
-        const locationId = String(this.event?.['location']?.id)
-        const organizerId = String(this.event?.['organizer']?.id)
-        const typeId = String(this.event?.['event_type']?.id)
+        const locationId = this.event?.['location']
+        const organizerId = this.event?.['organizer']
+        const typeId = this.event?.['event_type']
         this.loadLocation(locationId)
         this.loadOrganizer(organizerId)
         this.loadType(typeId)
