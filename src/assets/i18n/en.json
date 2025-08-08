@@ -60,5 +60,9 @@
   "home": {
     "current": "Current Events",
     "categories": "Categories"
+  },
+  "footer": {
+    "datenschutz": "Privacy Policy",
+    "impressum": "Imprint"
   }
 }
