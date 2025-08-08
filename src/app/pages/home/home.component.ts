@@ -27,20 +27,47 @@ export class HomeComponent implements OnInit {
   }
 
   async initializeData() {
-    console.log('onInit: HomeComponent');
-    
     try {
-        const [events, topics] = await Promise.all([
+      const [allEvents, topics] = await Promise.all([
         this.eventService.getAllEvents(),
         this.topicService.getAllTopics()
       ]);
       
-      this.events = events;
+      this.events = this.getUpcomingEvents(allEvents);
       this.topics = topics;
-      
     } catch (error) {
       console.error('Fehler beim Laden der Daten:', error);
     }
+  }
+
+  private getUpcomingEvents(events: Event[]): Event[] {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    
+    return events
+      .filter(event => {
+        const eventStartDate = new Date(event.date_start);
+        const eventStartDay = new Date(eventStartDate.getFullYear(), eventStartDate.getMonth(), eventStartDate.getDate());
+        
+        if (eventStartDay < today) {
+          return false;
+        }
+        
+        if (event.date_end) {
+          const eventEndDate = new Date(event.date_end);
+          return eventEndDate > now;
+        } else {
+          const endOfStartDay = new Date(eventStartDate);
+          endOfStartDay.setHours(23, 59, 59, 999);
+          return endOfStartDay > now;
+        }
+      })
+      .sort((a, b) => {
+        const dateA = new Date(a.date_start);
+        const dateB = new Date(b.date_start);
+        return dateA.getTime() - dateB.getTime();
+      })
+      .slice(0, 4);
   }
 
   getCardClass(index: number): string {
