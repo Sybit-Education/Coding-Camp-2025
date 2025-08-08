@@ -33,7 +33,7 @@ import { Subscription } from 'rxjs'
   styles: []
 })
 export class FavoriteButtonComponent implements OnInit, OnDestroy {
-  @Input() eventId = '';
+  @Input() eventId = '' as string | undefined;
 
   isFavorite = false;
   private subscription?: Subscription;
@@ -44,16 +44,12 @@ export class FavoriteButtonComponent implements OnInit, OnDestroy {
     if (this.eventId) {
       console.log('FavoriteButton initialized with eventId:', this.eventId);
 
-      // Stelle sicher, dass die ID im richtigen Format ist (ohne "event:" Präfix)
-      const cleanId = this.eventId.replace(/^event:/, '');
-      console.log('Clean eventId for checking favorites:', cleanId);
-
-      this.isFavorite = this.localStorageService.isEventSaved(cleanId);
+      this.isFavorite = this.localStorageService.isEventSaved(this.eventId);
       console.log('Is favorite?', this.isFavorite);
 
       // Subscribe to changes in saved events
       this.subscription = this.localStorageService.savedEvents$.subscribe(() => {
-        this.isFavorite = this.localStorageService.isEventSaved(cleanId);
+        this.isFavorite = this.localStorageService.isEventSaved(this.eventId);
       });
     } else {
       console.warn('FavoriteButton initialized without eventId');
@@ -63,14 +59,12 @@ export class FavoriteButtonComponent implements OnInit, OnDestroy {
   toggleFavorite(event: Event): void {
     event.stopPropagation(); // Verhindert, dass das Event-Klick-Event ausgelöst wird
 
-    // Stelle sicher, dass die ID im richtigen Format ist (ohne "event:" Präfix)
-    const cleanId = this.eventId.replace(/^event:/, '');
-    console.log('Toggle favorite for eventId:', cleanId);
+    console.log('Toggle favorite for eventId:', this.eventId);
 
     if (this.isFavorite) {
-      this.localStorageService.unsaveEvent(cleanId);
+      this.localStorageService.unsaveEvent(this.eventId);
     } else {
-      this.localStorageService.saveEvent(cleanId);
+      this.localStorageService.saveEvent(this.eventId);
     }
 
     // Aktualisiere den Status sofort
