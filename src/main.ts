@@ -1,10 +1,15 @@
 import { bootstrapApplication } from '@angular/platform-browser'
 import { AppComponent } from './app/app.component'
 import { SurrealdbService } from './app/services/surrealdb.service'
-import { provideAppInitializer, inject, isDevMode, LOCALE_ID } from '@angular/core'
+import {
+  provideAppInitializer,
+  inject,
+  isDevMode,
+  LOCALE_ID,
+} from '@angular/core'
 import { provideServiceWorker } from '@angular/service-worker'
 import { appConfig } from './app/app.config'
-import localeDe from '@angular/common/locales/de';
+import localeDe from '@angular/common/locales/de'
 import localeEn from '@angular/common/locales/en';
 import localeFr from '@angular/common/locales/fr';
 import { registerLocaleData } from '@angular/common'
@@ -15,7 +20,7 @@ import { TopicService } from './app/services/topic.service'
 import { MediaService } from './app/services/media.service'
 
 // Registriere alle unterstützten Locales für Datums- und Zahlenformatierung
-registerLocaleData(localeDe);
+registerLocaleData(localeDe)
 registerLocaleData(localeEn);
 registerLocaleData(localeFr);
 

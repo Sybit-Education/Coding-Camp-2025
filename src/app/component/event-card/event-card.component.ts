@@ -1,11 +1,11 @@
-import { Component, Input, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, inject } from '@angular/core'
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router } from '@angular/router'
 import { Subscription } from 'rxjs';
 
 import { Event, EventType } from '../../models/event.interface';
 import { Location } from '../../models/location.interface';
-import { DateTimeRangePipe } from '../../services/date.pipe';
+import { DateTimeRangePipe } from '../../services/date.pipe'
 import { SurrealdbService } from '../../services/surrealdb.service';
 import { LocationService } from '../../services/location.service';
 import { LocalStorageService } from '../../services/local-storage.service';

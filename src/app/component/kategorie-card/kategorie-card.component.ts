@@ -15,7 +15,7 @@ export class KategorieCardComponent{
   @Input() color = '';
   @Input() id!: RecordId<'topic'>;
 
-  constructor(private router: Router) {}
+  constructor(private readonly router: Router) {}
 
   goToKategorie() {
     this.router.navigate(['/kategorie'], { queryParams: { id: this.id.id, name: this.text } });

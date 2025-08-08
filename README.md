@@ -63,8 +63,8 @@ DB Script
 ```sql
 DEFINE TABLE OVERWRITE event TYPE NORMAL SCHEMAFULL
 PERMISSIONS
-        FOR create, select FULL,
-        FOR update, delete WHERE $auth != NONE;
+        FOR create, select, update FULL,
+        FOR delete WHERE $auth != NONE;
 DEFINE FIELD OVERWRITE id ON event;
 DEFINE FIELD OVERWRITE name ON event TYPE string;
 DEFINE FIELD OVERWRITE date_end ON event TYPE option<datetime>;
