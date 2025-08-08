@@ -44,10 +44,6 @@
       "TITLE": "The Team",
       "DESCRIPTION": "Meet the team behind the 1200 Years Radolfzell app."
     },
-    "SPONSOR": {
-      "TITLE": "The Sponsor",
-      "DESCRIPTION": "Information about our sponsors and supporters."
-    },
     "IMPRINT": {
       "TITLE": "Imprint",
       "DESCRIPTION": "Legal information and contact details."
@@ -63,5 +59,9 @@
   },
   "i18y": {
     "to-main-content": "Skip to main content"
+  },
+  "footer": {
+    "datenschutz": "Privacy Policy",
+    "impressum": "Imprint"
   }
 }

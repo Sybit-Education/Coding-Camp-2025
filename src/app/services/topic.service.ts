@@ -1,17 +1,18 @@
 import { inject, Injectable } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
 import { Topic } from '../models/topic.interface'
+import { RecordId, StringRecordId } from 'surrealdb'
 
 @Injectable({
   providedIn: 'root',
 })
 export class TopicService {
-  private surrealdb: SurrealdbService = inject(SurrealdbService)
+  private readonly surrealdb: SurrealdbService = inject(SurrealdbService)
 
   //************** GET **************
 
-  async getTopicByID(id: string): Promise<Topic> {
-    return await this.surrealdb.getById<Topic>(id)
+  async getTopicByID(id: RecordId<'topic'> | StringRecordId): Promise<Topic> {
+    return await this.surrealdb.getByRecordId<Topic>(id)
   }
 
   async getAllTopics(): Promise<Topic[]> {

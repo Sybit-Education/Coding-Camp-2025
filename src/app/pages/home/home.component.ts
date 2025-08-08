@@ -4,18 +4,10 @@ import { Router, RouterModule } from '@angular/router';
 import { EventCardComponent } from '../../component/event-card/event-card.component';
 import { EventService } from '../../services/event.service';
 import { Event } from '../../models/event.interface';
-import { LocationService } from '../../services/location.service';
 import { KategorieCardComponent } from "../../component/kategorie-card/kategorie-card.component";
 import { TopicService } from '../../services/topic.service';
 import { Topic } from '../../models/topic.interface';
 import { TranslateModule } from '@ngx-translate/core';
-
-interface EventWithResolvedLocation extends Event {
-  locationName: string;
-}
-
-
-
 
 @Component({
   selector: 'app-home',
@@ -25,7 +17,8 @@ interface EventWithResolvedLocation extends Event {
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
-  events: EventWithResolvedLocation[] = [];
+  events: Event[] = [];
+  topics: Topic[] = [];
 
   private readonly eventService: EventService = inject(EventService)
   private readonly locationService: LocationService = inject(LocationService)
@@ -35,10 +28,10 @@ export class HomeComponent implements OnInit {
   topics: Topic[] = [];
 
   ngOnInit() {
-    this.initilizeData();
+    this.initializeData();
   }
 
-  async initilizeData() {
+  async initializeData() {
     console.log('onInit: HomeComponent');
 
     this.topics = await this.topicService.getAllTopics();
@@ -57,32 +50,18 @@ export class HomeComponent implements OnInit {
       );
 
     } catch (error) {
-      console.error('Fehler beim Laden der Events:', error);
+      console.error('Fehler beim Laden der Daten:', error);
     }
   }
 
   getCardClass(index: number): string {
     return 'w-[calc(100vw-6rem)] h-[280px]';
   }
+
   getTopics() {
-    console.log(this.topics);
     return this.topics;
   }
 
-  /**
-   * Behandelt Tastaturereignisse für die Event-Karten
-   * @param event Das Tastaturereignis
-   * @param eventId Die ID des Events
-   */
-  onKeyDown(event: KeyboardEvent, eventId?: string): void {
-    // Enter oder Space aktiviert den Klick auf die Karte
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      if (eventId) {
-        const cleanedId = eventId.replace(/^event:/, '');
-        this.router.navigate(['/event', cleanedId]);
-      }
-    }
-  }
-}
 
+
+}

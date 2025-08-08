@@ -9,8 +9,7 @@ import { Organizer } from '../../models/organizer.interface'
 import { LocationService } from '../../services/location.service'
 import { OrganizerService } from '../../services/organizer.service'
 import { DateTimeRangePipe } from '../../services/date.pipe'
-// Für eine vollständige Implementierung würde LiveAnnouncer importiert werden
-// import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { RecordId, StringRecordId } from 'surrealdb'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -38,7 +37,8 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const eventId = this.route.snapshot.paramMap.get('id')
     if (eventId) {
-      this.loadEvent(eventId)
+      const recordID = new StringRecordId('event:' + eventId)
+      this.loadEvent(recordID)
     } else {
       this.error = 'Event ID nicht gefunden'
       this.announceError('Event ID nicht gefunden')
@@ -54,20 +54,24 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     console.error(`Fehler: ${message}`);
   }
 
-  async loadType(typeId: string) {
-    try {
-      const type = await this.eventService.getEventTypeByID(typeId!)
-      if (type) {
-        this.type = type as EventType
-      } else {
-        this.error = 'Event Type nicht gefunden'
+  async loadType(typeId: RecordId<'event_type'> | undefined) {
+    if (typeId) {
+      try {
+        const type = await this.eventService.getEventTypeByID(typeId)
+        if (type) {
+          this.type = type as EventType
+        } else {
+          this.error = 'Event Type nicht gefunden'
+        }
+      } catch (err) {
+        this.error = `Fehler beim Laden des Event Types: ${err}`
       }
-    } catch (err) {
-      this.error = `Fehler beim Laden des Event Types: ${err}`
+    } else {
+      this.error = 'Event Type ID nicht gefunden'
     }
   }
 
-  async loadLocation(locationId: string) {
+  async loadLocation(locationId: RecordId<'location'>) {
     try {
       const foundLocation =
         await this.locationService.getLocationByID(locationId)
@@ -82,7 +86,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  async loadOrganizer(organizerId: string) {
+  async loadOrganizer(organizerId: RecordId<'organizer'>) {
     try {
       const foundOrganizer =
         await this.organizerService.getOrganizerByID(organizerId)
@@ -97,29 +101,25 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  private async loadEvent(eventId: string) {
+  private async loadEvent(eventId: RecordId<'event'> | StringRecordId) {
     try {
       const foundEvent = await this.eventService.getEventByID(eventId)
 
       if (foundEvent) {
         this.event = foundEvent
-        
-        if (foundEvent.media && foundEvent.media.length > 0) {
-          this.mediaUrl =
-            this.mediaBaseUrl +
-            String(foundEvent.media[0].id).replace(/_(?=[^_]*$)/, '.')
-        }
-        
-        const locationId = String(this.event?.['location']?.id)
-        const organizerId = String(this.event?.['organizer']?.id)
-        const typeId = String(this.event?.['event_type']?.id)
-        
+        this.mediaUrl =
+          this.mediaBaseUrl +
+          String(foundEvent.media[0].id).replace(/_(?=[^_]*$)/, '.')
+        const locationId = this.event?.['location']
+        const organizerId = this.event?.['organizer']
+        const typeId = this.event?.['event_type']
+
         await Promise.all([
           this.loadLocation(locationId),
           this.loadOrganizer(organizerId),
           this.loadType(typeId)
         ])
-        
+
         document.title = `${this.event.name} - 1200 Jahre Radolfzell`
       } else {
         this.error = 'Event nicht gefunden'

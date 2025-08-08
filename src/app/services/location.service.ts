@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
 import { Location } from '../models/location.interface'
+import { RecordId, StringRecordId } from 'surrealdb'
 
 @Injectable({
   providedIn: 'root',
@@ -10,8 +11,10 @@ export class LocationService {
 
   //************** GET **************
 
-  async getLocationByID(id: string): Promise<Location> {
-    return await this.surrealdb.getById<Location>(id)
+  async getLocationByID(
+    id: RecordId<'location'> | StringRecordId,
+  ): Promise<Location> {
+    return await this.surrealdb.getByRecordId<Location>(id)
   }
 
   async getAllLocations(): Promise<Location[]> {
@@ -20,7 +23,7 @@ export class LocationService {
       return (result || []).map(
         (item: Record<string, unknown>) =>
           ({
-            ...item
+            ...item,
           }) as unknown as Location,
       )
     } catch (error) {
