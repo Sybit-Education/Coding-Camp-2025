@@ -11,7 +11,7 @@ export class TeilenComponent {
 
 
   sharePage() {
-    const link =  'https://https://1200-jahre-radolfzell.sybit.education/event/' + this.eventId
+    const link =  'https://1200-jahre-radolfzell.sybit.education/event/' + this.eventId
 
     navigator.clipboard.writeText(link)
   }
