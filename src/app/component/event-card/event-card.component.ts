@@ -75,9 +75,7 @@ export class EventCardComponent implements OnInit, OnDestroy {
     if (!this.event?.location) return null;
     
     try {
-      const locationRecord = this.event.location as any;
-      const locationId = locationRecord.tb + ':' + locationRecord.id;
-      return await this.locationService.getLocationByID(locationId);
+      return await this.locationService.getLocationByID(this.event.location);
     } catch (error) {
       console.warn('Fehler beim Laden der Location:', error);
       return null;

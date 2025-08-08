@@ -1,16 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EventCardComponent } from '../../component/event-card/event-card.component';
-import { KategorieCardComponent } from '../../component/kategorie-card/kategorie-card.component';
 import { EventService } from '../../services/event.service';
 import { Event } from '../../models/event.interface';
-import { Location } from '../../models/location.interface';
-import { LocationService } from '../../services/location.service';
 import { KategorieCardComponent } from "../../component/kategorie-card/kategorie-card.component";
-
-interface EventWithResolvedLocation extends Event {
-  locationName: string;
-}
+import { TopicService } from '../../services/topic.service';
+import { Topic } from '../../models/topic.interface';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home',
@@ -21,37 +17,40 @@ interface EventWithResolvedLocation extends Event {
 })
 export class HomeComponent implements OnInit {
   events: Event[] = [];
+  topics: Topic[] = [];
 
-  private readonly eventService = inject(EventService);
-  private readonly locationService = inject(LocationService);
+  private readonly eventService: EventService = inject(EventService);
+  private readonly topicService: TopicService = inject(TopicService);
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit() {
+    this.initializeData();
+  }
+
+  async initializeData() {
+    console.log('onInit: HomeComponent');
+    
     try {
-      const rawEvents = await this.eventService.getAllEvents();
-
-      this.events = await Promise.all(
-        rawEvents.map(async (event) => {
-          const locationId = event.location as unknown as string;
-          const location: Location = await this.locationService.getLocationByID(locationId);
-          return {
-            ...event,
-            locationName: location?.name ?? 'Unbekannter Ort',
-          };
-        })
-      );
+      // Parallel laden für bessere Performance
+      const [events, topics] = await Promise.all([
+        this.eventService.getAllEvents(),
+        this.topicService.getAllTopics()
+      ]);
+      
+      this.events = events;
+      this.topics = topics;
+      
+      console.log('Events geladen:', this.events.length);
+      console.log('Topics geladen:', this.topics);
     } catch (error) {
-      console.error('Fehler beim Laden der Events:', error);
+      console.error('Fehler beim Laden der Daten:', error);
     }
   }
 
   getCardClass(index: number): string {
     return 'w-[calc(100vw-6rem)] h-[280px]';
   }
+
   getTopics() {
-    console.log(this.topics);
     return this.topics;
   }
-
-
-
 }
