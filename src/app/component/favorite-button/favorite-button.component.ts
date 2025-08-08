@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs'
   imports: [CommonModule],
   template: `
     <button
+      *ngIf="eventId"
       (click)="toggleFavorite($event)"
       class="ml-2 focus:outline-none"
       [title]="isFavorite ? 'Aus Favoriten entfernen' : 'Zu Favoriten hinzufügen'"
