@@ -7,7 +7,7 @@ import { PlaceholderComponent } from './pages/placeholder/placeholder.component'
 import { EventDetailPageComponent } from './pages/event-detail/event-detail.component'
 import { DevsComponent } from './pages/devs/devs.component'
 import { LoginPageComponent } from './pages/login/login.component'
-import { ImpressumComponent } from './pages/impressum/impressum.component'
+import { LoginService } from './services/login.service'
 
 export const routes: Routes = [
   {
@@ -29,6 +29,7 @@ export const routes: Routes = [
   {
     path: 'create-event',
     component: EventCreateComponent,
+    canActivate: [LoginService]
   },
   {
     path: 'more',
@@ -44,7 +45,7 @@ export const routes: Routes = [
   },
   {
     path: 'impressum',
-    component: ImpressumComponent,
+    component: PlaceholderComponent,
   },
   {
     path: 'datenschutz',
