@@ -46,14 +46,14 @@ export class HomeComponent implements OnInit {
 
       this.events = await Promise.all(
         rawEvents.map(async (event) => {
-          const location = await this.locationService.getLocationByID(String(event.location.id));
+          const location = await this.locationService.getLocationByID(event.location);
           return {
             ...event,
             locationName: location?.name ?? 'Unbekannter Ort',
           };
         })
       );
-      
+
     } catch (error) {
       console.error('Fehler beim Laden der Events:', error);
     }

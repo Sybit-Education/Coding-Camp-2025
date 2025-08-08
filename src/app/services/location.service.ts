@@ -1,17 +1,18 @@
 import { inject, Injectable } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
 import { Location } from '../models/location.interface'
+import { RecordId } from 'surrealdb'
 
 @Injectable({
   providedIn: 'root',
 })
 export class LocationService {
-  private surrealdb: SurrealdbService = inject(SurrealdbService)
+  private readonly surrealdb: SurrealdbService = inject(SurrealdbService)
 
   //************** GET **************
 
-  async getLocationByID(id: string): Promise<Location> {
-    return await this.surrealdb.getById<Location>(id)
+  async getLocationByID(id: RecordId<'location'>): Promise<Location> {
+    return await this.surrealdb.getByRecordId<Location>(id)
   }
 
   async getAllLocations(): Promise<Location[]> {

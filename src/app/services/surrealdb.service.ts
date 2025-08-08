@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import Surreal, { StringRecordId, Token } from 'surrealdb'
+import Surreal, { RecordId, StringRecordId, Token } from 'surrealdb'
 import { environment } from '../../environments/environment.production'
 
 @Injectable({
@@ -36,10 +36,16 @@ export class SurrealdbService extends Surreal {
   }
 
   // 1) Einen Eintrag nach ID holen
+  // @deprecated Use `getByRecordId() instead!
   async getById<T extends Record<string, unknown>>(
     recordId: string,
   ): Promise<T> {
     const result = await super.select<T>(new StringRecordId(recordId))
+    return result as T
+  }
+
+  async getByRecordId<T extends Record<string, unknown>>(recordId: RecordId<string> | StringRecordId): Promise<T> {
+    const result = await super.select<T>(recordId)
     return result as T
   }
 
