@@ -101,5 +101,9 @@ export class EventDetailPageComponent implements OnInit {
     this.router.navigate(['/'])
   }
 
+  sharePage() {
+    
+  }
+
 
 }
