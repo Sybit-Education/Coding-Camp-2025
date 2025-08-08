@@ -1,0 +1,132 @@
+import { Component, OnInit, inject } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { Event } from '../../models/event.interface'
+import { EventService } from '../../services/event.service'
+import { LocalStorageService } from '../../services/local-storage.service'
+import { Router } from '@angular/router'
+import { DateTimeRangePipe } from '../../services/date.pipe'
+import { StringRecordId } from 'surrealdb'
+
+@Component({
+  selector: 'app-favourites',
+  standalone: true,
+  imports: [CommonModule, DateTimeRangePipe],
+  template: `
+    <div class="container mx-auto p-4 pb-20">
+      <h1 class="mb-6 text-2xl font-bold text-[#3b4ea3]">Meine Favoriten</h1>
+
+      <div *ngIf="loading" class="text-center py-8">
+        <p>Lade Favoriten...</p>
+      </div>
+
+      <div *ngIf="!loading && favouriteEvents.length === 0" class="text-center py-8">
+        <p>Du hast noch keine Favoriten gespeichert.</p>
+        <button 
+          (click)="navigateToHome()" 
+          class="mt-4 px-4 py-2 bg-[#3b4ea3] text-white rounded-md hover:bg-[#2c3a7a]"
+        >
+          Zur Übersicht
+        </button>
+      </div>
+
+      <div *ngIf="!loading && favouriteEvents.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div 
+          *ngFor="let event of favouriteEvents" 
+          class="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer"
+          (click)="navigateToEvent(event)"
+        >
+          <div class="p-4">
+            <div class="flex justify-between items-start">
+              <h2 class="text-lg font-semibold text-[#3b4ea3] mb-2">{{ event.name }}</h2>
+              <button 
+                (click)="removeFavourite($event, event)" 
+                class="text-yellow-500 hover:text-yellow-700"
+                title="Aus Favoriten entfernen"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                  <path fill-rule="evenodd" 
+                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" 
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
+            <p class="text-sm text-gray-600 mb-2">
+              {{ event.date_start | dateTimeRange : event.date_end }}
+            </p>
+            <p *ngIf="event.description" class="text-sm text-gray-700 line-clamp-2">
+              {{ event.description }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
+  styles: [`
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  `]
+})
+export class FavouritesComponent implements OnInit {
+  favouriteEvents: Event[] = [];
+  loading = true;
+
+  private readonly eventService = inject(EventService);
+  private readonly localStorageService = inject(LocalStorageService);
+  private readonly router = inject(Router);
+
+  ngOnInit(): void {
+    this.loadFavouriteEvents();
+  }
+
+  async loadFavouriteEvents(): Promise<void> {
+    this.loading = true;
+    try {
+      // Hole alle gespeicherten Event-IDs
+      const savedEventIds = this.localStorageService.getSavedEventIds();
+      
+      if (savedEventIds.length === 0) {
+        this.favouriteEvents = [];
+        this.loading = false;
+        return;
+      }
+
+      // Lade jedes Event einzeln
+      const eventPromises = savedEventIds.map(id => {
+        const recordId = new StringRecordId(`event:${id}`);
+        return this.eventService.getEventByID(recordId);
+      });
+
+      const events = await Promise.all(eventPromises);
+      this.favouriteEvents = events.filter(event => event !== null);
+    } catch (error) {
+      console.error('Fehler beim Laden der Favoriten:', error);
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  navigateToEvent(event: Event): void {
+    if (event.id) {
+      const eventId = event.id.toString().replace('event:', '');
+      this.router.navigate(['/event', eventId]);
+    }
+  }
+
+  navigateToHome(): void {
+    this.router.navigate(['/']);
+  }
+
+  removeFavourite(event: Event, favouriteEvent: Event): void {
+    event.stopPropagation(); // Verhindert Navigation zum Event
+    
+    if (favouriteEvent.id) {
+      const eventId = favouriteEvent.id.toString().replace('event:', '');
+      this.localStorageService.unsaveEvent(eventId);
+      this.favouriteEvents = this.favouriteEvents.filter(e => e.id !== favouriteEvent.id);
+    }
+  }
+}
