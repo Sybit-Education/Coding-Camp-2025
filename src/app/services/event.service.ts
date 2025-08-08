@@ -21,8 +21,7 @@ export class EventService {
       return (result || []).map(
         (item: Record<string, unknown>) =>
           ({
-            ...item,
-            id: item['id']?.toString() || '',
+            ...item
           }) as Event,
       )
     } catch (error) {

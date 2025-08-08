@@ -57,13 +57,11 @@
     "current": "Current Events",
     "categories": "Categories"
   },
-<<<<<<< HEAD
   "category": {
     "title": "Kategorie"
-=======
+  },
   "footer": {
     "datenschutz": "Privacy Policy",
     "impressum": "Imprint"
->>>>>>> main
   }
 }

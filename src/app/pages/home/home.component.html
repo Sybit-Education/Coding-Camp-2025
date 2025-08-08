@@ -1,4 +1,4 @@
-<div class="container mx-auto px-4 py-4 max-w-5xl justify-center items-center relative ">
+<div class="container mx-auto px-4 py-4 max-w-8xl justify-center items-center relative lg:w-480">
 
   <div class="p-4">
     <h1 class="text-xl font-bold mb-4 text-left">{{ 'home.current' | translate }}</h1>
@@ -6,18 +6,12 @@
     <!-- Horizontaler Scroll-Container für Events -->
     <div class="w-full overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 -mx-4 scrollbar-hide card-snap">
       <div class="flex gap-2 px-4 min-w-max event-row">
-<<<<<<< HEAD
-        <app-event-card *ngFor="let event of events; let i = index" class="flex-shrink-0 snap-center"
-          [class]="getCardClass(i)" [title]="event.name" [eventId]="event.id" [date_start]="event.date_start"
-          [date_end]="event.date_end" [locationName]="event.locationName"></app-event-card>
-=======
         <app-event-card
           *ngFor="let event of events; let i = index"
           class="flex-shrink-0 snap-center"
           [class]="getCardClass(i)"
           [event]="event"
         ></app-event-card>
->>>>>>> main
       </div>
     </div>
 

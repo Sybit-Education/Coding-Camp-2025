@@ -59,7 +59,7 @@ export class KategorieComponent  implements OnInit {
       this.events = await Promise.all(
         rawEvents.map(async (event) => {
           console.log('Event vor Location:', event);
-          const location = await this.locationService.getLocationByID(String(event.location.id));
+          const location = await this.locationService.getLocationByID(event.location);
           return {
             ...event,
             locationName: location?.name ?? 'Unbekannter Ort',
