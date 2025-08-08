@@ -20,8 +20,7 @@ interface EventWithResolvedLocation extends AppEvent {
   selector: 'app-kategorie',
   standalone: true,
   imports: [TranslateModule, EventCardComponent, CommonModule],
-  templateUrl: './kategorie.component.html',
-  styleUrl: './kategorie.component.scss'
+  templateUrl: './kategorie.component.html'
 })
 export class KategorieComponent  implements OnInit {
   events: EventWithResolvedLocation[] = [];
@@ -58,8 +57,13 @@ export class KategorieComponent  implements OnInit {
     this.topics = await this.topicService.getAllTopics();
     console.log('onInit: ',this.topics);
     try {
-    const rawEvents = (await this.eventService.getAllEvents()).filter(event => event.topic?.some(topic => topic.id === this.id));
-      console.log('Events aus Service kategorie:', rawEvents);
+      let rawEvents: AppEvent[] = []
+
+      if (!this.id){
+        rawEvents = (await this.eventService.getAllEvents())
+      } else {
+     rawEvents = (await this.eventService.getAllEvents()).filter(event => event.topic?.some(topic => topic.id === this.id));
+      }console.log('Events aus Service kategorie:', rawEvents);
 
       this.events = await Promise.all(
         rawEvents.map(async (event) => {

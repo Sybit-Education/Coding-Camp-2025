@@ -104,18 +104,13 @@ export class EventCardComponent implements OnInit, OnDestroy {
   }
 
   onCardClick(): void {
-    if (!this.event?.id) return;
+    if (!this.event) {
+      this.router.navigate(['/kategorie']);
+      return;
+    }
 
-    const cleanedId = this.event.id.id
-    
+    const cleanedId = this.event.id!.id
     this.router.navigate(['/event', cleanedId]);
-  if (this.isMoreCard) {
-    this.router.navigate(['/event/bh83eggbmhuyb33kbl39']);
-    return;
-  }
-
-  if (!this.event?.id) return;
-  this.router.navigate(['/event', cleanedId]);
 }
 
   ngOnDestroy(): void {
