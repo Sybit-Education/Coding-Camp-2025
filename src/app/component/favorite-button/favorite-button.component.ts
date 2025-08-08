@@ -41,23 +41,31 @@ export class FavoriteButtonComponent implements OnInit, OnDestroy {
   
   ngOnInit(): void {
     if (this.eventId) {
+      console.log('FavoriteButton initialized with eventId:', this.eventId);
       this.isFavorite = this.localStorageService.isEventSaved(this.eventId);
       
       // Subscribe to changes in saved events
       this.subscription = this.localStorageService.savedEvents$.subscribe(() => {
         this.isFavorite = this.localStorageService.isEventSaved(this.eventId);
       });
+    } else {
+      console.warn('FavoriteButton initialized without eventId');
     }
   }
   
   toggleFavorite(event: Event): void {
     event.stopPropagation(); // Verhindert, dass das Event-Klick-Event ausgelöst wird
     
+    console.log('Toggle favorite for eventId:', this.eventId);
+    
     if (this.isFavorite) {
       this.localStorageService.unsaveEvent(this.eventId);
     } else {
       this.localStorageService.saveEvent(this.eventId);
     }
+    
+    // Aktualisiere den Status sofort
+    this.isFavorite = !this.isFavorite;
   }
   
   ngOnDestroy(): void {

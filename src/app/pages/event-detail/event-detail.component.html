@@ -7,7 +7,7 @@
     />
     <div class="flex w-full justify-center items-center">
       <p class="px-2 text-2xl font-bold text-center pt-4 text-blue-900">{{ event?.name }}</p>
-      <app-favorite-button [eventId]="event?.id?.toString() || ''"></app-favorite-button>
+      <app-favorite-button [eventId]="event?.id ? (event.id.toString().replace('event:', '')) : ''"></app-favorite-button>
     </div>
      <div class="dash">
     <div class="mx-auto mt-4 w-[75%] border-t border-blue-900"></div>
