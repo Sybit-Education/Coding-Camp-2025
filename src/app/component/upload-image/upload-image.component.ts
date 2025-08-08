@@ -56,8 +56,6 @@ export class UploadImageComponent {
 
     this.image.emit(this.pic)
 
-    //this.mediaService.postMedia(media)
-
     this.dragedImage = true
   }
 
