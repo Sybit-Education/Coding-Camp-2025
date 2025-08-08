@@ -50,6 +50,14 @@ export class FavouritesComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       console.log('Explicitly loading favorite events from component');
       this.favoriteService.loadFavoriteEvents();
+      
+      // Sicherheits-Timeout: Setze loading auf false nach 2 Sekunden, falls es hängen bleibt
+      setTimeout(() => {
+        if (this.loading) {
+          console.log('Safety timeout: forcing loading to false');
+          this.loading = false;
+        }
+      }, 2000);
     }, 100);
   }
 

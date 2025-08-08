@@ -51,7 +51,10 @@ export class FavoriteService {
       if (savedEventIds.length === 0) {
         console.log('No saved events found');
         this.favoriteEventsSubject.next([]);
-        this.loadingSubject.next(false);
+        setTimeout(() => {
+          this.loadingSubject.next(false);
+          console.log('Loading set to false for empty favorites');
+        }, 0);
         return;
       }
 
