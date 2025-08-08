@@ -69,12 +69,17 @@ export class SurrealdbService extends Surreal {
   ): Promise<T> {
     console.log('📤 postUpdate(): Updating record', id, payload)
 
-    const result = await super.update<T>(
-      id,
-      payload,
-    )
-    console.log('update result:', result)
-    // SurrealDB gibt ein Array zurück, daher das erste Element nehmen
-    return Array.isArray(result) ? result[0] : result
+    try {
+      // Statt update verwenden wir merge, das besser für partielle Updates geeignet ist
+      await super.merge<T>(id, payload)
+      
+      // Nach dem Update den aktualisierten Datensatz explizit abrufen
+      const updatedRecord = await this.getByRecordId<T>(id)
+      console.log('Retrieved updated record:', updatedRecord)
+      return updatedRecord
+    } catch (error) {
+      console.error('Error in postUpdate:', error)
+      throw error
+    }
   }
 }
