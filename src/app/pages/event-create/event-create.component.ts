@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core'
-import { CommonModule } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -16,11 +15,15 @@ import { Organizer } from '../../models/organizer.interface'
 import { Topic } from '../../models/topic.interface'
 import { TypeDB } from '../../models/typeDB.interface'
 import { Decimal, RecordId } from 'surrealdb'
+import { UploadImageComponent } from '../../component/upload-image/upload-image.component'
+import { CommonModule } from '@angular/common'
+import { Media } from '../../models/media.model'
+import { MediaService } from '../../services/media.service'
 
 @Component({
   selector: 'app-event-create',
   standalone: true,
-  imports: [FormsModule, CommonModule, TranslateModule],
+  imports: [FormsModule, CommonModule, TranslateModule, UploadImageComponent],
   templateUrl: './event-create.component.html',
 })
 export class EventCreateComponent implements OnInit {
@@ -29,6 +32,7 @@ export class EventCreateComponent implements OnInit {
   private readonly locationService = inject(LocationService)
   private readonly organizerService = inject(OrganizerService)
   private readonly topicService = inject(TopicService)
+  private readonly mediaService = inject(MediaService)
 
   // Form-Felder
   eventname = ''
@@ -70,10 +74,11 @@ export class EventCreateComponent implements OnInit {
   organizers: Organizer[] = []
   eventTypes: TypeDB[] = []
   topics: Topic[] = []
+  image: Media | null = null
 
   //Draft?
   draft = false
-  media: RecordId<'media'>[] | undefined
+  media: Media[] = []
   timePeriode = false
 
   ngOnInit() {
@@ -103,6 +108,13 @@ export class EventCreateComponent implements OnInit {
     }
 
     console.log('selected Location:', this.selectedLocation)
+  }
+
+  handleImage(media: Media) {
+    if (media) {
+      this.media.push(media)
+    }
+    console.log('mediaIds form Handle: ', media)
   }
 
   setOrganizer(organizer: Organizer) {
@@ -139,13 +151,21 @@ export class EventCreateComponent implements OnInit {
 
   // Speichern
   async saveLocation() {
-
-    console.log('name: ', this.locationName, 'street: ', this.address, 'zip_code: ', this.plz, 'city: ', this.city)
+    console.log(
+      'name: ',
+      this.locationName,
+      'street: ',
+      this.address,
+      'zip_code: ',
+      this.plz,
+      'city: ',
+      this.city,
+    )
     const location: Location = {
-      name: this.locationName!,
-      street: this.address!,
-      zip_code: String(this.plz!),
-      city: this.city!,
+      name: this.locationName,
+      street: this.address,
+      zip_code: String(this.plz),
+      city: this.city,
     }
 
     try {
@@ -175,16 +195,14 @@ export class EventCreateComponent implements OnInit {
   }
 
   async saveEvent() {
-    if(!this.selectedLocation)
-    {
+    if (!this.selectedLocation) {
       await this.saveLocation()
     }
 
-    if(!this.selectedOrganizer)
-    {
+    if (!this.selectedOrganizer) {
       await this.saveOrganizer()
     }
-    
+
     if (
       !this.selectedLocation ||
       !this.selectedOrganizer ||
@@ -204,6 +222,9 @@ export class EventCreateComponent implements OnInit {
     // Preis in Decimal umwandeln
     const priceDec = this.price ? new Decimal(this.price) : undefined
 
+    const mediaIds: RecordId<'media'>[] = await this.getMediaIds() as unknown as RecordId<'media'>[]
+    console.log('found mediaIds: ', mediaIds)
+
     const payload: AppEvent = {
       name: this.eventname,
       date_start: start,
@@ -216,8 +237,8 @@ export class EventCreateComponent implements OnInit {
       event_type: this.selectedEventType.id,
       location: this.selectedLocation.id!,
       topic: this.selectedTopics.map((t) => t.id!),
-      media: this.media!,
-      age: this.age != null ? this.age : undefined,
+      media: mediaIds,
+      age: this.age ?? undefined,
       restriction: this.restriction || undefined,
     }
 
@@ -227,5 +248,22 @@ export class EventCreateComponent implements OnInit {
     } catch (err) {
       console.error('Fehler beim Erstellen des Events:', err)
     }
+  }
+
+  async getMediaIds(): Promise<RecordId<'media'>[]> {
+    return Promise.all(
+    this.media.map(async (med) => {
+      med.id = (
+        this.eventname.replace(/[^a-zA-Z0-9]/g, '_') +
+        '_' +
+        med.fileType.split('/')[1]
+      ) as unknown as RecordId<'media'>;
+
+      const result = await this.mediaService.postMedia(med);
+      console.log('result from creation of media: ', result);
+
+      return result.id!;
+    })
+  );
   }
 }
