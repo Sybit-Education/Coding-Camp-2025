@@ -71,7 +71,7 @@ export class SurrealdbService extends Surreal {
 
     try {
       // Statt update verwenden wir merge, das besser für partielle Updates geeignet ist
-      const updatedRecord = await super.merge<T>(id, payload)
+      const updatedRecord = await super.update<T>(id, payload)
 
       console.log('Retrieved updated record:', updatedRecord)
       return updatedRecord

@@ -261,7 +261,6 @@ export class EventCreateComponent implements OnInit {
     const priceDec = this.price ? new Decimal(this.price) : undefined
 
     const payload: AppEvent = {
-      id: this.eventId ?? undefined,
       name: this.eventname,
       date_start: start,
       date_end: end,
