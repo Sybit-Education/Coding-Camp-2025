@@ -1,61 +1,65 @@
 import { Routes } from '@angular/router'
-import { HomeComponent } from './pages/home/home.component'
-import { AboutComponent } from './pages/about/about.component'
-import { EventCreateComponent } from './pages/event-create/event-create.component'
-import { MoreComponent } from './pages/more/more.component'
-import { EventDetailPageComponent } from './pages/event-detail/event-detail.component'
-import { DevsComponent } from './pages/devs/devs.component'
-import { LoginPageComponent } from './pages/login/login.component'
-import { ImpressumComponent } from './pages/impressum/impressum.component'
-import { DatenschutzComponent } from './pages/datenschutz/datenschutz.component'
 import { LoginService } from './services/login.service'
-import { KategorieComponent } from './pages/kategorie/kategorie.component'
-import { FavouritesComponent } from './pages/favourites/favourites.component'
 
 export const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
+    loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent),
+    title: 'Startseite'
   },
   {
     path: 'favourites',
-    component: FavouritesComponent,
+    loadComponent: () => import('./pages/favourites/favourites.component').then(m => m.FavouritesComponent),
+    title: 'Favoriten'
   },
   {
     path: 'about',
-    component: AboutComponent,
+    loadComponent: () => import('./pages/about/about.component').then(m => m.AboutComponent),
+    title: 'Über uns'
   },
   {
     path: 'create-event',
-    component: EventCreateComponent,
-    canActivate: [LoginService]
+    loadComponent: () => import('./pages/event-create/event-create.component').then(m => m.EventCreateComponent),
+    canActivate: [LoginService],
+    title: 'Veranstaltung erstellen'
   },
   {
     path: 'more',
-    component: MoreComponent,
+    loadComponent: () => import('./pages/more/more.component').then(m => m.MoreComponent),
+    title: 'Mehr'
   },
   {
     path: 'team',
-    component: DevsComponent,
+    loadComponent: () => import('./pages/devs/devs.component').then(m => m.DevsComponent),
+    title: 'Team'
   },
   {
     path: 'impressum',
-    component: ImpressumComponent,
+    loadComponent: () => import('./pages/impressum/impressum.component').then(m => m.ImpressumComponent),
+    title: 'Impressum'
   },
   {
     path: 'datenschutz',
-    component: DatenschutzComponent,
+    loadComponent: () => import('./pages/datenschutz/datenschutz.component').then(m => m.DatenschutzComponent),
+    title: 'Datenschutz'
   },
   {
     path: 'event/:id',
-    component: EventDetailPageComponent,
+    loadComponent: () => import('./pages/event-detail/event-detail.component').then(m => m.EventDetailPageComponent),
+    title: 'Veranstaltungsdetails'
   },
   {
     path: 'login',
-    component: LoginPageComponent,
+    loadComponent: () => import('./pages/login/login.component').then(m => m.LoginPageComponent),
+    title: 'Login'
   },
   {
     path: 'kategorie',
-    component: KategorieComponent,
+    loadComponent: () => import('./pages/kategorie/kategorie.component').then(m => m.KategorieComponent),
+    title: 'Kategorie'
+  },
+  {
+    path: '**',
+    redirectTo: ''
   }
 ]
