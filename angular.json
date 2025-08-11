@@ -46,9 +46,7 @@
               "scripts": true,
               "styles": true,
               "fonts": true
-            },
-            "vendorChunk": true,
-            "commonChunk": true
+            }
           },
           "configurations": {
             "production": {
