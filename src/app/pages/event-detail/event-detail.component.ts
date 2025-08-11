@@ -13,12 +13,12 @@ import { RecordId, StringRecordId } from 'surrealdb'
 import { LoginService } from '../../services/login.service'
 import { TypeDB } from '../../models/typeDB.interface'
 import { FavoriteButtonComponent } from '../../component/favorite-button/favorite-button.component'
-import { TeilenComponent } from "../../component/teilen/teilen.component";
+import { ShareComponent } from "../../component/share/share.component";
 
 @Component({
   selector: 'app-event-detail-page',
   standalone: true,
-  imports: [MapComponent, CommonModule, DateTimeRangePipe, FavoriteButtonComponent, TeilenComponent],
+  imports: [MapComponent, CommonModule, DateTimeRangePipe, FavoriteButtonComponent, ShareComponent],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
 })

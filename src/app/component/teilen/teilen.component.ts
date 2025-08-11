@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-teilen',
+  selector: 'app-share',
   imports: [],
-  templateUrl: './teilen.component.html',
+  templateUrl: './share.component.html',
 })
-export class TeilenComponent {
+export class ShareComponent {
 
   @Input() eventId = ""
 
