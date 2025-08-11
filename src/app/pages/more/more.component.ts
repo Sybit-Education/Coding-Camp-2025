@@ -31,9 +31,9 @@ export class MoreComponent {
    * @param route Die Zielroute
    */
   navigateTo(route: string): void {
-    this.router.navigate([route]);
+    this.router.navigate([route])
     // Ankündigung für Screenreader
-    this.announceNavigation(route);
+    this.announceNavigation(route)
   }
 
   /**
@@ -41,10 +41,10 @@ export class MoreComponent {
    * @param route Die Zielroute
    */
   private announceNavigation(route: string): void {
-    const menuItem = this.menuItems.find(item => item.route === route);
+    const menuItem = this.menuItems.find((item) => item.route === route)
     if (menuItem) {
       // In einer vollständigen Implementierung würde hier LiveAnnouncer verwendet werden
-      console.log(`Navigiere zu: ${menuItem.title}`);
+      console.log(`Navigiere zu: ${menuItem.title}`)
     }
   }
   menuItems: MoreMenuItem[] = [

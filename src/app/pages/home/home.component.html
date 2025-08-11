@@ -9,7 +9,9 @@
   </a>
 
   <!-- Aktuelle Events -->
-  <div [attr.aria-labelledby]="'home.tags.aria-lable-event-heading' | translate">
+  <div
+    [attr.aria-labelledby]="'home.tags.aria-lable-event-heading' | translate"
+  >
     <h1 id="events-heading" class="mb-4 text-left text-xl font-bold">
       {{ 'home.current' | translate }}
     </h1>
@@ -38,7 +40,12 @@
   </div>
 
   <!-- Kategorien -->
-  <section [attr.aria-labelledby]="'home.tags.aria-lable-categories-heading' | translate">>
+  <section
+    [attr.aria-labelledby]="
+      'home.tags.aria-lable-categories-heading' | translate
+    "
+  >
+    >
     <h1 id="categories-heading" class="mb-4 text-left text-xl font-bold">
       {{ 'home.categories' | translate }}
     </h1>

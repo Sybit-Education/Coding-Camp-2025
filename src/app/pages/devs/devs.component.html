@@ -1,22 +1,27 @@
-<main class="container mx-auto px-4 py-4 max-w-5xl justify-center items-center relative">
+<main
+  class="relative container mx-auto max-w-5xl items-center justify-center px-4 py-4"
+>
+  <h1 class="my-8 flex text-2xl">{{ 'dev.headline' | translate }}</h1>
+  <img
+    src="/sybit-coding-camp-2025-team.jpg"
+    alt="{{ 'dev.altpicture' | translate }}"
+    class="rounded-2xl"
+  />
+  <p class="my-5">
+    {{ 'dev.text1' | translate }} &dash;
+    {{ 'dev.text2' | translate }}
+  </p>
+  <p class="my-5">
+    {{ 'dev.text3' | translate }}
+  </p>
 
-    <h1 class="my-8 flex text-2xl">{{ 'dev.headline' | translate }}</h1>
-    <img src="/sybit-coding-camp-2025-team.jpg" alt="{{ 'dev.altpicture' | translate }}" class="rounded-2xl" />
-    <p class="my-5">
-      {{ 'dev.text1' | translate }} &dash;
-      {{ 'dev.text2' | translate }}
-    </p>
-    <p class="my-5">
-      {{ 'dev.text3' | translate }}
-    </p>
+  <h1 class="my-5 flex text-2xl">{{ 'dev.patrticptants' | translate }}</h1>
+  <p>
+    {{ 'dev.patrticptantslist' | translate }}
+  </p>
 
-    <h1 class="my-5 flex text-2xl">{{ 'dev.patrticptants' | translate}}</h1>
-    <p>
-      {{ 'dev.patrticptantslist' | translate}}
-    </p>
-
-    <h1 class="my-5 flex text-2xl">{{ 'dev.coaches' | translate}}</h1>
-    <p>
-      {{ 'dev.coacheslist' | translate}}
-    </p>
+  <h1 class="my-5 flex text-2xl">{{ 'dev.coaches' | translate }}</h1>
+  <p>
+    {{ 'dev.coacheslist' | translate }}
+  </p>
 </main>

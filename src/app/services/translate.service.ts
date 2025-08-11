@@ -5,33 +5,35 @@ import { BehaviorSubject, Observable } from 'rxjs'
 @Injectable({
   providedIn: 'root',
 })
-export class I18nService{
-  private  readonly translateService = inject(TranslateService)
+export class I18nService {
+  private readonly translateService = inject(TranslateService)
   private readonly currentLangSubject = new BehaviorSubject<string>('de')
-  
+
   currentLang$ = this.currentLangSubject.asObservable()
 
   constructor() {
-    this.initializeTranslation();
+    this.initializeTranslation()
   }
-
 
   private initializeTranslation(): void {
     // Verfügbare Sprachen festlegen
-    this.translateService.addLangs(['de', 'en', 'fr']);
-    
+    this.translateService.addLangs(['de', 'en', 'fr'])
+
     // Fallback-Sprache festlegen (statt setDefaultLang)
-    this.translateService.setDefaultLang('de');
-    
+    this.translateService.setDefaultLang('de')
+
     // Browser-Sprache erkennen oder Standardsprache verwenden
-    const browserLang = this.translateService.getBrowserLang();
-    const initialLang = browserLang && ['de', 'en', 'fr'].includes(browserLang) ? browserLang : 'de';
-    
+    const browserLang = this.translateService.getBrowserLang()
+    const initialLang =
+      browserLang && ['de', 'en', 'fr'].includes(browserLang)
+        ? browserLang
+        : 'de'
+
     // Gespeicherte Sprache aus localStorage verwenden, falls vorhanden
-    const savedLang = localStorage.getItem('selectedLanguage');
-    
+    const savedLang = localStorage.getItem('selectedLanguage')
+
     // Sprache setzen
-    this.use(savedLang || initialLang);
+    this.use(savedLang || initialLang)
   }
 
   /**
@@ -41,27 +43,31 @@ export class I18nService{
     this.translateService.use(lang)
     this.currentLangSubject.next(lang)
     localStorage.setItem('selectedLanguage', lang)
-    
+
     // Aktualisiere das LOCALE_ID für Angular-interne Formatierungen
-    document.documentElement.lang = lang;
-    
+    document.documentElement.lang = lang
+
     // Aktualisiere das LOCALE_ID dynamisch
-    this.updateLocaleId(lang);
+    this.updateLocaleId(lang)
   }
-  
+
   /**
    * Aktualisiert das LOCALE_ID dynamisch, um Datums- und Zahlenformatierungen zu aktualisieren
    */
   private updateLocaleId(lang: string): void {
     // Bestimme das Locale basierend auf der Sprache
-    let locale = 'de-DE';
+    let locale = 'de-DE'
     switch (lang) {
-      case 'en': locale = 'en-GB'; break;
-      case 'fr': locale = 'fr-FR'; break;
+      case 'en':
+        locale = 'en-GB'
+        break
+      case 'fr':
+        locale = 'fr-FR'
+        break
     }
-    
+
     // Setze das Locale für die Anwendung
-    document.documentElement.setAttribute('lang', locale);
+    document.documentElement.setAttribute('lang', locale)
   }
 
   /**

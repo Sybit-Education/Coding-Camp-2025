@@ -49,7 +49,6 @@ export class EventDetailPageComponent implements OnInit {
   evntIdString: string | undefined
 
   ngOnInit(): void {
-    
     const eventId = this.route.snapshot.paramMap.get('id')
     if (eventId) {
       const recordID = new StringRecordId('event:' + eventId)

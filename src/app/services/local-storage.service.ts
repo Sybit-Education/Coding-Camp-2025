@@ -38,8 +38,13 @@ export class LocalStorageService {
   getSavedEventIds(): string[] {
     const savedEvents = localStorage.getItem(this.SAVED_EVENTS_KEY)
     const ids = savedEvents ? JSON.parse(savedEvents) : []
-    console.log('Retrieved saved event IDs from localStorage:', ids, '\nFound Events: ', savedEvents);
-    return ids;
+    console.log(
+      'Retrieved saved event IDs from localStorage:',
+      ids,
+      '\nFound Events: ',
+      savedEvents,
+    )
+    return ids
   }
 
   private setSavedEventIds(eventIds: string[]): void {
@@ -48,7 +53,9 @@ export class LocalStorageService {
 
   filterSavedEvents(events: Event[]): Event[] {
     const savedIds = this.getSavedEventIds()
-    return events.filter((event) => event.id && savedIds.includes(String(event.id)))
+    return events.filter(
+      (event) => event.id && savedIds.includes(String(event.id)),
+    )
   }
 
   getSavedEventsCount(): number {

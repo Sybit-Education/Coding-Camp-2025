@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core'
 
 // Services
 import { EventService } from '../../services/event.service'
@@ -13,7 +13,7 @@ import { Location } from '../../models/location.interface'
 import { Organizer } from '../../models/organizer.interface'
 import { Topic } from '../../models/topic.interface'
 import { TypeDB } from '../../models/typeDB.interface'
-import { Decimal, RecordId, StringRecordId} from 'surrealdb'
+import { Decimal, RecordId, StringRecordId } from 'surrealdb'
 import { CommonModule } from '@angular/common'
 import { Media } from '../../models/media.model'
 import { MediaService } from '../../services/media.service'
@@ -33,11 +33,9 @@ export class EventCreateComponent implements OnInit {
   private readonly locationService = inject(LocationService)
   private readonly organizerService = inject(OrganizerService)
   private readonly topicService = inject(TopicService)
-    private readonly mediaService = inject(MediaService)
+  private readonly mediaService = inject(MediaService)
 
-  constructor(
-    private readonly route: ActivatedRoute,
-  ) {}
+  constructor(private readonly route: ActivatedRoute) {}
 
   // Form-Felder
   eventId: RecordId<'event'> | undefined = undefined
@@ -95,7 +93,6 @@ export class EventCreateComponent implements OnInit {
     } else {
       this.initializeData()
     }
-    
   }
 
   private async loadEvent(eventId: RecordId<'event'> | StringRecordId) {
@@ -271,7 +268,8 @@ export class EventCreateComponent implements OnInit {
     // Preis in Decimal umwandeln
     const priceDec = this.price ? new Decimal(this.price) : undefined
 
-    const mediaIds: RecordId<'media'>[] = await this.getMediaIds() as unknown as RecordId<'media'>[]
+    const mediaIds: RecordId<'media'>[] =
+      (await this.getMediaIds()) as unknown as RecordId<'media'>[]
     console.log('found mediaIds: ', mediaIds)
 
     const payload: AppEvent = {
@@ -318,23 +316,21 @@ export class EventCreateComponent implements OnInit {
     }
   }
 
-    async getMediaIds(): Promise<RecordId<'media'>[]> {
+  async getMediaIds(): Promise<RecordId<'media'>[]> {
     return Promise.all(
-    this.media!.map(async (med) => {
-      med.id = (
-        this.eventname.replace(/[^a-zA-Z0-9]/g, '_') +
-        '_' +
-        med.fileType.split('/')[1]
-      ) as unknown as RecordId<'media'>;
+      this.media!.map(async (med) => {
+        med.id = (this.eventname.replace(/[^a-zA-Z0-9]/g, '_') +
+          '_' +
+          med.fileType.split('/')[1]) as unknown as RecordId<'media'>
 
-      const result = await this.mediaService.postMedia(med);
-      console.log('result from creation of media: ', result);
+        const result = await this.mediaService.postMedia(med)
+        console.log('result from creation of media: ', result)
 
-      return result.id!;
-    })
-  );
+        return result.id!
+      }),
+    )
   }
-    handleImage(media: Media) {
+  handleImage(media: Media) {
     if (media) {
       this.media.push(media)
     }
