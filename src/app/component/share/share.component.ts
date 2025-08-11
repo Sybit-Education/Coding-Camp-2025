@@ -10,7 +10,6 @@ import { Event } from '../../models/event.interface';
 })
 export class ShareComponent implements OnInit {
   @Input() event: Event | null = null;
-  @Input() eventId = "";
   isWebShareSupported = false;
   
   ngOnInit() {
@@ -19,12 +18,16 @@ export class ShareComponent implements OnInit {
   }
 
   sharePage() {
-    // Wenn keine Event-ID vorhanden ist, aber ein Event-Objekt, dann ID aus dem Objekt verwenden
-    const id = this.eventId || (this.event?.id?.id || '');
+    if (!this.event || !this.event.id) {
+      console.error('Kein Event oder Event-ID vorhanden');
+      return;
+    }
+    
+    const id = this.event.id.id || '';
     const url = 'https://1200-jahre-radolfzell.sybit.education/event/' + id;
     
     // Dynamischen Titel und Text basierend auf dem Event-Objekt erstellen
-    const title = this.event?.name || 'Veranstaltung in Radolfzell';
+    const title = this.event.name || 'Veranstaltung in Radolfzell';
     const text = `Schau dir diese Veranstaltung in Radolfzell an: ${title}`;
     
     // Wenn Web Share API unterstützt wird, nutze diese
