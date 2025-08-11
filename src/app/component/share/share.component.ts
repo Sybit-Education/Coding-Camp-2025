@@ -24,7 +24,8 @@ export class ShareComponent implements OnInit {
     }
     
     const id = this.event.id.id || '';
-    const url = 'https://1200-jahre-radolfzell.sybit.education/event/' + id;
+    const baseUrl = window.location.origin;
+    const url = `${baseUrl}/event/${id}`;
     
     // Dynamischen Titel und Text basierend auf dem Event-Objekt erstellen
     const title = this.event.name || 'Veranstaltung in Radolfzell';
