@@ -57,6 +57,9 @@
     "current": "Aktuelles",
     "categories": "Kategorien"
   },
+  "i18y": {
+    "to-main-content": "Zum Hauptinhalt springen"
+  },
   "footer": {
     "datenschutz": "Datenschutz",
     "impressum": "Impressum"
@@ -103,5 +106,17 @@
     "coacheslist": "Felix Klein, Max Eichelmann, Yannik Deschler, Yannik Schwarz, Max Buhl, Elias Frank, Noel Wölfle und Stephan Strittmatter",
     "headline": "👨‍💻 Unsere Entwickler",
     "altpicture": "Gruppenfoto aller Teilnehmer des Coding Camps"
+  },
+  "FAVORITES": {
+    "TITLE": "Meine Favoriten",
+    "LOADING": "Lade Favoriten...",
+    "EMPTY": {
+      "TITLE": "Du hast noch keine Favoriten gespeichert.",
+      "DESCRIPTION": "Füge Events zu deinen Favoriten hinzu, um sie hier zu sehen.",
+      "BUTTON": "Zur Übersicht"
+    },
+    "REMOVE": "Aus Favoriten entfernen",
+    "ADD": "Zu Favoriten hinzufügen",
+    "LOCAL_STORAGE_NOTICE": "Hinweis: Favoriten werden nur lokal auf diesem Gerät gespeichert."
   }
 }

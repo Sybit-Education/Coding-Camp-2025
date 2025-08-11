@@ -1,135 +1,186 @@
-<div class="event-container min-h-[80vh] w-[100vw] gap-5 px-6 py-6 grid">
-  <div class="info-card rounded-2xl bg-gray-100 shadow-2xl">
-    <img
-      class="sm:w-full rounded-t-2xl object-cover"
-      alt=""
-      [src]="mediaUrl"
-    />
-    <div class="flex w-full justify-center items-center">
-      <p class="px-2 text-2xl font-bold text-center pt-4 text-blue-900">{{ event?.name }}</p>
-    </div>
-     <div class="dash">
-    <div class="mx-auto mt-4 w-[75%] border-t border-blue-900"></div>
-    </div>
-    <div class="flex justify-between">
-      <div class="grid grid-cols-1 gap-4 rounded-2xl p-4 text-right text-xl w-full">
-        <div class="grid grid-cols-[1fr_3fr]">
-          <div
-            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-amber-300"
-          >
-            <p>📅</p>
+<main class="event-container mt-5 min-h-[80vh] w-[100vw]" lang="de">
+  <!-- Skip-Link für Screenreader -->
+  <a href="#event-content" class="sr-only focus:not-sr-only focus:absolute focus:p-2 focus:bg-white focus:z-50">
+    Zum Veranstaltungsinhalt springen
+  </a>
+  <article class="flex flex-col">
+    <section id="event-content" class="info-card rounded-2xl bg-gray-100 m-2 shadow-2xl">
+      <img
+        *ngIf="mediaUrl"
+        class="sm:w-full rounded-t-2xl object-cover"
+        [alt]="event?.name ? 'Bild der Veranstaltung: ' + event?.name : 'Veranstaltungsbild'"
+        [src]="mediaUrl"
+      />
+      <div *ngIf="!mediaUrl" class="sm:w-full rounded-t-2xl bg-gray-200 h-48 flex items-center justify-center">
+        <span class="text-gray-500">Kein Bild verfügbar</span>
+      </div>
+      <div class="flex w-full justify-left items-center">
+        <app-favorite-button *ngIf="event?.id" class="px-2 pt-4" [eventId]="evntIdString"></app-favorite-button>
+        <h1 class="flex w-full  text-2xl font-bold  px-2 pt-4 text-blue-900">{{ event?.name }}</h1>
+      </div>
+
+
+      <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
+
+      <div class="flex justify-between">
+        <div class="grid grid-cols-1 gap-4 rounded-2xl p-4 text-right text-xl w-full">
+          <div class="grid grid-cols-[1fr_3fr]">
+            <div
+              class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-amber-300"
+              aria-hidden="true"
+            >
+              <span role="img" aria-hidden="true">📅</span>
+            </div>
+            <div>
+              <h2 class="text-left text-base font-bold">Wann?</h2>
+              <p class="text-left text-sm">{{ event?.date_start! | dateTimeRange : event?.date_end }}</p>
+            </div>
           </div>
-          <div>
-            <p class="text-left text-base font-bold">Wann?</p>
-            <p class="text-left text-sm">{{ event?.date_start! | dateTimeRange : event?.date_end }}</p>
+          <div class="grid grid-cols-[1fr_3fr]">
+            <div
+              class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-red-300"
+              aria-hidden="true"
+            >
+              <span role="img" aria-hidden="true">📍</span>
+            </div>
+            <div>
+              <h2 class="text-left text-base font-bold">Wo?</h2>
+              <p class="text-left text-sm">{{ location?.name }}</p>
+            </div>
           </div>
-        </div>
-        <div class="grid grid-cols-[1fr_3fr]">
-          <div
-            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-red-300"
-          >
-            <p>📍</p>
+          <div class="grid grid-cols-[1fr_3fr]">
+            <div
+              class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-green-300"
+              aria-hidden="true"
+            >
+              <span role="img" aria-hidden="true">💶</span>
+            </div>
+            <div>
+              <h2 class="text-left text-base font-bold">Preis</h2>
+              <p class="text-left text-sm">
+                @if (event?.price !== null && +event?.price! > 0) {
+                  {{ event?.price }}
+                } @else {
+                  kostenlos
+                }
+              </p>
+            </div>
           </div>
-          <div>
-            <p class="text-left text-base font-bold">Wo?</p>
-            <p class="text-left text-sm">{{ location?.name }}</p>
-          </div>
-        </div>
-        <div class="grid grid-cols-[1fr_3fr]">
-          <div
-            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-green-300"
-          >
-            <p>💶</p>
-          </div>
-          <div>
-            <p class="text-left text-base font-bold">Preis</p>
-            <p class="text-left text-sm">@if (event?.price !== null && +event?.price! > 0) { {{ event?.price }} } @else { {{ "kostenlos" }} }</p>
-          </div>
-        </div>
-        <div class="grid grid-cols-[1fr_3fr]">
-          <div
-            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-purple-400"
-          >
-            <p>👥</p>
-          </div>
-          <div>
-            <p class="text-left text-base font-bold">Veranstalter</p>
-            <p class="text-left text-sm">{{ organizer?.name }}</p>
+          <div class="grid grid-cols-[1fr_3fr]">
+            <div
+              class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-purple-400"
+              aria-hidden="true"
+            >
+              <span role="img" aria-hidden="true">👥</span>
+            </div>
+            <div>
+              <h2 class="text-left text-base font-bold">Veranstalter</h2>
+              <p class="text-left text-sm">{{ organizer?.name }}</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-
-  <div class="desc rounded-2xl p-4 mt-10">
-    <div class="flex w-full h-[30px] justify-center items-center">
-      <p class="text-2xl font-bold text-center pt-4 text-blue-900">Beschreibung</p>
-    </div>
-    <div class="mx-auto my-4 w-[75%] border-t border-blue-900"></div>
-    <p>
-      {{ event?.description }}
-    </p>
-  </div>
-
-  <div class="map p-4">
-    <div class="flex w-full h-[30px] justify-center items-center">
-      <p class="text-2xl font-bold text-center pt-4 text-blue-900">Anreise</p>
-    </div>
-    <div class="mx-auto my-4 w-[75%] border-t nborder-blue-900"></div>
+    </section>
+    <section class="desc rounded-2xl p-2 mt-10" aria-labelledby="description-heading">
+      <h2 id="description-heading" class="text-2xl font-bold pt-4 text-blue-900">Beschreibung</h2>
+      <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
+      <p>
+        {{ event?.description || 'Keine Beschreibung verfügbar.' }}
+      </p>
+    </section>
 
     @if (location?.geo_point) {
-    <div class="map p-4">
-      <app-map
-        [coordinates]="[location!.geo_point!.point[1], location!.geo_point!.point[0]]"
-      ></app-map>
-    </div>
-    }
-  </div>
-  <div class="contact rounded-2xl bg-gray-100 shadow-2xl mb-18">
-    <div class="flex w-full h-[30px] justify-center items-center">
-      <p class="text-2xl font-bold text-center pt-4 text-blue-900">Kontaktdaten</p>
-    </div>
-    <div class="mx-auto mt-4 w-[75%] border-t border-blue-900"></div>
-    <div class="flex justify-between">
-      <div class="grid grid-cols-1 gap-4 rounded-2xl p-4 text-right text-xl w-full">
-        <div class="grid grid-cols-[1fr_3fr]">
-          <div
-            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-purple-400"
-          >
-            <p>👤</p>
-          </div>
-          <div>
-            <p class="text-left text-base font-bold">Name</p>
-            <p class="text-left text-sm">{{ organizer?.name }}</p>
-          </div>
+    <section class="map p-2" aria-labelledby="directions-heading">
+      <h2 id="directions-heading" class="text-2xl font-bold pt-4 text-blue-900">Anreise</h2>
+      <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
+
+      <div class="map p-4">
+        <app-map
+          [coordinates]="[location!.geo_point!.point[1], location!.geo_point!.point[0]]"
+        ></app-map>
+        <div class="sr-only">
+          <p>Veranstaltungsort: {{ location?.name }}</p>
+          <p>Adresse: {{ location?.street }}, {{ location?.zip_code }} {{ location?.city }}</p>
         </div>
-        @if (organizer?.email) {
-        <div class="grid grid-cols-[1fr_3fr]">
-          <div
-            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-red-300"
-          >
-            <p>📧</p>
-          </div>
-          <div>
-            <p class="text-left text-base font-bold">Email</p>
-            <p class="text-left text-sm">{{ organizer?.email }}</p>
-          </div>
-        </div>
-        }
-        @if (organizer?.phonenumber) {
-        <div class="grid grid-cols-[1fr_3fr]">
-          <div
-            class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-amber-300"
-          >
-            <p>☎️</p>
-          </div>
-          <div>
-            <p class="text-left text-base font-bold">Email</p>
-            <p class="text-left text-sm">{{ organizer?.phonenumber }}</p>
-          </div>
-        </div>
-        }
       </div>
-    </div>
+    </section>
+    }
+    <section class="contact p-2 rounded-2xl bg-gray-100 shadow-2xl mb-18" aria-labelledby="contact-heading">
+      <h2 id="contact-heading" class="text-2xl font-bold  pt-4 text-blue-900">Kontaktdaten</h2>
+      <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
+      <div class="flex justify-between">
+        <div class="grid grid-cols-1 gap-4 rounded-2xl p-4 text-right text-xl w-full">
+          <div class="grid grid-cols-[1fr_3fr]">
+            <div
+              class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-purple-400"
+              aria-hidden="true"
+            >
+              <span role="img" aria-hidden="true">👤</span>
+            </div>
+            <div>
+              <h3 class="text-left text-base font-bold">Name</h3>
+              <p class="text-left text-sm">{{ organizer?.name }}</p>
+            </div>
+          </div>
+          @if (organizer?.email) {
+          <div class="grid grid-cols-[1fr_3fr]">
+            <div
+              class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-red-300"
+              aria-hidden="true"
+            >
+              <span role="img" aria-hidden="true">📧</span>
+            </div>
+            <div>
+              <h3 class="text-left text-base font-bold">Email</h3>
+              <p class="text-left text-sm">
+                <a href="mailto:{{ organizer?.email }}" class="text-blue-700 underline hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  {{ organizer?.email }}
+                </a>
+              </p>
+            </div>
+          </div>
+          }
+          @if (organizer?.phonenumber) {
+          <div class="grid grid-cols-[1fr_3fr]">
+            <div
+              class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-amber-300"
+              aria-hidden="true"
+            >
+              <span role="img" aria-hidden="true">☎️</span>
+            </div>
+            <div>
+              <h3 class="text-left text-base font-bold">Telefon</h3>
+              <p class="text-left text-sm">
+                <a href="tel:{{ organizer?.phonenumber }}" class="text-blue-700 underline hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  {{ organizer?.phonenumber }}
+                </a>
+              </p>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </section>
+  </article>
+
+  <div class="mt-8 mb-20 flex justify-center">
+    <button
+      (click)="goBack()"
+      class="px-6 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+      aria-label="Zurück zur Übersicht"
+    >
+      Zurück
+    </button>
   </div>
-</div>
+
+  <div class="edit mb-20 flex items-center justify-center">
+    <button
+      class="hover*:bg-blue-600 rounded-full bg-blue-500 px-4 py-2 font-bold text-white"
+      (click)="redirect()"
+      *ngIf="isLoggedIn"
+    >
+      Bearbeiten
+    </button>
+  </div>
+</main>
+

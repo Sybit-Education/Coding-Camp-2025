@@ -22,7 +22,6 @@ export class MediaService {
         (item: Record<string, unknown>) =>
           ({
             ...item,
-            id: item['id']?.toString() || '',
           }) as Event,
       )
     } catch (error) {

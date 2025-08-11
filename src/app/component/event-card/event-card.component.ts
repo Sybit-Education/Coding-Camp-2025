@@ -1,11 +1,11 @@
-import { Component, Input, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, inject } from '@angular/core'
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router } from '@angular/router'
 import { Subscription } from 'rxjs';
 
 import { Event, EventType } from '../../models/event.interface';
 import { Location } from '../../models/location.interface';
-import { DateTimeRangePipe } from '../../services/date.pipe';
+import { DateTimeRangePipe } from '../../services/date.pipe'
 import { SurrealdbService } from '../../services/surrealdb.service';
 import { LocationService } from '../../services/location.service';
 import { LocalStorageService } from '../../services/local-storage.service';
@@ -25,6 +25,8 @@ export class EventCardComponent implements OnInit, OnDestroy {
   eventType: EventType | null = null;
   isSaved = false;
   mediaUrl: string | null = null;
+
+  @Input() isMoreCard = false;
 
   private subscription?: Subscription;
 
@@ -102,13 +104,14 @@ export class EventCardComponent implements OnInit, OnDestroy {
   }
 
   onCardClick(): void {
-    if (!this.event?.id) return;
+    if (!this.event) {
+      this.router.navigate(['/kategorie']);
+      return;
+    }
 
-    const eventId = this.event.id as unknown as string;
-    const cleanedId = eventId.replace(/^event:/, '');
-    
+    const cleanedId = this.event.id!.id
     this.router.navigate(['/event', cleanedId]);
-  }
+}
 
   ngOnDestroy(): void {
     this.subscription?.unsubscribe();

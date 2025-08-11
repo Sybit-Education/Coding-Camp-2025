@@ -286,10 +286,11 @@
             >
               <input
                 id="checkbox{{ topic.id }}"
+                name="topicCheckbox{{ topic.id }}"
                 type="checkbox"
                 [value]="topic.id"
+                [checked]="selectedTopics.includes(topic)"
                 (change)="toggleTopicSelection($event, topic)"
-                [checked]="selectedTopics!.includes(topic)"
                 class="h-4 w-4 cursor-pointer rounded-sm border-gray-300 bg-gray-100 text-[var(--colors-light-blue)]"
               />
               <label
@@ -306,15 +307,15 @@
       <!-- Event-Typ -->
       <div>
         <select
-          id="kp"
-          name="kp"
-          [(ngModel)]="eventType"
+          id="eventType"
+          name="eventType"
+          [(ngModel)]="selectedEventType"
           (ngModelChange)="setEventType($event)"
           class="p-[0.75rem 1rem] border-Gray-600 w-full cursor-pointer rounded-[6px] border-2"
         >
           <option [ngValue]="null">{{ 'create-event.topics' | translate }}</option>
           <option *ngFor="let eventType of eventTypes" [ngValue]="eventType">
-            {{ eventType }}
+            {{ eventType.name }}
           </option>
         </select>
       </div>

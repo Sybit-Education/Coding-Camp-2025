@@ -15,7 +15,7 @@ export enum EventType {
 }
 
 export interface Event extends Record<string, unknown> {
-  id?: string
+  id?: RecordId<'event'>
   name: string
   date_end?: Date
   date_start: Date
