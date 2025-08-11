@@ -6,7 +6,7 @@
 
   <h1 id="main-content" class="mb-6 text-2xl font-bold text-[#3b4ea3]">{{ 'bottom-nav.more' | translate }}</h1>
 
-  <nav class="grid gap-4" aria-label="Weitere Optionen" role="navigation">
+  <nav class="grid gap-4" [attr.aria-label]="'MORE.ARIA-LABLE' | translate" role="navigation">
     <a
       *ngFor="let item of menuItems; let i = index"
       [routerLink]="[item.route]"
@@ -27,8 +27,8 @@
           aria-hidden="true"
         >
           <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            [attr.stroke-linecap]="'round'"
+            [attr.stroke-linejoin]="'round'"
             [attr.d]="item.icon"
           />
         </svg>
@@ -47,9 +47,9 @@
           class="size-5"
         >
           <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="m8.25 4.5 7.5 7.5-7.5 7.5"
+            [attr.stroke-linecap]="'round'"
+            [attr.stroke-linejoin]="'round'"
+            [attr.d]="'m8.25 4.5 7.5 7.5-7.5 7.5'"
           />
         </svg>
       </div>

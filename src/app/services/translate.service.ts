@@ -1,13 +1,13 @@
-import { Injectable, inject, OnInit } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 import { BehaviorSubject, Observable } from 'rxjs'
 
 @Injectable({
   providedIn: 'root',
 })
-export class I18nService implements OnInit {
-  private translateService = inject(TranslateService)
-  private currentLangSubject = new BehaviorSubject<string>('de')
+export class I18nService{
+  private  readonly translateService = inject(TranslateService)
+  private readonly currentLangSubject = new BehaviorSubject<string>('de')
   
   currentLang$ = this.currentLangSubject.asObservable()
 
@@ -15,9 +15,6 @@ export class I18nService implements OnInit {
     this.initializeTranslation();
   }
 
-  ngOnInit(): void {
-    // Wird durch den Konstruktor bereits aufgerufen
-  }
 
   private initializeTranslation(): void {
     // Verfügbare Sprachen festlegen

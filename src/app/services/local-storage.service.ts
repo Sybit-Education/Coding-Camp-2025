@@ -38,7 +38,7 @@ export class LocalStorageService {
   getSavedEventIds(): string[] {
     const savedEvents = localStorage.getItem(this.SAVED_EVENTS_KEY)
     const ids = savedEvents ? JSON.parse(savedEvents) : []
-    console.log('Retrieved saved event IDs from localStorage:', ids);
+    console.log('Retrieved saved event IDs from localStorage:', ids, '\nFound Events: ', savedEvents);
     return ids;
   }
 

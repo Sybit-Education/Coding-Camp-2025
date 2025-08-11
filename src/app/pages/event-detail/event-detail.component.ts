@@ -12,12 +12,19 @@ import { DateTimeRangePipe } from '../../services/date.pipe'
 import { RecordId, StringRecordId } from 'surrealdb'
 import { LoginService } from '../../services/login.service'
 import { TypeDB } from '../../models/typeDB.interface'
+import { TranslateModule } from '@ngx-translate/core'
 import { FavoriteButtonComponent } from '../../component/favorite-button/favorite-button.component'
 
 @Component({
   selector: 'app-event-detail-page',
   standalone: true,
-  imports: [MapComponent, CommonModule, DateTimeRangePipe, FavoriteButtonComponent],
+  imports: [
+    MapComponent,
+    CommonModule,
+    DateTimeRangePipe,
+    FavoriteButtonComponent,
+    TranslateModule,
+  ],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
 })
@@ -39,11 +46,10 @@ export class EventDetailPageComponent implements OnInit {
   private readonly loginservice = inject(LoginService)
 
   protected isLoggedIn = false
-evntIdString: string|undefined
+  evntIdString: string | undefined
 
   ngOnInit(): void {
-
-    this.evntIdString = String(this.event?.id?.id)
+    
     const eventId = this.route.snapshot.paramMap.get('id')
     if (eventId) {
       const recordID = new StringRecordId('event:' + eventId)
@@ -61,7 +67,7 @@ evntIdString: string|undefined
    */
   private announceError(message: string): void {
     // In einer vollständigen Implementierung würde hier LiveAnnouncer verwendet werden
-    console.error(`Fehler: ${message}`);
+    console.error(`Fehler: ${message}`)
   }
 
   async loadType(typeId: RecordId<'event_type'> | undefined) {
@@ -117,6 +123,7 @@ evntIdString: string|undefined
 
       if (foundEvent) {
         this.event = foundEvent
+        this.evntIdString = String(this.event?.id!.id)
 
         console.log('Geladenes Event:', this.event)
         this.mediaUrl =
@@ -129,7 +136,7 @@ evntIdString: string|undefined
         await Promise.all([
           this.loadLocation(locationId),
           this.loadOrganizer(organizerId),
-          this.loadType(typeId)
+          this.loadType(typeId),
         ])
 
         document.title = `${this.event.name} - 1200 Jahre Radolfzell`
@@ -154,6 +161,5 @@ evntIdString: string|undefined
         id: this.event!.id,
       },
     })
-
   }
 }

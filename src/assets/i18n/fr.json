@@ -51,11 +51,17 @@
     "PRIVACY": {
       "TITLE": "Politique de confidentialité",
       "DESCRIPTION": "Informations sur la protection des données et le traitement des données."
-    }
+    },
+    "ARIA-LABLE": "Autres options"
   },
   "home": {
     "current": "Événements actuels",
-    "categories": "Catégories"
+    "categories": "Catégories",
+    "main-content": "Aller au contenu principal",
+    "tags": {
+      "aria-lable-event-heading": "events-heading",
+      "aria-lable-catagories-heading": "categories-heading"
+    }
   },
   "i18y": {
     "to-main-content": "Accéder au contenu principal"
@@ -118,5 +124,40 @@
     "REMOVE": "Retirer des favoris",
     "ADD": "Ajouter aux favoris",
     "LOCAL_STORAGE_NOTICE": "Remarque: Les favoris sont uniquement stockés localement sur cet appareil."
+  },
+  "event-card": {
+    "show-more": "Afficher plus d'événements"
+  },
+  "event-detail": {
+    "skip-to-content": "Aller au contenu de l'événement",
+    "no-image": "Aucune image disponible",
+    "when": "Quand ?",
+    "where": "Où ?",
+    "costs": "Prix",
+    "free": "gratuit",
+    "organizer": "Organisateur",
+    "description": "Description",
+    "arrival": "Arrivée",
+    "adress": "Adresse",
+    "eventlocation": "Lieu de l'événement",
+    "contact": "Coordonnées",
+    "name": "Nom",
+    "email": "E-mail",
+    "phone": "Téléphone",
+    "back": "Retour",
+    "edit": "Modifier",
+    "tags": {
+      "description-heading": "description-heading",
+      "directions-heading": "directions-heading",
+      "contact-heading": "contact-heading"
+    }
+  },
+  "login": {
+    "username": "Nom d'utilisateur / E-mail",
+    "password": "Mot de passe",
+    "login": "Connexion"
+  },
+  "upload-image": {
+    "image-here": "Glisser l’image ici"
   }
 }

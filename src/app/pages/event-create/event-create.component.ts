@@ -87,16 +87,20 @@ export class EventCreateComponent implements OnInit {
   media: Media[] = []
   timePeriode = false
 
-  async ngOnInit() {
-    await this.initializeData()
+  ngOnInit() {
     const eventId = this.route.snapshot.queryParams['id']
     if (eventId) {
       const recordID = new StringRecordId(eventId)
-      await this.loadEvent(recordID)
+      this.loadEvent(recordID)
+    } else {
+      this.initializeData()
     }
+    
   }
 
   private async loadEvent(eventId: RecordId<'event'> | StringRecordId) {
+    await this.initializeData()
+
     try {
       const event = await this.eventService.getEventByID(eventId)
       if (!event) return

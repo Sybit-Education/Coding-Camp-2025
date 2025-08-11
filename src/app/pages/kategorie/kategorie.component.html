@@ -4,7 +4,7 @@
 <div class="w-full pb-4">
     <div class="flex flex-col gap-2 px-4 event-row">
         <app-event-card *ngFor="let event of events; let i = index"
-            [class]="getCardClass(i)"
+            class="w-[calc(100vw-6rem)] h-[280px]"
             [title]="event.name"
             [event]="event">
         </app-event-card>

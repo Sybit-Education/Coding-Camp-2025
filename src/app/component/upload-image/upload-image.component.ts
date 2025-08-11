@@ -2,12 +2,12 @@ import { CommonModule } from '@angular/common'
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core'
 import { Media } from '../../models/media.model'
 import { MediaService } from '../../services/media.service'
+import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-upload-image',
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './upload-image.component.html',
-  styleUrl: './upload-image.component.scss',
 })
 export class UploadImageComponent {
   @Input() eventName = ''

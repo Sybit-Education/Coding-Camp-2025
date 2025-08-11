@@ -29,9 +29,9 @@ export class KategorieComponent  implements OnInit {
   id: RecordIdValue | null = null;
   name: string | null = null;
   
-  constructor(private route: ActivatedRoute) {}
+  constructor(private readonly route: ActivatedRoute) {}
 
-  async ngOnInit() {
+  ngOnInit() {
 
     console.log('onInit: KategorieComponent');
     
@@ -43,7 +43,7 @@ export class KategorieComponent  implements OnInit {
 
       console.log('onInit: KategorieComponent id:', this.id, 'name:', this.name);
   })
-  await this.initilizeData();
+   this.initilizeData();
   }
   private readonly eventService: EventService = inject(EventService)
   private readonly locationService: LocationService = inject(LocationService)
@@ -52,7 +52,7 @@ export class KategorieComponent  implements OnInit {
   
 
   async initilizeData() {
-    console.log('onInit: HomeComponent');
+    console.log('onInit: KategorieComponent');
 
     this.topics = await this.topicService.getAllTopics();
     console.log('onInit: ',this.topics);
@@ -81,9 +81,5 @@ export class KategorieComponent  implements OnInit {
     }
 
     console.log('Events nach Promise.all:', this.events);
-  }
-
-  getCardClass(index: number): string {
-    return 'w-[calc(100vw-6rem)] h-[280px]';
   }
 }
