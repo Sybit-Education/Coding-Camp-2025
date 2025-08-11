@@ -139,7 +139,7 @@ export class EventCreateComponent implements OnInit {
       const eventTypeId = String(event.event_type?.id)
       this.selectedEventType =
         this.eventTypes.find((e) => String(e.id?.id) === eventTypeId) || null
-      this.setEventType(this.selectedEventType)
+      this.setSelectedEventType(this.selectedEventType)
 
       const topicIds = event.topic || []
       for (const topicId of topicIds) {
@@ -185,7 +185,7 @@ export class EventCreateComponent implements OnInit {
     }
   }
 
-  setEventType(eventType: TypeDB | null) {
+  setSelectedEventType(eventType: TypeDB | null) {
     this.selectedEventType = eventType
   }
 
@@ -201,10 +201,10 @@ export class EventCreateComponent implements OnInit {
   // Speichern
   async saveLocation() {
     const location: Location = {
-      name: this.locationName!,
-      street: this.address!,
-      zip_code: String(this.plz!),
-      city: this.city!,
+      name: this.locationName,
+      street: this.address,
+      zip_code: String(this.plz),
+      city: this.city,
     }
 
     try {
@@ -304,7 +304,7 @@ export class EventCreateComponent implements OnInit {
 
   async getMediaIds(): Promise<RecordId<'media'>[]> {
     return Promise.all(
-      this.media!.map(async (med) => {
+      this.media.map(async (med) => {
         med.id = (this.eventname.replace(/[^a-zA-Z0-9]/g, '_') +
           '_' +
           med.fileType.split('/')[1]) as unknown as RecordId<'media'>

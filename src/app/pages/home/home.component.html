@@ -42,7 +42,7 @@
   <!-- Kategorien -->
   <section
     [attr.aria-labelledby]="
-      'home.tags.aria-lable-categories-heading' | translate
+      'home.tags.aria-lable-catagories-heading' | translate
     "
   >
     >
@@ -50,7 +50,7 @@
       {{ 'home.categories' | translate }}
     </h1>
 
-    <div class="text-gray-750 mr-5 grid flex-shrink-0 grid-cols-3">
+    <div class="text-gray-750 mr-5 grid grid-cols-3">
       <app-kategorie-card
         *ngFor="let kategorie of topics"
         [color]="kategorie.color"
