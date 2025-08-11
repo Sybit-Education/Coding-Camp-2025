@@ -40,7 +40,6 @@ export class SurrealdbService extends Surreal {
   async getById<T extends Record<string, unknown>>(
     recordId: string,
   ): Promise<T> {
-    console.log('📥 getById(): Fetching record with ID', recordId)
     const result = await super.select<T>(new StringRecordId(recordId))
     return result as T
   }
@@ -69,12 +68,10 @@ export class SurrealdbService extends Surreal {
     id: RecordId<string> | StringRecordId,
     payload?: T,
   ): Promise<T> {
-    console.log('📤 postUpdate(): Updating record', id, payload)
 
     try {
       const updatedRecord = await super.update<T>(id, payload)
 
-      console.log('Retrieved updated record:', updatedRecord)
       return updatedRecord
     } catch (error) {
       console.error('Error in postUpdate:', error)

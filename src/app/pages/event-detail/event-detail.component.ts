@@ -124,7 +124,6 @@ export class EventDetailPageComponent implements OnInit {
         this.event = foundEvent
         this.evntIdString = String(this.event?.id!.id)
 
-        console.log('Geladenes Event:', this.event)
         this.mediaUrl =
           this.mediaBaseUrl +
           String(foundEvent.media[0].id).replace(/_(?=[^_]*$)/, '.')
@@ -154,7 +153,6 @@ export class EventDetailPageComponent implements OnInit {
   }
 
   redirect() {
-    console.log('Redirect triggered with ID:', this.event?.id)
     this.router.navigate(['/create-event'], {
       queryParams: {
         id: this.event!.id,

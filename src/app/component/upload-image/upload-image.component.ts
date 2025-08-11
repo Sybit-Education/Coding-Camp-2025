@@ -43,8 +43,6 @@ export class UploadImageComponent {
   private async saveImage(file: File) {
     const base64 = (await this.fileToBase64(file)).split(',')[1]
 
-    console.log('fileName: ', base64.split(';')[0].split('/')[1])
-
     const media: Media = {
       fileName: file.name,
       fileType: file.type,
@@ -52,7 +50,6 @@ export class UploadImageComponent {
     }
 
     this.pic = media
-    console.log('media from child: ', media)
 
     this.image.emit(this.pic)
 

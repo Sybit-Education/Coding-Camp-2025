@@ -44,7 +44,6 @@ export class HomeComponent implements OnInit {
   }
 
   async initializeData() {
-    console.log('onInit: HomeComponent')
 
     try {
       const [events, topics] = await Promise.all([
