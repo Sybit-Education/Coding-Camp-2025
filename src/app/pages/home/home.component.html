@@ -1,35 +1,48 @@
-<div class="container mx-auto px-4 py-4 max-w-5xl justify-center items-center relative">
+<main class="container mx-auto px-4 py-4 max-w-5xl justify-center items-center relative">
+  <!-- Skip-Link für Screenreader -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:p-2 focus:bg-white focus:z-50">
+    Zum Hauptinhalt springen
+  </a>
 
-<div class="p-4">
-    <h1 class="text-xl font-bold mb-4 text-left">{{ 'home.current' | translate }}</h1>
+  <!-- Aktuelle Events -->
+  <section aria-labelledby="events-heading">
+    <h1 id="events-heading" class="text-xl font-bold mb-4 text-left">
+      {{ 'home.current' | translate }}
+    </h1>
 
     <!-- Horizontaler Scroll-Container für Events -->
-    <div class="w-full overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 -mx-4 scrollbar-hide card-snap">
-      <div class="flex gap-2 px-4 min-w-max event-row">
+    <div
+      class="w-full overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 -mx-4 scrollbar-hide card-snap"
+      role="region"
+      aria-label="Veranstaltungen"
+      tabindex="0"
+    >
+      <div class="flex gap-2 px-4 min-w-max event-row m-2">
         <app-event-card
-          *ngFor="let event of events; let i = index"
-          class="flex-shrink-0 snap-center"
-          [class]="getCardClass(i)"
-          [title]="event.name"
-          [eventId]="event.id"
-          [date_start]="event.date_start"
-          [date_end]="event.date_end"
-          [locationName]="event.locationName"
+          *ngFor="let event of displayEvents; let i = index"
+          class="snap-center w-[calc(100vw-6rem)] h-[280px]"
+          [event]="event.isMore ? null : event"
+          [isMoreCard]="!!event.isMore"
+          [attr.tabindex]="0"
+          [attr.aria-label]="'Veranstaltung: ' + event.name + ' am ' + (event.date_start | date:'dd.MM.yyyy')"
+          (keydown)="onKeyDown($event, event.id)"
         ></app-event-card>
       </div>
     </div>
+  </section>
 
-    <h1 class="text-xl font-bold mb-4 text-left">
+  <!-- Kategorien -->
+  <section aria-labelledby="categories-heading">
+    <h1 id="categories-heading" class="text-xl font-bold mb-4 text-left ">
       {{ 'home.categories' | translate }}
     </h1>
 
-    <div class="grid grid-cols-3 mr-5 text-gray-750 "> 
-      <app-kategorie-card
-        *ngFor="let kategorie of topics"
-        [color]="kategorie.color"
-        [text]="kategorie.name">
+    <div class="grid grid-cols-3 mr-5 text-gray-750">
+      <app-kategorie-card 
+        *ngFor="let kategorie of topics" 
+        [color]="kategorie.color" [text]="kategorie.name" [id]="kategorie.id!" 
+      >
       </app-kategorie-card>
     </div>
-
-  </div>
-</div>
+</section>
+</main>

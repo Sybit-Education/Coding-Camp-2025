@@ -44,10 +44,6 @@
       "TITLE": "Das Team",
       "DESCRIPTION": "Lernen Sie das Team hinter der 1200-Jahre-Radolfzell App kennen."
     },
-    "SPONSOR": {
-      "TITLE": "Der Sponsor",
-      "DESCRIPTION": "Informationen über unsere Sponsoren und Unterstützer."
-    },
     "IMPRINT": {
       "TITLE": "Impressum",
       "DESCRIPTION": "Rechtliche Informationen und Kontaktdaten."
@@ -61,8 +57,23 @@
     "current": "Aktuelles",
     "categories": "Kategorien"
   },
+  "i18y": {
+    "to-main-content": "Zum Hauptinhalt springen"
+  },
   "footer": {
     "datenschutz": "Datenschutz",
     "impressum": "Impressum"
+  },
+  "FAVORITES": {
+    "TITLE": "Meine Favoriten",
+    "LOADING": "Lade Favoriten...",
+    "EMPTY": {
+      "TITLE": "Du hast noch keine Favoriten gespeichert.",
+      "DESCRIPTION": "Füge Events zu deinen Favoriten hinzu, um sie hier zu sehen.",
+      "BUTTON": "Zur Übersicht"
+    },
+    "REMOVE": "Aus Favoriten entfernen",
+    "ADD": "Zu Favoriten hinzufügen",
+    "LOCAL_STORAGE_NOTICE": "Hinweis: Favoriten werden nur lokal auf diesem Gerät gespeichert."
   }
 }

@@ -21,7 +21,7 @@ export class OrganizerService {
       return (result || []).map(
         (item: Record<string, unknown>) =>
           ({
-            ...item
+            ...item,
           }) as unknown as Organizer,
       )
     } catch (error) {

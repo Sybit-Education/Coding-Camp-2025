@@ -1,5 +1,5 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, HostListener, Input, OnInit } from '@angular/core'
+import { CommonModule } from '@angular/common'
 import { I18nService } from '../../services/translate.service';
 import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
 
@@ -21,7 +21,10 @@ import { LanguageSwitcherComponent } from '../language-switcher/language-switche
 /**
  * Typ zur Definition eines Bildpfads für helles und dunkles Farbschema.
  */
-interface ThemeSrc { light: string; dark: string }
+interface ThemeSrc {
+  light: string
+  dark: string
+}
 
 /**
  * Zusammenstellung der möglichen Logostufen. Je nach verfügbarer Variante
@@ -29,13 +32,13 @@ interface ThemeSrc { light: string; dark: string }
  */
 interface LogoSet {
   /** Vollversion (Bildmarke + Wortmarke + Slogan) */
-  full: ThemeSrc;
+  full: ThemeSrc
   /** 1. Reduktion (ohne „JAHRE“) – optional */
-  reduced1?: ThemeSrc;
+  reduced1?: ThemeSrc
   /** 2. Reduktion (ohne Slogan) – optional */
-  reduced2?: ThemeSrc;
+  reduced2?: ThemeSrc
   /** 3. Stufe: nur Bildmarke „1200“ – optional */
-  markOnly?: ThemeSrc;
+  markOnly?: ThemeSrc
 }
 
 @Component({
@@ -43,7 +46,7 @@ interface LogoSet {
   standalone: true,
   imports: [CommonModule, LanguageSwitcherComponent],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
   /**
@@ -63,26 +66,35 @@ export class HeaderComponent implements OnInit {
       dark: '/header/Radolfzell_1200Logo_Web_transparenter_Grund.png',
     },
     // Optional: reduzierte Varianten laut Manual können hier angegeben werden.
-    reduced1: { light: '/header/Radolfzell_1200Logo_Web_transparenter_Grund_reduced1.png', dark: '/header/Radolfzell_1200Logo_Web_transparenter_Grund_reduced1.png' },
-    reduced2: { light: '/header/Radolfzell_1200Logo_Web_transparenter_Grund_reduced1.png', dark: '/header/Radolfzell_1200Logo_Web_transparenter_Grund_reduced1.png' },
-    markOnly: { light: '/header/Radolfzell_1200Logo_Web_transparenter_Grund_small.png', dark: '/header/Radolfzell_1200Logo_Web_transparenter_Grund_small.png' },
-  };
+    reduced1: {
+      light: '/header/Radolfzell_1200Logo_Web_transparenter_Grund_reduced1.png',
+      dark: '/header/Radolfzell_1200Logo_Web_transparenter_Grund_reduced1.png',
+    },
+    reduced2: {
+      light: '/header/Radolfzell_1200Logo_Web_transparenter_Grund_reduced1.png',
+      dark: '/header/Radolfzell_1200Logo_Web_transparenter_Grund_reduced1.png',
+    },
+    markOnly: {
+      light: '/header/Radolfzell_1200Logo_Web_transparenter_Grund_small.png',
+      dark: '/header/Radolfzell_1200Logo_Web_transparenter_Grund_small.png',
+    },
+  }
 
   /**
    * Abstand in Pixeln, ab dem der Header schrumpft. Standard: 120px.
    */
-  @Input() shrinkThreshold = 120;
+  @Input() shrinkThreshold = 20
 
   /**
    * Steuerung, ob die Wellenform unter dem Header angezeigt wird. Kann
    * deaktiviert werden, falls der Header ohne Bögen erscheinen soll.
    */
-  @Input() showWave = true;
+  @Input() showWave = true
 
   /**
    * Flag, ob der Header aktuell im verkleinerten Zustand dargestellt wird.
    */
-  isShrunk = false;
+  isShrunk = false
 
   /**
    * Interne Eigenschaft, die den aktuell ausgewählten Bildpfad für das
@@ -96,7 +108,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.updateState();
+    this.updateState()
   }
 
 
@@ -106,7 +118,7 @@ export class HeaderComponent implements OnInit {
    */
   @HostListener('window:scroll')
   onScroll(): void {
-    this.updateState();
+    this.updateState()
   }
 
   /**
@@ -115,15 +127,15 @@ export class HeaderComponent implements OnInit {
    */
   @HostListener('window:resize')
   onResize(): void {
-    this.updateState();
+    this.updateState()
   }
 
   /**
    * Aktualisiert sowohl den Shrink‑Status als auch den aktuellen Logopfad.
    */
   private updateState(): void {
-    this.isShrunk = window.scrollY > this.shrinkThreshold;
-    this.currentSrc = this.pickLogoForState();
+    this.isShrunk = window.scrollY > this.shrinkThreshold
+    this.currentSrc = this.pickLogoForState()
   }
 
   /**
@@ -131,8 +143,10 @@ export class HeaderComponent implements OnInit {
    * Information wird für die Auswahl der passenden Logovariante benötigt.
    */
   private isDarkMode(): boolean {
-    return window.matchMedia &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return (
+      window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches
+    )
   }
 
   /**
@@ -145,31 +159,39 @@ export class HeaderComponent implements OnInit {
    * weniger reduzierte Variante (etwa ohne „Jahre“) verwendet wird.
    */
   private pickLogoForState(): string {
-    const dark = this.isDarkMode();
-    const w = window.innerWidth;
+    const dark = this.isDarkMode()
+    const w = window.innerWidth
 
-    const choose = (src?: ThemeSrc) => src ? (dark ? src.dark : src.light) : '';
+    const choose = (src?: ThemeSrc) =>
+      src ? (dark ? src.dark : src.light) : ''
 
     // Groß: immer Vollversion
     if (!this.isShrunk) {
-      return choose(this.logo.full);
+      return choose(this.logo.full)
     }
 
     // Klein: wähle zuerst die markOnly‑Variante, dann reduced2, reduced1
-    if (this.logo.markOnly && (w < 340 || (!this.logo.reduced1 && !this.logo.reduced2))) {
-      const candidate = choose(this.logo.markOnly);
-      if (candidate) return candidate;
+    if (
+      this.logo.markOnly &&
+      (w < 340 || (!this.logo.reduced1 && !this.logo.reduced2))
+    ) {
+      const candidate = choose(this.logo.markOnly)
+      if (candidate) return candidate
     }
     if (this.logo.reduced2 && (w < 380 || !this.logo.reduced1)) {
-      const candidate = choose(this.logo.reduced2);
-      if (candidate) return candidate;
+      const candidate = choose(this.logo.reduced2)
+      if (candidate) return candidate
     }
     if (this.logo.reduced1) {
-      const candidate = choose(this.logo.reduced1);
-      if (candidate) return candidate;
+      const candidate = choose(this.logo.reduced1)
+      if (candidate) return candidate
     }
 
     // Fallback: reduziertes Set oder Vollversion, falls keine Reduktion vorhanden
-    return choose(this.logo.reduced2) || choose(this.logo.reduced1) || choose(this.logo.full);
+    return (
+      choose(this.logo.reduced2) ||
+      choose(this.logo.reduced1) ||
+      choose(this.logo.full)
+    )
   }
 }

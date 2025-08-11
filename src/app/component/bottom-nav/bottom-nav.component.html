@@ -6,7 +6,7 @@
 -->
 <nav class="fixed inset-x-0 bottom-3 z-500 flex justify-center px-4">
   <div
-    class="relative mx-5 px-1 flex w-full max-w-md items-center justify-around overflow-hidden rounded-3xl border border-[#fbd2bc]/50 bg-[#fbd2bc]/90 shadow-xl backdrop-blur-xl"
+    class="relative mx-5 flex w-full max-w-md items-center justify-around overflow-hidden rounded-3xl border border-[#fbd2bc]/50 bg-[#fbd2bc]/90 px-1 shadow-xl backdrop-blur-xl"
   >
     <!-- Wellen-Akzent: entspricht dem Bogen‑Motiv des Jubiläumsdesigns -->
     <svg
@@ -28,7 +28,7 @@
           routerLink="/"
           [routerLinkActiveOptions]="{ exact: true }"
           routerLinkActive="text-[#c70d56] bg-[#ffffff40] rounded-xl scale-110"
-          class="relative flex transform flex-col items-center justify-center m-1 p-0.5 text-[#3b4ea3] transition hover:text-[#c70d56]"
+          class="relative m-1 flex transform flex-col items-center justify-center p-0.5 text-[#3b4ea3] transition hover:text-[#c70d56]"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +52,7 @@
         <a
           routerLink="/favourites"
           routerLinkActive="text-[#c70d56] bg-[#ffffff40] rounded-xl scale-110"
-          class="relative flex transform flex-col items-center justify-center m-1 p-0.5 text-[#3b4ea3] transition hover:text-[#c70d56]"
+          class="relative m-1 flex transform flex-col items-center justify-center p-0.5 text-[#3b4ea3] transition hover:text-[#c70d56]"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +76,7 @@
         <a
           routerLink="/search"
           routerLinkActive="text-[#c70d56] bg-[#ffffff40] rounded-xl scale-110"
-          class="relative flex transform flex-col items-center justify-center m-1 p-0.5 text-[#3b4ea3] transition hover:text-[#c70d56]"
+          class="relative m-1 flex transform flex-col items-center justify-center p-0.5 text-[#3b4ea3] transition hover:text-[#c70d56]"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -99,7 +99,7 @@
         <a
           routerLink="/more"
           routerLinkActive="text-[#c70d56] bg-[#ffffff40] rounded-xl scale-110"
-          class="relative flex transform flex-col items-center justify-center m-1 p-0.5 text-[#3b4ea3] transition hover:text-[#c70d56]"
+          class="relative m-1 flex transform flex-col items-center justify-center p-0.5 text-[#3b4ea3] transition hover:text-[#c70d56]"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -117,7 +117,9 @@
             />
           </svg>
 
-          <span class="mt-1 text-xs font-medium tracking-wide">{{ 'bottom-nav.more' | translate }} &hellip;</span>
+          <span class="mt-1 text-xs font-medium tracking-wide"
+            >{{ 'bottom-nav.more' | translate }} &hellip;</span
+          >
         </a>
       </span>
     </div>

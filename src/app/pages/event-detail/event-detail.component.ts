@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core'
 import { MapComponent } from '../../component/map/map.component'
-import { Event, EventType } from '../../models/event.interface'
+import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
 import { ActivatedRoute, Router } from '@angular/router'
 import { EventService } from '../../services/event.service'
@@ -10,12 +10,15 @@ import { LocationService } from '../../services/location.service'
 import { OrganizerService } from '../../services/organizer.service'
 import { DateTimeRangePipe } from '../../services/date.pipe'
 import { RecordId, StringRecordId } from 'surrealdb'
+import { LoginService } from '../../services/login.service'
+import { TypeDB } from '../../models/typeDB.interface'
+import { FavoriteButtonComponent } from '../../component/favorite-button/favorite-button.component'
 import { TeilenComponent } from "../../component/teilen/teilen.component";
 
 @Component({
   selector: 'app-event-detail-page',
   standalone: true,
-  imports: [MapComponent, CommonModule, DateTimeRangePipe, TeilenComponent],
+  imports: [MapComponent, CommonModule, DateTimeRangePipe, FavoriteButtonComponent, TeilenComponent],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
 })
@@ -23,7 +26,7 @@ export class EventDetailPageComponent implements OnInit {
   event: Event | null = null
   location: Location | null = null
   organizer: Organizer | null = null
-  type: EventType | null = null
+  type: TypeDB | null = null
   error: string | null = null
   eventId = ""
 
@@ -35,6 +38,10 @@ export class EventDetailPageComponent implements OnInit {
   private readonly organizerService = inject(OrganizerService)
   private readonly route = inject(ActivatedRoute)
   private readonly router = inject(Router)
+  private readonly loginservice = inject(LoginService)
+
+  protected isLoggedIn = false
+evntIdString: string|undefined
 
   ngOnInit(): void {
     this.eventId = this.route.snapshot.paramMap.get('id')!
@@ -43,7 +50,18 @@ export class EventDetailPageComponent implements OnInit {
       this.loadEvent(recordID)
     } else {
       this.error = 'Event ID nicht gefunden'
+      this.announceError('Event ID nicht gefunden')
     }
+    this.isLoggedIn = this.loginservice.canActivate(this.route.snapshot)
+  }
+
+  /**
+   * Kündigt Fehler für Screenreader an
+   * @param message Die Fehlermeldung
+   */
+  private announceError(message: string): void {
+    // In einer vollständigen Implementierung würde hier LiveAnnouncer verwendet werden
+    console.error(`Fehler: ${message}`);
   }
 
   async loadType(typeId: RecordId<'event_type'> | undefined) {
@@ -51,7 +69,7 @@ export class EventDetailPageComponent implements OnInit {
       try {
         const type = await this.eventService.getEventTypeByID(typeId)
         if (type) {
-          this.type = type as EventType
+          this.type = type as unknown as TypeDB
         } else {
           this.error = 'Event Type nicht gefunden'
         }
@@ -99,24 +117,43 @@ export class EventDetailPageComponent implements OnInit {
 
       if (foundEvent) {
         this.event = foundEvent
+
+        console.log('Geladenes Event:', this.event)
         this.mediaUrl =
           this.mediaBaseUrl +
           String(foundEvent.media[0].id).replace(/_(?=[^_]*$)/, '.')
         const locationId = this.event?.['location']
         const organizerId = this.event?.['organizer']
         const typeId = this.event?.['event_type']
-        this.loadLocation(locationId)
-        this.loadOrganizer(organizerId)
-        this.loadType(typeId)
+
+        await Promise.all([
+          this.loadLocation(locationId),
+          this.loadOrganizer(organizerId),
+          this.loadType(typeId)
+        ])
+
+        document.title = `${this.event.name} - 1200 Jahre Radolfzell`
       } else {
         this.error = 'Event nicht gefunden'
+        this.announceError('Event nicht gefunden')
       }
     } catch (err) {
       this.error = `Fehler beim Laden: ${err}`
+      this.announceError(`Fehler beim Laden: ${err}`)
     }
   }
 
   goBack() {
     this.router.navigate(['/'])
+  }
+
+  redirect() {
+    console.log('Redirect triggered with ID:', this.event?.id)
+    this.router.navigate(['/create-event'], {
+      queryParams: {
+        id: this.event!.id,
+      },
+    })
+
   }
 }

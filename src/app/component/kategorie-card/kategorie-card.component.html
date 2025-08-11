@@ -1,6 +1,12 @@
 
-<div class="w-[25vw] aspect-[16/16]  rounded-lg p-4 flex items-center justify-center m-5 shadow-xl transform transition-transform duration-300  hover:scale-105"
-[ngStyle]="{'background-color': color}"
+
+<div (click)="goToKategorie()"
+      (keyup.enter)="goToKategorie()"
+      tabindex="0"
+      role="button"
+      aria-pressed="false"
+      class="text-center max-w-[250px] aspect-[16/16]  rounded-lg p-4 flex items-center justify-center m-5 shadow-xl transform transition-transform duration-300  hover:scale-105"
+      [ngStyle]="{'background-color': color}"
 >
   <div class="align-middle">
     <p class="items-center justify-center transform transition-transform duration-300 hover:scale-105 ">{{text}}</p>
