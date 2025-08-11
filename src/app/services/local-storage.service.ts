@@ -19,7 +19,6 @@ export class LocalStorageService {
       savedIds.push(eventId)
       this.setSavedEventIds(savedIds)
       this.savedEventsSubject.next(savedIds)
-      console.log(`Event ${eventId} zu Favoriten hinzugefügt`)
     }
   }
 
@@ -28,7 +27,6 @@ export class LocalStorageService {
     const filteredIds = savedIds.filter((id) => id !== eventId)
     this.setSavedEventIds(filteredIds)
     this.savedEventsSubject.next(filteredIds)
-    console.log(`Event ${eventId} aus Favoriten entfernt`)
   }
 
   isEventSaved(eventId: string | undefined): boolean {
@@ -38,7 +36,7 @@ export class LocalStorageService {
   getSavedEventIds(): string[] {
     const savedEvents = localStorage.getItem(this.SAVED_EVENTS_KEY)
     const ids = savedEvents ? JSON.parse(savedEvents) : []
-    console.log('Retrieved saved event IDs from localStorage:', ids);
+
     return ids;
   }
 

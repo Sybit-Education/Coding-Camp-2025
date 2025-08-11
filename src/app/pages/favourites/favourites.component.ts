@@ -30,31 +30,25 @@ export class FavouritesComponent implements OnInit, OnDestroy {
   private subscription?: Subscription;
 
   ngOnInit(): void {
-    console.log('FavouritesComponent initialized');
-
     // Abonniere Änderungen an den Favoriten
     this.subscription = this.favoriteService.favoriteEvents$.subscribe(events => {
-      console.log('Received favorite events:', events);
       this.favouriteEvents = events;
     });
 
     // Abonniere den Ladezustand
     this.subscription.add(
       this.favoriteService.loading$.subscribe(loading => {
-        console.log('Loading state changed:', loading);
         this.loading = loading;
       })
     );
 
     // Lade die Favoriten mit einem kleinen Timeout
     setTimeout(() => {
-      console.log('Explicitly loading favorite events from component');
       this.favoriteService.loadFavoriteEvents();
 
       // Sicherheits-Timeout: Setze loading auf false nach 2 Sekunden, falls es hängen bleibt
       setTimeout(() => {
         if (this.loading) {
-          console.log('Safety timeout: forcing loading to false');
           this.loading = false;
         }
       }, 2000);

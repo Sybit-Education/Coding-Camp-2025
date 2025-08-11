@@ -43,7 +43,6 @@ export class FavoriteButtonComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.eventId) {
-      console.log('FavoriteButton initialized with eventId:', this.eventId);
 
       // Initialer Status
       this.updateFavoriteStatus();
@@ -67,7 +66,7 @@ export class FavoriteButtonComponent implements OnInit, OnDestroy {
   private updateFavoriteStatus(): void {
     if (this.eventId) {
       const currentStatus = this.favoriteService.isEventFavorite(this.eventId.toString());
-      console.log(`Updating favorite status for ${this.eventId}: ${currentStatus}`);
+
       this.isFavorite = currentStatus;
     }
   }
@@ -76,8 +75,6 @@ export class FavoriteButtonComponent implements OnInit, OnDestroy {
     event.stopPropagation(); // Verhindert, dass das Event-Klick-Event ausgelöst wird
 
     if (!this.eventId) return;
-
-    console.log('Toggle favorite for eventId:', this.eventId.toString());
 
     this.favoriteService.toggleFavorite(this.eventId.toString());
 
