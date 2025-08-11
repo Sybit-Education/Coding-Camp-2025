@@ -6,7 +6,7 @@
   <article *ngIf="event" class="flex flex-col">
 
 
-    <section id="event-content" class="info-card rounded-2xlbg-gray-100 m-2 shadow-2xl">
+    <section id="event-content" class="info-card rounded-2xl bg-gray-100 m-2 shadow-2xl">
       <img
         *ngIf="mediaUrl"
         class="sm:w-full rounded-t-2xl object-cover"
@@ -60,7 +60,7 @@
             <div>
               <h2 class="text-left text-base font-bold">Preis</h2>
               <p class="text-left text-sm">
-                @if (event.price !== null && +event.price! > 0) {
+                @if (event.price !== null && event.price !== undefined && +event.price > 0) {
                   {{ event.price }}
                 } @else {
                   gratis
