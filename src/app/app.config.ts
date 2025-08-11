@@ -3,7 +3,6 @@ import { provideRouter, withComponentInputBinding, withPreloading, PreloadAllMod
 import { provideHttpClient, HttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { Observable } from 'rxjs'
-import { provideAnimations } from '@angular/platform-browser/animations'
 
 import { routes } from './app.routes'
 
@@ -31,7 +30,6 @@ export const appConfig: ApplicationConfig = {
       withPreloading(PreloadAllModules)
     ),
     provideHttpClient(withInterceptorsFromDi()),
-    provideAnimations(),
     importProvidersFrom(
       TranslateModule.forRoot({
         loader: {
