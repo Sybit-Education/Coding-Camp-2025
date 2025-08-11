@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common'
 import { Subscription } from 'rxjs'
 import { FavoriteService } from '../../services/favorite.service'
 import { TranslateModule } from '@ngx-translate/core'
+import { RecordId } from 'surrealdb'
 
 @Component({
   selector: 'app-favorite-button',
@@ -12,7 +13,7 @@ import { TranslateModule } from '@ngx-translate/core'
     <button
       *ngIf="eventId"
       (click)="toggleFavorite($event)"
-      class="ml-2 focus:outline-none"
+      class="mx-2 my-1 focus:outline-none"
       [title]="(isFavorite ? 'FAVORITES.REMOVE' : 'FAVORITES.ADD') | translate"
     >
       <!-- Solid star when favorited -->
@@ -34,7 +35,7 @@ import { TranslateModule } from '@ngx-translate/core'
   styles: []
 })
 export class FavoriteButtonComponent implements OnInit, OnDestroy {
-  @Input() eventId = '' as string | undefined;
+  @Input() eventId = undefined as RecordId | undefined;
 
   isFavorite = false;
   private subscription?: Subscription;
@@ -43,8 +44,6 @@ export class FavoriteButtonComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.eventId) {
-      console.log('FavoriteButton initialized with eventId:', this.eventId);
-
       // Initialer Status
       this.updateFavoriteStatus();
 
@@ -67,7 +66,6 @@ export class FavoriteButtonComponent implements OnInit, OnDestroy {
   private updateFavoriteStatus(): void {
     if (this.eventId) {
       const currentStatus = this.favoriteService.isEventFavorite(this.eventId.toString());
-      console.log(`Updating favorite status for ${this.eventId}: ${currentStatus}`);
       this.isFavorite = currentStatus;
     }
   }
@@ -76,9 +74,6 @@ export class FavoriteButtonComponent implements OnInit, OnDestroy {
     event.stopPropagation(); // Verhindert, dass das Event-Klick-Event ausgelöst wird
 
     if (!this.eventId) return;
-
-    console.log('Toggle favorite for eventId:', this.eventId.toString());
-
     this.favoriteService.toggleFavorite(this.eventId.toString());
 
     // Der Status wird durch die Subscription aktualisiert
