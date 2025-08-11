@@ -35,7 +35,7 @@ import { RecordId } from 'surrealdb'
   styles: []
 })
 export class FavoriteButtonComponent implements OnInit, OnDestroy {
-  @Input() eventId = undefined as RecordId | undefined;
+  @Input() eventId = undefined as RecordId<'event'> | undefined;
 
   isFavorite = false;
   private subscription?: Subscription;
