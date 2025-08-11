@@ -60,7 +60,7 @@
             <div>
               <h2 class="text-left text-base font-bold">Preis</h2>
               <p class="text-left text-sm">
-                @if (event.price !== null && event.price !== undefined && +event.price > 0) {
+                @if (event.price && +event.price > 0) {
                   {{ event.price }}
                 } @else {
                   gratis

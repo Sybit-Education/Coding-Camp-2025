@@ -4,6 +4,7 @@ import { Component, Input } from '@angular/core';
   selector: 'app-share',
   imports: [],
   templateUrl: './share.component.html',
+  standalone: true,
 })
 export class ShareComponent {
 
