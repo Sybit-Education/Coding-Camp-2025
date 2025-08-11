@@ -1,28 +1,16 @@
 <div class="flex flex-col items-center space-y-2 relative">
-
-    <!-- Button mit Popup -->
     <div class="relative group top-3 right-10.5">
       <button
         type="button"
         (click)="sharePage()"
-        aria-label="Seite teilen"
         class="p-3 rounded-full bg-blue-200 hover:bg-blue-300 transition focus:outline-none focus:ring-2 focus:ring-blue-400 group active:ring-blue-600"
       >
         <div class="flex h-[26px] w-[26px] relative items-center justify-center rounded-full">
-          <p>{{ isWebShareSupported ? '📤' : '🔗' }}</p>
+          <p>{{ '📤' }}</p>
         </div>
       </button>
-
-      <!-- Popup rechts vom Button, sichtbar nur beim Klick -->
-      <div
-        class="absolute left-full top-1/2 ml-3 -translate-y-1/2 bg-green-600 text-white text-sm px-3 py-1 rounded shadow-lg opacity-0 group-active:opacity-100 transition-opacity duration-150 pointer-events-none"
-      >
-        <ng-container *ngIf="!isWebShareSupported">✅ Link kopiert!</ng-container>
-        <ng-container *ngIf="isWebShareSupported">✅ Teilen...</ng-container>
-      </div>
     </div>
 
     <!-- Beschriftung unter dem Button -->
-    <p class="font-bold text-sm mt-1 relative top-1 right-10.5">Teilen</p>
-
+    <p class="font-bold text-sm mt-1 relative top-1 right-10.5">{{ 'SHARE.SHARE' | translate }}</p>
 </div>
