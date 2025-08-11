@@ -99,10 +99,6 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  getCardClass(index: number): string {
-    return 'w-[calc(100vw-6rem)] h-[280px]';
-  }
-
   getTopics() {
     return this.topics;
   }

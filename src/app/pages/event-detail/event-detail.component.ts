@@ -1,6 +1,6 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core'
+import { Component, inject, OnInit } from '@angular/core'
 import { MapComponent } from '../../component/map/map.component'
-import { Event, EventType } from '../../models/event.interface'
+import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
 import { ActivatedRoute, Router } from '@angular/router'
 import { EventService } from '../../services/event.service'
@@ -10,6 +10,8 @@ import { LocationService } from '../../services/location.service'
 import { OrganizerService } from '../../services/organizer.service'
 import { DateTimeRangePipe } from '../../services/date.pipe'
 import { RecordId, StringRecordId } from 'surrealdb'
+import { LoginService } from '../../services/login.service'
+import { TypeDB } from '../../models/typeDB.interface'
 import { FavoriteButtonComponent } from '../../component/favorite-button/favorite-button.component'
 
 @Component({
@@ -19,11 +21,11 @@ import { FavoriteButtonComponent } from '../../component/favorite-button/favorit
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
 })
-export class EventDetailPageComponent implements OnInit, OnDestroy {
+export class EventDetailPageComponent implements OnInit {
   event: Event | null = null
   location: Location | null = null
   organizer: Organizer | null = null
-  type: EventType | null = null
+  type: TypeDB | null = null
   error: string | null = null
 
   mediaBaseUrl = 'https://1200-jahre-radolfzell.sybit.education/media/'
@@ -34,6 +36,9 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   private readonly organizerService = inject(OrganizerService)
   private readonly route = inject(ActivatedRoute)
   private readonly router = inject(Router)
+  private readonly loginservice = inject(LoginService)
+
+  protected isLoggedIn = false
 evntIdString: string|undefined
 
   ngOnInit(): void {
@@ -47,6 +52,7 @@ evntIdString: string|undefined
       this.error = 'Event ID nicht gefunden'
       this.announceError('Event ID nicht gefunden')
     }
+    this.isLoggedIn = this.loginservice.canActivate(this.route.snapshot)
   }
 
   /**
@@ -63,7 +69,7 @@ evntIdString: string|undefined
       try {
         const type = await this.eventService.getEventTypeByID(typeId)
         if (type) {
-          this.type = type as EventType
+          this.type = type as unknown as TypeDB
         } else {
           this.error = 'Event Type nicht gefunden'
         }
@@ -111,6 +117,8 @@ evntIdString: string|undefined
 
       if (foundEvent) {
         this.event = foundEvent
+
+        console.log('Geladenes Event:', this.event)
         this.mediaUrl =
           this.mediaBaseUrl +
           String(foundEvent.media[0].id).replace(/_(?=[^_]*$)/, '.')
@@ -139,8 +147,13 @@ evntIdString: string|undefined
     this.router.navigate(['/'])
   }
 
-  ngOnDestroy(): void {
-    // Titel zurücksetzen
-    document.title = '1200 Jahre Radolfzell'
+  redirect() {
+    console.log('Redirect triggered with ID:', this.event?.id)
+    this.router.navigate(['/create-event'], {
+      queryParams: {
+        id: this.event!.id,
+      },
+    })
+
   }
 }

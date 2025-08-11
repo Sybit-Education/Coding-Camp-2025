@@ -81,7 +81,6 @@
         </div>
       </div>
     </section>
-
     <section class="desc rounded-2xl p-2 mt-10" aria-labelledby="description-heading">
       <h2 id="description-heading" class="text-2xl font-bold pt-4 text-blue-900">Beschreibung</h2>
       <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
@@ -173,4 +172,15 @@
       Zurück
     </button>
   </div>
+
+  <div class="edit mb-20 flex items-center justify-center">
+    <button
+      class="hover*:bg-blue-600 rounded-full bg-blue-500 px-4 py-2 font-bold text-white"
+      (click)="redirect()"
+      *ngIf="isLoggedIn"
+    >
+      Bearbeiten
+    </button>
+  </div>
 </main>
+
