@@ -1,22 +1,24 @@
-<main class="event-container mt-5 min-h-[80vh] w-[100vw]" lang="de">
+<main class="event-container mt-5 min-h-[80vh] w-full" lang="de">
   <!-- Skip-Link für Screenreader -->
   <a href="#event-content" class="sr-only focus:not-sr-only focus:absolute focus:p-2 focus:bg-white focus:z-50">
     Zum Veranstaltungsinhalt springen
   </a>
-  <article class="flex flex-col">
-    <section id="event-content" class="info-card rounded-2xl bg-gray-100 m-2 shadow-2xl">
+  <article *ngIf="event" class="flex flex-col">
+
+
+    <section id="event-content" class="info-card rounded-2xlbg-gray-100 m-2 shadow-2xl">
       <img
         *ngIf="mediaUrl"
         class="sm:w-full rounded-t-2xl object-cover"
-        [alt]="event?.name ? 'Bild der Veranstaltung: ' + event?.name : 'Veranstaltungsbild'"
+        [alt]="event.name ? 'Bild der Veranstaltung: ' + event.name : 'Veranstaltungsbild'"
         [src]="mediaUrl"
       />
       <div *ngIf="!mediaUrl" class="sm:w-full rounded-t-2xl bg-gray-200 h-48 flex items-center justify-center">
         <span class="text-gray-500">Kein Bild verfügbar</span>
       </div>
-      <div class="flex w-full justify-left items-center">
-        <app-favorite-button *ngIf="event?.id" class="px-2 pt-4" [eventId]="evntIdString"></app-favorite-button>
-        <h1 class="flex w-full  text-2xl font-bold  px-2 pt-4 text-blue-900">{{ event?.name }}</h1>
+      <div class="flex w-full justify-left">
+        <app-favorite-button *ngIf="event?.id" class="px-2 pt-4" [eventId]="event.id"></app-favorite-button>
+        <h1 class="flex text-2xl font-bold px-2 pt-4 text-blue-900">{{ event.name }}</h1>
       </div>
 
 
@@ -33,7 +35,7 @@
             </div>
             <div>
               <h2 class="text-left text-base font-bold">Wann?</h2>
-              <p class="text-left text-sm">{{ event?.date_start! | dateTimeRange : event?.date_end }}</p>
+              <p class="text-left text-sm">{{ event.date_start! | dateTimeRange : event.date_end }}</p>
             </div>
           </div>
           <div class="grid grid-cols-[1fr_3fr]">
@@ -58,10 +60,10 @@
             <div>
               <h2 class="text-left text-base font-bold">Preis</h2>
               <p class="text-left text-sm">
-                @if (event?.price !== null && +event?.price! > 0) {
-                  {{ event?.price }}
+                @if (event.price !== null && +event.price! > 0) {
+                  {{ event.price }}
                 } @else {
-                  kostenlos
+                  gratis
                 }
               </p>
             </div>
@@ -78,18 +80,19 @@
               <p class="text-left text-sm">{{ organizer?.name }}</p>
             </div>
           </div>
-    <div>
-      <app-teilen [eventId]="eventId">
-      </app-teilen>
-    </div>
+          <div>
+            <app-teilen [eventId]="eventId">
+            </app-teilen>
+          </div>
         </div>
       </div>
     </section>
-    <section class="desc rounded-2xl p-2 mt-10" aria-labelledby="description-heading">
+
+    <section class="desc p-2" aria-labelledby="description-heading">
       <h2 id="description-heading" class="text-2xl font-bold pt-4 text-blue-900">Beschreibung</h2>
       <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
       <p>
-        {{ event?.description || 'Keine Beschreibung verfügbar.' }}
+        {{ event.description || 'Keine Beschreibung verfügbar.' }}
       </p>
     </section>
 
@@ -98,7 +101,7 @@
       <h2 id="directions-heading" class="text-2xl font-bold pt-4 text-blue-900">Anreise</h2>
       <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
 
-      <div class="map p-4">
+      <div class="map">
         <app-map
           [coordinates]="[location!.geo_point!.point[1], location!.geo_point!.point[0]]"
         ></app-map>
@@ -109,7 +112,7 @@
       </div>
     </section>
     }
-    <section class="contact p-2 rounded-2xl bg-gray-100 shadow-2xl mb-18" aria-labelledby="contact-heading">
+    <section class="contact p-2 rounded-2xl bg-gray-100 shadow-2xl" aria-labelledby="contact-heading">
       <h2 id="contact-heading" class="text-2xl font-bold  pt-4 text-blue-900">Kontaktdaten</h2>
       <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
       <div class="flex justify-between">
