@@ -52,7 +52,7 @@
       "TITLE": "Datenschutz",
       "DESCRIPTION": "Informationen zum Datenschutz und zur Datenverarbeitung."
     },
-    "LOGIN":{ 
+    "LOGIN": {
       "TITLE": "Login",
       "DESCRIPTION": "Interne Datenverwaltung der Einträge."
     },
@@ -166,5 +166,8 @@
   },
   "SHARE": {
     "SHARE": "Teilen ..."
+  },
+  "share": {
+    "copy-notification": "Der Link wurde in die Zwischenablage kopiert."
   }
 }
