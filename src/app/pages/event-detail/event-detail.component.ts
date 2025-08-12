@@ -56,6 +56,9 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   evntIdString: string | undefined
 
   ngOnInit(): void {
+    // Scrolle sofort zum Seitenanfang
+    this.navigationService.scrollToTop();
+    
     this.eventId = this.route.snapshot.paramMap.get('id')!
     if (this.eventId) {
       const recordID = new StringRecordId('event:' + this.eventId)

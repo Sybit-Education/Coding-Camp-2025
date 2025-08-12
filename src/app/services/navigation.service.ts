@@ -22,13 +22,35 @@ export class NavigationService {
       scrollPositionRestoration: 'top'
     };
     
-    return this.router.navigate(commands, navigationExtras);
+    // Führe die Navigation aus und scrolle dann manuell nach oben
+    return this.router.navigate(commands, navigationExtras).then(success => {
+      if (success) {
+        // Warte einen Moment, bis die Navigation abgeschlossen ist
+        setTimeout(() => {
+          this.scrollToTop();
+        }, 100);
+      }
+      return success;
+    });
   }
 
   /**
    * Scrollt manuell zum Seitenanfang
    */
   scrollToTop(): void {
-    window.scrollTo(0, 0);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'auto' // 'auto' ist schneller als 'smooth'
+    });
+    
+    // Sicherheitsmaßnahme: Scrolle nochmals nach einer kurzen Verzögerung
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+      
+      // Versuche auch, das Dokument-Element zu scrollen (für einige Browser)
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0; // Für Safari
+    }, 50);
   }
 }

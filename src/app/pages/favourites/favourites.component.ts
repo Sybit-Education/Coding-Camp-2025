@@ -35,6 +35,9 @@ export class FavouritesComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription()
 
   ngOnInit(): void {
+    // Scrolle sofort zum Seitenanfang
+    this.navigationService.scrollToTop();
+    
     // Abonniere Änderungen an den Favoriten mit distinctUntilChanged für weniger Updates
     this.subscriptions.add(
       this.favoriteService.favoriteEvents$.pipe(
