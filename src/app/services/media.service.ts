@@ -36,40 +36,48 @@ export class MediaService {
     return result[0]
   }
 
-   async getMediaUrl(mediaRecordId: RecordId<'media'> | string | undefined): Promise<string | null> {
-    if (!mediaRecordId) return null;
-    
+  async getMediaUrl(
+    mediaRecordId: RecordId<'media'> | string | undefined,
+  ): Promise<string | null> {
+    if (!mediaRecordId) return null
+
     try {
-      let mediaId: string;
-      
-      if (typeof mediaRecordId === 'object' && mediaRecordId.tb && mediaRecordId.id) {
-        mediaId = mediaRecordId.tb + ':' + mediaRecordId.id;
+      let mediaId: string
+
+      if (
+        typeof mediaRecordId === 'object' &&
+        mediaRecordId.tb &&
+        mediaRecordId.id
+      ) {
+        mediaId = mediaRecordId.tb + ':' + mediaRecordId.id
       } else if (typeof mediaRecordId === 'string') {
-        mediaId = mediaRecordId;
+        mediaId = mediaRecordId
       } else {
-        return null;
+        return null
       }
-      
-      const media = await this.surrealdb.getById<Media>(mediaId);
-      
+
+      const media = await this.surrealdb.getById<Media>(mediaId)
+
       if (media?.file) {
-        return this.convertBase64ToDataUrl(media.file);
+        return this.convertBase64ToDataUrl(media.file)
       }
-      
-      return null;
+
+      return null
     } catch (error) {
-      console.warn('Fehler beim Laden der Media:', error);
-      return null;
+      console.warn('Fehler beim Laden der Media:', error)
+      return null
     }
   }
 
-  async getFirstMediaUrl(mediaArray: RecordId<'media'>[] | undefined): Promise<string | null> {
-    if (!mediaArray || mediaArray.length === 0) return null;
-    return await this.getMediaUrl(mediaArray[0]);
+  async getFirstMediaUrl(
+    mediaArray: RecordId<'media'>[] | undefined,
+  ): Promise<string | null> {
+    if (!mediaArray || mediaArray.length === 0) return null
+    return await this.getMediaUrl(mediaArray[0])
   }
 
   private convertBase64ToDataUrl(base64: string): string {
-    if (base64.startsWith('data:')) return base64;
-    return `data:image/jpeg;base64,${base64}`;
+    if (base64.startsWith('data:')) return base64
+    return `data:image/jpeg;base64,${base64}`
   }
 }

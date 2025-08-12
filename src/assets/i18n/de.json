@@ -51,11 +51,21 @@
     "PRIVACY": {
       "TITLE": "Datenschutz",
       "DESCRIPTION": "Informationen zum Datenschutz und zur Datenverarbeitung."
-    }
+    },
+    "LOGIN":{ 
+      "TITLE": "Login",
+      "DESCRIPTION": "Interne Datenverwaltung der Einträge."
+    },
+    "ARIA-LABLE": "Weitere Optionen"
   },
   "home": {
     "current": "Aktuelles",
-    "categories": "Kategorien"
+    "categories": "Kategorien",
+    "main-content": "Zum Hauptinhalt springen",
+    "tags": {
+      "aria-lable-event-heading": "events-heading",
+      "aria-lable-catagories-heading": "categories-heading"
+    }
   },
   "i18y": {
     "to-main-content": "Zum Hauptinhalt springen"
@@ -63,6 +73,49 @@
   "footer": {
     "datenschutz": "Datenschutz",
     "impressum": "Impressum"
+  },
+  "create-event": {
+    "eventname": "Eventname:",
+    "organizer": "Veranstalter wählen...",
+    "neworganizer": "Neuen Veranstalter erstellen",
+    "neworganizername": "Name",
+    "neworganizerphone": "Telefonnummer",
+    "neworganizermail": "E-Mail",
+    "startdate": "Startdatum",
+    "starttime": "Startzeit",
+    "enddate": "Enddatum",
+    "endtime": "Endzeit",
+    "timespan": "Zeitspanne",
+    "location": "Ort wählen...",
+    "newlocation": "Neuen Ort erstellen",
+    "newlocationname": "Ortsname",
+    "newlocationaddress": "Adresse",
+    "newlocationplz": "PLZ",
+    "newlocationcity": "Stadt",
+    "age": "Mindestalter",
+    "price": "Preis (€)",
+    "restrictions": "Einschränkungen",
+    "restrictionsexample": "z. B. Treppen",
+    "topics": "Themen des Events",
+    "eventtype": "Art des Events",
+    "moreinfo": "Mehr Infos",
+    "moreinfoexample": "https://...",
+    "createevent": "Event erstellen",
+    "newlocationnameexample": "Name des Ortes",
+    "newlocationaddressexample": "Straße und Hausnummer",
+    "ageexample": "z. B. 18",
+    "description": "Eventbeschreibung"
+  },
+  "dev": {
+    "text1": "Diese Website wurde im Rahmen des SYBIT Coding Camps 2025 entwickelt ",
+    "text2": " von jungen Talenten, die mit Neugier, Disziplin und Kreativität ihre ersten Schritte in der professionellen Softwareentwicklung gegangen sind. Unser Ziel war es, nicht nur Code zu schreiben, sondern etwas Sinnvolles zu erschaffen, das funktioniert, nützlich ist und unsere Ideen sichtbar macht.",
+    "text3": "Ein besonderer Dank gilt allen Teilnehmern, die mit Leidenschaft, Teamgeist und Ausdauer an diesem Projekt gearbeitet haben. Jede Komponente, jede Zeile Code und jede Entscheidung dahinter spiegelt den Lernprozess und das Engagement aller Beteiligten wider.",
+    "patrticptants": "Teilnehmer:innen",
+    "patrticptantslist": "Kaan Gel, Luisa Karsniqi, Sebastian Keller, Tomash Fedak, Leonard Röpcke, Jamal Blank, Adriano Mestre und Sasha (Oleksandr) Pavchak",
+    "coaches": "Coaches von SYBIT",
+    "coacheslist": "Felix Klein, Max Eichelmann, Yannik Deschler, Yannik Schwarz, Max Buhl, Elias Frank, Noel Wölfle und Stephan Strittmatter",
+    "headline": "👨‍💻 Unsere Entwickler",
+    "altpicture": "Gruppenfoto aller Teilnehmer des Coding Camps"
   },
   "FAVORITES": {
     "TITLE": "Meine Favoriten",
@@ -75,6 +128,41 @@
     "REMOVE": "Aus Favoriten entfernen",
     "ADD": "Zu Favoriten hinzufügen",
     "LOCAL_STORAGE_NOTICE": "Hinweis: Favoriten werden nur lokal auf diesem Gerät gespeichert."
+  },
+  "event-card": {
+    "show-more": "Mehr Events anzeigen"
+  },
+  "event-detail": {
+    "skip-to-content": "Zum Veranstaltungsinhalt springen",
+    "no-image": "Kein Bild verfügbar",
+    "when": "Wann?",
+    "where": "Wo?",
+    "costs": "Preis",
+    "free": "gratis",
+    "organizer": "Veranstalter",
+    "description": "Beschreibung",
+    "arrival": "Anreise",
+    "adress": "Adresse",
+    "eventlocation": "Veranstaltungsort",
+    "contact": "Kontaktdaten",
+    "name": "Name",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "back": "Zurück",
+    "edit": "Bearbeiten",
+    "tags": {
+      "description-heading": "description-heading",
+      "directions-heading": "directions-heading",
+      "contact-heading": "contact-heading"
+    }
+  },
+  "login": {
+    "username": "Benutzername / E-Mail",
+    "password": "Passwort",
+    "login": "Anmelden"
+  },
+  "upload-image": {
+    "image-here": "Bild hierher ziehen"
   },
   "SHARE": {
     "SHARE": "Teilen ..."

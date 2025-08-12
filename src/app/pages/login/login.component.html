@@ -14,7 +14,7 @@
         <label
           for="username"
           class="absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4"
-          >Benutzername / E-Mail</label
+          >{{ 'login.username' | translate }}</label
         >
       </div>
       <div class="relative">
@@ -23,7 +23,6 @@
           [type]="showPassword ? 'text' : 'password'"
           name="password"
           id="password"
-          aria-describedby="password_error_help"
           placeholder=" "
           required
           class="peer block w-full appearance-none rounded-lg border-1 border-gray-300 bg-transparent px-2.5 pt-4 pb-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none"
@@ -31,7 +30,7 @@
         <label
           for="password"
           class="absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4"
-          >Passwort</label
+          >{{ 'login.password' | translate }}</label
         >
         <button
           type="button"
@@ -46,20 +45,24 @@
             fill="none"
             stroke="currentColor"
             stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            [attr.stroke-linecap]="'round'"
+            [attr.stroke-linejoin]="'round'"
           >
             <path
               [class.hidden]="!showPassword"
-              d="M9.88 9.88a3 3 0 1 0 4.24 4.24"
+              [attr.d]="'M9.88 9.88a3 3 0 1 0 4.24 4.24'"
             ></path>
             <path
               [class.hidden]="!showPassword"
-              d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"
+              [attr.d]="
+                'M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68'
+              "
             ></path>
             <path
               [class.hidden]="!showPassword"
-              d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"
+              [attr.d]="
+                'M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61'
+              "
             ></path>
             <line
               [class.hidden]="!showPassword"
@@ -71,7 +74,7 @@
 
             <path
               [class.hidden]="showPassword"
-              d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"
+              [attr.d]="'M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z'"
             ></path>
             <circle
               [class.hidden]="showPassword"
@@ -89,7 +92,7 @@
         type="submit"
         class="w-full cursor-pointer rounded-lg border border-gray-400 bg-gray-100 px-5 py-2.5 text-center text-sm font-medium text-black transition-all duration-300 hover:border-gray-800 md:text-base lg:text-base xl:text-base 2xl:text-base"
       >
-        Anmelden
+        {{ 'login.login' | translate }}
       </button>
     </form>
   </div>

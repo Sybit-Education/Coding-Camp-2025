@@ -51,11 +51,21 @@
     "PRIVACY": {
       "TITLE": "Privacy Policy",
       "DESCRIPTION": "Information about data protection and data processing."
-    }
+    },
+    "LOGIN": {
+      "TITLE": "Login",
+      "DESCRIPTION": "Internal data management of entries."
+    },
+    "ARIA-LABLE": "More options"
   },
   "home": {
     "current": "Current Events",
-    "categories": "Categories"
+    "categories": "Categories",
+    "main-content": "Skip to main part",
+    "tags": {
+      "aria-lable-event-heading": "events-heading",
+      "aria-lable-catagories-heading": "categories-heading"
+    }
   },
   "category": {
     "title": "Kategorie"
@@ -66,6 +76,49 @@
   "footer": {
     "datenschutz": "Privacy Policy",
     "impressum": "Imprint"
+  },
+  "create-event": {
+    "eventname": "Event name:",
+    "organizer": "Select organizer...",
+    "neworganizer": "Create new organizer",
+    "neworganizername": "Name",
+    "neworganizerphone": "Phone number",
+    "neworganizermail": "e-mail",
+    "startdate": "Start date",
+    "starttime": "Start time",
+    "enddate": "End date",
+    "endtime": "End time",
+    "timespan": "Time span",
+    "location": "Select location...",
+    "newlocation": "Create new location",
+    "newlocationname": "Location name",
+    "newlocationaddress": "Address",
+    "newlocationplz": "Zip code",
+    "newlocationcity": "City",
+    "age": "Minimum age",
+    "price": "Price (€)",
+    "restrictions": "Restrictions",
+    "restrictionsexample": "e. g. stairs",
+    "topics": "Topics of the Event",
+    "eventtype": "Type of event",
+    "moreinfo": "More info",
+    "moreinfoexample": "https://...",
+    "createevent": "Create event",
+    "newlocationnameexample": "Name of the location",
+    "newlocationaddressexample": "Street and house number",
+    "ageexample": "e. g. 18",
+    "description": "Event description"
+  },
+  "dev": {
+    "text1": "This website was developed as part of the SYBIT Coding Camp 2025 ",
+    "text2": "by young talents who took their first steps in professional software development with curiosity, discipline and creativity.our goal was not just to write code, but to create something meaningful that works, is useful and makes our ideas visible.",
+    "text3": "Special thanks go to all participants who worked on this project with passion, team spirit and perseverance. Every component, every line of code and every decision behind it reflects the learning process and the commitment of everyone involved.",
+    "patrticptants": "Participants",
+    "patrticptantslist": "Kaan Gel, Luisa Karsniqi, Sebastian Keller, Tomash Fedak, Leonard Röpcke, Jamal Blank, Adriano Mestre and Sasha (Oleksandr) Pavchak",
+    "coaches": "Coaches from SYBIT",
+    "coacheslist": "Felix Klein, Max Eichelmann, Yannik Deschler, Yannik Schwarz, Max Buhl, Elias Frank, Noel Wölfle and Stephan Strittmatter",
+    "headline": "👨‍💻 Our developers",
+    "altpicture": "Group photo of all participants of the coding camp"
   },
   "FAVORITES": {
     "TITLE": "My Favorites",
@@ -78,6 +131,41 @@
     "REMOVE": "Remove from favorites",
     "ADD": "Add to favorites",
     "LOCAL_STORAGE_NOTICE": "Note: Favorites are only stored locally on this device."
+  },
+  "event-card": {
+    "show-more": "Show more events"
+  },
+  "event-detail": {
+    "skip-to-content": "Skip to event content",
+    "no-image": "No image available",
+    "when": "When?",
+    "where": "Where?",
+    "costs": "Price",
+    "free": "free",
+    "organizer": "Organizer",
+    "description": "Description",
+    "arrival": "Arrival",
+    "adress": "Address",
+    "eventlocation": "Event location",
+    "contact": "Contact details",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "back": "Back",
+    "edit": "Edit",
+    "tags": {
+      "description-heading": "description-heading",
+      "directions-heading": "directions-heading",
+      "contact-heading": "contact-heading"
+    }
+  },
+  "login": {
+    "username": "Username / E-Mail",
+    "password": "Password",
+    "login": "Login"
+  },
+  "upload-image": {
+    "image-here": "Drag image here"
   },
   "SHARE": {
     "SHARE": "Share ..."

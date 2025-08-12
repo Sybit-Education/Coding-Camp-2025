@@ -51,11 +51,21 @@
     "PRIVACY": {
       "TITLE": "Politique de confidentialité",
       "DESCRIPTION": "Informations sur la protection des données et le traitement des données."
-    }
+    },
+    "LOGIN": {
+      "TITLE": "Connexion",
+      "DESCRIPTION": "Gestion interne des données des entrées."
+    },
+    "ARIA-LABLE": "Autres options"
   },
   "home": {
     "current": "Événements actuels",
-    "categories": "Catégories"
+    "categories": "Catégories",
+    "main-content": "Aller au contenu principal",
+    "tags": {
+      "aria-lable-event-heading": "events-heading",
+      "aria-lable-catagories-heading": "categories-heading"
+    }
   },
   "i18y": {
     "to-main-content": "Accéder au contenu principal"
@@ -63,6 +73,49 @@
   "footer": {
     "datenschutz": "Mentions légales",
     "impressum": "Politique de confidentialité"
+  },
+  "create-event": {
+    "eventname": "Nom de l'événement:",
+    "organizer": "Choisir l'organisateur...",
+    "neworganizer": "Créer un nouvel organisateur",
+    "neworganizername": "Nom",
+    "neworganizerphone": "Numéro de téléphone",
+    "neworganizermail": "Courrier électronique",
+    "startdate": "Date de début",
+    "starttime": "Heure de début",
+    "enddate": "Date de fin",
+    "endtime": "Heure de fin",
+    "timespan": "Période",
+    "location": "Choisir un lieu...",
+    "newlocation": "Créer un nouveau lieu",
+    "newlocationname": "Nom de la localité",
+    "newlocationaddress": "Adresse",
+    "newlocationplz": "Code postal",
+    "newlocationcity": "Ville",
+    "age": "Âge minimum",
+    "price": "Prix (€)",
+    "restrictions": "Restrictions",
+    "restrictionsexample": "p. ex. escaliers",
+    "topics": "Thèmes de l'événement",
+    "eventtype": "Type d'événement",
+    "moreinfo": "Plus d'infos",
+    "moreinfoexample": "https://...",
+    "createevent": "Créer un événement",
+    "newlocationnameexample": "Nom de la localité",
+    "newlocationaddressexample": "Rue et numéro",
+    "ageexample": "p. ex. 18",
+    "description": "Description de l'événement"
+  },
+  "dev": {
+    "text1": "Ce site web a été développé dans le cadre du SYBIT Coding Camp 2025 ",
+    "text2": "par de jeunes talents qui ont fait leurs premiers pas dans le développement professionnel de logiciels avec curiosité, discipline et créativité.Notre objectif n'était pas seulement d'écrire du code, mais de créer quelque chose d'utile, qui fonctionne, qui soit utile et qui rende nos idées visibles.",
+    "text3": "Nous tenons à remercier tout particulièrement tous les participants qui ont travaillé sur ce projet avec passion, esprit d'équipe et persévérance. Chaque composant, chaque ligne de code et chaque décision prise derrière reflète le processus d'apprentissage et l'engagement de tous les participants.",
+    "patrticptants": "Participant(e)s",
+    "patrticptantslist": "Kaan Gel, Luisa Karsniqi, Sebastian Keller, Tomash Fedak, Leonard Röpcke, Jamal Blank, Adriano Mestre et Sasha (Oleksandr) Pavchak",
+    "coaches": "Coachs de SYBIT",
+    "coacheslist": "Felix Klein, Max Eichelmann, Yannik Deschler, Yannik Schwarz, Max Buhl, Elias Frank, Noel Wölfle et Stephan Strittmatter",
+    "headline": "👨‍💻 Nos développeurs",
+    "altpicture": "Photo de groupe de tous les participants au Coding Camp"
   },
   "FAVORITES": {
     "TITLE": "Mes Favoris",
@@ -75,6 +128,41 @@
     "REMOVE": "Retirer des favoris",
     "ADD": "Ajouter aux favoris",
     "LOCAL_STORAGE_NOTICE": "Remarque: Les favoris sont uniquement stockés localement sur cet appareil."
+  },
+  "event-card": {
+    "show-more": "Afficher plus d'événements"
+  },
+  "event-detail": {
+    "skip-to-content": "Aller au contenu de l'événement",
+    "no-image": "Aucune image disponible",
+    "when": "Quand ?",
+    "where": "Où ?",
+    "costs": "Prix",
+    "free": "gratuit",
+    "organizer": "Organisateur",
+    "description": "Description",
+    "arrival": "Arrivée",
+    "adress": "Adresse",
+    "eventlocation": "Lieu de l'événement",
+    "contact": "Coordonnées",
+    "name": "Nom",
+    "email": "E-mail",
+    "phone": "Téléphone",
+    "back": "Retour",
+    "edit": "Modifier",
+    "tags": {
+      "description-heading": "description-heading",
+      "directions-heading": "directions-heading",
+      "contact-heading": "contact-heading"
+    }
+  },
+  "login": {
+    "username": "Nom d'utilisateur / E-mail",
+    "password": "Mot de passe",
+    "login": "Connexion"
+  },
+  "upload-image": {
+    "image-here": "Glisser l'image ici"
   },
   "SHARE": {
     "SHARE": "Partager..."

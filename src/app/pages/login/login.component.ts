@@ -4,12 +4,13 @@ import { Login } from '../../models/login.module'
 import { LoginService } from '../../services/login.service'
 import { Component, inject } from '@angular/core'
 import { SurrealdbService } from '../../services/surrealdb.service'
+import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-page-login',
   templateUrl: './login.component.html',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, TranslateModule],
 })
 export class LoginPageComponent {
   public loginParams: Login = { username: '', password: '' }

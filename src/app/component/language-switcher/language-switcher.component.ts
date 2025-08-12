@@ -1,26 +1,11 @@
 import { Component, inject } from '@angular/core'
-import { CommonModule } from '@angular/common'
 import { I18nService } from '../../services/translate.service'
+import { CommonModule } from '@angular/common'
 
 @Component({
   selector: 'app-language-switcher',
-  standalone: true,
   imports: [CommonModule],
-  template: `
-    <div class="flex items-center space-x-2" role="radiogroup" aria-label="Sprache auswählen">
-      <button
-        *ngFor="let lang of availableLanguages"
-        (click)="switchLanguage(lang)"
-        [attr.aria-pressed]="currentLang === lang"
-        class="w-8 h-8 rounded-full overflow-hidden border-2 hover:scale-110 transition-transform focus:outline-none focus:ring-2 focus:ring-blue-500"
-        [class.border-blue-500]="currentLang === lang"
-        [class.border-transparent]="currentLang !== lang"
-        [title]="getLangTitle(lang)"
-      >
-        <img [src]="getFlagPath(lang)" [alt]="getLangTitle(lang)" class="w-full h-full object-cover">
-      </button>
-    </div>
-  `,
+  templateUrl: './language-switcher.component.html',
 })
 export class LanguageSwitcherComponent {
   private readonly i18nService = inject(I18nService)
@@ -32,8 +17,8 @@ export class LanguageSwitcherComponent {
   private readonly langMap = {
     'de': { flag: '/flags/de.svg', title: 'Deutsch' },
     'en': { flag: '/flags/gb.svg', title: 'English' },
-    'fr': { flag: '/flags/fr.svg', title: 'Français' }
-  };
+    'fr': { flag: '/flags/fr.svg', title: 'Français' },
+  }
 
   switchLanguage(lang: string): void {
     this.i18nService.use(lang)
@@ -41,10 +26,13 @@ export class LanguageSwitcherComponent {
   }
 
   getFlagPath(lang: string): string {
-    return this.langMap[lang as keyof typeof this.langMap]?.flag || '';
+    return this.langMap[lang as keyof typeof this.langMap]?.flag || ''
   }
 
   getLangTitle(lang: string): string {
-    return this.langMap[lang as keyof typeof this.langMap]?.title || lang.toUpperCase();
+    return (
+      this.langMap[lang as keyof typeof this.langMap]?.title ||
+      lang.toUpperCase()
+    )
   }
 }

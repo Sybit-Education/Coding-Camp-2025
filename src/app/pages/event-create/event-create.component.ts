@@ -1,5 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core'
 import { FormsModule } from '@angular/forms'
+import { TranslateModule } from '@ngx-translate/core'
+
+// Services
 import { EventService } from '../../services/event.service'
 import { LocationService } from '../../services/location.service'
 import { OrganizerService } from '../../services/organizer.service'
@@ -10,7 +13,7 @@ import { Location } from '../../models/location.interface'
 import { Organizer } from '../../models/organizer.interface'
 import { Topic } from '../../models/topic.interface'
 import { TypeDB } from '../../models/typeDB.interface'
-import { Decimal, RecordId, StringRecordId} from 'surrealdb'
+import { Decimal, RecordId, StringRecordId } from 'surrealdb'
 import { CommonModule } from '@angular/common'
 import { Media } from '../../models/media.model'
 import { MediaService } from '../../services/media.service'
@@ -19,7 +22,7 @@ import { UploadImageComponent } from '../../component/upload-image/upload-image.
 @Component({
   selector: 'app-event-create',
   standalone: true,
-  imports: [FormsModule, CommonModule, UploadImageComponent],
+  imports: [FormsModule, CommonModule, TranslateModule, UploadImageComponent],
   templateUrl: './event-create.component.html',
 })
 export class EventCreateComponent implements OnInit {
@@ -30,11 +33,9 @@ export class EventCreateComponent implements OnInit {
   private readonly locationService = inject(LocationService)
   private readonly organizerService = inject(OrganizerService)
   private readonly topicService = inject(TopicService)
-    private readonly mediaService = inject(MediaService)
+  private readonly mediaService = inject(MediaService)
 
-  constructor(
-    private readonly route: ActivatedRoute,
-  ) {}
+  constructor(private readonly route: ActivatedRoute) {}
 
   // Form-Felder
   eventId: RecordId<'event'> | undefined = undefined
@@ -84,16 +85,19 @@ export class EventCreateComponent implements OnInit {
   media: Media[] = []
   timePeriode = false
 
-  async ngOnInit() {
-    await this.initializeData()
+  ngOnInit() {
     const eventId = this.route.snapshot.queryParams['id']
     if (eventId) {
       const recordID = new StringRecordId(eventId)
-      await this.loadEvent(recordID)
+      this.loadEvent(recordID)
+    } else {
+      this.initializeData()
     }
   }
 
   private async loadEvent(eventId: RecordId<'event'> | StringRecordId) {
+    await this.initializeData()
+
     try {
       const event = await this.eventService.getEventByID(eventId)
       if (!event) return
@@ -135,7 +139,7 @@ export class EventCreateComponent implements OnInit {
       const eventTypeId = String(event.event_type?.id)
       this.selectedEventType =
         this.eventTypes.find((e) => String(e.id?.id) === eventTypeId) || null
-      this.setEventType(this.selectedEventType)
+      this.setSelectedEventType(this.selectedEventType)
 
       const topicIds = event.topic || []
       for (const topicId of topicIds) {
@@ -157,10 +161,6 @@ export class EventCreateComponent implements OnInit {
     this.locations = await this.locationService.getAllLocations()
     this.eventTypes = await this.eventService.getAllEventTypes()
     this.topics = await this.topicService.getAllTopics()
-    console.log('loaded organizer: ', this.organizers)
-    console.log('loaded locations: ', this.locations)
-    console.log('loaded Eventtypes: ', this.eventTypes)
-    console.log('loaded topics: ', this.topics)
   }
 
   // Auswahl-Handler
@@ -173,7 +173,6 @@ export class EventCreateComponent implements OnInit {
       this.plz = location.zip_code ?? ''
       this.city = location.city ?? ''
     }
-    console.log('selected Location:', this.selectedLocation)
   }
 
   setOrganizer(organizer: Organizer | null) {
@@ -184,12 +183,10 @@ export class EventCreateComponent implements OnInit {
       this.organizerphone = organizer.phonenumber ?? ''
       this.organizermail = organizer.email ?? ''
     }
-    console.log('selected Organizer:', this.selectedOrganizer)
   }
 
-  setEventType(eventType: TypeDB | null) {
+  setSelectedEventType(eventType: TypeDB | null) {
     this.selectedEventType = eventType
-    console.log('selected eventType:', this.selectedEventType)
   }
 
   toggleTopicSelection(event: Event, topic: Topic) {
@@ -204,15 +201,14 @@ export class EventCreateComponent implements OnInit {
   // Speichern
   async saveLocation() {
     const location: Location = {
-      name: this.locationName!,
-      street: this.address!,
-      zip_code: String(this.plz!),
-      city: this.city!,
+      name: this.locationName,
+      street: this.address,
+      zip_code: String(this.plz),
+      city: this.city,
     }
 
     try {
       const savedLocation = await this.locationService.postLocation(location)
-      console.log('Saved Location:', savedLocation)
       this.selectedLocation = savedLocation
     } catch (error) {
       console.error('Fehler beim Speichern der Location:', error)
@@ -229,7 +225,6 @@ export class EventCreateComponent implements OnInit {
     try {
       const savedOrganizer =
         await this.organizerService.postOrganizer(organizer)
-      console.log('Saved Organizer:', savedOrganizer)
       this.selectedOrganizer = savedOrganizer
     } catch (error) {
       console.error('Fehler beim Speichern des Organizers:', error)
@@ -264,8 +259,8 @@ export class EventCreateComponent implements OnInit {
     // Preis in Decimal umwandeln
     const priceDec = this.price ? new Decimal(this.price) : undefined
 
-    const mediaIds: RecordId<'media'>[] = await this.getMediaIds() as unknown as RecordId<'media'>[]
-    console.log('found mediaIds: ', mediaIds)
+    const mediaIds: RecordId<'media'>[] =
+      (await this.getMediaIds()) as unknown as RecordId<'media'>[]
 
     const payload: AppEvent = {
       name: this.eventname,
@@ -286,13 +281,10 @@ export class EventCreateComponent implements OnInit {
 
     if (this.eventId !== undefined) {
       try {
-        console.log('Updating existing event:', this.eventId)
-        console.log('Payload for update:', JSON.stringify(payload, null, 2))
         const updated = await this.eventService.updateEvent(
           this.eventId,
           payload,
         )
-        console.log('Event updated:', updated)
         if (!updated) {
           console.error('Update returned no data')
         }
@@ -304,33 +296,28 @@ export class EventCreateComponent implements OnInit {
       try {
         const created = await this.eventService.postEvent(payload)
         this.eventId = created[0].id
-        console.log('Event created:', created)
       } catch (err) {
         console.error('Fehler beim Erstellen des Events:', err)
       }
     }
   }
 
-    async getMediaIds(): Promise<RecordId<'media'>[]> {
+  async getMediaIds(): Promise<RecordId<'media'>[]> {
     return Promise.all(
-    this.media!.map(async (med) => {
-      med.id = (
-        this.eventname.replace(/[^a-zA-Z0-9]/g, '_') +
-        '_' +
-        med.fileType.split('/')[1]
-      ) as unknown as RecordId<'media'>;
+      this.media.map(async (med) => {
+        med.id = (this.eventname.replace(/[^a-zA-Z0-9]/g, '_') +
+          '_' +
+          med.fileType.split('/')[1]) as unknown as RecordId<'media'>
 
-      const result = await this.mediaService.postMedia(med);
-      console.log('result from creation of media: ', result);
+        const result = await this.mediaService.postMedia(med)
 
-      return result.id!;
-    })
-  );
+        return result.id!
+      }),
+    )
   }
-    handleImage(media: Media) {
+  handleImage(media: Media) {
     if (media) {
       this.media.push(media)
     }
-    console.log('mediaIds form Handle: ', media)
   }
 }

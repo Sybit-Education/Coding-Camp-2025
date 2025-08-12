@@ -8,7 +8,9 @@
     <div class="flex flex-col space-y-4">
       <!-- Event Name -->
       <div>
-        <label for="eventName">Event-Name:</label>
+        <label for="eventName">{{
+          'create-event.eventname' | translate
+        }}</label>
         <input
           id="eventName"
           name="eventName"
@@ -28,7 +30,9 @@
           (ngModelChange)="setOrganizer($event)"
           class="p-[0.75rem 1rem] w-full cursor-pointer rounded-[6px] border-2 border-gray-600"
         >
-          <option [ngValue]="null">Veranstalter wählen...</option>
+          <option [ngValue]="null">
+            {{ 'create-event.organizer' | translate }}
+          </option>
           <option *ngFor="let organizer of organizers" [ngValue]="organizer">
             {{ organizer.name }}
           </option>
@@ -38,7 +42,7 @@
           class="mt-2 w-[50%] rounded-2xl bg-[var(--colors-light-blue)] p-2"
           (click)="newOrganizer = !newOrganizer"
         >
-          Neuen Veranstalter erstellen
+          {{ 'create-event.neworganizer' | translate }}
         </button>
       </div>
 
@@ -48,7 +52,9 @@
         class="space-y-2 rounded-xl border-2 border-black p-2"
       >
         <p>
-          <label for="organizername">Name:</label>
+          <label for="organizername">{{
+            'create-event.neworganizername' | translate
+          }}</label>
           <input
             id="organizername"
             name="organizername"
@@ -59,7 +65,9 @@
           />
         </p>
         <p>
-          <label for="organizerphone">Telefonnummer:</label>
+          <label for="organizerphone">{{
+            'create-event.neworganizerphone' | translate
+          }}</label>
           <input
             id="organizerphone"
             name="organizerphone"
@@ -69,7 +77,9 @@
           />
         </p>
         <p>
-          <label for="organizermail">E-Mail:</label>
+          <label for="organizermail">{{
+            'create-event.neworganizermail' | translate
+          }}</label>
           <input
             id="organizermail"
             name="organizermail"
@@ -83,7 +93,7 @@
       <!-- Datum und Zeit -->
       <div class="grid grid-cols-2 gap-[1rem]">
         <div>
-          <label for="date">Startdatum:</label>
+          <label for="date">{{ 'create-event.startdate' | translate }}</label>
           <input
             id="date"
             type="date"
@@ -93,7 +103,7 @@
           />
         </div>
         <div>
-          <label for="time">Startzeit:</label>
+          <label for="time">{{ 'create-event.starttime' | translate }}</label>
           <input
             id="time"
             type="time"
@@ -106,7 +116,7 @@
 
       <div class="grid grid-cols-2 gap-[1rem]" *ngIf="timePeriode">
         <div>
-          <label for="date">Enddatum:</label>
+          <label for="date">{{ 'create-event.enddate' | translate }}</label>
           <input
             id="date"
             type="date"
@@ -116,7 +126,7 @@
           />
         </div>
         <div>
-          <label for="time">Endzeit:</label>
+          <label for="time">{{ 'create-event.endtime' | translate }}</label>
           <input
             id="time"
             type="time"
@@ -136,9 +146,9 @@
         />
         <label
           for="timePeriode"
-          class="ms-2 w-full cursor-pointer text-sm font-medium text-gray-900 dark:text-gray-700"
+          class="ms-2 w-full cursor-pointer text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-700"
         >
-          Zeitspanne
+          {{ 'create-event.timespan' | translate }}
         </label>
       </div>
 
@@ -151,7 +161,9 @@
           (ngModelChange)="setLocation($event)"
           class="p-[0.75rem 1rem] w-full cursor-pointer rounded-[6px] border-2 border-gray-600"
         >
-          <option [ngValue]="null">Location wählen ...</option>
+          <option [ngValue]="null">
+            {{ 'create-event.location' | translate }}
+          </option>
           <option *ngFor="let location of locations" [ngValue]="location">
             {{ location.name }}
           </option>
@@ -161,7 +173,7 @@
           class="mt-2 w-[50%] rounded-2xl bg-[var(--colors-light-blue)] p-2"
           (click)="newLocation = !newLocation"
         >
-          Neue Location erstellen
+          {{ 'create-event.newlocation' | translate }}
         </button>
       </div>
 
@@ -170,27 +182,35 @@
         *ngIf="newLocation"
         class="space-y-2 rounded-xl border-2 border-black p-2"
       >
-        <label for="locationName">Location-Name</label>
+        <label for="locationName">{{
+          'create-event.newlocationname' | translate
+        }}</label>
         <input
           id="locationName"
           name="locationName"
           type="text"
           [(ngModel)]="locationName"
-          placeholder="Name der Location"
+          placeholder="{{ 'create-event.newlocationnameexample' | translate }}"
           class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
         />
-        <label for="address">Adresse</label>
+        <label for="address">{{
+          'create-event.newlocationaddress' | translate
+        }}</label>
         <input
           id="address"
           name="address"
           type="text"
           [(ngModel)]="address"
-          placeholder="Straße und Hausnummer"
+          placeholder="{{
+            'create-event.newlocationaddressexample' | translate
+          }}"
           class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
         />
         <div class="grid grid-cols-2 gap-[1rem]">
           <div>
-            <label for="postalCode">PLZ</label>
+            <label for="postalCode">{{
+              'create-event.newlocationplz' | translate
+            }}</label>
             <input
               id="postalCode"
               name="plz"
@@ -200,7 +220,9 @@
             />
           </div>
           <div>
-            <label for="city">Stadt</label>
+            <label for="city">{{
+              'create-event.newlocationcity' | translate
+            }}</label>
             <input
               id="city"
               name="city"
@@ -215,7 +237,7 @@
 
       <!-- Mindestalter -->
       <div>
-        <label for="age">Mindestalter:</label>
+        <label for="age">{{ 'create-event.age' | translate }}</label>
         <input
           id="age"
           name="age"
@@ -223,13 +245,13 @@
           min="0"
           [(ngModel)]="age"
           class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
-          placeholder="z. B. 18"
+          placeholder="{{ 'create-event.ageexample' | translate }}"
         />
       </div>
 
       <!-- Preis -->
       <div>
-        <label for="price">Preis (€):</label>
+        <label for="price">{{ 'create-event.price' | translate }}</label>
         <input
           id="price"
           name="price"
@@ -247,7 +269,9 @@
     <div class="flex flex-col space-y-4">
       <!-- Beschreibung -->
       <div>
-        <label for="description">Eventbeschreibung:</label>
+        <label for="description">{{
+          'create-event.description' | translate
+        }}</label>
         <textarea
           id="description"
           name="description"
@@ -258,14 +282,16 @@
 
       <!-- Einschränkungen -->
       <div>
-        <label for="restriction">Einschränkungen:</label>
+        <label for="restriction">{{
+          'create-event.restrictions' | translate
+        }}</label>
         <input
           id="restriction"
           name="restriction"
           type="text"
           [(ngModel)]="restriction"
           class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
-          placeholder="z. B. Treppen"
+          placeholder="{{ 'create-event.restrictionsexample' | translate }}"
         />
       </div>
 
@@ -277,7 +303,7 @@
         <h1
           class="text-center text-sm font-medium text-gray-900 dark:text-gray-700"
         >
-          Themen des Events
+          {{ 'create-event.topics' | translate }}
         </h1>
         <ul class="space-y-1 p-3 text-sm text-gray-700 dark:text-gray-200">
           <li *ngFor="let topic of topics">
@@ -310,10 +336,12 @@
           id="eventType"
           name="eventType"
           [(ngModel)]="selectedEventType"
-          (ngModelChange)="setEventType($event)"
+          (ngModelChange)="setSelectedEventType($event)"
           class="p-[0.75rem 1rem] border-Gray-600 w-full cursor-pointer rounded-[6px] border-2"
         >
-          <option [ngValue]="null">Art des Events</option>
+          <option [ngValue]="null">
+            {{ 'create-event.topics' | translate }}
+          </option>
           <option *ngFor="let eventType of eventTypes" [ngValue]="eventType">
             {{ eventType.name }}
           </option>
@@ -322,12 +350,14 @@
 
       <!-- Mehr Infos -->
       <div>
-        <label for="moreInfoLink">Mehr Infos:</label>
+        <label for="moreInfoLink">{{
+          'create-event.moreinfo' | translate
+        }}</label>
         <input
           id="moreInfoLink"
           name="moreInfoLink"
           type="text"
-          placeholder="https://..."
+          placeholder="{{ 'create-event.moreinfoexample' | translate }}"
           [(ngModel)]="moreInfoLink"
           class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
         />
@@ -345,7 +375,7 @@
           class="w-full cursor-pointer rounded-2xl bg-[var(--colors-light-blue)] p-5"
           (click)="saveEvent()"
         >
-          Event erstellen
+          {{ 'create-event.createevent' | translate }}
         </button>
       </div>
     </div>

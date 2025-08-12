@@ -1,23 +1,35 @@
-import { ApplicationConfig, provideZoneChangeDetection, importProvidersFrom } from '@angular/core'
+import {
+  ApplicationConfig,
+  provideZoneChangeDetection,
+  importProvidersFrom,
+} from '@angular/core'
 import { provideRouter } from '@angular/router'
 import { provideHttpClient, HttpClient } from '@angular/common/http'
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
+import {
+  TranslateLoader,
+  TranslateModule,
+  Translation,
+} from '@ngx-translate/core'
 import { Observable } from 'rxjs'
 
 import { routes } from './app.routes'
 
 // Eigener TranslateLoader, der keine speziellen Tokens benötigt
 class CustomTranslateLoader implements TranslateLoader {
-  constructor(private http: HttpClient, private prefix: string = './assets/i18n/', private suffix: string = '.json') {}
+  constructor(
+    private readonly http: HttpClient,
+    private readonly prefix = './assets/i18n/',
+    private readonly suffix = '.json',
+  ) {}
 
-  getTranslation(lang: string): Observable<any> {
-    return this.http.get(`${this.prefix}${lang}${this.suffix}`);
+  getTranslation(lang: string): Observable<Translation> {
+    return this.http.get(`${this.prefix}${lang}${this.suffix}`)
   }
 }
 
 // Factory-Funktion für den CustomTranslateLoader
 export function createTranslateLoader(http: HttpClient) {
-  return new CustomTranslateLoader(http, './assets/i18n/', '.json');
+  return new CustomTranslateLoader(http, './assets/i18n/', '.json')
 }
 
 export const appConfig: ApplicationConfig = {
@@ -30,10 +42,10 @@ export const appConfig: ApplicationConfig = {
         loader: {
           provide: TranslateLoader,
           useFactory: createTranslateLoader,
-          deps: [HttpClient]
+          deps: [HttpClient],
         },
-        fallbackLang: 'de'
-      })
-    )
+        fallbackLang: 'de',
+      }),
+    ),
   ],
 }
