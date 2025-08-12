@@ -44,7 +44,9 @@ export class SurrealdbService extends Surreal {
     return result as T
   }
 
-  async getByRecordId<T extends Record<string, unknown>>(recordId: RecordId<string> | StringRecordId): Promise<T> {
+  async getByRecordId<T extends Record<string, unknown>>(
+    recordId: RecordId<string> | StringRecordId,
+  ): Promise<T> {
     const result = await super.select<T>(recordId)
     return result as T
   }
@@ -66,7 +68,6 @@ export class SurrealdbService extends Surreal {
     id: RecordId<string> | StringRecordId,
     payload?: T,
   ): Promise<T> {
-
     try {
       const updatedRecord = await super.update<T>(id, payload)
 

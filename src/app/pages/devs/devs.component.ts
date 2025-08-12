@@ -1,8 +1,9 @@
 import { Component } from '@angular/core'
+import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-devs',
-  imports: [],
+  imports: [TranslateModule],
   templateUrl: './devs.component.html',
   styleUrl: './devs.component.scss',
 })

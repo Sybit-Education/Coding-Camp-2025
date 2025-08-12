@@ -19,6 +19,7 @@ export class LocalStorageService {
       savedIds.push(eventId)
       this.setSavedEventIds(savedIds)
       this.savedEventsSubject.next(savedIds)
+      console.log(`Event ${eventId} zu Favoriten hinzugefügt`)
     }
   }
 
@@ -36,8 +37,7 @@ export class LocalStorageService {
   getSavedEventIds(): string[] {
     const savedEvents = localStorage.getItem(this.SAVED_EVENTS_KEY)
     const ids = savedEvents ? JSON.parse(savedEvents) : []
-
-    return ids;
+    return ids
   }
 
   private setSavedEventIds(eventIds: string[]): void {
@@ -46,10 +46,13 @@ export class LocalStorageService {
 
   filterSavedEvents(events: Event[]): Event[] {
     const savedIds = this.getSavedEventIds()
-    return events.filter((event) => event.id && savedIds.includes(String(event.id)))
+    return events.filter(
+      (event) => event.id && savedIds.includes(String(event.id)),
+    )
   }
 
   getSavedEventsCount(): number {
     return this.getSavedEventIds().length
   }
 }
+

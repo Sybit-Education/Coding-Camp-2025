@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router'
   standalone: true,
   imports: [CommonModule],
   template: `
+    <!--eslint-disable @angular-eslint/template/i18n-->
     <div class="container mx-auto p-4 pb-20">
       <h1 class="mb-6 text-2xl font-bold text-[#3b4ea3]">{{ pageTitle }}</h1>
 
@@ -39,7 +40,7 @@ import { ActivatedRoute } from '@angular/router'
 export class PlaceholderComponent implements OnInit {
   pageTitle = 'Seite'
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private readonly route: ActivatedRoute) {}
 
   ngOnInit() {
     // Bestimme den Seitentitel basierend auf der aktuellen Route

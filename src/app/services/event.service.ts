@@ -21,7 +21,7 @@ export class EventService {
       return (result || []).map(
         (item: Record<string, unknown>) =>
           ({
-            ...item
+            ...item,
           }) as Event,
       )
     } catch (error) {
@@ -37,7 +37,9 @@ export class EventService {
     }
   }
 
-  async getEventTypeByID(id: RecordId<'event_type'> | StringRecordId): Promise<EventType> {
+  async getEventTypeByID(
+    id: RecordId<'event_type'> | StringRecordId,
+  ): Promise<EventType> {
     const result = await this.surrealdb.getByRecordId<TypeDB>(id)
     const eventType = result.name as unknown as EventType
     return /^[A-Z_]+$/.test(eventType) ? eventType : EventType.UNKNOWN

@@ -1,42 +1,54 @@
 <div
-  (click)="onCardClick()"
-  tabindex="0"
-  role="button"
-  class="bg-white focus:ring-opacity-50 w-full transform cursor-pointer overflow-hidden rounded-2xl shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl focus:ring-2 focus:ring-yellow-400 focus:outline-none border border-gray-100 flex flex-col justify-center items-center"
+  class="focus:ring-opacity-50 flex w-full transform cursor-pointer flex-col items-center justify-center overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl focus:ring-2 focus:ring-yellow-400 focus:outline-none"
 >
-  <ng-container *ngIf="!isMoreCard; else moreCard">
-    <div class="relative h-[120px] w-full overflow-hidden bg-gray-300" *ngIf="mediaUrl">
-      <img
-        [src]="mediaUrl"
-        [alt]="event?.name || 'Event Bild'"
-        class="h-full w-full object-cover"
-        loading="lazy"
-      />
-    </div>
-
-    <div class="space-y-2 p-4 w-full">
-      <h3 class="line-clamp-2 text-base font-semibold text-gray-800 leading-tight">
-        {{ event?.name || 'Event Name' }}
-      </h3>
-
-      <div class="flex items-center text-gray-700">
-        <span class="mr-2">📅</span>
-        <span class="text-sm">
-          {{ (event?.date_start || null) | dateTimeRange : (event?.date_end || null) }}
-        </span>
+  <button (click)="onCardClick()" class="w-full">
+    <ng-container *ngIf="!isMoreCard; else moreCard">
+      <div
+        class="relative h-[120px] w-full overflow-hidden bg-gray-300"
+        *ngIf="mediaUrl"
+      >
+        <img
+          [src]="mediaUrl"
+          [alt]="event?.name || 'Event Bild'"
+          class="h-full w-full object-cover"
+          [attr.loading]="'lazy'"
+        />
       </div>
 
-      <div class="flex items-center text-gray-700">
-        <span class="mr-2">📍</span>
-        <span class="text-sm">{{ location?.name || 'Ort wird bekannt gegeben' }}</span>
-      </div>
-    </div>
-  </ng-container>
+      <div class="w-full space-y-2 p-4">
+        <h3
+          class="line-clamp-2 text-base leading-tight font-semibold text-gray-800"
+        >
+          {{ event?.name || 'Event Name' }}
+        </h3>
 
-  <ng-template #moreCard>
-    <div class="flex flex-col justify-center items-center p-6 h-full text-center">
-      <span class="text-4xl mb-2">➕</span>
-      <span class="text-lg font-semibold text-gray-800">Mehr Events anzeigen</span>
-    </div>
-  </ng-template>
+        <div class="flex items-center text-gray-700">
+          <span class="mr-2">📅</span>
+          <span class="text-sm">
+            {{
+              event?.date_start || null | dateTimeRange: event?.date_end || null
+            }}
+          </span>
+        </div>
+
+        <div class="flex items-center text-gray-700">
+          <span class="mr-2">📍</span>
+          <span class="text-sm">{{
+            location?.name || 'Ort wird bekannt gegeben'
+          }}</span>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #moreCard>
+      <div
+        class="flex h-full flex-col items-center justify-center p-6 text-center"
+      >
+        <span class="mb-2 text-4xl">➕</span>
+        <span class="text-lg font-semibold text-gray-800">
+          {{ 'event-card.show-more' | translate }}</span
+        >
+      </div>
+    </ng-template>
+  </button>
 </div>
