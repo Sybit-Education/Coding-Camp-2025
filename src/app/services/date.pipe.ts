@@ -28,18 +28,18 @@ export class DateTimeRangePipe implements PipeTransform, OnDestroy {
   }
 
   // Cache für formatierte Datumswerte
-  private dateCache = new Map<string, string>();
-  
+  private readonly dateCache = new Map<string, string>();
+
   transform(
     startIso: string | Date | null,
     endIso?: string | Date | null,
     locale?: string,
   ): string {
     if (!startIso) return ''
-    
+
     // Erstelle einen Cache-Key
     const cacheKey = `${startIso}-${endIso}-${locale || 'default'}-${this.i18nService.getCurrentLang()}`;
-    
+
     // Prüfe, ob das Ergebnis bereits im Cache ist
     if (this.dateCache.has(cacheKey)) {
       return this.dateCache.get(cacheKey)!;
@@ -51,7 +51,7 @@ export class DateTimeRangePipe implements PipeTransform, OnDestroy {
 
     const start = startIso instanceof Date ? startIso : new Date(startIso)
     let result: string;
-    
+
     if (!endIso) {
       result = this.formatSingleDateTime(start, effectiveLocale);
     } else {
@@ -64,16 +64,16 @@ export class DateTimeRangePipe implements PipeTransform, OnDestroy {
         result = this.formatMultiDayRange(start, end, effectiveLocale);
       }
     }
-    
+
     // Speichere das Ergebnis im Cache
     this.dateCache.set(cacheKey, result);
-    
+
     // Begrenze die Cache-Größe
     if (this.dateCache.size > 100) {
       const firstKey = this.dateCache.keys().next().value;
-      this.dateCache.delete(firstKey);
+      this.dateCache.delete(firstKey!);
     }
-    
+
     return result;
   }
 
