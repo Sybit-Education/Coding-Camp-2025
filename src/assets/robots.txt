@@ -1,0 +1,18 @@
+# robots.txt für 1200-jahre-radolfzell
+User-agent: *
+Allow: /
+Allow: /home
+Allow: /event/*
+Allow: /kategorie
+Allow: /about
+Allow: /impressum
+Allow: /datenschutz
+
+# Disallow administrative and development areas
+Disallow: /admin/
+Disallow: /login
+Disallow: /create-event
+Disallow: /edit-event
+
+# Sitemap location
+Sitemap: https://1200-jahre-radolfzell.sybit.education/sitemap.xml
