@@ -1,10 +1,10 @@
-<main class="event-container mt-5 min-h-[80vh] w-[100vw]" lang="de">
+<main class="event-container mt-5 min-h-[80vh] w-full" lang="de">
   <!-- Skip-Link für Screenreader -->
   <a href="#event-content" class="sr-only focus:not-sr-only focus:absolute focus:p-2 focus:bg-white focus:z-50">
     Zum Veranstaltungsinhalt springen
   </a>
-  <article class="flex flex-col">
-    <section id="event-content" class="info-card rounded-2xl bg-gray-100 m-2 shadow-2xl">
+  <article class="flex flex-col p-2">
+    <section id="event-content" class="info-card rounded-2xl bg-gray-100 shadow-2xl">
       <img
         *ngIf="mediaUrl"
         class="sm:w-full rounded-t-2xl object-cover"
@@ -81,7 +81,7 @@
         </div>
       </div>
     </section>
-    <section class="desc rounded-2xl p-2 mt-10" aria-labelledby="description-heading">
+    <section class="desc rounded-2xl mt-10" aria-labelledby="description-heading">
       <h2 id="description-heading" class="text-2xl font-bold pt-4 text-blue-900">Beschreibung</h2>
       <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
       <p>
@@ -90,11 +90,11 @@
     </section>
 
     @if (location?.geo_point) {
-    <section class="map p-2" aria-labelledby="directions-heading">
+    <section class="map" aria-labelledby="directions-heading">
       <h2 id="directions-heading" class="text-2xl font-bold pt-4 text-blue-900">Anreise</h2>
       <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
 
-      <div class="map p-4">
+      <div class="map">
         <app-map
           [coordinates]="[location!.geo_point!.point[1], location!.geo_point!.point[0]]"
         ></app-map>
@@ -105,7 +105,7 @@
       </div>
     </section>
     }
-    <section class="contact p-2 rounded-2xl bg-gray-100 shadow-2xl mb-18" aria-labelledby="contact-heading">
+    <section class="contact rounded-2xl bg-gray-100 shadow-2xl mb-18" aria-labelledby="contact-heading">
       <h2 id="contact-heading" class="text-2xl font-bold  pt-4 text-blue-900">Kontaktdaten</h2>
       <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
       <div class="flex justify-between">
