@@ -39,7 +39,7 @@ export class EventCreateComponent implements OnInit {
 
   // Form-Felder
   eventId: RecordId<'event'> | undefined = undefined
-  eventname = ''
+  eventName = ''
   description: string | null = null
   placename: string | null = null
   placeadress: string | null = null
@@ -82,7 +82,7 @@ export class EventCreateComponent implements OnInit {
 
   //Draft?
   draft = false
-  media: Media[] = []
+  images: string[] = []
   timePeriode = false
 
   ngOnInit() {
@@ -105,7 +105,7 @@ export class EventCreateComponent implements OnInit {
 
       // Felder befüllen
       this.eventId = event.id!
-      this.eventname = event.name
+      this.eventName = event.name
       this.description = event.description ?? null
       this.moreInfoLink = event.more_info_link ?? null
       this.price = event.price?.toString() ?? null
@@ -263,7 +263,7 @@ export class EventCreateComponent implements OnInit {
       (await this.getMediaIds()) as unknown as RecordId<'media'>[]
 
     const payload: AppEvent = {
-      name: this.eventname,
+      name: this.eventName,
       date_start: start,
       date_end: end,
       description: this.description || undefined,
@@ -303,21 +303,41 @@ export class EventCreateComponent implements OnInit {
   }
 
   async getMediaIds(): Promise<RecordId<'media'>[]> {
-    return Promise.all(
-      this.media.map(async (med) => {
-        med.id = (this.eventname.replace(/[^a-zA-Z0-9]/g, '_') +
-          '_' +
-          med.fileType.split('/')[1]) as unknown as RecordId<'media'>
+    const result: RecordId<'media'>[] = [] 
 
-        const result = await this.mediaService.postMedia(med)
+    result.push(...await this.postNewImages())
 
-        return result.id!
-      }),
-    )
+    return result
   }
-  handleImage(media: Media) {
+
+  private async postNewImages(): Promise<RecordId<'media'>[]> {
+    const resultMedias: Media[] = await Promise.all(
+      this.images.map((image, i) => {
+        const newMedia = {
+          id: (this.eventName.replace(/[^a-zA-Z0-9]/g, '_') +
+            '_' +
+            i +
+            '_' +
+            image.split(';')[0].split('/')[1]) as unknown as RecordId<'media'>,
+          file: image.split(',')[1],
+          fileName: this.eventName.replace(/[^a-zA-Z0-9]/g, '_') + '_' + i,
+          fileType: image.split(';')[0].split('/')[1],
+        }
+        return this.mediaService.postMedia(newMedia)
+      })
+    )
+
+    const resultMediasIds: RecordId<'media'>[] = resultMedias.map(
+      (media) => media.id as RecordId<'media'>
+    )
+    return resultMediasIds
+  }
+
+  handleImage(media: string[]) {
     if (media) {
-      this.media.push(media)
+      media.forEach((med) => {
+        this.images.push(med)
+      })
     }
   }
 }

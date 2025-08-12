@@ -3,13 +3,10 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  inject,
-  Input,
   Output,
   ViewChild,
 } from '@angular/core'
 import { Media } from '../../models/media.model'
-import { MediaService } from '../../services/media.service'
 import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
@@ -20,17 +17,14 @@ import { TranslateModule } from '@ngx-translate/core'
 export class UploadImageComponent {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>
 
-  @Input() eventName = ''
-  @Output() image = new EventEmitter<Media[]>()
-
-  private readonly mediaService: MediaService = inject(MediaService)
+  @Output() image = new EventEmitter<string[]>()
 
   dragedImage = false
   isHovering = false
   media = false
   files: File[] = []
   previews: string[] = []
-  pic: Media[] = []
+  pic: Media | null = null
 
   onAreaClick() {
     this.fileInput.nativeElement.click()
@@ -88,27 +82,12 @@ export class UploadImageComponent {
       }
     }
     reader.readAsDataURL(file)
+    this.image.emit(this.previews)
   }
 
   removeImage(index: number) {
     this.files.splice(index, 1)
     this.previews.splice(index, 1)
-  }
-
-  private async saveImage(file: File) {
-    const base64 = (await this.fileToBase64(file)).split(',')[1]
-
-    const media: Media = {
-      fileName: file.name,
-      fileType: file.type,
-      file: base64,
-    }
-
-    this.pic?.push(media)
-
-    this.image.emit(this.pic)
-
-    this.dragedImage = true
   }
 
   fileToBase64(file: File): Promise<string> {

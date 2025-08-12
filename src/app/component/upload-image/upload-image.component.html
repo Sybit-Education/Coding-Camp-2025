@@ -12,9 +12,9 @@
     [class.hovering]="isHovering"
   >
     <div class="mb-2 text-[1.1rem] font-medium text-black">
-      Bild hier ablegen oder klicken zum Auswählen
+      {{'Bild hier ablegen oder klicken zum Auswählen'}}
     </div>
-    <div class="text-[0.9rem] text-black">JPG, PNG - Max. 5 MB pro Bild</div>
+    <div class="text-[0.9rem] text-black">{{'JPG, PNG - Max. 5 MB pro Bild'}}</div>
     <input
       #fileInput
       type="file"
@@ -27,12 +27,12 @@
 
   @if (previews.length) {
     <div
-      class="m-3 rounded-xl border-2 border-gray-500 bg-white"
+      class="m-3 rounded-lg border-2 border-gray-500 bg-white"
       *ngFor="let src of previews; let i = index"
     >
       <button
         type="button"
-        class="aspect-[16/16] border-2 text-[2rem]"
+        class="text-[1.5rem]"
         (click)="removeImage(i)"
       >
         ✕

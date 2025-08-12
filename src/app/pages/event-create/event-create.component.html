@@ -15,7 +15,7 @@
           id="eventName"
           name="eventName"
           type="text"
-          [(ngModel)]="eventname"
+          [(ngModel)]="eventName"
           class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
           required
         />
@@ -364,7 +364,6 @@
       </div>
 
       <app-upload-image
-        [eventName]="eventname"
         (image)="handleImage($event)"
       ></app-upload-image>
 
