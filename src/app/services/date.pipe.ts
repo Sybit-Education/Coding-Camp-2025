@@ -27,31 +27,54 @@ export class DateTimeRangePipe implements PipeTransform, OnDestroy {
     }
   }
 
+  // Cache für formatierte Datumswerte
+  private dateCache = new Map<string, string>();
+  
   transform(
     startIso: string | Date | null,
     endIso?: string | Date | null,
     locale?: string,
   ): string {
     if (!startIso) return ''
+    
+    // Erstelle einen Cache-Key
+    const cacheKey = `${startIso}-${endIso}-${locale || 'default'}-${this.i18nService.getCurrentLang()}`;
+    
+    // Prüfe, ob das Ergebnis bereits im Cache ist
+    if (this.dateCache.has(cacheKey)) {
+      return this.dateCache.get(cacheKey)!;
+    }
 
     // Verwende die aktuelle Sprache für die Formatierung, falls keine Locale angegeben wurde
-    // Wir holen die aktuelle Sprache direkt vom Service, um immer den aktuellen Wert zu haben
     const currentLang = this.i18nService.getCurrentLang()
     const effectiveLocale = locale || this.getLocaleFromLang(currentLang)
 
     const start = startIso instanceof Date ? startIso : new Date(startIso)
+    let result: string;
+    
     if (!endIso) {
-      return this.formatSingleDateTime(start, effectiveLocale)
-    }
-
-    const end = endIso instanceof Date ? endIso : new Date(endIso)
-    const sameDay = start.toDateString() === end.toDateString()
-
-    if (sameDay) {
-      return this.formatSameDayRange(start, end, effectiveLocale)
+      result = this.formatSingleDateTime(start, effectiveLocale);
     } else {
-      return this.formatMultiDayRange(start, end, effectiveLocale)
+      const end = endIso instanceof Date ? endIso : new Date(endIso)
+      const sameDay = start.toDateString() === end.toDateString()
+
+      if (sameDay) {
+        result = this.formatSameDayRange(start, end, effectiveLocale);
+      } else {
+        result = this.formatMultiDayRange(start, end, effectiveLocale);
+      }
     }
+    
+    // Speichere das Ergebnis im Cache
+    this.dateCache.set(cacheKey, result);
+    
+    // Begrenze die Cache-Größe
+    if (this.dateCache.size > 100) {
+      const firstKey = this.dateCache.keys().next().value;
+      this.dateCache.delete(firstKey);
+    }
+    
+    return result;
   }
 
   private getLocaleFromLang(lang: string): string {

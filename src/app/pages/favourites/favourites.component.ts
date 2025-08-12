@@ -4,6 +4,7 @@ import { Event } from '../../models/event.interface'
 import { Router } from '@angular/router'
 import { FavoriteService } from '../../services/favorite.service'
 import { Subscription } from 'rxjs'
+import { distinctUntilChanged } from 'rxjs/operators'
 import { EventCardComponent } from '../../component/event-card/event-card.component'
 import { TranslateModule } from '@ngx-translate/core'
 
@@ -32,33 +33,45 @@ export class FavouritesComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription()
 
   ngOnInit(): void {
-    // Abonniere Änderungen an den Favoriten
+    // Abonniere Änderungen an den Favoriten mit distinctUntilChanged für weniger Updates
     this.subscriptions.add(
-      this.favoriteService.favoriteEvents$.subscribe(
+      this.favoriteService.favoriteEvents$.pipe(
+        distinctUntilChanged((prev, curr) => 
+          prev.length === curr.length && 
+          prev.every((event, i) => event.id?.id === curr[i].id?.id)
+        )
+      ).subscribe(
         (events) => {
           this.favouriteEvents = events
         },
       )
     )
 
-    // Abonniere den Ladezustand
+    // Abonniere den Ladezustand mit distinctUntilChanged
     this.subscriptions.add(
-      this.favoriteService.loading$.subscribe((loading) => {
+      this.favoriteService.loading$.pipe(
+        distinctUntilChanged()
+      ).subscribe((loading) => {
         this.loading = loading
       }),
     )
 
-    // Lade die Favoriten mit einem kleinen Timeout
-    setTimeout(() => {
+    // Lade die Favoriten mit requestAnimationFrame statt setTimeout für bessere Performance
+    requestAnimationFrame(() => {
       this.favoriteService.loadFavoriteEvents()
 
       // Sicherheits-Timeout: Setze loading auf false nach 2 Sekunden, falls es hängen bleibt
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         if (this.loading) {
           this.loading = false
         }
       }, 2000)
-    }, 100)
+      
+      // Timeout beim Zerstören der Komponente aufräumen
+      this.subscriptions.add({
+        unsubscribe: () => clearTimeout(timeoutId)
+      })
+    })
   }
 
   navigateToEvent(event: Event): void {

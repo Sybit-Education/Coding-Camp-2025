@@ -60,15 +60,19 @@ export class EventCardComponent implements OnInit, OnDestroy {
     if (!this.event) return
 
     try {
+      // Verwende Promise.all für parallele Ausführung
       const [location, eventType, mediaUrl] = await Promise.all([
         this.loadLocation(),
         this.loadEventType(),
         this.loadMedia(),
       ])
 
-      this.location = location
-      this.eventType = eventType
-      this.mediaUrl = mediaUrl
+      // Batch-Update der Komponenten-Properties für weniger Change Detection Zyklen
+      setTimeout(() => {
+        this.location = location
+        this.eventType = eventType
+        this.mediaUrl = mediaUrl
+      }, 0)
     } catch (error) {
       console.error('Fehler beim Laden der Event-Details:', error)
       this.mediaUrl = null

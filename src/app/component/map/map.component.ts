@@ -73,10 +73,14 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         // Deaktiviere Animationen für bessere Performance
         fadeAnimation: false,
         markerZoomAnimation: false,
-        zoomAnimation: false
+        zoomAnimation: false,
+        // Weitere Performance-Optimierungen
+        trackResize: false, // Manuelles Resize-Handling wenn nötig
+        renderer: new this.L.Canvas(), // Canvas statt SVG für bessere Performance
+        attributionControl: false, // Entferne Attribution Control für weniger DOM-Elemente
       });
 
-      // Optimiere Marker-Icon
+      // Optimiere Marker-Icon - Verwende eine statische URL für bessere Caching-Möglichkeiten
       const greenIcon = new this.L.Icon({
         iconUrl:
           'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
@@ -88,17 +92,23 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         shadowSize: [41, 41],
       });
 
-      this.L.marker(this.coordinates.slice() as [number, number], {
+      // Marker hinzufügen ohne slice() für weniger Objektkopien
+      this.L.marker(this.coordinates as [number, number], {
         icon: greenIcon,
       }).addTo(this.map);
 
-      // OpenStreetMap-Kachel-Layer hinzufügen mit Optimierungen
+      // OpenStreetMap-Kachel-Layer hinzufügen mit erweiterten Optimierungen
       this.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors',
         maxZoom: 20,
         // Reduziere die Anzahl der geladenen Kacheln
         updateWhenIdle: true,
-        updateWhenZooming: false
+        updateWhenZooming: false,
+        // Weitere Optimierungen
+        tileSize: 256,
+        zoomOffset: 0,
+        minZoom: 1,
+        detectRetina: false, // Deaktiviere Retina-Erkennung für weniger Kachel-Downloads
       }).addTo(this.map);
     } catch (error) {
       console.error('Fehler bei der Initialisierung der Karte:', error);

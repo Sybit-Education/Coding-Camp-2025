@@ -137,23 +137,36 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       const foundEvent = await this.eventService.getEventByID(eventId)
 
       if (foundEvent) {
+        // Setze Basis-Daten
         this.event = foundEvent
         this.evntIdString = String(this.event?.id!.id)
 
-        this.mediaUrl =
-          this.mediaBaseUrl +
-          String(foundEvent.media[0].id).replace(/_(?=[^_]*$)/, '.')
+        // Berechne Media-URL nur wenn Media vorhanden ist
+        if (foundEvent.media && foundEvent.media.length > 0) {
+          this.mediaUrl =
+            this.mediaBaseUrl +
+            String(foundEvent.media[0].id).replace(/_(?=[^_]*$)/, '.')
+        }
+        
+        // Extrahiere IDs für parallele Ladung
         const locationId = this.event?.['location']
         const organizerId = this.event?.['organizer']
         const typeId = this.event?.['event_type']
 
-        await Promise.all([
-          this.loadLocation(locationId),
-          this.loadOrganizer(organizerId),
-          this.loadType(typeId),
+        // Lade alle abhängigen Daten parallel
+        const [location, organizer, type] = await Promise.all([
+          locationId ? this.loadLocation(locationId) : Promise.resolve(null),
+          organizerId ? this.loadOrganizer(organizerId) : Promise.resolve(null),
+          typeId ? this.loadType(typeId) : Promise.resolve(null)
         ])
-
-        document.title = `${this.event.name} - 1200 Jahre Radolfzell`
+        
+        // Batch-Update für weniger Change Detection Zyklen
+        requestAnimationFrame(() => {
+          this.location = location
+          this.organizer = organizer
+          this.type = type
+          document.title = `${this.event!.name} - 1200 Jahre Radolfzell`
+        })
       } else {
         this.error = 'Event nicht gefunden'
         this.announceError('Event nicht gefunden')
