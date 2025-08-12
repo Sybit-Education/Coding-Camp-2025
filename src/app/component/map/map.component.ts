@@ -53,7 +53,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     // Aufräumen, wenn die Komponente zerstört wird
     if (this.map) {
       this.map.remove()
+      this.map = undefined
     }
+    // Referenzen freigeben
+    this.L = undefined
   }
 
   private initializeMap(): void {

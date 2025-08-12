@@ -1,4 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core'
+import { Component, inject, OnDestroy, OnInit } from '@angular/core'
+import { Subscription } from 'rxjs'
 import { MapComponent } from '../../component/map/map.component'
 import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
@@ -30,7 +31,8 @@ import { ShareComponent } from '../../component/share/share.component'
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
 })
-export class EventDetailPageComponent implements OnInit {
+export class EventDetailPageComponent implements OnInit, OnDestroy {
+  private subscriptions = new Subscription()
   event: Event | null = null
   location: Location | null = null
   organizer: Organizer | null = null
@@ -60,7 +62,18 @@ export class EventDetailPageComponent implements OnInit {
       this.error = 'Event ID nicht gefunden'
       this.announceError('Event ID nicht gefunden')
     }
-    this.isLoggedIn = this.loginservice.canActivate(this.route.snapshot)
+    
+    // Subscription für Login-Status
+    this.subscriptions.add(
+      this.loginservice.isLoggedIn$.subscribe(isLoggedIn => {
+        this.isLoggedIn = isLoggedIn
+      })
+    )
+  }
+  
+  ngOnDestroy(): void {
+    // Alle Subscriptions beenden
+    this.subscriptions.unsubscribe()
   }
 
   /**

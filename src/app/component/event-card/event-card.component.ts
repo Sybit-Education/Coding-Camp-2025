@@ -28,7 +28,7 @@ export class EventCardComponent implements OnInit, OnDestroy {
 
   @Input() isMoreCard = false
 
-  private subscription?: Subscription
+  private subscriptions = new Subscription()
 
   private readonly surrealDBService = inject(SurrealdbService)
   private readonly locationService = inject(LocationService)
@@ -49,9 +49,11 @@ export class EventCardComponent implements OnInit, OnDestroy {
     const eventId = this.event.id as unknown as string
     this.isSaved = this.localStorageService.isEventSaved(eventId)
 
-    this.subscription = this.localStorageService.savedEvents$.subscribe(() => {
-      this.isSaved = this.localStorageService.isEventSaved(eventId)
-    })
+    this.subscriptions.add(
+      this.localStorageService.savedEvents$.subscribe(() => {
+        this.isSaved = this.localStorageService.isEventSaved(eventId)
+      })
+    )
   }
 
   private async initializeEventDetails(): Promise<void> {
@@ -116,6 +118,12 @@ export class EventCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription?.unsubscribe()
+    this.subscriptions.unsubscribe()
+    
+    // Referenzen freigeben
+    this.event = null
+    this.location = null
+    this.eventType = null
+    this.mediaUrl = null
   }
 }

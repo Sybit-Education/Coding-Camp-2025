@@ -12,8 +12,7 @@ import { Subscription } from 'rxjs'
 export class DateTimeRangePipe implements PipeTransform, OnDestroy {
   private i18nService = inject(I18nService)
   private langChangeSub: Subscription
-  private lastStart: string | Date | null = null
-  private lastEnd: string | Date | null = null
+  // Entferne ungenutzte Variablen
 
   constructor() {
     // Abonniere Sprachänderungen

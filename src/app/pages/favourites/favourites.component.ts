@@ -29,18 +29,20 @@ export class FavouritesComponent implements OnInit, OnDestroy {
 
   private readonly favoriteService = inject(FavoriteService)
   private readonly router = inject(Router)
-  private subscription?: Subscription
+  private subscriptions = new Subscription()
 
   ngOnInit(): void {
     // Abonniere Änderungen an den Favoriten
-    this.subscription = this.favoriteService.favoriteEvents$.subscribe(
-      (events) => {
-        this.favouriteEvents = events
-      },
+    this.subscriptions.add(
+      this.favoriteService.favoriteEvents$.subscribe(
+        (events) => {
+          this.favouriteEvents = events
+        },
+      )
     )
 
     // Abonniere den Ladezustand
-    this.subscription.add(
+    this.subscriptions.add(
       this.favoriteService.loading$.subscribe((loading) => {
         this.loading = loading
       }),
@@ -82,8 +84,7 @@ export class FavouritesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe()
-    }
+    // Alle Subscriptions beenden
+    this.subscriptions.unsubscribe()
   }
 }
