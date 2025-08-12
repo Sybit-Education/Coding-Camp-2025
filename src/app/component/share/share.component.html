@@ -13,4 +13,10 @@
 
     <!-- Beschriftung unter dem Button -->
     <p class="font-bold text-sm mt-1 relative top-1 right-10.5">{{ 'SHARE.SHARE' | translate }}</p>
+    
+    <!-- Benachrichtigung für Benutzer, wenn Link kopiert wurde -->
+    <div *ngIf="showCopyMessage" 
+         class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in-out">
+      ✅ Der Link wurde in die Zwischenablage kopiert.
+    </div>
 </div>
