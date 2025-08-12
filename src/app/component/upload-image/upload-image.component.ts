@@ -28,11 +28,11 @@ export class UploadImageComponent {
   dragedImage = false
   isHovering = false
   media = false
+  files: File[] = []
   pic: Media[] = []
 
   onAreaClick() {
     this.fileInput.nativeElement.click()
-    
   }
 
   onDragOver(event: DragEvent) {
@@ -47,10 +47,36 @@ export class UploadImageComponent {
   onDrop(event: DragEvent) {
     event.preventDefault()
     this.isHovering = false
-    const file = event.dataTransfer?.files[0]
+    const file = event.dataTransfer?.files
 
     if (file) {
-      this.saveImage(file)
+      this.handleFiles(Array.from(file))
+    }
+  }
+
+  onFilesSelected(event: Event) {
+    const input = event.target as HTMLInputElement
+    if (!input.files) {
+      return
+    }
+    this.handleFiles(Array.from(input.files))
+    input.value = ''
+  }
+
+
+  private handleFiles(selected: File[]) {
+    for (const file of selected) {
+      if (!RegExp(/image\/(png|jpeg)/).exec(file.type)) {
+        alert(`Dateityp nicht erlaubt: ${file.name}`)
+        continue
+      }
+      const maxFileSize = 5 * 1024 * 1024
+      if (file.size > maxFileSize) {
+        alert(`Datei zu groß (max. 5 MB): ${file.name}`)
+        continue
+      }
+      this.files.push(file)
+      //this.createPreview(file)
     }
   }
 
