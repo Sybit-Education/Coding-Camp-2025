@@ -55,8 +55,6 @@ export class FavoriteService {
       }
 
       // Lade jedes Event einzeln
-      const events: Event[] = [];
-
       const events: Event[] = []
 
       for (const id of savedEventIds) {
@@ -64,10 +62,6 @@ export class FavoriteService {
           // Prüfe, ob die ID bereits das "event:"-Präfix hat
           const recordId = id.startsWith('event:')
             ? new StringRecordId(id)
-            : new StringRecordId(`event:${id}`);
-
-          const event = await this.eventService.getEventByID(recordId);
-
             : new StringRecordId(`event:${id}`)
 
           const event = await this.eventService.getEventByID(recordId)
@@ -83,7 +77,7 @@ export class FavoriteService {
       }
 
       // Sortiere Events nach Startdatum (aufsteigend)
-      const sortedEvents = events.sort((a, b) => {
+      const sortedEvents = events.toSorted((a, b) => {
         const dateA = a.date_start instanceof Date ? a.date_start : new Date(a.date_start);
         const dateB = b.date_start instanceof Date ? b.date_start : new Date(b.date_start);
         return dateA.getTime() - dateB.getTime();
