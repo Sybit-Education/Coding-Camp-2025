@@ -14,6 +14,7 @@ import { LoginService } from '../../services/login.service'
 import { TypeDB } from '../../models/typeDB.interface'
 import { TranslateModule } from '@ngx-translate/core'
 import { FavoriteButtonComponent } from '../../component/favorite-button/favorite-button.component'
+import { ShareComponent } from '../../component/share/share.component'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -24,6 +25,7 @@ import { FavoriteButtonComponent } from '../../component/favorite-button/favorit
     DateTimeRangePipe,
     FavoriteButtonComponent,
     TranslateModule,
+    ShareComponent,
   ],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
@@ -34,6 +36,7 @@ export class EventDetailPageComponent implements OnInit {
   organizer: Organizer | null = null
   type: TypeDB | null = null
   error: string | null = null
+  eventId = ''
 
   mediaBaseUrl = 'https://1200-jahre-radolfzell.sybit.education/media/'
   mediaUrl: string | null = null
@@ -49,9 +52,9 @@ export class EventDetailPageComponent implements OnInit {
   evntIdString: string | undefined
 
   ngOnInit(): void {
-    const eventId = this.route.snapshot.paramMap.get('id')
-    if (eventId) {
-      const recordID = new StringRecordId('event:' + eventId)
+    this.eventId = this.route.snapshot.paramMap.get('id')!
+    if (this.eventId) {
+      const recordID = new StringRecordId('event:' + this.eventId)
       this.loadEvent(recordID)
     } else {
       this.error = 'Event ID nicht gefunden'

@@ -1,4 +1,4 @@
-<main class="event-container mt-5 min-h-[80vh] w-[100vw]" lang="de">
+<main class="event-container mt-5 min-h-[80vh] w-full" lang="de">
   <!-- Skip-Link für Screenreader -->
   <a
     href="#event-content"
@@ -6,7 +6,7 @@
   >
     {{ 'event-detail.skip-to-content' | translate }}
   </a>
-  <article class="flex flex-col">
+  <article *ngIf="event" class="flex flex-col">
     <section
       id="event-content"
       class="info-card m-2 rounded-2xl bg-gray-100 shadow-2xl"
@@ -15,8 +15,8 @@
         *ngIf="mediaUrl"
         class="rounded-t-2xl object-cover sm:w-full"
         [alt]="
-          event?.name
-            ? 'Bild der Veranstaltung: ' + event?.name
+          event.name
+            ? 'Bild der Veranstaltung: ' + event.name
             : 'Veranstaltungsbild'
         "
         [src]="mediaUrl"
@@ -33,10 +33,10 @@
         <app-favorite-button
           *ngIf="event?.id"
           class="px-2 pt-4"
-          [eventId]="evntIdString"
+          [eventId]="event.id"
         ></app-favorite-button>
         <h1 class="flex w-full px-2 pt-4 text-2xl font-bold text-blue-900">
-          {{ event?.name }}
+          {{ event.name }}
         </h1>
       </div>
 
@@ -58,7 +58,7 @@
                 {{ 'event-detail.when' | translate }}
               </h2>
               <p class="text-left text-sm">
-                {{ event?.date_start! | dateTimeRange: event?.date_end }}
+                {{ event.date_start! | dateTimeRange: event.date_end }}
               </p>
             </div>
           </div>
@@ -88,8 +88,8 @@
                 {{ 'event-detail.costs' | translate }}
               </h2>
               <p class="text-left text-sm">
-                @if (event?.price !== null && +event?.price! > 0) {
-                  {{ event?.price }}
+                @if (event.price && +event.price > 0) {
+                  {{ event.price }}
                 } @else {
                   {{ 'event-detail.free' | translate }}
                 }
@@ -110,14 +110,15 @@
               <p class="text-left text-sm">{{ organizer?.name }}</p>
             </div>
           </div>
+          <div>
+            <app-share [event]="event" />
+          </div>
         </div>
       </div>
     </section>
     <section
       class="desc mt-10 rounded-2xl p-2"
-      [attr.aria-labelledby]="
-        'event-detail.tags.description-heading' | translate
-      "
+      [attr.aria-labelledby]="'description-heading'"
     >
       <h2
         id="description-heading"
@@ -127,7 +128,7 @@
       </h2>
       <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
       <p>
-        {{ event?.description || 'Keine Beschreibung verfügbar.' }}
+        {{ event.description || 'Keine Beschreibung verfügbar.' }}
       </p>
     </section>
 
@@ -146,7 +147,7 @@
         </h2>
         <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
 
-        <div class="map p-4">
+        <div class="map">
           <app-map
             [coordinates]="[
               location!.geo_point!.point[1],
@@ -169,7 +170,7 @@
     }
     <section
       class="contact mb-18 rounded-2xl bg-gray-100 p-2 shadow-2xl"
-      [attr.aria-labelledby]="'event-detail.tags.contact-heading' | translate"
+      [attr.aria-labelledby]="'contact-heading'"
     >
       <h2 id="contact-heading" class="pt-4 text-2xl font-bold text-blue-900">
         {{ 'event-detail.contact' | translate }}

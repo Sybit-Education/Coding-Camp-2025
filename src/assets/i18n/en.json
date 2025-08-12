@@ -162,5 +162,8 @@
   },
   "upload-image": {
     "image-here": "Drag image here"
+  },
+  "SHARE": {
+    "SHARE": "Share ..."
   }
 }

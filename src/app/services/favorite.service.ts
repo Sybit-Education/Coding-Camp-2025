@@ -74,7 +74,7 @@ export class FavoriteService {
       }
 
       // Sortiere Events nach Startdatum (aufsteigend)
-      const sortedEvents = events.sort((a, b) => {
+      const sortedEvents = events.slice().sort((a, b) => {
         const dateA =
           a.date_start instanceof Date ? a.date_start : new Date(a.date_start)
         const dateB =

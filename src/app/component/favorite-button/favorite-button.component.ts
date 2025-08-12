@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs'
 import { FavoriteService } from '../../services/favorite.service'
 import { TranslateModule } from '@ngx-translate/core'
 import { CommonModule } from '@angular/common'
+import { RecordId } from 'surrealdb'
 
 @Component({
   selector: 'app-favorite-button',
@@ -10,7 +11,7 @@ import { CommonModule } from '@angular/common'
   templateUrl: './favorite-button.component.html',
 })
 export class FavoriteButtonComponent implements OnInit, OnDestroy {
-  @Input() eventId = '' as string | undefined
+  @Input() eventId: RecordId<'event'> | undefined
 
   isFavorite = false
   private subscription?: Subscription
@@ -51,7 +52,6 @@ export class FavoriteButtonComponent implements OnInit, OnDestroy {
     event.stopPropagation() // Verhindert, dass das Event-Klick-Event ausgelöst wird
 
     if (!this.eventId) return
-
     this.favoriteService.toggleFavorite(this.eventId.toString())
 
     // Der Status wird durch die Subscription aktualisiert

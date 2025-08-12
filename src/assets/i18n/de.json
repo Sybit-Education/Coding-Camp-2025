@@ -159,5 +159,8 @@
   },
   "upload-image": {
     "image-here": "Bild hierher ziehen"
+  },
+  "SHARE": {
+    "SHARE": "Teilen ..."
   }
 }

@@ -158,6 +158,9 @@
     "login": "Connexion"
   },
   "upload-image": {
-    "image-here": "Glisser l’image ici"
+    "image-here": "Glisser l'image ici"
+  },
+  "SHARE": {
+    "SHARE": "Partager..."
   }
 }
