@@ -20,20 +20,29 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
   constructor(private readonly ngZone: NgZone) {}
 
-  async ngAfterViewInit(): Promise<void> {
+  ngAfterViewInit(): void {
     // Dynamisches Importieren von Leaflet
+    this.loadLeaflet();
+  }
+
+  private loadLeaflet(): void {
     try {
       // Importiere Leaflet außerhalb der Angular Zone für bessere Performance
-      this.ngZone.runOutsideAngular(async () => {
-        const L = await import('leaflet')
-        // Wichtig: Wir müssen das default-Objekt verwenden, da Leaflet als CommonJS-Modul importiert wird
-        this.L = L.default
-        this.leafletLoaded = true
+      this.ngZone.runOutsideAngular(() => {
+        import('leaflet')
+          .then(L => {
+            // Wichtig: Wir müssen das default-Objekt verwenden, da Leaflet als CommonJS-Modul importiert wird
+            this.L = L.default
+            this.leafletLoaded = true
 
-        // Warten bis DOM vollständig geladen ist
-        setTimeout(() => {
-          this.initializeMap()
-        }, 0)
+            // Warten bis DOM vollständig geladen ist
+            setTimeout(() => {
+              this.initializeMap()
+            }, 0)
+          })
+          .catch(error => {
+            console.error('Fehler beim Laden von Leaflet:', error)
+          });
       });
     } catch (error) {
       console.error('Fehler beim Laden von Leaflet:', error)
