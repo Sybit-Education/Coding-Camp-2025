@@ -1,22 +1,24 @@
-@if (!dragedImage) {
-  <div class="rounded-[6px] border-2 border-black">
-    <div
-      class="h-[250px]"
-      class="dropzone"
+<div
+  class="flex items-center justify-center rounded-[6px] border-2 border-black bg-[#6d7cbc]"
+>
+  @if (!dragedImage) {
+    <button
+      class="flex h-[250px] w-full items-center justify-center"
       (dragover)="onDragOver($event)"
-      (dragleave)="onDragLeave($event)"
+      (dragleave)="onDragLeave()"
       (drop)="onDrop($event)"
+      (keydown)="onAreaClick()"
+      (click)="onAreaClick()"
+      tabindex="0"
       [class.hovering]="isHovering"
     >
-      <p class="bg-[#6d7cbc] text-center">
+      <p class="text-center">
         {{ 'upload-image.image-here' | translate }}
       </p>
-    </div>
-  </div>
-} @else {
-  <div>
-    <p class="rounded-[6px] border-2 border-black bg-[#6d7cbc] text-center">
-      {{ pic?.fileName }}
+    </button>
+  } @else {
+    <p class="text-center">
+      {{ pic[0].fileName }}
     </p>
-  </div>
-}
+  }
+</div>

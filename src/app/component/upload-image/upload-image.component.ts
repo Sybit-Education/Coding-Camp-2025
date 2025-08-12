@@ -1,5 +1,13 @@
 import { CommonModule } from '@angular/common'
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core'
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core'
 import { Media } from '../../models/media.model'
 import { MediaService } from '../../services/media.service'
 import { TranslateModule } from '@ngx-translate/core'
@@ -10,23 +18,29 @@ import { TranslateModule } from '@ngx-translate/core'
   templateUrl: './upload-image.component.html',
 })
 export class UploadImageComponent {
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>
+
   @Input() eventName = ''
-  @Output() image = new EventEmitter<Media>()
+  @Output() image = new EventEmitter<Media[]>()
 
   private readonly mediaService: MediaService = inject(MediaService)
 
   dragedImage = false
   isHovering = false
   media = false
-  pic?: Media
+  pic: Media[] = []
+
+  onAreaClick() {
+    this.fileInput.nativeElement.click()
+    
+  }
 
   onDragOver(event: DragEvent) {
     event.preventDefault()
     this.isHovering = true
   }
 
-  onDragLeave(event: DragEvent) {
-    event.preventDefault()
+  onDragLeave() {
     this.isHovering = false
   }
 
@@ -49,7 +63,7 @@ export class UploadImageComponent {
       file: base64,
     }
 
-    this.pic = media
+    this.pic?.push(media)
 
     this.image.emit(this.pic)
 
