@@ -82,7 +82,10 @@ export class UploadImageComponent {
       }
     }
     reader.readAsDataURL(file)
+    console.log('image before filling in upload component: ', this.image.length)
+
     this.image.emit(this.previews)
+    console.log('image after filling in upload component: ', this.image.length)
   }
 
   removeImage(index: number) {

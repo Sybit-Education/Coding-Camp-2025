@@ -303,17 +303,20 @@ export class EventCreateComponent implements OnInit {
   }
 
   async getMediaIds(): Promise<RecordId<'media'>[]> {
-    const result: RecordId<'media'>[] = [] 
+    const result: RecordId<'media'>[] = []
 
-    result.push(...await this.postNewImages())
+    result.push(...(await this.postNewImages()))
+    console.log('result after postNewImages: ', result)
 
     return result
   }
 
   private async postNewImages(): Promise<RecordId<'media'>[]> {
+    console.log('postNewImage() -->')
+    console.log('images: ', this.images)
     const resultMedias: Media[] = await Promise.all(
-      this.images.map((image, i) => {
-        const newMedia = {
+      this.images.map(async (image, i) => {
+        const newMedia: Media = {
           id: (this.eventName.replace(/[^a-zA-Z0-9]/g, '_') +
             '_' +
             i +
@@ -323,21 +326,30 @@ export class EventCreateComponent implements OnInit {
           fileName: this.eventName.replace(/[^a-zA-Z0-9]/g, '_') + '_' + i,
           fileType: image.split(';')[0].split('/')[1],
         }
-        return this.mediaService.postMedia(newMedia)
-      })
+        const result = await this.mediaService.postMedia(newMedia)
+        console.log('returned Media: ', result)
+        return result
+      }),
     )
+    console.log('rsultMedias: ', resultMedias)
 
     const resultMediasIds: RecordId<'media'>[] = resultMedias.map(
-      (media) => media.id as RecordId<'media'>
+      (media) => media.id as RecordId<'media'>,
     )
+    console.log('const resultMediaIds: ', resultMediasIds)
+    console.log('postNewImage() <--  resultMediaIds: ', resultMediasIds)
     return resultMediasIds
   }
 
   handleImage(media: string[]) {
+    console.log(`handleImage(media: ${media}) -->`)
     if (media) {
+      console.log('checkup valid')
+      console.log('images before filling: ', this.images)
       media.forEach((med) => {
         this.images.push(med)
       })
+      console.log('images after filling: ', this.images)
     }
   }
 }
