@@ -52,6 +52,10 @@
       "TITLE": "Privacy Policy",
       "DESCRIPTION": "Information about data protection and data processing."
     },
+    "LOGIN": {
+      "TITLE": "Login",
+      "DESCRIPTION": "Internal data management of entries."
+    },
     "ARIA-LABLE": "More options"
   },
   "home": {

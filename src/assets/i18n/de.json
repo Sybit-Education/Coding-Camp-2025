@@ -52,6 +52,10 @@
       "TITLE": "Datenschutz",
       "DESCRIPTION": "Informationen zum Datenschutz und zur Datenverarbeitung."
     },
+    "LOGIN":{ 
+      "TITLE": "Login",
+      "DESCRIPTION": "Interne Datenverwaltung der Einträge."
+    },
     "ARIA-LABLE": "Weitere Optionen"
   },
   "home": {
