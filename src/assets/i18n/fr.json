@@ -52,6 +52,10 @@
       "TITLE": "Politique de confidentialité",
       "DESCRIPTION": "Informations sur la protection des données et le traitement des données."
     },
+    "LOGIN": {
+      "TITLE": "Connexion",
+      "DESCRIPTION": "Gestion interne des données des entrées."
+    },
     "ARIA-LABLE": "Autres options"
   },
   "home": {
