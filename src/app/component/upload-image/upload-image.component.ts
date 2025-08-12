@@ -29,6 +29,7 @@ export class UploadImageComponent {
   isHovering = false
   media = false
   files: File[] = []
+  previews: string[] = []
   pic: Media[] = []
 
   onAreaClick() {
@@ -63,7 +64,6 @@ export class UploadImageComponent {
     input.value = ''
   }
 
-
   private handleFiles(selected: File[]) {
     for (const file of selected) {
       if (!RegExp(/image\/(png|jpeg)/).exec(file.type)) {
@@ -76,8 +76,23 @@ export class UploadImageComponent {
         continue
       }
       this.files.push(file)
-      //this.createPreview(file)
+      this.createPreview(file)
     }
+  }
+
+  private createPreview(file: File) {
+    const reader = new FileReader()
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        this.previews.push(reader.result)
+      }
+    }
+    reader.readAsDataURL(file)
+  }
+
+  removeImage(index: number) {
+    this.files.splice(index, 1)
+    this.previews.splice(index, 1)
   }
 
   private async saveImage(file: File) {
