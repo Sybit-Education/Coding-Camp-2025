@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common'
 import { Event } from '../../models/event.interface'
 import { Router } from '@angular/router'
 import { FavoriteService } from '../../services/favorite.service'
-import { NavigationService } from '../../services/navigation.service'
 import { Subscription } from 'rxjs'
 import { distinctUntilChanged } from 'rxjs/operators'
 import { EventCardComponent } from '../../component/event-card/event-card.component'
@@ -31,13 +30,9 @@ export class FavouritesComponent implements OnInit, OnDestroy {
 
   private readonly favoriteService = inject(FavoriteService)
   private readonly router = inject(Router)
-  private readonly navigationService = inject(NavigationService)
   private subscriptions = new Subscription()
 
   ngOnInit(): void {
-    // Scrolle sofort zum Seitenanfang
-    this.navigationService.scrollToTop();
-    
     // Abonniere Änderungen an den Favoriten mit distinctUntilChanged für weniger Updates
     this.subscriptions.add(
       this.favoriteService.favoriteEvents$.pipe(
@@ -84,12 +79,12 @@ export class FavouritesComponent implements OnInit, OnDestroy {
       const eventId = event.id.toString()
       // Für die Navigation müssen wir das "event:" Präfix entfernen, da die Route es nicht erwartet
       const routeId = eventId.replace(/^event:/, '')
-      this.navigationService.navigateTo(['/event', routeId])
+      this.router.navigate(['/event', routeId])
     }
   }
 
   navigateToHome(): void {
-    this.navigationService.navigateTo(['/'])
+    this.router.navigate(['/'])
   }
 
   removeFavourite(event: MouseEvent, favouriteEvent: Event): void {
