@@ -1,6 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { MapComponent } from '../../component/map/map.component'
+import { NavigationService } from '../../services/navigation.service'
 import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -48,6 +49,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   private readonly organizerService = inject(OrganizerService)
   private readonly route = inject(ActivatedRoute)
   private readonly router = inject(Router)
+  private readonly navigationService = inject(NavigationService)
   private readonly loginservice = inject(LoginService)
 
   protected isLoggedIn = false
@@ -185,15 +187,14 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   }
 
   goBack() {
-    this.router.navigate(['/'], { scrollPositionRestoration: 'top' })
+    this.navigationService.navigateTo(['/'])
   }
 
   redirect() {
-    this.router.navigate(['/create-event'], {
+    this.navigationService.navigateTo(['/create-event'], {
       queryParams: {
         id: this.event!.id,
-      },
-      scrollPositionRestoration: 'top'
+      }
     })
   }
 }

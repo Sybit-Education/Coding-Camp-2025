@@ -2,6 +2,7 @@ import { Component, Input, OnInit, OnDestroy, inject } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { Router } from '@angular/router'
 import { Subscription } from 'rxjs'
+import { NavigationService } from '../../services/navigation.service'
 
 import { Event, EventType } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
@@ -33,6 +34,7 @@ export class EventCardComponent implements OnInit, OnDestroy {
   private readonly surrealDBService = inject(SurrealdbService)
   private readonly locationService = inject(LocationService)
   private readonly router = inject(Router)
+  private readonly navigationService = inject(NavigationService)
   private readonly localStorageService = inject(LocalStorageService)
   private readonly mediaService = inject(MediaService)
 
@@ -113,12 +115,12 @@ export class EventCardComponent implements OnInit, OnDestroy {
 
   onCardClick(): void {
     if (!this.event) {
-      this.router.navigate(['/kategorie'], { scrollPositionRestoration: 'top' })
+      this.navigationService.navigateTo(['/kategorie'])
       return
     }
 
     const cleanedId = this.event.id!.id
-    this.router.navigate(['/event', cleanedId], { scrollPositionRestoration: 'top' })
+    this.navigationService.navigateTo(['/event', cleanedId])
   }
 
   ngOnDestroy(): void {

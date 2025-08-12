@@ -29,11 +29,6 @@ export class DateTimeRangePipe implements PipeTransform, OnDestroy {
 
   // Cache für formatierte Datumswerte
   private readonly dateCache = new Map<string, string>();
-  
-  // Scroll-Verhalten für Router-Navigation
-  static scrollToTop(): void {
-    window.scrollTo(0, 0);
-  }
 
   transform(
     startIso: string | Date | null,
