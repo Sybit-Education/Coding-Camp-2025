@@ -78,5 +78,8 @@
     "REMOVE": "Remove from favorites",
     "ADD": "Add to favorites",
     "LOCAL_STORAGE_NOTICE": "Note: Favorites are only stored locally on this device."
+  },
+  "SHARE": {
+    "SHARE": "Share ..."
   }
 }

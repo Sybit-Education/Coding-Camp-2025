@@ -75,5 +75,8 @@
     "REMOVE": "Retirer des favoris",
     "ADD": "Ajouter aux favoris",
     "LOCAL_STORAGE_NOTICE": "Remarque: Les favoris sont uniquement stockés localement sur cet appareil."
+  },
+  "SHARE": {
+    "SHARE": "Partager..."
   }
 }
