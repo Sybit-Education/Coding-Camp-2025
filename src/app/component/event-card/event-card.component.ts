@@ -113,12 +113,12 @@ export class EventCardComponent implements OnInit, OnDestroy {
 
   onCardClick(): void {
     if (!this.event) {
-      this.router.navigate(['/kategorie'])
+      this.router.navigate(['/kategorie'], { scrollPositionRestoration: 'top' })
       return
     }
 
     const cleanedId = this.event.id!.id
-    this.router.navigate(['/event', cleanedId])
+    this.router.navigate(['/event', cleanedId], { scrollPositionRestoration: 'top' })
   }
 
   ngOnDestroy(): void {

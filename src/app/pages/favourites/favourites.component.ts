@@ -79,12 +79,12 @@ export class FavouritesComponent implements OnInit, OnDestroy {
       const eventId = event.id.toString()
       // Für die Navigation müssen wir das "event:" Präfix entfernen, da die Route es nicht erwartet
       const routeId = eventId.replace(/^event:/, '')
-      this.router.navigate(['/event', routeId])
+      this.router.navigate(['/event', routeId], { scrollPositionRestoration: 'top' })
     }
   }
 
   navigateToHome(): void {
-    this.router.navigate(['/'])
+    this.router.navigate(['/'], { scrollPositionRestoration: 'top' })
   }
 
   removeFavourite(event: MouseEvent, favouriteEvent: Event): void {

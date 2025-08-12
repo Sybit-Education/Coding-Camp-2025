@@ -185,7 +185,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   }
 
   goBack() {
-    this.router.navigate(['/'])
+    this.router.navigate(['/'], { scrollPositionRestoration: 'top' })
   }
 
   redirect() {
@@ -193,6 +193,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       queryParams: {
         id: this.event!.id,
       },
+      scrollPositionRestoration: 'top'
     })
   }
 }
