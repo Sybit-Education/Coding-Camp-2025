@@ -68,7 +68,6 @@ export class SurrealdbService extends Surreal {
     id: RecordId<string> | StringRecordId,
     payload?: T,
   ): Promise<T> {
-
     try {
       const updatedRecord = await super.update<T>(id, payload)
 

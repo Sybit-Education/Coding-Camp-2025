@@ -44,7 +44,6 @@ export class HomeComponent implements OnInit {
   }
 
   async initializeData() {
-
     try {
       const [events, topics] = await Promise.all([
         this.eventService.getAllEvents(),

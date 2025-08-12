@@ -42,7 +42,6 @@ export class KategorieComponent implements OnInit {
   private readonly topicService: TopicService = inject(TopicService)
 
   async initilizeData() {
-
     this.topics = await this.topicService.getAllTopics()
     try {
       let rawEvents: AppEvent[] = []
