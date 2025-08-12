@@ -1,22 +1,26 @@
-<div class="flex flex-col items-center space-y-2 relative">
-    <div class="relative group top-3 right-10.5">
-      <button
-        type="button"
-        (click)="sharePage()"
-        class="p-3 rounded-full bg-blue-200 hover:bg-blue-300 transition focus:outline-none focus:ring-2 focus:ring-blue-400 group active:ring-blue-600"
+<div class="relative flex flex-col items-center space-y-2">
+  <div class="group relative top-3 right-10.5">
+    <button
+      type="button"
+      (click)="sharePage()"
+      class="group rounded-full bg-blue-200 p-3 transition hover:bg-blue-300 focus:ring-2 focus:ring-blue-400 focus:outline-none active:ring-blue-600"
+    >
+      <div
+        class="relative flex h-[26px] w-[26px] items-center justify-center rounded-full"
       >
-        <div class="flex h-[26px] w-[26px] relative items-center justify-center rounded-full">
-          <p>{{ '📤' }}</p>
-        </div>
-      </button>
-    </div>
+        <p>{{ '📤' }}</p>
+      </div>
+    </button>
+  </div>
 
-    <!-- Beschriftung unter dem Button -->
-    <p class="font-bold text-sm mt-1 relative top-1 right-10.5">{{ 'SHARE.SHARE' | translate }}</p>
-    
-    <!-- Benachrichtigung für Benutzer, wenn Link kopiert wurde -->
-    <div *ngIf="showCopyMessage" 
-         class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in-out">
-      ✅ Der Link wurde in die Zwischenablage kopiert.
-    </div>
+  <!-- Beschriftung unter dem Button -->
+  <p class="relative top-1 right-10.5 mt-1 text-sm font-bold">
+    {{ 'SHARE.SHARE' | translate }}
+  </p>
+
+  <!-- Benachrichtigung für Benutzer, wenn Link kopiert wurde -->
+  <div *ngIf="showCopyMessage"
+        class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in-out">
+    ✅ {{ 'share.copy-notification' | translate }}
+  </div>
 </div>

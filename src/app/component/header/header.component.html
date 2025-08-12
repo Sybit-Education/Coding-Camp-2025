@@ -16,8 +16,10 @@
     'h-[240px] items-center bg-[#fbd2bc]/90': !isShrunk,
   }"
 >
-    <!-- Sprachumschalter oben rechts -->
-    <app-language-switcher class="absolute top-1 right-4 z-20"></app-language-switcher>
+  <!-- Sprachumschalter oben rechts -->
+  <app-language-switcher
+    class="absolute top-1 right-4 z-20"
+  ></app-language-switcher>
   <!-- Logo-Container: richtet das Logo zentriert oder links aus -->
   <div
     class="relative z-10 flex w-full items-center transition-all duration-1200"
@@ -45,8 +47,8 @@
       'h-[220px]': !isShrunk,
     }"
     viewBox="0 0 100 10"
-    preserveAspectRatio="none"
+    [attr.preserveAspectRatio]="'none'"
   >
-    <path d="M0 5 Q25 0 50 5 T100 5 V10 H0 Z" fill="#ffffff"></path>
+    <path [attr.d]="'M0 5 Q25 0 50 5 T100 5 V10 H0 Z'" fill="#ffffff"></path>
   </svg>
 </header>

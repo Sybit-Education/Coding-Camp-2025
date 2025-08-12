@@ -8,7 +8,9 @@
       (drop)="onDrop($event)"
       [class.hovering]="isHovering"
     >
-      <p class="bg-[#6d7cbc] text-center">Bild hierher ziehen</p>
+      <p class="bg-[#6d7cbc] text-center">
+        {{ 'upload-image.image-here' | translate }}
+      </p>
     </div>
   </div>
 } @else {

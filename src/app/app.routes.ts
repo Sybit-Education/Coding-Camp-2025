@@ -28,7 +28,7 @@ export const routes: Routes = [
   {
     path: 'create-event',
     component: EventCreateComponent,
-    canActivate: [LoginService]
+    canActivate: [LoginService],
   },
   {
     path: 'more',
@@ -57,5 +57,5 @@ export const routes: Routes = [
   {
     path: 'kategorie',
     component: KategorieComponent,
-  }
+  },
 ]

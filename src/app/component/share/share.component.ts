@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Event } from '../../models/event.interface';
-import { TranslateModule } from '@ngx-translate/core';
+import { Component, Input } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { Event } from '../../models/event.interface'
+import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-share',
@@ -10,50 +10,53 @@ import { TranslateModule } from '@ngx-translate/core';
   standalone: true,
 })
 export class ShareComponent {
-  @Input() event: Event | null = null;
-  showCopyMessage = false;
+  @Input() event: Event | null = null
+  showCopyMessage = false
 
   sharePage() {
     if (!this.event || !this.event.id) {
-      console.error('Kein Event oder Event-ID vorhanden');
-      return;
+      console.error('Kein Event oder Event-ID vorhanden')
+      return
     }
 
-    const id = this.event.id.id || '';
-    const baseUrl = window.location.origin;
-    const url = `${baseUrl}/event/${id}`;
+    const id = this.event.id.id || ''
+    const baseUrl = window.location.origin
+    const url = `${baseUrl}/event/${id}`
 
     // Dynamischen Titel und Text basierend auf dem Event-Objekt erstellen
-    const title = this.event.name || 'Veranstaltung in Radolfzell';
-    const text = `Schau dir diese Veranstaltung in Radolfzell an: ${title}`;
+    const title = this.event.name || 'Veranstaltung in Radolfzell'
+    const text = `Schau dir diese Veranstaltung in Radolfzell an: ${title}`
 
     // Wenn Web Share API unterstützt wird, nutze diese
     if (this.canBrowserShareData({ title, text, url })) {
-      navigator.share({
-        title: title,
-        text: text,
-        url: url
-      })
-      .then(() => console.log('Erfolgreich geteilt'))
-      .catch((error) => {
-        console.error('Fehler beim Teilen:', error);
-        // Fallback zur Zwischenablage
-        this.copyToClipboard(url);
-      });
+      navigator
+        .share({
+          title: title,
+          text: text,
+          url: url,
+        })
+        .then(() => console.log('Erfolgreich geteilt'))
+        .catch((error) => {
+          console.error('Fehler beim Teilen:', error)
+          // Fallback zur Zwischenablage
+          this.copyToClipboard(url)
+        })
     } else {
-      console.log('Web Share API nicht unterstützt, Fallback zur Zwischenablage');
+      console.log(
+        'Web Share API nicht unterstützt, Fallback zur Zwischenablage',
+      )
       // Fallback: In die Zwischenablage kopieren
-      this.copyToClipboard(url);
+      this.copyToClipboard(url)
     }
   }
 
   canBrowserShareData(data: ShareData | undefined): boolean {
     if (!navigator.share || !navigator.canShare) {
-      return false;
+      return false
     }
-    const canShare = navigator.canShare(data);
-    console.log('Kann geteilt werden:', canShare);
-    return canShare;
+    const canShare = navigator.canShare(data)
+    console.log('Kann geteilt werden:', canShare)
+    return canShare
   }
 
   private copyToClipboard(text: string) {
@@ -71,26 +74,26 @@ export class ShareComponent {
         this.fallbackCopyToClipboard(text);
       });
   }
-  
+
   private fallbackCopyToClipboard(text: string) {
     try {
       const textArea = document.createElement('textarea');
       textArea.value = text;
-      
+
       // Element unsichtbar machen und zum DOM hinzufügen
       textArea.style.position = 'fixed';
       textArea.style.left = '-999999px';
       textArea.style.top = '-999999px';
       document.body.appendChild(textArea);
-      
+
       // Text auswählen und kopieren
       textArea.focus();
       textArea.select();
       const successful = document.execCommand('copy');
-      
+
       // Element wieder entfernen
       document.body.removeChild(textArea);
-      
+
       if (successful) {
         console.log('Link in Zwischenablage kopiert (Fallback)');
         this.showCopyMessage = true;

@@ -12,13 +12,21 @@ import { DateTimeRangePipe } from '../../services/date.pipe'
 import { RecordId, StringRecordId } from 'surrealdb'
 import { LoginService } from '../../services/login.service'
 import { TypeDB } from '../../models/typeDB.interface'
+import { TranslateModule } from '@ngx-translate/core'
 import { FavoriteButtonComponent } from '../../component/favorite-button/favorite-button.component'
-import { ShareComponent } from "../../component/share/share.component";
+import { ShareComponent } from '../../component/share/share.component'
 
 @Component({
   selector: 'app-event-detail-page',
   standalone: true,
-  imports: [MapComponent, CommonModule, DateTimeRangePipe, FavoriteButtonComponent, ShareComponent],
+  imports: [
+    MapComponent,
+    CommonModule,
+    DateTimeRangePipe,
+    FavoriteButtonComponent,
+    TranslateModule,
+    ShareComponent,
+  ],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
 })
@@ -28,7 +36,7 @@ export class EventDetailPageComponent implements OnInit {
   organizer: Organizer | null = null
   type: TypeDB | null = null
   error: string | null = null
-  eventId = ""
+  eventId = ''
 
   mediaBaseUrl = 'https://1200-jahre-radolfzell.sybit.education/media/'
   mediaUrl: string | null = null
@@ -41,7 +49,7 @@ export class EventDetailPageComponent implements OnInit {
   private readonly loginservice = inject(LoginService)
 
   protected isLoggedIn = false
-evntIdString: string|undefined
+  evntIdString: string | undefined
 
   ngOnInit(): void {
     this.eventId = this.route.snapshot.paramMap.get('id')!
@@ -61,7 +69,7 @@ evntIdString: string|undefined
    */
   private announceError(message: string): void {
     // In einer vollständigen Implementierung würde hier LiveAnnouncer verwendet werden
-    console.error(`Fehler: ${message}`);
+    console.error(`Fehler: ${message}`)
   }
 
   async loadType(typeId: RecordId<'event_type'> | undefined) {
@@ -117,8 +125,8 @@ evntIdString: string|undefined
 
       if (foundEvent) {
         this.event = foundEvent
+        this.evntIdString = String(this.event?.id!.id)
 
-        console.log('Geladenes Event:', this.event)
         this.mediaUrl =
           this.mediaBaseUrl +
           String(foundEvent.media[0].id).replace(/_(?=[^_]*$)/, '.')
@@ -129,7 +137,7 @@ evntIdString: string|undefined
         await Promise.all([
           this.loadLocation(locationId),
           this.loadOrganizer(organizerId),
-          this.loadType(typeId)
+          this.loadType(typeId),
         ])
 
         document.title = `${this.event.name} - 1200 Jahre Radolfzell`
@@ -148,12 +156,10 @@ evntIdString: string|undefined
   }
 
   redirect() {
-    console.log('Redirect triggered with ID:', this.event?.id)
     this.router.navigate(['/create-event'], {
       queryParams: {
         id: this.event!.id,
       },
     })
-
   }
 }
