@@ -28,15 +28,17 @@
       'justify-center': !isShrunk,
     }"
   >
-    <img
-      [src]="currentSrc"
-      alt="1200 Jahre Radolfzell"
-      class="transition-all duration-50"
-      [ngClass]="{
-        'w-[120px]': isShrunk,
-        'w-[80%] max-w-[380px]': !isShrunk,
-      }"
-    />
+    <a routerLink="/">
+      <img
+        [src]="currentSrc"
+        alt="1200 Jahre Radolfzell"
+        class="transition-all duration-50"
+        [ngClass]="{
+          'w-[120px]': isShrunk,
+          'w-[80%] max-w-[380px]': !isShrunk,
+        }"
+      />
+    </a>
   </div>
   <!-- Wellenform im Corporate-Magenta, optional -->
   <svg
