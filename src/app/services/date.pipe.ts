@@ -71,7 +71,9 @@ export class DateTimeRangePipe implements PipeTransform, OnDestroy {
     // Begrenze die Cache-Größe
     if (this.dateCache.size > 100) {
       const firstKey = this.dateCache.keys().next().value;
-      this.dateCache.delete(firstKey!);
+      if (firstKey !== undefined) {
+        this.dateCache.delete(firstKey);
+      }
     }
 
     return result;

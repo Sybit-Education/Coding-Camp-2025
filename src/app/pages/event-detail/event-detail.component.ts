@@ -85,50 +85,57 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     console.error(`Fehler: ${message}`)
   }
 
-  async loadType(typeId: RecordId<'event_type'> | undefined) {
+  async loadType(typeId: RecordId<'event_type'> | undefined): Promise<TypeDB | null> {
     if (typeId) {
       try {
         const type = await this.eventService.getEventTypeByID(typeId)
         if (type) {
-          this.type = type as unknown as TypeDB
+          return type as unknown as TypeDB
         } else {
           this.error = 'Event Type nicht gefunden'
+          return null
         }
       } catch (err) {
         this.error = `Fehler beim Laden des Event Types: ${err}`
+        return null
       }
     } else {
       this.error = 'Event Type ID nicht gefunden'
+      return null
     }
   }
 
-  async loadLocation(locationId: RecordId<'location'>) {
+  async loadLocation(locationId: RecordId<'location'>): Promise<Location | null> {
     try {
       const foundLocation =
         await this.locationService.getLocationByID(locationId)
 
       if (foundLocation) {
-        this.location = foundLocation
+        return foundLocation
       } else {
         this.error = 'Location nicht gefunden'
+        return null
       }
     } catch (err) {
       this.error = `Fehler beim Laden: ${err}`
+      return null
     }
   }
 
-  async loadOrganizer(organizerId: RecordId<'organizer'>) {
+  async loadOrganizer(organizerId: RecordId<'organizer'>): Promise<Organizer | null> {
     try {
       const foundOrganizer =
         await this.organizerService.getOrganizerByID(organizerId)
 
       if (foundOrganizer) {
-        this.organizer = foundOrganizer
+        return foundOrganizer
       } else {
         this.error = 'Organizer nicht gefunden'
+        return null
       }
     } catch (err) {
       this.error = `Fehler beim Laden: ${err}`
+      return null
     }
   }
 
