@@ -32,9 +32,7 @@ export class MediaService {
   //************** POST **************
 
   async postMedia(media: Media) {
-    console.log(`postMedia(${media}) -->`)
     const result = await this.surrealdb.post<Media>('media', media)
-    console.log(`postMedia() <-- result: `, result)
     return result[0]
   }
 
