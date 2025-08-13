@@ -6,6 +6,7 @@ import {
   inject,
   isDevMode,
   LOCALE_ID,
+  enableProdMode
 } from '@angular/core'
 import { provideServiceWorker } from '@angular/service-worker'
 import { appConfig } from './app/app.config'
@@ -18,6 +19,12 @@ import { LocationService } from './app/services/location.service'
 import { OrganizerService } from './app/services/organizer.service'
 import { TopicService } from './app/services/topic.service'
 import { MediaService } from './app/services/media.service'
+import { environment } from './environments/environment'
+
+// Aktiviere Produktionsmodus, wenn nicht in Entwicklung
+if (environment.production) {
+  enableProdMode();
+}
 
 // Registriere alle unterstützten Locales für Datums- und Zahlenformatierung
 registerLocaleData(localeDe)
@@ -45,11 +52,14 @@ bootstrapApplication(AppComponent, {
     ...appConfig.providers,
     provideAppInitializer(() => {
       const surrealdb = inject(SurrealdbService)
-      inject(EventService)
-      inject(LocationService)
-      inject(OrganizerService)
-      inject(TopicService)
-      inject(MediaService)
+      // Lazy-load services nur wenn nötig
+      if (environment.preloadServices) {
+        inject(EventService)
+        inject(LocationService)
+        inject(OrganizerService)
+        inject(TopicService)
+        inject(MediaService)
+      }
       return surrealdb.initialize()
     }),
     provideServiceWorker('ngsw-worker.js', {

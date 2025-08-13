@@ -1,4 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core'
+import { Component, inject, OnDestroy, OnInit } from '@angular/core'
+import { Subscription } from 'rxjs'
 import { MapComponent } from '../../component/map/map.component'
 import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
@@ -30,7 +31,8 @@ import { ShareComponent } from '../../component/share/share.component'
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
 })
-export class EventDetailPageComponent implements OnInit {
+export class EventDetailPageComponent implements OnInit, OnDestroy {
+  private subscriptions = new Subscription()
   event: Event | null = null
   location: Location | null = null
   organizer: Organizer | null = null
@@ -60,7 +62,18 @@ export class EventDetailPageComponent implements OnInit {
       this.error = 'Event ID nicht gefunden'
       this.announceError('Event ID nicht gefunden')
     }
-    this.isLoggedIn = this.loginservice.canActivate(this.route.snapshot)
+    
+    // Subscription für Login-Status
+    this.subscriptions.add(
+      this.loginservice.isLoggedIn$.subscribe(isLoggedIn => {
+        this.isLoggedIn = isLoggedIn
+      })
+    )
+  }
+  
+  ngOnDestroy(): void {
+    // Alle Subscriptions beenden
+    this.subscriptions.unsubscribe()
   }
 
   /**
@@ -72,50 +85,57 @@ export class EventDetailPageComponent implements OnInit {
     console.error(`Fehler: ${message}`)
   }
 
-  async loadType(typeId: RecordId<'event_type'> | undefined) {
+  async loadType(typeId: RecordId<'event_type'> | undefined): Promise<TypeDB | null> {
     if (typeId) {
       try {
         const type = await this.eventService.getEventTypeByID(typeId)
         if (type) {
-          this.type = type as unknown as TypeDB
+          return type as unknown as TypeDB
         } else {
           this.error = 'Event Type nicht gefunden'
+          return null
         }
       } catch (err) {
         this.error = `Fehler beim Laden des Event Types: ${err}`
+        return null
       }
     } else {
       this.error = 'Event Type ID nicht gefunden'
+      return null
     }
   }
 
-  async loadLocation(locationId: RecordId<'location'>) {
+  async loadLocation(locationId: RecordId<'location'>): Promise<Location | null> {
     try {
       const foundLocation =
         await this.locationService.getLocationByID(locationId)
 
       if (foundLocation) {
-        this.location = foundLocation
+        return foundLocation
       } else {
         this.error = 'Location nicht gefunden'
+        return null
       }
     } catch (err) {
       this.error = `Fehler beim Laden: ${err}`
+      return null
     }
   }
 
-  async loadOrganizer(organizerId: RecordId<'organizer'>) {
+  async loadOrganizer(organizerId: RecordId<'organizer'>): Promise<Organizer | null> {
     try {
       const foundOrganizer =
         await this.organizerService.getOrganizerByID(organizerId)
 
       if (foundOrganizer) {
-        this.organizer = foundOrganizer
+        return foundOrganizer
       } else {
         this.error = 'Organizer nicht gefunden'
+        return null
       }
     } catch (err) {
       this.error = `Fehler beim Laden: ${err}`
+      return null
     }
   }
 
@@ -124,23 +144,36 @@ export class EventDetailPageComponent implements OnInit {
       const foundEvent = await this.eventService.getEventByID(eventId)
 
       if (foundEvent) {
+        // Setze Basis-Daten
         this.event = foundEvent
         this.evntIdString = String(this.event?.id!.id)
 
-        this.mediaUrl =
-          this.mediaBaseUrl +
-          String(foundEvent.media[0].id).replace(/_(?=[^_]*$)/, '.')
+        // Berechne Media-URL nur wenn Media vorhanden ist
+        if (foundEvent.media && foundEvent.media.length > 0) {
+          this.mediaUrl =
+            this.mediaBaseUrl +
+            String(foundEvent.media[0].id).replace(/_(?=[^_]*$)/, '.')
+        }
+        
+        // Extrahiere IDs für parallele Ladung
         const locationId = this.event?.['location']
         const organizerId = this.event?.['organizer']
         const typeId = this.event?.['event_type']
 
-        await Promise.all([
-          this.loadLocation(locationId),
-          this.loadOrganizer(organizerId),
-          this.loadType(typeId),
+        // Lade alle abhängigen Daten parallel
+        const [location, organizer, type] = await Promise.all([
+          locationId ? this.loadLocation(locationId) : Promise.resolve(null),
+          organizerId ? this.loadOrganizer(organizerId) : Promise.resolve(null),
+          typeId ? this.loadType(typeId) : Promise.resolve(null)
         ])
-
-        document.title = `${this.event.name} - 1200 Jahre Radolfzell`
+        
+        // Batch-Update für weniger Change Detection Zyklen
+        requestAnimationFrame(() => {
+          this.location = location
+          this.organizer = organizer
+          this.type = type
+          document.title = `${this.event!.name} - 1200 Jahre Radolfzell`
+        })
       } else {
         this.error = 'Event nicht gefunden'
         this.announceError('Event nicht gefunden')
@@ -159,7 +192,7 @@ export class EventDetailPageComponent implements OnInit {
     this.router.navigate(['/create-event'], {
       queryParams: {
         id: this.event!.id,
-      },
+      }
     })
   }
 }

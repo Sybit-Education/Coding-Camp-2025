@@ -28,7 +28,7 @@ export class EventCardComponent implements OnInit, OnDestroy {
 
   @Input() isMoreCard = false
 
-  private subscription?: Subscription
+  private subscriptions = new Subscription()
 
   private readonly surrealDBService = inject(SurrealdbService)
   private readonly locationService = inject(LocationService)
@@ -49,24 +49,30 @@ export class EventCardComponent implements OnInit, OnDestroy {
     const eventId = this.event.id as unknown as string
     this.isSaved = this.localStorageService.isEventSaved(eventId)
 
-    this.subscription = this.localStorageService.savedEvents$.subscribe(() => {
-      this.isSaved = this.localStorageService.isEventSaved(eventId)
-    })
+    this.subscriptions.add(
+      this.localStorageService.savedEvents$.subscribe(() => {
+        this.isSaved = this.localStorageService.isEventSaved(eventId)
+      })
+    )
   }
 
   private async initializeEventDetails(): Promise<void> {
     if (!this.event) return
 
     try {
+      // Verwende Promise.all für parallele Ausführung
       const [location, eventType, mediaUrl] = await Promise.all([
         this.loadLocation(),
         this.loadEventType(),
         this.loadMedia(),
       ])
 
-      this.location = location
-      this.eventType = eventType
-      this.mediaUrl = mediaUrl
+      // Batch-Update der Komponenten-Properties für weniger Change Detection Zyklen
+      setTimeout(() => {
+        this.location = location
+        this.eventType = eventType
+        this.mediaUrl = mediaUrl
+      }, 0)
     } catch (error) {
       console.error('Fehler beim Laden der Event-Details:', error)
       this.mediaUrl = null
@@ -116,6 +122,12 @@ export class EventCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription?.unsubscribe()
+    this.subscriptions.unsubscribe()
+    
+    // Referenzen freigeben
+    this.event = null
+    this.location = null
+    this.eventType = null
+    this.mediaUrl = null
   }
 }

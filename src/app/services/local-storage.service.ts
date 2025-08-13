@@ -19,6 +19,7 @@ export class LocalStorageService {
       savedIds.push(eventId)
       this.setSavedEventIds(savedIds)
       this.savedEventsSubject.next(savedIds)
+      console.log(`Event ${eventId} zu Favoriten hinzugefügt`)
     }
   }
 
@@ -54,3 +55,4 @@ export class LocalStorageService {
     return this.getSavedEventIds().length
   }
 }
+

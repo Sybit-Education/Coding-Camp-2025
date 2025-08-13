@@ -3,14 +3,15 @@ import {
   provideZoneChangeDetection,
   importProvidersFrom,
 } from '@angular/core'
-import { provideRouter } from '@angular/router'
-import { provideHttpClient, HttpClient } from '@angular/common/http'
+import { provideRouter, withComponentInputBinding, withPreloading, PreloadAllModules, withViewTransitions } from '@angular/router'
+import { provideHttpClient, HttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import {
   TranslateLoader,
   TranslateModule,
   Translation,
 } from '@ngx-translate/core'
 import { Observable } from 'rxjs'
+import { provideAnimations } from '@angular/platform-browser/animations'
 
 import { routes } from './app.routes'
 
@@ -35,8 +36,14 @@ export function createTranslateLoader(http: HttpClient) {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
-    provideHttpClient(),
+    provideRouter(
+      routes,
+      withComponentInputBinding(),
+      withViewTransitions(),
+      withPreloading(PreloadAllModules)
+    ),
+    provideHttpClient(withInterceptorsFromDi()),
+    provideAnimations(),
     importProvidersFrom(
       TranslateModule.forRoot({
         loader: {

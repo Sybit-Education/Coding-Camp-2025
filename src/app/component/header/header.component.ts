@@ -1,5 +1,6 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
+import { RouterModule } from '@angular/router'
 import { I18nService } from '../../services/translate.service'
 import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component'
 
@@ -44,7 +45,7 @@ interface LogoSet {
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, LanguageSwitcherComponent],
+  imports: [CommonModule, RouterModule, LanguageSwitcherComponent],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })

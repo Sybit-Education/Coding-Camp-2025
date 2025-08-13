@@ -19,13 +19,16 @@ export class FavoriteService {
   favoriteEvents$ = this.favoriteEventsSubject.asObservable()
 
   constructor() {
+    console.log('FavoriteService initialized');
+
     // Initialisiere den Service mit einem leeren Array
-    this.favoriteEventsSubject.next([])
+    this.favoriteEventsSubject.next([]);
 
     // Abonniere Änderungen an gespeicherten Events
     this.localStorageService.savedEvents$.subscribe(() => {
-      this.loadFavoriteEvents()
-    })
+      console.log('Saved events changed, reloading favorites');
+      this.loadFavoriteEvents();
+    });
 
     // Lade Favoriten beim Start
     setTimeout(() => {
@@ -74,15 +77,14 @@ export class FavoriteService {
       }
 
       // Sortiere Events nach Startdatum (aufsteigend)
-      const sortedEvents = events.slice().sort((a, b) => {
-        const dateA =
-          a.date_start instanceof Date ? a.date_start : new Date(a.date_start)
-        const dateB =
-          b.date_start instanceof Date ? b.date_start : new Date(b.date_start)
-        return dateA.getTime() - dateB.getTime()
-      })
+      const sortedEvents = events.toSorted((a, b) => {
+        const dateA = a.date_start instanceof Date ? a.date_start : new Date(a.date_start);
+        const dateB = b.date_start instanceof Date ? b.date_start : new Date(b.date_start);
+        return dateA.getTime() - dateB.getTime();
+      });
 
-      this.favoriteEventsSubject.next(sortedEvents)
+      console.log(`Loaded and sorted ${sortedEvents.length} favorite events`);
+      this.favoriteEventsSubject.next(sortedEvents);
     } catch (error) {
       console.error('Fehler beim Laden der Favoriten:', error)
       this.favoriteEventsSubject.next([])
