@@ -297,7 +297,11 @@ export class EventCreateComponent implements OnInit {
     if (!this.selectedLocation) await this.saveLocation()
     if (!this.selectedOrganizer) await this.saveOrganizer()
 
-    if (!this.selectedLocation || !this.selectedOrganizer || !this.selectedEventType) {
+    if (
+      !this.selectedLocation ||
+      !this.selectedOrganizer ||
+      !this.selectedEventType
+    ) {
       console.error('Bitte Location, Organizer und EventType auswählen!')
       return
     }
@@ -330,7 +334,10 @@ export class EventCreateComponent implements OnInit {
 
     try {
       if (this.eventId !== undefined) {
-        const updated = await this.eventService.updateEvent(this.eventId, payload)
+        const updated = await this.eventService.updateEvent(
+          this.eventId,
+          payload,
+        )
         if (!updated) console.error('Update returned no data')
       } else {
         const created = await this.eventService.postEvent(payload)
@@ -343,8 +350,8 @@ export class EventCreateComponent implements OnInit {
 
   // ===== Media Handling =====
   async getMediaIds(): Promise<RecordId<'media'>[]> {
-    const result:RecordId<'media'>[] = []
-    result.push(...await this.postNewImages())
+    const result: RecordId<'media'>[] = []
+    result.push(...(await this.postNewImages()))
     return result
   }
 
