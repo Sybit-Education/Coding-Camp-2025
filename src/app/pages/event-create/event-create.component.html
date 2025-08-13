@@ -394,17 +394,25 @@
 
         @if (previews.length) {
           <div
-            class="m-3 rounded-lg border-2 border-gray-500 bg-white"
+            class="rounded-lg border-2 border-gray-500 m-1"
             *ngFor="let src of previews; let i = index"
           >
-            <button
-              type="button"
-              class="text-[1.5rem]"
-              (click)="removeImage(i)"
+            <div
+              class="relative inline-block overflow-hidden align-top leading-none bg-white rounded-md"
             >
-              ✕
-            </button>
-            <img [src]="src" alt="Bild-Vorschau {{ i + 1 }}" />
+              <img
+                [src]="src"
+                alt="Bild-Vorschau {{ i + 1 }}"
+                class="block rounded-md"
+              />
+
+              <button
+                (click)="removeImage(i)"
+                class="absolute top-1 right-1 flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 bg-white/80 shadow-md hover:bg-gray-500 hover:text-white"
+              >
+                ✕
+              </button>
+            </div>
           </div>
         }
       </div>
