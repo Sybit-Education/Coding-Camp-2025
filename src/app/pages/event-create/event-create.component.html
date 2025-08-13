@@ -394,11 +394,11 @@
 
         @if (previews.length) {
           <div
-            class="rounded-lg border-2 border-gray-500 m-1"
+            class="m-1 rounded-lg border-2 border-gray-500"
             *ngFor="let src of previews; let i = index"
           >
             <div
-              class="relative inline-block overflow-hidden align-top leading-none bg-white rounded-md"
+              class="relative inline-block overflow-hidden rounded-md bg-white align-top leading-none"
             >
               <img
                 [src]="src"
