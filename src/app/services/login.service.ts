@@ -38,6 +38,8 @@ export class LoginService implements CanActivate {
       this.redirect = redirect
     }
 
+    this.router.navigate(['login'])
+
     return false
   }
 

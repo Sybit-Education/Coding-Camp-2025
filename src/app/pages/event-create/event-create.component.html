@@ -15,7 +15,7 @@
           id="eventName"
           name="eventName"
           type="text"
-          [(ngModel)]="eventname"
+          [(ngModel)]="eventName"
           class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
           required
         />
@@ -363,10 +363,59 @@
         />
       </div>
 
-      <app-upload-image
-        [eventName]="eventname"
-        (image)="handleImage($event)"
-      ></app-upload-image>
+      <div
+        class="flex flex-col items-center justify-center rounded-[6px] border-2 border-black bg-[#6d7cbc]"
+      >
+        <button
+          class="flex h-[250px] w-full flex-col items-center justify-center"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave()"
+          (drop)="onDrop($event)"
+          (keydown)="onAreaClick()"
+          (click)="onAreaClick()"
+          tabindex="0"
+          [class.hovering]="isDragging"
+        >
+          <div class="mb-2 text-[1.1rem] font-medium text-black">
+            {{ 'Bild hier ablegen oder klicken zum Auswählen' }}
+          </div>
+          <div class="text-[0.9rem] text-black">
+            {{ 'JPG, PNG - Max. 5 MB pro Bild' }}
+          </div>
+          <input
+            #fileInput
+            type="file"
+            multiple
+            [attr.accept]="'image/png, image/jpeg'"
+            (change)="onFilesSelected($event)"
+            style="display: none"
+          />
+        </button>
+
+        @if (previews.length) {
+          <div
+            class="m-1 rounded-lg border-2 border-gray-500"
+            *ngFor="let src of previews; let i = index"
+          >
+            <div
+              class="relative inline-block overflow-hidden rounded-md bg-white align-top leading-none"
+            >
+              <img
+                [src]="src"
+                alt="Bild-Vorschau {{ i + 1 }}"
+                class="block rounded-md"
+              />
+
+              <button
+                (click)="removeImage(i)"
+                class="absolute top-1 right-1 flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 bg-white/80 shadow-md hover:bg-gray-500 hover:text-white"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        }
+      </div>
 
       <!-- Button: Event erstellen -->
       <div>

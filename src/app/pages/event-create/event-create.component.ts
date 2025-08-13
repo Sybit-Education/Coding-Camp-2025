@@ -1,34 +1,35 @@
-import { Component, inject, OnInit } from '@angular/core'
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
-
-// Services
-import { EventService } from '../../services/event.service'
-import { LocationService } from '../../services/location.service'
-import { OrganizerService } from '../../services/organizer.service'
-import { TopicService } from '../../services/topic.service'
 import { ActivatedRoute } from '@angular/router'
+import { CommonModule } from '@angular/common'
+
+// Models
 import { Event as AppEvent } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
 import { Organizer } from '../../models/organizer.interface'
 import { Topic } from '../../models/topic.interface'
 import { TypeDB } from '../../models/typeDB.interface'
 import { Decimal, RecordId, StringRecordId } from 'surrealdb'
-import { CommonModule } from '@angular/common'
 import { Media } from '../../models/media.model'
+
+// Services
+import { EventService } from '../../services/event.service'
+import { LocationService } from '../../services/location.service'
+import { OrganizerService } from '../../services/organizer.service'
+import { TopicService } from '../../services/topic.service'
 import { MediaService } from '../../services/media.service'
-import { UploadImageComponent } from '../../component/upload-image/upload-image.component'
 
 @Component({
   selector: 'app-event-create',
   standalone: true,
-  imports: [FormsModule, CommonModule, TranslateModule, UploadImageComponent],
+  imports: [FormsModule, CommonModule, TranslateModule],
   templateUrl: './event-create.component.html',
 })
 export class EventCreateComponent implements OnInit {
-  event: AppEvent | null = null
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>
 
-  // Services
+  // ===== Services =====
   private readonly eventService = inject(EventService)
   private readonly locationService = inject(LocationService)
   private readonly organizerService = inject(OrganizerService)
@@ -37,54 +38,60 @@ export class EventCreateComponent implements OnInit {
 
   constructor(private readonly route: ActivatedRoute) {}
 
-  // Form-Felder
+  // ===== State & Formfelder =====
+  event: AppEvent | null = null
   eventId: RecordId<'event'> | undefined = undefined
-  eventname = ''
+  eventName = ''
   description: string | null = null
-  placename: string | null = null
-  placeadress: string | null = null
-  price: string | null = null
   moreInfoLink: string | null = null
+  price: string | null = null
   dateStart = ''
   timeStart = ''
   dateEnd? = ''
   timeEnd? = ''
   age: number | null = null
   restriction: string | null = null
+  draft = false
+  timePeriode = false
 
-  // Auswahlfelder & Zustand
+  // Location
+  placename: string | null = null
+  placeadress: string | null = null
   selectedLocation: Location | null = null
-  selectedOrganizer: Organizer | null = null
-  selectedEventType: TypeDB | null = null
-  selectedTopics: Topic[] = []
-  eventType: string | null = null
-
-  // Eingabefelder für neue Location
   locationName = ''
   address = ''
   plz = ''
   city = ''
   newLocation = false
 
-  // Eingabefelder für neuen Organizer
+  // Organizer
+  selectedOrganizer: Organizer | null = null
   organizername: string | null = null
   organizermail: string | null = null
   organizerphone: string | null = null
   organizerName: string | null = null
   newOrganizer = false
 
+  // Event Type & Topics
+  selectedEventType: TypeDB | null = null
+  selectedTopics: Topic[] = []
+  eventType: string | null = null
+
   // Datenquellen
   locations: Location[] = []
   organizers: Organizer[] = []
   eventTypes: TypeDB[] = []
   topics: Topic[] = []
+
+  // Images & Upload
   image: Media | null = null
+  images: string[] = []
+  previews: string[] = []
+  files: File[] = []
+  imageFiles: File[] = []
+  isDragging = false
 
-  //Draft?
-  draft = false
-  media: Media[] = []
-  timePeriode = false
-
+  // ===== Lifecycle =====
   ngOnInit() {
     const eventId = this.route.snapshot.queryParams['id']
     if (eventId) {
@@ -95,17 +102,23 @@ export class EventCreateComponent implements OnInit {
     }
   }
 
+  // ===== Initial-Daten laden =====
+  async initializeData() {
+    this.organizers = await this.organizerService.getAllOrganizers()
+    this.locations = await this.locationService.getAllLocations()
+    this.eventTypes = await this.eventService.getAllEventTypes()
+    this.topics = await this.topicService.getAllTopics()
+  }
+
   private async loadEvent(eventId: RecordId<'event'> | StringRecordId) {
     await this.initializeData()
-
     try {
       const event = await this.eventService.getEventByID(eventId)
       if (!event) return
-      this.event = event
 
-      // Felder befüllen
+      this.event = event
       this.eventId = event.id!
-      this.eventname = event.name
+      this.eventName = event.name
       this.description = event.description ?? null
       this.moreInfoLink = event.more_info_link ?? null
       this.price = event.price?.toString() ?? null
@@ -113,7 +126,7 @@ export class EventCreateComponent implements OnInit {
       this.restriction = event.restriction ?? null
       this.draft = event.draft ?? false
 
-      // Datum & Zeit splitten
+      // Datum & Zeit
       const start = new Date(event.date_start)
       this.dateStart = start.toISOString().split('T')[0]
       this.timeStart = start.toTimeString().slice(0, 5)
@@ -125,48 +138,40 @@ export class EventCreateComponent implements OnInit {
         this.timePeriode = true
       }
 
-      // Organizer, Location, EventType, Topics aus Listen suchen
+      // Organizer
       const organizerId = String(event.organizer.id)
       this.selectedOrganizer =
         this.organizers.find((o) => String(o.id?.id) === organizerId) || null
       this.setOrganizer(this.selectedOrganizer)
 
+      // Location
       const locationId = String(event.location.id)
       this.selectedLocation =
         this.locations.find((l) => String(l.id?.id) === locationId) || null
       this.setLocation(this.selectedLocation)
 
+      // Event Type
       const eventTypeId = String(event.event_type?.id)
       this.selectedEventType =
         this.eventTypes.find((e) => String(e.id?.id) === eventTypeId) || null
       this.setSelectedEventType(this.selectedEventType)
 
+      // Topics
       const topicIds = event.topic || []
       for (const topicId of topicIds) {
         const topic = this.topics.find(
           (t) => String(t.id?.id) === String(topicId?.id ?? topicId),
         )
-        if (topic) {
-          this.selectedTopics.push(topic)
-        }
+        if (topic) this.selectedTopics.push(topic)
       }
     } catch (err) {
       console.error('Fehler beim Laden des Events:', err)
     }
   }
 
-  // Initial-Daten laden
-  async initializeData() {
-    this.organizers = await this.organizerService.getAllOrganizers()
-    this.locations = await this.locationService.getAllLocations()
-    this.eventTypes = await this.eventService.getAllEventTypes()
-    this.topics = await this.topicService.getAllTopics()
-  }
-
-  // Auswahl-Handler
+  // ===== Auswahl-Handler =====
   setLocation(location: Location | null) {
     this.selectedLocation = location
-
     if (location) {
       this.locationName = location.name
       this.address = location.street ?? ''
@@ -177,7 +182,6 @@ export class EventCreateComponent implements OnInit {
 
   setOrganizer(organizer: Organizer | null) {
     this.selectedOrganizer = organizer
-
     if (organizer) {
       this.organizerName = organizer.name
       this.organizerphone = organizer.phonenumber ?? ''
@@ -198,7 +202,67 @@ export class EventCreateComponent implements OnInit {
     }
   }
 
-  // Speichern
+  // ===== File Upload Handling =====
+  onAreaClick() {
+    this.fileInput.nativeElement.click()
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault()
+    this.isDragging = true
+  }
+
+  onDragLeave() {
+    this.isDragging = false
+  }
+
+  onDrop(event: DragEvent) {
+    event.preventDefault()
+    this.isDragging = false
+    if (event.dataTransfer?.files) {
+      this.handleFiles(Array.from(event.dataTransfer.files))
+    }
+  }
+
+  onFilesSelected(event: Event) {
+    const input = event.target as HTMLInputElement
+    if (!input.files) return
+    this.handleFiles(Array.from(input.files))
+    input.value = ''
+  }
+
+  private handleFiles(selected: File[]) {
+    for (const file of selected) {
+      if (!RegExp(/image\/(png|jpeg)/).exec(file.type)) {
+        alert(`Dateityp nicht erlaubt: ${file.name}`)
+        continue
+      }
+      const maxFileSize = 5 * 1024 * 1024
+      if (file.size > maxFileSize) {
+        alert(`Datei zu groß (max. 5 MB): ${file.name}`)
+        continue
+      }
+      this.files.push(file)
+      this.createPreview(file)
+    }
+  }
+
+  private createPreview(file: File) {
+    const reader = new FileReader()
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        this.previews.push(reader.result)
+      }
+    }
+    reader.readAsDataURL(file)
+  }
+
+  removeImage(index: number) {
+    this.files.splice(index, 1)
+    this.previews.splice(index, 1)
+  }
+
+  // ===== Speichern =====
   async saveLocation() {
     const location: Location = {
       name: this.locationName,
@@ -206,7 +270,6 @@ export class EventCreateComponent implements OnInit {
       zip_code: String(this.plz),
       city: this.city,
     }
-
     try {
       const savedLocation = await this.locationService.postLocation(location)
       this.selectedLocation = savedLocation
@@ -221,7 +284,6 @@ export class EventCreateComponent implements OnInit {
       email: this.organizermail!,
       phonenumber: this.organizerphone!,
     }
-
     try {
       const savedOrganizer =
         await this.organizerService.postOrganizer(organizer)
@@ -232,13 +294,8 @@ export class EventCreateComponent implements OnInit {
   }
 
   async saveEvent() {
-    if (!this.selectedLocation) {
-      await this.saveLocation()
-    }
-
-    if (!this.selectedOrganizer) {
-      await this.saveOrganizer()
-    }
+    if (!this.selectedLocation) await this.saveLocation()
+    if (!this.selectedOrganizer) await this.saveOrganizer()
 
     if (
       !this.selectedLocation ||
@@ -249,21 +306,17 @@ export class EventCreateComponent implements OnInit {
       return
     }
 
-    // Datum + Zeit zu JS Date zusammenbauen
     const start = new Date(`${this.dateStart}T${this.timeStart}`)
     let end: Date | undefined
     if (this.dateEnd && this.timeEnd) {
       end = new Date(`${this.dateEnd}T${this.timeEnd}`)
     }
 
-    // Preis in Decimal umwandeln
     const priceDec = this.price ? new Decimal(this.price) : undefined
-
-    const mediaIds: RecordId<'media'>[] =
-      (await this.getMediaIds()) as unknown as RecordId<'media'>[]
+    const mediaIds = await this.getMediaIds()
 
     const payload: AppEvent = {
-      name: this.eventname,
+      name: this.eventName,
       date_start: start,
       date_end: end,
       description: this.description || undefined,
@@ -279,45 +332,45 @@ export class EventCreateComponent implements OnInit {
       restriction: this.restriction || undefined,
     }
 
-    if (this.eventId !== undefined) {
-      try {
+    try {
+      if (this.eventId !== undefined) {
         const updated = await this.eventService.updateEvent(
           this.eventId,
           payload,
         )
-        if (!updated) {
-          console.error('Update returned no data')
-        }
-      } catch (err) {
-        console.error('Fehler beim Aktualisieren des Events:', err)
-        return
-      }
-    } else {
-      try {
+        if (!updated) console.error('Update returned no data')
+      } else {
         const created = await this.eventService.postEvent(payload)
         this.eventId = created[0].id
-      } catch (err) {
-        console.error('Fehler beim Erstellen des Events:', err)
       }
+    } catch (err) {
+      console.error('Fehler beim Speichern des Events:', err)
     }
   }
 
+  // ===== Media Handling =====
   async getMediaIds(): Promise<RecordId<'media'>[]> {
-    return Promise.all(
-      this.media.map(async (med) => {
-        med.id = (this.eventname.replace(/[^a-zA-Z0-9]/g, '_') +
-          '_' +
-          med.fileType.split('/')[1]) as unknown as RecordId<'media'>
+    const result: RecordId<'media'>[] = []
+    result.push(...(await this.postNewImages()))
+    return result
+  }
 
-        const result = await this.mediaService.postMedia(med)
-
-        return result.id!
+  private async postNewImages(): Promise<RecordId<'media'>[]> {
+    const resultMedias: Media[] = await Promise.all(
+      this.previews.map(async (image, i) => {
+        const newMedia: Media = {
+          id: (this.eventName.replace(/[^a-zA-Z0-9]/g, '_') +
+            '_' +
+            i +
+            '_' +
+            image.split(';')[0].split('/')[1]) as unknown as RecordId<'media'>,
+          file: image.split(',')[1],
+          fileName: this.eventName.replace(/[^a-zA-Z0-9]/g, '_') + '_' + i,
+          fileType: image.split(';')[0].split('/')[1],
+        }
+        return await this.mediaService.postMedia(newMedia)
       }),
     )
-  }
-  handleImage(media: Media) {
-    if (media) {
-      this.media.push(media)
-    }
+    return resultMedias.map((media) => media.id as RecordId<'media'>)
   }
 }
