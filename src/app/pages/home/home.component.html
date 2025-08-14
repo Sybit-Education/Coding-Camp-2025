@@ -23,7 +23,7 @@
     <div
       class="scrollbar-hide card-snap -mx-2 mb-5 w-full snap-x snap-mandatory overflow-x-auto scroll-smooth pb-4"
     >
-      <div class="event-row flex min-w-max gap-2 px-2 pb-8">
+      <div class="event-row flex min-w-max gap-4 px-2 pb-8">
         <app-event-card
           *ngFor="let event of displayEvents; let i = index"
           class="h-full w-[calc(100vw-6rem)] snap-center"
@@ -55,7 +55,7 @@
       {{ 'home.categories' | translate }}
     </h2>
 
-    <div class="grid grid-cols-3 -mx-2">
+    <div class="grid grid-cols-3 lg:grid-cols-4 gap-4">
       <app-kategorie-card
         *ngFor="let kategorie of topics"
         [color]="kategorie.color"
