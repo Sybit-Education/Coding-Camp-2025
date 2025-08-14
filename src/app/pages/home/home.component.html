@@ -21,9 +21,9 @@
 
     <!-- Horizontaler Scroll-Container für Events -->
     <div
-      class="scrollbar-hide card-snap -mx-2 w-full snap-x snap-mandatory overflow-x-auto scroll-smooth pb-4"
+      class="scrollbar-hide card-snap -mx-2 mb-5 w-full snap-x snap-mandatory overflow-x-auto scroll-smooth pb-4"
     >
-      <div class="event-row flex min-w-max gap-2 px-2">
+      <div class="event-row flex min-w-max gap-2 px-2 pb-8">
         <app-event-card
           *ngFor="let event of displayEvents; let i = index"
           class="h-full w-[calc(100vw-6rem)] snap-center"
