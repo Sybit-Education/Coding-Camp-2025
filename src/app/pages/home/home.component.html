@@ -35,7 +35,11 @@
             ' am ' +
             (event.date_start | date: 'dd.MM.yyyy')
           "
-          (keydown)="onKeyDown($event, event.id)"
+        ></app-event-card>
+        <app-event-card
+          class="h-full w-[calc(100vw-6rem)] snap-center"
+          [event]="null"
+          [isMoreCard]="true"
         ></app-event-card>
       </div>
     </div>
@@ -51,7 +55,7 @@
       {{ 'home.categories' | translate }}
     </h2>
 
-    <div class="grid grid-cols-3">
+    <div class="grid grid-cols-3 -mx-2">
       <app-kategorie-card
         *ngFor="let kategorie of topics"
         [color]="kategorie.color"
