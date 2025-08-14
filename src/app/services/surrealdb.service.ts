@@ -40,6 +40,7 @@ export class SurrealdbService extends Surreal {
   async getById<T extends Record<string, unknown>>(
     recordId: string,
   ): Promise<T> {
+    console.warn('getById is deprecated, use getByRecordId instead')
     const result = await super.select<T>(new StringRecordId(recordId))
     return result as T
   }
