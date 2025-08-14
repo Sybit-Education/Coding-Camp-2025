@@ -1,8 +1,10 @@
-<div
-  class="focus:ring-opacity-50 flex w-full transform cursor-pointer flex-col items-center justify-center overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl focus:ring-2 focus:ring-yellow-400 focus:outline-none"
->
-  <button (click)="onCardClick()" class="w-full">
-    <ng-container *ngIf="!isMoreCard; else moreCard">
+
+  <ng-container *ngIf="!isMoreCard; else moreCard">
+    <a
+      [routerLink]="['/event', event?.id?.id]"
+      class="flex w-full h-full aspect-[4/3] flex-col items-center justify-top overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl cursor-pointer focus:ring-opacity-50 focus:ring-2 focus:ring-yellow-400"
+      tabindex="0"
+    >
       <div
         class="relative h-[120px] w-full overflow-hidden bg-gray-300"
         *ngIf="mediaUrl"
@@ -38,9 +40,14 @@
           }}</span>
         </div>
       </div>
-    </ng-container>
+    </a>
+  </ng-container>
 
-    <ng-template #moreCard>
+  <ng-template #moreCard>
+    <a [routerLink]="['/kategorie']"
+          class="flex w-full h-full aspect-[4/3] flex-col items-center justify-top overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl cursor-pointer focus:ring-opacity-50 focus:ring-4 focus:ring-yellow-400"
+      tabindex="0"
+    >
       <div
         class="flex h-full flex-col items-center justify-center p-6 text-center"
       >
@@ -49,6 +56,5 @@
           {{ 'event-card.show-more' | translate }}</span
         >
       </div>
-    </ng-template>
-  </button>
-</div>
+    </a>
+  </ng-template>
