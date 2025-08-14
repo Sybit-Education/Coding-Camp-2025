@@ -17,4 +17,10 @@
   <p class="relative top-1 right-10.5 mt-1 text-sm font-bold">
     {{ 'SHARE.SHARE' | translate }}
   </p>
+
+  <!-- Benachrichtigung für Benutzer, wenn Link kopiert wurde -->
+  <div *ngIf="showCopyMessage"
+        class="fixed top-2/3 left-1/2 transform -translate-x-1/2 bg-green-600 text-white text-sm p-4 rounded-lg shadow-lg z-50 animate-fade-in-out">
+    ✅ {{ 'share.copy-notification' | translate }}
+  </div>
 </div>

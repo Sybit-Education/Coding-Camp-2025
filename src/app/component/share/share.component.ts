@@ -11,6 +11,7 @@ import { TranslateModule } from '@ngx-translate/core'
 })
 export class ShareComponent {
   @Input() event: Event | null = null
+  showCopyMessage = false
 
   sharePage() {
     if (!this.event || !this.event.id) {
@@ -59,9 +60,49 @@ export class ShareComponent {
   }
 
   private copyToClipboard(text: string) {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => console.log('Link in Zwischenablage kopiert'))
-      .catch((err) => console.error('Fehler beim Kopieren:', err))
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        console.log('Link in Zwischenablage kopiert');
+        this.showCopyMessage = true;
+        setTimeout(() => {
+          this.showCopyMessage = false;
+        }, 3000); // Nachricht nach 3 Sekunden ausblenden
+      })
+      .catch(err => {
+        console.error('Fehler beim Kopieren:', err);
+        // Alternativer Fallback für ältere Browser
+        this.fallbackCopyToClipboard(text);
+      });
+  }
+
+  private fallbackCopyToClipboard(text: string) {
+    try {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+
+      // Element unsichtbar machen und zum DOM hinzufügen
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      textArea.style.top = '-999999px';
+      document.body.appendChild(textArea);
+
+      // Text auswählen und kopieren
+      textArea.focus();
+      textArea.select();
+      const successful = document.execCommand('copy');
+
+      // Element wieder entfernen
+      document.body.removeChild(textArea);
+
+      if (successful) {
+        console.log('Link in Zwischenablage kopiert (Fallback)');
+        this.showCopyMessage = true;
+        setTimeout(() => {
+          this.showCopyMessage = false;
+        }, 3000); // Nachricht nach 3 Sekunden ausblenden
+      }
+    } catch (err) {
+      console.error('Auch Fallback-Kopieren fehlgeschlagen:', err);
+    }
   }
 }

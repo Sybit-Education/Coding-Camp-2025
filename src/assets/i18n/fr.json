@@ -166,5 +166,8 @@
   },
   "SHARE": {
     "SHARE": "Partager..."
+  },
+  "share": {
+    "copy-notification": "Le lien a été copié dans le presse-papiers."
   }
 }

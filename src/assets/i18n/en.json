@@ -169,5 +169,8 @@
   },
   "SHARE": {
     "SHARE": "Share ..."
+  },
+  "share": {
+    "copy-notification": "Link was copied into clipboard."
   }
 }
