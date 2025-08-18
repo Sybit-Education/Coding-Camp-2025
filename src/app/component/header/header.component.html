@@ -1,13 +1,13 @@
 <!--
-  Der Header ist fest am oberen Rand verankert und passt seine Höhe,
-  Ausrichtung und Hintergrundfarbe abhängig vom Scrollzustand an. Im
-  Ausgangszustand nimmt der Header die volle Höhe (220px) ein, zeigt
-  das vollständige Jubiläumslogo und verwendet einen halbtransparenten
-  Apricot-Hintergrund. Im verkleinerten Zustand schrumpft er auf
-  70 px, richtet das Logo links aus, zeigt eine reduzierte
-  Logovariante und macht den Hintergrund transparent. Die Wellenform
-  bleibt optional erhalten und orientiert sich an den Bögen des
-  Corporate‑Designs.
+Der Header ist fest am oberen Rand verankert und passt seine Höhe,
+Ausrichtung und Hintergrundfarbe abhängig vom Scrollzustand an. Im
+Ausgangszustand nimmt der Header die volle Höhe (220px) ein, zeigt
+das vollständige Jubiläumslogo und verwendet einen halbtransparenten
+Apricot-Hintergrund. Im verkleinerten Zustand schrumpft er auf
+70 px, richtet das Logo links aus, zeigt eine reduzierte
+Logovariante und macht den Hintergrund transparent. Die Wellenform
+bleibt optional erhalten und orientiert sich an den Bögen des
+Corporate‑Designs.
 -->
 <header
   class="fixed top-0 left-0 z-500 flex w-full flex-col justify-center overflow-hidden backdrop-blur-[6px] transition-all duration-1200"
@@ -15,7 +15,7 @@
     'h-[70px] items-start bg-transparent pl-4': isShrunk,
     'h-[240px] items-center bg-[#fbd2bc]/90': !isShrunk,
   }"
->
+  >
   <!-- Sprachumschalter oben rechts -->
   <app-language-switcher
     class="absolute top-1 right-4 z-20"
@@ -27,7 +27,7 @@
       'justify-start': isShrunk,
       'justify-center': !isShrunk,
     }"
-  >
+    >
     <a routerLink="/">
       <img
         [src]="currentSrc"
@@ -37,20 +37,21 @@
           'w-[120px]': isShrunk,
           'w-[80%] max-w-[380px]': !isShrunk,
         }"
-      />
+        />
     </a>
   </div>
   <!-- Wellenform im Corporate-Magenta, optional -->
-  <svg
-    *ngIf="showWave"
-    class="absolute bottom-0 left-0 w-full"
+  @if (showWave) {
+    <svg
+      class="absolute bottom-0 left-0 w-full"
     [ngClass]="{
       'h-[0px]': isShrunk,
       'h-[220px]': !isShrunk,
     }"
-    viewBox="0 0 100 10"
-    [attr.preserveAspectRatio]="'none'"
-  >
-    <path [attr.d]="'M0 5 Q25 0 50 5 T100 5 V10 H0 Z'" fill="#ffffff"></path>
-  </svg>
+      viewBox="0 0 100 10"
+      [attr.preserveAspectRatio]="'none'"
+      >
+      <path [attr.d]="'M0 5 Q25 0 50 5 T100 5 V10 H0 Z'" fill="#ffffff"></path>
+    </svg>
+  }
 </header>

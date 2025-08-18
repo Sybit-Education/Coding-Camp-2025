@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { CommonModule } from '@angular/common'
+
 import { Router, RouterModule } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 
@@ -13,7 +13,7 @@ interface MoreMenuItem {
 @Component({
   selector: 'app-more',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule],
+  imports: [RouterModule, TranslateModule],
   templateUrl: './more.component.html',
   styles: [
     `

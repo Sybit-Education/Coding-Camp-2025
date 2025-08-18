@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core'
 import { I18nService } from '../../services/translate.service'
-import { CommonModule } from '@angular/common'
+
 
 @Component({
   selector: 'app-language-switcher',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './language-switcher.component.html',
 })
 export class LanguageSwitcherComponent {

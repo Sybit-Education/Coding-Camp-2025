@@ -2,12 +2,12 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { FavoriteService } from '../../services/favorite.service'
 import { TranslateModule } from '@ngx-translate/core'
-import { CommonModule } from '@angular/common'
+
 import { RecordId } from 'surrealdb'
 
 @Component({
   selector: 'app-favorite-button',
-  imports: [CommonModule, TranslateModule],
+  imports: [TranslateModule],
   templateUrl: './favorite-button.component.html',
 })
 export class FavoriteButtonComponent implements OnInit, OnDestroy {
