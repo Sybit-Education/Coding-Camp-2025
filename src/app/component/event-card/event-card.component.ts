@@ -1,8 +1,7 @@
 import { Component, Input, OnInit, OnDestroy, inject } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { Router } from '@angular/router'
+import { RouterModule } from '@angular/router'
 import { Subscription } from 'rxjs'
-
 import { Event, EventType } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
 import { DateTimeRangePipe } from '../../services/date.pipe'
@@ -15,7 +14,7 @@ import { TranslateModule } from '@ngx-translate/core'
 @Component({
   selector: 'app-event-card',
   standalone: true,
-  imports: [CommonModule, DateTimeRangePipe, TranslateModule],
+  imports: [CommonModule, DateTimeRangePipe, TranslateModule, RouterModule],
   templateUrl: './event-card.component.html',
 })
 export class EventCardComponent implements OnInit, OnDestroy {
@@ -28,11 +27,9 @@ export class EventCardComponent implements OnInit, OnDestroy {
 
   @Input() isMoreCard = false
 
-  private subscriptions = new Subscription()
-
+  private readonly subscriptions = new Subscription()
   private readonly surrealDBService = inject(SurrealdbService)
   private readonly locationService = inject(LocationService)
-  private readonly router = inject(Router)
   private readonly localStorageService = inject(LocalStorageService)
   private readonly mediaService = inject(MediaService)
 
@@ -95,9 +92,8 @@ export class EventCardComponent implements OnInit, OnDestroy {
 
     try {
       const typeRecord = this.event.event_type
-      const typeId = typeRecord.tb + ':' + typeRecord.id
-      const result = await this.surrealDBService.getById<{ name: string }>(
-        typeId,
+      const result = await this.surrealDBService.getByRecordId<{ name: string }>(
+        typeRecord,
       )
       return (result?.name as EventType) || EventType.UNKNOWN
     } catch (error) {
@@ -109,16 +105,6 @@ export class EventCardComponent implements OnInit, OnDestroy {
   private async loadMedia(): Promise<string | null> {
     if (!this.event?.media || this.event.media.length === 0) return null
     return await this.mediaService.getFirstMediaUrl(this.event.media)
-  }
-
-  onCardClick(): void {
-    if (!this.event) {
-      this.router.navigate(['/kategorie'])
-      return
-    }
-
-    const cleanedId = this.event.id!.id
-    this.router.navigate(['/event', cleanedId])
   }
 
   ngOnDestroy(): void {
