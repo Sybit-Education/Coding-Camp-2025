@@ -32,7 +32,8 @@
                 "glob": "**/*.json",
                 "input": "src/assets/i18n",
                 "output": "/assets/i18n"
-              }
+              },
+              "src/manifest.webmanifest"
             ],
             "styles": [
               "node_modules/leaflet/dist/leaflet.css",

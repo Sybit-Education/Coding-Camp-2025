@@ -52,6 +52,8 @@ export const appConfig: ApplicationConfig = {
           deps: [HttpClient],
         },
         fallbackLang: 'de',
+        isolate: false,
+        useDefaultLang: true,
       }),
     ),
   ],
