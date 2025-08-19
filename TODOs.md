@@ -1,4 +1,4 @@
-# TODOs für das Angular 20 Projekt
+# TODOs für das Angular 20 Projekt mit SEO-Optimierung
 
 Basierend auf den Anforderungen in `agents.md` fehlen noch folgende Komponenten oder Implementierungen:
 
@@ -25,8 +25,9 @@ Basierend auf den Anforderungen in `agents.md` fehlen noch folgende Komponenten 
 - [ ] Keine Optimierung für Core Web Vitals (LCP, FID, CLS)
 
 ## State Management
-- [ ] Kein klares State Management (NgRx, ComponentStore oder Signals)
-- [ ] Keine zoneless Change Detection implementiert
+- [ ] Kein klares State Management (NgRx, ComponentStore)
+- [ ] Unzureichende Nutzung von Signals für reaktive Programmierung
+- [ ] Keine Integration von @angular/core/rxjs-interop für RxJS und Signals
 
 ## Codequalität & Tests
 - [ ] Keine ESLint-Regeln für i18n konfiguriert
@@ -38,8 +39,10 @@ Basierend auf den Anforderungen in `agents.md` fehlen noch folgende Komponenten 
 - [ ] Unvollständige Ordnerstruktur (z.B. fehlendes `locale/` Verzeichnis)
 
 ## Performance & Optimierungen
+- [x] Vorbereitung für Server-Side Rendering (SSR) mit Angular Hydration
 - [ ] Keine explizite Verwendung von `OnPush` Change Detection
-- [ ] Keine Vorbereitung für Server-Side Rendering (SSR)
+- [ ] Keine Optimierung für Core Web Vitals (LCP, INP, CLS)
+- [ ] Kein Einsatz von ESBuild für schnellere Builds
 
 ## SurrealDB Integration
 - [ ] Live-Query-Funktionalität nicht vollständig implementiert

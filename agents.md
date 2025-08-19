@@ -19,7 +19,8 @@
 6. **Feature‑basierte Architektur / Domain‑Driven Design** (Mono‑Repo via Nx optional)  
 7. **State Management**:  
    - Für komplexe Flows: NgRx oder ComponentStore  
-   - Alternativ Signals oder rxResource für zoneless Change Detection  
+   - Signals für reaktive Programmierung und zoneless Change Detection
+   - Nutzung von @angular/core/rxjs-interop für RxJS-Integration mit Signals
 8. **Internationalisierung (I18n)**:  
    - Verwende `ngx-translate` für die Übersetzungsverwaltung
    - Nutze `TranslateService` mit JSON‑Dateien für Übersetzungen
@@ -40,8 +41,9 @@
     - Progressive Enhancement für Suchmaschinen
 11. **Performance & Optimierungen**:  
     - Lazy‑Loading, PreloadAllModules, `OnPush` Change Detection, AOT, Tree‑Shaking
-    - Server-Side Rendering (SSR) mit Angular Universal
-    - Optimierung für Core Web Vitals (LCP, FID, CLS)
+    - Server-Side Rendering (SSR) und Static Site Generation (SSG) mit Angular Hydration
+    - Optimierung für Core Web Vitals (LCP, INP, CLS)
+    - Einsatz von Standalone APIs und ESBuild für schnellere Builds
 12. **Codequalität & Tests**:  
     - Saubere DTOs / Interfaces, kein `any`, RxJS‑Pipes (`pipe`, `takeUntil`, etc.)  
     - Tooling: ESLint, Prettier, Husky Hooks  
@@ -78,33 +80,90 @@ src/
 
 ```ts
 // surreal.service.ts
-import { Injectable } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import Surreal from 'surrealdb.js';
+import { Observable, from, map, shareReplay } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class SurrealService {
   private db = new Surreal('https://your‑db‑url:port');
+  private connectionStatus = signal(false);
+  
+  // Expose as readonly signal
+  readonly isConnected = this.connectionStatus.asReadonly();
+  
+  // Convert to Observable for RxJS compatibility
+  readonly isConnected$ = toObservable(this.isConnected);
 
   async connect() {
-    await this.db.signin({ user: 'user', pass: 'pw' });
-    await this.db.use('namespace', 'database');
+    try {
+      await this.db.signin({ user: 'user', pass: 'pw' });
+      await this.db.use('namespace', 'database');
+      this.connectionStatus.set(true);
+      return true;
+    } catch (error) {
+      console.error('Connection error:', error);
+      this.connectionStatus.set(false);
+      return false;
+    }
   }
 
-  liveQuery(sql: string, callback: any) {
-    this.db.subscribeLive({ sql }, callback);
+  liveQuery<T>(sql: string): Observable<T[]> {
+    return new Observable<T[]>(observer => {
+      const callback = (data: any) => {
+        observer.next(data.result);
+      };
+      
+      const unsubscribe = this.db.subscribeLive({ sql }, callback);
+      
+      return () => {
+        unsubscribe();
+      };
+    }).pipe(shareReplay(1));
   }
 
-  query(sql: string) {
-    return this.db.query(sql);
+  query<T>(sql: string): Observable<T[]> {
+    return from(this.db.query<T[]>(sql)).pipe(
+      map(response => response.result),
+      shareReplay(1)
+    );
+  }
+  
+  // Signal-based API for Angular 20
+  createQuerySignal<T>(sql: string) {
+    return toSignal(this.query<T>(sql), { initialValue: [] as T[] });
   }
 }
 ```
 
 ```ts
-// app.main.ts oder standalone Setup
-ServiceWorkerModule.register('ngsw-worker.js', {
-  enabled: environment.production
-})
+// app.config.ts für Angular 20 Standalone Setup
+import { ApplicationConfig, isDevMode } from '@angular/core';
+import { provideRouter, withComponentInputBinding, withViewTransitions } from '@angular/router';
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideServiceWorker } from '@angular/service-worker';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideClientHydration } from '@angular/platform-browser';
+import { routes } from './app.routes';
+import { environment } from '../environments/environment';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(
+      routes,
+      withComponentInputBinding(),
+      withViewTransitions()
+    ),
+    provideHttpClient(withFetch()),
+    provideAnimations(),
+    provideClientHydration(),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000'
+    })
+  ]
+};
 ```
 
 ```html

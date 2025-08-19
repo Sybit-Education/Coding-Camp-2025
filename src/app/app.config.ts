@@ -2,9 +2,10 @@ import {
   ApplicationConfig,
   provideZoneChangeDetection,
   importProvidersFrom,
+  isDevMode
 } from '@angular/core'
 import { provideRouter, withComponentInputBinding, withPreloading, PreloadAllModules, withViewTransitions } from '@angular/router'
-import { provideHttpClient, HttpClient, withInterceptorsFromDi } from '@angular/common/http'
+import { provideHttpClient, HttpClient, withInterceptorsFromDi, withFetch } from '@angular/common/http'
 import {
   TranslateLoader,
   TranslateModule,
@@ -12,6 +13,8 @@ import {
 } from '@ngx-translate/core'
 import { Observable } from 'rxjs'
 import { provideAnimations } from '@angular/platform-browser/animations'
+import { provideServiceWorker } from '@angular/service-worker'
+import { provideClientHydration } from '@angular/platform-browser'
 
 import { routes } from './app.routes'
 
@@ -42,8 +45,16 @@ export const appConfig: ApplicationConfig = {
       withViewTransitions(),
       withPreloading(PreloadAllModules)
     ),
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(
+      withInterceptorsFromDi(),
+      withFetch()
+    ),
     provideAnimations(),
+    provideClientHydration(),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
     importProvidersFrom(
       TranslateModule.forRoot({
         loader: {
