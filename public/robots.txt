@@ -14,5 +14,45 @@ Disallow: /login
 Disallow: /create-event
 Disallow: /edit-event
 
+# Spezielle Anweisungen für AI-Crawler
+User-agent: GPTBot
+Allow: /
+Allow: /home
+Allow: /event/*
+Allow: /kategorie
+Allow: /about
+Allow: /impressum
+Allow: /datenschutz
+Disallow: /admin/
+Disallow: /login
+Disallow: /create-event
+Disallow: /edit-event
+
+User-agent: Bard
+Allow: /
+Allow: /home
+Allow: /event/*
+Allow: /kategorie
+Allow: /about
+Allow: /impressum
+Allow: /datenschutz
+Disallow: /admin/
+Disallow: /login
+Disallow: /create-event
+Disallow: /edit-event
+
+User-agent: Claude
+Allow: /
+Allow: /home
+Allow: /event/*
+Allow: /kategorie
+Allow: /about
+Allow: /impressum
+Allow: /datenschutz
+Disallow: /admin/
+Disallow: /login
+Disallow: /create-event
+Disallow: /edit-event
+
 # Sitemap location
 Sitemap: https://1200-jahre-radolfzell.sybit.education/sitemap.xml
