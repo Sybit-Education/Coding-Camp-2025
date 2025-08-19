@@ -1,4 +1,4 @@
-<main class="event-container mt-5 min-h-[80vh] w-full" lang="de">
+<div>
   <!-- Skip-Link für Screenreader -->
   <a
     href="#event-content"
@@ -135,7 +135,7 @@
       </section>
       @if (location?.geo_point) {
         <section
-          class="map p-2"
+          class="map mt-10"
           aria-labelledby="directions-heading"
           >
           <h2
@@ -167,7 +167,7 @@
         </section>
       }
       <section
-        class="contact mb-18 rounded-2xl bg-gray-100 shadow-2xl"
+        class="contact mt-10 mb-18 rounded-2xl bg-gray-100 shadow-2xl"
         [attr.aria-labelledby]="'contact-heading'"
         >
         <h2 id="contact-heading" class="pt-4 text-2xl font-bold text-blue-900">
@@ -263,4 +263,4 @@
       </button>
     }
   </div>
-</main>
+</div>

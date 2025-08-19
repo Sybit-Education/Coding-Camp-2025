@@ -50,6 +50,18 @@
         "maxAge": "1h",
         "timeout": "5s"
       }
+    },
+    {
+      "name": "api-freshness",
+      "urls": [
+        "https://surrealdb.sybit.education/event/*"
+      ],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 50,
+        "maxAge": "30m",
+        "timeout": "5s"
+      }
     }
   ],
   "navigationUrls": [

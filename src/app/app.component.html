@@ -4,10 +4,23 @@
 >
   <app-header></app-header>
 
-  <main class="min-h-[calc(100dvh - (--spacing(8)))] pt-[240px]">
+  <main class="relative container mx-auto max-w-5xl min-h-screen pt-[240px] p-2">
     <router-outlet />
   </main>
 
   <app-footer class="py-3"></app-footer>
   <app-bottom-nav></app-bottom-nav>
+
+  <!-- Update-Benachrichtigung -->
+  <div *ngIf="updateAvailable" class="fixed bottom-20 left-0 right-0 mx-auto w-11/12 max-w-md rounded-lg bg-blue-100 p-4 shadow-lg">
+    <div class="flex items-center justify-between">
+      <p class="text-sm text-blue-800">Eine neue Version ist verfügbar</p>
+      <button 
+        (click)="updateApp()" 
+        class="rounded bg-blue-600 px-4 py-2 text-xs font-bold text-white hover:bg-blue-700"
+        aria-label="App aktualisieren">
+        Aktualisieren
+      </button>
+    </div>
+  </div>
 </div>

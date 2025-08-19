@@ -1,6 +1,5 @@
 import { inject, Injectable } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
-import { Event } from '../models/event.interface'
 import { Media } from '../models/media.model'
 import { RecordId } from 'surrealdb'
 @Injectable({
@@ -9,54 +8,16 @@ import { RecordId } from 'surrealdb'
 export class MediaService {
   private readonly surrealdb: SurrealdbService = inject(SurrealdbService)
 
-  //************** GET **************
-  async getMediaByID(id: string): Promise<Event> {
-    const result = await this.surrealdb.getById<Event>('event:' + id)
-    return result
-  }
-
-  async getAllMedias(): Promise<Event[]> {
-    try {
-      const result = await this.surrealdb.getAll<Event>('event')
-      return (result || []).map(
-        (item: Record<string, unknown>) =>
-          ({
-            ...item,
-          }) as Event,
-      )
-    } catch (error) {
-      throw new Error(`Fehler beim Laden der Events: ${error}`)
-    }
-  }
-
-  //************** POST **************
-
   async postMedia(media: Media) {
     const result = await this.surrealdb.post<Media>('media', media)
     return result[0]
   }
 
-  async getMediaUrl(
-    mediaRecordId: RecordId<'media'> | string | undefined,
-  ): Promise<string | null> {
+  async getMediaUrl(mediaRecordId: RecordId<'media'> | undefined): Promise<string | null> {
     if (!mediaRecordId) return null
 
     try {
-      let mediaId: string
-
-      if (
-        typeof mediaRecordId === 'object' &&
-        mediaRecordId.tb &&
-        mediaRecordId.id
-      ) {
-        mediaId = mediaRecordId.tb + ':' + mediaRecordId.id
-      } else if (typeof mediaRecordId === 'string') {
-        mediaId = mediaRecordId
-      } else {
-        return null
-      }
-
-      const media = await this.surrealdb.getById<Media>(mediaId)
+      const media = await this.surrealdb.getByRecordId<Media>(mediaRecordId)
 
       if (media?.file) {
         return this.convertBase64ToDataUrl(media.file)

@@ -35,16 +35,6 @@ export class SurrealdbService extends Surreal {
     return await super.authenticate(token)
   }
 
-  // 1) Einen Eintrag nach ID holen
-  // @deprecated Use `getByRecordId() instead!
-  async getById<T extends Record<string, unknown>>(
-    recordId: string,
-  ): Promise<T> {
-    console.warn('getById is deprecated, use getByRecordId instead')
-    const result = await super.select<T>(new StringRecordId(recordId))
-    return result as T
-  }
-
   async getByRecordId<T extends Record<string, unknown>>(
     recordId: RecordId<string> | StringRecordId,
   ): Promise<T> {

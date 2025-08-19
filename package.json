@@ -5,12 +5,14 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:prod": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "npm run lint:fix && npm run lint:format",
     "lint:fix": "ng lint --fix",
     "lint:format": "prettier --write \"src/**/*.{ts,css,scss,html}\" --log-level warn",
-    "lint:ci": "ng lint --format json --output-file eslint-report.json"
+    "lint:ci": "ng lint --format json --output-file eslint-report.json",
+    "generate-icons": "node src/scripts/generate-maskable-icons.js"
   },
   "private": true,
   "dependencies": {
