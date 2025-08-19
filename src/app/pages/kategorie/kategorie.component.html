@@ -1,15 +1,13 @@
-<div class="m-10">
-  <p class="m-5 text-center">{{ this.name }}</p>
+<article>
+  <h1 class="mb-6 text-2xl font-bold text-[#3b4ea3]">
+    {{ this.name }}
+  </h1>
 
-  <div class="w-full pb-4">
-    <div class="event-row flex flex-col gap-2 px-4">
-      <app-event-card
-        *ngFor="let event of events; let i = index"
-        class="h-[280px] w-[calc(100vw-6rem)]"
-        [title]="event.name"
-        [event]="event"
-      >
-      </app-event-card>
-    </div>
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <app-event-card
+      *ngFor="let event of events; let i = index"
+      [event]="event"
+    >
+    </app-event-card>
   </div>
-</div>
+</article>
