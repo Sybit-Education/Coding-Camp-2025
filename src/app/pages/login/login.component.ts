@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms'
-import { CommonModule } from '@angular/common'
+
 import { Login } from '../../models/login.module'
 import { LoginService } from '../../services/login.service'
 import { Component, inject } from '@angular/core'
@@ -10,7 +10,7 @@ import { TranslateModule } from '@ngx-translate/core'
   selector: 'app-page-login',
   templateUrl: './login.component.html',
   standalone: true,
-  imports: [FormsModule, CommonModule, TranslateModule],
+  imports: [FormsModule, TranslateModule],
 })
 export class LoginPageComponent {
   public loginParams: Login = { username: '', password: '' }

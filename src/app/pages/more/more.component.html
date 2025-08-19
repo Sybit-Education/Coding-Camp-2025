@@ -3,7 +3,7 @@
   <a
     href="#main-content"
     class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2"
-  >
+    >
     {{ 'i18y.to-main-content' | translate }}
   </a>
 
@@ -15,55 +15,56 @@
     class="grid gap-4"
     [attr.aria-label]="'MORE.ARIA-LABLE' | translate"
     role="navigation"
-  >
-    <a
-      *ngFor="let item of menuItems; let i = index"
-      [routerLink]="[item.route]"
-      class="focus:ring-opacity-50 flex items-center rounded-lg bg-white p-4 shadow-md transition-shadow hover:shadow-lg focus:ring-2 focus:ring-[#3b4ea3] focus:outline-none"
-      [attr.aria-labelledby]="'menu-item-' + i"
-      tabindex="0"
-      (keydown.enter)="navigateTo(item.route)"
-      (keydown.space)="$event.preventDefault(); navigateTo(item.route)"
     >
-      <div class="mr-4 text-[#3b4ea3]" aria-hidden="true">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="size-8"
-          aria-hidden="true"
+    @for (item of menuItems; track item; let i = $index) {
+      <a
+        [routerLink]="[item.route]"
+        class="focus:ring-opacity-50 flex items-center rounded-lg bg-white p-4 shadow-md transition-shadow hover:shadow-lg focus:ring-2 focus:ring-[#3b4ea3] focus:outline-none"
+        [attr.aria-labelledby]="'menu-item-' + i"
+        tabindex="0"
+        (keydown.enter)="navigateTo(item.route)"
+        (keydown.space)="$event.preventDefault(); navigateTo(item.route)"
         >
-          <path
-            [attr.stroke-linecap]="'round'"
-            [attr.stroke-linejoin]="'round'"
-            [attr.d]="item.icon"
-          />
-        </svg>
-      </div>
-      <div>
-        <h2 class="text-xl font-semibold text-[#3b4ea3]" id="menu-item-{{ i }}">
-          {{ item.title | translate }}
-        </h2>
-        <p class="mt-1 text-gray-600">{{ item.description | translate }}</p>
-      </div>
-      <div class="ml-auto text-[#3b4ea3]" aria-hidden="true">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="size-5"
-        >
-          <path
-            [attr.stroke-linecap]="'round'"
-            [attr.stroke-linejoin]="'round'"
-            [attr.d]="'m8.25 4.5 7.5 7.5-7.5 7.5'"
-          />
-        </svg>
-      </div>
-    </a>
+        <div class="mr-4 text-[#3b4ea3]" aria-hidden="true">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-8"
+            aria-hidden="true"
+            >
+            <path
+              [attr.stroke-linecap]="'round'"
+              [attr.stroke-linejoin]="'round'"
+              [attr.d]="item.icon"
+              />
+          </svg>
+        </div>
+        <div>
+          <h2 class="text-xl font-semibold text-[#3b4ea3]" id="menu-item-{{ i }}">
+            {{ item.title | translate }}
+          </h2>
+          <p class="mt-1 text-gray-600">{{ item.description | translate }}</p>
+        </div>
+        <div class="ml-auto text-[#3b4ea3]" aria-hidden="true">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-5"
+            >
+            <path
+              [attr.stroke-linecap]="'round'"
+              [attr.stroke-linejoin]="'round'"
+              [attr.d]="'m8.25 4.5 7.5 7.5-7.5 7.5'"
+              />
+          </svg>
+        </div>
+      </a>
+    }
   </nav>
 </div>

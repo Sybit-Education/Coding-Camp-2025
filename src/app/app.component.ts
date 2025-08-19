@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router'
-import { CommonModule } from '@angular/common'
+
 import { HeaderComponent } from './component/header/header.component'
 import { FooterComponent } from './component/footer/footer.component'
 import { filter } from 'rxjs/operators'
@@ -10,12 +10,11 @@ import { UpdateService } from './pwa/update.service'
 @Component({
   selector: 'app-root',
   imports: [
-    CommonModule,
     RouterOutlet,
     HeaderComponent,
     FooterComponent,
-    BottomNavComponent,
-  ],
+    BottomNavComponent
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

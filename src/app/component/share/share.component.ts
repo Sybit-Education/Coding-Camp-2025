@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core'
-import { CommonModule } from '@angular/common'
+
 import { Event } from '../../models/event.interface'
 import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-share',
-  imports: [CommonModule, TranslateModule],
+  imports: [TranslateModule],
   templateUrl: './share.component.html',
   standalone: true,
 })

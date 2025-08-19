@@ -2,20 +2,21 @@
   class="flex items-center space-x-2"
   role="radiogroup"
   [attr.aria-label]="'Sprache auswählen'"
->
-  <button
-    *ngFor="let lang of availableLanguages"
-    (click)="switchLanguage(lang)"
-    [attr.aria-pressed]="currentLang === lang"
-    class="h-8 w-8 overflow-hidden rounded-full border-2 transition-transform hover:scale-110 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-    [class.border-blue-500]="currentLang === lang"
-    [class.border-transparent]="currentLang !== lang"
-    [title]="getLangTitle(lang)"
   >
-    <img
-      [src]="getFlagPath(lang)"
-      [alt]="getLangTitle(lang)"
-      class="h-full w-full object-cover"
-    />
-  </button>
+  @for (lang of availableLanguages; track lang) {
+    <button
+      (click)="switchLanguage(lang)"
+      [attr.aria-pressed]="currentLang === lang"
+      class="h-8 w-8 overflow-hidden rounded-full border-2 transition-transform hover:scale-110 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+      [class.border-blue-500]="currentLang === lang"
+      [class.border-transparent]="currentLang !== lang"
+      [title]="getLangTitle(lang)"
+      >
+      <img
+        [src]="getFlagPath(lang)"
+        [alt]="getLangTitle(lang)"
+        class="h-full w-full object-cover"
+        />
+    </button>
+  }
 </div>

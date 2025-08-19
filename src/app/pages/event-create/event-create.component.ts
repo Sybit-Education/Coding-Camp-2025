@@ -2,7 +2,7 @@ import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
 import { ActivatedRoute } from '@angular/router'
-import { CommonModule } from '@angular/common'
+
 
 // Models
 import { Event as AppEvent } from '../../models/event.interface'
@@ -23,7 +23,7 @@ import { MediaService } from '../../services/media.service'
 @Component({
   selector: 'app-event-create',
   standalone: true,
-  imports: [FormsModule, CommonModule, TranslateModule],
+  imports: [FormsModule, TranslateModule],
   templateUrl: './event-create.component.html',
 })
 export class EventCreateComponent implements OnInit {

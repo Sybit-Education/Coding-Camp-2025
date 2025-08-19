@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core'
-import { CommonModule } from '@angular/common'
+
 import { Event } from '../../models/event.interface'
 import { Router } from '@angular/router'
 import { FavoriteService } from '../../services/favorite.service'
@@ -11,7 +11,7 @@ import { TranslateModule } from '@ngx-translate/core'
 @Component({
   selector: 'app-favourites',
   standalone: true,
-  imports: [CommonModule, EventCardComponent, TranslateModule],
+  imports: [EventCardComponent, TranslateModule],
   templateUrl: './favourites.component.html',
   styles: [
     `

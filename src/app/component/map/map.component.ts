@@ -1,12 +1,12 @@
 import { AfterViewInit, Component, Input, OnDestroy, NgZone } from '@angular/core'
-import { CommonModule } from '@angular/common'
+
 
 // Lazy-Loading für Leaflet
 import type { Map, Icon, TileLayer, Marker } from 'leaflet'
 
 @Component({
   selector: 'app-map',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './map.component.html',
   styleUrl: './map.component.scss',
   standalone: true,

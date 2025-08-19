@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 import { EventCardComponent } from '../../component/event-card/event-card.component'
-import { CommonModule } from '@angular/common'
+
 import { EventService } from '../../services/event.service'
 import { LocationService } from '../../services/location.service'
 import { TopicService } from '../../services/topic.service'
@@ -18,7 +18,7 @@ interface EventWithResolvedLocation extends AppEvent {
 @Component({
   selector: 'app-kategorie',
   standalone: true,
-  imports: [TranslateModule, EventCardComponent, CommonModule],
+  imports: [TranslateModule, EventCardComponent],
   templateUrl: './kategorie.component.html',
 })
 export class KategorieComponent implements OnInit {
