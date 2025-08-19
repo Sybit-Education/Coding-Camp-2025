@@ -1,4 +1,4 @@
-# TODOs für das Angular 19 Projekt
+# TODOs für das Angular 20 Projekt
 
 Basierend auf den Anforderungen in `agents.md` fehlen noch folgende Komponenten oder Implementierungen:
 
