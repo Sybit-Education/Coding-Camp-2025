@@ -14,6 +14,16 @@ Basierend auf den Anforderungen in `agents.md` fehlen noch folgende Komponenten 
 - [ ] Kein explizites Fokus-Management implementiert
 - [ ] Keine Verwendung von `LiveAnnouncer` oder `cdkTrapFocus` aus Angular CDK
 
+## SEO & AI-Auffindbarkeit
+- [x] SEO-Service für Meta-Tags und strukturierte Daten implementiert
+- [x] Statische Sitemap.xml erstellt
+- [x] Robots.txt mit AI-Crawler-Anweisungen konfiguriert
+- [ ] Keine strukturierten Daten (JSON-LD) für Events in den Komponenten
+- [ ] Keine dynamische Meta-Tag-Aktualisierung in den Komponenten
+- [ ] Keine Canonical URLs für mehrsprachige Inhalte in den Komponenten
+- [ ] Keine semantische HTML-Struktur für bessere Indexierung
+- [ ] Keine Optimierung für Core Web Vitals (LCP, FID, CLS)
+
 ## State Management
 - [ ] Kein klares State Management (NgRx, ComponentStore oder Signals)
 - [ ] Keine zoneless Change Detection implementiert
@@ -32,12 +42,13 @@ Basierend auf den Anforderungen in `agents.md` fehlen noch folgende Komponenten 
 - [ ] Keine Vorbereitung für Server-Side Rendering (SSR)
 
 ## SurrealDB Integration
-- [ ] Live-Query-Funktionalität nicht vollständigy implementiert
+- [ ] Live-Query-Funktionalität nicht vollständig implementiert
 - [ ] Authentifizierung über SurrealDB nicht implementiert
 
 ## Nächste Schritte
 1. Internationalisierung implementieren (höchste Priorität)
-2. Barrierefreiheit verbessern
-3. State Management einführen
-4. Tests hinzufügen
-5. Projektstruktur optimieren
+2. SEO & AI-Auffindbarkeit verbessern
+3. Barrierefreiheit verbessern
+4. State Management einführen
+5. Tests hinzufügen
+6. Projektstruktur optimieren

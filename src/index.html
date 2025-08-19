@@ -11,6 +11,41 @@
       name="description"
       content="1200 Jahre Radolfzell - Jubiläumsfeier und Veranstaltungen"
     />
+    
+    <!-- SEO Meta Tags -->
+    <meta name="keywords" content="Radolfzell, Jubiläum, Veranstaltungen, Bodensee, Stadtfest" />
+    <meta name="author" content="Stadt Radolfzell" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://1200-jahre-radolfzell.sybit.education/" />
+    <meta property="og:title" content="1200 Jahre Radolfzell" />
+    <meta property="og:description" content="1200 Jahre Radolfzell - Jubiläumsfeier und Veranstaltungen am Bodensee" />
+    <meta property="og:image" content="/assets/images/og-image.jpg" />
+    <meta property="og:locale" content="de_DE" />
+    <meta property="og:locale:alternate" content="en_GB" />
+    <meta property="og:locale:alternate" content="fr_FR" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://1200-jahre-radolfzell.sybit.education/" />
+    <meta name="twitter:title" content="1200 Jahre Radolfzell" />
+    <meta name="twitter:description" content="1200 Jahre Radolfzell - Jubiläumsfeier und Veranstaltungen am Bodensee" />
+    <meta name="twitter:image" content="/assets/images/twitter-image.jpg" />
+    
+    <!-- AI-spezifische Meta-Tags -->
+    <meta name="ai:description" content="Offizielle Website zum 1200-jährigen Jubiläum der Stadt Radolfzell am Bodensee mit allen Veranstaltungen, Events und Informationen zum Festjahr." />
+    <meta name="ai:keywords" content="Radolfzell, Jubiläum, 1200 Jahre, Bodensee, Stadtfest, Veranstaltungen, Events, Kultur" />
+    <meta name="ai:context" content="Historisches Stadtjubiläum mit kulturellen Veranstaltungen" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://1200-jahre-radolfzell.sybit.education/" />
+    <link rel="alternate" hreflang="de" href="https://1200-jahre-radolfzell.sybit.education/" />
+    <link rel="alternate" hreflang="en" href="https://1200-jahre-radolfzell.sybit.education/en/" />
+    <link rel="alternate" hreflang="fr" href="https://1200-jahre-radolfzell.sybit.education/fr/" />
+    
+    <!-- PWA -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="manifest" href="manifest.webmanifest" />
     <link href="/fonts/material-icons.css" rel="stylesheet" />
@@ -20,13 +55,56 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <link rel="apple-touch-icon" href="/icons/maskable-icon-192x192.png">
+    
+    <!-- Preload wichtiger Ressourcen -->
+    <link rel="preload" href="/assets/i18n/de.json" as="fetch" crossorigin="anonymous">
   </head>
 
   <body>
     <app-root></app-root>
     <noscript>
-      Bitte aktivieren Sie JavaScript, um diese Anwendung zu nutzen. Please
-      enable JavaScript to continue using this application.
+      <div style="padding: 20px; text-align: center; background-color: #f8f9fa; border: 1px solid #dee2e6; margin: 20px;">
+        <h1>JavaScript ist deaktiviert</h1>
+        <p>Bitte aktivieren Sie JavaScript, um diese Anwendung zu nutzen.</p>
+        <p>Please enable JavaScript to continue using this application.</p>
+      </div>
     </noscript>
+    
+    <!-- Strukturierte Daten für die Organisation -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Stadt Radolfzell am Bodensee",
+        "url": "https://1200-jahre-radolfzell.sybit.education",
+        "logo": "https://1200-jahre-radolfzell.sybit.education/assets/images/logo.png",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+49-7732-81-0",
+          "contactType": "customer service",
+          "availableLanguage": ["German", "English", "French"]
+        },
+        "sameAs": [
+          "https://www.facebook.com/stadtradolfzell",
+          "https://www.instagram.com/stadtradolfzell",
+          "https://www.youtube.com/user/stadtradolfzell"
+        ]
+      }
+    </script>
+    
+    <!-- Strukturierte Daten für die Website -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "1200 Jahre Radolfzell",
+        "url": "https://1200-jahre-radolfzell.sybit.education",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://1200-jahre-radolfzell.sybit.education/search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
   </body>
 </html>

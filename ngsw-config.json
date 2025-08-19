@@ -36,6 +36,18 @@
           "/assets/i18n/*.json"
         ]
       }
+    },
+    {
+      "name": "seo-assets",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/sitemap.xml",
+          "/robots.txt",
+          "/assets/sitemap.xml"
+        ]
+      }
     }
   ],
   "dataGroups": [
