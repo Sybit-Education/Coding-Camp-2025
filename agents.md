@@ -29,9 +29,20 @@
    - Semantisches HTML, ARIA‑Attribute mit `attr.aria‑...`, Tastatur‑Navigation  
    - Skip‑Links, Fokus‑Management, Live Announcements, Angular CDK (`LiveAnnouncer`, `cdkTrapFocus`) ([Accessibility Best Practices in Angular 19])  
    - Hoher Kontrast, Fokus-Styling, alt‑Texte, Fehlerbeschreibungen  
-10. **Performance & Optimierungen**:  
-    - Lazy‑Loading, PreloadAllModules, `OnPush` Change Detection, AOT, Tree‑Shaking, SSR‑Vorbereitung  
-11. **Codequalität & Tests**:  
+10. **SEO & AI-Auffindbarkeit**:
+    - Strukturierte Daten mit JSON-LD für Events, Orte und Organisationen
+    - Meta-Tags für soziale Medien (Open Graph, Twitter Cards)
+    - Semantische HTML-Struktur mit korrekten Heading-Hierarchien
+    - Statische und dynamische Sitemap-Generierung
+    - Canonical URLs für mehrsprachige Inhalte
+    - Web Mentions und Schema.org Markup
+    - AI-spezifische Meta-Tags und Optimierungen für AI-Crawler
+    - Progressive Enhancement für Suchmaschinen
+11. **Performance & Optimierungen**:  
+    - Lazy‑Loading, PreloadAllModules, `OnPush` Change Detection, AOT, Tree‑Shaking
+    - Server-Side Rendering (SSR) mit Angular Universal
+    - Optimierung für Core Web Vitals (LCP, FID, CLS)
+12. **Codequalität & Tests**:  
     - Saubere DTOs / Interfaces, kein `any`, RxJS‑Pipes (`pipe`, `takeUntil`, etc.)  
     - Tooling: ESLint, Prettier, Husky Hooks  
     - Unit‑Tests (Jest oder Jasmine/Karma), E2E mit Cypress  
@@ -52,6 +63,7 @@ src/
     pages/ # Die einzelnen Pages
     locale/ # Übersetzungs‑Dateien (JSON)
     services/ # Services der app
+    seo/ # SEO-Services und Komponenten
     styles/
     tailwind.css
   environments/
@@ -96,7 +108,7 @@ ServiceWorkerModule.register('ngsw-worker.js', {
 ```
 
 ```html
-<!-- barrierefreies & i18n-konformes UI -->
+<!-- barrierefreies & i18n-konformes UI mit SEO-Optimierung -->
 <a href="#mainContent" class="skip-link sr-only focus:not-sr-only">
   {{ 'SKIP_TO_MAIN' | translate }}
 </a>
@@ -108,5 +120,70 @@ ServiceWorkerModule.register('ngsw-worker.js', {
     {{ 'SAVE' | translate }}
   </button>
   <div aria-live="polite">{{ notificationMessage }}</div>
+  
+  <!-- Strukturierte Daten für SEO -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "name": "{{ event.name }}",
+      "startDate": "{{ event.date_start | date:'yyyy-MM-dd' }}",
+      "endDate": "{{ event.date_end | date:'yyyy-MM-dd' }}",
+      "location": {
+        "@type": "Place",
+        "name": "{{ event.location.name }}",
+        "address": "{{ event.location.address }}"
+      },
+      "description": "{{ event.description }}"
+    }
+  </script>
 </main>
+```
+
+```ts
+// seo.service.ts
+import { Injectable } from '@angular/core';
+import { Meta, Title } from '@angular/platform-browser';
+
+@Injectable({ providedIn: 'root' })
+export class SeoService {
+  constructor(
+    private meta: Meta,
+    private title: Title
+  ) {}
+
+  updateMetaTags(config: {
+    title: string;
+    description: string;
+    image?: string;
+    url?: string;
+  }) {
+    this.title.setTitle(config.title);
+    
+    // Standard Meta-Tags
+    this.meta.updateTag({ name: 'description', content: config.description });
+    
+    // Open Graph Tags
+    this.meta.updateTag({ property: 'og:title', content: config.title });
+    this.meta.updateTag({ property: 'og:description', content: config.description });
+    if (config.image) {
+      this.meta.updateTag({ property: 'og:image', content: config.image });
+    }
+    if (config.url) {
+      this.meta.updateTag({ property: 'og:url', content: config.url });
+    }
+    
+    // Twitter Cards
+    this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    this.meta.updateTag({ name: 'twitter:title', content: config.title });
+    this.meta.updateTag({ name: 'twitter:description', content: config.description });
+    if (config.image) {
+      this.meta.updateTag({ name: 'twitter:image', content: config.image });
+    }
+    
+    // AI-spezifische Meta-Tags
+    this.meta.updateTag({ name: 'ai:description', content: config.description });
+    this.meta.updateTag({ name: 'ai:keywords', content: 'events,veranstaltungen,kultur' });
+  }
+}
 ```
