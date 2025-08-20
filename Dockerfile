@@ -1,25 +1,27 @@
-FROM node:lts AS build-stage
+FROM node:lts-bookworm-slim AS build-stage
 
-ARG environment=production
+# Set build args (Angular-Konfiguration: production|staging|...).
+ARG ENV=production
+
 WORKDIR /app
-
-RUN npm i -g @angular/cli
 
 COPY package*.json ./
 RUN npm ci
 
+# Angular CLI (falls nicht im devDependencies)
+RUN npx -y @angular/cli@latest ng version >/dev/null 2>&1 || true
+
 COPY . .
-RUN ng build --configuration=production
 
-RUN cp -r /app/dist/1200-jahre-radolfzell/browser/* /app/dist/1200-jahre-radolfzell/
+RUN npm run build -- --configuration=${ENV} --output-path=dist/app
 
+# -----------------------------------------------------------------------
+FROM nginx:stable-alpine AS production-stage
 
-FROM nginx:alpine-slim AS production-stage
-
-WORKDIR /usr/share/nginx/html
-RUN rm -rf ./*
+RUN rm -rf /usr/share/nginx/html/*
 
 COPY docker/nginx/nginx.conf /etc/nginx/nginx.conf
-COPY --from=build-stage /app/dist/1200-jahre-radolfzell/ .
+COPY --from=build-stage /app/dist/app/  /usr/share/nginx/html/
 
 EXPOSE 80
+HEALTHCHECK --interval=30s --timeout=3s --retries=3 CMD wget -qO- http://127.0.0.1/healthz || exit 1
