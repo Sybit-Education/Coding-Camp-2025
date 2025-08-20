@@ -1,18 +1,32 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { CanActivateFn, Router } from '@angular/router';
 import { I18nService } from '../services/translate.service';
 
 /**
- * Guard, der die Sprache basierend auf der Route setzt
+ * Guard zur Überprüfung und Verwaltung der Spracheinstellung in der URL
  */
-export const languageGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+export const languageGuard: CanActivateFn = (route, state) => {
+  const router = inject(Router);
   const i18nService = inject(I18nService);
-  const language = route.data['language'];
   
-  if (language) {
-    // Setze die Sprache basierend auf dem Routenpräfix, ohne Navigation
-    i18nService.setLanguage(language, false);
-    console.log(`Sprache auf ${language} gesetzt`);
+  // Verfügbare Sprachen
+  const availableLanguages = ['de', 'en', 'fr'];
+  
+  // Prüfen, ob das erste Segment eine gültige Sprache ist
+  const lang = route.params['lang'];
+  
+  if (lang && availableLanguages.includes(lang)) {
+    // Wenn eine gültige Sprache in der URL ist, setze diese Sprache
+    i18nService.setLanguage(lang, false);
+    return true;
+  } else if (route.routeConfig?.path === '') {
+    // Wenn wir auf der Root-Route sind, leite zur deutschen Version weiter
+    router.navigateByUrl('/de');
+    return false;
+  } else if (route.routeConfig?.path === '**') {
+    // Wildcard-Route, leite zur deutschen Version weiter
+    router.navigateByUrl('/de');
+    return false;
   }
   
   return true;

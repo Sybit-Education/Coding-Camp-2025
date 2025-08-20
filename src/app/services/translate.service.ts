@@ -93,15 +93,18 @@ export class I18nService {
    */
   private navigateToLocalizedRoute(lang: string): void {
     const currentUrl = this.router.url
-    const urlWithoutLang = currentUrl.replace(/^\/[a-z]{2}\//, '/')
+    const segments = currentUrl.split('/').filter(segment => segment)
     
-    // Für Deutsch keine Sprachpräfix
-    if (lang === 'de') {
-      this.router.navigateByUrl(urlWithoutLang)
-    } else {
-      // Für andere Sprachen füge Sprachpräfix hinzu
-      this.router.navigateByUrl(`/${lang}${urlWithoutLang}`)
-    }
+    // Prüfe, ob das erste Segment eine Sprache ist
+    const isFirstSegmentLang = ['de', 'en', 'fr'].includes(segments[0])
+    
+    // Entferne das Sprachsegment, wenn vorhanden
+    const pathWithoutLang = isFirstSegmentLang 
+      ? `/${segments.slice(1).join('/')}` 
+      : currentUrl
+    
+    // Navigiere zur neuen URL mit der gewählten Sprache
+    this.router.navigateByUrl(`/${lang}${pathWithoutLang}`)
   }
 
   /**
