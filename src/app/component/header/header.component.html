@@ -30,11 +30,11 @@ Corporate‑Designs.
     >
     <a routerLink="/">
       <img
-        [src]="currentSrc"
+        [src]="isShrunk ? '/Radolfzell_1200_Jahre_Logo_small.svg' : '/Radolfzell_1200_Jahre_Logo.svg'"
         alt="1200 Jahre Radolfzell"
         class="transition-all duration-50"
         [ngClass]="{
-          'w-[120px]': isShrunk,
+          'w-[100px]': isShrunk,
           'w-[80%] max-w-[380px]': !isShrunk,
         }"
         />
