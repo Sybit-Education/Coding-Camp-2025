@@ -1,7 +1,8 @@
 import {
   ApplicationConfig,
   importProvidersFrom,
-  isDevMode
+  isDevMode,
+  APP_INITIALIZER
 } from '@angular/core'
 import { 
   provideRouter, 
@@ -34,6 +35,7 @@ import {
 
 import { routes } from './app.routes'
 import { environment } from '../environments/environment'
+import { SeoInitializerService } from './services/seo-initializer.service'
 
 // Eigener TranslateLoader, der keine speziellen Tokens benötigt
 class CustomTranslateLoader implements TranslateLoader {
@@ -101,5 +103,17 @@ export const appConfig: ApplicationConfig = {
         defaultLanguage: 'de'
       }),
     ),
+    // Router-Events für SEO-Metadaten abfangen
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (seoInitializer: SeoInitializerService) => {
+        return () => {
+          console.log('SEO Initializer aktiviert');
+          return true;
+        };
+      },
+      deps: [SeoInitializerService],
+      multi: true
+    },
   ],
 }
