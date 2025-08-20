@@ -1,5 +1,53 @@
 @use 'tailwindcss';
 
+/* Global base styles for HTML elements using Tailwind */
+@layer base {
+  /* Heading styles */
+  h1 {
+    @apply text-3xl text-left font-bold text-[#3b4ea3] mb-4;
+  }
+
+  h2 {
+    @apply text-2xl text-left font-bold text-[#3b4ea3] mb-3;
+  }
+
+  h3 {
+    @apply text-xl text-left font-bold text-[#3b4ea3] mb-2;
+  }
+
+  h4 {
+    @apply text-lg text-left font-bold text-[#3b4ea3] mb-2;
+  }
+
+  /* Paragraph styles */
+  p {
+    @apply mb-4 text-left text-base leading-relaxed;
+  }
+
+  /* Link styles */
+  a {
+    @apply transition-colors duration-200;
+  }
+
+  /* List styles */
+  ul {
+    @apply list-disc pl-5 mb-4;
+  }
+
+  ol {
+    @apply list-decimal pl-5 mb-4;
+  }
+
+  li {
+    @apply mb-1;
+  }
+
+  /* Form element styles */
+  input, select, textarea {
+    @apply px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#6d7cbc] focus:border-transparent rounded-lg;
+  }
+}
+
 @font-face {
   font-family: 'Meta Pro';
   src: url('/fonts/metapro_normal.otf') format('opentype');

@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router'
   template: `
     <!--eslint-disable @angular-eslint/template/i18n-->
     <div class="container mx-auto p-4 pb-20">
-      <h1 class="mb-6 text-2xl font-bold text-[#3b4ea3]">{{ pageTitle }}</h1>
+      <h1>{{ pageTitle }}</h1>
 
       <div class="rounded-lg bg-white p-6 shadow-md">
         <p class="text-gray-600">
