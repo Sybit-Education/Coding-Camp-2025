@@ -1,8 +1,8 @@
 <div
-  class="flex flex-col items-center justify-center bg-[var(--colors-light-blue)] p-5 text-lg leading-relaxed text-shadow-gray-500"
+  class="flex flex-col items-center justify-center rounded-2xl bg-[var(--colors-light-blue)] p-5 text-lg leading-relaxed text-shadow-gray-500"
   >
   <form
-    class="grid gap-[3rem] rounded-2xl bg-white p-6 text-black sm:grid-cols-[1fr] md:w-[75%] md:grid-cols-[1fr_1fr]"
+    class="grid gap-[3rem] rounded-2xl bg-white p-6 sm:grid-cols-[1fr] md:w-full md:grid-cols-[1fr_1fr]"
     >
     <!-- Linke Spalte mit vertikalem Abstand -->
     <div class="flex flex-col space-y-4">
@@ -16,7 +16,7 @@
           name="eventName"
           type="text"
           [(ngModel)]="eventName"
-          class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+          class="p-[0.75rem 1rem] w-full"
           required
           />
       </div>
@@ -28,7 +28,7 @@
           name="organizer"
           [(ngModel)]="selectedOrganizer"
           (ngModelChange)="setOrganizer($event)"
-          class="p-[0.75rem 1rem] w-full cursor-pointer rounded-[6px] border-2 border-gray-600"
+          class="p-[0.75rem 1rem] w-full cursor-pointer"
           >
           <option [ngValue]="null">
             {{ 'create-event.organizer' | translate }}
@@ -41,7 +41,7 @@
         </select>
         <button
           type="button"
-          class="mt-2 w-[50%] rounded-2xl bg-[var(--colors-light-blue)] p-2"
+          class="mt-2 w-full rounded-2xl bg-[var(--colors-light-blue)] text-white p-2"
           (click)="newOrganizer = !newOrganizer"
           >
           {{ 'create-event.neworganizer' | translate }}
@@ -62,7 +62,7 @@
               name="organizername"
               type="text"
               [(ngModel)]="organizername"
-              class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+              class="p-[0.75rem 1rem] w-full"
               required
               />
           </p>
@@ -75,7 +75,7 @@
               name="organizerphone"
               type="number"
               [(ngModel)]="organizerphone"
-              class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+              class="p-[0.75rem 1rem] w-full "
               />
           </p>
           <p>
@@ -87,7 +87,7 @@
               name="organizermail"
               type="text"
               [(ngModel)]="organizermail"
-              class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+              class="p-[0.75rem 1rem] w-full"
               />
           </p>
         </div>
@@ -102,7 +102,7 @@
             type="date"
             [(ngModel)]="dateStart"
             name="dateStart"
-            class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+            class="p-[0.75rem 1rem] w-full"
             />
         </div>
         <div>
@@ -112,7 +112,7 @@
             type="time"
             [(ngModel)]="timeStart"
             name="timeStart"
-            class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+            class="p-[0.75rem 1rem] w-full"
             />
         </div>
       </div>
@@ -126,7 +126,7 @@
               type="date"
               [(ngModel)]="dateEnd"
               name="dateStart"
-              class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+              class="p-[0.75rem 1rem] w-full"
               />
           </div>
           <div>
@@ -136,7 +136,7 @@
               type="time"
               [(ngModel)]="timeEnd"
               name="timeStart"
-              class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+              class="p-[0.75rem 1rem] w-full"
               />
           </div>
         </div>
@@ -147,11 +147,11 @@
           name="timePeriode"
           type="checkbox"
           [(ngModel)]="timePeriode"
-          class="h-4 w-4 cursor-pointer rounded-sm border-gray-300 bg-gray-100 text-[var(--colors-light-blue)]"
+          class="h-4 w-4 cursor-pointer"
           />
         <label
           for="timePeriode"
-          class="ms-2 w-full cursor-pointer text-sm font-medium whitespace-nowrap text-gray-900 dark:text-gray-700"
+          class="ms-2 w-full cursor-pointer"
           >
           {{ 'create-event.timespan' | translate }}
         </label>
@@ -164,7 +164,7 @@
           name="location"
           [(ngModel)]="selectedLocation"
           (ngModelChange)="setLocation($event)"
-          class="p-[0.75rem 1rem] w-full cursor-pointer rounded-[6px] border-2 border-gray-600"
+          class="p-[0.75rem 1rem] w-full cursor-pointer "
           >
           <option [ngValue]="null">
             {{ 'create-event.location' | translate }}
@@ -177,7 +177,7 @@
         </select>
         <button
           type="button"
-          class="mt-2 w-[50%] rounded-2xl bg-[var(--colors-light-blue)] p-2"
+          class="mt-2 w-full rounded-2xl bg-[var(--colors-light-blue)] text-white p-2"
           (click)="newLocation = !newLocation"
           >
           {{ 'create-event.newlocation' | translate }}
@@ -198,7 +198,7 @@
             type="text"
             [(ngModel)]="locationName"
             placeholder="{{ 'create-event.newlocationnameexample' | translate }}"
-            class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+            class="p-[0.75rem 1rem] w-full "
             />
           <label for="address">{{
             'create-event.newlocationaddress' | translate
@@ -211,7 +211,7 @@
           placeholder="{{
             'create-event.newlocationaddressexample' | translate
           }}"
-            class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+            class="p-[0.75rem 1rem] w-full "
             />
           <div class="grid grid-cols-2 gap-[1rem]">
             <div>
@@ -223,7 +223,7 @@
                 name="plz"
                 type="number"
                 [(ngModel)]="plz"
-                class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+                class="p-[0.75rem 1rem] w-full "
                 />
             </div>
             <div>
@@ -236,7 +236,7 @@
                 type="text"
                 [(ngModel)]="city"
                 required
-                class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+                class="p-[0.75rem 1rem] w-full "
                 />
             </div>
           </div>
@@ -252,7 +252,7 @@
           type="number"
           min="0"
           [(ngModel)]="age"
-          class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+          class="p-[0.75rem 1rem] w-full "
           placeholder="{{ 'create-event.ageexample' | translate }}"
           />
       </div>
@@ -268,7 +268,7 @@
           step="0.01"
           placeholder="0.00"
           [(ngModel)]="price"
-          class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+          class="p-[0.75rem 1rem] w-full "
           />
       </div>
     </div>
@@ -284,7 +284,7 @@
           id="description"
           name="description"
           [(ngModel)]="description"
-          class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+          class="p-[0.75rem 1rem] w-full "
         ></textarea>
       </div>
 
@@ -298,21 +298,19 @@
           name="restriction"
           type="text"
           [(ngModel)]="restriction"
-          class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+          class="p-[0.75rem 1rem] w-full "
           placeholder="{{ 'create-event.restrictionsexample' | translate }}"
           />
       </div>
 
       <!-- Themen -->
+      <h3>
+        {{ 'create-event.topics' | translate }}
+      </h3>
       <div
         id="choose-category"
         class="rounded-lg bg-white shadow-sm dark:bg-gray-100"
         >
-        <h1
-          class="text-center text-sm font-medium text-gray-900 dark:text-gray-700"
-          >
-          {{ 'create-event.topics' | translate }}
-        </h1>
         <ul class="space-y-1 p-3 text-sm text-gray-700 dark:text-gray-200">
           @for (topic of topics; track topic) {
             <li>
@@ -371,7 +369,7 @@
           type="text"
           placeholder="{{ 'create-event.moreinfoexample' | translate }}"
           [(ngModel)]="moreInfoLink"
-          class="p-[0.75rem 1rem] w-full rounded-[6px] border-2 border-gray-600"
+          class="p-[0.75rem 1rem] w-full "
           />
       </div>
 
@@ -388,7 +386,7 @@
           tabindex="0"
           [class.hovering]="isDragging"
           >
-          <div class="mb-2 text-[1.1rem] font-medium text-black">
+          <div class="mb-2 text-[1.1rem] font-medium text-white">
             {{ 'Bild hier ablegen oder klicken zum Auswählen' }}
           </div>
           <div class="text-[0.9rem] text-black">
@@ -433,7 +431,7 @@
       <div>
         <button
           type="submit"
-          class="w-full cursor-pointer rounded-2xl bg-[var(--colors-light-blue)] p-5"
+          class="w-full cursor-pointer rounded-2xl bg-[var(--colors-light-blue)] text-white p-5"
           (click)="saveEvent()"
           >
           {{ 'create-event.createevent' | translate }}

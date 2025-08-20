@@ -4,51 +4,47 @@
 @layer base {
   /* Heading styles */
   h1 {
-    @apply text-3xl font-bold text-[#3b4ea3] mb-4;
+    @apply text-3xl text-left font-bold text-[#3b4ea3] mb-4;
   }
-  
+
   h2 {
-    @apply text-2xl font-bold text-[#3b4ea3] mb-3;
+    @apply text-2xl text-left font-bold text-[#3b4ea3] mb-3;
   }
-  
+
   h3 {
-    @apply text-xl font-bold text-[#3b4ea3] mb-2;
+    @apply text-xl text-left font-bold text-[#3b4ea3] mb-2;
   }
-  
+
   h4 {
-    @apply text-lg font-bold text-[#3b4ea3] mb-2;
+    @apply text-lg text-left font-bold text-[#3b4ea3] mb-2;
   }
-  
+
   /* Paragraph styles */
   p {
-    @apply mb-4 text-base leading-relaxed;
+    @apply mb-4 text-left text-base leading-relaxed;
   }
-  
+
   /* Link styles */
   a {
-    @apply text-[#c70d56] hover:text-[#f18b70] transition-colors duration-200;
+    @apply transition-colors duration-200;
   }
-  
+
   /* List styles */
   ul {
     @apply list-disc pl-5 mb-4;
   }
-  
+
   ol {
     @apply list-decimal pl-5 mb-4;
   }
-  
+
   li {
     @apply mb-1;
   }
-  
+
   /* Form element styles */
-  button {
-    @apply px-4 py-2 bg-[#3b4ea3] text-white rounded hover:bg-[#6d7cbc] transition-colors duration-200;
-  }
-  
   input, select, textarea {
-    @apply px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#6d7cbc] focus:border-transparent;
+    @apply px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#6d7cbc] focus:border-transparent rounded-lg;
   }
 }
 
