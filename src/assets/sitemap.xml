@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!-- Hauptseite -->
+  <url>
+    <loc>https://1200-jahre-radolfzell.sybit.education/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="de" href="https://1200-jahre-radolfzell.sybit.education/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://1200-jahre-radolfzell.sybit.education/en/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://1200-jahre-radolfzell.sybit.education/fr/"/>
+  </url>
+  
+  <!-- Kategorieseite -->
+  <url>
+    <loc>https://1200-jahre-radolfzell.sybit.education/kategorie</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="de" href="https://1200-jahre-radolfzell.sybit.education/kategorie"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://1200-jahre-radolfzell.sybit.education/en/kategorie"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://1200-jahre-radolfzell.sybit.education/fr/kategorie"/>
+  </url>
+  
+  <!-- Über uns Seite -->
+  <url>
+    <loc>https://1200-jahre-radolfzell.sybit.education/about</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="de" href="https://1200-jahre-radolfzell.sybit.education/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://1200-jahre-radolfzell.sybit.education/en/about"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://1200-jahre-radolfzell.sybit.education/fr/about"/>
+  </url>
+  
+  <!-- Impressum -->
+  <url>
+    <loc>https://1200-jahre-radolfzell.sybit.education/impressum</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="de" href="https://1200-jahre-radolfzell.sybit.education/impressum"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://1200-jahre-radolfzell.sybit.education/en/impressum"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://1200-jahre-radolfzell.sybit.education/fr/impressum"/>
+  </url>
+  
+  <!-- Datenschutz -->
+  <url>
+    <loc>https://1200-jahre-radolfzell.sybit.education/datenschutz</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="de" href="https://1200-jahre-radolfzell.sybit.education/datenschutz"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://1200-jahre-radolfzell.sybit.education/en/datenschutz"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://1200-jahre-radolfzell.sybit.education/fr/datenschutz"/>
+  </url>
+  
+  <!-- Hinweis: Event-URLs sollten dynamisch generiert werden -->
+</urlset>

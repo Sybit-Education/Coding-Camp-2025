@@ -21,7 +21,7 @@ export class LanguageSwitcherComponent {
   }
 
   switchLanguage(lang: string): void {
-    this.i18nService.use(lang)
+    this.i18nService.setLanguage(lang)
     this.currentLang = lang
   }
 
