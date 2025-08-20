@@ -71,7 +71,7 @@ export const appConfig: ApplicationConfig = {
       }),
       withPreloading(PreloadAllModules),
       // Debug-Tracing nur in der Entwicklungsumgebung aktivieren
-      ...(environment.debug ? [withDebugTracing()] : [])
+      ...(isDevMode() ? [withDebugTracing()] : [])
     ),
     provideHttpClient(
       withInterceptorsFromDi(),
