@@ -23,7 +23,7 @@
         "files": [
           "/assets/**",
           "/fonts/**",
-          "/*.(svg|cur|jpg|jpeg|png|webp|gif|otf|ttf|woff|woff2)"
+          "/*.(svg|cur|jpg|jpeg|png|webp|gif|otf|ttf|woff|woff2|avif)"
         ]
       }
     },
@@ -34,6 +34,27 @@
       "resources": {
         "files": [
           "/assets/i18n/*.json"
+        ]
+      }
+    },
+    {
+      "name": "seo-assets",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/sitemap.xml",
+          "/robots.txt",
+          "/assets/sitemap.xml"
+        ]
+      }
+    },
+    {
+      "name": "app-shell",
+      "installMode": "prefetch",
+      "resources": {
+        "files": [
+          "/app-shell.html"
         ]
       }
     }
@@ -69,5 +90,9 @@
     "!/**/*.*",
     "!/**/*__*",
     "!/**/*__*/**"
-  ]
+  ],
+  "appData": {
+    "version": "1.0.0",
+    "changelog": "Initial version"
+  }
 }
