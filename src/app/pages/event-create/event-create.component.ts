@@ -245,7 +245,10 @@ export class EventCreateComponent implements OnInit {
     }
   }
 
-  private createPreview(file?: File | null, image?: RecordId<'media'>[] | null) {
+  private createPreview(
+    file?: File | null,
+    image?: RecordId<'media'>[] | null,
+  ) {
     if (file) {
       const reader = new FileReader()
       reader.onload = () => {
@@ -309,7 +312,7 @@ export class EventCreateComponent implements OnInit {
       !this.selectedOrganizer ||
       !this.selectedEventType
     ) {
-      // FIXME: UI info needed 
+      // FIXME: UI info needed
       console.error('Bitte Location, Organizer und EventType auswählen!')
       return
     }
@@ -364,21 +367,36 @@ export class EventCreateComponent implements OnInit {
   }
 
   private async postNewImages(): Promise<RecordId<'media'>[]> {
-    const resultMedias: Media[] = await Promise.all(
-      this.previews.map(async (image, i) => {
-        const newMedia: Media = {
-          id: (this.eventName.replace(/[^a-zA-Z0-9]/g, '_') +
-            '_' +
-            i +
-            '_' +
-            image.split(';')[0].split('/')[1]) as unknown as RecordId<'media'>,
-          file: image.split(',')[1],
-          fileName: this.eventName.replace(/[^a-zA-Z0-9]/g, '_') + '_' + i,
-          fileType: image.split(';')[0].split('/')[1],
-        }
-        return await this.mediaService.postMedia(newMedia)
-      }),
-    )
-    return resultMedias.map((media) => media.id as RecordId<'media'>)
+    const result: RecordId<'media'>[] = []
+    const resultMedias: Media[] = (
+      await Promise.all(
+        this.previews.map(async (image, i) => {
+          if (image.startsWith('http')) {
+            const existingMedia = await this.mediaService.getMediaByUrl(image)
+            if (existingMedia) {
+              return existingMedia
+            } else {
+              return null
+            }
+          } else {
+            const newMedia: Media = {
+              id: (this.eventName.replace(/[^a-zA-Z0-9]/g, '_') +
+                '_' +
+                i +
+                '_' +
+                image
+                  .split(';')[0]
+                  .split('/')[1]) as unknown as RecordId<'media'>,
+              file: image.split(',')[1],
+              fileName: this.eventName.replace(/[^a-zA-Z0-9]/g, '_') + '_' + i,
+              fileType: image.split(';')[0].split('/')[1],
+            }
+            return await this.mediaService.postMedia(newMedia)
+          }
+        }),
+      )
+    ).filter((media): media is Media => media !== null)
+    result.push(...resultMedias.map((media) => media.id as RecordId<'media'>))
+    return result
   }
 }
