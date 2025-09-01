@@ -3,7 +3,6 @@ import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
 import { ActivatedRoute } from '@angular/router'
 
-
 // Models
 import { Event as AppEvent } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
@@ -35,8 +34,7 @@ export class EventCreateComponent implements OnInit {
   private readonly organizerService = inject(OrganizerService)
   private readonly topicService = inject(TopicService)
   private readonly mediaService = inject(MediaService)
-
-  constructor(private readonly route: ActivatedRoute) {}
+  private readonly route = inject(ActivatedRoute)
 
   // ===== State & Formfelder =====
   event: AppEvent | null = null
@@ -84,12 +82,10 @@ export class EventCreateComponent implements OnInit {
   topics: Topic[] = []
 
   // Images & Upload
-  image: Media | null = null
-  images: string[] = []
   previews: string[] = []
   files: File[] = []
-  imageFiles: File[] = []
   isDragging = false
+  images: RecordId<'media'>[] = []
 
   // ===== Lifecycle =====
   ngOnInit() {
@@ -125,6 +121,7 @@ export class EventCreateComponent implements OnInit {
       this.age = event.age ?? null
       this.restriction = event.restriction ?? null
       this.draft = event.draft ?? false
+      this.images = event.media ?? []
 
       // Datum & Zeit
       const start = new Date(event.date_start)
@@ -164,6 +161,9 @@ export class EventCreateComponent implements OnInit {
         )
         if (topic) this.selectedTopics.push(topic)
       }
+
+      // Images
+      this.createPreview(null, event.media)
     } catch (err) {
       console.error('Fehler beim Laden des Events:', err)
     }
@@ -247,14 +247,24 @@ export class EventCreateComponent implements OnInit {
     }
   }
 
-  private createPreview(file: File) {
-    const reader = new FileReader()
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        this.previews.push(reader.result)
+  private createPreview(file?: File | null, image?: RecordId<'media'>[] | null) {
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = () => {
+        if (typeof reader.result === 'string') {
+          this.previews.push(reader.result)
+        }
       }
+      reader.readAsDataURL(file)
+    } else if (image) {
+      image.forEach((image) => {
+        this.mediaService.getMediaUrl(image).then((url) => {
+          if (url) {
+            this.previews.push(url)
+          }
+        })
+      })
     }
-    reader.readAsDataURL(file)
   }
 
   removeImage(index: number) {
