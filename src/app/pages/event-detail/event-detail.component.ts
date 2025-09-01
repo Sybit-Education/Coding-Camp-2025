@@ -16,6 +16,7 @@ import { TypeDB } from '../../models/typeDB.interface'
 import { TranslateModule } from '@ngx-translate/core'
 import { FavoriteButtonComponent } from '../../component/favorite-button/favorite-button.component'
 import { ShareComponent } from '../../component/share/share.component'
+import { MediaService } from '@app/services/media.service'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -32,7 +33,7 @@ import { ShareComponent } from '../../component/share/share.component'
   templateUrl: './event-detail.component.html',
 })
 export class EventDetailPageComponent implements OnInit, OnDestroy {
-  private subscriptions = new Subscription()
+  private readonly subscriptions = new Subscription()
   event: Event | null = null
   location: Location | null = null
   organizer: Organizer | null = null
@@ -49,6 +50,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute)
   private readonly router = inject(Router)
   private readonly loginservice = inject(LoginService)
+  private readonly mediaService = inject(MediaService)
 
   protected isLoggedIn = false
   evntIdString: string | undefined
@@ -146,13 +148,11 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       if (foundEvent) {
         // Setze Basis-Daten
         this.event = foundEvent
-        this.evntIdString = String(this.event?.id!.id)
+        this.evntIdString = this.event?.id ? this.event.id.toString() : undefined
 
         // Berechne Media-URL nur wenn Media vorhanden ist
         if (foundEvent.media && foundEvent.media.length > 0) {
-          this.mediaUrl =
-            this.mediaBaseUrl +
-            String(foundEvent.media[0].id).replace(/_(?=[^_]*$)/, '.')
+          this.mediaUrl = await this.mediaService.getMediaUrl(foundEvent.media[0]);
         }
         
         // Extrahiere IDs für parallele Ladung

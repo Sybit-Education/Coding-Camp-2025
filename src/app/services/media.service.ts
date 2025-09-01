@@ -8,6 +8,8 @@ import { RecordId } from 'surrealdb'
 export class MediaService {
   private readonly surrealdb: SurrealdbService = inject(SurrealdbService)
 
+  private readonly mediaBaseUrl: string = 'https://1200-jahre-radolfzell.sybit.education/media/'
+
   async postMedia(media: Media) {
     const result = await this.surrealdb.post<Media>('media', media)
     return result[0]
@@ -17,13 +19,10 @@ export class MediaService {
     if (!mediaRecordId) return null
 
     try {
-      const media = await this.surrealdb.getByRecordId<Media>(mediaRecordId)
+      const mediaURL = String(mediaRecordId).replace(/_(?=[^_]*$)/, '.').split(':')[1]
 
-      if (media?.file) {
-        return this.convertBase64ToDataUrl(media.file)
-      }
+      return this.mediaBaseUrl + mediaURL
 
-      return null
     } catch (error) {
       console.warn('Fehler beim Laden der Media:', error)
       return null
@@ -35,10 +34,5 @@ export class MediaService {
   ): Promise<string | null> {
     if (!mediaArray || mediaArray.length === 0) return null
     return await this.getMediaUrl(mediaArray[0])
-  }
-
-  private convertBase64ToDataUrl(base64: string): string {
-    if (base64.startsWith('data:')) return base64
-    return `data:image/jpeg;base64,${base64}`
   }
 }

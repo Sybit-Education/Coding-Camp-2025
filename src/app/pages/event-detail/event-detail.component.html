@@ -120,7 +120,7 @@
       </section>
       <section
         class="desc mt-10 rounded-2xl"
-        aria-labelledby="description-heading"
+        [attr.aria-labelledby]="'description-heading'"
         >
         <h2
           id="description-heading"
@@ -135,7 +135,7 @@
       @if (location?.geo_point) {
         <section
           class="map mt-10"
-          aria-labelledby="directions-heading"
+          [attr.aria-labelledby]="'directions-heading'"
           >
           <h2
             id="directions-heading"
