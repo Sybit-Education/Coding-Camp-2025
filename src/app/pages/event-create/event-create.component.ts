@@ -83,7 +83,6 @@ export class EventCreateComponent implements OnInit {
 
   // Images & Upload
   previews: string[] = []
-  files: File[] = []
   isDragging = false
   images: RecordId<'media'>[] = []
 
@@ -242,7 +241,6 @@ export class EventCreateComponent implements OnInit {
         alert(`Datei zu groß (max. 5 MB): ${file.name}`)
         continue
       }
-      this.files.push(file)
       this.createPreview(file)
     }
   }
@@ -268,7 +266,6 @@ export class EventCreateComponent implements OnInit {
   }
 
   removeImage(index: number) {
-    this.files.splice(index, 1)
     this.previews.splice(index, 1)
   }
 
@@ -312,6 +309,7 @@ export class EventCreateComponent implements OnInit {
       !this.selectedOrganizer ||
       !this.selectedEventType
     ) {
+      // FIXME: UI info needed 
       console.error('Bitte Location, Organizer und EventType auswählen!')
       return
     }
