@@ -1,19 +1,20 @@
-<div class="bg-kultur mh-[80px] flex justify-between pb-[80px] w-full px-4">
-  <div class="flex gap-5">
+<div class="bg-kultur min-h-[80px] flex flex-col md:flex-row justify-between items-center md:items-end pb-[80px] w-full px-6">
+  <div class="flex gap-5 py-4">
     <div>
-      <a href="/datenschutz">{{ 'footer.datenschutz' | translate }} </a>
+      <a href="/datenschutz" class="hover:underline">{{ 'footer.datenschutz' | translate }}</a>
     </div>
-    |
+    <span class="text-gray-400">|</span>
     <div>
-      <a href="/impressum">{{ 'footer.impressum' | translate }}</a>
+      <a href="/impressum" class="hover:underline">{{ 'footer.impressum' | translate }}</a>
     </div>
   </div>
   
-  <div id="sponsor" class="text-right">
-    App sponsored by
+  <div id="sponsor" class="flex flex-col items-end bg-white/10 rounded-lg p-3 shadow-sm">
+    <span class="text-sm text-gray-600 mb-1">App sponsored by</span>
     <img
       src="sybit-logo.svg"
       alt="SYBIT-Logo"
+      class="h-8 max-w-[120px] object-contain"
     />
   </div>
 </div>
