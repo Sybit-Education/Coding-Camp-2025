@@ -3,7 +3,6 @@ import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
 import { ActivatedRoute } from '@angular/router'
 
-
 // Models
 import { Event as AppEvent } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
@@ -35,8 +34,7 @@ export class EventCreateComponent implements OnInit {
   private readonly organizerService = inject(OrganizerService)
   private readonly topicService = inject(TopicService)
   private readonly mediaService = inject(MediaService)
-
-  constructor(private readonly route: ActivatedRoute) {}
+  private readonly route = inject(ActivatedRoute)
 
   // ===== State & Formfelder =====
   event: AppEvent | null = null
@@ -84,12 +82,9 @@ export class EventCreateComponent implements OnInit {
   topics: Topic[] = []
 
   // Images & Upload
-  image: Media | null = null
-  images: string[] = []
   previews: string[] = []
-  files: File[] = []
-  imageFiles: File[] = []
   isDragging = false
+  images: RecordId<'media'>[] = []
 
   // ===== Lifecycle =====
   ngOnInit() {
@@ -125,6 +120,7 @@ export class EventCreateComponent implements OnInit {
       this.age = event.age ?? null
       this.restriction = event.restriction ?? null
       this.draft = event.draft ?? false
+      this.images = event.media ?? []
 
       // Datum & Zeit
       const start = new Date(event.date_start)
@@ -164,6 +160,9 @@ export class EventCreateComponent implements OnInit {
         )
         if (topic) this.selectedTopics.push(topic)
       }
+
+      // Images
+      this.createPreview(null, event.media)
     } catch (err) {
       console.error('Fehler beim Laden des Events:', err)
     }
@@ -242,23 +241,34 @@ export class EventCreateComponent implements OnInit {
         alert(`Datei zu groß (max. 5 MB): ${file.name}`)
         continue
       }
-      this.files.push(file)
       this.createPreview(file)
     }
   }
 
-  private createPreview(file: File) {
-    const reader = new FileReader()
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        this.previews.push(reader.result)
+  private createPreview(
+    file?: File | null,
+    image?: RecordId<'media'>[] | null,
+  ) {
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = () => {
+        if (typeof reader.result === 'string') {
+          this.previews.push(reader.result)
+        }
       }
+      reader.readAsDataURL(file)
+    } else if (image) {
+      image.forEach((image) => {
+        this.mediaService.getMediaUrl(image).then((url) => {
+          if (url) {
+            this.previews.push(url)
+          }
+        })
+      })
     }
-    reader.readAsDataURL(file)
   }
 
   removeImage(index: number) {
-    this.files.splice(index, 1)
     this.previews.splice(index, 1)
   }
 
@@ -302,6 +312,7 @@ export class EventCreateComponent implements OnInit {
       !this.selectedOrganizer ||
       !this.selectedEventType
     ) {
+      // FIXME: UI info needed
       console.error('Bitte Location, Organizer und EventType auswählen!')
       return
     }
@@ -356,21 +367,36 @@ export class EventCreateComponent implements OnInit {
   }
 
   private async postNewImages(): Promise<RecordId<'media'>[]> {
-    const resultMedias: Media[] = await Promise.all(
-      this.previews.map(async (image, i) => {
-        const newMedia: Media = {
-          id: (this.eventName.replace(/[^a-zA-Z0-9]/g, '_') +
-            '_' +
-            i +
-            '_' +
-            image.split(';')[0].split('/')[1]) as unknown as RecordId<'media'>,
-          file: image.split(',')[1],
-          fileName: this.eventName.replace(/[^a-zA-Z0-9]/g, '_') + '_' + i,
-          fileType: image.split(';')[0].split('/')[1],
-        }
-        return await this.mediaService.postMedia(newMedia)
-      }),
-    )
-    return resultMedias.map((media) => media.id as RecordId<'media'>)
+    const result: RecordId<'media'>[] = []
+    const resultMedias: Media[] = (
+      await Promise.all(
+        this.previews.map(async (image, i) => {
+          if (image.startsWith('http')) {
+            const existingMedia = await this.mediaService.getMediaByUrl(image)
+            if (existingMedia) {
+              return existingMedia
+            } else {
+              return null
+            }
+          } else {
+            const newMedia: Media = {
+              id: (this.eventName.replace(/[^a-zA-Z0-9]/g, '_') +
+                '_' +
+                i +
+                '_' +
+                image
+                  .split(';')[0]
+                  .split('/')[1]) as unknown as RecordId<'media'>,
+              file: image.split(',')[1],
+              fileName: this.eventName.replace(/[^a-zA-Z0-9]/g, '_') + '_' + i,
+              fileType: image.split(';')[0].split('/')[1],
+            }
+            return await this.mediaService.postMedia(newMedia)
+          }
+        }),
+      )
+    ).filter((media): media is Media => media !== null)
+    result.push(...resultMedias.map((media) => media.id as RecordId<'media'>))
+    return result
   }
 }

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
 import { Media } from '../models/media.model'
-import { RecordId } from 'surrealdb'
+import { RecordId, StringRecordId } from 'surrealdb'
 @Injectable({
   providedIn: 'root',
 })
@@ -34,5 +34,16 @@ export class MediaService {
   ): Promise<string | null> {
     if (!mediaArray || mediaArray.length === 0) return null
     return await this.getMediaUrl(mediaArray[0])
+  }
+
+  async getMediaByUrl(url: string): Promise<Media | null> {
+    try {
+      const id = url.substring(url.lastIndexOf('/') + 1).replace('.', '_')
+      const media = await this.surrealdb.getByRecordId<Media>(new StringRecordId(`media:${id}`))
+      return media || null
+    } catch (error) {
+      console.warn('Fehler beim Laden der Media:', error)
+      return null
+    }
   }
 }
