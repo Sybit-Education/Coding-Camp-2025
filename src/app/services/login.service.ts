@@ -4,22 +4,41 @@ import { CookieService } from 'ngx-cookie-service'
 import { BehaviorSubject } from 'rxjs'
 import { Login } from '../models/login.module'
 import { SurrealdbService } from './surrealdb.service'
-import { Injectable } from '@angular/core'
+import { Injectable, inject, signal } from '@angular/core'
+import { toSignal } from '@angular/core/rxjs-interop'
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoginService implements CanActivate {
-  private readonly isLoggedInSubject = new BehaviorSubject<boolean>(false)
-  isLoggedIn$ = this.isLoggedInSubject.asObservable()
-  private redirect!: unknown[]
-  private readonly decoder = new JwtHelperService()
+  // Dependency Injection mit inject()
+  private readonly router = inject(Router);
+  private readonly cookieService = inject(CookieService);
+  private readonly surrealDBService = inject(SurrealdbService);
+  
+  // Signal für reaktiven State
+  readonly isLoggedInState = signal<boolean>(false);
+  
+  // BehaviorSubject für Abwärtskompatibilität
+  private readonly isLoggedInSubject = new BehaviorSubject<boolean>(false);
+  isLoggedIn$ = this.isLoggedInSubject.asObservable();
+  
+  // Signal aus Observable für Komponenten
+  readonly isLoggedIn = toSignal(this.isLoggedIn$, { initialValue: false });
+  
+  private redirect!: unknown[];
+  private readonly decoder = new JwtHelperService();
 
-  constructor(
-    private readonly router: Router,
-    private readonly cookieService: CookieService,
-    private readonly surrealDBService: SurrealdbService,
-  ) {}
+  constructor() {
+    // Prüfe beim Start, ob der Benutzer eingeloggt ist
+    this.checkInitialLoginState();
+  }
+  
+  private async checkInitialLoginState(): Promise<void> {
+    const isLoggedIn = await this.isLoggedIn();
+    this.isLoggedInState.set(isLoggedIn);
+    this.isLoggedInSubject.next(isLoggedIn);
+  }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const token = this.getToken()
@@ -57,7 +76,11 @@ export class LoginService implements CanActivate {
 
   async setToken(token: string) {
     this.cookieService.set('token', token)
-    this.isLoggedInSubject.next(await this.isLoggedIn())
+    const loggedIn = await this.isLoggedIn();
+    
+    // Beide State-Mechanismen aktualisieren
+    this.isLoggedInState.set(loggedIn);
+    this.isLoggedInSubject.next(loggedIn);
   }
 
   async login(loginParams: Login): Promise<boolean> {
@@ -69,7 +92,7 @@ export class LoginService implements CanActivate {
     if (!token) {
       return false
     }
-    this.setToken(token)
+    await this.setToken(token)
     return true
   }
 

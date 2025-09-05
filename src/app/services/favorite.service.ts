@@ -1,4 +1,5 @@
-import { Injectable, inject } from '@angular/core'
+import { Injectable, inject, signal } from '@angular/core'
+import { toSignal } from '@angular/core/rxjs-interop'
 import { BehaviorSubject } from 'rxjs'
 import { Event } from '../models/event.interface'
 import { LocalStorageService } from './local-storage.service'
@@ -12,11 +13,20 @@ export class FavoriteService {
   readonly localStorageService = inject(LocalStorageService)
   private readonly eventService = inject(EventService)
 
-  private readonly loadingSubject = new BehaviorSubject<boolean>(false)
+  // Signals für reaktiven State
+  private readonly loadingState = signal<boolean>(false)
   private readonly favoriteEventsSubject = new BehaviorSubject<Event[]>([])
 
+  // Observables für Abwärtskompatibilität
   loading$ = this.loadingSubject.asObservable()
   favoriteEvents$ = this.favoriteEventsSubject.asObservable()
+  
+  // Signals für zoneless Angular
+  readonly loading = toSignal(this.loading$, { initialValue: false })
+  readonly favoriteEvents = toSignal(this.favoriteEvents$, { initialValue: [] as Event[] })
+
+  // Für Abwärtskompatibilität
+  private readonly loadingSubject = new BehaviorSubject<boolean>(false)
 
   constructor() {
     console.log('FavoriteService initialized');
@@ -24,7 +34,11 @@ export class FavoriteService {
     // Initialisiere den Service mit einem leeren Array
     this.favoriteEventsSubject.next([]);
 
-    // Abonniere Änderungen an gespeicherten Events
+    // Abonniere Änderungen an gespeicherten Events mit toSignal
+    const savedEvents = toSignal(this.localStorageService.savedEvents$, { initialValue: [] as string[] });
+    
+    // Effekt für Änderungen an gespeicherten Events
+    // In einer vollständigen Implementierung würde hier effect() verwendet werden
     this.localStorageService.savedEvents$.subscribe(() => {
       console.log('Saved events changed, reloading favorites');
       this.loadFavoriteEvents();
@@ -40,7 +54,9 @@ export class FavoriteService {
    * Lädt alle favorisierten Events
    */
   async loadFavoriteEvents(): Promise<void> {
-    this.loadingSubject.next(true)
+    // Signal und Subject aktualisieren
+    this.loadingState.set(true);
+    this.loadingSubject.next(true);
 
     try {
       // Hole alle gespeicherten Event-IDs
@@ -48,9 +64,8 @@ export class FavoriteService {
 
       if (savedEventIds.length === 0) {
         this.favoriteEventsSubject.next([])
-        setTimeout(() => {
-          this.loadingSubject.next(false)
-        }, 0)
+        this.loadingState.set(false);
+        this.loadingSubject.next(false);
         return
       }
 
@@ -89,7 +104,8 @@ export class FavoriteService {
       console.error('Fehler beim Laden der Favoriten:', error)
       this.favoriteEventsSubject.next([])
     } finally {
-      this.loadingSubject.next(false)
+      this.loadingState.set(false);
+      this.loadingSubject.next(false);
     }
   }
 
