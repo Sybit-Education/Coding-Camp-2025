@@ -6,7 +6,8 @@ import {
   inject,
   isDevMode,
   LOCALE_ID,
-  enableProdMode
+  enableProdMode,
+  provideZonelessChangeDetection
 } from '@angular/core'
 import { provideServiceWorker } from '@angular/service-worker'
 import { appConfig } from './app/app.config'
@@ -33,6 +34,8 @@ registerLocaleData(localeFr)
 
 bootstrapApplication(AppComponent, {
   providers: [
+    // Aktiviere zoneless Change Detection
+    provideZonelessChangeDetection(),
     // Das LOCALE_ID wird für Angular-interne Formatierungen verwendet
     // Die Standardsprache ist Deutsch, kann aber durch die Sprachumschaltung geändert werden
     {
