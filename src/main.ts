@@ -7,7 +7,8 @@ import {
   isDevMode,
   LOCALE_ID,
   enableProdMode,
-  provideZonelessChangeDetection
+  provideZonelessChangeDetection,
+  ApplicationConfig
 } from '@angular/core'
 import { provideServiceWorker } from '@angular/service-worker'
 import { appConfig } from './app/app.config'
