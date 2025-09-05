@@ -13,6 +13,9 @@ export class FavoriteService {
   readonly localStorageService = inject(LocalStorageService)
   private readonly eventService = inject(EventService)
 
+  // Für Abwärtskompatibilität - muss vor Verwendung initialisiert werden
+  private readonly loadingSubject = new BehaviorSubject<boolean>(false)
+  
   // Signals für reaktiven State
   private readonly loadingState = signal<boolean>(false)
   private readonly favoriteEventsSubject = new BehaviorSubject<Event[]>([])
@@ -24,9 +27,6 @@ export class FavoriteService {
   // Signals für zoneless Angular
   readonly loading = toSignal(this.loading$, { initialValue: false })
   readonly favoriteEvents = toSignal(this.favoriteEvents$, { initialValue: [] as Event[] })
-
-  // Für Abwärtskompatibilität
-  private readonly loadingSubject = new BehaviorSubject<boolean>(false)
 
   constructor() {
     console.log('FavoriteService initialized');
