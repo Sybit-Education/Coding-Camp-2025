@@ -37,6 +37,7 @@ registerLocaleData(localeFr)
 const bootstrapConfig: ApplicationConfig = {
   providers: [
     // Aktiviere zoneless Change Detection als ersten Provider
+    // Wichtig: Dies muss vor allen anderen Providern stehen
     provideZonelessChangeDetection(),
     // Füge die restlichen Provider hinzu
     ...appConfig.providers,
