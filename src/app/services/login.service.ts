@@ -15,17 +15,17 @@ export class LoginService implements CanActivate {
   private readonly router = inject(Router);
   private readonly cookieService = inject(CookieService);
   private readonly surrealDBService = inject(SurrealdbService);
-  
+
   // Signal für reaktiven State
   readonly isLoggedInState = signal<boolean>(false);
-  
+
   // BehaviorSubject für Abwärtskompatibilität
   private readonly isLoggedInSubject = new BehaviorSubject<boolean>(false);
-  isLoggedIn$ = this.isLoggedInSubject.asObservable();
-  
+  isLoggedIn = this.isLoggedInSubject.asObservable();
+
   // Signal aus Observable für Komponenten
-  readonly isLoggedInSignal = toSignal(this.isLoggedIn$, { initialValue: false });
-  
+  readonly isLoggedInSignal = toSignal(this.isLoggedIn, { initialValue: false });
+
   private redirect!: unknown[];
   private readonly decoder = new JwtHelperService();
 
@@ -33,7 +33,7 @@ export class LoginService implements CanActivate {
     // Prüfe beim Start, ob der Benutzer eingeloggt ist
     this.checkInitialLoginState();
   }
-  
+
   private async checkInitialLoginState(): Promise<void> {
     const loggedIn = await this.checkLoginStatus();
     this.isLoggedInState.set(loggedIn);
@@ -77,7 +77,7 @@ export class LoginService implements CanActivate {
   async setToken(token: string) {
     this.cookieService.set('token', token)
     const loggedIn = await this.checkLoginStatus();
-    
+
     // Beide State-Mechanismen aktualisieren
     this.isLoggedInState.set(loggedIn);
     this.isLoggedInSubject.next(loggedIn);
