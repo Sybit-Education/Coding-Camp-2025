@@ -1,6 +1,5 @@
 import {
   ApplicationConfig,
-  provideZoneChangeDetection,
   importProvidersFrom,
 } from '@angular/core'
 import { provideRouter, withComponentInputBinding, withPreloading, PreloadAllModules, withViewTransitions } from '@angular/router'
@@ -35,7 +34,6 @@ export function createTranslateLoader(http: HttpClient) {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(
       routes,
       withComponentInputBinding(),

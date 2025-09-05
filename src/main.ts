@@ -32,7 +32,8 @@ registerLocaleData(localeDe)
 registerLocaleData(localeEn)
 registerLocaleData(localeFr)
 
-bootstrapApplication(AppComponent, {
+// Erweitere die App-Konfiguration mit zusätzlichen Providern
+const bootstrapConfig: ApplicationConfig = {
   providers: [
     // Aktiviere zoneless Change Detection
     provideZonelessChangeDetection(),
@@ -70,4 +71,7 @@ bootstrapApplication(AppComponent, {
       registrationStrategy: 'registerWhenStable:30000',
     }),
   ],
-})
+};
+
+bootstrapApplication(AppComponent, bootstrapConfig)
+  .catch(err => console.error('Error bootstrapping app:', err));
