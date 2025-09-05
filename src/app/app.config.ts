@@ -53,7 +53,6 @@ export const appConfig: ApplicationConfig = {
         },
         fallbackLang: 'de',
         isolate: false,
-        useDefaultLang: true,
       }),
     ),
   ],

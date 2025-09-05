@@ -19,8 +19,8 @@ export class I18nService {
     // Verfügbare Sprachen festlegen
     this.translateService.addLangs(['de', 'en', 'fr'])
 
-    // Fallback-Sprache festlegen (statt setDefaultLang)
-    this.translateService.setDefaultLang('de')
+    // Fallback-Sprache festlegen
+    this.translateService.setFallbackLang('de')
 
     // Browser-Sprache erkennen oder Standardsprache verwenden
     const browserLang = this.translateService.getBrowserLang()
