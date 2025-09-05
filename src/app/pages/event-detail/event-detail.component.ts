@@ -67,7 +67,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
 
     // Subscription für Login-Status
     this.subscriptions.add(
-      this.loginservice.isLoggedIn.subscribe(isLoggedIn => {
+      this.loginservice.isLoggedIn$.subscribe(isLoggedIn => {
         this.isLoggedIn = isLoggedIn
       })
     )
