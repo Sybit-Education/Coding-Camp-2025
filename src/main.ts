@@ -36,8 +36,10 @@ registerLocaleData(localeFr)
 // Erweitere die App-Konfiguration mit zusätzlichen Providern
 const bootstrapConfig: ApplicationConfig = {
   providers: [
-    // Aktiviere zoneless Change Detection
+    // Aktiviere zoneless Change Detection als ersten Provider
     provideZonelessChangeDetection(),
+    // Füge die restlichen Provider hinzu
+    ...appConfig.providers,
     // Das LOCALE_ID wird für Angular-interne Formatierungen verwendet
     // Die Standardsprache ist Deutsch, kann aber durch die Sprachumschaltung geändert werden
     {
@@ -54,7 +56,6 @@ const bootstrapConfig: ApplicationConfig = {
         }
       },
     },
-    ...appConfig.providers,
     provideAppInitializer(() => {
       const surrealdb = inject(SurrealdbService)
       // Lazy-load services nur wenn nötig
