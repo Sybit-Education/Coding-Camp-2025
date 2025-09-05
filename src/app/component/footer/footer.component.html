@@ -8,14 +8,16 @@
       <a href="/impressum" class="hover:underline">{{ 'footer.impressum' | translate }}</a>
     </div>
   </div>
-  
-  <div id="sponsor" class="flex flex-col items-end bg-white/10 rounded-lg p-3 shadow-sm">
-    <span class="text-sm text-gray-600 mb-1">App sponsored by</span>
-    <img
-      src="sybit-logo.svg"
-      alt="SYBIT-Logo"
-      class="h-8 max-w-[120px] object-contain"
-    />
-  </div>
+
+  <a [routerLink]="['/team']" routerLinkActive="router-link-active">
+    <div id="sponsor" class="flex flex-col items-end bg-white/10 rounded-lg m-1 p-3 shadow-sm">
+      <span class="text-sm text-center text-gray-600 mb-1">{{ 'footer.sponsoring' | translate }}</span>
+      <img
+        src="sybit-logo.svg"
+        alt="SYBIT Sponsoring Logo"
+        class="h-6 max-w-[120px] object-contain"
+      />
+    </div>
+  </a>
 </div>
 

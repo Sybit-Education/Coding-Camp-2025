@@ -4,19 +4,19 @@
 @layer base {
   /* Heading styles */
   h1 {
-    @apply text-3xl text-left font-bold text-[#3b4ea3] mb-4;
+    @apply text-3xl text-left font-bold text-[#3b4ea3] mt-10 mb-4;
   }
 
   h2 {
-    @apply text-2xl text-left font-bold text-[#3b4ea3] mb-3;
+    @apply text-2xl text-left font-bold text-[#3b4ea3] mt-8 mb-4;
   }
 
   h3 {
-    @apply text-xl text-left font-bold text-[#3b4ea3] mb-2;
+    @apply text-xl text-left font-bold text-[#3b4ea3] mt-4 mb-2;
   }
 
   h4 {
-    @apply text-lg text-left font-bold text-[#3b4ea3] mb-2;
+    @apply text-lg text-left font-bold text-[#3b4ea3] mt-4 mb-2;
   }
 
   /* Paragraph styles */
@@ -131,6 +131,10 @@
   .bg-orange-light      { background-color: var(--color-orange-light); }
 }
 */
+
+.link {
+  @apply text-[#3b4ea3] underline hover:text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none;
+}
 
 /* Custom SVG-Background Utilities */
 @utility bg-geschichte {

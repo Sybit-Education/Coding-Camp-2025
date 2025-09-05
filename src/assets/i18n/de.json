@@ -73,7 +73,8 @@
   },
   "footer": {
     "datenschutz": "Datenschutz",
-    "impressum": "Impressum"
+    "impressum": "Impressum",
+    "sponsoring": "Developed & sponsored by"
   },
   "create-event": {
     "eventname": "Eventname:",
@@ -116,7 +117,10 @@
     "coaches": "Coaches von SYBIT",
     "coacheslist": "Felix Klein, Max Eichelmann, Yannik Deschler, Yannik Schwarz, Max Buhl, Elias Frank, Noel Wölfle und Stephan Strittmatter",
     "headline": "👨‍💻 Unsere Entwickler",
-    "altpicture": "Gruppenfoto aller Teilnehmer des Coding Camps"
+    "altpicture": "Gruppenfoto aller Teilnehmer des Coding Camps",
+    "coding-camp-text": "Das SYBIT Coding Camp findet seit 2015 jährlich in der ersten vollen Woche der Sommerferien im Rahmen des Ferienprogramms der Stadt Radolfzell statt. Viele ehemalige Teilnehmende sind heute fester Bestandteil des Unternehmens und besuchen das Coding Camp regelmäßig, um sich inspirieren zu lassen und den aktuellen Projekten zu folgen.",
+    "sybit": "SYBIT ist Europas führender Full-Service-Anbieter für Customer Experience (CX) mit umfassender Expertise in Business Consulting, Process Consulting und Solution Consulting. Als strategischer Partner begleitet SYBIT Unternehmen dabei, kundenzentrierte Prozesse zu gestalten und innovative Lösungen entlang der gesamten Customer Journey zu implementieren. Mit über 25 Jahren Erfahrung und als Teil der NTT Data Business Solutions treibt SYBIT die digitale Transformation nachhaltig voran. We create Customer Experience Champions!",
+    "coding-camp-title": "Das SYBIT Coding Camp – Eine Erfolgsgeschichte"
   },
   "FAVORITES": {
     "TITLE": "Meine Favoriten",
