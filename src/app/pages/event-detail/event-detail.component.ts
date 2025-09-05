@@ -64,15 +64,15 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       this.error = 'Event ID nicht gefunden'
       this.announceError('Event ID nicht gefunden')
     }
-    
+
     // Subscription für Login-Status
     this.subscriptions.add(
-      this.loginservice.isLoggedIn$.subscribe(isLoggedIn => {
+      this.loginservice.isLoggedIn.subscribe(isLoggedIn => {
         this.isLoggedIn = isLoggedIn
       })
     )
   }
-  
+
   ngOnDestroy(): void {
     // Alle Subscriptions beenden
     this.subscriptions.unsubscribe()
@@ -154,7 +154,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
         if (foundEvent.media && foundEvent.media.length > 0) {
           this.mediaUrl = await this.mediaService.getMediaUrl(foundEvent.media[0]);
         }
-        
+
         // Extrahiere IDs für parallele Ladung
         const locationId = this.event?.['location']
         const organizerId = this.event?.['organizer']
@@ -166,7 +166,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
           organizerId ? this.loadOrganizer(organizerId) : Promise.resolve(null),
           typeId ? this.loadType(typeId) : Promise.resolve(null)
         ])
-        
+
         // Batch-Update für weniger Change Detection Zyklen
         requestAnimationFrame(() => {
           this.location = location
