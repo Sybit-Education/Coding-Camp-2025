@@ -21,10 +21,10 @@ export class LoginService implements CanActivate {
 
   // BehaviorSubject für Abwärtskompatibilität
   private readonly isLoggedInSubject = new BehaviorSubject<boolean>(false);
-  isLoggedIn = this.isLoggedInSubject.asObservable();
-
+  isLoggedIn$ = this.isLoggedInSubject.asObservable();
+  
   // Signal aus Observable für Komponenten
-  readonly isLoggedInSignal = toSignal(this.isLoggedIn, { initialValue: false });
+  readonly isLoggedInSignal = toSignal(this.isLoggedIn$, { initialValue: false });
 
   private redirect!: unknown[];
   private readonly decoder = new JwtHelperService();
@@ -94,6 +94,11 @@ export class LoginService implements CanActivate {
     }
     await this.setToken(token)
     return true
+  }
+
+  // Methode für Abwärtskompatibilität
+  async isLoggedIn(): Promise<boolean> {
+    return this.checkLoginStatus();
   }
 
   async checkLoginStatus(): Promise<boolean> {
