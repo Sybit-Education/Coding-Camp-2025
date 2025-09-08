@@ -33,12 +33,12 @@
               <td>
                 <a [routerLink]="['/event', event.id]">{{ event.name }}</a>
               </td>
-              <td>{{ event.organizer?.name || 'N/A' }}</td>
+              <td>{{ getOrganizerName(event) }}</td>
               <td class="actions-cell">
-                <button class="btn-edit" (click)="editEvent(event.id!)">
+                <button class="btn-edit" (click)="editEvent(String(event.id))">
                   {{ 'ADMIN.EVENTS.EDIT' | translate }}
                 </button>
-                <button class="btn-delete" (click)="deleteEvent(event.id!)">
+                <button class="btn-delete" (click)="deleteEvent(String(event.id))">
                   {{ 'ADMIN.EVENTS.DELETE' | translate }}
                 </button>
               </td>

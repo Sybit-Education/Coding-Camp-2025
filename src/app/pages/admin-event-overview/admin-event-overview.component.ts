@@ -5,6 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Event } from '../../models/event.interface';
 import { EventService } from '../../services/event.service';
 import { ChangeDetectionStrategy } from '@angular/core';
+import { SurrealdbService } from '../../services/surrealdb.service';
 
 @Component({
   selector: 'app-admin-event-overview',
@@ -16,6 +17,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 })
 export class AdminEventOverviewComponent implements OnInit {
   private readonly eventService = inject(EventService);
+  private readonly surrealDb = inject(SurrealdbService);
   
   // Loading state
   isLoading = signal(true);
@@ -51,6 +53,24 @@ export class AdminEventOverviewComponent implements OnInit {
     });
   }
   
+  // Get organizer name
+  getOrganizerName(event: Event): string {
+    if (!event.organizer) return 'N/A';
+    
+    // If organizer is already an object with name property
+    if (typeof event.organizer === 'object' && 'name' in event.organizer) {
+      return event.organizer.name as string;
+    }
+    
+    // Otherwise return the ID as string
+    return String(event.organizer);
+  }
+  
+  // Convert RecordId to string
+  String(id: any): string {
+    return String(id);
+  }
+  
   // Navigate to edit event page
   editEvent(eventId: string): void {
     // This will be implemented when we create the edit event page
@@ -61,8 +81,8 @@ export class AdminEventOverviewComponent implements OnInit {
   async deleteEvent(eventId: string): Promise<void> {
     if (confirm('Möchten Sie diese Veranstaltung wirklich löschen?')) {
       try {
-        // Use the SurrealDB service to delete the event
-        await this.eventService.deleteEventById(eventId);
+        // Use the SurrealDB service directly to delete the event
+        await this.surrealDb.delete(`event:${eventId}`);
         
         // Refresh the events list
         const updatedEvents = await this.eventService.getAllEvents();
