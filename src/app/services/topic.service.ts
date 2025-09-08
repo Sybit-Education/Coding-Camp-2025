@@ -17,6 +17,11 @@ export class TopicService {
     this.initializeData();
   }
   
+  // Öffentliche Methode zur Initialisierung der Datenbankverbindung
+  async initializeDatabase(): Promise<void> {
+    await this.surrealdb.initialize();
+  }
+  
   private async initializeData(): Promise<void> {
     try {
       const topics = await this.fetchAllTopics();
