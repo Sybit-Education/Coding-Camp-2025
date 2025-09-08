@@ -49,39 +49,56 @@ export class KategorieComponent implements OnInit {
   private readonly locationService: LocationService = inject(LocationService)
   private readonly topicService: TopicService = inject(TopicService)
 
+  // Cache für Locations, um wiederholte Anfragen zu vermeiden
+  private locationCache = new Map<string, Promise<Location>>();
+  
   async initilizeData() {
     this.loading = true;
     try {
       // Stelle sicher, dass die Datenbankverbindung initialisiert ist
       await this.topicService.initializeDatabase();
       
-      this.topics = await this.topicService.getAllTopics()
+      // Lade Topics und Events parallel
+      const [topics, allEvents] = await Promise.all([
+        this.topicService.getAllTopics(),
+        this.eventService.getAllEvents()
+      ]);
       
-      let rawEvents: AppEvent[] = []
-
-      if (!this.id) {
-        rawEvents = await this.eventService.getAllEvents()
-      } else {
-        rawEvents = (await this.eventService.getAllEvents()).filter((event) =>
-          event.topic?.some((topic) => topic.id === this.id),
-        )
-      }
-
+      this.topics = topics;
+      
+      // Filtere Events basierend auf der ID
+      const rawEvents = !this.id 
+        ? allEvents 
+        : allEvents.filter((event) => 
+            event.topic?.some((topic) => topic.id === this.id)
+          );
+      
+      // Optimiere Location-Ladung durch Caching
       this.events = await Promise.all(
         rawEvents.map(async (event) => {
-          const location = await this.locationService.getLocationByID(
-            event.location,
-          )
+          let location;
+          
+          // Verwende Cache für Locations
+          const locationId = String(event.location);
+          if (!this.locationCache.has(locationId)) {
+            this.locationCache.set(
+              locationId, 
+              this.locationService.getLocationByID(event.location)
+            );
+          }
+          
+          location = await this.locationCache.get(locationId);
+          
           return {
             ...event,
             locationName: location?.name ?? 'Unbekannter Ort',
-          }
+          };
         }),
-      )
+      );
       
       console.log('Kategorie-Events geladen:', this.events.length);
     } catch (error) {
-      console.error('Fehler beim Laden der Events:', error)
+      console.error('Fehler beim Laden der Events:', error);
     } finally {
       this.loading = false;
       // Change Detection auslösen, da wir OnPush verwenden

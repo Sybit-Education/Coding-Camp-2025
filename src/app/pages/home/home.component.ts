@@ -68,11 +68,21 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  // Cache für teure Berechnungen
+  private cachedEvents: {input: Event[], output: Event[], timestamp: number} | null = null;
+  
   private getUpcomingEvents(events: Event[]): Event[] {
+    // Prüfe, ob wir ein gültiges Cache-Ergebnis haben (nicht älter als 5 Minuten)
+    if (this.cachedEvents && 
+        this.cachedEvents.input === events && 
+        (Date.now() - this.cachedEvents.timestamp) < 300000) {
+      return this.cachedEvents.output;
+    }
+    
     const now = new Date()
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
-    return events
+    const result = events
       .filter((event) => {
         const eventStartDate = new Date(event.date_start)
         const eventStartDay = new Date(
@@ -98,7 +108,16 @@ export class HomeComponent implements OnInit {
         const dateA = new Date(a.date_start)
         const dateB = new Date(b.date_start)
         return dateA.getTime() - dateB.getTime()
-      })
+      });
+      
+    // Ergebnis cachen
+    this.cachedEvents = {
+      input: events,
+      output: result,
+      timestamp: Date.now()
+    };
+    
+    return result;
   }
 
   getTopics() {

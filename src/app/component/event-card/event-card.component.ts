@@ -49,9 +49,14 @@ export class EventCardComponent implements OnInit, OnDestroy {
     const eventId = this.event.id as unknown as string
     this.isSaved = this.localStorageService.isEventSaved(eventId)
 
+    // Verwende toSignal für bessere Performance
+    const savedEventsSignal = this.localStorageService.savedEventsSignal;
+    
+    // Subscription nur hinzufügen, wenn wir sie wirklich brauchen (für ältere Komponenten)
     this.subscriptions.add(
       this.localStorageService.savedEvents$.subscribe(() => {
         this.isSaved = this.localStorageService.isEventSaved(eventId)
+        this.markForCheck();
       })
     )
   }

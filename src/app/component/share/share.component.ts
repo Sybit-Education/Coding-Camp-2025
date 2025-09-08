@@ -65,9 +65,12 @@ export class ShareComponent {
       .then(() => {
         console.log('Link in Zwischenablage kopiert');
         this.showCopyMessage = true;
-        setTimeout(() => {
-          this.showCopyMessage = false;
-        }, 3000); // Nachricht nach 3 Sekunden ausblenden
+        // Verwende requestAnimationFrame für bessere Performance
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            this.showCopyMessage = false;
+          }, 3000); // Nachricht nach 3 Sekunden ausblenden
+        });
       })
       .catch(err => {
         console.error('Fehler beim Kopieren:', err);

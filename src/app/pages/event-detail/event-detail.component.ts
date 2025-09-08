@@ -146,6 +146,9 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
 
   private async loadEvent(eventId: RecordId<'event'> | StringRecordId) {
     try {
+      // Stelle sicher, dass die Datenbankverbindung initialisiert ist
+      await this.eventService.initializeDatabase?.();
+      
       const foundEvent = await this.eventService.getEventByID(eventId)
 
       if (!foundEvent) {
@@ -158,9 +161,14 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       this.event = foundEvent
       this.evntIdString = this.event?.id ? this.event.id.toString() : undefined
 
-      // Berechne Media-URL nur wenn Media vorhanden ist
+      // Starte alle Ladeprozesse parallel
+      const promises: Promise<any>[] = [];
+      
+      // Media-URL laden
+      let mediaUrlPromise: Promise<string | null> = Promise.resolve(null);
       if (foundEvent.media?.length > 0) {
-        this.mediaUrl = await this.mediaService.getMediaUrl(foundEvent.media[0]);
+        mediaUrlPromise = this.mediaService.getMediaUrl(foundEvent.media[0]);
+        promises.push(mediaUrlPromise);
       }
 
       // Extrahiere IDs für parallele Ladung
@@ -169,17 +177,27 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       const typeId = this.event?.['event_type']
 
       // Lade alle abhängigen Daten parallel
-      const [location, organizer, type] = await Promise.all([
-        locationId ? this.loadLocation(locationId) : Promise.resolve(null),
-        organizerId ? this.loadOrganizer(organizerId) : Promise.resolve(null),
-        typeId ? this.loadType(typeId) : Promise.resolve(null)
-      ])
-
+      const locationPromise = locationId ? this.loadLocation(locationId) : Promise.resolve(null);
+      const organizerPromise = organizerId ? this.loadOrganizer(organizerId) : Promise.resolve(null);
+      const typePromise = typeId ? this.loadType(typeId) : Promise.resolve(null);
+      
+      promises.push(locationPromise, organizerPromise, typePromise);
+      
+      // Warte auf alle Promises
+      await Promise.all(promises);
+      
       // Batch-Update für weniger Change Detection Zyklen
       requestAnimationFrame(() => {
-        this.location = location
-        this.organizer = organizer
-        this.type = type
+        if (foundEvent.media?.length > 0) {
+          mediaUrlPromise.then(url => {
+            this.mediaUrl = url;
+          });
+        }
+        
+        locationPromise.then(location => this.location = location);
+        organizerPromise.then(organizer => this.organizer = organizer);
+        typePromise.then(type => this.type = type);
+        
         document.title = `${this.event!.name} - 1200 Jahre Radolfzell`
         this.markForCheck()
       })

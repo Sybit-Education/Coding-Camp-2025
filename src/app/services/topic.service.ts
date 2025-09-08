@@ -49,16 +49,23 @@ export class TopicService {
     return await this.surrealdb.getByRecordId<Topic>(id)
   }
 
+  // Timestamp für Cache-Invalidierung
+  private lastTopicsFetch = 0;
+  private readonly CACHE_TTL = 300000; // 5 Minuten Cache-Gültigkeit
+  
   async getAllTopics(): Promise<Topic[]> {
-    // Verwende gecachte Daten, wenn verfügbar
+    // Verwende gecachte Daten, wenn verfügbar und nicht zu alt
     const cachedTopics = this.allTopics();
-    if (cachedTopics.length > 0) {
+    const now = Date.now();
+    
+    if (cachedTopics.length > 0 && (now - this.lastTopicsFetch) < this.CACHE_TTL) {
       return cachedTopics;
     }
     
     // Andernfalls lade Daten und aktualisiere Signal
     const topics = await this.fetchAllTopics();
     this.allTopics.set(topics);
+    this.lastTopicsFetch = now;
     return topics;
   }
 

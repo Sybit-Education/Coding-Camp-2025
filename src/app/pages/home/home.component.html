@@ -54,7 +54,7 @@
     </h2>
 
     <div class="grid grid-cols-3 lg:grid-cols-4 gap-4">
-      @for (kategorie of topics; track $index) {
+      @for (kategorie of topics; track kategorie.id) {
         <app-kategorie-card
           [color]="kategorie.color"
           [text]="kategorie.name"

@@ -64,16 +64,23 @@ export class EventService {
     return result
   }
 
+  // Timestamp für Cache-Invalidierung
+  private lastEventsFetch = 0;
+  private readonly CACHE_TTL = 60000; // 1 Minute Cache-Gültigkeit
+  
   async getAllEvents(): Promise<Event[]> {
-    // Verwende gecachte Daten, wenn verfügbar
+    // Verwende gecachte Daten, wenn verfügbar und nicht zu alt
     const cachedEvents = this.allEvents();
-    if (cachedEvents.length > 0) {
+    const now = Date.now();
+    
+    if (cachedEvents.length > 0 && (now - this.lastEventsFetch) < this.CACHE_TTL) {
       return cachedEvents;
     }
     
     // Andernfalls lade Daten und aktualisiere Signal
     const events = await this.fetchAllEvents();
     this.allEvents.set(events);
+    this.lastEventsFetch = now;
     return events;
   }
 

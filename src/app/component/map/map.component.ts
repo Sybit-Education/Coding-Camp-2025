@@ -30,16 +30,22 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     try {
       // Importiere Leaflet außerhalb der Angular Zone für bessere Performance
       this.ngZone.runOutsideAngular(() => {
+        // Verwende dynamischen Import mit Prefetch-Hint
+        const link = document.createElement('link');
+        link.rel = 'prefetch';
+        link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+        document.head.appendChild(link);
+        
         import('leaflet')
           .then(L => {
             // Wichtig: Wir müssen das default-Objekt verwenden, da Leaflet als CommonJS-Modul importiert wird
             this.L = L.default
             this.leafletLoaded = true
 
-            // Warten bis DOM vollständig geladen ist
-            setTimeout(() => {
+            // Verwende requestAnimationFrame statt setTimeout für bessere Performance
+            requestAnimationFrame(() => {
               this.initializeMap()
-            }, 0)
+            })
           })
           .catch(error => {
             console.error('Fehler beim Laden von Leaflet:', error)
