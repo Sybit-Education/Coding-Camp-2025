@@ -43,7 +43,11 @@ export class HomeComponent implements OnInit {
   private readonly markForCheck = injectMarkForCheck()
 
   ngOnInit() {
-    this.initializeData()
+    // Initialisiere Daten und stelle sicher, dass Change Detection ausgelöst wird
+    this.initializeData().then(() => {
+      console.log('Initialisierung abgeschlossen');
+      this.markForCheck();
+    });
   }
 
   async initializeData() {
