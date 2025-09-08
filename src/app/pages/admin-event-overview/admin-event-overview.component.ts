@@ -1,11 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Event } from '../../models/event.interface';
 import { EventService } from '../../services/event.service';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs/operators';
 import { ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
@@ -16,26 +14,33 @@ import { ChangeDetectionStrategy } from '@angular/core';
   styleUrl: './admin-event-overview.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AdminEventOverviewComponent {
+export class AdminEventOverviewComponent implements OnInit {
   private readonly eventService = inject(EventService);
   
   // Loading state
   isLoading = signal(true);
   
-  // Get all events and sort them by start date
-  events = toSignal(
-    this.eventService.getAllEvents().pipe(
-      map(events => {
-        // Sort events by start date (ascending)
-        return [...events].sort((a, b) => {
-          const dateA = new Date(a.date_start);
-          const dateB = new Date(b.date_start);
-          return dateA.getTime() - dateB.getTime();
-        });
-      })
-    ),
-    { initialValue: [] as Event[] }
-  );
+  // Events list
+  events = signal<Event[]>([]);
+  
+  async ngOnInit(): Promise<void> {
+    try {
+      const eventsList = await this.eventService.getAllEvents();
+      
+      // Sort events by start date (ascending)
+      const sortedEvents = [...eventsList].sort((a, b) => {
+        const dateA = new Date(a.date_start);
+        const dateB = new Date(b.date_start);
+        return dateA.getTime() - dateB.getTime();
+      });
+      
+      this.events.set(sortedEvents);
+    } catch (error) {
+      console.error('Error loading events:', error);
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
   
   // Format date for display
   formatDate(date: Date): string {
@@ -56,9 +61,20 @@ export class AdminEventOverviewComponent {
   async deleteEvent(eventId: string): Promise<void> {
     if (confirm('Möchten Sie diese Veranstaltung wirklich löschen?')) {
       try {
-        await this.eventService.deleteEvent(eventId);
+        // Use the SurrealDB service to delete the event
+        await this.eventService.deleteEventById(eventId);
+        
         // Refresh the events list
-        this.eventService.getAllEvents();
+        const updatedEvents = await this.eventService.getAllEvents();
+        
+        // Sort and update the events signal
+        const sortedEvents = [...updatedEvents].sort((a, b) => {
+          const dateA = new Date(a.date_start);
+          const dateB = new Date(b.date_start);
+          return dateA.getTime() - dateB.getTime();
+        });
+        
+        this.events.set(sortedEvents);
       } catch (error) {
         console.error('Fehler beim Löschen der Veranstaltung:', error);
       }
