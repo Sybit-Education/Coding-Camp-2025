@@ -19,9 +19,14 @@ export class MediaService {
     if (!mediaRecordId) return null
 
     try {
+      // Stelle sicher, dass die Verbindung initialisiert ist
+      await this.surrealdb.initialize();
+      
       const mediaURL = String(mediaRecordId).replace(/_(?=[^_]*$)/, '.').split(':')[1]
-
-      return this.mediaBaseUrl + mediaURL
+      const url = this.mediaBaseUrl + mediaURL;
+      
+      console.log('Media URL erstellt:', url, 'aus RecordId:', mediaRecordId);
+      return url;
 
     } catch (error) {
       console.warn('Fehler beim Laden der Media:', error)
@@ -32,12 +37,20 @@ export class MediaService {
   async getFirstMediaUrl(
     mediaArray: RecordId<'media'>[] | undefined,
   ): Promise<string | null> {
-    if (!mediaArray || mediaArray.length === 0) return null
+    if (!mediaArray || mediaArray.length === 0) {
+      console.log('Keine Media-IDs vorhanden');
+      return null;
+    }
+    
+    console.log('Lade erste Media aus:', mediaArray);
     return await this.getMediaUrl(mediaArray[0])
   }
 
   async getMediaByUrl(url: string): Promise<Media | null> {
     try {
+      // Stelle sicher, dass die Verbindung initialisiert ist
+      await this.surrealdb.initialize();
+      
       const id = url.substring(url.lastIndexOf('/') + 1).replace('.', '_')
       const media = await this.surrealdb.getByRecordId<Media>(new StringRecordId(`media:${id}`))
       return media || null

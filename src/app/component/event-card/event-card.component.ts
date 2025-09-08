@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input, OnInit, OnDestroy, inject } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { Subscription } from 'rxjs'
@@ -10,12 +10,14 @@ import { LocationService } from '../../services/location.service'
 import { LocalStorageService } from '../../services/local-storage.service'
 import { MediaService } from '../../services/media.service'
 import { TranslateModule } from '@ngx-translate/core'
+import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 
 @Component({
   selector: 'app-event-card',
   standalone: true,
   imports: [CommonModule, DateTimeRangePipe, TranslateModule, RouterModule],
   templateUrl: './event-card.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventCardComponent implements OnInit, OnDestroy {
   @Input() event: Event | null = null
@@ -32,6 +34,7 @@ export class EventCardComponent implements OnInit, OnDestroy {
   private readonly locationService = inject(LocationService)
   private readonly localStorageService = inject(LocalStorageService)
   private readonly mediaService = inject(MediaService)
+  private readonly markForCheck = injectMarkForCheck()
 
   ngOnInit() {
     if (this.event?.id) {
@@ -69,10 +72,16 @@ export class EventCardComponent implements OnInit, OnDestroy {
         this.location = location
         this.eventType = eventType
         this.mediaUrl = mediaUrl
+        
+        // Change Detection auslösen, da wir OnPush verwenden
+        this.markForCheck();
+        
+        console.log('Event-Card geladen:', this.event?.name, 'Media URL:', this.mediaUrl);
       }, 0)
     } catch (error) {
       console.error('Fehler beim Laden der Event-Details:', error)
       this.mediaUrl = null
+      this.markForCheck(); // Auch bei Fehlern Change Detection auslösen
     }
   }
 
@@ -104,7 +113,14 @@ export class EventCardComponent implements OnInit, OnDestroy {
 
   private async loadMedia(): Promise<string | null> {
     if (!this.event?.media || this.event.media.length === 0) return null
-    return await this.mediaService.getFirstMediaUrl(this.event.media)
+    try {
+      const url = await this.mediaService.getFirstMediaUrl(this.event.media);
+      console.log('Media URL geladen:', url);
+      return url;
+    } catch (error) {
+      console.error('Fehler beim Laden der Media URL:', error);
+      return null;
+    }
   }
 
   ngOnDestroy(): void {
