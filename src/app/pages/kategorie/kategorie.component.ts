@@ -10,6 +10,7 @@ import { Topic } from '../../models/topic.interface'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 
 import { Event as AppEvent } from '../../models/event.interface'
+import { Location as AppLocation } from '../../models/location.interface'
 import { RecordIdValue } from 'surrealdb'
 import { CommonModule } from '@angular/common'
 
@@ -50,7 +51,7 @@ export class KategorieComponent implements OnInit {
   private readonly topicService: TopicService = inject(TopicService)
 
   // Cache für Locations, um wiederholte Anfragen zu vermeiden
-  private locationCache = new Map<string, Promise<Location>>();
+  private locationCache = new Map<string, Promise<AppLocation>>();
   
   async initilizeData() {
     this.loading = true;
@@ -87,11 +88,11 @@ export class KategorieComponent implements OnInit {
             );
           }
           
-          location = await this.locationCache.get(locationId);
+          const locationData = await this.locationCache.get(locationId);
           
           return {
             ...event,
-            locationName: location?.name ?? 'Unbekannter Ort',
+            locationName: locationData?.name ?? 'Unbekannter Ort',
           };
         }),
       );
