@@ -21,6 +21,9 @@ export class EventService {
   
   private async initializeData(): Promise<void> {
     try {
+      // Stelle sicher, dass die Datenbankverbindung initialisiert ist
+      await this.surrealdb.initialize();
+      
       // Lade Daten parallel
       const [events, types] = await Promise.all([
         this.fetchAllEvents(),
