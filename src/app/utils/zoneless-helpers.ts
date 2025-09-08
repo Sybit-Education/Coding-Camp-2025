@@ -1,4 +1,4 @@
-import { afterNextRender, afterRender, ChangeDetectorRef, inject, signal } from '@angular/core';
+import { afterNextRender, ChangeDetectorRef, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
 
@@ -84,9 +84,17 @@ export function toTypedSignal<T>(source$: Observable<T>, initialValue: T) {
  */
 export function createSignalWithSetter<T>(initialValue: T) {
   const sig = signal<T>(initialValue);
-  return {
-    (): T => sig(),
-    set: (value: T) => sig.set(value),
-    update: (updater: (value: T) => T) => sig.update(updater)
+  
+  // Erstelle ein Funktionsobjekt mit zusätzlichen Methoden
+  const result = () => sig();
+  
+  // Füge Methoden hinzu
+  result.set = (value: T) => sig.set(value);
+  result.update = (updater: (value: T) => T) => sig.update(updater);
+  
+  return result as {
+    (): T;
+    set: (value: T) => void;
+    update: (updater: (value: T) => T) => void;
   };
 }
