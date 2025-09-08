@@ -148,41 +148,41 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     try {
       const foundEvent = await this.eventService.getEventByID(eventId)
 
-      if (foundEvent) {
-        // Setze Basis-Daten
-        this.event = foundEvent
-        this.evntIdString = this.event?.id ? this.event.id.toString() : undefined
-
-        // Berechne Media-URL nur wenn Media vorhanden ist
-        if (foundEvent.media && foundEvent.media.length > 0) {
-          this.mediaUrl = await this.mediaService.getMediaUrl(foundEvent.media[0]);
-        }
-
-        // Extrahiere IDs für parallele Ladung
-        const locationId = this.event?.['location']
-        const organizerId = this.event?.['organizer']
-        const typeId = this.event?.['event_type']
-
-        // Lade alle abhängigen Daten parallel
-        const [location, organizer, type] = await Promise.all([
-          locationId ? this.loadLocation(locationId) : Promise.resolve(null),
-          organizerId ? this.loadOrganizer(organizerId) : Promise.resolve(null),
-          typeId ? this.loadType(typeId) : Promise.resolve(null)
-        ])
-
-        // Batch-Update für weniger Change Detection Zyklen
-        requestAnimationFrame(() => {
-          this.location = location
-          this.organizer = organizer
-          this.type = type
-          document.title = `${this.event!.name} - 1200 Jahre Radolfzell`
-          // Change Detection auslösen
-          this.markForCheck()
-        })
-      } else {
+      if (!foundEvent) {
         this.error = 'Event nicht gefunden'
         this.announceError('Event nicht gefunden')
+        return;
       }
+      
+      // Setze Basis-Daten
+      this.event = foundEvent
+      this.evntIdString = this.event?.id ? this.event.id.toString() : undefined
+
+      // Berechne Media-URL nur wenn Media vorhanden ist
+      if (foundEvent.media?.length > 0) {
+        this.mediaUrl = await this.mediaService.getMediaUrl(foundEvent.media[0]);
+      }
+
+      // Extrahiere IDs für parallele Ladung
+      const locationId = this.event?.['location']
+      const organizerId = this.event?.['organizer']
+      const typeId = this.event?.['event_type']
+
+      // Lade alle abhängigen Daten parallel
+      const [location, organizer, type] = await Promise.all([
+        locationId ? this.loadLocation(locationId) : Promise.resolve(null),
+        organizerId ? this.loadOrganizer(organizerId) : Promise.resolve(null),
+        typeId ? this.loadType(typeId) : Promise.resolve(null)
+      ])
+
+      // Batch-Update für weniger Change Detection Zyklen
+      requestAnimationFrame(() => {
+        this.location = location
+        this.organizer = organizer
+        this.type = type
+        document.title = `${this.event!.name} - 1200 Jahre Radolfzell`
+        this.markForCheck()
+      })
     } catch (err) {
       this.error = `Fehler beim Laden: ${err}`
       this.announceError(`Fehler beim Laden: ${err}`)

@@ -24,13 +24,12 @@ export class EventService {
       // Stelle sicher, dass die Datenbankverbindung initialisiert ist
       await this.surrealdb.initialize();
       
-      // Lade Daten parallel
+      // Lade Daten parallel und aktualisiere Signals
       const [events, types] = await Promise.all([
         this.fetchAllEvents(),
         this.fetchAllEventTypes()
       ]);
       
-      // Aktualisiere Signals
       this.allEvents.set(events);
       this.allEventTypes.set(types);
     } catch (error) {

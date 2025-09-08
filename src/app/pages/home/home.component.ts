@@ -44,10 +44,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     // Initialisiere Daten und stelle sicher, dass Change Detection ausgelöst wird
-    this.initializeData().then(() => {
-      console.log('Initialisierung abgeschlossen');
-      this.markForCheck();
-    });
+    this.initializeData().then(() => this.markForCheck());
   }
 
   async initializeData() {

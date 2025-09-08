@@ -113,14 +113,7 @@ export class EventCardComponent implements OnInit, OnDestroy {
 
   private async loadMedia(): Promise<string | null> {
     if (!this.event?.media || this.event.media.length === 0) return null
-    try {
-      const url = await this.mediaService.getFirstMediaUrl(this.event.media);
-      console.log('Media URL geladen:', url);
-      return url;
-    } catch (error) {
-      console.error('Fehler beim Laden der Media URL:', error);
-      return null;
-    }
+    return await this.mediaService.getFirstMediaUrl(this.event.media);
   }
 
   ngOnDestroy(): void {

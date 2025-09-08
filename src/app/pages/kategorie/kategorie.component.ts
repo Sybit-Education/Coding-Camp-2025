@@ -42,10 +42,7 @@ export class KategorieComponent implements OnInit {
       this.name = params['name'] || null
       
       // Daten neu laden, wenn sich die Parameter ändern
-      this.initilizeData().then(() => {
-        console.log('Kategorie-Daten initialisiert');
-        this.markForCheck();
-      });
+      this.initilizeData().then(() => this.markForCheck());
     })
   }
   private readonly eventService: EventService = inject(EventService)

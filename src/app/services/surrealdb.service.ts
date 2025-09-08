@@ -31,17 +31,15 @@ export class SurrealdbService extends Surreal {
   
   private async initializeConnection(): Promise<void> {
     try {
-      console.log('Initialisiere SurrealDB-Verbindung...');
       await this.connect(environment.surrealDbAddress, {
         namespace: environment.surrealDbNamespace,
         database: environment.surrealDbDatabase,
       });
       await this.ready;
       this.connectionInitialized = true;
-      console.log('SurrealDB-Verbindung erfolgreich initialisiert');
+      console.log('SurrealDB-Verbindung initialisiert');
     } catch (error) {
       console.error('Fehler bei der Initialisierung der SurrealDB-Verbindung:', error);
-      // Zurücksetzen des Promise, damit ein erneuter Versuch möglich ist
       this.connectionPromise = null;
       throw error;
     }
