@@ -1,0 +1,105 @@
+.admin-events-container {
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 5rem; // Space for bottom navigation
+  
+  h1 {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  .actions {
+    margin-bottom: 1.5rem;
+    
+    .btn-create {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background-color: #4CAF50;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 500;
+      
+      &:hover {
+        background-color: #45a049;
+      }
+    }
+  }
+  
+  .loading-spinner, .no-events {
+    padding: 2rem;
+    text-align: center;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+  }
+  
+  .events-table-container {
+    overflow-x: auto;
+    
+    .events-table {
+      width: 100%;
+      border-collapse: collapse;
+      
+      th, td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      
+      th {
+        background-color: #f2f2f2;
+        font-weight: 600;
+      }
+      
+      tr:hover {
+        background-color: #f5f5f5;
+      }
+      
+      .actions-cell {
+        white-space: nowrap;
+        
+        button {
+          margin-right: 0.5rem;
+          padding: 0.25rem 0.5rem;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          
+          &.btn-edit {
+            background-color: #2196F3;
+            color: white;
+            
+            &:hover {
+              background-color: #0b7dda;
+            }
+          }
+          
+          &.btn-delete {
+            background-color: #f44336;
+            color: white;
+            
+            &:hover {
+              background-color: #da190b;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .events-table {
+    th, td {
+      padding: 0.5rem;
+    }
+    
+    .actions-cell button {
+      padding: 0.2rem 0.4rem;
+      font-size: 0.85rem;
+    }
+  }
+}

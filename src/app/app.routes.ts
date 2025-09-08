@@ -59,6 +59,12 @@ export const routes: Routes = [
     title: 'Kategorie'
   },
   {
+    path: 'admin/events',
+    loadComponent: () => import('./pages/admin-event-overview/admin-event-overview.component').then(m => m.AdminEventOverviewComponent),
+    canActivate: [LoginService],
+    title: 'Admin: Veranstaltungen'
+  },
+  {
     path: '**',
     redirectTo: ''
   }

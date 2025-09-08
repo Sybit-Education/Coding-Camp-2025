@@ -1,0 +1,51 @@
+<div class="admin-events-container">
+  <h1>{{ 'ADMIN.EVENTS.TITLE' | translate }}</h1>
+  
+  <div class="actions">
+    <a [routerLink]="['/create-event']" class="btn-create">
+      {{ 'ADMIN.EVENTS.CREATE_NEW' | translate }}
+    </a>
+  </div>
+  
+  @if (isLoading()) {
+    <div class="loading-spinner">
+      <p>{{ 'COMMON.LOADING' | translate }}</p>
+    </div>
+  } @else if (events().length === 0) {
+    <div class="no-events">
+      <p>{{ 'ADMIN.EVENTS.NO_EVENTS' | translate }}</p>
+    </div>
+  } @else {
+    <div class="events-table-container">
+      <table class="events-table">
+        <thead>
+          <tr>
+            <th>{{ 'ADMIN.EVENTS.DATE' | translate }}</th>
+            <th>{{ 'ADMIN.EVENTS.NAME' | translate }}</th>
+            <th>{{ 'ADMIN.EVENTS.ORGANIZER' | translate }}</th>
+            <th>{{ 'ADMIN.EVENTS.ACTIONS' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (event of events(); track event.id) {
+            <tr>
+              <td>{{ formatDate(event.date_start) }}</td>
+              <td>
+                <a [routerLink]="['/event', event.id]">{{ event.name }}</a>
+              </td>
+              <td>{{ event.organizer?.name || 'N/A' }}</td>
+              <td class="actions-cell">
+                <button class="btn-edit" (click)="editEvent(event.id!)">
+                  {{ 'ADMIN.EVENTS.EDIT' | translate }}
+                </button>
+                <button class="btn-delete" (click)="deleteEvent(event.id!)">
+                  {{ 'ADMIN.EVENTS.DELETE' | translate }}
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
