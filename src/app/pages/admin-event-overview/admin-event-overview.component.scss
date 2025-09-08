@@ -38,51 +38,48 @@
   .events-table-container {
     overflow-x: auto;
     
-    .events-table {
-      width: 100%;
-      border-collapse: collapse;
+    .filter-container {
+      margin-bottom: 1rem;
       
-      th, td {
-        padding: 0.75rem;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-      }
-      
-      th {
-        background-color: #f2f2f2;
-        font-weight: 600;
-      }
-      
-      tr:hover {
-        background-color: #f5f5f5;
-      }
-      
-      .actions-cell {
-        white-space: nowrap;
+      .filter-input {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
         
-        button {
-          margin-right: 0.5rem;
-          padding: 0.25rem 0.5rem;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
+        &:focus {
+          outline: none;
+          border-color: #2196F3;
+        }
+      }
+    }
+    
+    .actions-cell {
+      white-space: nowrap;
+      
+      button {
+        margin-right: 0.5rem;
+        padding: 0.25rem 0.5rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        
+        &.btn-edit {
+          background-color: #2196F3;
+          color: white;
           
-          &.btn-edit {
-            background-color: #2196F3;
-            color: white;
-            
-            &:hover {
-              background-color: #0b7dda;
-            }
+          &:hover {
+            background-color: #0b7dda;
           }
+        }
+        
+        &.btn-delete {
+          background-color: #f44336;
+          color: white;
           
-          &.btn-delete {
-            background-color: #f44336;
-            color: white;
-            
-            &:hover {
-              background-color: #da190b;
-            }
+          &:hover {
+            background-color: #da190b;
           }
         }
       }
@@ -90,16 +87,48 @@
   }
 }
 
+// NGX-Datatable custom styles
+.ngx-datatable.material {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  
+  .datatable-header {
+    background-color: #f2f2f2;
+    font-weight: 600;
+  }
+  
+  .datatable-body-row {
+    &:hover {
+      background-color: #f5f5f5;
+    }
+  }
+  
+  .datatable-row-even {
+    background-color: #fafafa;
+  }
+  
+  .datatable-body-cell {
+    padding: 0.75rem;
+    
+    a {
+      color: #2196F3;
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
 // Responsive adjustments
 @media (max-width: 768px) {
-  .events-table {
-    th, td {
-      padding: 0.5rem;
-    }
-    
-    .actions-cell button {
-      padding: 0.2rem 0.4rem;
-      font-size: 0.85rem;
-    }
+  .admin-events-container {
+    padding: 0.5rem;
+  }
+  
+  .actions-cell button {
+    padding: 0.2rem 0.4rem;
+    font-size: 0.85rem;
   }
 }

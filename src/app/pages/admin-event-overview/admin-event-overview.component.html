@@ -17,35 +17,62 @@
     </div>
   } @else {
     <div class="events-table-container">
-      <table class="events-table">
-        <thead>
-          <tr>
-            <th>{{ 'ADMIN.EVENTS.DATE' | translate }}</th>
-            <th>{{ 'ADMIN.EVENTS.NAME' | translate }}</th>
-            <th>{{ 'ADMIN.EVENTS.ORGANIZER' | translate }}</th>
-            <th>{{ 'ADMIN.EVENTS.ACTIONS' | translate }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (event of events(); track event.id) {
-            <tr>
-              <td>{{ formatDate(event.date_start) }}</td>
-              <td>
-                <a [routerLink]="['/event', event.id]">{{ event.name }}</a>
-              </td>
-              <td>{{ getOrganizerName(event) }}</td>
-              <td class="actions-cell">
-                <button class="btn-edit" (click)="editEvent(String(event.id))">
-                  {{ 'ADMIN.EVENTS.EDIT' | translate }}
-                </button>
-                <button class="btn-delete" (click)="deleteEvent(String(event.id))">
-                  {{ 'ADMIN.EVENTS.DELETE' | translate }}
-                </button>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+      <div class="filter-container">
+        <input
+          type="text"
+          placeholder="Suchen..."
+          [(ngModel)]="filterValue"
+          (keyup)="updateFilter()"
+          class="filter-input"
+        />
+      </div>
+      
+      <ngx-datatable
+        class="material"
+        [rows]="rows()"
+        [columns]="columns"
+        [columnMode]="'force'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="'auto'"
+        [limit]="10"
+        [reorderable]="false"
+      >
+        <!-- Date Column Template -->
+        <ngx-datatable-column name="Datum" prop="date_start">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            {{ value }}
+          </ng-template>
+        </ngx-datatable-column>
+        
+        <!-- Name Column Template -->
+        <ngx-datatable-column name="Name" prop="name">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <a [routerLink]="['/event', row.originalId]">{{ row.name }}</a>
+          </ng-template>
+        </ngx-datatable-column>
+        
+        <!-- Organizer Column Template -->
+        <ngx-datatable-column name="Veranstalter" prop="organizer">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            {{ value }}
+          </ng-template>
+        </ngx-datatable-column>
+        
+        <!-- Actions Column Template -->
+        <ngx-datatable-column name="Aktionen" [sortable]="false" [width]="200">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <div class="actions-cell">
+              <button class="btn-edit" (click)="editEvent(String(row.originalId))">
+                {{ 'ADMIN.EVENTS.EDIT' | translate }}
+              </button>
+              <button class="btn-delete" (click)="deleteEvent(String(row.originalId))">
+                {{ 'ADMIN.EVENTS.DELETE' | translate }}
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
     </div>
   }
 </div>
