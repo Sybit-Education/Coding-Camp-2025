@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { MapComponent } from '../../component/map/map.component'
 import { Event } from '../../models/event.interface'
@@ -31,6 +31,7 @@ import { MediaService } from '@app/services/media.service'
   ],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventDetailPageComponent implements OnInit, OnDestroy {
   private readonly subscriptions = new Subscription()
