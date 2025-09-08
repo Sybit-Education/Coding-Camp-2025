@@ -56,7 +56,7 @@ export class KategorieComponent implements OnInit {
     this.loading = true;
     try {
       // Stelle sicher, dass die Datenbankverbindung initialisiert ist
-      await this.topicService.surrealdb.initialize();
+      await this.topicService.initializeDatabase();
       
       this.topics = await this.topicService.getAllTopics()
       
