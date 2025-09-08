@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule, Router } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
@@ -13,6 +13,7 @@ import { RecordId } from 'surrealdb'
 
 import { Event } from '../../models/event.interface'
 import { Topic } from '../../models/topic.interface'
+import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 
 type EventOrMore = Event & { isMore?: boolean }
 
@@ -39,6 +40,7 @@ export class HomeComponent implements OnInit {
   private readonly locationService = inject(LocationService)
   private readonly topicService = inject(TopicService)
   private readonly router = inject(Router)
+  private readonly markForCheck = injectMarkForCheck()
 
   ngOnInit() {
     this.initializeData()

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core'
+import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { Subscription } from 'rxjs'
 import { MapComponent } from '../../component/map/map.component'
 import { Event } from '../../models/event.interface'
@@ -52,6 +53,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router)
   private readonly loginservice = inject(LoginService)
   private readonly mediaService = inject(MediaService)
+  private readonly markForCheck = injectMarkForCheck()
 
   protected isLoggedIn = false
   evntIdString: string | undefined
@@ -174,6 +176,8 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
           this.organizer = organizer
           this.type = type
           document.title = `${this.event!.name} - 1200 Jahre Radolfzell`
+          // Change Detection auslösen
+          this.markForCheck()
         })
       } else {
         this.error = 'Event nicht gefunden'
