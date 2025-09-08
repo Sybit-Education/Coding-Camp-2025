@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnDestroy, NgZone } from '@angular/core'
+import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnDestroy, NgZone } from '@angular/core'
 
 
 // Lazy-Loading für Leaflet
@@ -10,6 +10,7 @@ import type { Map, Icon, TileLayer, Marker } from 'leaflet'
   templateUrl: './map.component.html',
   styleUrl: './map.component.scss',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapComponent implements AfterViewInit, OnDestroy {
   private map?: Map

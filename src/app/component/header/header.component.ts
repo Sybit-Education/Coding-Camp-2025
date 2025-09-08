@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, HostListener, Input, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { I18nService } from '../../services/translate.service'
@@ -48,6 +48,7 @@ interface LogoSet {
   imports: [CommonModule, RouterModule, LanguageSwitcherComponent],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit {
   /**

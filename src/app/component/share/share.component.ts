@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 
 import { Event } from '../../models/event.interface'
 import { TranslateModule } from '@ngx-translate/core'
@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core'
   imports: [TranslateModule],
   templateUrl: './share.component.html',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShareComponent {
   @Input() event: Event | null = null

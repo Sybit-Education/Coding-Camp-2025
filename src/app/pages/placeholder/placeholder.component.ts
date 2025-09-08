@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { ActivatedRoute } from '@angular/router'
 
@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router'
   selector: 'app-placeholder',
   standalone: true,
   imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <!--eslint-disable @angular-eslint/template/i18n-->
     <div class="container mx-auto p-4 pb-20">
