@@ -147,8 +147,8 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   private async loadEvent(eventId: RecordId<'event'> | StringRecordId) {
     try {
       // Stelle sicher, dass die Datenbankverbindung initialisiert ist
-      await this.eventService.initializeDatabase?.();
-      
+      await this.eventService.initializeData();
+
       const foundEvent = await this.eventService.getEventByID(eventId)
 
       if (!foundEvent) {
@@ -156,14 +156,14 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
         this.announceError('Event nicht gefunden')
         return;
       }
-      
+
       // Setze Basis-Daten
       this.event = foundEvent
       this.evntIdString = this.event?.id ? this.event.id.toString() : undefined
 
       // Starte alle Ladeprozesse parallel
       const promises: Promise<any>[] = [];
-      
+
       // Media-URL laden
       let mediaUrlPromise: Promise<string | null> = Promise.resolve(null);
       if (foundEvent.media?.length > 0) {
@@ -180,12 +180,12 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       const locationPromise = locationId ? this.loadLocation(locationId) : Promise.resolve(null);
       const organizerPromise = organizerId ? this.loadOrganizer(organizerId) : Promise.resolve(null);
       const typePromise = typeId ? this.loadType(typeId) : Promise.resolve(null);
-      
+
       promises.push(locationPromise, organizerPromise, typePromise);
-      
+
       // Warte auf alle Promises
       await Promise.all(promises);
-      
+
       // Batch-Update für weniger Change Detection Zyklen
       requestAnimationFrame(() => {
         if (foundEvent.media?.length > 0) {
@@ -193,11 +193,11 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
             this.mediaUrl = url;
           });
         }
-        
+
         locationPromise.then(location => this.location = location);
         organizerPromise.then(organizer => this.organizer = organizer);
         typePromise.then(type => this.type = type);
-        
+
         document.title = `${this.event!.name} - 1200 Jahre Radolfzell`
         this.markForCheck()
       })
