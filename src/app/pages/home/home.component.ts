@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule, Router } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
@@ -70,15 +70,15 @@ export class HomeComponent implements OnInit {
 
   // Cache für teure Berechnungen
   private cachedEvents: {input: Event[], output: Event[], timestamp: number} | null = null;
-  
+
   private getUpcomingEvents(events: Event[]): Event[] {
     // Prüfe, ob wir ein gültiges Cache-Ergebnis haben (nicht älter als 5 Minuten)
-    if (this.cachedEvents && 
-        this.cachedEvents.input === events && 
+    if (this.cachedEvents &&
+        this.cachedEvents.input === events &&
         (Date.now() - this.cachedEvents.timestamp) < 300000) {
       return this.cachedEvents.output;
     }
-    
+
     const now = new Date()
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
@@ -109,14 +109,14 @@ export class HomeComponent implements OnInit {
         const dateB = new Date(b.date_start)
         return dateA.getTime() - dateB.getTime()
       });
-      
+
     // Ergebnis cachen
     this.cachedEvents = {
       input: events,
       output: result,
       timestamp: Date.now()
     };
-    
+
     return result;
   }
 

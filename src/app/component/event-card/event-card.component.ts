@@ -49,9 +49,6 @@ export class EventCardComponent implements OnInit, OnDestroy {
     const eventId = this.event.id as unknown as string
     this.isSaved = this.localStorageService.isEventSaved(eventId)
 
-    // Verwende toSignal für bessere Performance
-    const savedEventsSignal = this.localStorageService.savedEventsSignal;
-    
     // Subscription nur hinzufügen, wenn wir sie wirklich brauchen (für ältere Komponenten)
     this.subscriptions.add(
       this.localStorageService.savedEvents$.subscribe(() => {
@@ -77,10 +74,10 @@ export class EventCardComponent implements OnInit, OnDestroy {
         this.location = location
         this.eventType = eventType
         this.mediaUrl = mediaUrl
-        
+
         // Change Detection auslösen, da wir OnPush verwenden
         this.markForCheck();
-        
+
         console.log('Event-Card geladen:', this.event?.name, 'Media URL:', this.mediaUrl);
       }, 0)
     } catch (error) {
@@ -123,7 +120,7 @@ export class EventCardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe()
-    
+
     // Referenzen freigeben
     this.event = null
     this.location = null
