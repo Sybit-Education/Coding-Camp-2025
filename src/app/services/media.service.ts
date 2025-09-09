@@ -19,9 +19,7 @@ export class MediaService {
     if (!mediaRecordId) return null
 
     try {
-      // Stelle sicher, dass die Verbindung initialisiert ist
-      await this.surrealdb.initialize();
-      
+
       const mediaURL = String(mediaRecordId).replace(/_(?=[^_]*$)/, '.').split(':')[1]
       return this.mediaBaseUrl + mediaURL;
     } catch (error) {
@@ -41,7 +39,7 @@ export class MediaService {
     try {
       // Stelle sicher, dass die Verbindung initialisiert ist
       await this.surrealdb.initialize();
-      
+
       const id = url.substring(url.lastIndexOf('/') + 1).replace('.', '_')
       const media = await this.surrealdb.getByRecordId<Media>(new StringRecordId(`media:${id}`))
       return media || null

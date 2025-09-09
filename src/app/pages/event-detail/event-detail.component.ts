@@ -146,8 +146,6 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
 
   private async loadEvent(eventId: RecordId<'event'> | StringRecordId) {
     try {
-      // Stelle sicher, dass die Datenbankverbindung initialisiert ist
-      await this.eventService.initializeData();
 
       const foundEvent = await this.eventService.getEventByID(eventId)
 

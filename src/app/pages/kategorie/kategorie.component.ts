@@ -34,14 +34,14 @@ export class KategorieComponent implements OnInit {
   loading = true;
 
   constructor(private readonly route: ActivatedRoute) {}
-  
+
   private readonly markForCheck = injectMarkForCheck();
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
       this.id = params['id'] || null
       this.name = params['name'] || null
-      
+
       // Daten neu laden, wenn sich die Parameter ändern
       this.initilizeData().then(() => this.markForCheck());
     })
@@ -52,51 +52,50 @@ export class KategorieComponent implements OnInit {
 
   // Cache für Locations, um wiederholte Anfragen zu vermeiden
   private locationCache = new Map<string, Promise<AppLocation>>();
-  
+
   async initilizeData() {
     this.loading = true;
     try {
       // Stelle sicher, dass die Datenbankverbindung initialisiert ist
       await this.topicService.initializeDatabase();
-      
+
       // Lade Topics und Events parallel
       const [topics, allEvents] = await Promise.all([
         this.topicService.getAllTopics(),
         this.eventService.getAllEvents()
       ]);
-      
+
       this.topics = topics;
-      
+
       // Filtere Events basierend auf der ID
-      const rawEvents = !this.id 
-        ? allEvents 
-        : allEvents.filter((event) => 
+      const rawEvents = !this.id
+        ? allEvents
+        : allEvents.filter((event) =>
             event.topic?.some((topic) => topic.id === this.id)
           );
-      
+
       // Optimiere Location-Ladung durch Caching
       this.events = await Promise.all(
         rawEvents.map(async (event) => {
-          let location;
-          
+
           // Verwende Cache für Locations
           const locationId = String(event.location);
           if (!this.locationCache.has(locationId)) {
             this.locationCache.set(
-              locationId, 
+              locationId,
               this.locationService.getLocationByID(event.location)
             );
           }
-          
+
           const locationData = await this.locationCache.get(locationId);
-          
+
           return {
             ...event,
             locationName: locationData?.name ?? 'Unbekannter Ort',
           };
         }),
       );
-      
+
       console.log('Kategorie-Events geladen:', this.events.length);
     } catch (error) {
       console.error('Fehler beim Laden der Events:', error);
