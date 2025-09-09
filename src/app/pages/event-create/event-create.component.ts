@@ -1,7 +1,7 @@
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 
 // Models
 import { Event as AppEvent } from '../../models/event.interface'
@@ -35,6 +35,7 @@ export class EventCreateComponent implements OnInit {
   private readonly topicService = inject(TopicService)
   private readonly mediaService = inject(MediaService)
   private readonly route = inject(ActivatedRoute)
+  private readonly router = inject(Router)
 
   // ===== State & Formfelder =====
   event: AppEvent | null = null
@@ -355,6 +356,9 @@ export class EventCreateComponent implements OnInit {
         const created = await this.eventService.postEvent(payload)
         this.eventId = created[0].id
       }
+      
+      // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
+      this.router.navigate(['/admin']);
     } catch (err) {
       console.error('Fehler beim Speichern des Events:', err)
     }
