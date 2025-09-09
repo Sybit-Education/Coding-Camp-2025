@@ -1,11 +1,10 @@
-import { Component, inject, signal, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, inject, signal, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Event } from '../../models/event.interface';
 import { EventService } from '../../services/event.service';
-import { ChangeDetectionStrategy } from '@angular/core';
-import { SurrealdbService } from '../../services/surrealdb.service';
+import { OrganizerService } from '../../services/organizer.service';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { FormsModule } from '@angular/forms';
 import { Organizer } from '../../models/organizer.interface';
@@ -22,7 +21,7 @@ import { RecordId } from 'surrealdb';
 })
 export class AdminEventOverviewComponent implements OnInit {
   private readonly eventService = inject(EventService);
-  private readonly surrealDb = inject(SurrealdbService);
+  private readonly organizerService = inject(OrganizerService);
   private readonly router = inject(Router);
 
   // Loading state
@@ -98,7 +97,7 @@ export class AdminEventOverviewComponent implements OnInit {
   // Lade alle Veranstalter und erstelle eine Map für schnellen Zugriff
   private async loadOrganizers(): Promise<void> {
     try {
-      const organizers = await this.surrealDb.getAll<Organizer>('organizer');
+      const organizers = await this.organizerService.getAllOrganizers();
       const map = new Map<string, Organizer>();
 
       organizers.forEach(organizer => {
@@ -197,18 +196,14 @@ export class AdminEventOverviewComponent implements OnInit {
   }
 
   // Delete event
-  async deleteEvent(eventId: string | RecordId): Promise<void> {
+  async deleteEvent(eventId: RecordId): Promise<void> {
     if (confirm('Möchten Sie diese Veranstaltung wirklich löschen?')) {
       try {
-        // Stelle sicher, dass wir die vollständige Event-ID haben (mit "event:" Präfix)
-        const fullEventId = typeof eventId === 'string' && !eventId.includes(':') 
-          ? `event:${eventId}` 
-          : eventId;
-        
-        console.log(`Versuche Event mit ID ${fullEventId} zu löschen...`);
-        
+
+        console.log(`Versuche Event mit ID ${eventId} zu löschen...`);
+
         // Use the SurrealDB service directly to delete the event
-        const result = await this.surrealDb.delete(fullEventId);
+        const result = await this.eventService.delete(eventId);
         console.log('Löschergebnis:', result);
 
         // Refresh the events list
