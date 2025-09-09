@@ -62,16 +62,6 @@ export class ShareComponent {
 
   private copyToClipboard(text: string) {
     navigator.clipboard.writeText(text)
-      .then(() => {
-        console.log('Link in Zwischenablage kopiert');
-        this.showCopyMessage = true;
-        // Verwende requestAnimationFrame für bessere Performance
-        requestAnimationFrame(() => {
-          setTimeout(() => {
-            this.showCopyMessage = false;
-          }, 3000); // Nachricht nach 3 Sekunden ausblenden
-        });
-      })
       .catch(err => {
         console.error('Fehler beim Kopieren:', err);
         // Alternativer Fallback für ältere Browser
