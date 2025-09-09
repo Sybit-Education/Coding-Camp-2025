@@ -1,6 +1,6 @@
 import { Component, inject, signal, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Event } from '../../models/event.interface';
 import { EventService } from '../../services/event.service';
@@ -22,6 +22,7 @@ import { Organizer } from '../../models/organizer.interface';
 export class AdminEventOverviewComponent implements OnInit {
   private readonly eventService = inject(EventService);
   private readonly surrealDb = inject(SurrealdbService);
+  private readonly router = inject(Router);
   
   // Loading state
   isLoading = signal(true);
@@ -144,8 +145,7 @@ export class AdminEventOverviewComponent implements OnInit {
   
   // Navigate to edit event page
   editEvent(eventId: string): void {
-    // This will be implemented when we create the edit event page
-    console.log('Edit event:', eventId);
+    this.router.navigate(['/admin/event', eventId]);
   }
   
   // Sort handler
