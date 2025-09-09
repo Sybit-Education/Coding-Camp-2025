@@ -8,6 +8,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { SurrealdbService } from '../../services/surrealdb.service';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { FormsModule } from '@angular/forms';
+import { Organizer } from '../../models/organizer.interface';
 
 @Component({
   selector: 'app-admin-event-overview',
@@ -28,6 +29,9 @@ export class AdminEventOverviewComponent implements OnInit {
   // Events list
   events = signal<Event[]>([]);
   
+  // Organizers map for quick lookup
+  organizersMap = signal<Map<string, Organizer>>(new Map());
+  
   // Table settings
   rows = signal<any[]>([]);
   temp = signal<any[]>([]);
@@ -42,6 +46,9 @@ export class AdminEventOverviewComponent implements OnInit {
   
   async ngOnInit(): Promise<void> {
     try {
+      // Lade alle Veranstalter und erstelle eine Map für schnellen Zugriff
+      await this.loadOrganizers();
+      
       const eventsList = await this.eventService.getAllEvents();
       
       // Sort events by start date (ascending)
@@ -80,6 +87,24 @@ export class AdminEventOverviewComponent implements OnInit {
     });
   }
   
+  // Lade alle Veranstalter und erstelle eine Map für schnellen Zugriff
+  private async loadOrganizers(): Promise<void> {
+    try {
+      const organizers = await this.surrealDb.getAll<Organizer>('organizer');
+      const map = new Map<string, Organizer>();
+      
+      organizers.forEach(organizer => {
+        if (organizer.id) {
+          map.set(String(organizer.id), organizer);
+        }
+      });
+      
+      this.organizersMap.set(map);
+    } catch (error) {
+      console.error('Fehler beim Laden der Veranstalter:', error);
+    }
+  }
+  
   // Get organizer name
   getOrganizerName(event: Event): string {
     if (!event.organizer) return 'N/A';
@@ -89,8 +114,21 @@ export class AdminEventOverviewComponent implements OnInit {
       return event.organizer.name as string;
     }
     
+    // Try to find organizer in our map
+    const organizerId = String(event.organizer);
+    const organizerMap = this.organizersMap();
+    
+    if (organizerMap.has(organizerId)) {
+      return organizerMap.get(organizerId)?.name || 'Unbekannt';
+    }
+    
+    // If it's a record ID, try to extract the name part
+    if (organizerId.startsWith('organizer:')) {
+      return organizerId.split(':')[1];
+    }
+    
     // Otherwise return the ID as string
-    return String(event.organizer);
+    return organizerId;
   }
   
   // Convert RecordId to string
