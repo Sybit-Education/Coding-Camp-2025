@@ -5,6 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Event } from '../../models/event.interface';
 import { EventService } from '../../services/event.service';
 import { OrganizerService } from '../../services/organizer.service';
+import { SurrealdbService } from '../../services/surrealdb.service';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { FormsModule } from '@angular/forms';
 import { Organizer } from '../../models/organizer.interface';
@@ -23,6 +24,7 @@ export class AdminEventOverviewComponent implements OnInit {
   private readonly eventService = inject(EventService);
   private readonly organizerService = inject(OrganizerService);
   private readonly router = inject(Router);
+  private readonly surrealDb = inject(SurrealdbService);
 
   // Loading state
   isLoading = signal(true);
@@ -199,12 +201,20 @@ export class AdminEventOverviewComponent implements OnInit {
   async deleteEvent(eventId: RecordId): Promise<void> {
     if (confirm('Möchten Sie diese Veranstaltung wirklich löschen?')) {
       try {
-
-        console.log(`Versuche Event mit ID ${eventId} zu löschen...`);
-
-        // Use the SurrealDB service directly to delete the event
-        const result = await this.eventService.delete(eventId);
-        console.log('Löschergebnis:', result);
+        // Stelle sicher, dass wir die vollständige Event-ID haben (mit "event:" Präfix)
+        const fullEventId = typeof eventId === 'string' && !eventId.includes(':') 
+          ? `event:${eventId}` 
+          : eventId;
+        
+        console.log(`Versuche Event mit ID ${fullEventId} zu löschen...`);
+        
+        try {
+          // Verwende direkt den SurrealDB-Service zum Löschen
+          await this.surrealDb.delete(fullEventId);
+          console.log('Event erfolgreich gelöscht');
+        } catch (deleteError) {
+          console.error('Fehler beim Löschen:', deleteError);
+        }
 
         // Refresh the events list
         const updatedEvents = await this.eventService.getAllEvents();
