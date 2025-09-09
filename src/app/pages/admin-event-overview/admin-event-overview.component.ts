@@ -197,11 +197,19 @@ export class AdminEventOverviewComponent implements OnInit {
   }
 
   // Delete event
-  async deleteEvent(eventId: RecordId): Promise<void> {
+  async deleteEvent(eventId: string | RecordId): Promise<void> {
     if (confirm('Möchten Sie diese Veranstaltung wirklich löschen?')) {
       try {
+        // Stelle sicher, dass wir die vollständige Event-ID haben (mit "event:" Präfix)
+        const fullEventId = typeof eventId === 'string' && !eventId.includes(':') 
+          ? `event:${eventId}` 
+          : eventId;
+        
+        console.log(`Versuche Event mit ID ${fullEventId} zu löschen...`);
+        
         // Use the SurrealDB service directly to delete the event
-        await this.surrealDb.delete(eventId);
+        const result = await this.surrealDb.delete(fullEventId);
+        console.log('Löschergebnis:', result);
 
         // Refresh the events list
         const updatedEvents = await this.eventService.getAllEvents();
