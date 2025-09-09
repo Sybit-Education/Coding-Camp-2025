@@ -67,4 +67,8 @@ export class EventService {
   async updateEvent(id: RecordId<'event'>, event: Event): Promise<Event> {
     return await this.surrealdb.postUpdate<Event>(id, event)
   }
+
+  delete(eventId: RecordId<string>) {
+    this.surrealdb.deleteRow(eventId)
+  }
 }

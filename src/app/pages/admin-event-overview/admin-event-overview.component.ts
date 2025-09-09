@@ -201,49 +201,38 @@ export class AdminEventOverviewComponent implements OnInit {
   async deleteEvent(eventId: RecordId): Promise<void> {
     if (confirm('Möchten Sie diese Veranstaltung wirklich löschen?')) {
       try {
-        // Stelle sicher, dass wir die vollständige Event-ID haben (mit "event:" Präfix)
-        const fullEventId = typeof eventId === 'string' && !eventId.includes(':') 
-          ? `event:${eventId}` 
-          : eventId;
-        
-        console.log(`Versuche Event mit ID ${fullEventId} zu löschen...`);
-        
-        try {
-          // Verwende direkt den SurrealDB-Service zum Löschen
-          await this.surrealDb.delete(fullEventId);
-          console.log('Event erfolgreich gelöscht');
-        } catch (deleteError) {
-          console.error('Fehler beim Löschen:', deleteError);
-        }
-
-        // Refresh the events list
-        const updatedEvents = await this.eventService.getAllEvents();
-
-        // Sort and update the events signal
-        const sortedEvents = [...updatedEvents].sort((a, b) => {
-          const dateA = new Date(a.date_start);
-          const dateB = new Date(b.date_start);
-          return dateA.getTime() - dateB.getTime();
-        });
-
-        // Transform data for the table
-        const tableData = sortedEvents.map(event => {
-          return {
-            ...event,
-            date_start: this.formatDate(event.date_start),
-            organizer: this.getOrganizerName(event),
-            originalId: event.id
-          };
-        });
-
-        this.events.set(sortedEvents);
-        this.temp.set([...tableData]);
-
-        // Wende die aktuelle Sortierung auf die neuen Daten an
-        this.rows.set(this.sortData(tableData, this.currentSorts()));
-      } catch (error) {
-        console.error('Fehler beim Löschen der Veranstaltung:', error);
+        // Verwende direkt den SurrealDB-Service zum Löschen
+        await this.surrealDb.delete(eventId);
+        console.log('Event erfolgreich gelöscht');
+      } catch (deleteError) {
+        console.error('Fehler beim Löschen:', deleteError);
       }
+
+      // Refresh the events list
+      const updatedEvents = await this.eventService.getAllEvents();
+
+      // Sort and update the events signal
+      const sortedEvents = [...updatedEvents].sort((a, b) => {
+        const dateA = new Date(a.date_start);
+        const dateB = new Date(b.date_start);
+        return dateA.getTime() - dateB.getTime();
+      });
+
+      // Transform data for the table
+      const tableData = sortedEvents.map(event => {
+        return {
+          ...event,
+          date_start: this.formatDate(event.date_start),
+          organizer: this.getOrganizerName(event),
+          originalId: event.id
+        };
+      });
+
+      this.events.set(sortedEvents);
+      this.temp.set([...tableData]);
+
+      // Wende die aktuelle Sortierung auf die neuen Daten an
+      this.rows.set(this.sortData(tableData, this.currentSorts()));
     }
   }
 }

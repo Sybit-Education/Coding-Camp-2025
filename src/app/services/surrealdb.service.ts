@@ -68,4 +68,8 @@ export class SurrealdbService extends Surreal {
       throw error
     }
   }
+
+  async deleteRow(recordId: RecordId<string> | StringRecordId) {
+    await super.delete(recordId)
+  }
 }

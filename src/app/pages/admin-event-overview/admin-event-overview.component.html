@@ -41,7 +41,7 @@
         (sort)="onSort($event)"
       >
         <!-- Date Column Template -->
-        <ngx-datatable-column name="Datum" prop="date_start">
+        <ngx-datatable-column name="Datum" prop="date_start" [width]="10">
           <ng-template let-value="value" ngx-datatable-cell-template>
             {{ value }}
           </ng-template>
@@ -62,7 +62,7 @@
         </ngx-datatable-column>
 
         <!-- Actions Column Template -->
-        <ngx-datatable-column name="Aktionen" [sortable]="false" [width]="150">
+        <ngx-datatable-column name="Aktionen" [sortable]="false" [width]="100">
           <ng-template let-row="row" ngx-datatable-cell-template>
             <div class="actions-cell">
               <button class="btn-edit" (click)="editEvent(row.originalId)">
