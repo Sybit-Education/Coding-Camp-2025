@@ -1,4 +1,4 @@
-import { inject, Injectable, OnInit, signal } from '@angular/core'
+import { inject, Injectable, signal } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
 import { Event, EventType } from '../models/event.interface'
 import { RecordId, StringRecordId, surql } from 'surrealdb'
