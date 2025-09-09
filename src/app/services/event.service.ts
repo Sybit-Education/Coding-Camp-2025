@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core'
+import { inject, Injectable, OnInit, signal } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
 import { Event, EventType } from '../models/event.interface'
 import { RecordId, StringRecordId, surql } from 'surrealdb'
@@ -14,10 +14,6 @@ export class EventService {
   readonly allEvents = signal<Event[]>([]);
   readonly allEventTypes = signal<TypeDB[]>([]);
 
-  constructor() {
-    // Initialisiere Daten beim Start
-    this.initializeData();
-  }
 
   async initializeData(): Promise<void> {
     try {
