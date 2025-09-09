@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core'
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router'
 
 import { HeaderComponent } from './component/header/header.component'
@@ -24,10 +24,10 @@ export class AppComponent implements OnInit {
   isCarouselPage = false
   updateAvailable = false
 
-  constructor(
-    private readonly router: Router,
-    private readonly updateService: UpdateService
-  ) {
+  private readonly updateService = inject(UpdateService);
+  private readonly router = inject(Router);
+
+  constructor() {
     this.updateService.updateAvailable$.subscribe(available => {
       this.updateAvailable = available;
     });
@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
       .subscribe((event: NavigationEnd) => {
         this.isCarouselPage = event.url === '/'
       })
-    
+
     // Prüfe auf Updates beim Start
     this.updateService.checkForUpdate();
   }
