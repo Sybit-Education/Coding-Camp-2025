@@ -22,7 +22,7 @@ export class LoginPageComponent {
 
   constructor(private readonly loginService: LoginService) {}
 
-  async NgOnInit() {
+  async ngOnInit() {
     if (await this.loginService.isLoggedIn()) {
       this.loginService.switchRoute()
     }

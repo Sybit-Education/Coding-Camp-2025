@@ -49,7 +49,8 @@ export class LoginService implements CanActivate {
 
   switchRoute() {
     if (this.redirect == null) {
-      this.router.navigate(['/'])
+      // Leite den Benutzer direkt zur Admin-Seite weiter
+      this.router.navigate(['/admin'])
       return
     }
     this.router.navigate(this.redirect)
