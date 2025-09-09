@@ -33,8 +33,7 @@ export class KategorieComponent implements OnInit {
   name: string | null = null
   loading = true;
 
-  constructor(private readonly route: ActivatedRoute) {}
-
+  private readonly route = inject(ActivatedRoute);
   private readonly markForCheck = injectMarkForCheck();
 
   ngOnInit() {
@@ -51,7 +50,7 @@ export class KategorieComponent implements OnInit {
   private readonly topicService: TopicService = inject(TopicService)
 
   // Cache für Locations, um wiederholte Anfragen zu vermeiden
-  private locationCache = new Map<string, Promise<AppLocation>>();
+  private readonly locationCache = new Map<string, Promise<AppLocation>>();
 
   async initilizeData() {
     this.loading = true;
