@@ -88,7 +88,8 @@ export class EventCreateComponent implements OnInit {
 
   // ===== Lifecycle =====
   ngOnInit() {
-    const eventId = this.route.snapshot.queryParams['id']
+    // Prüfe, ob wir im Bearbeitungsmodus sind (URL-Parameter aus der Route)
+    const eventId = this.route.snapshot.paramMap.get('id')
     if (eventId) {
       const recordID = new StringRecordId(eventId)
       this.loadEvent(recordID)
