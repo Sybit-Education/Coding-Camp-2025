@@ -37,6 +37,8 @@
         [rowHeight]="'auto'"
         [limit]="10"
         [reorderable]="false"
+        [sorts]="currentSorts()"
+        (sort)="onSort($event)"
       >
         <!-- Date Column Template -->
         <ngx-datatable-column name="Datum" prop="date_start">

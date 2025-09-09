@@ -35,6 +35,9 @@ export class AdminEventOverviewComponent implements OnInit {
   // Table settings
   rows = signal<any[]>([]);
   temp = signal<any[]>([]);
+  currentSorts = signal<{prop: string, dir: string}[]>([
+    { prop: 'date_start', dir: 'asc' } // Standardsortierung nach Datum aufsteigend
+  ]);
   columns = [
     { prop: 'date_start', name: 'Datum', sortable: true },
     { prop: 'name', name: 'Name', sortable: true },
@@ -71,6 +74,9 @@ export class AdminEventOverviewComponent implements OnInit {
       this.events.set(sortedEvents);
       this.rows.set(tableData);
       this.temp.set([...tableData]);
+      
+      // Wende die Standardsortierung an
+      this.rows.set(this.sortData(tableData, this.currentSorts()));
     } catch (error) {
       console.error('Error loading events:', error);
     } finally {
@@ -142,6 +148,37 @@ export class AdminEventOverviewComponent implements OnInit {
     console.log('Edit event:', eventId);
   }
   
+  // Sort handler
+  onSort(event: { sorts: { prop: string, dir: string }[] }): void {
+    // Aktualisiere den aktuellen Sortierzustand
+    this.currentSorts.set(event.sorts);
+    
+    // Sortiere die Daten
+    const data = [...this.temp()];
+    this.rows.set(this.sortData(data, event.sorts));
+  }
+  
+  // Sortiere Daten basierend auf Sortierkriterien
+  private sortData(data: any[], sorts: { prop: string, dir: string }[]): any[] {
+    if (sorts.length === 0) return data;
+    
+    const sort = sorts[0]; // Wir verwenden nur die erste Sortierung
+    const dir = sort.dir === 'asc' ? 1 : -1;
+    
+    return [...data].sort((a, b) => {
+      const propA = a[sort.prop];
+      const propB = b[sort.prop];
+      
+      // Vergleiche Strings
+      if (typeof propA === 'string' && typeof propB === 'string') {
+        return dir * propA.localeCompare(propB, 'de');
+      }
+      
+      // Vergleiche andere Typen
+      return dir * (propA > propB ? 1 : propA < propB ? -1 : 0);
+    });
+  }
+  
   // Filter function
   updateFilter(): void {
     const val = this.filterValue.toLowerCase();
@@ -156,8 +193,11 @@ export class AdminEventOverviewComponent implements OnInit {
       );
     });
     
+    // Sortiere die gefilterten Daten
+    const sortedTemp = this.sortData(temp, this.currentSorts());
+    
     // Update rows
-    this.rows.set([...temp]);
+    this.rows.set(sortedTemp);
   }
   
   // Delete event
@@ -188,8 +228,10 @@ export class AdminEventOverviewComponent implements OnInit {
         });
         
         this.events.set(sortedEvents);
-        this.rows.set(tableData);
         this.temp.set([...tableData]);
+        
+        // Wende die aktuelle Sortierung auf die neuen Daten an
+        this.rows.set(this.sortData(tableData, this.currentSorts()));
       } catch (error) {
         console.error('Fehler beim Löschen der Veranstaltung:', error);
       }
