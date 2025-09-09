@@ -174,5 +174,10 @@
   },
   "share": {
     "copy-notification": "Le lien a été copié dans le presse-papiers."
+  },
+  "ADMIN": {
+    "EVENTS": {
+      "TITLE": "Administration"
+    }
   }
 }
