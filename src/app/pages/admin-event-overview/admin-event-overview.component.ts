@@ -145,7 +145,9 @@ export class AdminEventOverviewComponent implements OnInit {
   
   // Navigate to edit event page
   editEvent(eventId: string): void {
-    this.router.navigate(['/admin/event', eventId]);
+    // Entferne den "event:" Prefix, falls vorhanden
+    const cleanId = eventId.startsWith('event:') ? eventId.substring(6) : eventId;
+    this.router.navigate(['/admin/event', cleanId]);
   }
   
   // Sort handler
