@@ -41,9 +41,9 @@ export class AdminEventOverviewComponent implements OnInit {
     { prop: 'date_start', dir: 'asc' } // Standardsortierung nach Datum aufsteigend
   ]);
   columns = [
-    { prop: 'date_start', name: 'Datum', sortable: true },
-    { prop: 'name', name: 'Name', sortable: true },
-    { prop: 'organizer', name: 'Veranstalter', sortable: true }
+    { prop: 'date_start', name: 'Datum', sortable: true, width: 120 },
+    { prop: 'name', name: 'Name', sortable: true, flexGrow: 2 },
+    { prop: 'organizer', name: 'Veranstalter', sortable: true, flexGrow: 1 }
   ];
 
   // Filter value
