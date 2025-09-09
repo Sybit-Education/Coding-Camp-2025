@@ -1,12 +1,12 @@
 <div class="admin-events-container">
   <h1>{{ 'ADMIN.EVENTS.TITLE' | translate }}</h1>
-  
+
   <div class="actions">
-    <a [routerLink]="['/create-event']" class="btn-create">
+    <a [routerLink]="['/admin/create']" class="btn-create">
       {{ 'ADMIN.EVENTS.CREATE_NEW' | translate }}
     </a>
   </div>
-  
+
   @if (isLoading()) {
     <div class="loading-spinner">
       <p>{{ 'COMMON.LOADING' | translate }}</p>
@@ -26,7 +26,7 @@
           class="filter-input"
         />
       </div>
-      
+
       <ngx-datatable
         class="material"
         [rows]="rows()"
@@ -46,29 +46,29 @@
             {{ value }}
           </ng-template>
         </ngx-datatable-column>
-        
+
         <!-- Name Column Template -->
         <ngx-datatable-column name="Name" prop="name">
           <ng-template let-row="row" ngx-datatable-cell-template>
             <a [routerLink]="['/event', row.originalId]">{{ row.name }}</a>
           </ng-template>
         </ngx-datatable-column>
-        
+
         <!-- Organizer Column Template -->
         <ngx-datatable-column name="Veranstalter" prop="organizer">
           <ng-template let-value="value" ngx-datatable-cell-template>
             {{ value }}
           </ng-template>
         </ngx-datatable-column>
-        
+
         <!-- Actions Column Template -->
         <ngx-datatable-column name="Aktionen" [sortable]="false" [width]="200">
           <ng-template let-row="row" ngx-datatable-cell-template>
             <div class="actions-cell">
-              <button class="btn-edit" (click)="editEvent(String(row.originalId))">
+              <button class="btn-edit" (click)="editEvent(row.originalId)">
                 {{ 'ADMIN.EVENTS.EDIT' | translate }}
               </button>
-              <button class="btn-delete" (click)="deleteEvent(String(row.originalId))">
+              <button class="btn-delete" (click)="deleteEvent(row.originalId)">
                 {{ 'ADMIN.EVENTS.DELETE' | translate }}
               </button>
             </div>
