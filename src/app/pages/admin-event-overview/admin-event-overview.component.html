@@ -58,14 +58,14 @@
         (sort)="onSort($event)"
       >
         <!-- Date Column Template -->
-        <ngx-datatable-column name="Datum" prop="date_start" [width]="120">
+        <ngx-datatable-column name="Datum" prop="date_start" [width]="100">
           <ng-template let-value="value" ngx-datatable-cell-template>
             <span class="text-sm text-gray-700">{{ value }}</span>
           </ng-template>
         </ngx-datatable-column>
 
         <!-- Name Column Template -->
-        <ngx-datatable-column name="Name" prop="name" [flexGrow]="2">
+        <ngx-datatable-column name="Name" prop="name" [flexGrow]="3">
           <ng-template let-row="row" ngx-datatable-cell-template>
             <a 
               href="javascript:void(0)" 

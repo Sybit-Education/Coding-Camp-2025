@@ -57,8 +57,8 @@ export class AdminEventOverviewComponent implements OnInit {
     { prop: 'date_start', dir: SortDirection.asc }, // Standardsortierung nach Datum aufsteigend
   ])
   columns: TableColumn[] = [
-    { prop: 'date_start', name: 'Datum', sortable: true, width: 120 },
-    { prop: 'name', name: 'Name', sortable: true, flexGrow: 2 },
+    { prop: 'date_start', name: 'Datum', sortable: true, width: 100 },
+    { prop: 'name', name: 'Name', sortable: true, flexGrow: 3 },
     { prop: 'organizer', name: 'Veranstalter', sortable: true, flexGrow: 1 },
   ]
 
