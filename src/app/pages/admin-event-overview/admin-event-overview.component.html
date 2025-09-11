@@ -16,8 +16,8 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
       </div>
-      <a 
-        [routerLink]="['/admin/create']" 
+      <a
+        [routerLink]="['/admin/create']"
         class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
       >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -36,8 +36,8 @@
   } @else if (events().length === 0) {
     <div class="text-center py-8 bg-white rounded-lg shadow">
       <p class="text-gray-500 mb-4">{{ 'ADMIN.EVENTS.NO_EVENTS' | translate }}</p>
-      <a 
-        [routerLink]="['/admin/create']" 
+      <a
+        [routerLink]="['/admin/create']"
         class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
       >
         {{ 'ADMIN.EVENTS.CREATE_NEW' | translate }}
@@ -58,7 +58,7 @@
         (sort)="onSort($event)"
       >
         <!-- Date Column Template -->
-        <ngx-datatable-column name="Datum" prop="date_start" [width]="100">
+        <ngx-datatable-column name="Datum" prop="date_start" [width]="10">
           <ng-template let-value="value" ngx-datatable-cell-template>
             <span class="text-sm text-gray-700">{{ value }}</span>
           </ng-template>
@@ -67,10 +67,10 @@
         <!-- Name Column Template -->
         <ngx-datatable-column name="Name" prop="name" [flexGrow]="3">
           <ng-template let-row="row" ngx-datatable-cell-template>
-            <a 
-              href="javascript:void(0)" 
+            <a
+              href="javascript:void(0)"
               (click)="editEvent(row.originalId)"
-              class="font-medium text-blue-600 hover:text-blue-800 hover:underline"
+              class="text-blue-600 hover:text-blue-800 hover:underline"
             >
               {{ row.name }}
             </a>
@@ -85,11 +85,11 @@
         </ngx-datatable-column>
 
         <!-- Actions Column Template -->
-        <ngx-datatable-column name="Aktionen" [sortable]="false" [width]="120">
+        <ngx-datatable-column name="Aktionen" [sortable]="false" [width]="10">
           <ng-template let-row="row" ngx-datatable-cell-template>
             <div class="flex space-x-2">
-              <button 
-                (click)="editEvent(row.originalId)" 
+              <button
+                (click)="editEvent(row.originalId)"
                 class="p-1 text-blue-600 hover:text-blue-800 focus:outline-none"
                 title="{{ 'ADMIN.EVENTS.EDIT' | translate }}"
               >
@@ -97,8 +97,8 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
               </button>
-              <button 
-                (click)="deleteEvent(row.originalId)" 
+              <button
+                (click)="deleteEvent(row.originalId)"
                 class="p-1 text-red-600 hover:text-red-800 focus:outline-none"
                 title="{{ 'ADMIN.EVENTS.DELETE' | translate }}"
               >
@@ -119,35 +119,35 @@
   .tailwind-table {
     @apply border-0 shadow-none;
   }
-  
+
   .tailwind-table .datatable-header {
     @apply bg-gray-50 border-b border-gray-200;
   }
-  
+
   .tailwind-table .datatable-header-cell {
     @apply text-sm font-semibold text-gray-700 px-4 py-3;
   }
-  
+
   .tailwind-table .datatable-body-row {
     @apply border-b border-gray-100 hover:bg-gray-50 transition-colors;
   }
-  
+
   .tailwind-table .datatable-body-cell {
     @apply px-4 py-3;
   }
-  
+
   .tailwind-table .datatable-footer {
     @apply bg-white border-t border-gray-200;
   }
-  
+
   .tailwind-table .datatable-pager {
     @apply text-sm text-gray-600;
   }
-  
+
   .tailwind-table .datatable-pager li.active a {
     @apply bg-blue-600 text-white;
   }
-  
+
   .tailwind-table .datatable-pager a {
     @apply rounded-md hover:bg-gray-100;
   }
