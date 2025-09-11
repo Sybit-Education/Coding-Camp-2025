@@ -1,4 +1,11 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostListener,
+  inject,
+  Input,
+  OnInit,
+} from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { I18nService } from '../../services/translate.service'
@@ -48,6 +55,7 @@ interface LogoSet {
   imports: [CommonModule, RouterModule, LanguageSwitcherComponent],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit {
   /**
@@ -104,7 +112,9 @@ export class HeaderComponent implements OnInit {
    */
   currentSrc = ''
 
-  constructor(private readonly i18nService: I18nService) {
+  private readonly i18nService: I18nService = inject(I18nService)
+
+  constructor() {
     this.currentLang = this.i18nService.getCurrentLang()
   }
 

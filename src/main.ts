@@ -6,7 +6,9 @@ import {
   inject,
   isDevMode,
   LOCALE_ID,
-  enableProdMode
+  enableProdMode,
+  provideZonelessChangeDetection,
+  ApplicationConfig,
 } from '@angular/core'
 import { provideServiceWorker } from '@angular/service-worker'
 import { appConfig } from './app/app.config'
@@ -23,7 +25,7 @@ import { environment } from './environments/environment'
 
 // Aktiviere Produktionsmodus, wenn nicht in Entwicklung
 if (environment.production) {
-  enableProdMode();
+  enableProdMode()
 }
 
 // Registriere alle unterstützten Locales für Datums- und Zahlenformatierung
@@ -31,8 +33,14 @@ registerLocaleData(localeDe)
 registerLocaleData(localeEn)
 registerLocaleData(localeFr)
 
-bootstrapApplication(AppComponent, {
+// Erweitere die App-Konfiguration mit zusätzlichen Providern
+const bootstrapConfig: ApplicationConfig = {
   providers: [
+    // Aktiviere zoneless Change Detection als ersten Provider
+    // Wichtig: Dies muss vor allen anderen Providern stehen
+    provideZonelessChangeDetection(),
+    // Füge die restlichen Provider hinzu
+    ...appConfig.providers,
     // Das LOCALE_ID wird für Angular-interne Formatierungen verwendet
     // Die Standardsprache ist Deutsch, kann aber durch die Sprachumschaltung geändert werden
     {
@@ -49,7 +57,6 @@ bootstrapApplication(AppComponent, {
         }
       },
     },
-    ...appConfig.providers,
     provideAppInitializer(() => {
       const surrealdb = inject(SurrealdbService)
       // Lazy-load services nur wenn nötig
@@ -67,4 +74,8 @@ bootstrapApplication(AppComponent, {
       registrationStrategy: 'registerWhenStable:30000',
     }),
   ],
-})
+}
+
+bootstrapApplication(AppComponent, bootstrapConfig).catch((err) =>
+  console.error('Error bootstrapping app:', err),
+)

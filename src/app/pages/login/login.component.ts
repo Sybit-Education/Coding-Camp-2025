@@ -19,8 +19,7 @@ export class LoginPageComponent {
   unauthorizedErrorCode = 401
 
   private readonly surrealdbService = inject(SurrealdbService)
-
-  constructor(private readonly loginService: LoginService) {}
+  private readonly loginService = inject(LoginService)
 
   async NgOnInit() {
     if (await this.loginService.isLoggedIn()) {

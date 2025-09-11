@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { RecordId } from 'surrealdb'
 
@@ -7,6 +7,7 @@ import { RecordId } from 'surrealdb'
   selector: 'app-kategorie-card',
   imports: [CommonModule, RouterModule],
   templateUrl: './kategorie-card.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KategorieCardComponent {
   @Input() text!: string

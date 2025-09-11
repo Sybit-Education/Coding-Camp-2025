@@ -4,19 +4,19 @@
 @layer base {
   /* Heading styles */
   h1 {
-    @apply text-3xl text-left font-bold text-[#3b4ea3] mt-10 mb-4;
+    @apply mt-10 mb-4 text-left text-3xl font-bold text-[#3b4ea3];
   }
 
   h2 {
-    @apply text-2xl text-left font-bold text-[#3b4ea3] mt-8 mb-4;
+    @apply mt-8 mb-4 text-left text-2xl font-bold text-[#3b4ea3];
   }
 
   h3 {
-    @apply text-xl text-left font-bold text-[#3b4ea3] mt-4 mb-2;
+    @apply mt-4 mb-2 text-left text-xl font-bold text-[#3b4ea3];
   }
 
   h4 {
-    @apply text-lg text-left font-bold text-[#3b4ea3] mt-4 mb-2;
+    @apply mt-4 mb-2 text-left text-lg font-bold text-[#3b4ea3];
   }
 
   /* Paragraph styles */
@@ -31,11 +31,11 @@
 
   /* List styles */
   ul {
-    @apply list-disc pl-5 mb-4;
+    @apply mb-4 list-disc pl-5;
   }
 
   ol {
-    @apply list-decimal pl-5 mb-4;
+    @apply mb-4 list-decimal pl-5;
   }
 
   li {
@@ -43,8 +43,10 @@
   }
 
   /* Form element styles */
-  input, select, textarea {
-    @apply px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#6d7cbc] focus:border-transparent rounded-lg;
+  input,
+  select,
+  textarea {
+    @apply rounded rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-[#6d7cbc] focus:outline-none;
   }
 }
 
