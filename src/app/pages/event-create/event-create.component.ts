@@ -311,8 +311,6 @@ export class EventCreateComponent implements OnInit {
     if (!this.selectedLocation) await this.saveLocation()
     if (!this.selectedOrganizer) await this.saveOrganizer()
 
-    console.log(this.description)
-
     if (
       !this.selectedLocation ||
       !this.selectedOrganizer ||
