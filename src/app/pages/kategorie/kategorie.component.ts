@@ -57,7 +57,7 @@ export class KategorieComponent implements OnInit {
       this.events = await Promise.all(
         rawEvents.map(async (event) => {
           const location = await this.locationService.getLocationByID(
-            event.location,
+            event.location!,
           )
           return {
             ...event,

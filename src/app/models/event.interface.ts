@@ -25,9 +25,9 @@ export interface Event extends Record<string, unknown> {
   age?: number
   restriction?: string
   draft: boolean
-  organizer: RecordId<'organizer'>
+  organizer?: RecordId<'organizer'>
   event_type?: RecordId<'event_type'>
-  location: RecordId<'location'>
+  location?: RecordId<'location'>
   topic?: RecordId<'topic'>[]
   media: RecordId<'media'>[]
 }

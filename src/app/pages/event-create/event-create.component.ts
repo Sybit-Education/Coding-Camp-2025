@@ -135,13 +135,13 @@ export class EventCreateComponent implements OnInit {
       }
 
       // Organizer
-      const organizerId = String(event.organizer.id)
+      const organizerId = String(event.organizer?.id)
       this.selectedOrganizer =
         this.organizers.find((o) => String(o.id?.id) === organizerId) || null
       this.setOrganizer(this.selectedOrganizer)
 
       // Location
-      const locationId = String(event.location.id)
+      const locationId = String(event.location!.id)
       this.selectedLocation =
         this.locations.find((l) => String(l.id?.id) === locationId) || null
       this.setLocation(this.selectedLocation)
@@ -289,6 +289,9 @@ export class EventCreateComponent implements OnInit {
   }
 
   async saveOrganizer() {
+    if (!this.organizername && !this.organizermail && !this.organizerphone) {
+      return
+    }
     const organizer: Organizer = {
       name: this.organizername!,
       email: this.organizermail!,
@@ -308,9 +311,9 @@ export class EventCreateComponent implements OnInit {
     if (!this.selectedOrganizer) await this.saveOrganizer()
 
     if (
-      !this.selectedLocation ||
-      !this.selectedOrganizer ||
-      !this.selectedEventType
+      this.eventName === '' ||
+      this.dateStart === '' ||
+      this.timeStart === ''
     ) {
       // FIXME: UI info needed
       console.error('Bitte Location, Organizer und EventType auswählen!')
@@ -334,9 +337,9 @@ export class EventCreateComponent implements OnInit {
       more_info_link: this.moreInfoLink || undefined,
       price: priceDec,
       draft: this.draft,
-      organizer: this.selectedOrganizer.id!,
-      event_type: this.selectedEventType.id,
-      location: this.selectedLocation.id!,
+      organizer: this.selectedOrganizer?.id ?? undefined,
+      event_type: this.selectedEventType?.id ?? undefined,
+      location: this.selectedLocation?.id ?? undefined,
       topic: this.selectedTopics.map((t) => t.id!),
       media: mediaIds,
       age: this.age ?? undefined,
