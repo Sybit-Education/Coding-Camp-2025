@@ -150,7 +150,9 @@ export class AdminEventOverviewComponent implements OnInit {
 
     // Sortiere die Daten
     const data = [...this.temp()];
-    this.rows.set(this.sortData(data, event.sorts));
+    // Cast event.sorts to the expected type
+    const typedSorts = event.sorts as { prop: string; dir: SortDirection }[];
+    this.rows.set(this.sortData(data, typedSorts));
   }
 
   // Sortiere Daten basierend auf Sortierkriterien
