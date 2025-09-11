@@ -36,9 +36,9 @@ export class AdminEventOverviewComponent implements OnInit {
   organizersMap = signal<Map<string, Organizer>>(new Map());
 
   // Table settings
-  rows = signal<any[]>([]);
-  temp = signal<any[]>([]);
-  currentSorts = signal<any[]>([
+  rows = signal<Record<string, unknown>[]>([]);
+  temp = signal<Record<string, unknown>[]>([]);
+  currentSorts = signal<{prop: string; dir: string}[]>([
     { prop: 'date_start', dir: 'asc' } // Standardsortierung nach Datum aufsteigend
   ]);
   columns = [
@@ -146,7 +146,7 @@ export class AdminEventOverviewComponent implements OnInit {
   }
 
   // Sort handler
-  onSort(event: any): void {
+  onSort(event: {sorts: {prop: string; dir: string}[]}): void {
     // Aktualisiere den aktuellen Sortierzustand
     this.currentSorts.set(event.sorts);
 
@@ -156,7 +156,7 @@ export class AdminEventOverviewComponent implements OnInit {
   }
 
   // Sortiere Daten basierend auf Sortierkriterien
-  private sortData(data: any[], sorts: any[]): any[] {
+  private sortData(data: Record<string, unknown>[], sorts: {prop: string; dir: string}[]): Record<string, unknown>[] {
     if (sorts.length === 0) return data;
 
     const sort = sorts[0]; // Wir verwenden nur die erste Sortierung
