@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core'
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router'
 
 import { HeaderComponent } from './component/header/header.component'
@@ -9,12 +14,7 @@ import { UpdateService } from './pwa/update.service'
 
 @Component({
   selector: 'app-root',
-  imports: [
-    RouterOutlet,
-    HeaderComponent,
-    FooterComponent,
-    BottomNavComponent
-],
+  imports: [RouterOutlet, HeaderComponent, FooterComponent, BottomNavComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,13 +24,13 @@ export class AppComponent implements OnInit {
   isCarouselPage = false
   updateAvailable = false
 
-  private readonly updateService = inject(UpdateService);
-  private readonly router = inject(Router);
+  private readonly updateService = inject(UpdateService)
+  private readonly router = inject(Router)
 
   constructor() {
-    this.updateService.updateAvailable$.subscribe(available => {
-      this.updateAvailable = available;
-    });
+    this.updateService.updateAvailable$.subscribe((available) => {
+      this.updateAvailable = available
+    })
   }
 
   ngOnInit() {
@@ -41,10 +41,10 @@ export class AppComponent implements OnInit {
       })
 
     // Prüfe auf Updates beim Start
-    this.updateService.checkForUpdate();
+    this.updateService.checkForUpdate()
   }
 
   updateApp(): void {
-    this.updateService.activateUpdate();
+    this.updateService.activateUpdate()
   }
 }

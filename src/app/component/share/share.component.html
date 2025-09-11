@@ -4,10 +4,10 @@
       type="button"
       (click)="sharePage()"
       class="group rounded-full bg-blue-200 p-3 transition hover:bg-blue-300 focus:ring-2 focus:ring-blue-400 focus:outline-none active:ring-blue-600"
-      >
+    >
       <div
         class="relative flex h-[26px] w-[26px] items-center justify-center rounded-full"
-        >
+      >
         <p>{{ '📤' }}</p>
       </div>
     </button>
@@ -21,7 +21,8 @@
   <!-- Benachrichtigung für Benutzer, wenn Link kopiert wurde -->
   @if (showCopyMessage) {
     <div
-      class="fixed top-2/3 left-1/2 transform -translate-x-1/2 bg-green-600 text-white text-sm p-4 rounded-lg shadow-lg z-50 animate-fade-in-out">
+      class="animate-fade-in-out fixed top-2/3 left-1/2 z-50 -translate-x-1/2 transform rounded-lg bg-green-600 p-4 text-sm text-white shadow-lg"
+    >
       ✅ {{ 'share.copy-notification' | translate }}
     </div>
   }

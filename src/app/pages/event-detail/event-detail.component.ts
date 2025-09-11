@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { Subscription } from 'rxjs'
 import { MapComponent } from '../../component/map/map.component'
@@ -70,9 +76,9 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
 
     // Subscription für Login-Status
     this.subscriptions.add(
-      this.loginservice.isLoggedIn$.subscribe(isLoggedIn => {
+      this.loginservice.isLoggedIn$.subscribe((isLoggedIn) => {
         this.isLoggedIn = isLoggedIn
-      })
+      }),
     )
   }
 
@@ -90,7 +96,9 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     console.error(`Fehler: ${message}`)
   }
 
-  async loadType(typeId: RecordId<'event_type'> | undefined): Promise<TypeDB | null> {
+  async loadType(
+    typeId: RecordId<'event_type'> | undefined,
+  ): Promise<TypeDB | null> {
     if (typeId) {
       try {
         const type = await this.eventService.getEventTypeByID(typeId)
@@ -110,7 +118,9 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  async loadLocation(locationId: RecordId<'location'>): Promise<Location | null> {
+  async loadLocation(
+    locationId: RecordId<'location'>,
+  ): Promise<Location | null> {
     try {
       const foundLocation =
         await this.locationService.getLocationByID(locationId)
@@ -127,7 +137,9 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  async loadOrganizer(organizerId: RecordId<'organizer'>): Promise<Organizer | null> {
+  async loadOrganizer(
+    organizerId: RecordId<'organizer'>,
+  ): Promise<Organizer | null> {
     try {
       const foundOrganizer =
         await this.organizerService.getOrganizerByID(organizerId)
@@ -146,13 +158,12 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
 
   private async loadEvent(eventId: RecordId<'event'> | StringRecordId) {
     try {
-
       const foundEvent = await this.eventService.getEventByID(eventId)
 
       if (!foundEvent) {
         this.error = 'Event nicht gefunden'
         this.announceError('Event nicht gefunden')
-        return;
+        return
       }
 
       // Setze Basis-Daten
@@ -160,13 +171,13 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       this.evntIdString = this.event?.id ? this.event.id.toString() : undefined
 
       // Starte alle Ladeprozesse parallel
-      const promises: Promise<any>[] = [];
+      const promises: Promise<unknown>[] = []
 
       // Media-URL laden
-      let mediaUrlPromise: Promise<string | null> = Promise.resolve(null);
+      let mediaUrlPromise: Promise<string | null> = Promise.resolve(null)
       if (foundEvent.media?.length > 0) {
-        mediaUrlPromise = this.mediaService.getMediaUrl(foundEvent.media[0]);
-        promises.push(mediaUrlPromise);
+        mediaUrlPromise = this.mediaService.getMediaUrl(foundEvent.media[0])
+        promises.push(mediaUrlPromise)
       }
 
       // Extrahiere IDs für parallele Ladung
@@ -175,26 +186,30 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       const typeId = this.event?.['event_type']
 
       // Lade alle abhängigen Daten parallel
-      const locationPromise = locationId ? this.loadLocation(locationId) : Promise.resolve(null);
-      const organizerPromise = organizerId ? this.loadOrganizer(organizerId) : Promise.resolve(null);
-      const typePromise = typeId ? this.loadType(typeId) : Promise.resolve(null);
+      const locationPromise = locationId
+        ? this.loadLocation(locationId)
+        : Promise.resolve(null)
+      const organizerPromise = organizerId
+        ? this.loadOrganizer(organizerId)
+        : Promise.resolve(null)
+      const typePromise = typeId ? this.loadType(typeId) : Promise.resolve(null)
 
-      promises.push(locationPromise, organizerPromise, typePromise);
+      promises.push(locationPromise, organizerPromise, typePromise)
 
       // Warte auf alle Promises
-      await Promise.all(promises);
+      await Promise.all(promises)
 
       // Batch-Update für weniger Change Detection Zyklen
       requestAnimationFrame(() => {
         if (foundEvent.media?.length > 0) {
-          mediaUrlPromise.then(url => {
-            this.mediaUrl = url;
-          });
+          mediaUrlPromise.then((url) => {
+            this.mediaUrl = url
+          })
         }
 
-        locationPromise.then(location => this.location = location);
-        organizerPromise.then(organizer => this.organizer = organizer);
-        typePromise.then(type => this.type = type);
+        locationPromise.then((location) => (this.location = location))
+        organizerPromise.then((organizer) => (this.organizer = organizer))
+        typePromise.then((type) => (this.type = type))
 
         document.title = `${this.event!.name} - 1200 Jahre Radolfzell`
         this.markForCheck()
@@ -213,7 +228,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     this.router.navigate(['/create-event'], {
       queryParams: {
         id: this.event!.id,
-      }
+      },
     })
   }
 }

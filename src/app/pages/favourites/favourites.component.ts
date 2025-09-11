@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+  inject,
+} from '@angular/core'
 
 import { Event } from '../../models/event.interface'
 import { Router } from '@angular/router'
@@ -33,32 +39,33 @@ export class FavouritesComponent implements OnInit, OnDestroy {
   private readonly favoriteService = inject(FavoriteService)
   private readonly router = inject(Router)
   private readonly subscriptions = new Subscription()
-   private readonly markForCheck = injectMarkForCheck();
+  private readonly markForCheck = injectMarkForCheck()
 
   ngOnInit(): void {
     // Abonniere Änderungen an den Favoriten mit distinctUntilChanged für weniger Updates
     this.subscriptions.add(
-      this.favoriteService.favoriteEvents$.pipe(
-        distinctUntilChanged((prev, curr) =>
-          prev.length === curr.length &&
-          prev.every((event, i) => event.id?.id === curr[i].id?.id)
+      this.favoriteService.favoriteEvents$
+        .pipe(
+          distinctUntilChanged(
+            (prev, curr) =>
+              prev.length === curr.length &&
+              prev.every((event, i) => event.id?.id === curr[i].id?.id),
+          ),
         )
-      ).subscribe(
-        (events) => {
+        .subscribe((events) => {
           this.favouriteEvents = events
-        },
-      )
+        }),
     )
 
     // Abonniere den Ladezustand mit distinctUntilChanged
     this.subscriptions.add(
-      this.favoriteService.loading$.pipe(
-        distinctUntilChanged()
-      ).subscribe((loading) => {
-        this.loading = loading
-        // Change Detection auslösen, da wir OnPush verwenden
-        this.markForCheck();
-      }),
+      this.favoriteService.loading$
+        .pipe(distinctUntilChanged())
+        .subscribe((loading) => {
+          this.loading = loading
+          // Change Detection auslösen, da wir OnPush verwenden
+          this.markForCheck()
+        }),
     )
 
     // Lade die Favoriten mit requestAnimationFrame statt setTimeout für bessere Performance

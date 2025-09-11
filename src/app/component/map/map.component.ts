@@ -1,8 +1,15 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnDestroy, NgZone } from '@angular/core'
-
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnDestroy,
+  NgZone,
+  inject,
+} from '@angular/core'
 
 // Lazy-Loading für Leaflet
-import type { Map, Icon, TileLayer, Marker } from 'leaflet'
+import type { Map } from 'leaflet'
 
 @Component({
   selector: 'app-map',
@@ -15,15 +22,15 @@ import type { Map, Icon, TileLayer, Marker } from 'leaflet'
 export class MapComponent implements AfterViewInit, OnDestroy {
   private map?: Map
   private L?: typeof import('leaflet')
-  private leafletLoaded = false;
+  private leafletLoaded = false
 
   @Input() coordinates!: [number, number]
 
-  constructor(private readonly ngZone: NgZone) {}
+  private readonly ngZone: NgZone = inject(NgZone)
 
   ngAfterViewInit(): void {
     // Dynamisches Importieren von Leaflet
-    this.loadLeaflet();
+    this.loadLeaflet()
   }
 
   private loadLeaflet(): void {
@@ -31,13 +38,13 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       // Importiere Leaflet außerhalb der Angular Zone für bessere Performance
       this.ngZone.runOutsideAngular(() => {
         // Verwende dynamischen Import mit Prefetch-Hint
-        const link = document.createElement('link');
-        link.rel = 'prefetch';
-        link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-        document.head.appendChild(link);
-        
+        const link = document.createElement('link')
+        link.rel = 'prefetch'
+        link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
+        document.head.appendChild(link)
+
         import('leaflet')
-          .then(L => {
+          .then((L) => {
             // Wichtig: Wir müssen das default-Objekt verwenden, da Leaflet als CommonJS-Modul importiert wird
             this.L = L.default
             this.leafletLoaded = true
@@ -47,10 +54,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
               this.initializeMap()
             })
           })
-          .catch(error => {
+          .catch((error) => {
             console.error('Fehler beim Laden von Leaflet:', error)
-          });
-      });
+          })
+      })
     } catch (error) {
       console.error('Fehler beim Laden von Leaflet:', error)
     }
@@ -67,7 +74,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   private initializeMap(): void {
-    if (!this.L || !this.leafletLoaded) return;
+    if (!this.L || !this.leafletLoaded) return
 
     try {
       // Karte erstellen mit Startkoordinaten und Zoom-Stufe
@@ -85,7 +92,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         trackResize: false, // Manuelles Resize-Handling wenn nötig
         renderer: new this.L.Canvas(), // Canvas statt SVG für bessere Performance
         attributionControl: false, // Entferne Attribution Control für weniger DOM-Elemente
-      });
+      })
 
       // Optimiere Marker-Icon - Verwende eine statische URL für bessere Caching-Möglichkeiten
       const greenIcon = new this.L.Icon({
@@ -97,12 +104,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         iconAnchor: [12, 41],
         popupAnchor: [1, -34],
         shadowSize: [41, 41],
-      });
+      })
 
       // Marker hinzufügen ohne slice() für weniger Objektkopien
       this.L.marker(this.coordinates as [number, number], {
         icon: greenIcon,
-      }).addTo(this.map);
+      }).addTo(this.map)
 
       // OpenStreetMap-Kachel-Layer hinzufügen mit erweiterten Optimierungen
       this.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -116,9 +123,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         zoomOffset: 0,
         minZoom: 1,
         detectRetina: false, // Deaktiviere Retina-Erkennung für weniger Kachel-Downloads
-      }).addTo(this.map);
+      }).addTo(this.map)
     } catch (error) {
-      console.error('Fehler bei der Initialisierung der Karte:', error);
+      console.error('Fehler bei der Initialisierung der Karte:', error)
     }
   }
 }

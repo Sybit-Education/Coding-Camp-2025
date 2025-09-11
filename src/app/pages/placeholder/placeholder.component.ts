@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { ActivatedRoute } from '@angular/router'
 
@@ -8,7 +13,6 @@ import { ActivatedRoute } from '@angular/router'
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <!--eslint-disable @angular-eslint/template/i18n-->
     <div class="container mx-auto p-4 pb-20">
       <h1>{{ pageTitle }}</h1>
 
@@ -41,7 +45,7 @@ import { ActivatedRoute } from '@angular/router'
 export class PlaceholderComponent implements OnInit {
   pageTitle = 'Seite'
 
-  constructor(private readonly route: ActivatedRoute) {}
+  private readonly route: ActivatedRoute = inject(ActivatedRoute)
 
   ngOnInit() {
     // Bestimme den Seitentitel basierend auf der aktuellen Route

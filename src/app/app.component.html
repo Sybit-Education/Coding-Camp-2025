@@ -4,7 +4,9 @@
 >
   <app-header></app-header>
 
-  <main class="relative container mx-auto max-w-5xl min-h-screen pt-[240px] p-2">
+  <main
+    class="relative container mx-auto min-h-screen max-w-5xl p-2 pt-[240px]"
+  >
     <router-outlet />
   </main>
 
@@ -12,18 +14,20 @@
   <app-bottom-nav></app-bottom-nav>
 
   <!-- Update-Benachrichtigung -->
-   @if (updateAvailable) {
-    <div  class="fixed bottom-20 left-0 right-0 mx-auto w-11/12 max-w-md rounded-lg bg-blue-100 p-4 shadow-lg">
+  @if (updateAvailable) {
+    <div
+      class="fixed right-0 bottom-20 left-0 mx-auto w-11/12 max-w-md rounded-lg bg-blue-100 p-4 shadow-lg"
+    >
       <div class="flex items-center justify-between">
         <p class="text-sm text-blue-800">Eine neue Version ist verfügbar</p>
         <button
           (click)="updateApp()"
           class="rounded bg-blue-600 px-4 py-2 text-xs font-bold text-white hover:bg-blue-700"
-          aria-label="App aktualisieren">
+          aria-label="App aktualisieren"
+        >
           Aktualisieren
         </button>
       </div>
     </div>
-
   }
 </div>

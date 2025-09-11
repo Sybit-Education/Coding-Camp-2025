@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 import { EventCardComponent } from '../../component/event-card/event-card.component'
@@ -31,10 +36,10 @@ export class KategorieComponent implements OnInit {
   topics: Topic[] = []
   id: RecordIdValue | null = null
   name: string | null = null
-  loading = true;
+  loading = true
 
-  private readonly route = inject(ActivatedRoute);
-  private readonly markForCheck = injectMarkForCheck();
+  private readonly route = inject(ActivatedRoute)
+  private readonly markForCheck = injectMarkForCheck()
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
@@ -42,7 +47,7 @@ export class KategorieComponent implements OnInit {
       this.name = params['name'] || null
 
       // Daten neu laden, wenn sich die Parameter ändern
-      this.initilizeData().then(() => this.markForCheck());
+      this.initilizeData().then(() => this.markForCheck())
     })
   }
   private readonly eventService: EventService = inject(EventService)
@@ -50,58 +55,57 @@ export class KategorieComponent implements OnInit {
   private readonly topicService: TopicService = inject(TopicService)
 
   // Cache für Locations, um wiederholte Anfragen zu vermeiden
-  private readonly locationCache = new Map<string, Promise<AppLocation>>();
+  private readonly locationCache = new Map<string, Promise<AppLocation>>()
 
   async initilizeData() {
-    this.loading = true;
+    this.loading = true
     try {
       // Stelle sicher, dass die Datenbankverbindung initialisiert ist
-      await this.topicService.initializeDatabase();
+      await this.topicService.initializeDatabase()
 
       // Lade Topics und Events parallel
       const [topics, allEvents] = await Promise.all([
         this.topicService.getAllTopics(),
-        this.eventService.getAllEvents()
-      ]);
+        this.eventService.getAllEvents(),
+      ])
 
-      this.topics = topics;
+      this.topics = topics
 
       // Filtere Events basierend auf der ID
       const rawEvents = !this.id
         ? allEvents
         : allEvents.filter((event) =>
-            event.topic?.some((topic) => topic.id === this.id)
-          );
+            event.topic?.some((topic) => topic.id === this.id),
+          )
 
       // Optimiere Location-Ladung durch Caching
       this.events = await Promise.all(
         rawEvents.map(async (event) => {
-
           // Verwende Cache für Locations
-          const locationId = String(event.location);
+          const locationId = String(event.location)
           if (!this.locationCache.has(locationId)) {
             this.locationCache.set(
               locationId,
-              this.locationService.getLocationByID(event.location)
-            );
+              this.locationService.getLocationByID(event.location),
+            )
           }
 
-          const locationData = await this.locationCache.get(locationId);
+          const locationData = await this.locationCache.get(locationId)
 
           return {
             ...event,
             locationName: locationData?.name ?? 'Unbekannter Ort',
-          };
+          }
         }),
-      );
+      )
 
-      console.log('Kategorie-Events geladen:', this.events.length);
+      console.log('Kategorie-Events geladen:', this.events.length)
     } catch (error) {
-      console.error('Fehler beim Laden der Events:', error);
+      console.error('Fehler beim Laden der Events:', error)
     } finally {
-      this.loading = false;
+      this.loading = false
       // Change Detection auslösen, da wir OnPush verwenden
-      this.markForCheck();
+      this.markForCheck()
     }
   }
 }

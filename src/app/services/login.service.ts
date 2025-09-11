@@ -12,32 +12,34 @@ import { toSignal } from '@angular/core/rxjs-interop'
 })
 export class LoginService implements CanActivate {
   // Dependency Injection mit inject()
-  private readonly router = inject(Router);
-  private readonly cookieService = inject(CookieService);
-  private readonly surrealDBService = inject(SurrealdbService);
+  private readonly router = inject(Router)
+  private readonly cookieService = inject(CookieService)
+  private readonly surrealDBService = inject(SurrealdbService)
 
   // Signal für reaktiven State
-  readonly isLoggedInState = signal<boolean>(false);
+  readonly isLoggedInState = signal<boolean>(false)
 
   // BehaviorSubject für Abwärtskompatibilität
-  private readonly isLoggedInSubject = new BehaviorSubject<boolean>(false);
-  isLoggedIn$ = this.isLoggedInSubject.asObservable();
-  
-  // Signal aus Observable für Komponenten
-  readonly isLoggedInSignal = toSignal(this.isLoggedIn$, { initialValue: false });
+  private readonly isLoggedInSubject = new BehaviorSubject<boolean>(false)
+  isLoggedIn$ = this.isLoggedInSubject.asObservable()
 
-  private redirect!: unknown[];
-  private readonly decoder = new JwtHelperService();
+  // Signal aus Observable für Komponenten
+  readonly isLoggedInSignal = toSignal(this.isLoggedIn$, {
+    initialValue: false,
+  })
+
+  private redirect!: unknown[]
+  private readonly decoder = new JwtHelperService()
 
   constructor() {
     // Prüfe beim Start, ob der Benutzer eingeloggt ist
-    this.checkInitialLoginState();
+    this.checkInitialLoginState()
   }
 
   private async checkInitialLoginState(): Promise<void> {
-    const loggedIn = await this.checkLoginStatus();
-    this.isLoggedInState.set(loggedIn);
-    this.isLoggedInSubject.next(loggedIn);
+    const loggedIn = await this.checkLoginStatus()
+    this.isLoggedInState.set(loggedIn)
+    this.isLoggedInSubject.next(loggedIn)
   }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
@@ -76,11 +78,11 @@ export class LoginService implements CanActivate {
 
   async setToken(token: string) {
     this.cookieService.set('token', token)
-    const loggedIn = await this.checkLoginStatus();
+    const loggedIn = await this.checkLoginStatus()
 
     // Beide State-Mechanismen aktualisieren
-    this.isLoggedInState.set(loggedIn);
-    this.isLoggedInSubject.next(loggedIn);
+    this.isLoggedInState.set(loggedIn)
+    this.isLoggedInSubject.next(loggedIn)
   }
 
   async login(loginParams: Login): Promise<boolean> {
@@ -98,7 +100,7 @@ export class LoginService implements CanActivate {
 
   // Methode für Abwärtskompatibilität
   async isLoggedIn(): Promise<boolean> {
-    return this.checkLoginStatus();
+    return this.checkLoginStatus()
   }
 
   async checkLoginStatus(): Promise<boolean> {

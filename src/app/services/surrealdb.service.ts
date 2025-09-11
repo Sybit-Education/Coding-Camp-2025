@@ -6,8 +6,8 @@ import { environment } from '../../environments/environment.production'
   providedIn: 'root',
 })
 export class SurrealdbService extends Surreal {
-  private connectionInitialized = false;
-  private connectionPromise: Promise<void> | null = null;
+  private connectionInitialized = false
+  private connectionPromise: Promise<void> | null = null
 
   constructor() {
     super()
@@ -16,32 +16,35 @@ export class SurrealdbService extends Surreal {
   async initialize() {
     // Wenn bereits eine Initialisierung läuft, warte auf deren Abschluss
     if (this.connectionPromise) {
-      return this.connectionPromise;
+      return this.connectionPromise
     }
-    
+
     // Wenn die Verbindung bereits initialisiert ist, nichts tun
     if (this.connectionInitialized) {
-      return;
+      return
     }
-    
+
     // Initialisiere die Verbindung und speichere das Promise
-    this.connectionPromise = this.initializeConnection();
-    return this.connectionPromise;
+    this.connectionPromise = this.initializeConnection()
+    return this.connectionPromise
   }
-  
+
   private async initializeConnection(): Promise<void> {
     try {
       await this.connect(environment.surrealDbAddress, {
         namespace: environment.surrealDbNamespace,
         database: environment.surrealDbDatabase,
-      });
-      await this.ready;
-      this.connectionInitialized = true;
-      console.log('SurrealDB-Verbindung initialisiert');
+      })
+      await this.ready
+      this.connectionInitialized = true
+      console.log('SurrealDB-Verbindung initialisiert')
     } catch (error) {
-      console.error('Fehler bei der Initialisierung der SurrealDB-Verbindung:', error);
-      this.connectionPromise = null;
-      throw error;
+      console.error(
+        'Fehler bei der Initialisierung der SurrealDB-Verbindung:',
+        error,
+      )
+      this.connectionPromise = null
+      throw error
     }
   }
 
@@ -66,7 +69,7 @@ export class SurrealdbService extends Surreal {
     recordId: RecordId<string> | StringRecordId,
   ): Promise<T> {
     // Stelle sicher, dass die Verbindung initialisiert ist
-    await this.initialize();
+    await this.initialize()
     const result = await super.select<T>(recordId)
     return result as T
   }
@@ -74,7 +77,7 @@ export class SurrealdbService extends Surreal {
   // 2) Alle Einträge einer Tabelle holen
   async getAll<T extends Record<string, unknown>>(table: string): Promise<T[]> {
     // Stelle sicher, dass die Verbindung initialisiert ist
-    await this.initialize();
+    await this.initialize()
     return await super.select<T>(table)
   }
 
@@ -84,7 +87,7 @@ export class SurrealdbService extends Surreal {
     payload?: T | T[],
   ): Promise<T[]> {
     // Stelle sicher, dass die Verbindung initialisiert ist
-    await this.initialize();
+    await this.initialize()
     return await super.insert<T>(table, payload)
   }
 
@@ -94,7 +97,7 @@ export class SurrealdbService extends Surreal {
   ): Promise<T> {
     try {
       // Stelle sicher, dass die Verbindung initialisiert ist
-      await this.initialize();
+      await this.initialize()
       const updatedRecord = await super.update<T>(id, payload)
 
       return updatedRecord

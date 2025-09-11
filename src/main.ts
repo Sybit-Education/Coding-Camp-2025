@@ -8,7 +8,7 @@ import {
   LOCALE_ID,
   enableProdMode,
   provideZonelessChangeDetection,
-  ApplicationConfig
+  ApplicationConfig,
 } from '@angular/core'
 import { provideServiceWorker } from '@angular/service-worker'
 import { appConfig } from './app/app.config'
@@ -25,7 +25,7 @@ import { environment } from './environments/environment'
 
 // Aktiviere Produktionsmodus, wenn nicht in Entwicklung
 if (environment.production) {
-  enableProdMode();
+  enableProdMode()
 }
 
 // Registriere alle unterstützten Locales für Datums- und Zahlenformatierung
@@ -74,7 +74,8 @@ const bootstrapConfig: ApplicationConfig = {
       registrationStrategy: 'registerWhenStable:30000',
     }),
   ],
-};
+}
 
-bootstrapApplication(AppComponent, bootstrapConfig)
-  .catch(err => console.error('Error bootstrapping app:', err));
+bootstrapApplication(AppComponent, bootstrapConfig).catch((err) =>
+  console.error('Error bootstrapping app:', err),
+)

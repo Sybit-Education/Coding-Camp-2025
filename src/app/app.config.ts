@@ -1,9 +1,16 @@
+import { ApplicationConfig, importProvidersFrom } from '@angular/core'
 import {
-  ApplicationConfig,
-  importProvidersFrom,
-} from '@angular/core'
-import { provideRouter, withComponentInputBinding, withPreloading, PreloadAllModules, withViewTransitions } from '@angular/router'
-import { provideHttpClient, HttpClient, withInterceptorsFromDi } from '@angular/common/http'
+  provideRouter,
+  withComponentInputBinding,
+  withPreloading,
+  PreloadAllModules,
+  withViewTransitions,
+} from '@angular/router'
+import {
+  provideHttpClient,
+  HttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http'
 import {
   TranslateLoader,
   TranslateModule,
@@ -38,7 +45,7 @@ export const appConfig: ApplicationConfig = {
       routes,
       withComponentInputBinding(),
       withViewTransitions(),
-      withPreloading(PreloadAllModules)
+      withPreloading(PreloadAllModules),
     ),
     provideHttpClient(withInterceptorsFromDi()),
     provideAnimations(),

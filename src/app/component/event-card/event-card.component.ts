@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, OnDestroy, inject } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  inject,
+} from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { Subscription } from 'rxjs'
@@ -53,8 +60,8 @@ export class EventCardComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.localStorageService.savedEvents$.subscribe(() => {
         this.isSaved = this.localStorageService.isEventSaved(eventId)
-        this.markForCheck();
-      })
+        this.markForCheck()
+      }),
     )
   }
 
@@ -76,14 +83,19 @@ export class EventCardComponent implements OnInit, OnDestroy {
         this.mediaUrl = mediaUrl
 
         // Change Detection auslösen, da wir OnPush verwenden
-        this.markForCheck();
+        this.markForCheck()
 
-        console.log('Event-Card geladen:', this.event?.name, 'Media URL:', this.mediaUrl);
+        console.log(
+          'Event-Card geladen:',
+          this.event?.name,
+          'Media URL:',
+          this.mediaUrl,
+        )
       }, 0)
     } catch (error) {
       console.error('Fehler beim Laden der Event-Details:', error)
       this.mediaUrl = null
-      this.markForCheck(); // Auch bei Fehlern Change Detection auslösen
+      this.markForCheck() // Auch bei Fehlern Change Detection auslösen
     }
   }
 
@@ -103,9 +115,9 @@ export class EventCardComponent implements OnInit, OnDestroy {
 
     try {
       const typeRecord = this.event.event_type
-      const result = await this.surrealDBService.getByRecordId<{ name: string }>(
-        typeRecord,
-      )
+      const result = await this.surrealDBService.getByRecordId<{
+        name: string
+      }>(typeRecord)
       return (result?.name as EventType) || EventType.UNKNOWN
     } catch (error) {
       console.warn('Fehler beim Laden des Event Types:', error)
@@ -115,7 +127,7 @@ export class EventCardComponent implements OnInit, OnDestroy {
 
   private async loadMedia(): Promise<string | null> {
     if (!this.event?.media || this.event.media.length === 0) return null
-    return await this.mediaService.getFirstMediaUrl(this.event.media);
+    return await this.mediaService.getFirstMediaUrl(this.event.media)
   }
 
   ngOnDestroy(): void {

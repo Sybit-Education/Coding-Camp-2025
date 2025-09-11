@@ -8,16 +8,16 @@ import { toSignal } from '@angular/core/rxjs-interop'
 })
 export class I18nService {
   private readonly translateService = inject(TranslateService)
-  
+
   // Signal für reaktiven State
-  readonly currentLangState = signal<string>('de');
-  
+  readonly currentLangState = signal<string>('de')
+
   // BehaviorSubject für Abwärtskompatibilität
   private readonly currentLangSubject = new BehaviorSubject<string>('de')
   currentLang$ = this.currentLangSubject.asObservable()
-  
+
   // Signal aus Observable für Komponenten
-  readonly currentLang = toSignal(this.currentLang$, { initialValue: 'de' });
+  readonly currentLang = toSignal(this.currentLang$, { initialValue: 'de' })
 
   constructor() {
     this.initializeTranslation()
@@ -49,11 +49,11 @@ export class I18nService {
    */
   use(lang: string): void {
     this.translateService.use(lang)
-    
+
     // Beide State-Mechanismen aktualisieren
-    this.currentLangState.set(lang);
+    this.currentLangState.set(lang)
     this.currentLangSubject.next(lang)
-    
+
     localStorage.setItem('selectedLanguage', lang)
 
     // Aktualisiere das LOCALE_ID für Angular-interne Formatierungen

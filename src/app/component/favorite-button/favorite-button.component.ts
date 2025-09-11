@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core'
+import { Component, Input, OnInit, OnDestroy, inject } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { FavoriteService } from '../../services/favorite.service'
 import { TranslateModule } from '@ngx-translate/core'
@@ -16,7 +16,7 @@ export class FavoriteButtonComponent implements OnInit, OnDestroy {
   isFavorite = false
   private subscription?: Subscription
 
-  constructor(private readonly favoriteService: FavoriteService) {}
+  private readonly favoriteService = inject(FavoriteService)
 
   ngOnInit(): void {
     if (this.eventId) {

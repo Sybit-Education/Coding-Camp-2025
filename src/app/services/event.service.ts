@@ -11,23 +11,21 @@ export class EventService {
   private readonly surrealdb: SurrealdbService = inject(SurrealdbService)
 
   // Signals für häufig verwendete Daten
-  readonly allEvents = signal<Event[]>([]);
-  readonly allEventTypes = signal<TypeDB[]>([]);
-
+  readonly allEvents = signal<Event[]>([])
+  readonly allEventTypes = signal<TypeDB[]>([])
 
   async initializeData(): Promise<void> {
     try {
-
       // Lade Daten parallel und aktualisiere Signals
       const [events, types] = await Promise.all([
         this.fetchAllEvents(),
-        this.fetchAllEventTypes()
-      ]);
+        this.fetchAllEventTypes(),
+      ])
 
-      this.allEvents.set(events);
-      this.allEventTypes.set(types);
+      this.allEvents.set(events)
+      this.allEventTypes.set(types)
     } catch (error) {
-      console.error('Fehler beim Initialisieren der Event-Daten:', error);
+      console.error('Fehler beim Initialisieren der Event-Daten:', error)
     }
   }
 
@@ -35,11 +33,11 @@ export class EventService {
     try {
       const result = await this.surrealdb.getAll<Event>('event')
       return (result || []).map(
-        (item: Record<string, unknown>) => ({...item}) as Event
+        (item: Record<string, unknown>) => ({ ...item }) as Event,
       )
     } catch (error) {
-      console.error('Fehler beim Laden der Events:', error);
-      return [];
+      console.error('Fehler beim Laden der Events:', error)
+      return []
     }
   }
 
@@ -47,8 +45,8 @@ export class EventService {
     try {
       return await this.surrealdb.getAll('event_type')
     } catch (error) {
-      console.error('Fehler beim Laden der Event-Typen:', error);
-      return [];
+      console.error('Fehler beim Laden der Event-Typen:', error)
+      return []
     }
   }
 
@@ -59,36 +57,39 @@ export class EventService {
   }
 
   // Timestamp für Cache-Invalidierung
-  private lastEventsFetch = 0;
-  private readonly CACHE_TTL = 60000; // 1 Minute Cache-Gültigkeit
+  private lastEventsFetch = 0
+  private readonly CACHE_TTL = 60000 // 1 Minute Cache-Gültigkeit
 
   async getAllEvents(): Promise<Event[]> {
     // Verwende gecachte Daten, wenn verfügbar und nicht zu alt
-    const cachedEvents = this.allEvents();
-    const now = Date.now();
+    const cachedEvents = this.allEvents()
+    const now = Date.now()
 
-    if (cachedEvents.length > 0 && (now - this.lastEventsFetch) < this.CACHE_TTL) {
-      return cachedEvents;
+    if (
+      cachedEvents.length > 0 &&
+      now - this.lastEventsFetch < this.CACHE_TTL
+    ) {
+      return cachedEvents
     }
 
     // Andernfalls lade Daten und aktualisiere Signal
-    const events = await this.fetchAllEvents();
-    this.allEvents.set(events);
-    this.lastEventsFetch = now;
-    return events;
+    const events = await this.fetchAllEvents()
+    this.allEvents.set(events)
+    this.lastEventsFetch = now
+    return events
   }
 
   async getAllEventTypes(): Promise<TypeDB[]> {
     // Verwende gecachte Daten, wenn verfügbar
-    const cachedTypes = this.allEventTypes();
+    const cachedTypes = this.allEventTypes()
     if (cachedTypes.length > 0) {
-      return cachedTypes;
+      return cachedTypes
     }
 
     // Andernfalls lade Daten und aktualisiere Signal
-    const types = await this.fetchAllEventTypes();
-    this.allEventTypes.set(types);
-    return types;
+    const types = await this.fetchAllEventTypes()
+    this.allEventTypes.set(types)
+    return types
   }
 
   async getEventTypeByID(
