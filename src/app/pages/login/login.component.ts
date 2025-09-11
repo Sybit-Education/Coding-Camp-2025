@@ -20,11 +20,11 @@ export class LoginPageComponent implements OnInit {
   private readonly loginService = inject(LoginService)
 
   ngOnInit(): void {
-    this.loginService.isLoggedIn().then(isLoggedIn => {
+    this.loginService.isLoggedIn().then((isLoggedIn) => {
       if (isLoggedIn) {
-        this.loginService.switchRoute();
+        this.loginService.switchRoute()
       }
-    });
+    })
   }
 
   togglePassword(): void {
