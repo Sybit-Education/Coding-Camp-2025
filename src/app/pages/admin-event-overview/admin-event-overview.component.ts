@@ -34,8 +34,8 @@ export class AdminEventOverviewComponent implements OnInit {
   organizersMap = signal<Map<string, Organizer>>(new Map());
 
   // Table settings
-  rows = signal<Record<string, string>[]>([]);
-  temp = signal<Record<string, Event>[]>([]);
+  rows = signal<any[]>([]);
+  temp = signal<any[]>([]);
   currentSorts = signal<{ prop: string; dir: SortDirection }[]>([
     { prop: 'date_start', dir: SortDirection.asc } // Standardsortierung nach Datum aufsteigend
   ]);
@@ -146,7 +146,7 @@ export class AdminEventOverviewComponent implements OnInit {
   // Sort handler
   onSort(event: SortEvent): void {
     // Aktualisiere den aktuellen Sortierzustand
-    this.currentSorts.set(event.sorts);
+    this.currentSorts.set(event.sorts as { prop: string; dir: SortDirection }[]);
 
     // Sortiere die Daten
     const data = [...this.temp()];
@@ -154,17 +154,17 @@ export class AdminEventOverviewComponent implements OnInit {
   }
 
   // Sortiere Daten basierend auf Sortierkriterien
-  private sortData(data: Record<string, string>[], sorts: { prop: string; dir: SortDirection }[]): Record<string, string>[] {
+  private sortData(data: any[], sorts: { prop: string; dir: SortDirection }[]): any[] {
     if (sorts.length === 0) return data;
 
     const sort = sorts[0]; // Wir verwenden nur die erste Sortierung
     const dir = sort.dir === SortDirection.asc || sort.dir === SortDirection.desc ? 1 : -1;
 
     return [...data].sort((a, b) => {
-      const propA = a[sort.prop];
-      const propB = b[sort.prop];
+      const propA = String(a[sort.prop] || '');
+      const propB = String(b[sort.prop] || '');
 
-      // Alle Werte sind Strings in unserem Fall
+      // Alle Werte werden als Strings behandelt
       return dir * propA.localeCompare(propB, 'de');
     });
   }
@@ -176,9 +176,9 @@ export class AdminEventOverviewComponent implements OnInit {
     // Filter data
     const temp = this.temp().filter(function(d) {
       return (
-        d['name'].toLowerCase().indexOf(val) !== -1 ||
-        d['organizer'].toLowerCase().indexOf(val) !== -1 ||
-        d['date_start'].toLowerCase().indexOf(val) !== -1 ||
+        d['name']?.toString().toLowerCase().indexOf(val) !== -1 ||
+        d['organizer']?.toString().toLowerCase().indexOf(val) !== -1 ||
+        d['date_start']?.toString().toLowerCase().indexOf(val) !== -1 ||
         !val
       );
     });
