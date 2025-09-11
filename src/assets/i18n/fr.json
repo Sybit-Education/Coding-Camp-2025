@@ -106,7 +106,8 @@
     "newlocationnameexample": "Nom de la localité",
     "newlocationaddressexample": "Rue et numéro",
     "ageexample": "p. ex. 18",
-    "description": "Description de l'événement"
+    "description": "Description de l'événement",
+    "hint": "Les champs marqués d'un * sont obligatoires."
   },
   "dev": {
     "text1": "Ce site web a été développé dans le cadre du SYBIT Coding Camp 2025 ",
