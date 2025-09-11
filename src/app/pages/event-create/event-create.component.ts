@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
 import { ActivatedRoute } from '@angular/router'
@@ -19,12 +19,14 @@ import { LocationService } from '../../services/location.service'
 import { OrganizerService } from '../../services/organizer.service'
 import { TopicService } from '../../services/topic.service'
 import { MediaService } from '../../services/media.service'
+import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 
 @Component({
   selector: 'app-event-create',
   standalone: true,
   imports: [FormsModule, TranslateModule, QuillEditorComponent],
   templateUrl: './event-create.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventCreateComponent implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>
@@ -36,6 +38,7 @@ export class EventCreateComponent implements OnInit {
   private readonly topicService = inject(TopicService)
   private readonly mediaService = inject(MediaService)
   private readonly route = inject(ActivatedRoute)
+  private readonly markForCheck = injectMarkForCheck()
 
   // ===== State & Formfelder =====
   event: AppEvent | null = null
@@ -92,9 +95,9 @@ export class EventCreateComponent implements OnInit {
     const eventId = this.route.snapshot.queryParams['id']
     if (eventId) {
       const recordID = new StringRecordId(eventId)
-      this.loadEvent(recordID)
+      this.loadEvent(recordID).then(() => this.markForCheck())
     } else {
-      this.initializeData()
+      this.initializeData().then(() => this.markForCheck())
     }
   }
 
