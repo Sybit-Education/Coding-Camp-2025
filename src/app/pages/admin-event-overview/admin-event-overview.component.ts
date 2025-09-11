@@ -33,7 +33,6 @@ import { RecordId } from 'surrealdb'
     FormsModule,
   ],
   templateUrl: './admin-event-overview.component.html',
-  styleUrl: './admin-event-overview.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
