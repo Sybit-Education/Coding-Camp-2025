@@ -18,7 +18,7 @@
             type="text"
             [(ngModel)]="eventName"
             class="p-[0.75rem 1rem] w-full"
-            required
+            required="true"
           />
         </div>
       </ng-container>
@@ -35,6 +35,7 @@
             class="p-[0.75rem 1rem] block w-full rounded-lg border border-red-500 bg-red-50 p-2.5 text-sm text-red-900 placeholder-red-700 focus:border-red-500 focus:ring-red-500"
             [(ngModel)]="eventName"
             name="eventName"
+            required="true"
           />
           <p class="mt-2 text-sm text-red-600 dark:text-red-500">
             {{'create-event.error.name' | translate}}
@@ -126,6 +127,7 @@
               [(ngModel)]="dateStart"
               name="dateStart"
               class="p-[0.75rem 1rem] w-full"
+              required="true"
             />
           </div>
         </ng-container>
@@ -142,6 +144,7 @@
               class="p-[0.75rem 1rem] block w-full rounded-lg border border-red-500 bg-red-50 p-2.5 text-sm text-red-900 placeholder-red-700 focus:border-red-500 focus:ring-red-500"
               [(ngModel)]="dateStart"
               name="dateStart"
+              required="true"
             />
             <p class="mt-2 text-sm text-red-600 dark:text-red-500">
               {{'create-event.error.date' | translate}}
@@ -159,6 +162,7 @@
               [(ngModel)]="timeStart"
               name="timeStart"
               class="p-[0.75rem 1rem] w-full"
+              required="true"
             />
           </div>
         </ng-container>
@@ -175,6 +179,7 @@
               class="p-[0.75rem 1rem] block w-full rounded-lg border border-red-500 bg-red-50 p-2.5 text-sm text-red-900 placeholder-red-700 focus:border-red-500 focus:ring-red-500"
               [(ngModel)]="timeStart"
               name="timeStart"
+              required="true"
             />
             <p class="mt-2 text-sm text-red-600 dark:text-red-500">
               {{'create-event.error.time' | translate}}
