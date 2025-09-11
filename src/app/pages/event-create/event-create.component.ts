@@ -137,28 +137,28 @@ export class EventCreateComponent implements OnInit {
       }
 
       // Organizer
-      const organizerId = String(event.organizer.id)
+      const organizerId = event.organizer.id
       this.selectedOrganizer =
-        this.organizers.find((o) => String(o.id?.id) === organizerId) || null
+        this.organizers.find((o) => o.id?.id === organizerId) || null
       this.setOrganizer(this.selectedOrganizer)
 
       // Location
-      const locationId = String(event.location.id)
+      const locationId = event.location.id
       this.selectedLocation =
-        this.locations.find((l) => String(l.id?.id) === locationId) || null
+        this.locations.find((l) => l.id?.id === locationId) || null
       this.setLocation(this.selectedLocation)
 
       // Event Type
-      const eventTypeId = String(event.event_type?.id)
+      const eventTypeId = event.event_type?.id
       this.selectedEventType =
-        this.eventTypes.find((e) => String(e.id?.id) === eventTypeId) || null
+        this.eventTypes.find((e) => e.id?.id === eventTypeId) || null
       this.setSelectedEventType(this.selectedEventType)
 
       // Topics
       const topicIds = event.topic || []
       for (const topicId of topicIds) {
         const topic = this.topics.find(
-          (t) => String(t.id?.id) === String(topicId?.id ?? topicId),
+          (t) => t.id?.id === (topicId?.id ?? topicId),
         )
         if (topic) this.selectedTopics.push(topic)
       }
@@ -356,7 +356,7 @@ export class EventCreateComponent implements OnInit {
         const created = await this.eventService.postEvent(payload)
         this.eventId = created[0].id
       }
-      
+
       // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
       this.router.navigate(['/admin']);
     } catch (err) {
