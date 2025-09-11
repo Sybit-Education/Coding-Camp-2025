@@ -5,7 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Event } from '../../models/event.interface';
 import { EventService } from '../../services/event.service';
 import { OrganizerService } from '../../services/organizer.service';
-import { NgxDatatableModule, SortType, TableColumn, SortEvent, SortDirection } from '@swimlane/ngx-datatable';
+import { NgxDatatableModule, TableColumn, SortEvent, SortDirection } from '@swimlane/ngx-datatable';
 import { FormsModule } from '@angular/forms';
 import { Organizer } from '../../models/organizer.interface';
 import { RecordId } from 'surrealdb';
@@ -34,8 +34,8 @@ export class AdminEventOverviewComponent implements OnInit {
   organizersMap = signal<Map<string, Organizer>>(new Map());
 
   // Table settings
-  rows = signal<any[]>([]);
-  temp = signal<any[]>([]);
+  rows = signal<Record<string, unknown>[]>([]);
+  temp = signal<Record<string, unknown>[]>([]);
   currentSorts = signal<{ prop: string; dir: SortDirection }[]>([
     { prop: 'date_start', dir: SortDirection.asc } // Standardsortierung nach Datum aufsteigend
   ]);
@@ -156,7 +156,7 @@ export class AdminEventOverviewComponent implements OnInit {
   }
 
   // Sortiere Daten basierend auf Sortierkriterien
-  private sortData(data: any[], sorts: { prop: string; dir: SortDirection }[]): any[] {
+  private sortData(data: Record<string, unknown>[], sorts: { prop: string; dir: SortDirection }[]): Record<string, unknown>[] {
     if (sorts.length === 0) return data;
 
     const sort = sorts[0]; // Wir verwenden nur die erste Sortierung
