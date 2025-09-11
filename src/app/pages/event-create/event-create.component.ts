@@ -276,85 +276,140 @@ export class EventCreateComponent implements OnInit {
 
   // ===== Speichern =====
   async saveLocation() {
+    if (!this.locationName) {
+      console.error('Bitte einen Namen für die Location eingeben!');
+      return;
+    }
+
     const location: Location = {
       name: this.locationName,
-      street: this.address,
-      zip_code: String(this.plz),
-      city: this.city,
-    }
+      street: this.address || undefined,
+      zip_code: this.plz || undefined,
+      city: this.city || 'Radolfzell',
+    };
+
     try {
-      const savedLocation = await this.locationService.postLocation(location)
-      this.selectedLocation = savedLocation
+      console.log('Speichere neue Location:', location);
+      const savedLocation = await this.locationService.postLocation(location);
+      console.log('Location gespeichert:', savedLocation);
+      this.selectedLocation = savedLocation;
+      this.newLocation = false; // Formular schließen
     } catch (error) {
-      console.error('Fehler beim Speichern der Location:', error)
+      console.error('Fehler beim Speichern der Location:', error);
     }
   }
 
   async saveOrganizer() {
-    const organizer: Organizer = {
-      name: this.organizername!,
-      email: this.organizermail!,
-      phonenumber: this.organizerphone!,
+    if (!this.organizername) {
+      console.error('Bitte einen Namen für den Organizer eingeben!');
+      return;
     }
+
+    const organizer: Organizer = {
+      name: this.organizername,
+      email: this.organizermail || undefined,
+      phonenumber: this.organizerphone || undefined,
+    };
+
     try {
-      const savedOrganizer =
-        await this.organizerService.postOrganizer(organizer)
-      this.selectedOrganizer = savedOrganizer
+      console.log('Speichere neuen Organizer:', organizer);
+      const savedOrganizer = await this.organizerService.postOrganizer(organizer);
+      console.log('Organizer gespeichert:', savedOrganizer);
+      this.selectedOrganizer = savedOrganizer;
+      this.newOrganizer = false; // Formular schließen
     } catch (error) {
-      console.error('Fehler beim Speichern des Organizers:', error)
+      console.error('Fehler beim Speichern des Organizers:', error);
     }
   }
 
   async saveEvent() {
-    if (!this.selectedLocation) await this.saveLocation()
-    if (!this.selectedOrganizer) await this.saveOrganizer()
-
-    if (
-      !this.selectedLocation ||
-      !this.selectedOrganizer ||
-      !this.selectedEventType
-    ) {
-      // FIXME: UI info needed
-      console.error('Bitte Location, Organizer und EventType auswählen!')
-      return
-    }
-
-    const start = new Date(`${this.dateStart}T${this.timeStart}`)
-    let end: Date | undefined
-    if (this.dateEnd && this.timeEnd) {
-      end = new Date(`${this.dateEnd}T${this.timeEnd}`)
-    }
-
-    const priceDec = this.price ? new Decimal(this.price) : undefined
-    const mediaIds = await this.getMediaIds()
-
-    const payload: AppEvent = {
-      name: this.eventName,
-      date_start: start,
-      date_end: end,
-      description: this.description || undefined,
-      more_info_link: this.moreInfoLink || undefined,
-      price: priceDec,
-      draft: this.draft,
-      organizer: this.selectedOrganizer.id!,
-      event_type: this.selectedEventType.id,
-      location: this.selectedLocation.id!,
-      topic: this.selectedTopics.map((t) => t.id!),
-      media: mediaIds,
-      age: this.age ?? undefined,
-      restriction: this.restriction || undefined,
-    }
-
     try {
+      // Prüfen, ob neue Location oder Organizer erstellt werden müssen
+      if (this.newLocation && !this.selectedLocation) {
+        await this.saveLocation();
+      }
+      
+      if (this.newOrganizer && !this.selectedOrganizer) {
+        await this.saveOrganizer();
+      }
+
+      // Validierung
+      if (!this.eventName) {
+        console.error('Bitte einen Event-Namen eingeben!');
+        return;
+      }
+
+      if (!this.selectedLocation) {
+        console.error('Bitte eine Location auswählen oder erstellen!');
+        return;
+      }
+
+      if (!this.selectedOrganizer) {
+        console.error('Bitte einen Organizer auswählen oder erstellen!');
+        return;
+      }
+
+      if (!this.selectedEventType) {
+        console.error('Bitte einen Event-Typ auswählen!');
+        return;
+      }
+
+      if (!this.dateStart || !this.timeStart) {
+        console.error('Bitte Startdatum und -zeit angeben!');
+        return;
+      }
+
+      // Datum und Zeit verarbeiten
+      const start = new Date(`${this.dateStart}T${this.timeStart}`);
+      let end: Date | undefined;
+      if (this.timePeriode && this.dateEnd && this.timeEnd) {
+        end = new Date(`${this.dateEnd}T${this.timeEnd}`);
+      }
+
+      // Preis konvertieren
+      const priceDec = this.price ? new Decimal(this.price) : undefined;
+      
+      // Medien verarbeiten
+      const mediaIds = await this.getMediaIds();
+
+      // Event-Payload erstellen
+      const payload: AppEvent = {
+        name: this.eventName,
+        date_start: start,
+        date_end: end,
+        description: this.description || undefined,
+        more_info_link: this.moreInfoLink || undefined,
+        price: priceDec,
+        draft: this.draft,
+        organizer: this.selectedOrganizer.id!,
+        event_type: this.selectedEventType.id,
+        location: this.selectedLocation.id!,
+        topic: this.selectedTopics.map((t) => t.id!),
+        media: mediaIds,
+        age: this.age ?? undefined,
+        restriction: this.restriction || undefined,
+      };
+
+      // Event speichern (Update oder Create)
       if (this.eventId !== undefined) {
         const updated = await this.eventService.updateEvent(
           this.eventId,
           payload,
-        )
-        if (!updated) console.error('Update returned no data')
+        );
+        if (!updated) {
+          console.error('Update returned no data');
+        } else {
+          console.log('Event erfolgreich aktualisiert:', updated);
+        }
       } else {
-        const created = await this.eventService.postEvent(payload)
-        this.eventId = created[0].id
+        const created = await this.eventService.postEvent(payload);
+        if (created && created.length > 0) {
+          this.eventId = created[0].id;
+          console.log('Event erfolgreich erstellt:', created[0]);
+        } else {
+          console.error('Erstellen des Events fehlgeschlagen, keine Daten zurückgegeben');
+          return;
+        }
       }
 
       // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren

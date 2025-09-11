@@ -430,11 +430,11 @@
       <!-- Button: Event erstellen -->
       <div>
         <button
-          type="submit"
+          type="button"
           class="w-full cursor-pointer rounded-2xl bg-[var(--colors-light-blue)] text-white p-5"
           (click)="saveEvent()"
           >
-          {{ 'create-event.createevent' | translate }}
+          {{ (eventId ? 'create-event.updateevent' : 'create-event.createevent') | translate }}
         </button>
       </div>
     </div>
