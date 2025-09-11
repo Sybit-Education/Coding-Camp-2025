@@ -2,7 +2,7 @@
   class="flex items-center space-x-2"
   role="radiogroup"
   [attr.aria-label]="'Sprache auswählen'"
-  >
+>
   @for (lang of availableLanguages; track lang) {
     <button
       (click)="switchLanguage(lang)"
@@ -11,12 +11,12 @@
       [class.border-blue-500]="currentLang === lang"
       [class.border-transparent]="currentLang !== lang"
       [title]="getLangTitle(lang)"
-      >
+    >
       <img
         [src]="getFlagPath(lang)"
         [alt]="getLangTitle(lang)"
         class="h-full w-full object-cover"
-        />
+      />
     </button>
   }
 </div>

@@ -3,7 +3,7 @@
   <a
     href="#event-content"
     class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2"
-    >
+  >
     {{ 'event-detail.skip-to-content' | translate }}
   </a>
   @if (event) {
@@ -11,22 +11,22 @@
       <section
         id="event-content"
         class="info-card rounded-2xl bg-gray-100 shadow-2xl"
-        >
+      >
         @if (mediaUrl) {
           <img
             class="rounded-t-2xl object-cover sm:w-full"
-        [alt]="
-          event.name
-            ? 'Bild der Veranstaltung: ' + event.name
-            : 'Veranstaltungsbild'
-        "
+            [alt]="
+              event.name
+                ? 'Bild der Veranstaltung: ' + event.name
+                : 'Veranstaltungsbild'
+            "
             [src]="mediaUrl"
-            />
+          />
         }
         @if (!mediaUrl) {
           <div
             class="flex h-48 items-center justify-center rounded-t-2xl bg-gray-200 sm:w-full"
-            >
+          >
             <span class="text-gray-500">{{
               'event-detail.no-image' | translate
             }}</span>
@@ -47,12 +47,12 @@
         <div class="flex justify-between">
           <div
             class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-xl"
-            >
+          >
             <div class="grid grid-cols-[1fr_3fr]">
               <div
                 class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-amber-300"
                 aria-hidden="true"
-                >
+              >
                 <span aria-hidden="true">📅</span>
               </div>
               <div>
@@ -68,7 +68,7 @@
               <div
                 class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-red-300"
                 aria-hidden="true"
-                >
+              >
                 <span aria-hidden="true">📍</span>
               </div>
               <div>
@@ -82,7 +82,7 @@
               <div
                 class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-green-300"
                 aria-hidden="true"
-                >
+              >
                 <span aria-hidden="true">💶</span>
               </div>
               <div>
@@ -102,7 +102,7 @@
               <div
                 class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-purple-400"
                 aria-hidden="true"
-                >
+              >
                 <span aria-hidden="true">👥</span>
               </div>
               <div>
@@ -121,10 +121,8 @@
       <section
         class="desc mt-10 rounded-2xl"
         [attr.aria-labelledby]="'description-heading'"
-        >
-        <h2
-          id="description-heading"
-          >
+      >
+        <h2 id="description-heading">
           {{ 'event-detail.description' | translate }}
         </h2>
         <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
@@ -136,20 +134,17 @@
         <section
           class="map mt-10"
           [attr.aria-labelledby]="'directions-heading'"
-          >
-          <h2
-            id="directions-heading"
-            class="text-2xl font-bold text-blue-900"
-            >
+        >
+          <h2 id="directions-heading" class="text-2xl font-bold text-blue-900">
             {{ 'event-detail.arrival' | translate }}
           </h2>
           <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
           <div class="map">
             <app-map
-            [coordinates]="[
-              location!.geo_point!.point[1],
-              location!.geo_point!.point[0],
-            ]"
+              [coordinates]="[
+                location!.geo_point!.point[1],
+                location!.geo_point!.point[0],
+              ]"
             ></app-map>
             <div class="sr-only">
               <p>
@@ -168,7 +163,7 @@
       <section
         class="contact mt-10 mb-18 rounded-2xl bg-gray-100 shadow-2xl"
         [attr.aria-labelledby]="'contact-heading'"
-        >
+      >
         <h2 id="contact-heading">
           {{ 'event-detail.contact' | translate }}
         </h2>
@@ -176,12 +171,12 @@
         <div class="flex justify-between">
           <div
             class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-xl"
-            >
+          >
             <div class="grid grid-cols-[1fr_3fr]">
               <div
                 class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-purple-400"
                 aria-hidden="true"
-                >
+              >
                 <span aria-hidden="true">👤</span>
               </div>
               <div>
@@ -196,7 +191,7 @@
                 <div
                   class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-red-300"
                   aria-hidden="true"
-                  >
+                >
                   <span aria-hidden="true">📧</span>
                 </div>
                 <div>
@@ -207,7 +202,7 @@
                     <a
                       href="mailto:{{ organizer?.email }}"
                       class="text-blue-700 underline hover:text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                      >
+                    >
                       {{ organizer?.email }}
                     </a>
                   </p>
@@ -219,7 +214,7 @@
                 <div
                   class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-amber-300"
                   aria-hidden="true"
-                  >
+                >
                   <span aria-hidden="true">☎️</span>
                 </div>
                 <div>
@@ -230,7 +225,7 @@
                     <a
                       href="tel:{{ organizer?.phonenumber }}"
                       class="text-blue-700 underline hover:text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                      >
+                    >
                       {{ organizer?.phonenumber }}
                     </a>
                   </p>
@@ -247,7 +242,7 @@
     <button
       (click)="goBack()"
       class="focus:ring-opacity-50 rounded-lg bg-blue-700 px-6 py-2 text-white hover:bg-blue-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-      >
+    >
       {{ 'event-detail.back' | translate }}
     </button>
   </div>
@@ -257,7 +252,7 @@
       <button
         class="hover*:bg-blue-600 rounded-full bg-blue-500 px-4 py-2 font-bold text-white"
         (click)="redirect()"
-        >
+      >
         {{ 'event-detail.edit' | translate }}
       </button>
     }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { ChangeDetectionStrategy, Component } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 
@@ -7,5 +7,6 @@ import { TranslateModule } from '@ngx-translate/core'
   standalone: true,
   imports: [TranslateModule, RouterModule],
   templateUrl: './footer.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FooterComponent {}

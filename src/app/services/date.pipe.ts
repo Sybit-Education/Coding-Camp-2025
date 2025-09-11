@@ -28,7 +28,7 @@ export class DateTimeRangePipe implements PipeTransform, OnDestroy {
   }
 
   // Cache für formatierte Datumswerte
-  private readonly dateCache = new Map<string, string>();
+  private readonly dateCache = new Map<string, string>()
 
   transform(
     startIso: string | Date | null,
@@ -38,11 +38,11 @@ export class DateTimeRangePipe implements PipeTransform, OnDestroy {
     if (!startIso) return ''
 
     // Erstelle einen Cache-Key
-    const cacheKey = `${startIso}-${endIso}-${locale || 'default'}-${this.i18nService.getCurrentLang()}`;
+    const cacheKey = `${startIso}-${endIso}-${locale || 'default'}-${this.i18nService.getCurrentLang()}`
 
     // Prüfe, ob das Ergebnis bereits im Cache ist
     if (this.dateCache.has(cacheKey)) {
-      return this.dateCache.get(cacheKey)!;
+      return this.dateCache.get(cacheKey)!
     }
 
     // Verwende die aktuelle Sprache für die Formatierung, falls keine Locale angegeben wurde
@@ -50,33 +50,33 @@ export class DateTimeRangePipe implements PipeTransform, OnDestroy {
     const effectiveLocale = locale || this.getLocaleFromLang(currentLang)
 
     const start = startIso instanceof Date ? startIso : new Date(startIso)
-    let result: string;
+    let result: string
 
     if (!endIso) {
-      result = this.formatSingleDateTime(start, effectiveLocale);
+      result = this.formatSingleDateTime(start, effectiveLocale)
     } else {
       const end = endIso instanceof Date ? endIso : new Date(endIso)
       const sameDay = start.toDateString() === end.toDateString()
 
       if (sameDay) {
-        result = this.formatSameDayRange(start, end, effectiveLocale);
+        result = this.formatSameDayRange(start, end, effectiveLocale)
       } else {
-        result = this.formatMultiDayRange(start, end, effectiveLocale);
+        result = this.formatMultiDayRange(start, end, effectiveLocale)
       }
     }
 
     // Speichere das Ergebnis im Cache
-    this.dateCache.set(cacheKey, result);
+    this.dateCache.set(cacheKey, result)
 
     // Begrenze die Cache-Größe
     if (this.dateCache.size > 100) {
-      const firstKey = this.dateCache.keys().next().value;
+      const firstKey = this.dateCache.keys().next().value
       if (firstKey !== undefined) {
-        this.dateCache.delete(firstKey);
+        this.dateCache.delete(firstKey)
       }
     }
 
-    return result;
+    return result
   }
 
   private getLocaleFromLang(lang: string): string {

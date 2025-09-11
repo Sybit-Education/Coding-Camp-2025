@@ -3,12 +3,24 @@
     {{ this.name }}
   </h1>
 
+  <!-- Ladeanzeige -->
+  <div *ngIf="loading" class="flex items-center justify-center p-8">
+    <div
+      class="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-[#c70d56]"
+    ></div>
+  </div>
+
+  <!-- Keine Events Meldung -->
+  <div
+    *ngIf="!loading && events.length === 0"
+    class="rounded-lg bg-gray-100 p-4 text-center"
+  >
+    <p>Keine Veranstaltungen in dieser Kategorie gefunden.</p>
+  </div>
+
   <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-      @for (event of events; track event; let i = $index) {
-        <app-event-card
-          [event]="event"
-          >
-        </app-event-card>
-      }
+    @for (event of events; track $index) {
+      <app-event-card [event]="event"> </app-event-card>
+    }
   </div>
 </article>

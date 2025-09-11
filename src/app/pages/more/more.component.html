@@ -3,7 +3,7 @@
   <a
     href="#main-content"
     class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2"
-    >
+  >
     {{ 'i18y.to-main-content' | translate }}
   </a>
 
@@ -15,7 +15,7 @@
     class="grid gap-4"
     [attr.aria-label]="'MORE.ARIA-LABLE' | translate"
     role="navigation"
-    >
+  >
     @for (item of menuItems; track item; let i = $index) {
       <a
         [routerLink]="[item.route]"
@@ -24,7 +24,7 @@
         tabindex="0"
         (keydown.enter)="navigateTo(item.route)"
         (keydown.space)="$event.preventDefault(); navigateTo(item.route)"
-        >
+      >
         <div class="mr-4 text-[#3b4ea3]" aria-hidden="true">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -34,12 +34,12 @@
             stroke="currentColor"
             class="size-8"
             aria-hidden="true"
-            >
+          >
             <path
               [attr.stroke-linecap]="'round'"
               [attr.stroke-linejoin]="'round'"
               [attr.d]="item.icon"
-              />
+            />
           </svg>
         </div>
         <div>
@@ -56,12 +56,12 @@
             stroke-width="1.5"
             stroke="currentColor"
             class="size-5"
-            >
+          >
             <path
               [attr.stroke-linecap]="'round'"
               [attr.stroke-linejoin]="'round'"
               [attr.d]="'m8.25 4.5 7.5 7.5-7.5 7.5'"
-              />
+            />
           </svg>
         </div>
       </a>

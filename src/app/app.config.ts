@@ -1,10 +1,16 @@
+import { ApplicationConfig, importProvidersFrom } from '@angular/core'
 import {
-  ApplicationConfig,
-  provideZoneChangeDetection,
-  importProvidersFrom,
-} from '@angular/core'
-import { provideRouter, withComponentInputBinding, withPreloading, PreloadAllModules, withViewTransitions } from '@angular/router'
-import { provideHttpClient, HttpClient, withInterceptorsFromDi } from '@angular/common/http'
+  provideRouter,
+  withComponentInputBinding,
+  withPreloading,
+  PreloadAllModules,
+  withViewTransitions,
+} from '@angular/router'
+import {
+  provideHttpClient,
+  HttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http'
 import {
   TranslateLoader,
   TranslateModule,
@@ -35,12 +41,11 @@ export function createTranslateLoader(http: HttpClient) {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(
       routes,
       withComponentInputBinding(),
       withViewTransitions(),
-      withPreloading(PreloadAllModules)
+      withPreloading(PreloadAllModules),
     ),
     provideHttpClient(withInterceptorsFromDi()),
     provideAnimations(),
