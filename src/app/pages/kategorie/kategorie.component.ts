@@ -92,9 +92,8 @@ export class KategorieComponent implements OnInit {
                 this.locationService.getLocationByID(event.location),
               )
             }
-          
 
-          locationData = await this.locationCache.get(locationId)
+            locationData = await this.locationCache.get(locationId)
           }
           return {
             ...event,

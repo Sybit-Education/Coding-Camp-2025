@@ -38,7 +38,7 @@
             required="true"
           />
           <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-            {{'create-event.error.name' | translate}}
+            {{ 'create-event.error.name' | translate }}
           </p>
         </div>
       </ng-template>
@@ -147,7 +147,7 @@
               required="true"
             />
             <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-              {{'create-event.error.date' | translate}}
+              {{ 'create-event.error.date' | translate }}
             </p>
           </div>
         </ng-template>
@@ -182,7 +182,7 @@
               required="true"
             />
             <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-              {{'create-event.error.time' | translate}}
+              {{ 'create-event.error.time' | translate }}
             </p>
           </div>
         </ng-template>
@@ -502,11 +502,11 @@
       @if (this.errorDate || this.errorName || this.errorTime) {
         <div>
           <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-            {{'create-event.error.general' | translate}}
+            {{ 'create-event.error.general' | translate }}
           </p>
         </div>
       }
-      
+
       <div>
         <button
           type="submit"
