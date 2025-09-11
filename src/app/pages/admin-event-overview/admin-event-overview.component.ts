@@ -5,8 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Event } from '../../models/event.interface';
 import { EventService } from '../../services/event.service';
 import { OrganizerService } from '../../services/organizer.service';
-import { SurrealdbService } from '../../services/surrealdb.service';
-import { NgxDatatableModule, SortType, TableColumn, SortEvent } from '@swimlane/ngx-datatable';
+import { NgxDatatableModule, SortType, TableColumn, SortEvent, SortDirection } from '@swimlane/ngx-datatable';
 import { FormsModule } from '@angular/forms';
 import { Organizer } from '../../models/organizer.interface';
 import { RecordId } from 'surrealdb';
@@ -24,7 +23,6 @@ export class AdminEventOverviewComponent implements OnInit {
   private readonly eventService = inject(EventService);
   private readonly organizerService = inject(OrganizerService);
   private readonly router = inject(Router);
-  private readonly surrealDb = inject(SurrealdbService);
 
   // Loading state
   isLoading = signal(true);
@@ -37,9 +35,9 @@ export class AdminEventOverviewComponent implements OnInit {
 
   // Table settings
   rows = signal<Record<string, string>[]>([]);
-  temp = signal<Record<string, string>[]>([]);
-  currentSorts = signal<{ prop: string; dir: SortType }[]>([
-    { prop: 'date_start', dir: 'asc' } // Standardsortierung nach Datum aufsteigend
+  temp = signal<Record<string, Event>[]>([]);
+  currentSorts = signal<{ prop: string; dir: SortDirection }[]>([
+    { prop: 'date_start', dir: SortDirection.asc } // Standardsortierung nach Datum aufsteigend
   ]);
   columns: TableColumn[] = [
     { prop: 'date_start', name: 'Datum', sortable: true, width: 120 },
@@ -156,11 +154,11 @@ export class AdminEventOverviewComponent implements OnInit {
   }
 
   // Sortiere Daten basierend auf Sortierkriterien
-  private sortData(data: Record<string, string>[], sorts: { prop: string; dir: SortType }[]): Record<string, string>[] {
+  private sortData(data: Record<string, string>[], sorts: { prop: string; dir: SortDirection }[]): Record<string, string>[] {
     if (sorts.length === 0) return data;
 
     const sort = sorts[0]; // Wir verwenden nur die erste Sortierung
-    const dir = sort.dir === 'asc' || sort.dir === 'ASC' ? 1 : -1;
+    const dir = sort.dir === SortDirection.asc || sort.dir === SortDirection.desc ? 1 : -1;
 
     return [...data].sort((a, b) => {
       const propA = a[sort.prop];
@@ -193,11 +191,11 @@ export class AdminEventOverviewComponent implements OnInit {
   }
 
   // Delete event
-  async deleteEvent(eventId: RecordId): Promise<void> {
+  async deleteEvent(eventId: RecordId) {
     if (confirm('Möchten Sie diese Veranstaltung wirklich löschen?')) {
       try {
-        // Verwende direkt den SurrealDB-Service zum Löschen
-        await this.surrealDb.delete(eventId);
+        // Verwende direkt den Event-Service zum Löschen
+        this.eventService.delete(eventId);
         console.log('Event erfolgreich gelöscht');
       } catch (deleteError) {
         console.error('Fehler beim Löschen:', deleteError);
