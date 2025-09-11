@@ -18,11 +18,12 @@ import { LocationService } from '../../services/location.service'
 import { OrganizerService } from '../../services/organizer.service'
 import { TopicService } from '../../services/topic.service'
 import { MediaService } from '../../services/media.service'
+import { CommonModule } from '@angular/common'
 
 @Component({
   selector: 'app-event-create',
   standalone: true,
-  imports: [FormsModule, TranslateModule],
+  imports: [FormsModule, TranslateModule, CommonModule],
   templateUrl: './event-create.component.html',
 })
 export class EventCreateComponent implements OnInit {
@@ -51,6 +52,11 @@ export class EventCreateComponent implements OnInit {
   restriction: string | null = null
   draft = false
   timePeriode = false
+
+  // Error States
+  errorName = false
+  errorDate = false
+  errorTime = false
 
   // Location
   placename: string | null = null
@@ -315,10 +321,26 @@ export class EventCreateComponent implements OnInit {
       this.dateStart === '' ||
       this.timeStart === ''
     ) {
-      // FIXME: UI info needed
-      console.error('Bitte Location, Organizer und EventType auswählen!')
+      if (this.eventName === '') {
+        this.errorName = true
+      } else {
+        this.errorName = false
+      }
+      if (this.dateStart === '') {
+        this.errorDate = true
+      } else {
+        this.errorDate = false
+      }
+      if (this.timeStart === '') {
+        this.errorTime = true
+      } else {
+        this.errorTime = false
+      }
       return
     }
+    this.errorName = false
+    this.errorDate = false
+    this.errorTime = false
 
     const start = new Date(`${this.dateStart}T${this.timeStart}`)
     let end: Date | undefined

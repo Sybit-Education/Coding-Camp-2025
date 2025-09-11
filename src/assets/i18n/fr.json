@@ -107,7 +107,13 @@
     "newlocationaddressexample": "Rue et numéro",
     "ageexample": "p. ex. 18",
     "description": "Description de l'événement",
-    "hint": "Les champs marqués d'un * sont obligatoires."
+    "hint": "Les champs marqués d'un * sont obligatoires.",
+    "error": {
+      "name": "Veuillez entrer un nom d'événement.",
+      "date": "Veuillez entrer une date de début.",
+      "time": "Veuillez entrer une heure de début.",
+      "general": "Veuillez remplir tous les champs obligatoires."
+    }
   },
   "dev": {
     "text1": "Ce site web a été développé dans le cadre du SYBIT Coding Camp 2025 ",
