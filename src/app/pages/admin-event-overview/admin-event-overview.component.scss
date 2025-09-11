@@ -1,165 +1,36 @@
-.admin-events-container {
-  padding: 1rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding-bottom: 5rem; // Space for bottom navigation
-
-  h1 {
-    margin-bottom: 1.5rem;
-    font-size: 1.5rem;
-    font-weight: 600;
-  }
-
-  .actions {
-    margin-bottom: 1.5rem;
-
-    .btn-create {
-      display: inline-block;
-      padding: 0.5rem 1rem;
-      background-color: #4caf50;
-      color: white;
-      text-decoration: none;
-      border-radius: 4px;
-      font-weight: 500;
-
-      &:hover {
-        background-color: #45a049;
-      }
-    }
-  }
-
-  .loading-spinner,
-  .no-events {
-    padding: 2rem;
-    text-align: center;
-    background-color: #f9f9f9;
-    border-radius: 4px;
-  }
-
-  .events-table-container {
-    overflow-x: auto;
-
-    .filter-container {
-      margin-bottom: 1rem;
-
-      .filter-input {
-        width: 100%;
-        padding: 0.5rem;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 1rem;
-
-        &:focus {
-          outline: none;
-          border-color: #2196f3;
-        }
-      }
-    }
-
-    .actions-cell {
-      white-space: nowrap;
-
-      button {
-        margin-right: 0.5rem;
-        padding: 0.25rem 0.5rem;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-
-        &.btn-edit {
-          background-color: #2196f3;
-          color: white;
-
-          &:hover {
-            background-color: #0b7dda;
-          }
-        }
-
-        &.btn-delete {
-          background-color: #f44336;
-          color: white;
-
-          &:hover {
-            background-color: #da190b;
-          }
-        }
-      }
-    }
-  }
+/* Anpassungen für ngx-datatable mit Tailwind */
+.tailwind-table {
+  @apply border-0 shadow-none;
 }
 
-// NGX-Datatable custom styles
-.ngx-datatable.material {
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-
-  .datatable-header {
-    background-color: #f2f2f2;
-    font-weight: 600;
-
-    .datatable-header-cell {
-      &.sort-active {
-        color: #2196f3;
-
-        .datatable-header-cell-wrapper {
-          position: relative;
-
-          &:after {
-            content: '';
-            position: absolute;
-            right: -8px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 0;
-            height: 0;
-            border-left: 5px solid transparent;
-            border-right: 5px solid transparent;
-          }
-        }
-
-        &.sort-asc .datatable-header-cell-wrapper:after {
-          border-bottom: 5px solid #2196f3;
-        }
-
-        &.sort-desc .datatable-header-cell-wrapper:after {
-          border-top: 5px solid #2196f3;
-        }
-      }
-    }
-  }
-
-  .datatable-body-row {
-    &:hover {
-      background-color: #f5f5f5;
-    }
-  }
-
-  .datatable-row-even {
-    background-color: #fafafa;
-  }
-
-  .datatable-body-cell {
-    padding: 0.75rem;
-
-    a {
-      color: #2196f3;
-      text-decoration: none;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
+.tailwind-table .datatable-header {
+  @apply bg-gray-50 border-b border-gray-200;
 }
 
-// Responsive adjustments
-@media (max-width: 768px) {
-  .admin-events-container {
-    padding: 0.5rem;
-  }
+.tailwind-table .datatable-header-cell {
+  @apply text-sm font-semibold text-gray-700 px-4 py-3;
+}
 
-  .actions-cell button {
-    padding: 0.2rem 0.4rem;
-    font-size: 0.85rem;
-  }
+.tailwind-table .datatable-body-row {
+  @apply border-b border-gray-100 hover:bg-gray-50 transition-colors;
+}
+
+.tailwind-table .datatable-body-cell {
+  @apply px-4 py-3;
+}
+
+.tailwind-table .datatable-footer {
+  @apply bg-white border-t border-gray-200;
+}
+
+.tailwind-table .datatable-pager {
+  @apply text-sm text-gray-600;
+}
+
+.tailwind-table .datatable-pager li.active a {
+  @apply bg-blue-600 text-white;
+}
+
+.tailwind-table .datatable-pager a {
+  @apply rounded-md hover:bg-gray-100;
 }
