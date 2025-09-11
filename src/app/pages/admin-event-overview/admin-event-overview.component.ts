@@ -6,7 +6,7 @@ import { Event } from '../../models/event.interface';
 import { EventService } from '../../services/event.service';
 import { OrganizerService } from '../../services/organizer.service';
 import { SurrealdbService } from '../../services/surrealdb.service';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { NgxDatatableModule, SortType, TableColumn, SortEvent } from '@swimlane/ngx-datatable';
 import { FormsModule } from '@angular/forms';
 import { Organizer } from '../../models/organizer.interface';
 import { RecordId } from 'surrealdb';
@@ -36,12 +36,12 @@ export class AdminEventOverviewComponent implements OnInit {
   organizersMap = signal<Map<string, Organizer>>(new Map());
 
   // Table settings
-  rows = signal<Record<string, unknown>[]>([]);
-  temp = signal<Record<string, unknown>[]>([]);
-  currentSorts = signal<{prop: string; dir: string}[]>([
+  rows = signal<Record<string, string>[]>([]);
+  temp = signal<Record<string, string>[]>([]);
+  currentSorts = signal<{ prop: string; dir: SortType }[]>([
     { prop: 'date_start', dir: 'asc' } // Standardsortierung nach Datum aufsteigend
   ]);
-  columns = [
+  columns: TableColumn[] = [
     { prop: 'date_start', name: 'Datum', sortable: true, width: 120 },
     { prop: 'name', name: 'Name', sortable: true, flexGrow: 2 },
     { prop: 'organizer', name: 'Veranstalter', sortable: true, flexGrow: 1 }
@@ -146,7 +146,7 @@ export class AdminEventOverviewComponent implements OnInit {
   }
 
   // Sort handler
-  onSort(event: {sorts: {prop: string; dir: string}[]}): void {
+  onSort(event: SortEvent): void {
     // Aktualisiere den aktuellen Sortierzustand
     this.currentSorts.set(event.sorts);
 
@@ -156,7 +156,7 @@ export class AdminEventOverviewComponent implements OnInit {
   }
 
   // Sortiere Daten basierend auf Sortierkriterien
-  private sortData(data: Record<string, unknown>[], sorts: {prop: string; dir: string}[]): Record<string, unknown>[] {
+  private sortData(data: Record<string, string>[], sorts: { prop: string; dir: SortType }[]): Record<string, string>[] {
     if (sorts.length === 0) return data;
 
     const sort = sorts[0]; // Wir verwenden nur die erste Sortierung
@@ -166,13 +166,8 @@ export class AdminEventOverviewComponent implements OnInit {
       const propA = a[sort.prop];
       const propB = b[sort.prop];
 
-      // Vergleiche Strings
-      if (typeof propA === 'string' && typeof propB === 'string') {
-        return dir * propA.localeCompare(propB, 'de');
-      }
-
-      // Vergleiche andere Typen
-      return dir * (propA > propB ? 1 : propA < propB ? -1 : 0);
+      // Alle Werte sind Strings in unserem Fall
+      return dir * propA.localeCompare(propB, 'de');
     });
   }
 
@@ -183,9 +178,9 @@ export class AdminEventOverviewComponent implements OnInit {
     // Filter data
     const temp = this.temp().filter(function(d) {
       return (
-        d.name.toLowerCase().indexOf(val) !== -1 ||
-        d.organizer.toLowerCase().indexOf(val) !== -1 ||
-        d.date_start.toLowerCase().indexOf(val) !== -1 ||
+        d['name'].toLowerCase().indexOf(val) !== -1 ||
+        d['organizer'].toLowerCase().indexOf(val) !== -1 ||
+        d['date_start'].toLowerCase().indexOf(val) !== -1 ||
         !val
       );
     });
