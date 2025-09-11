@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, OnDestroy, inject } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  inject,
+} from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { Subscription } from 'rxjs'
@@ -10,12 +17,14 @@ import { LocationService } from '../../services/location.service'
 import { LocalStorageService } from '../../services/local-storage.service'
 import { MediaService } from '../../services/media.service'
 import { TranslateModule } from '@ngx-translate/core'
+import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 
 @Component({
   selector: 'app-event-card',
   standalone: true,
   imports: [CommonModule, DateTimeRangePipe, TranslateModule, RouterModule],
   templateUrl: './event-card.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventCardComponent implements OnInit, OnDestroy {
   @Input() event: Event | null = null
@@ -32,6 +41,7 @@ export class EventCardComponent implements OnInit, OnDestroy {
   private readonly locationService = inject(LocationService)
   private readonly localStorageService = inject(LocalStorageService)
   private readonly mediaService = inject(MediaService)
+  private readonly markForCheck = injectMarkForCheck()
 
   ngOnInit() {
     if (this.event?.id) {
@@ -46,10 +56,12 @@ export class EventCardComponent implements OnInit, OnDestroy {
     const eventId = this.event.id as unknown as string
     this.isSaved = this.localStorageService.isEventSaved(eventId)
 
+    // Subscription nur hinzufügen, wenn wir sie wirklich brauchen (für ältere Komponenten)
     this.subscriptions.add(
       this.localStorageService.savedEvents$.subscribe(() => {
         this.isSaved = this.localStorageService.isEventSaved(eventId)
-      })
+        this.markForCheck()
+      }),
     )
   }
 
@@ -69,10 +81,21 @@ export class EventCardComponent implements OnInit, OnDestroy {
         this.location = location
         this.eventType = eventType
         this.mediaUrl = mediaUrl
+
+        // Change Detection auslösen, da wir OnPush verwenden
+        this.markForCheck()
+
+        console.log(
+          'Event-Card geladen:',
+          this.event?.name,
+          'Media URL:',
+          this.mediaUrl,
+        )
       }, 0)
     } catch (error) {
       console.error('Fehler beim Laden der Event-Details:', error)
       this.mediaUrl = null
+      this.markForCheck() // Auch bei Fehlern Change Detection auslösen
     }
   }
 
@@ -92,9 +115,9 @@ export class EventCardComponent implements OnInit, OnDestroy {
 
     try {
       const typeRecord = this.event.event_type
-      const result = await this.surrealDBService.getByRecordId<{ name: string }>(
-        typeRecord,
-      )
+      const result = await this.surrealDBService.getByRecordId<{
+        name: string
+      }>(typeRecord)
       return (result?.name as EventType) || EventType.UNKNOWN
     } catch (error) {
       console.warn('Fehler beim Laden des Event Types:', error)
@@ -109,7 +132,7 @@ export class EventCardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe()
-    
+
     // Referenzen freigeben
     this.event = null
     this.location = null

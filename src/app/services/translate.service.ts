@@ -1,15 +1,23 @@
-import { Injectable, inject } from '@angular/core'
+import { Injectable, inject, signal } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 import { BehaviorSubject, Observable } from 'rxjs'
+import { toSignal } from '@angular/core/rxjs-interop'
 
 @Injectable({
   providedIn: 'root',
 })
 export class I18nService {
   private readonly translateService = inject(TranslateService)
-  private readonly currentLangSubject = new BehaviorSubject<string>('de')
 
+  // Signal für reaktiven State
+  readonly currentLangState = signal<string>('de')
+
+  // BehaviorSubject für Abwärtskompatibilität
+  private readonly currentLangSubject = new BehaviorSubject<string>('de')
   currentLang$ = this.currentLangSubject.asObservable()
+
+  // Signal aus Observable für Komponenten
+  readonly currentLang = toSignal(this.currentLang$, { initialValue: 'de' })
 
   constructor() {
     this.initializeTranslation()
@@ -41,7 +49,11 @@ export class I18nService {
    */
   use(lang: string): void {
     this.translateService.use(lang)
+
+    // Beide State-Mechanismen aktualisieren
+    this.currentLangState.set(lang)
     this.currentLangSubject.next(lang)
+
     localStorage.setItem('selectedLanguage', lang)
 
     // Aktualisiere das LOCALE_ID für Angular-interne Formatierungen

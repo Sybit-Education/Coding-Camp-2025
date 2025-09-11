@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core'
 import { I18nService } from '../../services/translate.service'
 
-
 @Component({
   selector: 'app-language-switcher',
   imports: [],

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, signal } from '@angular/core'
 import { BehaviorSubject } from 'rxjs'
 import { Event } from '../models/event.interface'
 
@@ -7,6 +7,11 @@ import { Event } from '../models/event.interface'
 })
 export class LocalStorageService {
   private readonly SAVED_EVENTS_KEY = 'saved_events'
+
+  // Signal für reaktiven State
+  readonly savedEventsSignal = signal<string[]>(this.getSavedEventIds())
+
+  // BehaviorSubject für Abwärtskompatibilität
   private readonly savedEventsSubject = new BehaviorSubject<string[]>(
     this.getSavedEventIds(),
   )
@@ -18,7 +23,11 @@ export class LocalStorageService {
     if (eventId && !savedIds.includes(eventId)) {
       savedIds.push(eventId)
       this.setSavedEventIds(savedIds)
+
+      // Beide State-Mechanismen aktualisieren
+      this.savedEventsSignal.set(savedIds)
       this.savedEventsSubject.next(savedIds)
+
       console.log(`Event ${eventId} zu Favoriten hinzugefügt`)
     }
   }
@@ -27,6 +36,9 @@ export class LocalStorageService {
     const savedIds = this.getSavedEventIds()
     const filteredIds = savedIds.filter((id) => id !== eventId)
     this.setSavedEventIds(filteredIds)
+
+    // Beide State-Mechanismen aktualisieren
+    this.savedEventsSignal.set(filteredIds)
     this.savedEventsSubject.next(filteredIds)
   }
 
@@ -55,4 +67,3 @@ export class LocalStorageService {
     return this.getSavedEventIds().length
   }
 }
-

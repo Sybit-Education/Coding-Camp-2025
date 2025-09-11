@@ -1,4 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  inject,
+} from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule, Router } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
@@ -13,6 +18,7 @@ import { RecordId } from 'surrealdb'
 
 import { Event } from '../../models/event.interface'
 import { Topic } from '../../models/topic.interface'
+import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 
 type EventOrMore = Event & { isMore?: boolean }
 
@@ -28,6 +34,7 @@ type EventOrMore = Event & { isMore?: boolean }
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit {
   events: Event[] = []
@@ -38,9 +45,11 @@ export class HomeComponent implements OnInit {
   private readonly locationService = inject(LocationService)
   private readonly topicService = inject(TopicService)
   private readonly router = inject(Router)
+  private readonly markForCheck = injectMarkForCheck()
 
   ngOnInit() {
-    this.initializeData()
+    // Initialisiere Daten und stelle sicher, dass Change Detection ausgelöst wird
+    this.initializeData().then(() => this.markForCheck())
   }
 
   async initializeData() {
@@ -64,11 +73,27 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  // Cache für teure Berechnungen
+  private cachedEvents: {
+    input: Event[]
+    output: Event[]
+    timestamp: number
+  } | null = null
+
   private getUpcomingEvents(events: Event[]): Event[] {
+    // Prüfe, ob wir ein gültiges Cache-Ergebnis haben (nicht älter als 5 Minuten)
+    if (
+      this.cachedEvents &&
+      this.cachedEvents.input === events &&
+      Date.now() - this.cachedEvents.timestamp < 300000
+    ) {
+      return this.cachedEvents.output
+    }
+
     const now = new Date()
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
-    return events
+    const result = events
       .filter((event) => {
         const eventStartDate = new Date(event.date_start)
         const eventStartDay = new Date(
@@ -95,6 +120,15 @@ export class HomeComponent implements OnInit {
         const dateB = new Date(b.date_start)
         return dateA.getTime() - dateB.getTime()
       })
+
+    // Ergebnis cachen
+    this.cachedEvents = {
+      input: events,
+      output: result,
+      timestamp: Date.now(),
+    }
+
+    return result
   }
 
   getTopics() {

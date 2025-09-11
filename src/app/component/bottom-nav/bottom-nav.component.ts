@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { ChangeDetectionStrategy, Component } from '@angular/core'
 
 import { RouterModule } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
@@ -30,5 +30,6 @@ export interface BottomNavItem {
   imports: [RouterModule, TranslateModule],
   templateUrl: './bottom-nav.component.html',
   styleUrls: ['./bottom-nav.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BottomNavComponent {}

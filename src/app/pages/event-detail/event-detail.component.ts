@@ -1,4 +1,11 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core'
+import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { Subscription } from 'rxjs'
 import { MapComponent } from '../../component/map/map.component'
 import { Event } from '../../models/event.interface'
@@ -31,6 +38,7 @@ import { MediaService } from '@app/services/media.service'
   ],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventDetailPageComponent implements OnInit, OnDestroy {
   private readonly subscriptions = new Subscription()
@@ -51,6 +59,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router)
   private readonly loginservice = inject(LoginService)
   private readonly mediaService = inject(MediaService)
+  private readonly markForCheck = injectMarkForCheck()
 
   protected isLoggedIn = false
   evntIdString: string | undefined
@@ -64,15 +73,15 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       this.error = 'Event ID nicht gefunden'
       this.announceError('Event ID nicht gefunden')
     }
-    
+
     // Subscription für Login-Status
     this.subscriptions.add(
-      this.loginservice.isLoggedIn$.subscribe(isLoggedIn => {
+      this.loginservice.isLoggedIn$.subscribe((isLoggedIn) => {
         this.isLoggedIn = isLoggedIn
-      })
+      }),
     )
   }
-  
+
   ngOnDestroy(): void {
     // Alle Subscriptions beenden
     this.subscriptions.unsubscribe()
@@ -87,7 +96,9 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     console.error(`Fehler: ${message}`)
   }
 
-  async loadType(typeId: RecordId<'event_type'> | undefined): Promise<TypeDB | null> {
+  async loadType(
+    typeId: RecordId<'event_type'> | undefined,
+  ): Promise<TypeDB | null> {
     if (typeId) {
       try {
         const type = await this.eventService.getEventTypeByID(typeId)
@@ -107,7 +118,9 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  async loadLocation(locationId: RecordId<'location'>): Promise<Location | null> {
+  async loadLocation(
+    locationId: RecordId<'location'>,
+  ): Promise<Location | null> {
     try {
       const foundLocation =
         await this.locationService.getLocationByID(locationId)
@@ -124,7 +137,9 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  async loadOrganizer(organizerId: RecordId<'organizer'>): Promise<Organizer | null> {
+  async loadOrganizer(
+    organizerId: RecordId<'organizer'>,
+  ): Promise<Organizer | null> {
     try {
       const foundOrganizer =
         await this.organizerService.getOrganizerByID(organizerId)
@@ -145,39 +160,60 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     try {
       const foundEvent = await this.eventService.getEventByID(eventId)
 
-      if (foundEvent) {
-        // Setze Basis-Daten
-        this.event = foundEvent
-        this.evntIdString = this.event?.id ? this.event.id.toString() : undefined
-
-        // Berechne Media-URL nur wenn Media vorhanden ist
-        if (foundEvent.media && foundEvent.media.length > 0) {
-          this.mediaUrl = await this.mediaService.getMediaUrl(foundEvent.media[0]);
-        }
-        
-        // Extrahiere IDs für parallele Ladung
-        const locationId = this.event?.['location']
-        const organizerId = this.event?.['organizer']
-        const typeId = this.event?.['event_type']
-
-        // Lade alle abhängigen Daten parallel
-        const [location, organizer, type] = await Promise.all([
-          locationId ? this.loadLocation(locationId) : Promise.resolve(null),
-          organizerId ? this.loadOrganizer(organizerId) : Promise.resolve(null),
-          typeId ? this.loadType(typeId) : Promise.resolve(null)
-        ])
-        
-        // Batch-Update für weniger Change Detection Zyklen
-        requestAnimationFrame(() => {
-          this.location = location
-          this.organizer = organizer
-          this.type = type
-          document.title = `${this.event!.name} - 1200 Jahre Radolfzell`
-        })
-      } else {
+      if (!foundEvent) {
         this.error = 'Event nicht gefunden'
         this.announceError('Event nicht gefunden')
+        return
       }
+
+      // Setze Basis-Daten
+      this.event = foundEvent
+      this.evntIdString = this.event?.id ? this.event.id.toString() : undefined
+
+      // Starte alle Ladeprozesse parallel
+      const promises: Promise<unknown>[] = []
+
+      // Media-URL laden
+      let mediaUrlPromise: Promise<string | null> = Promise.resolve(null)
+      if (foundEvent.media?.length > 0) {
+        mediaUrlPromise = this.mediaService.getMediaUrl(foundEvent.media[0])
+        promises.push(mediaUrlPromise)
+      }
+
+      // Extrahiere IDs für parallele Ladung
+      const locationId = this.event?.['location']
+      const organizerId = this.event?.['organizer']
+      const typeId = this.event?.['event_type']
+
+      // Lade alle abhängigen Daten parallel
+      const locationPromise = locationId
+        ? this.loadLocation(locationId)
+        : Promise.resolve(null)
+      const organizerPromise = organizerId
+        ? this.loadOrganizer(organizerId)
+        : Promise.resolve(null)
+      const typePromise = typeId ? this.loadType(typeId) : Promise.resolve(null)
+
+      promises.push(locationPromise, organizerPromise, typePromise)
+
+      // Warte auf alle Promises
+      await Promise.all(promises)
+
+      // Batch-Update für weniger Change Detection Zyklen
+      requestAnimationFrame(() => {
+        if (foundEvent.media?.length > 0) {
+          mediaUrlPromise.then((url) => {
+            this.mediaUrl = url
+          })
+        }
+
+        locationPromise.then((location) => (this.location = location))
+        organizerPromise.then((organizer) => (this.organizer = organizer))
+        typePromise.then((type) => (this.type = type))
+
+        document.title = `${this.event!.name} - 1200 Jahre Radolfzell`
+        this.markForCheck()
+      })
     } catch (err) {
       this.error = `Fehler beim Laden: ${err}`
       this.announceError(`Fehler beim Laden: ${err}`)
@@ -192,7 +228,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     this.router.navigate(['/create-event'], {
       queryParams: {
         id: this.event!.id,
-      }
+      },
     })
   }
 }

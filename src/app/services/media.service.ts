@@ -8,21 +8,24 @@ import { RecordId, StringRecordId } from 'surrealdb'
 export class MediaService {
   private readonly surrealdb: SurrealdbService = inject(SurrealdbService)
 
-  private readonly mediaBaseUrl: string = 'https://1200-jahre-radolfzell.sybit.education/media/'
+  private readonly mediaBaseUrl: string =
+    'https://1200-jahre-radolfzell.sybit.education/media/'
 
   async postMedia(media: Media) {
     const result = await this.surrealdb.post<Media>('media', media)
     return result[0]
   }
 
-  async getMediaUrl(mediaRecordId: RecordId<'media'> | undefined): Promise<string | null> {
+  async getMediaUrl(
+    mediaRecordId: RecordId<'media'> | undefined,
+  ): Promise<string | null> {
     if (!mediaRecordId) return null
 
     try {
-      const mediaURL = String(mediaRecordId).replace(/_(?=[^_]*$)/, '.').split(':')[1]
-
+      const mediaURL = String(mediaRecordId)
+        .replace(/_(?=[^_]*$)/, '.')
+        .split(':')[1]
       return this.mediaBaseUrl + mediaURL
-
     } catch (error) {
       console.warn('Fehler beim Laden der Media:', error)
       return null
@@ -39,7 +42,9 @@ export class MediaService {
   async getMediaByUrl(url: string): Promise<Media | null> {
     try {
       const id = url.substring(url.lastIndexOf('/') + 1).replace('.', '_')
-      const media = await this.surrealdb.getByRecordId<Media>(new StringRecordId(`media:${id}`))
+      const media = await this.surrealdb.getByRecordId<Media>(
+        new StringRecordId(`media:${id}`),
+      )
       return media || null
     } catch (error) {
       console.warn('Fehler beim Laden der Media:', error)

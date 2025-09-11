@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+  inject,
+} from '@angular/core'
 
 import { Event } from '../../models/event.interface'
 import { Router } from '@angular/router'
@@ -7,6 +13,7 @@ import { Subscription } from 'rxjs'
 import { distinctUntilChanged } from 'rxjs/operators'
 import { EventCardComponent } from '../../component/event-card/event-card.component'
 import { TranslateModule } from '@ngx-translate/core'
+import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 
 @Component({
   selector: 'app-favourites',
@@ -23,6 +30,7 @@ import { TranslateModule } from '@ngx-translate/core'
       }
     `,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FavouritesComponent implements OnInit, OnDestroy {
   favouriteEvents: Event[] = []
@@ -30,47 +38,39 @@ export class FavouritesComponent implements OnInit, OnDestroy {
 
   private readonly favoriteService = inject(FavoriteService)
   private readonly router = inject(Router)
-  private subscriptions = new Subscription()
+  private readonly subscriptions = new Subscription()
+  private readonly markForCheck = injectMarkForCheck()
 
   ngOnInit(): void {
     // Abonniere Änderungen an den Favoriten mit distinctUntilChanged für weniger Updates
     this.subscriptions.add(
-      this.favoriteService.favoriteEvents$.pipe(
-        distinctUntilChanged((prev, curr) => 
-          prev.length === curr.length && 
-          prev.every((event, i) => event.id?.id === curr[i].id?.id)
+      this.favoriteService.favoriteEvents$
+        .pipe(
+          distinctUntilChanged(
+            (prev, curr) =>
+              prev.length === curr.length &&
+              prev.every((event, i) => event.id?.id === curr[i].id?.id),
+          ),
         )
-      ).subscribe(
-        (events) => {
+        .subscribe((events) => {
           this.favouriteEvents = events
-        },
-      )
+        }),
     )
 
     // Abonniere den Ladezustand mit distinctUntilChanged
     this.subscriptions.add(
-      this.favoriteService.loading$.pipe(
-        distinctUntilChanged()
-      ).subscribe((loading) => {
-        this.loading = loading
-      }),
+      this.favoriteService.loading$
+        .pipe(distinctUntilChanged())
+        .subscribe((loading) => {
+          this.loading = loading
+          // Change Detection auslösen, da wir OnPush verwenden
+          this.markForCheck()
+        }),
     )
 
     // Lade die Favoriten mit requestAnimationFrame statt setTimeout für bessere Performance
     requestAnimationFrame(() => {
       this.favoriteService.loadFavoriteEvents()
-
-      // Sicherheits-Timeout: Setze loading auf false nach 2 Sekunden, falls es hängen bleibt
-      const timeoutId = setTimeout(() => {
-        if (this.loading) {
-          this.loading = false
-        }
-      }, 2000)
-      
-      // Timeout beim Zerstören der Komponente aufräumen
-      this.subscriptions.add({
-        unsubscribe: () => clearTimeout(timeoutId)
-      })
     })
   }
 
