@@ -2,6 +2,7 @@ import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
 import { ActivatedRoute } from '@angular/router'
+import { QuillEditorComponent } from 'ngx-quill'
 
 // Models
 import { Event as AppEvent } from '../../models/event.interface'
@@ -22,7 +23,7 @@ import { MediaService } from '../../services/media.service'
 @Component({
   selector: 'app-event-create',
   standalone: true,
-  imports: [FormsModule, TranslateModule],
+  imports: [FormsModule, TranslateModule, QuillEditorComponent],
   templateUrl: './event-create.component.html',
 })
 export class EventCreateComponent implements OnInit {
@@ -40,7 +41,7 @@ export class EventCreateComponent implements OnInit {
   event: AppEvent | null = null
   eventId: RecordId<'event'> | undefined = undefined
   eventName = ''
-  description: string | null = null
+  description = ''
   moreInfoLink: string | null = null
   price: string | null = null
   dateStart = ''
@@ -114,7 +115,7 @@ export class EventCreateComponent implements OnInit {
       this.event = event
       this.eventId = event.id!
       this.eventName = event.name
-      this.description = event.description ?? null
+      this.description = event.description ?? ''
       this.moreInfoLink = event.more_info_link ?? null
       this.price = event.price?.toString() ?? null
       this.age = event.age ?? null
@@ -306,6 +307,8 @@ export class EventCreateComponent implements OnInit {
   async saveEvent() {
     if (!this.selectedLocation) await this.saveLocation()
     if (!this.selectedOrganizer) await this.saveOrganizer()
+
+    console.log(this.description)
 
     if (
       !this.selectedLocation ||

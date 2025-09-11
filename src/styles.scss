@@ -1,5 +1,8 @@
 @use 'tailwindcss';
 
+@import 'quill/dist/quill.snow.css';
+@import 'quill/dist/quill.bubble.css';
+
 /* Global base styles for HTML elements using Tailwind */
 @layer base {
   /* Heading styles */
