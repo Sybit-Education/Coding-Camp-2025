@@ -110,7 +110,14 @@
     "newlocationnameexample": "Name of the location",
     "newlocationaddressexample": "Street and house number",
     "ageexample": "e. g. 18",
-    "description": "Event description"
+    "description": "Event description",
+    "hint": "Fields marked with * are mandatory.",
+    "error": {
+      "name": "Please enter an event name.",
+      "date": "Please enter a start date.",
+      "time": "Please enter a start time.",
+      "general": "Please fill in all mandatory fields."
+    }
   },
   "dev": {
     "text1": "This website was developed as part of the SYBIT Coding Camp 2025 ",

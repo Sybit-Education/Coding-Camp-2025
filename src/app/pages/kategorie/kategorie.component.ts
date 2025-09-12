@@ -82,16 +82,19 @@ export class KategorieComponent implements OnInit {
       this.events = await Promise.all(
         rawEvents.map(async (event) => {
           // Verwende Cache für Locations
-          const locationId = String(event.location)
-          if (!this.locationCache.has(locationId)) {
-            this.locationCache.set(
-              locationId,
-              this.locationService.getLocationByID(event.location),
-            )
+          let locationData: AppLocation | undefined
+
+          if (event.location) {
+            const locationId = String(event.location)
+            if (!this.locationCache.has(locationId)) {
+              this.locationCache.set(
+                locationId,
+                this.locationService.getLocationByID(event.location),
+              )
+            }
+
+            locationData = await this.locationCache.get(locationId)
           }
-
-          const locationData = await this.locationCache.get(locationId)
-
           return {
             ...event,
             locationName: locationData?.name ?? 'Unbekannter Ort',

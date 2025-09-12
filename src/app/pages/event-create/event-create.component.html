@@ -7,19 +7,41 @@
     <!-- Linke Spalte mit vertikalem Abstand -->
     <div class="flex flex-col space-y-4">
       <!-- Event Name -->
-      <div>
-        <label for="eventName">{{
-          'create-event.eventname' | translate
-        }}</label>
-        <input
-          id="eventName"
-          name="eventName"
-          type="text"
-          [(ngModel)]="eventName"
-          class="p-[0.75rem 1rem] w-full"
-          required
-        />
-      </div>
+      <ng-container *ngIf="!this.errorName; else errorName">
+        <div>
+          <label for="eventName" class="required">{{
+            'create-event.eventname' | translate
+          }}</label>
+          <input
+            id="eventName"
+            name="eventName"
+            type="text"
+            [(ngModel)]="eventName"
+            class="p-[0.75rem 1rem] w-full"
+            required="true"
+          />
+        </div>
+      </ng-container>
+      <ng-template #errorName>
+        <div>
+          <label
+            for="errorName"
+            class="required mb-2 block text-sm font-medium text-red-700 dark:text-red-500"
+            >{{ 'create-event.eventname' | translate }}</label
+          >
+          <input
+            type="text"
+            id="errorName"
+            class="p-[0.75rem 1rem] block w-full rounded-lg border border-red-500 bg-red-50 p-2.5 text-sm text-red-900 placeholder-red-700 focus:border-red-500 focus:ring-red-500"
+            [(ngModel)]="eventName"
+            name="eventName"
+            required="true"
+          />
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+            {{ 'create-event.error.name' | translate }}
+          </p>
+        </div>
+      </ng-template>
 
       <!-- Veranstalter Auswahl -->
       <div>
@@ -92,27 +114,78 @@
       }
 
       <!-- Datum und Zeit -->
+
       <div class="grid grid-cols-2 gap-[1rem]">
-        <div>
-          <label for="date">{{ 'create-event.startdate' | translate }}</label>
-          <input
-            id="date"
-            type="date"
-            [(ngModel)]="dateStart"
-            name="dateStart"
-            class="p-[0.75rem 1rem] w-full"
-          />
-        </div>
-        <div>
-          <label for="time">{{ 'create-event.starttime' | translate }}</label>
-          <input
-            id="time"
-            type="time"
-            [(ngModel)]="timeStart"
-            name="timeStart"
-            class="p-[0.75rem 1rem] w-full"
-          />
-        </div>
+        <ng-container *ngIf="!this.errorDate; else errorDate">
+          <div>
+            <label for="date" class="required">{{
+              'create-event.startdate' | translate
+            }}</label>
+            <input
+              id="date"
+              type="date"
+              [(ngModel)]="dateStart"
+              name="dateStart"
+              class="p-[0.75rem 1rem] w-full"
+              required="true"
+            />
+          </div>
+        </ng-container>
+        <ng-template #errorDate>
+          <div>
+            <label
+              for="errorDate"
+              class="required mb-2 block text-sm font-medium text-red-700 dark:text-red-500"
+              >{{ 'create-event.startdate' | translate }}</label
+            >
+            <input
+              type="date"
+              id="errorDate"
+              class="p-[0.75rem 1rem] block w-full rounded-lg border border-red-500 bg-red-50 p-2.5 text-sm text-red-900 placeholder-red-700 focus:border-red-500 focus:ring-red-500"
+              [(ngModel)]="dateStart"
+              name="dateStart"
+              required="true"
+            />
+            <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+              {{ 'create-event.error.date' | translate }}
+            </p>
+          </div>
+        </ng-template>
+        <ng-container *ngIf="!this.errorTime; else errorTime">
+          <div>
+            <label for="time" class="required">{{
+              'create-event.starttime' | translate
+            }}</label>
+            <input
+              id="time"
+              type="time"
+              [(ngModel)]="timeStart"
+              name="timeStart"
+              class="p-[0.75rem 1rem] w-full"
+              required="true"
+            />
+          </div>
+        </ng-container>
+        <ng-template #errorTime>
+          <div>
+            <label
+              for="errorTime"
+              class="required mb-2 block text-sm font-medium text-red-700 dark:text-red-500"
+              >{{ 'create-event.starttime' | translate }}</label
+            >
+            <input
+              type="time"
+              id="errorTime"
+              class="p-[0.75rem 1rem] block w-full rounded-lg border border-red-500 bg-red-50 p-2.5 text-sm text-red-900 placeholder-red-700 focus:border-red-500 focus:ring-red-500"
+              [(ngModel)]="timeStart"
+              name="timeStart"
+              required="true"
+            />
+            <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+              {{ 'create-event.error.time' | translate }}
+            </p>
+          </div>
+        </ng-template>
       </div>
 
       @if (timePeriode) {
@@ -265,6 +338,11 @@
           [(ngModel)]="price"
           class="p-[0.75rem 1rem] w-full"
         />
+      </div>
+
+      <div class="required m-0 mt-5"></div>
+      <div>
+        <p>{{ 'create-event.hint' | translate }}</p>
       </div>
     </div>
 
@@ -431,6 +509,14 @@
       </div>
 
       <!-- Button: Event erstellen -->
+      @if (this.errorDate || this.errorName || this.errorTime) {
+        <div>
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+            {{ 'create-event.error.general' | translate }}
+          </p>
+        </div>
+      }
+
       <div>
         <button
           type="submit"

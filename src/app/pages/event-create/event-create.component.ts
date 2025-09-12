@@ -19,12 +19,13 @@ import { LocationService } from '../../services/location.service'
 import { OrganizerService } from '../../services/organizer.service'
 import { TopicService } from '../../services/topic.service'
 import { MediaService } from '../../services/media.service'
+import { CommonModule } from '@angular/common'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 
 @Component({
   selector: 'app-event-create',
   standalone: true,
-  imports: [FormsModule, TranslateModule, QuillEditorComponent],
+  imports: [FormsModule, TranslateModule, CommonModule, QuillEditorComponent],
   templateUrl: './event-create.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -56,6 +57,11 @@ export class EventCreateComponent implements OnInit {
   restriction: string | null = null
   draft = false
   timePeriode = false
+
+  // Error States
+  errorName = false
+  errorDate = false
+  errorTime = false
 
   // Location
   placename: string | null = null
@@ -304,11 +310,9 @@ export class EventCreateComponent implements OnInit {
   }
 
   async saveOrganizer() {
-    if (!this.organizername) {
-      console.error('Bitte einen Namen für den Organizer eingeben!')
+    if (!this.organizername && !this.organizermail && !this.organizerphone) {
       return
     }
-
     const organizer: Organizer = {
       name: this.organizername,
       email: this.organizermail || undefined,
@@ -328,41 +332,34 @@ export class EventCreateComponent implements OnInit {
   }
 
   async saveEvent() {
-    try {
-      // Prüfen, ob neue Location oder Organizer erstellt werden müssen
-      if (this.newLocation && !this.selectedLocation) {
-        await this.saveLocation()
-      }
+    if (!this.selectedLocation) await this.saveLocation()
+    if (!this.selectedOrganizer) await this.saveOrganizer()
 
-      if (this.newOrganizer && !this.selectedOrganizer) {
-        await this.saveOrganizer()
+    if (
+      this.eventName === '' ||
+      this.dateStart === '' ||
+      this.timeStart === ''
+    ) {
+      if (this.eventName === '') {
+        this.errorName = true
+      } else {
+        this.errorName = false
       }
-
-      // Validierung
-      if (!this.eventName) {
-        console.error('Bitte einen Event-Namen eingeben!')
-        return
+      if (this.dateStart === '') {
+        this.errorDate = true
+      } else {
+        this.errorDate = false
       }
-
-      if (!this.selectedLocation) {
-        console.error('Bitte eine Location auswählen oder erstellen!')
-        return
+      if (this.timeStart === '') {
+        this.errorTime = true
+      } else {
+        this.errorTime = false
       }
-
-      if (!this.selectedOrganizer) {
-        console.error('Bitte einen Organizer auswählen oder erstellen!')
-        return
-      }
-
-      if (!this.selectedEventType) {
-        console.error('Bitte einen Event-Typ auswählen!')
-        return
-      }
-
-      if (!this.dateStart || !this.timeStart) {
-        console.error('Bitte Startdatum und -zeit angeben!')
-        return
-      }
+      return
+    }
+    this.errorName = false
+    this.errorDate = false
+    this.errorTime = false
 
       // Datum und Zeit verarbeiten
       const start = new Date(`${this.dateStart}T${this.timeStart}`)
@@ -377,23 +374,22 @@ export class EventCreateComponent implements OnInit {
       // Medien verarbeiten
       const mediaIds = await this.getMediaIds()
 
-      // Event-Payload erstellen
-      const payload: AppEvent = {
-        name: this.eventName,
-        date_start: start,
-        date_end: end,
-        description: this.description || undefined,
-        more_info_link: this.moreInfoLink || undefined,
-        price: priceDec,
-        draft: this.draft,
-        organizer: this.selectedOrganizer.id!,
-        event_type: this.selectedEventType.id,
-        location: this.selectedLocation.id!,
-        topic: this.selectedTopics.map((t) => t.id!),
-        media: mediaIds,
-        age: this.age ?? undefined,
-        restriction: this.restriction || undefined,
-      }
+    const payload: AppEvent = {
+      name: this.eventName,
+      date_start: start,
+      date_end: end,
+      description: this.description || undefined,
+      more_info_link: this.moreInfoLink || undefined,
+      price: priceDec,
+      draft: this.draft,
+      organizer: this.selectedOrganizer?.id ?? undefined,
+      event_type: this.selectedEventType?.id ?? undefined,
+      location: this.selectedLocation?.id ?? undefined,
+      topic: this.selectedTopics.map((t) => t.id!),
+      media: mediaIds,
+      age: this.age ?? undefined,
+      restriction: this.restriction || undefined,
+    }
 
       // Event speichern (Update oder Create)
       if (this.eventId !== undefined) {
