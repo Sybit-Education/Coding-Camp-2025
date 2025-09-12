@@ -103,7 +103,8 @@ export class AdminEventOverviewComponent implements OnInit {
         const tableData = sortedEvents.map((event) => {
           return {
             ...event,
-            date_start: this.formatDate(event.date_start),
+            date_display: this.formatDate(event.date_start), // Formatiertes Datum für die Anzeige
+            date_start: new Date(event.date_start).getTime(), // Timestamp für die Sortierung
             organizer: this.getOrganizerName(event),
             originalId: event.id, // Keep original ID for actions
           }
@@ -208,10 +209,16 @@ export class AdminEventOverviewComponent implements OnInit {
       sort.dir === SortDirection.asc || sort.dir === SortDirection.desc ? 1 : -1
 
     return [...data].sort((a, b) => {
+      // Spezielle Behandlung für Datumsspalte
+      if (sort.prop === 'date_start') {
+        const valueA = a[sort.prop] as number || 0
+        const valueB = b[sort.prop] as number || 0
+        return dir * (valueA - valueB)
+      }
+
+      // Für alle anderen Spalten: String-Vergleich
       const propA = String(a[sort.prop] || '')
       const propB = String(b[sort.prop] || '')
-
-      // Alle Werte werden als Strings behandelt
       return dir * propA.localeCompare(propB, 'de')
     })
   }
@@ -225,7 +232,7 @@ export class AdminEventOverviewComponent implements OnInit {
       return (
         d['name']?.toString().toLowerCase().indexOf(val) !== -1 ||
         d['organizer']?.toString().toLowerCase().indexOf(val) !== -1 ||
-        d['date_start']?.toString().toLowerCase().indexOf(val) !== -1 ||
+        d['date_display']?.toString().toLowerCase().indexOf(val) !== -1 ||
         !val
       )
     })
@@ -262,7 +269,8 @@ export class AdminEventOverviewComponent implements OnInit {
       const tableData = sortedEvents.map((event) => {
         return {
           ...event,
-          date_start: this.formatDate(event.date_start),
+          date_display: this.formatDate(event.date_start), // Formatiertes Datum für die Anzeige
+          date_start: new Date(event.date_start).getTime(), // Timestamp für die Sortierung
           organizer: this.getOrganizerName(event),
           originalId: event.id,
         }

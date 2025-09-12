@@ -90,8 +90,8 @@
           [width]="10"
           [flexGrow]="0"
         >
-          <ng-template let-value="value" ngx-datatable-cell-template>
-            <span class="text-gray-700">{{ value }}</span>
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <span class="text-gray-700">{{ row.date_display }}</span>
           </ng-template>
         </ngx-datatable-column>
 
