@@ -118,18 +118,20 @@
           </div>
         </div>
       </section>
-      <section
-        class="desc mt-10 rounded-2xl"
-        [attr.aria-labelledby]="'description-heading'"
-      >
-        <h2 id="description-heading">
-          {{ 'event-detail.description' | translate }}
-        </h2>
-        <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
-        <p>
-          {{ event.description || 'Keine Beschreibung verfügbar.' }}
-        </p>
-      </section>
+      @if (event.description) {
+        <section
+          class="desc mt-10 rounded-2xl"
+          [attr.aria-labelledby]="'description-heading'"
+        >
+          <h2 id="description-heading">
+            {{ 'event-detail.description' | translate }}
+          </h2>
+          <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
+          <p [innerHTML]="event.description">
+            {{ event.description }}
+          </p>
+        </section>
+      }
       @if (location?.geo_point) {
         <section
           class="map mt-10"
