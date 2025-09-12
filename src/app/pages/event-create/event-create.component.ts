@@ -147,16 +147,21 @@ export class EventCreateComponent implements OnInit {
       }
 
       // Organizer
-      const organizerId = event.organizer.id
-      this.selectedOrganizer =
-        this.organizers.find((o) => o.id?.id === organizerId) || null
-      this.setOrganizer(this.selectedOrganizer)
+      // Organizer
+      if (event.organizer) {
+        const organizerId = event.organizer.id
+        this.selectedOrganizer =
+          this.organizers.find((o) => o.id?.id === organizerId) || null
+        this.setOrganizer(this.selectedOrganizer)
+      }
 
       // Location
-      const locationId = event.location.id
-      this.selectedLocation =
-        this.locations.find((l) => l.id?.id === locationId) || null
-      this.setLocation(this.selectedLocation)
+      if (event.location) {
+        const locationId = event.location.id
+        this.selectedLocation =
+          this.locations.find((l) => l.id?.id === locationId) || null
+        this.setLocation(this.selectedLocation)
+      }
 
       // Event Type
       const eventTypeId = event.event_type?.id
@@ -175,7 +180,7 @@ export class EventCreateComponent implements OnInit {
 
       // Images
       this.createPreview(null, event.media)
-    } catch (err) {
+    } catch (error: any) {
       console.error('Fehler beim Laden des Events:', err)
     }
   }
@@ -314,7 +319,7 @@ export class EventCreateComponent implements OnInit {
       return
     }
     const organizer: Organizer = {
-      name: this.organizername,
+      name: this.organizername || '',
       email: this.organizermail || undefined,
       phonenumber: this.organizerphone || undefined,
     }
@@ -433,7 +438,7 @@ export class EventCreateComponent implements OnInit {
     const result: RecordId<'media'>[] = []
     const resultMedias: Media[] = (
       await Promise.all(
-        this.previews.map(async (image, i) => {
+        this.previews.map(async (image: string, i: number) => {
           if (image.startsWith('http')) {
             const existingMedia = await this.mediaService.getMediaByUrl(image)
             if (existingMedia) {
