@@ -106,7 +106,14 @@
     "newlocationnameexample": "Name des Ortes",
     "newlocationaddressexample": "Straße und Hausnummer",
     "ageexample": "z. B. 18",
-    "description": "Eventbeschreibung"
+    "description": "Eventbeschreibung",
+    "hint": "Felder mit * sind Pflichtfelder.",
+    "error": {
+      "name": "Bitte geben Sie einen Eventnamen ein.",
+      "date": "Bitte geben Sie ein Startdatum ein.",
+      "time": "Bitte geben Sie eine Startzeit ein.",
+      "general": "Bitte füllen Sie alle Pflichtfelder aus."
+    }
   },
   "dev": {
     "text1": "Diese Website wurde im Rahmen des SYBIT Coding Camps 2025 entwickelt ",

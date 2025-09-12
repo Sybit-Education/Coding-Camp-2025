@@ -19,12 +19,13 @@ import { LocationService } from '../../services/location.service'
 import { OrganizerService } from '../../services/organizer.service'
 import { TopicService } from '../../services/topic.service'
 import { MediaService } from '../../services/media.service'
+import { CommonModule } from '@angular/common'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 
 @Component({
   selector: 'app-event-create',
   standalone: true,
-  imports: [FormsModule, TranslateModule, QuillEditorComponent],
+  imports: [FormsModule, TranslateModule, CommonModule, QuillEditorComponent],
   templateUrl: './event-create.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -55,6 +56,11 @@ export class EventCreateComponent implements OnInit {
   restriction: string | null = null
   draft = false
   timePeriode = false
+
+  // Error States
+  errorName = false
+  errorDate = false
+  errorTime = false
 
   // Location
   placename: string | null = null
@@ -139,13 +145,13 @@ export class EventCreateComponent implements OnInit {
       }
 
       // Organizer
-      const organizerId = String(event.organizer.id)
+      const organizerId = String(event.organizer?.id)
       this.selectedOrganizer =
         this.organizers.find((o) => String(o.id?.id) === organizerId) || null
       this.setOrganizer(this.selectedOrganizer)
 
       // Location
-      const locationId = String(event.location.id)
+      const locationId = String(event.location!.id)
       this.selectedLocation =
         this.locations.find((l) => String(l.id?.id) === locationId) || null
       this.setLocation(this.selectedLocation)
@@ -293,6 +299,9 @@ export class EventCreateComponent implements OnInit {
   }
 
   async saveOrganizer() {
+    if (!this.organizername && !this.organizermail && !this.organizerphone) {
+      return
+    }
     const organizer: Organizer = {
       name: this.organizername!,
       email: this.organizermail!,
@@ -312,14 +321,30 @@ export class EventCreateComponent implements OnInit {
     if (!this.selectedOrganizer) await this.saveOrganizer()
 
     if (
-      !this.selectedLocation ||
-      !this.selectedOrganizer ||
-      !this.selectedEventType
+      this.eventName === '' ||
+      this.dateStart === '' ||
+      this.timeStart === ''
     ) {
-      // FIXME: UI info needed
-      console.error('Bitte Location, Organizer und EventType auswählen!')
+      if (this.eventName === '') {
+        this.errorName = true
+      } else {
+        this.errorName = false
+      }
+      if (this.dateStart === '') {
+        this.errorDate = true
+      } else {
+        this.errorDate = false
+      }
+      if (this.timeStart === '') {
+        this.errorTime = true
+      } else {
+        this.errorTime = false
+      }
       return
     }
+    this.errorName = false
+    this.errorDate = false
+    this.errorTime = false
 
     const start = new Date(`${this.dateStart}T${this.timeStart}`)
     let end: Date | undefined
@@ -338,9 +363,9 @@ export class EventCreateComponent implements OnInit {
       more_info_link: this.moreInfoLink || undefined,
       price: priceDec,
       draft: this.draft,
-      organizer: this.selectedOrganizer.id!,
-      event_type: this.selectedEventType.id,
-      location: this.selectedLocation.id!,
+      organizer: this.selectedOrganizer?.id ?? undefined,
+      event_type: this.selectedEventType?.id ?? undefined,
+      location: this.selectedLocation?.id ?? undefined,
       topic: this.selectedTopics.map((t) => t.id!),
       media: mediaIds,
       age: this.age ?? undefined,
