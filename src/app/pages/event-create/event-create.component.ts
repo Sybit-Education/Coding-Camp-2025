@@ -1,7 +1,8 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
 import { ActivatedRoute, Router } from '@angular/router'
+import { QuillEditorComponent } from 'ngx-quill'
 
 // Models
 import { Event as AppEvent } from '../../models/event.interface'
@@ -18,12 +19,14 @@ import { LocationService } from '../../services/location.service'
 import { OrganizerService } from '../../services/organizer.service'
 import { TopicService } from '../../services/topic.service'
 import { MediaService } from '../../services/media.service'
+import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 
 @Component({
   selector: 'app-event-create',
   standalone: true,
-  imports: [FormsModule, TranslateModule],
+  imports: [FormsModule, TranslateModule, QuillEditorComponent],
   templateUrl: './event-create.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventCreateComponent implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>
@@ -35,13 +38,14 @@ export class EventCreateComponent implements OnInit {
   private readonly topicService = inject(TopicService)
   private readonly mediaService = inject(MediaService)
   private readonly route = inject(ActivatedRoute)
+  private readonly markForCheck = injectMarkForCheck()
   private readonly router = inject(Router)
 
   // ===== State & Formfelder =====
   event: AppEvent | null = null
   eventId: RecordId<'event'> | undefined = undefined
   eventName = ''
-  description: string | null = null
+  description = ''
   moreInfoLink: string | null = null
   price: string | null = null
   dateStart = ''
@@ -93,9 +97,9 @@ export class EventCreateComponent implements OnInit {
     const eventId = this.route.snapshot.paramMap.get('id')
     if (eventId) {
       const recordID = new StringRecordId(eventId)
-      this.loadEvent(recordID)
+      this.loadEvent(recordID).then(() => this.markForCheck())
     } else {
-      this.initializeData()
+      this.initializeData().then(() => this.markForCheck())
     }
   }
 
@@ -116,7 +120,7 @@ export class EventCreateComponent implements OnInit {
       this.event = event
       this.eventId = event.id!
       this.eventName = event.name
-      this.description = event.description ?? null
+      this.description = event.description ?? ''
       this.moreInfoLink = event.more_info_link ?? null
       this.price = event.price?.toString() ?? null
       this.age = event.age ?? null
