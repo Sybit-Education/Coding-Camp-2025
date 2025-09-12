@@ -179,7 +179,10 @@
     "EVENTS": {
       "TITLE": "Administration",
       "SEARCH": "Recherche ...",
-      "CREATE_NEW": "Créer un nouveau ..."
+      "CREATE_NEW": "Créer un nouveau ...",
+      "NO_EVENTS": "Aucun événement trouvé",
+      "DELETE": "Supprimer",
+      "EDIT": "Modifier ..."
     }
   }
 }
