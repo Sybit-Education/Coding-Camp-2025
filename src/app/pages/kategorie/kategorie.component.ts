@@ -21,6 +21,7 @@ import { CommonModule } from '@angular/common'
 
 interface EventWithResolvedLocation extends AppEvent {
   locationName: string
+  isPast?: boolean
 }
 
 @Component({
@@ -101,6 +102,29 @@ export class KategorieComponent implements OnInit {
           }
         }),
       )
+      
+      // Markiere vergangene Events und sortiere nach Datum (aufsteigend)
+      const now = new Date()
+      this.events = this.events.map(event => {
+        const endDate = event.date_end ? new Date(event.date_end) : new Date(event.date_start)
+        return {
+          ...event,
+          isPast: endDate < now
+        }
+      })
+      
+      // Sortiere Events: Aktuelle Events nach Datum (aufsteigend), vergangene Events ans Ende
+      this.events.sort((a, b) => {
+        // Wenn ein Event vergangen ist und das andere nicht, kommt das aktuelle zuerst
+        if (a.isPast && !b.isPast) return 1
+        if (!a.isPast && b.isPast) return -1
+        
+        // Wenn beide Events den gleichen Status haben (beide vergangen oder beide aktuell),
+        // sortiere nach Datum aufsteigend
+        const dateA = new Date(a.date_start).getTime()
+        const dateB = new Date(b.date_start).getTime()
+        return dateA - dateB
+      })
 
       console.log('Kategorie-Events geladen:', this.events.length)
     } catch (error) {

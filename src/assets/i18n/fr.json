@@ -22,7 +22,8 @@
     "LOCATION": "Lieu",
     "DATE": "Date",
     "SAVE_EVENT": "Enregistrer l'événement",
-    "REMOVE_EVENT": "Supprimer l'événement"
+    "REMOVE_EVENT": "Supprimer l'événement",
+    "PAST_EVENT": "Événement passé"
   },
   "ABOUT": {
     "TITLE": "À propos de nous",
