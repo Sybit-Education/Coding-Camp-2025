@@ -49,21 +49,5 @@
 }
 
 .tailwind-table .datatable-footer {
-  @apply border-t border-gray-300 bg-white;
-}
-
-.tailwind-table .datatable-pager {
-  @apply p-4 text-gray-600;
-}
-
-.tailwind-table .datatable-pager li.active a {
-  @apply bg-blue-600 text-white;
-}
-
-.tailwind-table .datatable-pager a:hover {
-  @apply bg-gray-100;
-}
-
-.tailwind-table .page-count {
-  @apply p-4 text-sm font-bold text-gray-600;
+  display: none;
 }
