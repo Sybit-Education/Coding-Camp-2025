@@ -110,8 +110,14 @@ export class KategorieComponent implements OnInit {
         }
       })
       
-      // Sortiere Events nach Datum (aufsteigend)
+      // Sortiere Events: Aktuelle Events nach Datum (aufsteigend), vergangene Events ans Ende
       this.events.sort((a, b) => {
+        // Wenn ein Event vergangen ist und das andere nicht, kommt das aktuelle zuerst
+        if (a.isPast && !b.isPast) return 1
+        if (!a.isPast && b.isPast) return -1
+        
+        // Wenn beide Events den gleichen Status haben (beide vergangen oder beide aktuell),
+        // sortiere nach Datum aufsteigend
         const dateA = new Date(a.date_start).getTime()
         const dateB = new Date(b.date_start).getTime()
         return dateA - dateB
