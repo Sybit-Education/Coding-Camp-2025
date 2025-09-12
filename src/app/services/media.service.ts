@@ -2,14 +2,14 @@ import { inject, Injectable } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
 import { Media } from '../models/media.model'
 import { RecordId, StringRecordId } from 'surrealdb'
+import { environment } from '@environments/environment.production'
 @Injectable({
   providedIn: 'root',
 })
 export class MediaService {
   private readonly surrealdb: SurrealdbService = inject(SurrealdbService)
 
-  private readonly mediaBaseUrl: string =
-    'https://1200-jahre-radolfzell.sybit.education/media/'
+  private readonly mediaBaseUrl: string = environment.MEDIA_BASE_URL
 
   async postMedia(media: Media) {
     const result = await this.surrealdb.post<Media>('media', media)

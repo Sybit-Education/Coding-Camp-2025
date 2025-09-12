@@ -353,12 +353,22 @@
         <label for="description">{{
           'create-event.description' | translate
         }}</label>
-        <textarea
-          id="description"
+        <quill-editor
           name="description"
           [(ngModel)]="description"
-          class="p-[0.75rem 1rem] w-full"
-        ></textarea>
+          [placeholder]="'Beschreibung eingeben...'"
+          [format]="'html'"
+          [modules]="{
+            toolbar: [
+              ['bold', 'italic', 'underline'],
+              [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+              ['link'],
+            ],
+          }"
+          theme="snow"
+          class="w-full rounded-md border"
+        >
+        </quill-editor>
       </div>
 
       <!-- Einschränkungen -->
