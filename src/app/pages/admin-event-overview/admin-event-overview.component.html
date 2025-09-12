@@ -9,7 +9,7 @@
           type="text"
           [(ngModel)]="filterValue"
           (keyup)="updateFilter()"
-          placeholder="Suchen..."
+          placeholder="{{ 'ADMIN.EVENTS.SEARCH' | translate }}"
           class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute right-3 top-2.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -46,7 +46,7 @@
   } @else {
     <div class="bg-white rounded-lg shadow overflow-hidden">
       <ngx-datatable
-        class="material tailwind-table"
+        class="tailwind-table"
         [rows]="rows()"
         [columnMode]="'force'"
         [headerHeight]="50"
@@ -58,7 +58,7 @@
         (sort)="onSort($event)"
       >
         <!-- Date Column Template -->
-        <ngx-datatable-column name="Datum" prop="date_start" [width]="10">
+        <ngx-datatable-column name="Datum" prop="date_start" [width]="10" [flexGrow]="0">
           <ng-template let-value="value" ngx-datatable-cell-template>
             <span class="text-gray-700">{{ value }}</span>
           </ng-template>

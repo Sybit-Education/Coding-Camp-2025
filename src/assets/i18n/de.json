@@ -182,7 +182,8 @@
       "CREATE_NEW": "Neu anlegen ...",
       "NO_EVENTS": "Keine Events gefunden",
       "EDIT": "Bearbeiten ...",
-      "DELETE": "Löschen"
+      "DELETE": "Löschen",
+      "SEARCH": "Suchen ..."
     }
   }
 }

@@ -177,7 +177,9 @@
   },
   "ADMIN": {
     "EVENTS": {
-      "TITLE": "Administration"
+      "TITLE": "Administration",
+      "SEARCH": "Recherche ...",
+      "CREATE_NEW": "Créer un nouveau ..."
     }
   }
 }

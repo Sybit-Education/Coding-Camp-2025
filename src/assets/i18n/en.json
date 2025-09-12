@@ -184,7 +184,9 @@
       "TITLE": "Administration",
       "NO_EVENTS": "No events found.",
       "EDIT": "Edit ...",
-      "DELETE": "Delete"
+      "DELETE": "Delete",
+      "SEARCH": "Search ...",
+      "CREATE_NEW": "Create new ..."
     }
   }
 }

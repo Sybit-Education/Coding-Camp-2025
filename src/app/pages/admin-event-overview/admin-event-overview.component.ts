@@ -58,20 +58,20 @@ export class AdminEventOverviewComponent implements OnInit {
     { prop: 'date_start', dir: SortDirection.asc }, // Standardsortierung nach Datum aufsteigend
   ])
   columns: TableColumn[] = [
-    { prop: 'date_start', name: 'Datum', sortable: true, width: 100 },
-    { prop: 'name', name: 'Name', sortable: true, flexGrow: 3 },
-    { prop: 'organizer', name: 'Veranstalter', sortable: true, flexGrow: 1 },
+    { prop: 'date_start', name: 'Datum', sortable: true, width: 10, flexGrow: 0, resizeable: false },
+    { prop: 'name', name: 'Name', sortable: true, flexGrow: 3, resizeable: true },
+    { prop: 'organizer', name: 'Veranstalter', sortable: true, flexGrow: 1, resizeable: true },
+    { name: 'Aktionen', sortable: false, width: 10, resizeable: false },
   ]
 
   // Filter value
   filterValue = ''
 
-  async ngOnInit(): Promise<void> {
-    try {
-      // Lade alle Veranstalter und erstelle eine Map für schnellen Zugriff
-      await this.loadOrganizers()
+    ngOnInit(): void {
 
-      const eventsList = await this.eventService.getAllEvents()
+      // Lade alle Veranstalter und erstelle eine Map für schnellen Zugriff
+      this.loadOrganizers()
+      this.eventService.getAllEvents().then((eventsList) => {
 
       // Sort events by start date (ascending)
       const sortedEvents = [...eventsList].sort((a, b) => {
@@ -96,11 +96,11 @@ export class AdminEventOverviewComponent implements OnInit {
 
       // Wende die Standardsortierung an
       this.rows.set(this.sortData(tableData, this.currentSorts()))
-    } catch (error) {
+    }).catch((error) => {
       console.error('Error loading events:', error)
-    } finally {
+    }).finally(() => {
       this.isLoading.set(false)
-    }
+    })
   }
 
   // Format date for display
@@ -113,9 +113,9 @@ export class AdminEventOverviewComponent implements OnInit {
   }
 
   // Lade alle Veranstalter und erstelle eine Map für schnellen Zugriff
-  private async loadOrganizers(): Promise<void> {
-    try {
-      const organizers = await this.organizerService.getAllOrganizers()
+  private loadOrganizers(): void {
+
+      this.organizerService.getAllOrganizers().then((organizers) => {
       const map = new Map<string, Organizer>()
 
       organizers.forEach((organizer) => {
@@ -125,9 +125,9 @@ export class AdminEventOverviewComponent implements OnInit {
       })
 
       this.organizersMap.set(map)
-    } catch (error) {
+    }).catch((error) => {
       console.error('Fehler beim Laden der Veranstalter:', error)
-    }
+    })
   }
 
   // Get organizer name
