@@ -290,6 +290,7 @@ export class EventCreateComponent implements OnInit {
         })
       })
     }
+    this.markForCheck()
   }
 
   removeImage(index: number) {
