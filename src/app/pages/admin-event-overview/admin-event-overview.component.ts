@@ -58,49 +58,70 @@ export class AdminEventOverviewComponent implements OnInit {
     { prop: 'date_start', dir: SortDirection.asc }, // Standardsortierung nach Datum aufsteigend
   ])
   columns: TableColumn[] = [
-    { prop: 'date_start', name: 'Datum', sortable: true, width: 10, flexGrow: 0, resizeable: false },
-    { prop: 'name', name: 'Name', sortable: true, flexGrow: 3, resizeable: true },
-    { prop: 'organizer', name: 'Veranstalter', sortable: true, flexGrow: 1, resizeable: true },
+    {
+      prop: 'date_start',
+      name: 'Datum',
+      sortable: true,
+      width: 10,
+      flexGrow: 0,
+      resizeable: false,
+    },
+    {
+      prop: 'name',
+      name: 'Name',
+      sortable: true,
+      flexGrow: 3,
+      resizeable: true,
+    },
+    {
+      prop: 'organizer',
+      name: 'Veranstalter',
+      sortable: true,
+      flexGrow: 1,
+      resizeable: true,
+    },
     { name: 'Aktionen', sortable: false, width: 10, resizeable: false },
   ]
 
   // Filter value
   filterValue = ''
 
-    ngOnInit(): void {
+  ngOnInit(): void {
+    // Lade alle Veranstalter und erstelle eine Map für schnellen Zugriff
+    this.loadOrganizers()
+    this.eventService
+      .getAllEvents()
+      .then((eventsList) => {
+        // Sort events by start date (ascending)
+        const sortedEvents = [...eventsList].sort((a, b) => {
+          const dateA = new Date(a.date_start)
+          const dateB = new Date(b.date_start)
+          return dateA.getTime() - dateB.getTime()
+        })
 
-      // Lade alle Veranstalter und erstelle eine Map für schnellen Zugriff
-      this.loadOrganizers()
-      this.eventService.getAllEvents().then((eventsList) => {
+        // Transform data for the table
+        const tableData = sortedEvents.map((event) => {
+          return {
+            ...event,
+            date_start: this.formatDate(event.date_start),
+            organizer: this.getOrganizerName(event),
+            originalId: event.id, // Keep original ID for actions
+          }
+        })
 
-      // Sort events by start date (ascending)
-      const sortedEvents = [...eventsList].sort((a, b) => {
-        const dateA = new Date(a.date_start)
-        const dateB = new Date(b.date_start)
-        return dateA.getTime() - dateB.getTime()
+        this.events.set(sortedEvents)
+        this.rows.set(tableData)
+        this.temp.set([...tableData])
+
+        // Wende die Standardsortierung an
+        this.rows.set(this.sortData(tableData, this.currentSorts()))
       })
-
-      // Transform data for the table
-      const tableData = sortedEvents.map((event) => {
-        return {
-          ...event,
-          date_start: this.formatDate(event.date_start),
-          organizer: this.getOrganizerName(event),
-          originalId: event.id, // Keep original ID for actions
-        }
+      .catch((error) => {
+        console.error('Error loading events:', error)
       })
-
-      this.events.set(sortedEvents)
-      this.rows.set(tableData)
-      this.temp.set([...tableData])
-
-      // Wende die Standardsortierung an
-      this.rows.set(this.sortData(tableData, this.currentSorts()))
-    }).catch((error) => {
-      console.error('Error loading events:', error)
-    }).finally(() => {
-      this.isLoading.set(false)
-    })
+      .finally(() => {
+        this.isLoading.set(false)
+      })
   }
 
   // Format date for display
@@ -114,20 +135,22 @@ export class AdminEventOverviewComponent implements OnInit {
 
   // Lade alle Veranstalter und erstelle eine Map für schnellen Zugriff
   private loadOrganizers(): void {
+    this.organizerService
+      .getAllOrganizers()
+      .then((organizers) => {
+        const map = new Map<string, Organizer>()
 
-      this.organizerService.getAllOrganizers().then((organizers) => {
-      const map = new Map<string, Organizer>()
+        organizers.forEach((organizer) => {
+          if (organizer.id) {
+            map.set(String(organizer.id), organizer)
+          }
+        })
 
-      organizers.forEach((organizer) => {
-        if (organizer.id) {
-          map.set(String(organizer.id), organizer)
-        }
+        this.organizersMap.set(map)
       })
-
-      this.organizersMap.set(map)
-    }).catch((error) => {
-      console.error('Fehler beim Laden der Veranstalter:', error)
-    })
+      .catch((error) => {
+        console.error('Fehler beim Laden der Veranstalter:', error)
+      })
   }
 
   // Get organizer name
