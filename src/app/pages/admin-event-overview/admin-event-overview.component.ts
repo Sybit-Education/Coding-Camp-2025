@@ -155,7 +155,7 @@ export class AdminEventOverviewComponent implements OnInit {
 
   // Get organizer name
   getOrganizerName(event: Event): string {
-    if (!event.organizer) return 'N/A'
+    if (!event.organizer) return ''
 
     // If organizer is already an object with name property
     if (typeof event.organizer === 'object' && 'name' in event.organizer) {
