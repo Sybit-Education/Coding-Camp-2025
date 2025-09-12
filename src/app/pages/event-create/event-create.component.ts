@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -180,7 +187,7 @@ export class EventCreateComponent implements OnInit {
 
       // Images
       this.createPreview(null, event.media)
-    } catch (error: any) {
+    } catch (err) {
       console.error('Fehler beim Laden des Events:', err)
     }
   }
@@ -366,18 +373,18 @@ export class EventCreateComponent implements OnInit {
     this.errorDate = false
     this.errorTime = false
 
-      // Datum und Zeit verarbeiten
-      const start = new Date(`${this.dateStart}T${this.timeStart}`)
-      let end: Date | undefined
-      if (this.timePeriode && this.dateEnd && this.timeEnd) {
-        end = new Date(`${this.dateEnd}T${this.timeEnd}`)
-      }
+    // Datum und Zeit verarbeiten
+    const start = new Date(`${this.dateStart}T${this.timeStart}`)
+    let end: Date | undefined
+    if (this.timePeriode && this.dateEnd && this.timeEnd) {
+      end = new Date(`${this.dateEnd}T${this.timeEnd}`)
+    }
 
-      // Preis konvertieren
-      const priceDec = this.price ? new Decimal(this.price) : undefined
+    // Preis konvertieren
+    const priceDec = this.price ? new Decimal(this.price) : undefined
 
-      // Medien verarbeiten
-      const mediaIds = await this.getMediaIds()
+    // Medien verarbeiten
+    const mediaIds = await this.getMediaIds()
 
     const payload: AppEvent = {
       name: this.eventName,
@@ -396,35 +403,29 @@ export class EventCreateComponent implements OnInit {
       restriction: this.restriction || undefined,
     }
 
-      // Event speichern (Update oder Create)
-      if (this.eventId !== undefined) {
-        const updated = await this.eventService.updateEvent(
-          this.eventId,
-          payload,
-        )
-        if (!updated) {
-          console.error('Update returned no data')
-        } else {
-          console.log('Event erfolgreich aktualisiert:', updated)
-        }
+    // Event speichern (Update oder Create)
+    if (this.eventId !== undefined) {
+      const updated = await this.eventService.updateEvent(this.eventId, payload)
+      if (!updated) {
+        console.error('Update returned no data')
       } else {
-        const created = await this.eventService.postEvent(payload)
-        if (created && created.length > 0) {
-          this.eventId = created[0].id
-          console.log('Event erfolgreich erstellt:', created[0])
-        } else {
-          console.error(
-            'Erstellen des Events fehlgeschlagen, keine Daten zurückgegeben',
-          )
-          return
-        }
+        console.log('Event erfolgreich aktualisiert:', updated)
       }
-
-      // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
-      this.router.navigate(['/admin'])
-    } catch (err) {
-      console.error('Fehler beim Speichern des Events:', err)
+    } else {
+      const created = await this.eventService.postEvent(payload)
+      if (created && created.length > 0) {
+        this.eventId = created[0].id
+        console.log('Event erfolgreich erstellt:', created[0])
+      } else {
+        console.error(
+          'Erstellen des Events fehlgeschlagen, keine Daten zurückgegeben',
+        )
+        return
+      }
     }
+
+    // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
+    this.router.navigate(['/admin'])
   }
 
   // ===== Media Handling =====

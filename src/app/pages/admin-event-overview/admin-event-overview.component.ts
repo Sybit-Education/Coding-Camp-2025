@@ -211,8 +211,8 @@ export class AdminEventOverviewComponent implements OnInit {
     return [...data].sort((a, b) => {
       // Spezielle Behandlung für Datumsspalte
       if (sort.prop === 'date_start') {
-        const valueA = a[sort.prop] as number || 0
-        const valueB = b[sort.prop] as number || 0
+        const valueA = (a[sort.prop] as number) || 0
+        const valueB = (b[sort.prop] as number) || 0
         return dir * (valueA - valueB)
       }
 
