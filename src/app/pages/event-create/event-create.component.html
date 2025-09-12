@@ -523,7 +523,10 @@
           class="w-full cursor-pointer rounded-2xl bg-[var(--colors-light-blue)] p-5 text-white"
           (click)="saveEvent()"
         >
-          {{ 'create-event.createevent' | translate }}
+          {{
+            (eventId ? 'create-event.updateevent' : 'create-event.createevent')
+              | translate
+          }}
         </button>
       </div>
     </div>

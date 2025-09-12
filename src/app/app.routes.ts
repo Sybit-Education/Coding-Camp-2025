@@ -23,15 +23,6 @@ export const routes: Routes = [
     title: 'Über uns',
   },
   {
-    path: 'create-event',
-    loadComponent: () =>
-      import('./pages/event-create/event-create.component').then(
-        (m) => m.EventCreateComponent,
-      ),
-    canActivate: [LoginService],
-    title: 'Veranstaltung erstellen',
-  },
-  {
     path: 'more',
     loadComponent: () =>
       import('./pages/more/more.component').then((m) => m.MoreComponent),
@@ -80,6 +71,60 @@ export const routes: Routes = [
         (m) => m.KategorieComponent,
       ),
     title: 'Kategorie',
+  },
+  {
+    path: 'admin',
+    loadComponent: () =>
+      import(
+        './pages/admin-event-overview/admin-event-overview.component'
+      ).then((m) => m.AdminEventOverviewComponent),
+    canActivate: [LoginService],
+    title: 'Admin: Veranstaltungen',
+  },
+  {
+    path: 'admin/create',
+    loadComponent: () =>
+      import('./pages/event-create/event-create.component').then(
+        (m) => m.EventCreateComponent,
+      ),
+    canActivate: [LoginService],
+    title: 'Veranstaltung erstellen',
+  },
+  {
+    path: 'admin/event/:id',
+    loadComponent: () =>
+      import('./pages/event-create/event-create.component').then(
+        (m) => m.EventCreateComponent,
+      ),
+    canActivate: [LoginService],
+    title: 'Veranstaltung erstellen',
+  },
+  {
+    path: 'admin',
+    loadComponent: () =>
+      import(
+        './pages/admin-event-overview/admin-event-overview.component'
+      ).then((m) => m.AdminEventOverviewComponent),
+    canActivate: [LoginService],
+    title: 'Admin: Veranstaltungen',
+  },
+  {
+    path: 'admin/create',
+    loadComponent: () =>
+      import('./pages/event-create/event-create.component').then(
+        (m) => m.EventCreateComponent,
+      ),
+    canActivate: [LoginService],
+    title: 'Veranstaltung erstellen',
+  },
+  {
+    path: 'admin/event/:id',
+    loadComponent: () =>
+      import('./pages/event-create/event-create.component').then(
+        (m) => m.EventCreateComponent,
+      ),
+    canActivate: [LoginService],
+    title: 'Veranstaltung erstellen',
   },
   {
     path: '**',

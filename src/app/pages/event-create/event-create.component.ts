@@ -1,7 +1,14 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { QuillEditorComponent } from 'ngx-quill'
 
 // Models
@@ -40,6 +47,7 @@ export class EventCreateComponent implements OnInit {
   private readonly mediaService = inject(MediaService)
   private readonly route = inject(ActivatedRoute)
   private readonly markForCheck = injectMarkForCheck()
+  private readonly router = inject(Router)
 
   // ===== State & Formfelder =====
   event: AppEvent | null = null
@@ -98,7 +106,8 @@ export class EventCreateComponent implements OnInit {
 
   // ===== Lifecycle =====
   ngOnInit() {
-    const eventId = this.route.snapshot.queryParams['id']
+    // Prüfe, ob wir im Bearbeitungsmodus sind (URL-Parameter aus der Route)
+    const eventId = this.route.snapshot.paramMap.get('id')
     if (eventId) {
       const recordID = new StringRecordId(eventId)
       this.loadEvent(recordID).then(() => this.markForCheck())
@@ -145,28 +154,33 @@ export class EventCreateComponent implements OnInit {
       }
 
       // Organizer
-      const organizerId = String(event.organizer?.id)
-      this.selectedOrganizer =
-        this.organizers.find((o) => String(o.id?.id) === organizerId) || null
-      this.setOrganizer(this.selectedOrganizer)
+      // Organizer
+      if (event.organizer) {
+        const organizerId = event.organizer.id
+        this.selectedOrganizer =
+          this.organizers.find((o) => o.id?.id === organizerId) || null
+        this.setOrganizer(this.selectedOrganizer)
+      }
 
       // Location
-      const locationId = String(event.location!.id)
-      this.selectedLocation =
-        this.locations.find((l) => String(l.id?.id) === locationId) || null
-      this.setLocation(this.selectedLocation)
+      if (event.location) {
+        const locationId = event.location.id
+        this.selectedLocation =
+          this.locations.find((l) => l.id?.id === locationId) || null
+        this.setLocation(this.selectedLocation)
+      }
 
       // Event Type
-      const eventTypeId = String(event.event_type?.id)
+      const eventTypeId = event.event_type?.id
       this.selectedEventType =
-        this.eventTypes.find((e) => String(e.id?.id) === eventTypeId) || null
+        this.eventTypes.find((e) => e.id?.id === eventTypeId) || null
       this.setSelectedEventType(this.selectedEventType)
 
       // Topics
       const topicIds = event.topic || []
       for (const topicId of topicIds) {
         const topic = this.topics.find(
-          (t) => String(t.id?.id) === String(topicId?.id ?? topicId),
+          (t) => t.id?.id === (topicId?.id ?? topicId),
         )
         if (topic) this.selectedTopics.push(topic)
       }
@@ -284,15 +298,24 @@ export class EventCreateComponent implements OnInit {
 
   // ===== Speichern =====
   async saveLocation() {
+    if (!this.locationName) {
+      console.error('Bitte einen Namen für die Location eingeben!')
+      return
+    }
+
     const location: Location = {
       name: this.locationName,
-      street: this.address,
-      zip_code: String(this.plz),
-      city: this.city,
+      street: this.address || undefined,
+      zip_code: this.plz || undefined,
+      city: this.city || 'Radolfzell',
     }
+
     try {
+      console.log('Speichere neue Location:', location)
       const savedLocation = await this.locationService.postLocation(location)
+      console.log('Location gespeichert:', savedLocation)
       this.selectedLocation = savedLocation
+      this.newLocation = false // Formular schließen
     } catch (error) {
       console.error('Fehler beim Speichern der Location:', error)
     }
@@ -303,14 +326,18 @@ export class EventCreateComponent implements OnInit {
       return
     }
     const organizer: Organizer = {
-      name: this.organizername!,
-      email: this.organizermail!,
-      phonenumber: this.organizerphone!,
+      name: this.organizername || '',
+      email: this.organizermail || undefined,
+      phonenumber: this.organizerphone || undefined,
     }
+
     try {
+      console.log('Speichere neuen Organizer:', organizer)
       const savedOrganizer =
         await this.organizerService.postOrganizer(organizer)
+      console.log('Organizer gespeichert:', savedOrganizer)
       this.selectedOrganizer = savedOrganizer
+      this.newOrganizer = false // Formular schließen
     } catch (error) {
       console.error('Fehler beim Speichern des Organizers:', error)
     }
@@ -346,13 +373,17 @@ export class EventCreateComponent implements OnInit {
     this.errorDate = false
     this.errorTime = false
 
+    // Datum und Zeit verarbeiten
     const start = new Date(`${this.dateStart}T${this.timeStart}`)
     let end: Date | undefined
-    if (this.dateEnd && this.timeEnd) {
+    if (this.timePeriode && this.dateEnd && this.timeEnd) {
       end = new Date(`${this.dateEnd}T${this.timeEnd}`)
     }
 
+    // Preis konvertieren
     const priceDec = this.price ? new Decimal(this.price) : undefined
+
+    // Medien verarbeiten
     const mediaIds = await this.getMediaIds()
 
     const payload: AppEvent = {
@@ -372,20 +403,29 @@ export class EventCreateComponent implements OnInit {
       restriction: this.restriction || undefined,
     }
 
-    try {
-      if (this.eventId !== undefined) {
-        const updated = await this.eventService.updateEvent(
-          this.eventId,
-          payload,
-        )
-        if (!updated) console.error('Update returned no data')
+    // Event speichern (Update oder Create)
+    if (this.eventId !== undefined) {
+      const updated = await this.eventService.updateEvent(this.eventId, payload)
+      if (!updated) {
+        console.error('Update returned no data')
       } else {
-        const created = await this.eventService.postEvent(payload)
-        this.eventId = created[0].id
+        console.log('Event erfolgreich aktualisiert:', updated)
       }
-    } catch (err) {
-      console.error('Fehler beim Speichern des Events:', err)
+    } else {
+      const created = await this.eventService.postEvent(payload)
+      if (created && created.length > 0) {
+        this.eventId = created[0].id
+        console.log('Event erfolgreich erstellt:', created[0])
+      } else {
+        console.error(
+          'Erstellen des Events fehlgeschlagen, keine Daten zurückgegeben',
+        )
+        return
+      }
     }
+
+    // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
+    this.router.navigate(['/admin'])
   }
 
   // ===== Media Handling =====
@@ -399,7 +439,7 @@ export class EventCreateComponent implements OnInit {
     const result: RecordId<'media'>[] = []
     const resultMedias: Media[] = (
       await Promise.all(
-        this.previews.map(async (image, i) => {
+        this.previews.map(async (image: string, i: number) => {
           if (image.startsWith('http')) {
             const existingMedia = await this.mediaService.getMediaByUrl(image)
             if (existingMedia) {

@@ -30,6 +30,7 @@
     "@ng-icons/heroicons": "^32.1.0",
     "@ngx-translate/core": "^17.0.0",
     "@ngx-translate/http-loader": "^17.0.0",
+    "@swimlane/ngx-datatable": "^22.0.0",
     "@tailwindcss/postcss": "^4.1.12",
     "@types/leaflet": "^1.9.20",
     "leaflet": "^1.9.4",

@@ -2,8 +2,7 @@ import { FormsModule } from '@angular/forms'
 
 import { Login } from '../../models/login.module'
 import { LoginService } from '../../services/login.service'
-import { Component, inject } from '@angular/core'
-import { SurrealdbService } from '../../services/surrealdb.service'
+import { Component, inject, OnInit } from '@angular/core'
 import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
@@ -12,19 +11,20 @@ import { TranslateModule } from '@ngx-translate/core'
   standalone: true,
   imports: [FormsModule, TranslateModule],
 })
-export class LoginPageComponent {
+export class LoginPageComponent implements OnInit {
   public loginParams: Login = { username: '', password: '' }
   showPassword = false
   isError = false
   unauthorizedErrorCode = 401
 
-  private readonly surrealdbService = inject(SurrealdbService)
   private readonly loginService = inject(LoginService)
 
-  async NgOnInit() {
-    if (await this.loginService.isLoggedIn()) {
-      this.loginService.switchRoute()
-    }
+  ngOnInit(): void {
+    this.loginService.isLoggedIn().then((isLoggedIn) => {
+      if (isLoggedIn) {
+        this.loginService.switchRoute()
+      }
+    })
   }
 
   togglePassword(): void {

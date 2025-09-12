@@ -4,7 +4,8 @@
     "CANCEL": "Cancel",
     "BACK": "Back",
     "NEXT": "Next",
-    "SKIP_TO_MAIN": "Skip to main content"
+    "SKIP_TO_MAIN": "Skip to main content",
+    "LOADING": "Loading ..."
   },
   "HEADER": {
     "TITLE": "1200 Years Radolfzell",
@@ -184,5 +185,15 @@
   },
   "share": {
     "copy-notification": "Link was copied into clipboard."
+  },
+  "ADMIN": {
+    "EVENTS": {
+      "TITLE": "Administration",
+      "NO_EVENTS": "No events found.",
+      "EDIT": "Edit ...",
+      "DELETE": "Delete",
+      "SEARCH": "Search ...",
+      "CREATE_NEW": "Create new ..."
+    }
   }
 }
