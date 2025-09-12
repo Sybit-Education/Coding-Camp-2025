@@ -98,6 +98,13 @@ export class KategorieComponent implements OnInit {
           }
         }),
       )
+      
+      // Sortiere Events nach Datum (aufsteigend)
+      this.events.sort((a, b) => {
+        const dateA = new Date(a.date_start).getTime()
+        const dateB = new Date(b.date_start).getTime()
+        return dateA - dateB
+      })
 
       console.log('Kategorie-Events geladen:', this.events.length)
     } catch (error) {
