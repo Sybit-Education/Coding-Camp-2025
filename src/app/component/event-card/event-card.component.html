@@ -3,16 +3,24 @@
     [routerLink]="['/event', event?.id?.id]"
     class="justify-top focus:ring-opacity-50 flex aspect-[1/1] h-full w-full cursor-pointer flex-col items-center overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl focus:ring-2 focus:ring-yellow-400"
   >
-    @if (mediaUrl) {
-      <div class="relative h-[50%] w-full overflow-hidden bg-gray-300">
+    <div class="relative h-[50%] w-full overflow-hidden bg-gray-100">
+      @if (mediaUrl) {
         <img
           [src]="mediaUrl"
           [alt]="event?.name || 'Event Bild'"
           class="h-full w-full object-cover"
           [attr.loading]="'lazy'"
         />
-      </div>
-    }
+      } @else {
+        <div class="flex h-full w-full items-center justify-center bg-gray-100">
+          <img
+            src="/public/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg"
+            alt="1200 Jahre Radolfzell Logo"
+            class="h-3/4 w-3/4 object-contain opacity-30"
+          />
+        </div>
+      }
+    </div>
     <div class="h-[50%] w-full space-y-2 p-4">
       <h3
         class="line-clamp-2 text-base leading-tight font-semibold text-gray-800"
