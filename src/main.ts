@@ -57,17 +57,22 @@ const bootstrapConfig: ApplicationConfig = {
         }
       },
     },
-    provideAppInitializer(() => {
+    provideAppInitializer(async () => {
       const surrealdb = inject(SurrealdbService)
+      let eventService: EventService
+      let topicService: TopicService
       // Lazy-load services nur wenn nötig
       if (environment.preloadServices) {
-        inject(EventService)
         inject(LocationService)
         inject(OrganizerService)
-        inject(TopicService)
         inject(MediaService)
+        topicService = inject(TopicService)
+        eventService = inject(EventService)
+
+        await eventService.initializeData()
+        await topicService.initializeData()
       }
-      return surrealdb.initialize()
+      return await surrealdb.initialize()
     }),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
