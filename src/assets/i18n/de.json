@@ -109,6 +109,7 @@
     "ageexample": "z. B. 18",
     "description": "Eventbeschreibung",
     "hint": "Felder mit * sind Pflichtfelder.",
+    "updateevent": "Event aktualisieren",
     "error": {
       "name": "Bitte geben Sie einen Eventnamen ein.",
       "date": "Bitte geben Sie ein Startdatum ein.",

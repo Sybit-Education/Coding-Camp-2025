@@ -224,11 +224,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     this.router.navigate(['/'])
   }
 
-  redirect() {
-    this.router.navigate(['/create-event'], {
-      queryParams: {
-        id: this.event!.id,
-      },
-    })
+  editEvent() {
+    this.router.navigate(['/admin/event', String(this.event!.id)])
   }
 }
