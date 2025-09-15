@@ -65,6 +65,8 @@ const bootstrapConfig: ApplicationConfig = {
       let topicService: TopicService
       let favoriteService: FavoriteService
       let loginService: LoginService
+
+      const connectionPromise = await surrealdb.initialize()
       // Lazy-load services nur wenn nötig
       if (environment.preloadServices) {
         inject(LocationService)
@@ -80,7 +82,7 @@ const bootstrapConfig: ApplicationConfig = {
         await favoriteService.initializeData()
         await loginService.checkInitialLoginState()
       }
-      return await surrealdb.initialize()
+      return connectionPromise
     }),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
