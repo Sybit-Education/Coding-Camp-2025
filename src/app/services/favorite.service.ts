@@ -30,7 +30,7 @@ export class FavoriteService {
     initialValue: [] as Event[],
   })
 
-  constructor() {
+  async initializeData(): Promise<void> {
     console.log('FavoriteService initialized')
 
     // Initialisiere den Service mit einem leeren Array

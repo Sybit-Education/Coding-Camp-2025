@@ -22,6 +22,8 @@ import { OrganizerService } from './app/services/organizer.service'
 import { TopicService } from './app/services/topic.service'
 import { MediaService } from './app/services/media.service'
 import { environment } from './environments/environment'
+import { FavoriteService } from '@app/services/favorite.service'
+import { LoginService } from '@app/services/login.service'
 
 // Aktiviere Produktionsmodus, wenn nicht in Entwicklung
 if (environment.production) {
@@ -61,16 +63,22 @@ const bootstrapConfig: ApplicationConfig = {
       const surrealdb = inject(SurrealdbService)
       let eventService: EventService
       let topicService: TopicService
+      let favoriteService: FavoriteService
+      let loginService: LoginService
       // Lazy-load services nur wenn nötig
       if (environment.preloadServices) {
         inject(LocationService)
         inject(OrganizerService)
         inject(MediaService)
+        loginService = inject(LoginService)
         topicService = inject(TopicService)
         eventService = inject(EventService)
+        favoriteService = inject(FavoriteService)
 
         await eventService.initializeData()
         await topicService.initializeData()
+        await favoriteService.initializeData()
+        await loginService.checkInitialLoginState()
       }
       return await surrealdb.initialize()
     }),

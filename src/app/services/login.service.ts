@@ -31,12 +31,7 @@ export class LoginService implements CanActivate {
   private redirect!: unknown[]
   private readonly decoder = new JwtHelperService()
 
-  constructor() {
-    // Prüfe beim Start, ob der Benutzer eingeloggt ist
-    this.checkInitialLoginState()
-  }
-
-  private async checkInitialLoginState(): Promise<void> {
+  async checkInitialLoginState(): Promise<void> {
     const loggedIn = await this.checkLoginStatus()
     this.isLoggedInState.set(loggedIn)
     this.isLoggedInSubject.next(loggedIn)

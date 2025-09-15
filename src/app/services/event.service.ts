@@ -11,8 +11,8 @@ export class EventService {
   private readonly surrealdb: SurrealdbService = inject(SurrealdbService)
 
   // Signals für häufig verwendete Daten
-  readonly allEvents = signal<Event[]>([])
-  readonly allEventTypes = signal<TypeDB[]>([])
+  private readonly allEvents = signal<Event[]>([])
+  private readonly allEventTypes = signal<TypeDB[]>([])
 
   async initializeData(): Promise<void> {
     try {

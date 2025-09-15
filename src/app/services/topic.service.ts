@@ -12,11 +12,6 @@ export class TopicService {
   // Signal für reaktiven State
   readonly allTopics = signal<Topic[]>([])
 
-  // Öffentliche Methode zur Initialisierung der Datenbankverbindung
-  async initializeDatabase(): Promise<void> {
-    await this.surrealdb.initialize()
-  }
-
   async initializeData(): Promise<void> {
     try {
       const topics = await this.fetchAllTopics()
