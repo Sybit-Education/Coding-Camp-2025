@@ -61,28 +61,21 @@ const bootstrapConfig: ApplicationConfig = {
     },
     provideAppInitializer(async () => {
       const surrealdb = inject(SurrealdbService)
-      let eventService: EventService
-      let topicService: TopicService
-      let favoriteService: FavoriteService
-      let loginService: LoginService
+      const loginService = inject(LoginService)
+      const topicService = inject(TopicService)
+      const eventService = inject(EventService)
+      const favoriteService = inject(FavoriteService)
 
-      const connectionPromise = await surrealdb.initialize()
-      // Lazy-load services nur wenn nötig
-      if (environment.preloadServices) {
-        inject(LocationService)
-        inject(OrganizerService)
-        inject(MediaService)
-        loginService = inject(LoginService)
-        topicService = inject(TopicService)
-        eventService = inject(EventService)
-        favoriteService = inject(FavoriteService)
+      inject(LocationService)
+      inject(OrganizerService)
+      inject(MediaService)
 
-        await eventService.initializeData()
-        await topicService.initializeData()
-        await favoriteService.initializeData()
-        await loginService.checkInitialLoginState()
-      }
-      return connectionPromise
+      await eventService.initializeData()
+      await topicService.initializeData()
+      await favoriteService.initializeData()
+      await loginService.checkInitialLoginState()
+
+      return await surrealdb.initialize()
     }),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
