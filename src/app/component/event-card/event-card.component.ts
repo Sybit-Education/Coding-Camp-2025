@@ -29,12 +29,14 @@ import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 export class EventCardComponent implements OnInit, OnDestroy {
   @Input() event: Event | null = null
 
+  @Input() isMoreCard = false
+
+  @Input() fromCategory = true
+
   location: Location | null = null
   eventType: EventType | null = null
   isSaved = false
   mediaUrl: string | null = null
-
-  @Input() isMoreCard = false
 
   private readonly subscriptions = new Subscription()
   private readonly surrealDBService = inject(SurrealdbService)

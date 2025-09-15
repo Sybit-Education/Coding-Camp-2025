@@ -49,7 +49,6 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   error: string | null = null
   eventId = ''
 
-  mediaBaseUrl = 'https://1200-jahre-radolfzell.sybit.education/media/'
   mediaUrl: string | null = null
 
   private readonly eventService = inject(EventService)

@@ -23,7 +23,8 @@
     "LOCATION": "Ort",
     "DATE": "Datum",
     "SAVE_EVENT": "Veranstaltung speichern",
-    "PAST_EVENT": "Vergangene Veranstaltung"
+    "PAST_EVENT": "Vergangene Veranstaltung",
+    "NO_EVENTS_FOUND_IN_CATEGORY": "Keine Veranstaltungen in dieser Kategorie gefunden."
   },
   "ABOUT": {
     "TITLE": "Über uns",
