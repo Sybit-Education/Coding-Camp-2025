@@ -10,8 +10,8 @@ import { Subscription } from 'rxjs'
   pure: false, // Impure pipe, um auf Sprachänderungen zu reagieren
 })
 export class DateTimeRangePipe implements PipeTransform, OnDestroy {
-  private i18nService = inject(I18nService)
-  private langChangeSub: Subscription
+  private readonly i18nService = inject(I18nService)
+  private readonly langChangeSub: Subscription
   // Entferne ungenutzte Variablen
 
   constructor() {

@@ -22,6 +22,8 @@ import { OrganizerService } from './app/services/organizer.service'
 import { TopicService } from './app/services/topic.service'
 import { MediaService } from './app/services/media.service'
 import { environment } from './environments/environment'
+import { FavoriteService } from '@app/services/favorite.service'
+import { LoginService } from '@app/services/login.service'
 
 // Aktiviere Produktionsmodus, wenn nicht in Entwicklung
 if (environment.production) {
@@ -57,17 +59,23 @@ const bootstrapConfig: ApplicationConfig = {
         }
       },
     },
-    provideAppInitializer(() => {
+    provideAppInitializer(async () => {
       const surrealdb = inject(SurrealdbService)
-      // Lazy-load services nur wenn nötig
-      if (environment.preloadServices) {
-        inject(EventService)
-        inject(LocationService)
-        inject(OrganizerService)
-        inject(TopicService)
-        inject(MediaService)
-      }
-      return surrealdb.initialize()
+      const loginService = inject(LoginService)
+      const topicService = inject(TopicService)
+      const eventService = inject(EventService)
+      const favoriteService = inject(FavoriteService)
+
+      inject(LocationService)
+      inject(OrganizerService)
+      inject(MediaService)
+
+      await eventService.initializeData()
+      await topicService.initializeData()
+      await favoriteService.initializeData()
+      await loginService.checkInitialLoginState()
+
+      return await surrealdb.initialize()
     }),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
