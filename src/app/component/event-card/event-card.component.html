@@ -1,7 +1,7 @@
 @if (!isMoreCard) {
   <a
     [routerLink]="['/event', event?.id?.id]"
-    [queryParams]="fromCategory ? { fromCategory: true } : {}"
+   [queryParams]="{ fromCategory: fromCategory || null }"
     class="justify-top focus:ring-opacity-50 flex aspect-[1/1] h-full w-full cursor-pointer flex-col items-center overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl focus:ring-2 focus:ring-yellow-400"
   >
     <div class="relative h-[50%] w-full overflow-hidden bg-gray-100">
