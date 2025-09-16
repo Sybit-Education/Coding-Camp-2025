@@ -49,8 +49,11 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   error: string | null = null
   eventId = ''
 
-  mediaBaseUrl = 'https://1200-jahre-radolfzell.sybit.education/media/'
   mediaUrl: string | null = null
+
+  protected isLoggedIn = false
+  evntIdString: string | undefined
+  fromCategory = ''
 
   private readonly eventService = inject(EventService)
   private readonly locationService = inject(LocationService)
@@ -59,13 +62,17 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router)
   private readonly loginservice = inject(LoginService)
   private readonly mediaService = inject(MediaService)
-  private readonly markForCheck = injectMarkForCheck()
-
-  protected isLoggedIn = false
-  evntIdString: string | undefined
+  private readonly markForCheck = injectMarkForCheck()  
 
   ngOnInit(): void {
-    this.eventId = this.route.snapshot.paramMap.get('id')!
+    this.route.queryParamMap.subscribe((params) => {
+      this.fromCategory = params.get('fromCategory') || ''
+      console.log('fromCategory:', this.fromCategory)
+    })
+
+    this.route.paramMap.subscribe((params) => {
+      this.eventId = params.get('id') || ''
+    })
     if (this.eventId) {
       const recordID = new StringRecordId('event:' + this.eventId)
       this.loadEvent(recordID)
@@ -221,7 +228,11 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   }
 
   goBack() {
-    this.router.navigate(['/'])
+    if (!this.fromCategory) {
+      this.router.navigate(['/'])
+    } else {
+      this.router.navigate(['/kategorie'], { queryParams: { id: this.fromCategory.split(',')[0], name: this.fromCategory.split(',')[1] || '' } })
+    }
   }
 
   editEvent() {
