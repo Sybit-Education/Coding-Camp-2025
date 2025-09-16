@@ -41,6 +41,7 @@ export class KategorieComponent implements OnInit {
 
   private readonly route = inject(ActivatedRoute)
   private readonly markForCheck = injectMarkForCheck()
+  fromCategory = ''
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
@@ -49,6 +50,8 @@ export class KategorieComponent implements OnInit {
 
       // Daten neu laden, wenn sich die Parameter ändern
       this.initilizeData().then(() => this.markForCheck())
+
+      this.fromCategory = (this.id?.toString() || 'keineID') + ',' + (this.name || 'keinName')
     })
   }
   private readonly eventService: EventService = inject(EventService)

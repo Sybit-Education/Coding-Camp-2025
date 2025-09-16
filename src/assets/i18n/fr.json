@@ -23,7 +23,8 @@
     "DATE": "Date",
     "SAVE_EVENT": "Enregistrer l'événement",
     "REMOVE_EVENT": "Supprimer l'événement",
-    "PAST_EVENT": "Événement passé"
+    "PAST_EVENT": "Événement passé",
+    "NO_EVENTS_FOUND_IN_CATEGORY": "Aucun événement trouvé dans cette catégorie."
   },
   "ABOUT": {
     "TITLE": "À propos de nous",
@@ -109,6 +110,7 @@
     "ageexample": "p. ex. 18",
     "description": "Description de l'événement",
     "hint": "Les champs marqués d'un * sont obligatoires.",
+    "updateevent": "Mettre à jour l'événement",
     "error": {
       "name": "Veuillez entrer un nom d'événement.",
       "date": "Veuillez entrer une date de début.",
