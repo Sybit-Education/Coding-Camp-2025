@@ -22,14 +22,13 @@
             "
             [src]="mediaUrl"
           />
-        }
-        @if (!mediaUrl) {
-          <div
-            class="flex h-48 items-center justify-center rounded-t-2xl bg-gray-200 sm:w-full"
-          >
-            <span class="text-gray-500">{{
-              'event-detail.no-image' | translate
-            }}</span>
+        } @else {
+          <div class="w-full flex justify-center py-2">
+            <img
+            class="rounded-2xl opacity-30"
+            src="/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg"
+            alt="1200 Jahre Radolfzell Logo"
+          />
           </div>
         }
         <div class="justify-left flex w-full items-center">
