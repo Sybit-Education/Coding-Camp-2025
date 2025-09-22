@@ -243,10 +243,9 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   const lat = this.location!.geo_point!.point[1];
   const lng = this.location!.geo_point!.point[0];
 
-  // Universelle Maps-URL
   const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
 
-  window.open(url, "_blank"); // Öffnet neuen Tab oder die App
+  window.open(url, "_blank");
 }
 
 }
