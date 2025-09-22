@@ -62,7 +62,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router)
   private readonly loginservice = inject(LoginService)
   private readonly mediaService = inject(MediaService)
-  private readonly markForCheck = injectMarkForCheck()  
+  private readonly markForCheck = injectMarkForCheck()
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params) => {
@@ -238,4 +238,14 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   editEvent() {
     this.router.navigate(['/admin/event', String(this.event!.id)])
   }
+
+  startRoute() {
+  const lat = this.location!.geo_point!.point[1];
+  const lng = this.location!.geo_point!.point[0];
+
+  const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+
+  window.open(url, "_blank");
+}
+
 }
