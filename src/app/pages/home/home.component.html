@@ -60,9 +60,9 @@
     </h2>
 
     <div class="grid grid-cols-3 gap-4 lg:grid-cols-4">
-      @for (kategorie of topics; track kategorie.id) {
+      @for (kategorie of topicsOrTypes; track kategorie.id) {
         <app-kategorie-card
-          [color]="kategorie.color"
+          [color]="typeof kategorie.color === 'string' && kategorie.color ? kategorie.color : '#ccc'"
           [text]="kategorie.name"
           [id]="kategorie.id!"
         >

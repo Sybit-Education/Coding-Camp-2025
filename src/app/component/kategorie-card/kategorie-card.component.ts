@@ -12,5 +12,5 @@ import { RecordId } from 'surrealdb'
 export class KategorieCardComponent {
   @Input() text!: string
   @Input() color = ''
-  @Input() id!: RecordId<'topic'>
+  @Input() id!: RecordId<'topic'> | RecordId<'event_type'>
 }

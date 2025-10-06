@@ -19,6 +19,7 @@ import { RecordId } from 'surrealdb'
 import { Event } from '../../models/event.interface'
 import { Topic } from '../../models/topic.interface'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
+import { TypeDB } from '@app/models/typeDB.interface'
 
 type EventOrMore = Event & { isMore?: boolean }
 
@@ -41,6 +42,8 @@ export class HomeComponent implements OnInit {
   displayEvents: EventOrMore[] = []
   topics: Topic[] = []
 
+  topicsOrTypes: (Topic | TypeDB)[] = []
+
   private readonly eventService = inject(EventService)
   private readonly locationService = inject(LocationService)
   private readonly topicService = inject(TopicService)
@@ -54,9 +57,10 @@ export class HomeComponent implements OnInit {
 
   async initializeData() {
     try {
-      const [events, topics] = await Promise.all([
+      const [events, topics, eventTypes] = await Promise.all([
         this.eventService.getAllEvents(),
         this.topicService.getAllTopics(),
+        this.eventService.getAllEventTypes(),
       ])
 
       this.events = this.getUpcomingEvents(events)
@@ -67,7 +71,11 @@ export class HomeComponent implements OnInit {
         this.displayEvents.push({ isMore: true } as EventOrMore)
       }
 
-      this.topics = topics
+      console.log('EventTypes:', eventTypes)
+      this.topicsOrTypes.push(...topics)
+      this.topicsOrTypes.push(...eventTypes.map((type) => ({ ...type, color: '#888888' })))
+
+      console.log('TopicsOrTypes:', this.topicsOrTypes)
     } catch (error) {
       console.error('Fehler beim Laden der Daten:', error)
     }
