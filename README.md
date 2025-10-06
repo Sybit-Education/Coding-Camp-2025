@@ -147,6 +147,7 @@ DEFINE FIELD OVERWRITE id ON media;
 DEFINE FIELD OVERWRITE file ON media TYPE option<string>;
 DEFINE FIELD OVERWRITE fileName ON media TYPE option<string>;
 DEFINE FIELD OVERWRITE fileType ON media TYPE option<string>;
+DEFINE FIELD OVERWRITE mainMedia ON media TYPE option<bool> DEFAULT false;
 
 
 

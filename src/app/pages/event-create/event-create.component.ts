@@ -103,6 +103,7 @@ export class EventCreateComponent implements OnInit {
   previews: string[] = []
   isDragging = false
   images: RecordId<'media'>[] = []
+  mainImageIndex: number | null = null
 
   // ===== Lifecycle =====
   ngOnInit() {
@@ -468,5 +469,9 @@ export class EventCreateComponent implements OnInit {
     ).filter((media): media is Media => media !== null)
     result.push(...resultMedias.map((media) => media.id as RecordId<'media'>))
     return result
+  }
+
+  mainImage(index: number) {
+    this.mainImageIndex = index
   }
 }
