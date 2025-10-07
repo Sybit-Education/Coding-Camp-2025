@@ -45,10 +45,8 @@ export class KategorieComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
-      const id = params['id'] || null
-      if (id.includes('event_type')) {
-        this.id = id.split(':')[1] as RecordIdValue | null
-      }
+      this.id = params['id'] as RecordIdValue | null
+
       this.name = params['name'] || null
 
       // Daten neu laden, wenn sich die Parameter ändern
