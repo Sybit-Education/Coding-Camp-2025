@@ -1,4 +1,5 @@
 export const environment = {
+  configName: '',
   production: false,
   surrealDbAddress: 'wss://surrealdb.sybit.education',
   surrealDbNamespace: '1200.sybit.education',
