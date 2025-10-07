@@ -1,7 +1,8 @@
 export const environment = {
+  configName: 'staging',
   production: true,
   surrealDbAddress: 'wss://surrealdb.sybit.education',
   surrealDbNamespace: '1200.sybit.education',
-  surrealDbDatabase: 'main',
+  surrealDbDatabase: 'develop',
   MEDIA_BASE_URL: 'https://1200-jahre-radolfzell.sybit.education/media/',
 }

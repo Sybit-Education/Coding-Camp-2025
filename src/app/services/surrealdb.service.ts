@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import Surreal, { RecordId, StringRecordId, Token } from 'surrealdb'
-import { environment } from '../../environments/environment.production'
+import { environment } from '../../environments/environment'
 
 @Injectable({
   providedIn: 'root',
@@ -37,7 +37,7 @@ export class SurrealdbService extends Surreal {
       })
       await this.ready
       this.connectionInitialized = true
-      console.log('SurrealDB-Verbindung initialisiert')
+      console.log(`SurrealDB-Verbindung [${environment.surrealDbDatabase}] initialisiert`)
     } catch (error) {
       console.error(
         'Fehler bei der Initialisierung der SurrealDB-Verbindung:',
