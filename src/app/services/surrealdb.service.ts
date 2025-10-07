@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import Surreal, { RecordId, StringRecordId, Token } from 'surrealdb'
-import { environment } from '../../environments/environment.production'
+import { environment } from '../../environments/environment'
 
 @Injectable({
   providedIn: 'root',

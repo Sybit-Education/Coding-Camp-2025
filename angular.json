@@ -107,6 +107,9 @@
             "production": {
               "buildTarget": "1200-jahre-radolfzell:build:production"
             },
+            "staging": {
+              "buildTarget": "1200-jahre-radolfzell:build:staging"
+            },
             "development": {
               "buildTarget": "1200-jahre-radolfzell:build:development"
             }
