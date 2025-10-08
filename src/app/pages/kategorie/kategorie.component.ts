@@ -45,13 +45,15 @@ export class KategorieComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
-      this.id = params['id'] || null
+      this.id = params['id'] as RecordIdValue | null
+
       this.name = params['name'] || null
 
       // Daten neu laden, wenn sich die Parameter ändern
       this.initilizeData().then(() => this.markForCheck())
 
-      this.fromCategory = (this.id?.toString() || 'keineID') + ',' + (this.name || 'keinName')
+      this.fromCategory =
+        (this.id?.toString() || 'keineID') + ',' + (this.name || 'keinName')
     })
   }
   private readonly eventService: EventService = inject(EventService)
@@ -75,8 +77,10 @@ export class KategorieComponent implements OnInit {
       // Filtere Events basierend auf der ID
       const rawEvents = !this.id
         ? allEvents
-        : allEvents.filter((event) =>
-            event.topic?.some((topic) => topic.id === this.id),
+        : allEvents.filter(
+            (event) =>
+              event.topic?.some((topic) => topic.id === this.id) ||
+              event.event_type?.id === this.id,
           )
 
       // Optimiere Location-Ladung durch Caching
