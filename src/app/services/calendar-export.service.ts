@@ -169,6 +169,28 @@ END:VCALENDAR`
   }
 
   /**
+   * Generiert eine Apple Calendar URL (webcal://)
+   * 
+   * Hinweis: Diese Methode erstellt einen temporären Download und öffnet dann
+   * das webcal-Protokoll, das von Apple Kalendern unterstützt wird.
+   */
+  generateAppleCalendarUrl(calEvent: CalendarEvent): string {
+    // Für Apple Kalender verwenden wir das webcal:// Protokoll
+    // Dies funktioniert auf macOS und iOS Geräten
+    
+    // Erstelle die iCal-Datei
+    const icalContent = this.generateICalFile(calEvent);
+    
+    // Erstelle einen Blob und einen temporären URL
+    const blob = new Blob([icalContent], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    
+    // Wandle den http(s):// URL in einen webcal:// URL um
+    // Dies wird von Apple Kalendern erkannt und geöffnet
+    return url.replace(/^https?:\/\//i, 'webcal://');
+  }
+
+  /**
    * Erstellt und downloadet eine .ics Datei
    */
   downloadICalFile(calEvent: CalendarEvent, filename = 'event.ics'): void {

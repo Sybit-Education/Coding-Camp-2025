@@ -159,4 +159,23 @@ export class ShareComponent {
     window.open(url, '_blank');
     this.showCalendarOptions.set(false);
   }
+
+  /**
+   * Öffnet das Event im Apple Kalender
+   * 
+   * Hinweis: Diese Methode funktioniert am besten auf macOS/iOS Geräten
+   */
+  openInAppleCalendar(): void {
+    if (!this.event) return;
+    
+    // Für Apple Kalender laden wir die iCal-Datei direkt herunter
+    // und öffnen sie mit dem webcal:// Protokoll
+    const eventUrl = this.getEventUrl();
+    const calEvent = this.calendarService.createCalendarEvent(this.event, this.location, eventUrl);
+    
+    // Für Apple Kalender ist es am einfachsten, die iCal-Datei direkt herunterzuladen
+    // Das Betriebssystem wird sie dann mit der Kalender-App öffnen
+    this.calendarService.downloadICalFile(calEvent, `${this.event.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`);
+    this.showCalendarOptions.set(false);
+  }
 }
