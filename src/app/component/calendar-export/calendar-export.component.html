@@ -6,9 +6,12 @@
       (click)="toggleCalendarOptions()"
       class="group rounded-full bg-green-200 p-3 transition hover:bg-green-300 focus:ring-2 focus:ring-green-400 focus:outline-none active:ring-green-600"
       aria-label="{{ 'SHARE.ADD_TO_CALENDAR' | translate }}"
+      aria-expanded="{{ showCalendarOptions() }}"
+      aria-haspopup="true"
     >
       <div
         class="relative flex h-[26px] w-[26px] items-center justify-center rounded-full"
+        aria-hidden="true"
       >
         <p>{{ '📅' }}</p>
       </div>
@@ -20,29 +23,37 @@
 
   <!-- Calendar Options Dropdown -->
   @if (showCalendarOptions()) {
-    <div class="absolute top-16 right-0 z-10 w-64 rounded-md bg-white p-2 shadow-lg ring-1 ring-black ring-opacity-5">
+    <div 
+      class="absolute top-16 right-0 z-10 w-64 rounded-md bg-white p-2 shadow-lg ring-1 ring-black ring-opacity-5"
+      role="menu"
+      aria-labelledby="calendar-menu-button"
+    >
       <div class="py-1">
         <button
           class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           (click)="exportToICalendar()"
+          role="menuitem"
         >
           {{ 'SHARE.DOWNLOAD_ICAL' | translate }}
         </button>
         <button
           class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           (click)="openInGoogleCalendar()"
+          role="menuitem"
         >
           {{ 'SHARE.GOOGLE_CALENDAR' | translate }}
         </button>
         <button
           class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           (click)="openInOutlookCalendar()"
+          role="menuitem"
         >
           {{ 'SHARE.OUTLOOK_CALENDAR' | translate }}
         </button>
         <button
           class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           (click)="openInAppleCalendar()"
+          role="menuitem"
         >
           {{ 'SHARE.APPLE_CALENDAR' | translate }}
         </button>

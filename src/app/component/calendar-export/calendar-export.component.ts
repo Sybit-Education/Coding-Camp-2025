@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, inject, signal } from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, Input, inject, signal } from '@angular/core'
 import { TranslateModule } from '@ngx-translate/core'
 import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
@@ -18,12 +18,33 @@ export class CalendarExportComponent {
   showCalendarOptions = signal(false)
   
   private readonly calendarService = inject(CalendarExportService)
+  private readonly elementRef = inject(ElementRef)
 
   /**
    * Zeigt die Kalenderoptionen an oder versteckt sie
    */
   toggleCalendarOptions(): void {
     this.showCalendarOptions.update(value => !value)
+  }
+
+  /**
+   * Schließt das Dropdown-Menü, wenn außerhalb geklickt wird
+   */
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.elementRef.nativeElement.contains(event.target) && this.showCalendarOptions()) {
+      this.showCalendarOptions.set(false)
+    }
+  }
+
+  /**
+   * Schließt das Dropdown-Menü bei Escape-Taste
+   */
+  @HostListener('document:keydown.escape')
+  onEscapePress(): void {
+    if (this.showCalendarOptions()) {
+      this.showCalendarOptions.set(false)
+    }
   }
 
   /**
