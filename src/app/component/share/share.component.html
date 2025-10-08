@@ -1,6 +1,6 @@
 <div class="relative flex flex-col items-center space-y-2">
   <div class="flex gap-4">
-    <!-- Share Button -->
+    <!-- Kombinierter Share Button (teilt Link und Kalenderdatei) -->
     <div class="group">
       <button
         type="button"
@@ -19,7 +19,7 @@
       </p>
     </div>
 
-    <!-- Calendar Button -->
+    <!-- Fallback Calendar Button (nur für Desktop oder wenn Web Share API nicht verfügbar) -->
     <div class="group">
       <button
         type="button"
@@ -39,7 +39,7 @@
     </div>
   </div>
 
-  <!-- Calendar Options Dropdown -->
+  <!-- Calendar Options Dropdown (Fallback für Desktop) -->
   @if (showCalendarOptions()) {
     <div class="absolute top-16 right-0 z-10 w-64 rounded-md bg-white p-2 shadow-lg ring-1 ring-black ring-opacity-5">
       <div class="py-1">
