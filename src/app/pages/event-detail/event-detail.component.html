@@ -6,10 +6,10 @@
   >
     {{ 'event-detail.skip-to-content' | translate }}
   </a>
-  
+
   <!-- Meta-Tags für Social Media Sharing -->
   <meta property="og:title" [attr.content]="event?.name || '1200 Jahre Radolfzell'" />
-  <meta property="og:description" [attr.content]="event?.description ? (event.description | slice:0:150) + '...' : 'Veranstaltung im Rahmen von 1200 Jahre Radolfzell'" />
+  <meta property="og:description" [attr.content]="event?.description ? (event?.description | slice:0:150) + '...' : 'Veranstaltung im Rahmen von 1200 Jahre Radolfzell'" />
   <meta property="og:image" [attr.content]="mediaUrl || '/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg'" />
   <meta property="og:url" [attr.content]="getEventUrl()" />
   <meta property="og:type" content="website" />
