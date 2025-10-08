@@ -16,6 +16,17 @@ export interface CalendarEvent {
 })
 export class CalendarExportService {
   /**
+   * Entfernt HTML-Tags aus einem String
+   */
+  private stripHtml(html: string): string {
+    // Temporäres div-Element erstellen
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    // Text ohne HTML-Tags zurückgeben
+    return tempDiv.textContent || tempDiv.innerText || '';
+  }
+
+  /**
    * Erstellt ein CalendarEvent-Objekt aus einem Event und optional einem Location-Objekt
    */
   createCalendarEvent(event: Event, location?: Location | null, eventUrl?: string): CalendarEvent {
@@ -35,8 +46,11 @@ export class CalendarExportService {
       locationStr = parts.join(', ')
     }
 
-    // Beschreibung mit Link zur Veranstaltung anreichern
-    let description = event.description || ''
+    // HTML aus der Beschreibung entfernen und mit Link zur Veranstaltung anreichern
+    let description = event.description ? this.stripHtml(event.description) : '';
+    // Entferne überschüssige Leerzeichen und ersetze mehrere Leerzeichen durch ein einzelnes
+    description = description.replace(/\s+/g, ' ').trim();
+    
     if (eventUrl) {
       description += description ? '\n\n' : '';
       description += `Mehr Informationen: ${eventUrl}`;
@@ -68,6 +82,8 @@ export class CalendarExportService {
       .replace(/\n/g, '\\n')
       .replace(/,/g, '\\,')
       .replace(/;/g, '\\;')
+      .replace(/</g, '') // Entferne verbliebene < Zeichen
+      .replace(/>/g, '') // Entferne verbliebene > Zeichen
   }
 
   /**
@@ -109,12 +125,15 @@ END:VCALENDAR`
     const startDate = calEvent.startDate.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/g, '')
     const endDate = (calEvent.endDate || calEvent.startDate).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/g, '')
     
+    // Stelle sicher, dass die Beschreibung keine HTML-Tags enthält
+    const cleanDescription = this.stripHtml(calEvent.description || '');
+    
     // URLSearchParams übernimmt automatisch das korrekte URL-Encoding
     const params = new URLSearchParams({
       action: 'TEMPLATE',
       text: calEvent.title,
       dates: `${startDate}/${endDate}`,
-      details: calEvent.description || '',
+      details: cleanDescription,
       location: calEvent.location || '',
     })
     
@@ -132,6 +151,9 @@ END:VCALENDAR`
     const startDate = calEvent.startDate.toISOString().substring(0, 16).replace('T', ' ')
     const endDate = (calEvent.endDate || calEvent.startDate).toISOString().substring(0, 16).replace('T', ' ')
     
+    // Stelle sicher, dass die Beschreibung keine HTML-Tags enthält
+    const cleanDescription = this.stripHtml(calEvent.description || '');
+    
     // URLSearchParams übernimmt automatisch das korrekte URL-Encoding
     const params = new URLSearchParams({
       path: '/calendar/action/compose',
@@ -139,7 +161,7 @@ END:VCALENDAR`
       subject: calEvent.title,
       startdt: startDate,
       enddt: endDate,
-      body: calEvent.description || '',
+      body: cleanDescription,
       location: calEvent.location || '',
     })
     
