@@ -73,7 +73,7 @@ export class HomeComponent implements OnInit {
 
       console.log('EventTypes:', eventTypes)
       this.topicsOrTypes.push(...topics)
-      this.topicsOrTypes.push(...eventTypes.map((type) => ({ ...type, color: '#888888' })))
+      this.topicsOrTypes.push(...eventTypes)
 
       console.log('TopicsOrTypes:', this.topicsOrTypes)
     } catch (error) {
