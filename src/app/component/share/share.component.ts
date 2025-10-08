@@ -2,11 +2,10 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
 import { TranslateModule } from '@ngx-translate/core'
-import { CalendarExportComponent } from '../calendar-export/calendar-export.component'
 
 @Component({
   selector: 'app-share',
-  imports: [TranslateModule, CalendarExportComponent],
+  imports: [TranslateModule],
   templateUrl: './share.component.html',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,

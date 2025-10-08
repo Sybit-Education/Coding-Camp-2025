@@ -1,27 +1,19 @@
-<div class="relative flex flex-col items-center space-y-2">
-  <div class="flex gap-4">
-    <!-- Share Button -->
-    <div class="group">
-      <button
-        type="button"
-        (click)="sharePage()"
-        class="group rounded-full bg-blue-200 p-3 transition hover:bg-blue-300 focus:ring-2 focus:ring-blue-400 focus:outline-none active:ring-blue-600"
-        aria-label="{{ 'SHARE.SHARE' | translate }}"
-      >
-        <div
-          class="relative flex h-[26px] w-[26px] items-center justify-center rounded-full"
-        >
-          <p>{{ '📤' }}</p>
-        </div>
-      </button>
-      <p class="mt-1 text-sm font-bold text-center">
-        {{ 'SHARE.SHARE' | translate }}
-      </p>
+<div class="relative">
+  <button
+    type="button"
+    (click)="sharePage()"
+    class="group rounded-full bg-blue-200 p-3 transition hover:bg-blue-300 focus:ring-2 focus:ring-blue-400 focus:outline-none active:ring-blue-600"
+    aria-label="{{ 'SHARE.SHARE' | translate }}"
+  >
+    <div
+      class="relative flex h-[26px] w-[26px] items-center justify-center rounded-full"
+    >
+      <p>{{ '📤' }}</p>
     </div>
-
-    <!-- Calendar Export Component -->
-    <app-calendar-export [event]="event" [location]="location"></app-calendar-export>
-  </div>
+  </button>
+  <p class="mt-1 text-sm font-bold text-center">
+    {{ 'SHARE.SHARE' | translate }}
+  </p>
 
   <!-- Benachrichtigung für Benutzer, wenn Link kopiert wurde -->
   @if (showCopyMessage) {

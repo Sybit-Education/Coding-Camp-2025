@@ -111,8 +111,11 @@
                 <p>{{ organizer?.name }}</p>
               </div>
             </div>
-            <div>
-              <app-share [event]="event" [location]="location" />
+              <div class="relative flex flex-col items-center space-y-2">
+                <div class="flex gap-4">
+                  <app-share [event]="event" [location]="location" />
+                  <app-calendar-export [event]="event" [location]="location" />
+               </div>
             </div>
           </div>
         </div>
