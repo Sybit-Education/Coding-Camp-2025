@@ -17,7 +17,7 @@ export class ShareComponent {
   @Input() location: Location | null = null
   showCopyMessage = false
   showCalendarOptions = signal(false)
-  
+
   private readonly calendarService = inject(CalendarExportService)
 
   sharePage() {
@@ -40,7 +40,6 @@ export class ShareComponent {
           text: text,
           url: url,
         })
-        .then(() => console.log('Erfolgreich geteilt'))
         .catch((error) => {
           console.error('Fehler beim Teilen:', error)
           // Fallback zur Zwischenablage
@@ -60,13 +59,11 @@ export class ShareComponent {
       return false
     }
     const canShare = navigator.canShare(data)
-    console.log('Kann geteilt werden:', canShare)
     return canShare
   }
 
   private copyToClipboard(text: string) {
-    navigator.clipboard.writeText(text).catch((err) => {
-      console.error('Fehler beim Kopieren:', err)
+    navigator.clipboard.writeText(text).catch(() => {
       // Alternativer Fallback für ältere Browser
       this.fallbackCopyToClipboard(text)
     })
@@ -92,7 +89,6 @@ export class ShareComponent {
       document.body.removeChild(textArea)
 
       if (successful) {
-        console.log('Link in Zwischenablage kopiert (Fallback)')
         this.showCopyMessage = true
         setTimeout(() => {
           this.showCopyMessage = false
@@ -114,9 +110,9 @@ export class ShareComponent {
    * Generiert die Event-URL für die aktuelle Veranstaltung
    */
   private getEventUrl(): string {
-    if (!this.event || !this.event.id) return '';
-    
-    const id = this.event.id.id || '';
+    const id = this.event?.id?.id ?? '';
+    if (!id) return '';
+
     const baseUrl = window.location.origin;
     return `${baseUrl}/event/${id}`;
   }
@@ -126,7 +122,7 @@ export class ShareComponent {
    */
   exportToICalendar(): void {
     if (!this.event) return;
-    
+
     const eventUrl = this.getEventUrl();
     const calEvent = this.calendarService.createCalendarEvent(this.event, this.location, eventUrl);
     const filename = `${this.event.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`;
@@ -139,7 +135,7 @@ export class ShareComponent {
    */
   openInGoogleCalendar(): void {
     if (!this.event) return;
-    
+
     const eventUrl = this.getEventUrl();
     const calEvent = this.calendarService.createCalendarEvent(this.event, this.location, eventUrl);
     const url = this.calendarService.generateGoogleCalendarUrl(calEvent);
@@ -152,7 +148,7 @@ export class ShareComponent {
    */
   openInOutlookCalendar(): void {
     if (!this.event) return;
-    
+
     const eventUrl = this.getEventUrl();
     const calEvent = this.calendarService.createCalendarEvent(this.event, this.location, eventUrl);
     const url = this.calendarService.generateOutlookCalendarUrl(calEvent);
@@ -162,17 +158,17 @@ export class ShareComponent {
 
   /**
    * Öffnet das Event im Apple Kalender
-   * 
+   *
    * Hinweis: Diese Methode funktioniert am besten auf macOS/iOS Geräten
    */
   openInAppleCalendar(): void {
     if (!this.event) return;
-    
+
     // Für Apple Kalender laden wir die iCal-Datei direkt herunter
     // und öffnen sie mit dem webcal:// Protokoll
     const eventUrl = this.getEventUrl();
     const calEvent = this.calendarService.createCalendarEvent(this.event, this.location, eventUrl);
-    
+
     // Für Apple Kalender ist es am einfachsten, die iCal-Datei direkt herunterzuladen
     // Das Betriebssystem wird sie dann mit der Kalender-App öffnen
     this.calendarService.downloadICalFile(calEvent, `${this.event.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`);
