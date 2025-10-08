@@ -59,7 +59,7 @@
       {{ 'home.categories' | translate }}
     </h2>
 
-    <div class="grid grid-cols-3 gap-4 lg:grid-cols-4">
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
       @for (kategorie of topicsOrTypes; track kategorie.id) {
         <app-kategorie-card
           [color]="typeof kategorie.color === 'string' && kategorie.color ? kategorie.color : '#ccc'"
