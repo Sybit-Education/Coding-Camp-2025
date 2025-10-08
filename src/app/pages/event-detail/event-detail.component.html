@@ -89,7 +89,7 @@
                   {{ 'event-detail.costs' | translate }}
                 </h3>
                 <p>
-                  @if (event.price && +event.price > 0) {
+                  @if (event.price && event.price > 0) {
                     {{ event.price }}
                   } @else {
                     {{ 'event-detail.free' | translate }}
