@@ -1,0 +1,45 @@
+<div class="relative h-full w-full rounded-t-2xl sm:w-full">
+  <!-- Bilder -->
+  @for (item of images; track $index) {
+    @if ($index === selectedImageIndex) {
+      <div class="flex h-full w-full justify-center rounded-t-2xl">
+        <img
+          class="w-full rounded-t-2xl object-cover"
+          [src]="item"
+          [alt]="
+            eventName
+              ? 'Bild der Veranstaltung: ' + eventName
+              : 'Veranstaltungsbild'
+          "
+        />
+      </div>
+    }
+  }
+
+  <!-- Buttons über dem Bild -->
+  <div
+    class="pointer-events-none absolute inset-0 grid grid-cols-2 items-center p-4"
+  >
+    <div class="flex items-center justify-start">
+      <button
+        class="pointer-events-auto rounded-full bg-black/50 p-2 text-5xl text-white hover:bg-black/50"
+        (click)="
+          selectedImageIndex =
+            (selectedImageIndex - 1 + images.length) % images.length
+        "
+        aria-label="Vorheriges Bild"
+      >
+        <mat-icon>keyboard_arrow_left</mat-icon>
+      </button>
+    </div>
+    <div class="flex items-center justify-end">
+      <button
+        class="pointer-events-auto rounded-full bg-black/50 p-2 text-5xl text-white hover:bg-black/50"
+        (click)="selectedImageIndex = (selectedImageIndex + 1) % images.length"
+        aria-label="Nächstes Bild"
+      >
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
