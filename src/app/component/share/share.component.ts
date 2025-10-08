@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input, inject, signal } from '@angular/core'
 
 import { Event } from '../../models/event.interface'
+import { Location } from '../../models/location.interface'
 import { TranslateModule } from '@ngx-translate/core'
+import { CalendarExportService } from '../../services/calendar-export.service'
 
 @Component({
   selector: 'app-share',
@@ -12,7 +14,11 @@ import { TranslateModule } from '@ngx-translate/core'
 })
 export class ShareComponent {
   @Input() event: Event | null = null
+  @Input() location: Location | null = null
   showCopyMessage = false
+  showCalendarOptions = signal(false)
+  
+  private readonly calendarService = inject(CalendarExportService)
 
   sharePage() {
     if (!this.event || !this.event.id) {
@@ -97,5 +103,48 @@ export class ShareComponent {
     } catch (err) {
       console.error('Auch Fallback-Kopieren fehlgeschlagen:', err)
     }
+  }
+
+  /**
+   * Zeigt die Kalenderoptionen an oder versteckt sie
+   */
+  toggleCalendarOptions(): void {
+    this.showCalendarOptions.update(value => !value)
+  }
+
+  /**
+   * Exportiert das Event als iCal-Datei (.ics)
+   */
+  exportToICalendar(): void {
+    if (!this.event) return
+    
+    const calEvent = this.calendarService.createCalendarEvent(this.event, this.location)
+    const filename = `${this.event.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`
+    this.calendarService.downloadICalFile(calEvent, filename)
+    this.showCalendarOptions.set(false)
+  }
+
+  /**
+   * Öffnet das Event im Google Kalender
+   */
+  openInGoogleCalendar(): void {
+    if (!this.event) return
+    
+    const calEvent = this.calendarService.createCalendarEvent(this.event, this.location)
+    const url = this.calendarService.generateGoogleCalendarUrl(calEvent)
+    window.open(url, '_blank')
+    this.showCalendarOptions.set(false)
+  }
+
+  /**
+   * Öffnet das Event im Outlook Kalender
+   */
+  openInOutlookCalendar(): void {
+    if (!this.event) return
+    
+    const calEvent = this.calendarService.createCalendarEvent(this.event, this.location)
+    const url = this.calendarService.generateOutlookCalendarUrl(calEvent)
+    window.open(url, '_blank')
+    this.showCalendarOptions.set(false)
   }
 }

@@ -1,22 +1,69 @@
 <div class="relative flex flex-col items-center space-y-2">
-  <div class="group relative top-3 right-10.5">
-    <button
-      type="button"
-      (click)="sharePage()"
-      class="group rounded-full bg-blue-200 p-3 transition hover:bg-blue-300 focus:ring-2 focus:ring-blue-400 focus:outline-none active:ring-blue-600"
-    >
-      <div
-        class="relative flex h-[26px] w-[26px] items-center justify-center rounded-full"
+  <div class="flex gap-4">
+    <!-- Share Button -->
+    <div class="group">
+      <button
+        type="button"
+        (click)="sharePage()"
+        class="group rounded-full bg-blue-200 p-3 transition hover:bg-blue-300 focus:ring-2 focus:ring-blue-400 focus:outline-none active:ring-blue-600"
+        aria-label="{{ 'SHARE.SHARE' | translate }}"
       >
-        <p>{{ '📤' }}</p>
-      </div>
-    </button>
+        <div
+          class="relative flex h-[26px] w-[26px] items-center justify-center rounded-full"
+        >
+          <p>{{ '📤' }}</p>
+        </div>
+      </button>
+      <p class="mt-1 text-sm font-bold text-center">
+        {{ 'SHARE.SHARE' | translate }}
+      </p>
+    </div>
+
+    <!-- Calendar Button -->
+    <div class="group">
+      <button
+        type="button"
+        (click)="toggleCalendarOptions()"
+        class="group rounded-full bg-green-200 p-3 transition hover:bg-green-300 focus:ring-2 focus:ring-green-400 focus:outline-none active:ring-green-600"
+        aria-label="{{ 'SHARE.ADD_TO_CALENDAR' | translate }}"
+      >
+        <div
+          class="relative flex h-[26px] w-[26px] items-center justify-center rounded-full"
+        >
+          <p>{{ '📅' }}</p>
+        </div>
+      </button>
+      <p class="mt-1 text-sm font-bold text-center">
+        {{ 'SHARE.ADD_TO_CALENDAR' | translate }}
+      </p>
+    </div>
   </div>
 
-  <!-- Beschriftung unter dem Button -->
-  <p class="relative top-1 right-10.5 mt-1 text-sm font-bold">
-    {{ 'SHARE.SHARE' | translate }}
-  </p>
+  <!-- Calendar Options Dropdown -->
+  @if (showCalendarOptions()) {
+    <div class="absolute top-16 right-0 z-10 w-64 rounded-md bg-white p-2 shadow-lg ring-1 ring-black ring-opacity-5">
+      <div class="py-1">
+        <button
+          class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+          (click)="exportToICalendar()"
+        >
+          {{ 'SHARE.DOWNLOAD_ICAL' | translate }}
+        </button>
+        <button
+          class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+          (click)="openInGoogleCalendar()"
+        >
+          {{ 'SHARE.GOOGLE_CALENDAR' | translate }}
+        </button>
+        <button
+          class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+          (click)="openInOutlookCalendar()"
+        >
+          {{ 'SHARE.OUTLOOK_CALENDAR' | translate }}
+        </button>
+      </div>
+    </div>
+  }
 
   <!-- Benachrichtigung für Benutzer, wenn Link kopiert wurde -->
   @if (showCopyMessage) {

@@ -184,7 +184,11 @@
     "image-here": "Drag image here"
   },
   "SHARE": {
-    "SHARE": "Share ..."
+    "SHARE": "Share ...",
+    "ADD_TO_CALENDAR": "Add to calendar",
+    "DOWNLOAD_ICAL": "Download iCal file (.ics)",
+    "GOOGLE_CALENDAR": "Google Calendar",
+    "OUTLOOK_CALENDAR": "Outlook Calendar"
   },
   "share": {
     "copy-notification": "Link was copied into clipboard."
