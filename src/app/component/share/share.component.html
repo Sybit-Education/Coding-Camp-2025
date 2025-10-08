@@ -1,6 +1,6 @@
 <div class="relative flex flex-col items-center space-y-2">
   <div class="flex gap-4">
-    <!-- Kombinierter Share Button (teilt Link und Kalenderdatei) -->
+    <!-- Share Button -->
     <div class="group">
       <button
         type="button"
@@ -19,57 +19,9 @@
       </p>
     </div>
 
-    <!-- Fallback Calendar Button (nur für Desktop oder wenn Web Share API nicht verfügbar) -->
-    <div class="group">
-      <button
-        type="button"
-        (click)="toggleCalendarOptions()"
-        class="group rounded-full bg-green-200 p-3 transition hover:bg-green-300 focus:ring-2 focus:ring-green-400 focus:outline-none active:ring-green-600"
-        aria-label="{{ 'SHARE.ADD_TO_CALENDAR' | translate }}"
-      >
-        <div
-          class="relative flex h-[26px] w-[26px] items-center justify-center rounded-full"
-        >
-          <p>{{ '📅' }}</p>
-        </div>
-      </button>
-      <p class="mt-1 text-sm font-bold text-center">
-        {{ 'SHARE.ADD_TO_CALENDAR' | translate }}
-      </p>
-    </div>
+    <!-- Calendar Export Component -->
+    <app-calendar-export [event]="event" [location]="location"></app-calendar-export>
   </div>
-
-  <!-- Calendar Options Dropdown (Fallback für Desktop) -->
-  @if (showCalendarOptions()) {
-    <div class="absolute top-16 right-0 z-10 w-64 rounded-md bg-white p-2 shadow-lg ring-1 ring-black ring-opacity-5">
-      <div class="py-1">
-        <button
-          class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-          (click)="exportToICalendar()"
-        >
-          {{ 'SHARE.DOWNLOAD_ICAL' | translate }}
-        </button>
-        <button
-          class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-          (click)="openInGoogleCalendar()"
-        >
-          {{ 'SHARE.GOOGLE_CALENDAR' | translate }}
-        </button>
-        <button
-          class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-          (click)="openInOutlookCalendar()"
-        >
-          {{ 'SHARE.OUTLOOK_CALENDAR' | translate }}
-        </button>
-        <button
-          class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-          (click)="openInAppleCalendar()"
-        >
-          {{ 'SHARE.APPLE_CALENDAR' | translate }}
-        </button>
-      </div>
-    </div>
-  }
 
   <!-- Benachrichtigung für Benutzer, wenn Link kopiert wurde -->
   @if (showCopyMessage) {

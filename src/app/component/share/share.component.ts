@@ -1,13 +1,12 @@
-import { ChangeDetectionStrategy, Component, Input, inject, signal } from '@angular/core'
-
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
 import { TranslateModule } from '@ngx-translate/core'
-import { CalendarExportService } from '../../services/calendar-export.service'
+import { CalendarExportComponent } from '../calendar-export/calendar-export.component'
 
 @Component({
   selector: 'app-share',
-  imports: [TranslateModule],
+  imports: [TranslateModule, CalendarExportComponent],
   templateUrl: './share.component.html',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -16,9 +15,6 @@ export class ShareComponent {
   @Input() event: Event | null = null
   @Input() location: Location | null = null
   showCopyMessage = false
-  showCalendarOptions = signal(false)
-
-  private readonly calendarService = inject(CalendarExportService)
 
   sharePage() {
     if (!this.event || !this.event.id) {
@@ -100,13 +96,6 @@ export class ShareComponent {
   }
 
   /**
-   * Zeigt die Kalenderoptionen an oder versteckt sie
-   */
-  toggleCalendarOptions(): void {
-    this.showCalendarOptions.update(value => !value)
-  }
-
-  /**
    * Generiert die Event-URL für die aktuelle Veranstaltung
    */
   private getEventUrl(): string {
@@ -115,63 +104,5 @@ export class ShareComponent {
 
     const baseUrl = window.location.origin;
     return `${baseUrl}/event/${id}`;
-  }
-
-  /**
-   * Exportiert das Event als iCal-Datei (.ics)
-   */
-  exportToICalendar(): void {
-    if (!this.event) return;
-
-    const eventUrl = this.getEventUrl();
-    const calEvent = this.calendarService.createCalendarEvent(this.event, this.location, eventUrl);
-    const filename = `${this.event.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`;
-    this.calendarService.downloadICalFile(calEvent, filename);
-    this.showCalendarOptions.set(false);
-  }
-
-  /**
-   * Öffnet das Event im Google Kalender
-   */
-  openInGoogleCalendar(): void {
-    if (!this.event) return;
-
-    const eventUrl = this.getEventUrl();
-    const calEvent = this.calendarService.createCalendarEvent(this.event, this.location, eventUrl);
-    const url = this.calendarService.generateGoogleCalendarUrl(calEvent);
-    window.open(url, '_blank');
-    this.showCalendarOptions.set(false);
-  }
-
-  /**
-   * Öffnet das Event im Outlook Kalender
-   */
-  openInOutlookCalendar(): void {
-    if (!this.event) return;
-
-    const eventUrl = this.getEventUrl();
-    const calEvent = this.calendarService.createCalendarEvent(this.event, this.location, eventUrl);
-    const url = this.calendarService.generateOutlookCalendarUrl(calEvent);
-    window.open(url, '_blank');
-    this.showCalendarOptions.set(false);
-  }
-
-  /**
-   * Öffnet das Event im Apple Kalender
-   *
-   * Hinweis: Diese Methode funktioniert am besten auf macOS/iOS Geräten
-   */
-  openInAppleCalendar(): void {
-    if (!this.event) return;
-
-    // Für Apple Kalender laden wir die iCal-Datei direkt herunter
-    // und öffnen sie mit dem webcal:// Protokoll
-    const eventUrl = this.getEventUrl();
-    const calEvent = this.calendarService.createCalendarEvent(this.event, this.location, eventUrl);
-
-    // Für Apple Kalender ist es am einfachsten, die iCal-Datei direkt herunterzuladen
-    // Das Betriebssystem wird sie dann mit der Kalender-App öffnen
-    this.calendarService.downloadICalFile(calEvent, `${this.event.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`);
-    this.showCalendarOptions.set(false);
   }
 }
