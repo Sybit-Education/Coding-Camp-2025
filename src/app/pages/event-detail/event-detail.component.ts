@@ -242,12 +242,24 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   }
 
   startRoute() {
-  const lat = this.location!.geo_point!.point[1];
-  const lng = this.location!.geo_point!.point[0];
+    const lat = this.location!.geo_point!.point[1];
+    const lng = this.location!.geo_point!.point[0];
 
-  const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
 
-  window.open(url, "_blank");
-}
+    window.open(url, "_blank");
+  }
+
+  /**
+   * Generiert die Event-URL für die aktuelle Veranstaltung
+   * Wird für die Meta-Tags verwendet
+   */
+  getEventUrl(): string {
+    if (!this.event || !this.event.id) return window.location.href;
+    
+    const id = this.event.id.id || '';
+    const baseUrl = window.location.origin;
+    return `${baseUrl}/event/${id}`;
+  }
 
 }
