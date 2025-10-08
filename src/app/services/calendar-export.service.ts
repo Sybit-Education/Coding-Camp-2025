@@ -18,7 +18,7 @@ export class CalendarExportService {
   /**
    * Erstellt ein CalendarEvent-Objekt aus einem Event und optional einem Location-Objekt
    */
-  createCalendarEvent(event: Event, location?: Location | null): CalendarEvent {
+  createCalendarEvent(event: Event, location?: Location | null, eventUrl?: string): CalendarEvent {
     // Standardwerte für Enddatum setzen, falls nicht vorhanden
     const endDate = event.date_end || new Date(event.date_start.getTime() + 60 * 60 * 1000) // +1h als Standard
 
@@ -35,13 +35,20 @@ export class CalendarExportService {
       locationStr = parts.join(', ')
     }
 
+    // Beschreibung mit Link zur Veranstaltung anreichern
+    let description = event.description || ''
+    if (eventUrl) {
+      description += description ? '\n\n' : '';
+      description += `Mehr Informationen: ${eventUrl}`;
+    }
+
     return {
       title: event.name,
-      description: event.description || '',
+      description: description,
       location: locationStr,
       startDate: new Date(event.date_start),
       endDate: endDate ? new Date(endDate) : undefined,
-      url: event.more_info_link,
+      url: eventUrl || event.more_info_link,
     }
   }
 

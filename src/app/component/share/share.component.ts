@@ -26,9 +26,7 @@ export class ShareComponent {
       return
     }
 
-    const id = this.event.id.id || ''
-    const baseUrl = window.location.origin
-    const url = `${baseUrl}/event/${id}`
+    const url = this.getEventUrl()
 
     // Dynamischen Titel und Text basierend auf dem Event-Objekt erstellen
     const title = this.event.name || 'Veranstaltung in Radolfzell'
@@ -113,38 +111,52 @@ export class ShareComponent {
   }
 
   /**
+   * Generiert die Event-URL für die aktuelle Veranstaltung
+   */
+  private getEventUrl(): string {
+    if (!this.event || !this.event.id) return '';
+    
+    const id = this.event.id.id || '';
+    const baseUrl = window.location.origin;
+    return `${baseUrl}/event/${id}`;
+  }
+
+  /**
    * Exportiert das Event als iCal-Datei (.ics)
    */
   exportToICalendar(): void {
-    if (!this.event) return
+    if (!this.event) return;
     
-    const calEvent = this.calendarService.createCalendarEvent(this.event, this.location)
-    const filename = `${this.event.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`
-    this.calendarService.downloadICalFile(calEvent, filename)
-    this.showCalendarOptions.set(false)
+    const eventUrl = this.getEventUrl();
+    const calEvent = this.calendarService.createCalendarEvent(this.event, this.location, eventUrl);
+    const filename = `${this.event.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`;
+    this.calendarService.downloadICalFile(calEvent, filename);
+    this.showCalendarOptions.set(false);
   }
 
   /**
    * Öffnet das Event im Google Kalender
    */
   openInGoogleCalendar(): void {
-    if (!this.event) return
+    if (!this.event) return;
     
-    const calEvent = this.calendarService.createCalendarEvent(this.event, this.location)
-    const url = this.calendarService.generateGoogleCalendarUrl(calEvent)
-    window.open(url, '_blank')
-    this.showCalendarOptions.set(false)
+    const eventUrl = this.getEventUrl();
+    const calEvent = this.calendarService.createCalendarEvent(this.event, this.location, eventUrl);
+    const url = this.calendarService.generateGoogleCalendarUrl(calEvent);
+    window.open(url, '_blank');
+    this.showCalendarOptions.set(false);
   }
 
   /**
    * Öffnet das Event im Outlook Kalender
    */
   openInOutlookCalendar(): void {
-    if (!this.event) return
+    if (!this.event) return;
     
-    const calEvent = this.calendarService.createCalendarEvent(this.event, this.location)
-    const url = this.calendarService.generateOutlookCalendarUrl(calEvent)
-    window.open(url, '_blank')
-    this.showCalendarOptions.set(false)
+    const eventUrl = this.getEventUrl();
+    const calEvent = this.calendarService.createCalendarEvent(this.event, this.location, eventUrl);
+    const url = this.calendarService.generateOutlookCalendarUrl(calEvent);
+    window.open(url, '_blank');
+    this.showCalendarOptions.set(false);
   }
 }
