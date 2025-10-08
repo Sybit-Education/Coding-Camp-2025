@@ -60,20 +60,32 @@ export class CalendarExportService {
   }
 
   /**
+   * Sicheres Escapen von Zeichen für iCalendar-Format
+   */
+  private escapeICalText(text: string): string {
+    return text
+      .replace(/\\/g, '\\\\') // Backslash muss zuerst ersetzt werden
+      .replace(/\n/g, '\\n')
+      .replace(/,/g, '\\,')
+      .replace(/;/g, '\\;')
+  }
+
+  /**
    * Erstellt eine iCalendar-Datei (.ics) für ein Event
    */
   generateICalFile(calEvent: CalendarEvent): string {
     const startDate = this.formatDateForICal(calEvent.startDate)
     const endDate = this.formatDateForICal(calEvent.endDate || calEvent.startDate)
     
-    // Beschreibung escapen
-    const description = (calEvent.description || '')
-      .replace(/\n/g, '\\n')
-      .replace(/,/g, '\\,')
-      .replace(/;/g, '\\;')
+    // Beschreibung sicher escapen
+    const description = this.escapeICalText(calEvent.description || '')
+    
+    // Titel und Ort sicher escapen
+    const summary = this.escapeICalText(calEvent.title)
+    const location = this.escapeICalText(calEvent.location)
     
     // URL hinzufügen, falls vorhanden
-    const urlLine = calEvent.url ? `URL:${calEvent.url}\n` : ''
+    const urlLine = calEvent.url ? `URL:${this.escapeICalText(calEvent.url)}\n` : ''
     
     return `BEGIN:VCALENDAR
 VERSION:2.0
@@ -81,10 +93,10 @@ PRODID:-//1200 Jahre Radolfzell//Calendar Export//DE
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
-SUMMARY:${calEvent.title}
+SUMMARY:${summary}
 DTSTART:${startDate}
 DTEND:${endDate}
-LOCATION:${calEvent.location}
+LOCATION:${location}
 DESCRIPTION:${description}
 ${urlLine}END:VEVENT
 END:VCALENDAR`
@@ -97,6 +109,7 @@ END:VCALENDAR`
     const startDate = calEvent.startDate.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/g, '')
     const endDate = (calEvent.endDate || calEvent.startDate).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/g, '')
     
+    // URLSearchParams übernimmt automatisch das korrekte URL-Encoding
     const params = new URLSearchParams({
       action: 'TEMPLATE',
       text: calEvent.title,
@@ -119,6 +132,7 @@ END:VCALENDAR`
     const startDate = calEvent.startDate.toISOString().substring(0, 16).replace('T', ' ')
     const endDate = (calEvent.endDate || calEvent.startDate).toISOString().substring(0, 16).replace('T', ' ')
     
+    // URLSearchParams übernimmt automatisch das korrekte URL-Encoding
     const params = new URLSearchParams({
       path: '/calendar/action/compose',
       rru: 'addevent',
