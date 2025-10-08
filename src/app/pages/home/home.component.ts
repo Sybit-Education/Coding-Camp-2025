@@ -71,11 +71,8 @@ export class HomeComponent implements OnInit {
         this.displayEvents.push({ isMore: true } as EventOrMore)
       }
 
-      console.log('EventTypes:', eventTypes)
       this.topicsOrTypes.push(...topics)
       this.topicsOrTypes.push(...eventTypes)
-
-      console.log('TopicsOrTypes:', this.topicsOrTypes)
     } catch (error) {
       console.error('Fehler beim Laden der Daten:', error)
     }
