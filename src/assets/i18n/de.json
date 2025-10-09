@@ -180,7 +180,12 @@
     "image-here": "Bild hierher ziehen"
   },
   "SHARE": {
-    "SHARE": "Teilen ..."
+    "SHARE": "Teilen",
+    "ADD_TO_CALENDAR": "Zum Kalender",
+    "DOWNLOAD_ICAL": "Als iCal-Datei (.ics)",
+    "GOOGLE_CALENDAR": "Google Kalender",
+    "OUTLOOK_CALENDAR": "Outlook Kalender",
+    "APPLE_CALENDAR": "Apple Kalender"
   },
   "share": {
     "copy-notification": "Der Link wurde in die Zwischenablage kopiert."

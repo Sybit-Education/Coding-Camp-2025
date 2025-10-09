@@ -32,9 +32,16 @@ export class LoginService implements CanActivate {
   private readonly decoder = new JwtHelperService()
 
   async checkInitialLoginState(): Promise<void> {
-    const loggedIn = await this.checkLoginStatus()
-    this.isLoggedInState.set(loggedIn)
-    this.isLoggedInSubject.next(loggedIn)
+    try {
+      const loggedIn = await this.checkLoginStatus()
+      this.isLoggedInState.set(loggedIn)
+      this.isLoggedInSubject.next(loggedIn)
+    } catch (error) {
+      console.error('Login state check failed:', error)
+      this.setToken('')
+      this.isLoggedInState.set(false)
+      this.isLoggedInSubject.next(false)
+    }
   }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
