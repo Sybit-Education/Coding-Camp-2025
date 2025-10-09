@@ -25,6 +25,7 @@ import { FavoriteButtonComponent } from '../../component/favorite-button/favorit
 import { ShareComponent } from '../../component/share/share.component'
 import { CalendarExportComponent } from '../../component/calendar-export/calendar-export.component'
 import { MediaService } from '@app/services/media.service'
+import { ImageCarouselComponent } from "@app/component/image-carousel/image-carousel.component";
 
 @Component({
   selector: 'app-event-detail-page',
@@ -36,8 +37,9 @@ import { MediaService } from '@app/services/media.service'
     FavoriteButtonComponent,
     TranslateModule,
     ShareComponent,
+    ImageCarouselComponent,
     CalendarExportComponent,
-  ],
+],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -51,7 +53,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   error: string | null = null
   eventId = ''
 
-  mediaUrl: string | null = null
+  mediaUrl: (string | null)[] = []
 
   protected isLoggedIn = false
   evntIdString: string | undefined
@@ -183,9 +185,11 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       const promises: Promise<unknown>[] = []
 
       // Media-URL laden
-      let mediaUrlPromise: Promise<string | null> = Promise.resolve(null)
+      let mediaUrlPromise: Promise<(string | null)[]> = Promise.resolve([null])
       if (foundEvent.media?.length > 0) {
-        mediaUrlPromise = this.mediaService.getMediaUrl(foundEvent.media[0])
+        mediaUrlPromise = Promise.all(
+          foundEvent.media.map((mediaId) => this.mediaService.getMediaUrl(mediaId))
+        )
         promises.push(mediaUrlPromise)
       }
 
@@ -256,7 +260,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
    */
   getEventUrl(): string {
     if (!this.event || !this.event.id) return window.location.href;
-    
+
     const id = this.event.id.id || '';
     const baseUrl = window.location.origin;
     return `${baseUrl}/event/${id}`;

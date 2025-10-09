@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
 import { Media } from '../models/media.model'
 import { RecordId, StringRecordId } from 'surrealdb'
-import { environment } from '@environments/environment.production'
+import { environment } from '@environments/environment'
 @Injectable({
   providedIn: 'root',
 })
