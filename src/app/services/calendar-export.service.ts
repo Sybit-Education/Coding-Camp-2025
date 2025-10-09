@@ -146,26 +146,31 @@ END:VCALENDAR`
 
   /**
    * Generiert eine Outlook.com Calendar URL
+   * 
+   * Basierend auf der aktuellen Outlook.com Web-Schnittstelle
    */
   generateOutlookCalendarUrl(calEvent: CalendarEvent): string {
-    const startDate = calEvent.startDate.toISOString().substring(0, 16).replace('T', ' ')
-    const endDate = (calEvent.endDate || calEvent.startDate).toISOString().substring(0, 16).replace('T', ' ')
+    // Formatiere Datum im ISO-Format für Outlook
+    const startISO = calEvent.startDate.toISOString()
+    const endISO = (calEvent.endDate || new Date(calEvent.startDate.getTime() + 60 * 60 * 1000)).toISOString()
     
     // Stelle sicher, dass die Beschreibung keine HTML-Tags enthält
-    const cleanDescription = this.stripHtml(calEvent.description || '');
+    const cleanDescription = this.stripHtml(calEvent.description || '')
     
     // URLSearchParams übernimmt automatisch das korrekte URL-Encoding
     const params = new URLSearchParams({
-      path: '/calendar/action/compose',
-      rru: 'addevent',
       subject: calEvent.title,
-      startdt: startDate,
-      enddt: endDate,
+      startdt: startISO,
+      enddt: endISO,
       body: cleanDescription,
       location: calEvent.location || '',
     })
     
-    return `https://outlook.live.com/calendar/0/deeplink/compose?${params.toString()}`
+    if (calEvent.url) {
+      params.append('body', `${cleanDescription}\n\n${calEvent.url}`)
+    }
+    
+    return `https://outlook.office.com/calendar/0/deeplink/compose?${params.toString()}`
   }
 
   /**
