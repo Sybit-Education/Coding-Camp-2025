@@ -36,7 +36,7 @@
                 [images]="mediaUrl"
                 [eventName]="event.name"
                 class="rounded-t-2xl object-cover sm:w-full"
-              />
+              ></app-image-carousel>
             } @else {
               <img
                 class="rounded-t-2xl object-cover sm:w-full"
@@ -139,8 +139,8 @@
             </div>
               <div class="relative flex flex-col items-center space-y-2">
                 <div class="flex gap-4">
-                  <app-share [event]="event" [location]="location" />
-                  <app-calendar-export [event]="event" [location]="location" />
+                  <app-share [event]="event" [location]="location"></app-share>
+                  <app-calendar-export [event]="event" [location]="location"></app-calendar-export>
                </div>
             </div>
           </div>
