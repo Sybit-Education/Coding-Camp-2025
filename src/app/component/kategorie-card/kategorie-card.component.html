@@ -1,6 +1,6 @@
 <div
   class="flex aspect-[4/3] items-center justify-center rounded-lg text-center shadow-xl transition-transform duration-300 hover:scale-105"
-  [ngStyle]="{ 'background-color': color }"
+  [ngStyle]="{ 'background-color': backgroundColor() }"
 >
   <a
     [routerLink]="['/kategorie']"
@@ -9,6 +9,7 @@
   >
     <div class="align-middle">
       <p
+        [class]="textColor()"
         class="items-center justify-center transition-transform duration-300 hover:scale-105 text-center font-semibold"
       >
         {{ text }}
