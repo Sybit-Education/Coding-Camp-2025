@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
-
 import { Event } from '../../models/event.interface'
+import { Location } from '../../models/location.interface'
 import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
@@ -12,6 +12,7 @@ import { TranslateModule } from '@ngx-translate/core'
 })
 export class ShareComponent {
   @Input() event: Event | null = null
+  @Input() location: Location | null = null
   showCopyMessage = false
 
   sharePage() {
@@ -20,9 +21,7 @@ export class ShareComponent {
       return
     }
 
-    const id = this.event.id.id || ''
-    const baseUrl = window.location.origin
-    const url = `${baseUrl}/event/${id}`
+    const url = this.getEventUrl()
 
     // Dynamischen Titel und Text basierend auf dem Event-Objekt erstellen
     const title = this.event.name || 'Veranstaltung in Radolfzell'
@@ -36,7 +35,6 @@ export class ShareComponent {
           text: text,
           url: url,
         })
-        .then(() => console.log('Erfolgreich geteilt'))
         .catch((error) => {
           console.error('Fehler beim Teilen:', error)
           // Fallback zur Zwischenablage
@@ -56,13 +54,11 @@ export class ShareComponent {
       return false
     }
     const canShare = navigator.canShare(data)
-    console.log('Kann geteilt werden:', canShare)
     return canShare
   }
 
   private copyToClipboard(text: string) {
-    navigator.clipboard.writeText(text).catch((err) => {
-      console.error('Fehler beim Kopieren:', err)
+    navigator.clipboard.writeText(text).catch(() => {
       // Alternativer Fallback für ältere Browser
       this.fallbackCopyToClipboard(text)
     })
@@ -88,7 +84,6 @@ export class ShareComponent {
       document.body.removeChild(textArea)
 
       if (successful) {
-        console.log('Link in Zwischenablage kopiert (Fallback)')
         this.showCopyMessage = true
         setTimeout(() => {
           this.showCopyMessage = false
@@ -97,5 +92,16 @@ export class ShareComponent {
     } catch (err) {
       console.error('Auch Fallback-Kopieren fehlgeschlagen:', err)
     }
+  }
+
+  /**
+   * Generiert die Event-URL für die aktuelle Veranstaltung
+   */
+  private getEventUrl(): string {
+    const id = this.event?.id?.id ?? '';
+    if (!id) return '';
+
+    const baseUrl = window.location.origin;
+    return `${baseUrl}/event/${id}`;
   }
 }

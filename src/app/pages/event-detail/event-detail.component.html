@@ -6,6 +6,14 @@
   >
     {{ 'event-detail.skip-to-content' | translate }}
   </a>
+
+  <!-- Meta-Tags für Social Media Sharing -->
+  <meta property="og:title" [attr.content]="event?.name || '1200 Jahre Radolfzell'" />
+  <meta property="og:description" [attr.content]="event?.description ? (event?.description | slice:0:150) + '...' : 'Veranstaltung im Rahmen von 1200 Jahre Radolfzell'" />
+  <meta property="og:image" [attr.content]="mediaUrl || '/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg'" />
+  <meta property="og:url" [attr.content]="getEventUrl()" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
   @if (event) {
     <article class="flex flex-col p-2">
       <section
@@ -98,7 +106,7 @@
                 </h3>
                 <p>
                   @if (event.price && +event.price > 0) {
-                    {{ event.price }}
+                    {{ event.price }} €
                   } @else {
                     {{ 'event-detail.free' | translate }}
                   }
@@ -119,8 +127,11 @@
                 <p>{{ organizer?.name }}</p>
               </div>
             </div>
-            <div>
-              <app-share [event]="event" />
+              <div class="relative flex flex-col items-center space-y-2">
+                <div class="flex gap-4">
+                  <app-share [event]="event" [location]="location" />
+                  <app-calendar-export [event]="event" [location]="location" />
+               </div>
             </div>
           </div>
         </div>

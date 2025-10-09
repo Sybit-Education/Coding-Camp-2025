@@ -23,6 +23,7 @@ import { TypeDB } from '../../models/typeDB.interface'
 import { TranslateModule } from '@ngx-translate/core'
 import { FavoriteButtonComponent } from '../../component/favorite-button/favorite-button.component'
 import { ShareComponent } from '../../component/share/share.component'
+import { CalendarExportComponent } from '../../component/calendar-export/calendar-export.component'
 import { MediaService } from '@app/services/media.service'
 import { ImageCarouselComponent } from "@app/component/image-carousel/image-carousel.component";
 
@@ -36,7 +37,8 @@ import { ImageCarouselComponent } from "@app/component/image-carousel/image-caro
     FavoriteButtonComponent,
     TranslateModule,
     ShareComponent,
-    ImageCarouselComponent
+    ImageCarouselComponent,
+    CalendarExportComponent,
 ],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
@@ -224,7 +226,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
 
         document.title = `${this.event!.name} - 1200 Jahre Radolfzell`
         this.markForCheck()
-      })      
+      })
     } catch (err) {
       this.error = `Fehler beim Laden: ${err}`
       this.announceError(`Fehler beim Laden: ${err}`)
@@ -244,12 +246,24 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   }
 
   startRoute() {
-  const lat = this.location!.geo_point!.point[1];
-  const lng = this.location!.geo_point!.point[0];
+    const lat = this.location!.geo_point!.point[1];
+    const lng = this.location!.geo_point!.point[0];
 
-  const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
 
-  window.open(url, "_blank");
-}
+    window.open(url, "_blank");
+  }
+
+  /**
+   * Generiert die Event-URL für die aktuelle Veranstaltung
+   * Wird für die Meta-Tags verwendet
+   */
+  getEventUrl(): string {
+    if (!this.event || !this.event.id) return window.location.href;
+
+    const id = this.event.id.id || '';
+    const baseUrl = window.location.origin;
+    return `${baseUrl}/event/${id}`;
+  }
 
 }
