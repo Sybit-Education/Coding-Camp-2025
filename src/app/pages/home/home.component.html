@@ -62,7 +62,7 @@
     <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
       @for (kategorie of topicsOrTypes; track kategorie.id) {
         <app-kategorie-card
-          [color]="typeof kategorie.color === 'string' && kategorie.color ? kategorie.color : '#ccc'"
+          [color]="kategorie.color"
           [text]="kategorie.name"
           [id]="kategorie.id!"
         >
