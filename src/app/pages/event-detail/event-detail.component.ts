@@ -31,15 +31,15 @@ import { ImageCarouselComponent } from "@app/component/image-carousel/image-caro
   selector: 'app-event-detail-page',
   standalone: true,
   imports: [
-    MapComponent,
     CommonModule,
+    TranslateModule,
+    MapComponent,
     DateTimeRangePipe,
     FavoriteButtonComponent,
-    TranslateModule,
     ShareComponent,
     ImageCarouselComponent,
     CalendarExportComponent,
-],
+  ],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -56,8 +56,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   mediaUrl: (string | null)[] = []
 
   protected isLoggedIn = false
-  evntIdString: string | undefined
-  fromCategory = ''
+  private fromCategory = ''
 
   private readonly eventService = inject(EventService)
   private readonly locationService = inject(LocationService)
@@ -179,7 +178,6 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
 
       // Setze Basis-Daten
       this.event = foundEvent
-      this.evntIdString = this.event?.id ? this.event.id.toString() : undefined
 
       // Starte alle Ladeprozesse parallel
       const promises: Promise<unknown>[] = []
