@@ -56,8 +56,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   mediaUrl: (string | null)[] = []
 
   protected isLoggedIn = false
-  evntIdString: string | undefined
-  fromCategory = ''
+  private fromCategory = ''
 
   private readonly eventService = inject(EventService)
   private readonly locationService = inject(LocationService)
@@ -179,7 +178,6 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
 
       // Setze Basis-Daten
       this.event = foundEvent
-      this.evntIdString = this.event?.id ? this.event.id.toString() : undefined
 
       // Starte alle Ladeprozesse parallel
       const promises: Promise<unknown>[] = []

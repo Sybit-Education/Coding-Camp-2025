@@ -30,7 +30,7 @@
             <span class="text-xl">←</span>
           </button>
 
-          @if (mediaUrl) {
+          @if (mediaUrl && mediaUrl.length !== 0) {
             @if (mediaUrl.length && mediaUrl.length > 1) {
               <app-image-carousel
                 [images]="mediaUrl"
