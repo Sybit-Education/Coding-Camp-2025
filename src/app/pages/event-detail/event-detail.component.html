@@ -22,24 +22,24 @@
       >
         <!-- Back-Button in der oberen linken Ecke -->
         <div class="relative">
-          <button 
-            (click)="goBack()" 
+          <button
+            (click)="goBack()"
             class="absolute left-4 top-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/80 shadow-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             aria-label="{{ 'event-detail.back' | translate }}"
           >
             <span class="text-xl">←</span>
           </button>
-          
+
           @if (mediaUrl) {
             @if (mediaUrl.length && mediaUrl.length > 1) {
               <app-image-carousel
                 [images]="mediaUrl"
                 [eventName]="event.name"
-                class="rounded-t-2xl object-cover sm:w-full"
+                class="rounded-t-2xl object-cover sm:w-full aspect-[4/3]"
               ></app-image-carousel>
             } @else {
               <img
-                class="rounded-t-2xl object-cover sm:w-full"
+                class="rounded-t-2xl object-cover sm:w-full aspect-[4/3]"
                 [alt]="
                   event.name
                     ? 'Bild der Veranstaltung: ' + event.name
@@ -49,21 +49,20 @@
               />
             }
           } @else {
-          <div class="flex w-full justify-center py-2">
-            <img
-              class="rounded-2xl opacity-30"
-              src="/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg"
-              alt="1200 Jahre Radolfzell Logo"
-            />
-          </div>
-        }
-        <div class="justify-left flex w-full items-center">
-          @if (event.id) {
-            <app-favorite-button
-              class="p-2"
-              [eventId]="event.id"
-            ></app-favorite-button>
+            <div class="flex w-full justify-center py-2">
+              <img
+                class="rounded-2xl opacity-30"
+                src="/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg"
+                alt="1200 Jahre Radolfzell Logo"
+              />
+            </div>
           }
+        </div>
+        <div class="justify-left flex w-full items-center">
+          <app-favorite-button
+            class="p-2"
+            [eventId]="event.id"
+          ></app-favorite-button>
           <h1 class="px-2 pt-4">
             {{ event.name }}
           </h1>
@@ -146,10 +145,11 @@
           </div>
         </div>
       </section>
+
       @if (event.description) {
         <section
           class="desc mt-10 rounded-2xl"
-          [attr.aria-labelledby]="'description-heading'"
+          aria-labelledby="description-heading"
         >
           <h2 id="description-heading">
             {{ 'event-detail.description' | translate }}
