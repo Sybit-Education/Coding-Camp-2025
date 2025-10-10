@@ -31,7 +31,7 @@
           </button>
 
           @if (mediaUrl && mediaUrl.length !== 0) {
-            @if (mediaUrl.length && mediaUrl.length > 1) {
+            @if (mediaUrl.length > 1) {
               <app-image-carousel
                 [images]="mediaUrl"
                 [eventName]="event.name"
@@ -114,7 +114,7 @@
                   {{ 'event-detail.costs' | translate }}
                 </h3>
                 <p>
-                  @if (event.price !== undefined && event.price !== null && +event.price > 0) {
+                  @if (event.price !== undefined && +event.price > 0) {
                     {{ event.price }} €
                   } @else {
                     {{ 'event-detail.free' | translate }}
@@ -276,7 +276,6 @@
     </article>
   }
 
-  <!-- Der Back-Button wurde in die obere linke Ecke des Bildes verschoben -->
 
   <div class="edit mb-20 flex items-center justify-center">
     @if (isLoggedIn) {
