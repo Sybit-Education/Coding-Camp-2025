@@ -92,7 +92,7 @@ export class AdminEventOverviewComponent implements OnInit {
   }
 
   // Lade Organisatoren und dann Events in der richtigen Reihenfolge
-  private async loadOrganizersAndEvents(): void {
+  private async loadOrganizersAndEvents(): Promise<void> {
     try {
       // Zuerst Organisatoren laden
       await this.loadOrganizers();
