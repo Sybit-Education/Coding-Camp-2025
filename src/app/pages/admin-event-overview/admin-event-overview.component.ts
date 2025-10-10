@@ -87,42 +87,48 @@ export class AdminEventOverviewComponent implements OnInit {
   filterValue = ''
 
   ngOnInit(): void {
-    // Lade alle Veranstalter und erstelle eine Map für schnellen Zugriff
-    this.loadOrganizers()
-    this.eventService
-      .getAllEvents()
-      .then((eventsList) => {
-        // Sort events by start date (ascending)
-        const sortedEvents = [...eventsList].sort((a, b) => {
-          const dateA = new Date(a.date_start)
-          const dateB = new Date(b.date_start)
-          return dateA.getTime() - dateB.getTime()
-        })
+    // Zuerst alle Veranstalter laden, dann erst die Events
+    this.loadOrganizersAndEvents();
+  }
 
-        // Transform data for the table
-        const tableData = sortedEvents.map((event) => {
-          return {
-            ...event,
-            date_display: this.formatDate(event.date_start), // Formatiertes Datum für die Anzeige
-            date_start: new Date(event.date_start).getTime(), // Timestamp für die Sortierung
-            organizer: this.getOrganizerName(event),
-            originalId: event.id, // Keep original ID for actions
-          }
-        })
+  // Lade Organisatoren und dann Events in der richtigen Reihenfolge
+  private async loadOrganizersAndEvents(): Promise<void> {
+    try {
+      // Zuerst Organisatoren laden
+      await this.loadOrganizers();
+      
+      // Dann Events laden
+      const eventsList = await this.eventService.getAllEvents();
+      
+      // Sort events by start date (ascending)
+      const sortedEvents = [...eventsList].sort((a, b) => {
+        const dateA = new Date(a.date_start);
+        const dateB = new Date(b.date_start);
+        return dateA.getTime() - dateB.getTime();
+      });
 
-        this.events.set(sortedEvents)
-        this.rows.set(tableData)
-        this.temp.set([...tableData])
+      // Transform data for the table
+      const tableData = sortedEvents.map((event) => {
+        return {
+          ...event,
+          date_display: this.formatDate(event.date_start), // Formatiertes Datum für die Anzeige
+          date_start: new Date(event.date_start).getTime(), // Timestamp für die Sortierung
+          organizer: this.getOrganizerName(event),
+          originalId: event.id, // Keep original ID for actions
+        };
+      });
 
-        // Wende die Standardsortierung an
-        this.rows.set(this.sortData(tableData, this.currentSorts()))
-      })
-      .catch((error) => {
-        console.error('Error loading events:', error)
-      })
-      .finally(() => {
-        this.isLoading.set(false)
-      })
+      this.events.set(sortedEvents);
+      this.rows.set(tableData);
+      this.temp.set([...tableData]);
+
+      // Wende die Standardsortierung an
+      this.rows.set(this.sortData(tableData, this.currentSorts()));
+    } catch (error) {
+      console.error('Error loading data:', error);
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 
   // Format date for display
@@ -135,23 +141,22 @@ export class AdminEventOverviewComponent implements OnInit {
   }
 
   // Lade alle Veranstalter und erstelle eine Map für schnellen Zugriff
-  private loadOrganizers(): void {
-    this.organizerService
-      .getAllOrganizers()
-      .then((organizers) => {
-        const map = new Map<string, Organizer>()
+  private async loadOrganizers(): Promise<void> {
+    try {
+      const organizers = await this.organizerService.getAllOrganizers();
+      const map = new Map<string, Organizer>();
 
-        organizers.forEach((organizer) => {
-          if (organizer.id) {
-            map.set(String(organizer.id), organizer)
-          }
-        })
+      organizers.forEach((organizer) => {
+        if (organizer.id) {
+          map.set(String(organizer.id), organizer);
+        }
+      });
 
-        this.organizersMap.set(map)
-      })
-      .catch((error) => {
-        console.error('Fehler beim Laden der Veranstalter:', error)
-      })
+      this.organizersMap.set(map);
+    } catch (error) {
+      console.error('Fehler beim Laden der Veranstalter:', error);
+      throw error; // Fehler weiterleiten, damit die aufrufende Funktion reagieren kann
+    }
   }
 
   // Get organizer name
