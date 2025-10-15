@@ -9,8 +9,8 @@
   >
     <div class="align-middle">
       <p
-        [class]="textColor()"
-        class="items-center justify-center transition-transform duration-300 hover:scale-105 text-center font-semibold"
+        [ngStyle]="{ color: textColor() }"
+        class="items-center justify-center text-center font-semibold transition-transform duration-300 hover:scale-105"
       >
         {{ text }}
       </p>

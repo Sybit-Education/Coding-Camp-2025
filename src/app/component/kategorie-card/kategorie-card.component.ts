@@ -22,6 +22,6 @@ export class KategorieCardComponent {
   
   // Berechne die optimale Textfarbe basierend auf der Hintergrundfarbe
   protected readonly textColor = computed(() => {
-    return getContrastTextColor(this.backgroundColor()) === 'white' ? 'text-white' : 'text-black';
+    return getContrastTextColor(this.backgroundColor()) === 'white' ? '#6d7cbc' : ' #3b4ea3';
   });
 }
