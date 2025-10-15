@@ -392,7 +392,7 @@ export class EventCreateComponent implements OnInit {
       name: this.eventName,
       date_start: start,
       date_end: end,
-      description: sanitizeQuillContent(this.description) || undefined,
+      description: sanitizeQuillContent(this.description),
       more_info_link: this.moreInfoLink || undefined,
       price: priceDec,
       draft: this.draft,
