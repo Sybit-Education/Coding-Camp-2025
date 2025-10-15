@@ -28,6 +28,7 @@ import { TopicService } from '../../services/topic.service'
 import { MediaService } from '../../services/media.service'
 import { CommonModule } from '@angular/common'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
+import { sanitizeQuillContent } from '../../utils/quill-sanitizer'
 
 @Component({
   selector: 'app-event-create',
@@ -391,7 +392,7 @@ export class EventCreateComponent implements OnInit {
       name: this.eventName,
       date_start: start,
       date_end: end,
-      description: this.description || undefined,
+      description: sanitizeQuillContent(this.description) || undefined,
       more_info_link: this.moreInfoLink || undefined,
       price: priceDec,
       draft: this.draft,
