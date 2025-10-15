@@ -98,6 +98,7 @@ export class EventCreateComponent implements OnInit {
   organizers: Organizer[] = []
   eventTypes: TypeDB[] = []
   topics: Topic[] = []
+  editing = false
 
   // Images & Upload
   previews: string[] = []
@@ -110,6 +111,7 @@ export class EventCreateComponent implements OnInit {
     const eventId = this.route.snapshot.paramMap.get('id')
     if (eventId) {
       const recordID = new StringRecordId(eventId)
+      this.editing = true
       this.loadEvent(recordID).then(() => this.markForCheck())
     } else {
       this.initializeData().then(() => this.markForCheck())
@@ -153,7 +155,6 @@ export class EventCreateComponent implements OnInit {
         this.timePeriode = true
       }
 
-      // Organizer
       // Organizer
       if (event.organizer) {
         const organizerId = event.organizer.id
@@ -265,11 +266,11 @@ export class EventCreateComponent implements OnInit {
         alert(`Datei zu groß (max. 5 MB): ${file.name}`)
         continue
       }
-      this.createPreview(file)
+      this.createPreview(file).then(() => this.markForCheck())
     }
   }
 
-  private createPreview(
+  private async createPreview(
     file?: File | null,
     image?: RecordId<'media'>[] | null,
   ) {
@@ -294,6 +295,9 @@ export class EventCreateComponent implements OnInit {
   }
 
   removeImage(index: number) {
+    if (this.previews[index].includes(this.mediaService.mediaBaseUrl)) {
+      this.mediaService.deleteImageByURL(this.previews[index])
+    }
     this.previews.splice(index, 1)
   }
 
