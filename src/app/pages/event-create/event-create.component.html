@@ -2,12 +2,11 @@
   class="flex flex-col items-center justify-center rounded-2xl bg-[var(--colors-light-blue)] p-5 text-lg leading-relaxed text-shadow-gray-500"
 >
   <form
-    class="grid gap-[3rem] rounded-2xl bg-white p-6 sm:grid-cols-[1fr] md:w-full md:grid-cols-[1fr_1fr]"
+    class="rounded-2xl bg-white p-6"
   >
-    <!-- Linke Spalte mit vertikalem Abstand -->
-    <div class="flex flex-col space-y-4">
       <!-- Event Name -->
-      <ng-container *ngIf="!this.errorName; else errorName">
+       @if (!this.errorName) {
+
         <div>
           <label for="eventName" class="required">{{
             'create-event.eventname' | translate
@@ -21,8 +20,7 @@
             required="true"
           />
         </div>
-      </ng-container>
-      <ng-template #errorName>
+      } @else {
         <div>
           <label
             for="errorName"
@@ -41,7 +39,9 @@
             {{ 'create-event.error.name' | translate }}
           </p>
         </div>
-      </ng-template>
+    }
+  <!-- Linke Spalte mit vertikalem Abstand -->
+    <div class="flex flex-col space-y-4 grid gap-[3rem] sm:grid-cols-[1fr] md:w-full md:grid-cols-[1fr_1fr]">
 
       <!-- Veranstalter Auswahl -->
       <div>
