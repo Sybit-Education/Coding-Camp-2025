@@ -111,20 +111,19 @@ export class LoginService implements CanActivate {
     if (!token) {
       return false
     }
-    
+
     // Check if token is expired using the decoder
     if (this.decoder.isTokenExpired(token)) {
       console.log('Token is expired, clearing token')
       this.cookieService.delete('token')
       return false
     }
-    
+
     try {
       // Only try to authenticate with SurrealDB if token isn't expired
-      await this.surrealDBService.authenticate(token)
-      return true
+      return await this.surrealDBService.authenticate(token)
     } catch (error) {
-      console.log('Authentication failed:', error)
+      console.error('Authentication failed or token invalid/expired:', error)
       // Clear the token if authentication fails
       this.cookieService.delete('token')
       return false
