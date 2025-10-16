@@ -61,8 +61,17 @@ export class SurrealdbService extends Surreal {
     return jwtToken
   }
 
-  override async authenticate(token: Token): Promise<true> {
-    return await super.authenticate(token)
+  override async authenticate(token: Token): Promise<boolean> {
+    try {
+      // Ensure connection is initialized before authentication
+      await this.initialize()
+      await super.authenticate(token)
+      return true
+    } catch (error) {
+      console.error('Authentication error:', error)
+      // Return false instead of throwing an error
+      return false
+    }
   }
 
   async getByRecordId<T extends Record<string, unknown>>(
