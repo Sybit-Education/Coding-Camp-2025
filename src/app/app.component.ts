@@ -11,7 +11,7 @@ import { FooterComponent } from './component/footer/footer.component'
 import { filter } from 'rxjs/operators'
 import { BottomNavComponent } from './component/bottom-nav/bottom-nav.component'
 import { UpdateService } from './pwa/update.service'
-import { SnackBarComponent } from './components/snack-bar/snack-bar.component'
+import { SnackBarComponent } from './component/snack-bar/snack-bar.component'
 
 @Component({
   selector: 'app-root',
