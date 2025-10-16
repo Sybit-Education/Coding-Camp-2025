@@ -12,6 +12,7 @@ import { TranslateModule } from '@ngx-translate/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { QuillEditorComponent } from 'ngx-quill'
 import { LocationInputComponent } from '../../component/location-input/location-input.component'
+import { OrganizerInputComponent } from '../../component/organizer-input/organizer-input.component'
 
 // Models
 import { Event as AppEvent } from '../../models/event.interface'
@@ -35,7 +36,7 @@ import { sanitizeQuillContent } from '../../utils/quill-sanitizer'
 @Component({
   selector: 'app-event-create',
   standalone: true,
-  imports: [FormsModule, TranslateModule, CommonModule, QuillEditorComponent, LocationInputComponent],
+  imports: [FormsModule, TranslateModule, CommonModule, QuillEditorComponent, LocationInputComponent, OrganizerInputComponent],
   templateUrl: './event-create.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -84,11 +85,6 @@ export class EventCreateComponent implements OnInit {
 
   // Organizer
   selectedOrganizer: Organizer | null = null
-  organizername: string | null = null
-  organizermail: string | null = null
-  organizerphone: string | null = null
-  organizerName: string | null = null
-  newOrganizer = false
 
   // Event Type & Topics
   selectedEventType: TypeDB | null = null
@@ -201,11 +197,6 @@ export class EventCreateComponent implements OnInit {
 
   setOrganizer(organizer: Organizer | null) {
     this.selectedOrganizer = organizer
-    if (organizer) {
-      this.organizerName = organizer.name
-      this.organizerphone = organizer.phonenumber ?? ''
-      this.organizermail = organizer.email ?? ''
-    }
   }
 
   setSelectedEventType(eventType: TypeDB | null) {
@@ -295,31 +286,6 @@ export class EventCreateComponent implements OnInit {
 
   // ===== Speichern =====
 
-  async saveOrganizer() {
-    if (!this.organizername && !this.organizermail && !this.organizerphone) {
-      this.snackBarService.showError('Bitte mindestens einen Wert für den Veranstalter eingeben!')
-      return
-    }
-    const organizer: Organizer = {
-      name: this.organizername || '',
-      email: this.organizermail || undefined,
-      phonenumber: this.organizerphone || undefined,
-    }
-
-    try {
-      console.log('Speichere neuen Organizer:', organizer)
-      const savedOrganizer =
-        await this.organizerService.postOrganizer(organizer)
-      console.log('Organizer gespeichert:', savedOrganizer)
-      this.selectedOrganizer = savedOrganizer
-      this.newOrganizer = false // Formular schließen
-      this.snackBarService.showSuccess('Veranstalter erfolgreich gespeichert')
-    } catch (error) {
-      console.error('Fehler beim Speichern des Organizers:', error)
-      this.snackBarService.showError(`Fehler beim Speichern des Veranstalters: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`)
-      this.markForCheck()
-    }
-  }
 
   async saveEvent() {
     try {
@@ -327,7 +293,10 @@ export class EventCreateComponent implements OnInit {
         this.snackBarService.showError('Bitte wählen Sie eine Location aus oder erstellen Sie eine neue')
         return
       }
-      if (!this.selectedOrganizer) await this.saveOrganizer()
+      if (!this.selectedOrganizer) {
+        this.snackBarService.showError('Bitte wählen Sie einen Veranstalter aus oder erstellen Sie einen neuen')
+        return
+      }
 
       if (
         this.eventName === '' ||
