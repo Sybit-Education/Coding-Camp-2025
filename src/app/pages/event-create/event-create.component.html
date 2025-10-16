@@ -38,6 +38,7 @@
           'create-event.eventname' | translate
         }}</label>
         <input
+          #eventNameInput
           id="eventName"
           name="eventName"
           type="text"
@@ -146,6 +147,7 @@
               'create-event.startdate' | translate
             }}</label>
             <input
+              #dateStartInput
               id="date"
               type="date"
               [(ngModel)]="dateStart"
@@ -163,6 +165,7 @@
               >{{ 'create-event.startdate' | translate }}</label
             >
             <input
+              #dateStartInput
               type="date"
               id="errorDate"
               class="p-[0.75rem 1rem] block w-full rounded-lg border border-red-500 bg-red-50 p-2.5 text-sm text-red-900 placeholder-red-700 focus:border-red-500 focus:ring-red-500"
@@ -181,6 +184,7 @@
               'create-event.starttime' | translate
             }}</label>
             <input
+              #timeStartInput
               id="time"
               type="time"
               [(ngModel)]="timeStart"
@@ -198,6 +202,7 @@
               >{{ 'create-event.starttime' | translate }}</label
             >
             <input
+              #timeStartInput
               type="time"
               id="errorTime"
               class="p-[0.75rem 1rem] block w-full rounded-lg border border-red-500 bg-red-50 p-2.5 text-sm text-red-900 placeholder-red-700 focus:border-red-500 focus:ring-red-500"

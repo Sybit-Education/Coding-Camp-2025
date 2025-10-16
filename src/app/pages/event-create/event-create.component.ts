@@ -39,6 +39,9 @@ import { sanitizeQuillContent } from '../../utils/quill-sanitizer'
 })
 export class EventCreateComponent implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>
+  @ViewChild('eventNameInput') eventNameInput!: ElementRef<HTMLInputElement>
+  @ViewChild('dateStartInput') dateStartInput!: ElementRef<HTMLInputElement>
+  @ViewChild('timeStartInput') timeStartInput!: ElementRef<HTMLInputElement>
 
   // ===== Services =====
   private readonly eventService = inject(EventService)
@@ -403,6 +406,9 @@ export class EventCreateComponent implements OnInit {
         this.errorMessages.event = 'Bitte füllen Sie alle Pflichtfelder aus (Name, Datum, Uhrzeit).'
         this.showErrorAlert = true
         this.markForCheck()
+        
+        // Fokus auf das erste Feld mit Fehler setzen
+        setTimeout(() => this.focusFirstErrorField(), 100)
         return
       }
       this.errorName = false
@@ -475,6 +481,19 @@ export class EventCreateComponent implements OnInit {
   }
 
   // ===== Media Handling =====
+  /**
+   * Setzt den Fokus auf das erste Feld mit einem Fehler
+   */
+  private focusFirstErrorField(): void {
+    if (this.errorName && this.eventNameInput) {
+      this.eventNameInput.nativeElement.focus()
+    } else if (this.errorDate && this.dateStartInput) {
+      this.dateStartInput.nativeElement.focus()
+    } else if (this.errorTime && this.timeStartInput) {
+      this.timeStartInput.nativeElement.focus()
+    }
+  }
+
   private async postNewImages(): Promise<RecordId<'media'>[]> {
     const result: RecordId<'media'>[] = []
     try {
