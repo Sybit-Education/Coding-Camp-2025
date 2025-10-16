@@ -409,35 +409,35 @@ export class EventCreateComponent implements OnInit {
       this.errorDate = false
       this.errorTime = false
 
-    // Datum und Zeit verarbeiten
-    const start = new Date(`${this.dateStart}T${this.timeStart}`)
-    let end: Date | undefined
-    if (this.timePeriode && this.dateEnd && this.timeEnd) {
-      end = new Date(`${this.dateEnd}T${this.timeEnd}`)
-    }
+      // Datum und Zeit verarbeiten
+      const start = new Date(`${this.dateStart}T${this.timeStart}`)
+      let end: Date | undefined
+      if (this.timePeriode && this.dateEnd && this.timeEnd) {
+        end = new Date(`${this.dateEnd}T${this.timeEnd}`)
+      }
 
-    // Preis konvertieren
-    const priceDec = this.price ? new Decimal(this.price) : undefined
+      // Preis konvertieren
+      const priceDec = this.price ? new Decimal(this.price) : undefined
 
-    // Medien verarbeiten
-    const mediaIds = await this.postNewImages()
+      // Medien verarbeiten
+      const mediaIds = await this.postNewImages()
 
-    const payload: AppEvent = {
-      name: this.eventName,
-      date_start: start,
-      date_end: end,
-      description: sanitizeQuillContent(this.description),
-      more_info_link: this.moreInfoLink || undefined,
-      price: priceDec,
-      draft: this.draft,
-      organizer: this.selectedOrganizer?.id ?? undefined,
-      event_type: this.selectedEventType?.id ?? undefined,
-      location: this.selectedLocation?.id ?? undefined,
-      topic: this.selectedTopics.map((t) => t.id!),
-      media: mediaIds,
-      age: this.age ?? undefined,
-      restriction: this.restriction || undefined,
-    }
+      const payload: AppEvent = {
+        name: this.eventName,
+        date_start: start,
+        date_end: end,
+        description: sanitizeQuillContent(this.description),
+        more_info_link: this.moreInfoLink || undefined,
+        price: priceDec,
+        draft: this.draft,
+        organizer: this.selectedOrganizer?.id ?? undefined,
+        event_type: this.selectedEventType?.id ?? undefined,
+        location: this.selectedLocation?.id ?? undefined,
+        topic: this.selectedTopics.map((t) => t.id!),
+        media: mediaIds,
+        age: this.age ?? undefined,
+        restriction: this.restriction || undefined,
+      }
 
     // Event speichern (Update oder Create)
     try {
