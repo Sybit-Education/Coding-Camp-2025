@@ -1,7 +1,7 @@
 <div 
   *ngIf="visible()" 
   [@snackBarState]="visible() ? 'visible' : 'void'"
-  class="fixed bottom-5 left-1/2 transform -translate-x-1/2 z-50 flex items-center w-full max-w-md p-4 mb-4 rounded-lg shadow border"
+  class="fixed top-20 right-5 z-50 flex items-center w-full max-w-md p-4 mb-4 rounded-lg shadow border"
   [ngClass]="getTypeClass()"
   role="alert">
   <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-lg">

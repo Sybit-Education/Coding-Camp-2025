@@ -13,11 +13,11 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
   animations: [
     trigger('snackBarState', [
       state('void', style({
-        transform: 'translateY(100%)',
+        transform: 'translateX(100%)',
         opacity: 0
       })),
       state('visible', style({
-        transform: 'translateY(0)',
+        transform: 'translateX(0)',
         opacity: 1
       })),
       transition('void => visible', animate('200ms ease-out')),
