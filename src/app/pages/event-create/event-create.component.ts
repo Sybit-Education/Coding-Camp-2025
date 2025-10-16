@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { QuillEditorComponent } from 'ngx-quill'
+import { LocationInputComponent } from '../../component/location-input/location-input.component'
 
 // Models
 import { Event as AppEvent } from '../../models/event.interface'
@@ -34,7 +35,7 @@ import { sanitizeQuillContent } from '../../utils/quill-sanitizer'
 @Component({
   selector: 'app-event-create',
   standalone: true,
-  imports: [FormsModule, TranslateModule, CommonModule, QuillEditorComponent],
+  imports: [FormsModule, TranslateModule, CommonModule, QuillEditorComponent, LocationInputComponent],
   templateUrl: './event-create.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -80,11 +81,6 @@ export class EventCreateComponent implements OnInit {
   placename: string | null = null
   placeadress: string | null = null
   selectedLocation: Location | null = null
-  locationName = ''
-  address = ''
-  plz = ''
-  city = ''
-  newLocation = false
 
   // Organizer
   selectedOrganizer: Organizer | null = null
@@ -201,12 +197,6 @@ export class EventCreateComponent implements OnInit {
   // ===== Auswahl-Handler =====
   setLocation(location: Location | null) {
     this.selectedLocation = location
-    if (location) {
-      this.locationName = location.name
-      this.address = location.street ?? ''
-      this.plz = location.zip_code ?? ''
-      this.city = location.city ?? ''
-    }
   }
 
   setOrganizer(organizer: Organizer | null) {
@@ -304,32 +294,6 @@ export class EventCreateComponent implements OnInit {
   }
 
   // ===== Speichern =====
-  async saveLocation() {
-    if (!this.locationName) {
-      this.snackBarService.showError('Bitte einen Namen für die Location eingeben!')
-      return
-    }
-
-    const location: Location = {
-      name: this.locationName,
-      street: this.address || undefined,
-      zip_code: this.plz || undefined,
-      city: this.city || 'Radolfzell',
-    }
-
-    try {
-      console.log('Speichere neue Location:', location)
-      const savedLocation = await this.locationService.postLocation(location)
-      console.log('Location gespeichert:', savedLocation)
-      this.selectedLocation = savedLocation
-      this.newLocation = false // Formular schließen
-      this.snackBarService.showSuccess('Location erfolgreich gespeichert')
-    } catch (error) {
-      console.error('Fehler beim Speichern der Location:', error)
-      this.snackBarService.showError(`Fehler beim Speichern der Location: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`)
-      this.markForCheck()
-    }
-  }
 
   async saveOrganizer() {
     if (!this.organizername && !this.organizermail && !this.organizerphone) {
@@ -359,7 +323,10 @@ export class EventCreateComponent implements OnInit {
 
   async saveEvent() {
     try {
-      if (!this.selectedLocation) await this.saveLocation()
+      if (!this.selectedLocation) {
+        this.snackBarService.showError('Bitte wählen Sie eine Location aus oder erstellen Sie eine neue')
+        return
+      }
       if (!this.selectedOrganizer) await this.saveOrganizer()
 
       if (
