@@ -1,12 +1,13 @@
 <div class="flex items-center justify-center">
   <div class="mt-10 rounded-xl bg-white p-10 text-center shadow-xl">
-    <form (ngSubmit)="handleLogin()">
+    <form (ngSubmit)="handleLogin()" autocomplete="on">
       <div class="relative mb-4">
         <input
           type="text"
           [(ngModel)]="loginParams.username"
           name="username"
           id="username"
+          autocomplete="username"
           class="peer block w-full appearance-none rounded-lg border-1 border-gray-300 bg-transparent px-2.5 pt-4 pb-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none"
           placeholder=" "
           required
@@ -23,6 +24,7 @@
           [type]="showPassword ? 'text' : 'password'"
           name="password"
           id="password"
+          autocomplete="current-password"
           placeholder=" "
           required
           class="peer block w-full appearance-none rounded-lg border-1 border-gray-300 bg-transparent px-2.5 pt-4 pb-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none"
