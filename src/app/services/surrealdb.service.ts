@@ -62,6 +62,8 @@ export class SurrealdbService extends Surreal {
   }
 
   override async authenticate(token: Token): Promise<true> {
+    // Ensure connection is initialized before authentication
+    await this.initialize()
     return await super.authenticate(token)
   }
 
