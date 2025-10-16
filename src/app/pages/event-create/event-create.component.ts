@@ -6,6 +6,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core'
+import { SnackBarService } from '../../services/snack-bar.service'
 import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -52,6 +53,7 @@ export class EventCreateComponent implements OnInit {
   private readonly route = inject(ActivatedRoute)
   private readonly markForCheck = injectMarkForCheck()
   private readonly router = inject(Router)
+  private readonly snackBarService = inject(SnackBarService)
 
   // ===== State & Formfelder =====
   event: AppEvent | null = null
@@ -73,15 +75,6 @@ export class EventCreateComponent implements OnInit {
   errorName = false
   errorDate = false
   errorTime = false
-  
-  // Fehlermeldungen
-  errorMessages = {
-    location: '',
-    organizer: '',
-    event: '',
-    media: ''
-  }
-  showErrorAlert = false
 
   // Location
   placename: string | null = null
@@ -313,9 +306,7 @@ export class EventCreateComponent implements OnInit {
   // ===== Speichern =====
   async saveLocation() {
     if (!this.locationName) {
-      this.errorMessages.location = 'Bitte einen Namen für die Location eingeben!'
-      this.showErrorAlert = true
-      this.markForCheck()
+      this.snackBarService.showError('Bitte einen Namen für die Location eingeben!')
       return
     }
 
@@ -332,20 +323,17 @@ export class EventCreateComponent implements OnInit {
       console.log('Location gespeichert:', savedLocation)
       this.selectedLocation = savedLocation
       this.newLocation = false // Formular schließen
-      this.errorMessages.location = ''
+      this.snackBarService.showSuccess('Location erfolgreich gespeichert')
     } catch (error) {
       console.error('Fehler beim Speichern der Location:', error)
-      this.errorMessages.location = `Fehler beim Speichern der Location: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`
-      this.showErrorAlert = true
+      this.snackBarService.showError(`Fehler beim Speichern der Location: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`)
       this.markForCheck()
     }
   }
 
   async saveOrganizer() {
     if (!this.organizername && !this.organizermail && !this.organizerphone) {
-      this.errorMessages.organizer = 'Bitte mindestens einen Wert für den Veranstalter eingeben!'
-      this.showErrorAlert = true
-      this.markForCheck()
+      this.snackBarService.showError('Bitte mindestens einen Wert für den Veranstalter eingeben!')
       return
     }
     const organizer: Organizer = {
@@ -361,23 +349,15 @@ export class EventCreateComponent implements OnInit {
       console.log('Organizer gespeichert:', savedOrganizer)
       this.selectedOrganizer = savedOrganizer
       this.newOrganizer = false // Formular schließen
-      this.errorMessages.organizer = ''
+      this.snackBarService.showSuccess('Veranstalter erfolgreich gespeichert')
     } catch (error) {
       console.error('Fehler beim Speichern des Organizers:', error)
-      this.errorMessages.organizer = `Fehler beim Speichern des Veranstalters: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`
-      this.showErrorAlert = true
+      this.snackBarService.showError(`Fehler beim Speichern des Veranstalters: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`)
       this.markForCheck()
     }
   }
 
   async saveEvent() {
-    // Zurücksetzen der Fehlermeldungen
-    this.errorMessages.event = '';
-    this.errorMessages.location = '';
-    this.errorMessages.organizer = '';
-    this.errorMessages.media = '';
-    this.showErrorAlert = false;
-    
     try {
       if (!this.selectedLocation) await this.saveLocation()
       if (!this.selectedOrganizer) await this.saveOrganizer()
@@ -403,9 +383,7 @@ export class EventCreateComponent implements OnInit {
           this.errorTime = false
         }
         
-        this.errorMessages.event = 'Bitte füllen Sie alle Pflichtfelder aus (Name, Datum, Uhrzeit).'
-        this.showErrorAlert = true
-        this.markForCheck()
+        this.snackBarService.showError('Bitte füllen Sie alle Pflichtfelder aus (Name, Datum, Uhrzeit).')
         
         // Fokus auf das erste Feld mit Fehler setzen
         setTimeout(() => this.focusFirstErrorField(), 100)
@@ -449,12 +427,12 @@ export class EventCreateComponent implements OnInit {
       if (this.eventId !== undefined) {
         const updated = await this.eventService.updateEvent(this.eventId, payload)
         if (!updated) {
-          this.errorMessages.event = 'Update hat keine Daten zurückgegeben'
-          this.showErrorAlert = true
+          this.snackBarService.showError('Update hat keine Daten zurückgegeben')
           this.markForCheck()
           return
         } else {
           console.log('Event erfolgreich aktualisiert:', updated)
+          this.snackBarService.showSuccess('Event erfolgreich aktualisiert')
           // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
           this.router.navigate(['/admin'])
         }
@@ -463,19 +441,18 @@ export class EventCreateComponent implements OnInit {
         if (created && created.length > 0) {
           this.eventId = created[0].id
           console.log('Event erfolgreich erstellt:', created[0])
+          this.snackBarService.showSuccess('Event erfolgreich erstellt')
           // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
           this.router.navigate(['/admin'])
         } else {
-          this.errorMessages.event = 'Erstellen des Events fehlgeschlagen, keine Daten zurückgegeben'
-          this.showErrorAlert = true
+          this.snackBarService.showError('Erstellen des Events fehlgeschlagen, keine Daten zurückgegeben')
           this.markForCheck()
           return
         }
       }
     } catch (error) {
       console.error('Fehler beim Speichern des Events:', error)
-      this.errorMessages.event = `Fehler beim Speichern des Events: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`
-      this.showErrorAlert = true
+      this.snackBarService.showError(`Fehler beim Speichern des Events: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`)
       this.markForCheck()
     }
   }
@@ -525,8 +502,7 @@ export class EventCreateComponent implements OnInit {
               }
             } catch (error) {
               console.error(`Fehler beim Verarbeiten des Bildes ${i}:`, error)
-              this.errorMessages.media = `Fehler beim Hochladen des Bildes ${i+1}: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`
-              this.showErrorAlert = true
+              this.snackBarService.showError(`Fehler beim Hochladen des Bildes ${i+1}: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`)
               this.markForCheck()
               return null
             }
@@ -537,8 +513,7 @@ export class EventCreateComponent implements OnInit {
       return result
     } catch (error) {
       console.error('Fehler beim Hochladen der Bilder:', error)
-      this.errorMessages.media = `Fehler beim Hochladen der Bilder: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`
-      this.showErrorAlert = true
+      this.snackBarService.showError(`Fehler beim Hochladen der Bilder: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`)
       this.markForCheck()
       return result
     }
