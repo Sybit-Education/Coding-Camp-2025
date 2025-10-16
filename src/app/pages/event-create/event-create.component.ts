@@ -420,7 +420,7 @@ export class EventCreateComponent implements OnInit {
     const priceDec = this.price ? new Decimal(this.price) : undefined
 
     // Medien verarbeiten
-    const mediaIds = await this.getMediaIds()
+    const mediaIds = await this.postNewImages()
 
     const payload: AppEvent = {
       name: this.eventName,
@@ -476,12 +476,6 @@ export class EventCreateComponent implements OnInit {
   }
 
   // ===== Media Handling =====
-  async getMediaIds(): Promise<RecordId<'media'>[]> {
-    const result: RecordId<'media'>[] = []
-    result.push(...(await this.postNewImages()))
-    return result
-  }
-
   private async postNewImages(): Promise<RecordId<'media'>[]> {
     const result: RecordId<'media'>[] = []
     try {
