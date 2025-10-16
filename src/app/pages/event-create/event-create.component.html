@@ -44,10 +44,9 @@
 
 
       <!-- Datum und Zeit -->
-
       <div class="grid grid-cols-2 gap-[1rem]">
         <ng-container *ngIf="!this.errorDate; else errorDate">
-          <div>
+          <div class="my-4">
             <label for="date" class="required">{{
               'create-event.startdate' | translate
             }}</label>
@@ -63,7 +62,7 @@
           </div>
         </ng-container>
         <ng-template #errorDate>
-          <div>
+          <div class="my-4">
             <label
               for="errorDate"
               class="required mb-2 block text-sm font-medium text-red-700 dark:text-red-500"
@@ -79,12 +78,12 @@
               required="true"
             />
             <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-              {{ 'create-event.error.date' | translate }}
+               {{ 'create-event.error.date' | translate }}
             </p>
           </div>
         </ng-template>
         <ng-container *ngIf="!this.errorTime; else errorTime">
-          <div>
+          <div class="my-4">
             <label for="time" class="required">{{
               'create-event.starttime' | translate
             }}</label>
@@ -100,7 +99,7 @@
           </div>
         </ng-container>
         <ng-template #errorTime>
-          <div>
+          <div class="my-4">
             <label
               for="errorTime"
               class="required mb-2 block text-sm font-medium text-red-700 dark:text-red-500"
@@ -118,30 +117,30 @@
             <p class="mt-2 text-sm text-red-600 dark:text-red-500">
               {{ 'create-event.error.time' | translate }}
             </p>
-          </div>
+         </div>
         </ng-template>
       </div>
 
       @if (timePeriode) {
         <div class="grid grid-cols-2 gap-[1rem]">
-          <div>
+          <div class="my-4">
             <label for="date">{{ 'create-event.enddate' | translate }}</label>
             <input
               id="date"
               type="date"
               [(ngModel)]="dateEnd"
               name="dateStart"
-              class="p-[0.75rem 1rem] w-full"
+              class="w-full"
             />
           </div>
-          <div>
+          <div  class="my-4">
             <label for="time">{{ 'create-event.endtime' | translate }}</label>
             <input
               id="time"
               type="time"
               [(ngModel)]="timeEnd"
               name="timeStart"
-              class="p-[0.75rem 1rem] w-full"
+              class="w-full"
             />
           </div>
         </div>
@@ -152,7 +151,7 @@
           name="timePeriode"
           type="checkbox"
           [(ngModel)]="timePeriode"
-          class="h-4 w-4 cursor-pointer"
+          class="cursor-pointer"
         />
         <label for="timePeriode" class="ms-2 w-full cursor-pointer">
           {{ 'create-event.timespan' | translate }}
