@@ -61,16 +61,15 @@ export class SurrealdbService extends Surreal {
     return jwtToken
   }
 
-  override async authenticate(token: Token): Promise<boolean> {
+  override async authenticate(token: Token): Promise<true> {
     try {
       // Ensure connection is initialized before authentication
       await this.initialize()
-      await super.authenticate(token)
-      return true
+      return await super.authenticate(token)
     } catch (error) {
       console.error('Authentication error:', error)
-      // Return false instead of throwing an error
-      return false
+      // Instead of returning false, we'll throw an error that can be caught by the caller
+      throw error
     }
   }
 
