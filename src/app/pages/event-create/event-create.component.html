@@ -4,6 +4,33 @@
   <form
     class="rounded-2xl bg-white p-6"
   >
+    <!-- Fehlermeldungen -->
+    @if (showErrorAlert) {
+      <div class="mb-4 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-red-100 dark:text-red-800" role="alert">
+        <h4 class="mb-2 text-lg font-medium">Fehler beim Speichern</h4>
+        <ul class="list-inside list-disc space-y-1">
+          @if (errorMessages.event) {
+            <li>{{ errorMessages.event }}</li>
+          }
+          @if (errorMessages.location) {
+            <li>{{ errorMessages.location }}</li>
+          }
+          @if (errorMessages.organizer) {
+            <li>{{ errorMessages.organizer }}</li>
+          }
+          @if (errorMessages.media) {
+            <li>{{ errorMessages.media }}</li>
+          }
+        </ul>
+        <button 
+          type="button" 
+          class="mt-2 inline-flex items-center rounded-lg bg-red-200 px-3 py-1.5 text-center text-xs font-medium text-red-800 hover:bg-red-300 focus:outline-none focus:ring-4 focus:ring-red-300"
+          (click)="showErrorAlert = false"
+        >
+          Schließen
+        </button>
+      </div>
+    }
     <div>
       <!-- Event Name -->
        @if (!this.errorName) {

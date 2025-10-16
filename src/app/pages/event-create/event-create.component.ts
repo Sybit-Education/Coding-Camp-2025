@@ -70,6 +70,15 @@ export class EventCreateComponent implements OnInit {
   errorName = false
   errorDate = false
   errorTime = false
+  
+  // Fehlermeldungen
+  errorMessages = {
+    location: '',
+    organizer: '',
+    event: '',
+    media: ''
+  }
+  showErrorAlert = false
 
   // Location
   placename: string | null = null
@@ -301,7 +310,9 @@ export class EventCreateComponent implements OnInit {
   // ===== Speichern =====
   async saveLocation() {
     if (!this.locationName) {
-      console.error('Bitte einen Namen für die Location eingeben!')
+      this.errorMessages.location = 'Bitte einen Namen für die Location eingeben!'
+      this.showErrorAlert = true
+      this.markForCheck()
       return
     }
 
@@ -318,13 +329,20 @@ export class EventCreateComponent implements OnInit {
       console.log('Location gespeichert:', savedLocation)
       this.selectedLocation = savedLocation
       this.newLocation = false // Formular schließen
+      this.errorMessages.location = ''
     } catch (error) {
       console.error('Fehler beim Speichern der Location:', error)
+      this.errorMessages.location = `Fehler beim Speichern der Location: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`
+      this.showErrorAlert = true
+      this.markForCheck()
     }
   }
 
   async saveOrganizer() {
     if (!this.organizername && !this.organizermail && !this.organizerphone) {
+      this.errorMessages.organizer = 'Bitte mindestens einen Wert für den Veranstalter eingeben!'
+      this.showErrorAlert = true
+      this.markForCheck()
       return
     }
     const organizer: Organizer = {
@@ -340,40 +358,56 @@ export class EventCreateComponent implements OnInit {
       console.log('Organizer gespeichert:', savedOrganizer)
       this.selectedOrganizer = savedOrganizer
       this.newOrganizer = false // Formular schließen
+      this.errorMessages.organizer = ''
     } catch (error) {
       console.error('Fehler beim Speichern des Organizers:', error)
+      this.errorMessages.organizer = `Fehler beim Speichern des Veranstalters: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`
+      this.showErrorAlert = true
+      this.markForCheck()
     }
   }
 
   async saveEvent() {
-    if (!this.selectedLocation) await this.saveLocation()
-    if (!this.selectedOrganizer) await this.saveOrganizer()
+    // Zurücksetzen der Fehlermeldungen
+    this.errorMessages.event = '';
+    this.errorMessages.location = '';
+    this.errorMessages.organizer = '';
+    this.errorMessages.media = '';
+    this.showErrorAlert = false;
+    
+    try {
+      if (!this.selectedLocation) await this.saveLocation()
+      if (!this.selectedOrganizer) await this.saveOrganizer()
 
-    if (
-      this.eventName === '' ||
-      this.dateStart === '' ||
-      this.timeStart === ''
-    ) {
-      if (this.eventName === '') {
-        this.errorName = true
-      } else {
-        this.errorName = false
+      if (
+        this.eventName === '' ||
+        this.dateStart === '' ||
+        this.timeStart === ''
+      ) {
+        if (this.eventName === '') {
+          this.errorName = true
+        } else {
+          this.errorName = false
+        }
+        if (this.dateStart === '') {
+          this.errorDate = true
+        } else {
+          this.errorDate = false
+        }
+        if (this.timeStart === '') {
+          this.errorTime = true
+        } else {
+          this.errorTime = false
+        }
+        
+        this.errorMessages.event = 'Bitte füllen Sie alle Pflichtfelder aus (Name, Datum, Uhrzeit).'
+        this.showErrorAlert = true
+        this.markForCheck()
+        return
       }
-      if (this.dateStart === '') {
-        this.errorDate = true
-      } else {
-        this.errorDate = false
-      }
-      if (this.timeStart === '') {
-        this.errorTime = true
-      } else {
-        this.errorTime = false
-      }
-      return
-    }
-    this.errorName = false
-    this.errorDate = false
-    this.errorTime = false
+      this.errorName = false
+      this.errorDate = false
+      this.errorTime = false
 
     // Datum und Zeit verarbeiten
     const start = new Date(`${this.dateStart}T${this.timeStart}`)
@@ -406,28 +440,39 @@ export class EventCreateComponent implements OnInit {
     }
 
     // Event speichern (Update oder Create)
-    if (this.eventId !== undefined) {
-      const updated = await this.eventService.updateEvent(this.eventId, payload)
-      if (!updated) {
-        console.error('Update returned no data')
+    try {
+      if (this.eventId !== undefined) {
+        const updated = await this.eventService.updateEvent(this.eventId, payload)
+        if (!updated) {
+          this.errorMessages.event = 'Update hat keine Daten zurückgegeben'
+          this.showErrorAlert = true
+          this.markForCheck()
+          return
+        } else {
+          console.log('Event erfolgreich aktualisiert:', updated)
+          // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
+          this.router.navigate(['/admin'])
+        }
       } else {
-        console.log('Event erfolgreich aktualisiert:', updated)
+        const created = await this.eventService.postEvent(payload)
+        if (created && created.length > 0) {
+          this.eventId = created[0].id
+          console.log('Event erfolgreich erstellt:', created[0])
+          // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
+          this.router.navigate(['/admin'])
+        } else {
+          this.errorMessages.event = 'Erstellen des Events fehlgeschlagen, keine Daten zurückgegeben'
+          this.showErrorAlert = true
+          this.markForCheck()
+          return
+        }
       }
-    } else {
-      const created = await this.eventService.postEvent(payload)
-      if (created && created.length > 0) {
-        this.eventId = created[0].id
-        console.log('Event erfolgreich erstellt:', created[0])
-      } else {
-        console.error(
-          'Erstellen des Events fehlgeschlagen, keine Daten zurückgegeben',
-        )
-        return
-      }
+    } catch (error) {
+      console.error('Fehler beim Speichern des Events:', error)
+      this.errorMessages.event = `Fehler beim Speichern des Events: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`
+      this.showErrorAlert = true
+      this.markForCheck()
     }
-
-    // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
-    this.router.navigate(['/admin'])
   }
 
   // ===== Media Handling =====
@@ -439,35 +484,51 @@ export class EventCreateComponent implements OnInit {
 
   private async postNewImages(): Promise<RecordId<'media'>[]> {
     const result: RecordId<'media'>[] = []
-    const resultMedias: Media[] = (
-      await Promise.all(
-        this.previews.map(async (image: string, i: number) => {
-          if (image.startsWith('http')) {
-            const existingMedia = await this.mediaService.getMediaByUrl(image)
-            if (existingMedia) {
-              return existingMedia
-            } else {
+    try {
+      const resultMedias: Media[] = (
+        await Promise.all(
+          this.previews.map(async (image: string, i: number) => {
+            try {
+              if (image.startsWith('http')) {
+                const existingMedia = await this.mediaService.getMediaByUrl(image)
+                if (existingMedia) {
+                  return existingMedia
+                } else {
+                  return null
+                }
+              } else {
+                const newMedia: Media = {
+                  id: (this.eventName.replace(/[^a-zA-Z0-9]/g, '_') +
+                    '_' +
+                    i +
+                    '_' +
+                    image
+                      .split(';')[0]
+                      .split('/')[1]) as unknown as RecordId<'media'>,
+                  file: image.split(',')[1],
+                  fileName: this.eventName.replace(/[^a-zA-Z0-9]/g, '_') + '_' + i,
+                  fileType: image.split(';')[0].split('/')[1],
+                }
+                return await this.mediaService.postMedia(newMedia)
+              }
+            } catch (error) {
+              console.error(`Fehler beim Verarbeiten des Bildes ${i}:`, error)
+              this.errorMessages.media = `Fehler beim Hochladen des Bildes ${i+1}: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`
+              this.showErrorAlert = true
+              this.markForCheck()
               return null
             }
-          } else {
-            const newMedia: Media = {
-              id: (this.eventName.replace(/[^a-zA-Z0-9]/g, '_') +
-                '_' +
-                i +
-                '_' +
-                image
-                  .split(';')[0]
-                  .split('/')[1]) as unknown as RecordId<'media'>,
-              file: image.split(',')[1],
-              fileName: this.eventName.replace(/[^a-zA-Z0-9]/g, '_') + '_' + i,
-              fileType: image.split(';')[0].split('/')[1],
-            }
-            return await this.mediaService.postMedia(newMedia)
-          }
-        }),
-      )
-    ).filter((media): media is Media => media !== null)
-    result.push(...resultMedias.map((media) => media.id as RecordId<'media'>))
-    return result
+          }),
+        )
+      ).filter((media): media is Media => media !== null)
+      result.push(...resultMedias.map((media) => media.id as RecordId<'media'>))
+      return result
+    } catch (error) {
+      console.error('Fehler beim Hochladen der Bilder:', error)
+      this.errorMessages.media = `Fehler beim Hochladen der Bilder: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`
+      this.showErrorAlert = true
+      this.markForCheck()
+      return result
+    }
   }
 }
