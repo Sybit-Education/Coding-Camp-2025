@@ -22,8 +22,8 @@
             <li>{{ errorMessages.media }}</li>
           }
         </ul>
-        <button 
-          type="button" 
+        <button
+          type="button"
           class="mt-2 inline-flex items-center rounded-lg bg-red-200 px-3 py-1.5 text-center text-xs font-medium text-red-800 hover:bg-red-300 focus:outline-none focus:ring-4 focus:ring-red-300"
           (click)="showErrorAlert = false"
         >
@@ -69,75 +69,6 @@
   <!-- Linke Spalte mit vertikalem Abstand -->
     <div class="flex flex-col space-y-4 grid gap-[3rem] sm:grid-cols-[1fr] md:w-full md:grid-cols-[1fr_1fr]">
 
-      <!-- Veranstalter Auswahl -->
-      <div>
-        <select
-          id="organizer"
-          name="organizer"
-          [(ngModel)]="selectedOrganizer"
-          (ngModelChange)="setOrganizer($event)"
-          class="p-[0.75rem 1rem] w-full cursor-pointer"
-        >
-          <option [ngValue]="null">
-            {{ 'create-event.organizer' | translate }}
-          </option>
-          @for (organizer of organizers; track organizer) {
-            <option [ngValue]="organizer">
-              {{ organizer.name }}
-            </option>
-          }
-        </select>
-        <button
-          type="button"
-          class="mt-2 w-full rounded-2xl bg-[var(--colors-light-blue)] p-2 text-white"
-          (click)="newOrganizer = !newOrganizer"
-        >
-          {{ 'create-event.neworganizer' | translate }}
-        </button>
-      </div>
-
-      <!-- Neuer Veranstalter -->
-      @if (newOrganizer) {
-        <div class="space-y-2 rounded-xl border-2 border-black p-2">
-          <p>
-            <label for="organizername">{{
-              'create-event.neworganizername' | translate
-            }}</label>
-            <input
-              id="organizername"
-              name="organizername"
-              type="text"
-              [(ngModel)]="organizername"
-              class="p-[0.75rem 1rem] w-full"
-              required
-            />
-          </p>
-          <p>
-            <label for="organizerphone">{{
-              'create-event.neworganizerphone' | translate
-            }}</label>
-            <input
-              id="organizerphone"
-              name="organizerphone"
-              type="number"
-              [(ngModel)]="organizerphone"
-              class="p-[0.75rem 1rem] w-full"
-            />
-          </p>
-          <p>
-            <label for="organizermail">{{
-              'create-event.neworganizermail' | translate
-            }}</label>
-            <input
-              id="organizermail"
-              name="organizermail"
-              type="text"
-              [(ngModel)]="organizermail"
-              class="p-[0.75rem 1rem] w-full"
-            />
-          </p>
-        </div>
-      }
 
       <!-- Datum und Zeit -->
 
@@ -341,6 +272,76 @@
         </div>
       }
 
+ <!-- Veranstalter Auswahl -->
+      <div>
+        <select
+          id="organizer"
+          name="organizer"
+          [(ngModel)]="selectedOrganizer"
+          (ngModelChange)="setOrganizer($event)"
+          class="p-[0.75rem 1rem] w-full cursor-pointer"
+        >
+          <option [ngValue]="null">
+            {{ 'create-event.organizer' | translate }}
+          </option>
+          @for (organizer of organizers; track organizer) {
+            <option [ngValue]="organizer">
+              {{ organizer.name }}
+            </option>
+          }
+        </select>
+        <button
+          type="button"
+          class="mt-2 w-full rounded-2xl bg-[var(--colors-light-blue)] p-2 text-white"
+          (click)="newOrganizer = !newOrganizer"
+        >
+          {{ 'create-event.neworganizer' | translate }}
+        </button>
+      </div>
+
+      <!-- Neuer Veranstalter -->
+      @if (newOrganizer) {
+        <div class="space-y-2 rounded-xl border-2 border-black p-2">
+          <p>
+            <label for="organizername">{{
+              'create-event.neworganizername' | translate
+            }}</label>
+            <input
+              id="organizername"
+              name="organizername"
+              type="text"
+              [(ngModel)]="organizername"
+              class="p-[0.75rem 1rem] w-full"
+              required
+            />
+          </p>
+          <p>
+            <label for="organizerphone">{{
+              'create-event.neworganizerphone' | translate
+            }}</label>
+            <input
+              id="organizerphone"
+              name="organizerphone"
+              type="number"
+              [(ngModel)]="organizerphone"
+              class="p-[0.75rem 1rem] w-full"
+            />
+          </p>
+          <p>
+            <label for="organizermail">{{
+              'create-event.neworganizermail' | translate
+            }}</label>
+            <input
+              id="organizermail"
+              name="organizermail"
+              type="text"
+              [(ngModel)]="organizermail"
+              class="p-[0.75rem 1rem] w-full"
+            />
+          </p>
+        </div>
+      }
+
       <!-- Preis -->
       <div>
         <label for="price">{{ 'create-event.price' | translate }}</label>
@@ -371,6 +372,8 @@
         }}</label>
         <quill-editor
           name="description"
+          [maxLength]="5000"
+          [styles]="{minHeight: '250px'}"
           [(ngModel)]="description"
           [placeholder]="'Beschreibung eingeben...'"
           [format]="'html'"
