@@ -439,8 +439,7 @@ export class EventCreateComponent implements OnInit {
         restriction: this.restriction || undefined,
       }
 
-    // Event speichern (Update oder Create)
-    try {
+      // Event speichern (Update oder Create)
       if (this.eventId !== undefined) {
         const updated = await this.eventService.updateEvent(this.eventId, payload)
         if (!updated) {
