@@ -3,7 +3,6 @@ import {
   inject,
   signal,
   OnInit,
-  OnDestroy,
   ViewEncapsulation,
   ChangeDetectionStrategy,
   DestroyRef,
@@ -164,11 +163,11 @@ export class AdminEventOverviewComponent implements OnInit {
       const organizers = await this.organizerService.getAllOrganizers();
       const map = new Map<string, Organizer>();
 
-      organizers.forEach((organizer) => {
+      for (const organizer of organizers) {
         if (organizer.id) {
           map.set(String(organizer.id), organizer);
         }
-      });
+      }
 
       this.organizersMap.set(map);
     } catch (error) {
