@@ -158,61 +158,63 @@
       </div>
 
     <div class="flex flex-col grid gap-[3rem] sm:grid-cols-[1fr] md:w-full md:grid-cols-[1fr_1fr]">
-     <div class="flex flex-col space-y-4">
-      <!-- Themen -->
-      <h3>
-        {{ 'create-event.topics' | translate }}
-      </h3>
-      <!-- Event-Typ -->
-      <div>
-        <select
-          id="eventType"
-          name="eventType"
-          [(ngModel)]="selectedEventType"
-          (ngModelChange)="setSelectedEventType($event)"
-          class="border-Gray-600 w-full cursor-pointer rounded-[6px] border-2"
-        >
-          <option [ngValue]="null">
-            {{ 'create-event.topics' | translate }}
-          </option>
-          @for (eventType of eventTypes; track eventType) {
-            <option [ngValue]="eventType">
-              {{ eventType.name }}
+      <div class="flex flex-col">
+        <!-- Themen -->
+        <h3>
+          {{ 'create-event.topics' | translate }}
+        </h3>
+        <!-- Event-Typ -->
+        <div>
+          <select
+            id="eventType"
+            name="eventType"
+            [(ngModel)]="selectedEventType"
+            (ngModelChange)="setSelectedEventType($event)"
+            class="border-Gray-600 w-full cursor-pointer rounded-[6px] border-2"
+          >
+            <option [ngValue]="null">
+              {{ 'create-event.topics' | translate }}
             </option>
-          }
-        </select>
+            @for (eventType of eventTypes; track eventType) {
+              <option [ngValue]="eventType">
+                {{ eventType.name }}
+              </option>
+            }
+          </select>
+        </div>
+        <div
+          id="choose-category"
+          class="rounded-lg bg-white shadow-sm dark:bg-gray-100 my-4"
+        >
+          <ul class="p-3 text-gray-700 dark:text-gray-200 list-none mb-0">
+            @for (topic of topics; track topic) {
+              <li>
+                <div>
+                  <input
+                    id="checkbox{{ topic.id }}"
+                    name="topicCheckbox{{ topic.id }}"
+                    type="checkbox"
+                    [value]="topic.id"
+                    [checked]="selectedTopics.includes(topic)"
+                    (change)="toggleTopicSelection($event, topic)"
+                    class="h-4 w-4 cursor-pointer"
+                  />
+                  <label
+                    for="checkbox{{ topic.id }}"
+                    class="ms-2 w-full cursor-pointer text-gray-900 dark:text-gray-700"
+                  >
+                    {{ topic.name }}
+                  </label>
+                </div>
+              </li>
+            }
+          </ul>
+        </div>
       </div>
-      <div
-        id="choose-category"
-        class="rounded-lg bg-white shadow-sm dark:bg-gray-100"
-      >
-        <ul class="p-3 text-gray-700 dark:text-gray-200 list-none mb-0">
-          @for (topic of topics; track topic) {
-            <li>
-              <div>
-                <input
-                  id="checkbox{{ topic.id }}"
-                  name="topicCheckbox{{ topic.id }}"
-                  type="checkbox"
-                  [value]="topic.id"
-                  [checked]="selectedTopics.includes(topic)"
-                  (change)="toggleTopicSelection($event, topic)"
-                  class="h-4 w-4 cursor-pointer"
-                />
-                <label
-                  for="checkbox{{ topic.id }}"
-                  class="ms-2 w-full cursor-pointer text-gray-900 dark:text-gray-700"
-                >
-                  {{ topic.name }}
-                </label>
-              </div>
-            </li>
-          }
-        </ul>
-      </div>
+      <div>
 
       <!-- Mehr Infos -->
-      <div>
+      <div class="my-4 mt-6">
         <label for="moreInfoLink">{{
           'create-event.moreinfo' | translate
         }}</label>
@@ -227,7 +229,7 @@
       </div>
 
      <!-- Einschränkungen -->
-      <div>
+      <div class="my-4">
         <label for="restriction">{{
           'create-event.restrictions' | translate
         }}</label>
@@ -241,26 +243,29 @@
         />
       </div>
       <!-- Preis -->
-      <div>
+      <div class="my-4">
         <label for="price">{{ 'create-event.price' | translate }}</label>
-        <input
-          id="price"
-          name="price"
-          type="number"
-          min="0"
-          step="0.01"
-          placeholder="0.00"
-          [(ngModel)]="price"
-          class="w-full"
-        />
+          <input
+            id="price"
+            name="price"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="0.00"
+            [(ngModel)]="price"
+            class="w-full"
+          />
+        </div>
       </div>
-      </div>
+    </div>
+
+    <div>
       <!-- Bild-Upload -->
       <div
         class="flex flex-col items-center justify-center rounded-[6px] border-2 border-black bg-[#6d7cbc]"
       >
         <button
-          class="flex h-[250px] w-full flex-col items-center justify-center"
+          class="flex h-[200px] w-full flex-col items-center justify-center"
           (dragover)="onDragOver($event)"
           (dragleave)="onDragLeave()"
           (drop)="onDrop($event)"
@@ -286,25 +291,28 @@
         </button>
 
         @if (previews.length) {
-          @for (src of previews; track src; let i = $index) {
-            <div class="m-1 rounded-lg border-2 border-gray-500">
-              <div
-                class="relative inline-block overflow-hidden rounded-md bg-white align-top leading-none"
-              >
-                <img
-                  [src]="src"
-                  alt="Bild-Vorschau {{ i + 1 }}"
-                  class="block rounded-md"
-                />
-                <button
-                  (click)="removeImage(i)"
-                  class="absolute top-1 right-1 flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 bg-white/80 shadow-md hover:bg-gray-500 hover:text-white"
+          <div class="grid grid-flow-row-dense grid-cols-4 gap-2">
+            @for (src of previews; track src; let i = $index) {
+              <div class="m-1">
+                <div
+                  class="relative overflow-hidden rounded-md align-top leading-none rounded-lg border-2 border-gray-500"
                 >
-                  ✕
-                </button>
+                  <img
+                    [src]="src"
+                    alt="Bild-Vorschau {{ i + 1 }}"
+                    class="rounded-md max-h-50 max-w-50 object-cover"
+                  />
+                  <button
+                    (click)="removeImage(i)"
+                    class="absolute top-1 right-1 flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 bg-white/80 shadow-md hover:bg-gray-500 hover:text-white"
+                  >
+                    ✕
+                  </button>
+                </div>
               </div>
-            </div>
-          }
+
+            }
+          </div>
         }
       </div>
 
@@ -317,11 +325,11 @@
           </p>
         </div>
       }
-
-      <div class="flex flex-col space-y-4">
+    </div>
+      <div class="flex flex-col grid gap-[3rem] w-full my-8 sm:grid-cols-[1fr] md:grid-cols-[1fr_1fr] lg:grid-cols-[1fr_1fr_1fr]">
         <button
           type="submit"
-          class="w-full cursor-pointer rounded-2xl bg-[var(--colors-light-blue)] p-5 text-white"
+          class="w-full cursor-pointer rounded-2xl bg-blue-600 hover:bg-blue-700 p-5 text-white"
           (click)="saveEvent()"
         >
           {{
@@ -329,7 +337,7 @@
               | translate
           }}
         </button>
-        
+
         <button
           type="button"
           class="w-full cursor-pointer rounded-2xl bg-gray-300 p-5 text-gray-800 hover:bg-gray-400"
@@ -337,7 +345,7 @@
         >
           {{ 'create-event.cancel' | translate }}
         </button>
-        
+
         <!-- Löschen-Button (nur bei bestehenden Events anzeigen) -->
         @if (eventId) {
           <button
@@ -349,6 +357,5 @@
           </button>
         }
       </div>
-    </div>
   </form>
 </div>
