@@ -9,7 +9,7 @@ import { environment } from '@environments/environment'
 export class MediaService {
   private readonly surrealdb: SurrealdbService = inject(SurrealdbService)
 
-  private readonly mediaBaseUrl: string = environment.MEDIA_BASE_URL
+  readonly mediaBaseUrl: string = environment.MEDIA_BASE_URL
 
   async postMedia(media: Media) {
     const result = await this.surrealdb.post<Media>('media', media)
@@ -50,5 +50,11 @@ export class MediaService {
       console.warn('Fehler beim Laden der Media:', error)
       return null
     }
+  }
+
+  async deleteImageByURL(url: string) {
+    const media = await this.getMediaByUrl(url)
+
+    this.surrealdb.deleteRow(media?.id as RecordId<'media'>)
   }
 }
