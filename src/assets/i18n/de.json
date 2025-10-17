@@ -104,19 +104,21 @@
     "eventtype": "Art des Events",
     "moreinfo": "Mehr Infos",
     "moreinfoexample": "https://...",
-    "createevent": "Event erstellen",
+    "createevent": "Erstellen",
     "newlocationnameexample": "Name des Ortes",
     "newlocationaddressexample": "Straße und Hausnummer",
     "ageexample": "z. B. 18",
     "description": "Eventbeschreibung",
     "hint": "Felder mit * sind Pflichtfelder.",
-    "updateevent": "Event aktualisieren",
+    "updateevent": "Aktualisieren",
     "error": {
       "name": "Bitte geben Sie einen Eventnamen ein.",
       "date": "Bitte geben Sie ein Startdatum ein.",
       "time": "Bitte geben Sie eine Startzeit ein.",
       "general": "Bitte füllen Sie alle Pflichtfelder aus."
-    }
+    },
+    "cancel": "Abbrechen",
+    "delete": "Löschen ..."
   },
   "dev": {
     "text1": "Diese Website wurde im Rahmen des SYBIT Coding Camps 2025 entwickelt ",
