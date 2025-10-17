@@ -115,7 +115,14 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       const reader = new FileReader()
       reader.onload = () => {
         if (typeof reader.result === 'string') {
-          this.previews.push(reader.result)
+          // Speichere den Dateinamen und MIME-Type als Metadaten
+          const dataWithMetadata = {
+            dataUrl: reader.result,
+            fileName: file.name,
+            mimeType: file.type
+          }
+          // Speichere das Objekt als JSON-String
+          this.previews.push(JSON.stringify(dataWithMetadata))
           this.previewsChange.emit(this.previews)
           this.markForCheck()
         }
@@ -154,6 +161,27 @@ export class ImageUploadComponent implements OnInit, OnChanges {
     }).catch(error => {
       console.error('Fehler beim Aktualisieren der Media-IDs nach dem Entfernen:', error)
     })
+  }
+  
+  /**
+   * Extrahiert die korrekte Bild-URL aus dem Preview-String
+   * Unterstützt sowohl normale URLs als auch JSON-Strings mit Metadaten
+   */
+  getSrcForPreview(src: string): string {
+    if (src.startsWith('http')) {
+      return src;
+    }
+    
+    try {
+      if (src.startsWith('{') && src.endsWith('}')) {
+        const imageData = JSON.parse(src);
+        return imageData.dataUrl;
+      }
+    } catch (e) {
+      console.error('Fehler beim Parsen des JSON-Strings:', e);
+    }
+    
+    return src;
   }
 
   async uploadImages(): Promise<RecordId<'media'>[]> {
@@ -199,17 +227,39 @@ export class ImageUploadComponent implements OnInit, OnChanges {
         await Promise.all(
           newImages.map(async (image: string, i: number) => {
             try {
+              let file: string;
+              let fileName: string;
+              let fileType: string;
+              
+              // Prüfen, ob es sich um ein JSON-Objekt mit Metadaten handelt
+              if (image.startsWith('{') && image.endsWith('}')) {
+                try {
+                  const imageData = JSON.parse(image);
+                  file = imageData.dataUrl.split(',')[1];
+                  fileName = imageData.fileName;
+                  // Extrahiere den MIME-Type aus dem vollständigen Type
+                  fileType = imageData.mimeType.split('/')[1];
+                } catch (e) {
+                  // Fallback, falls JSON-Parsing fehlschlägt
+                  file = image.split(',')[1];
+                  fileName = `${this.eventName.replace(/[^a-zA-Z0-9]/g, '_')}_${i}`;
+                  fileType = image.split(';')[0].split('/')[1];
+                }
+              } else {
+                // Fallback für ältere Daten ohne Metadaten
+                file = image.split(',')[1];
+                fileName = `${this.eventName.replace(/[^a-zA-Z0-9]/g, '_')}_${i}`;
+                fileType = image.split(';')[0].split('/')[1];
+              }
+              
+              // Eindeutige ID generieren
+              const uniqueId = `${fileName.replace(/[^a-zA-Z0-9.]/g, '_')}_${Date.now()}`;
+              
               const newMedia: Media = {
-                id: (this.eventName.replace(/[^a-zA-Z0-9]/g, '_') +
-                  '_' +
-                  (i + Date.now()) + // Timestamp hinzufügen für Eindeutigkeit
-                  '_' +
-                  image
-                    .split(';')[0]
-                    .split('/')[1]) as unknown as RecordId<'media'>,
-                file: image.split(',')[1],
-                fileName: this.eventName.replace(/[^a-zA-Z0-9]/g, '_') + '_' + i,
-                fileType: image.split(';')[0].split('/')[1],
+                id: uniqueId as unknown as RecordId<'media'>,
+                file: file,
+                fileName: fileName,
+                fileType: fileType,
               }
               return await this.mediaService.postMedia(newMedia)
             } catch (error) {
