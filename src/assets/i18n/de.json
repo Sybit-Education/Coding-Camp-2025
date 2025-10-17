@@ -79,7 +79,7 @@
     "sponsoring": "Developed & sponsored by"
   },
   "create-event": {
-    "eventname": "Eventname:",
+    "eventname": "Name",
     "organizer": "Veranstalter wählen...",
     "neworganizer": "Neuen Veranstalter erstellen",
     "neworganizername": "Name",
