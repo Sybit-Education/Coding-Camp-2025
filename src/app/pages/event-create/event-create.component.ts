@@ -5,6 +5,7 @@ import {
   inject,
   OnInit,
   ViewChild,
+  signal,
 } from '@angular/core'
 import { SnackBarService } from '../../services/snack-bar.service'
 import { FormsModule } from '@angular/forms'
@@ -13,6 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { QuillEditorComponent } from 'ngx-quill'
 import { LocationInputComponent } from '../../component/location-input/location-input.component'
 import { OrganizerInputComponent } from '../../component/organizer-input/organizer-input.component'
+import { ImageUploadComponent } from '../../component/image-upload/image-upload.component'
 
 // Models
 import { Event as AppEvent } from '../../models/event.interface'
@@ -21,14 +23,12 @@ import { Organizer } from '../../models/organizer.interface'
 import { Topic } from '../../models/topic.interface'
 import { TypeDB } from '../../models/typeDB.interface'
 import { Decimal, RecordId, StringRecordId } from 'surrealdb'
-import { Media } from '../../models/media.model'
 
 // Services
 import { EventService } from '../../services/event.service'
 import { LocationService } from '../../services/location.service'
 import { OrganizerService } from '../../services/organizer.service'
 import { TopicService } from '../../services/topic.service'
-import { MediaService } from '../../services/media.service'
 import { CommonModule } from '@angular/common'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { sanitizeQuillContent } from '../../utils/quill-sanitizer'
@@ -36,22 +36,29 @@ import { sanitizeQuillContent } from '../../utils/quill-sanitizer'
 @Component({
   selector: 'app-event-create',
   standalone: true,
-  imports: [FormsModule, TranslateModule, CommonModule, QuillEditorComponent, LocationInputComponent, OrganizerInputComponent],
+  imports: [
+    FormsModule, 
+    TranslateModule, 
+    CommonModule, 
+    QuillEditorComponent, 
+    LocationInputComponent, 
+    OrganizerInputComponent,
+    ImageUploadComponent
+  ],
   templateUrl: './event-create.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventCreateComponent implements OnInit {
-  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>
   @ViewChild('eventNameInput') eventNameInput!: ElementRef<HTMLInputElement>
   @ViewChild('dateStartInput') dateStartInput!: ElementRef<HTMLInputElement>
   @ViewChild('timeStartInput') timeStartInput!: ElementRef<HTMLInputElement>
+  @ViewChild(ImageUploadComponent) imageUploadComponent!: ImageUploadComponent
 
   // ===== Services =====
   private readonly eventService = inject(EventService)
   private readonly locationService = inject(LocationService)
   private readonly organizerService = inject(OrganizerService)
   private readonly topicService = inject(TopicService)
-  private readonly mediaService = inject(MediaService)
   private readonly route = inject(ActivatedRoute)
   private readonly markForCheck = injectMarkForCheck()
   private readonly router = inject(Router)
@@ -99,7 +106,6 @@ export class EventCreateComponent implements OnInit {
 
   // Images & Upload
   previews: string[] = []
-  isDragging = false
   images: RecordId<'media'>[] = []
 
   // ===== Lifecycle =====
@@ -183,8 +189,7 @@ export class EventCreateComponent implements OnInit {
         if (topic) this.selectedTopics.push(topic)
       }
 
-      // Images
-      this.createPreview(null, event.media)
+      // Images werden in der ImageUploadComponent geladen
     } catch (err) {
       console.error('Fehler beim Laden des Events:', err)
     }
@@ -212,77 +217,6 @@ export class EventCreateComponent implements OnInit {
     }
   }
 
-  // ===== File Upload Handling =====
-  onAreaClick() {
-    this.fileInput.nativeElement.click()
-  }
-
-  onDragOver(event: DragEvent) {
-    event.preventDefault()
-    this.isDragging = true
-  }
-
-  onDragLeave() {
-    this.isDragging = false
-  }
-
-  onDrop(event: DragEvent) {
-    event.preventDefault()
-    this.isDragging = false
-    if (event.dataTransfer?.files) {
-      this.handleFiles(Array.from(event.dataTransfer.files))
-    }
-  }
-
-  onFilesSelected(event: Event) {
-    const input = event.target as HTMLInputElement
-    if (!input.files) return
-    this.handleFiles(Array.from(input.files))
-    input.value = ''
-  }
-
-  private handleFiles(selected: File[]) {
-    for (const file of selected) {
-      if (!RegExp(/image\/(png|jpeg)/).exec(file.type)) {
-        alert(`Dateityp nicht erlaubt: ${file.name}`)
-        continue
-      }
-      const maxFileSize = 5 * 1024 * 1024
-      if (file.size > maxFileSize) {
-        alert(`Datei zu groß (max. 5 MB): ${file.name}`)
-        continue
-      }
-      this.createPreview(file)
-    }
-  }
-
-  private createPreview(
-    file?: File | null,
-    image?: RecordId<'media'>[] | null,
-  ) {
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = () => {
-        if (typeof reader.result === 'string') {
-          this.previews.push(reader.result)
-        }
-      }
-      reader.readAsDataURL(file)
-    } else if (image) {
-      image.forEach((image) => {
-        this.mediaService.getMediaUrl(image).then((url) => {
-          if (url) {
-            this.previews.push(url)
-          }
-        })
-      })
-    }
-    this.markForCheck()
-  }
-
-  removeImage(index: number) {
-    this.previews.splice(index, 1)
-  }
 
   // ===== Speichern =====
 
@@ -334,7 +268,7 @@ export class EventCreateComponent implements OnInit {
       const priceDec = this.price ? new Decimal(this.price) : undefined
 
       // Medien verarbeiten
-      const mediaIds = await this.postNewImages()
+      const mediaIds = await this.imageUploadComponent.uploadImages()
 
       const payload: AppEvent = {
         name: this.eventName,
@@ -433,51 +367,4 @@ export class EventCreateComponent implements OnInit {
     }
   }
 
-  private async postNewImages(): Promise<RecordId<'media'>[]> {
-    const result: RecordId<'media'>[] = []
-    try {
-      const resultMedias: Media[] = (
-        await Promise.all(
-          this.previews.map(async (image: string, i: number) => {
-            try {
-              if (image.startsWith('http')) {
-                const existingMedia = await this.mediaService.getMediaByUrl(image)
-                if (existingMedia) {
-                  return existingMedia
-                } else {
-                  return null
-                }
-              } else {
-                const newMedia: Media = {
-                  id: (this.eventName.replace(/[^a-zA-Z0-9]/g, '_') +
-                    '_' +
-                    i +
-                    '_' +
-                    image
-                      .split(';')[0]
-                      .split('/')[1]) as unknown as RecordId<'media'>,
-                  file: image.split(',')[1],
-                  fileName: this.eventName.replace(/[^a-zA-Z0-9]/g, '_') + '_' + i,
-                  fileType: image.split(';')[0].split('/')[1],
-                }
-                return await this.mediaService.postMedia(newMedia)
-              }
-            } catch (error) {
-              console.error(`Fehler beim Verarbeiten des Bildes ${i}:`, error)
-              this.snackBarService.showError(`Fehler beim Hochladen des Bildes ${i+1}: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`)
-              this.markForCheck()
-              return null
-            }
-          }),
-        )
-      ).filter((media): media is Media => media !== null)
-      result.push(...resultMedias.map((media) => media.id as RecordId<'media'>))
-      return result
-    } catch (error) {
-      console.error('Fehler beim Hochladen der Bilder:', error)
-      this.snackBarService.showError(`Fehler beim Hochladen der Bilder: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`)
-      this.markForCheck()
-      return result
-    }
-  }
 }
