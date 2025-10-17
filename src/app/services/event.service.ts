@@ -116,14 +116,22 @@ export class EventService {
   //************** POST **************
 
   async postEvent(event: Event) {
-    return await this.surrealdb.post<Event>('event', event)
+    const result = await this.surrealdb.post<Event>('event', event)
+    // Cache invalidieren nach dem Erstellen eines Events
+    this.lastEventsFetch = 0
+    return result
   }
 
   async updateEvent(id: RecordId<'event'>, event: Event): Promise<Event> {
-    return await this.surrealdb.postUpdate<Event>(id, event)
+    const result = await this.surrealdb.postUpdate<Event>(id, event)
+    // Cache invalidieren nach dem Aktualisieren eines Events
+    this.lastEventsFetch = 0
+    return result
   }
 
-  delete(eventId: RecordId<string>) {
-    this.surrealdb.deleteRow(eventId)
+  async delete(eventId: RecordId<string>) {
+    await this.surrealdb.deleteRow(eventId)
+    // Cache invalidieren nach dem Löschen eines Events
+    this.lastEventsFetch = 0
   }
 }
