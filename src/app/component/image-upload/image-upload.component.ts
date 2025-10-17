@@ -160,6 +160,13 @@ export class ImageUploadComponent implements OnInit, OnChanges {
     const result: RecordId<'media'>[] = []
     
     try {
+      // Wenn keine Vorschaubilder vorhanden sind, aber existierende Bilder übergeben wurden,
+      // geben wir die existierenden Bilder zurück
+      if (this.previews.length === 0 && this.existingImages.length > 0) {
+        console.log('Keine neuen Bilder, behalte existierende:', this.existingImages);
+        return [...this.existingImages];
+      }
+      
       // Zuerst existierende Medien sammeln
       for (const image of this.previews) {
         if (image.startsWith('http')) {
@@ -167,6 +174,17 @@ export class ImageUploadComponent implements OnInit, OnChanges {
             const existingMedia = await this.mediaService.getMediaByUrl(image)
             if (existingMedia && existingMedia.id) {
               result.push(existingMedia.id as RecordId<'media'>)
+            } else {
+              // Wenn wir keine Media-ID für die URL finden können,
+              // versuchen wir, die ID aus den existingImages zu finden
+              const matchingExistingImage = this.existingImages.find(async (mediaId) => {
+                const url = await this.mediaService.getMediaUrl(mediaId);
+                return url === image;
+              });
+              
+              if (matchingExistingImage) {
+                result.push(matchingExistingImage);
+              }
             }
           } catch (error) {
             console.error('Fehler beim Abrufen des existierenden Mediums:', error)

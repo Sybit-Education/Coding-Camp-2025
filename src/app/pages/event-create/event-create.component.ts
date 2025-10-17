@@ -144,6 +144,11 @@ export class EventCreateComponent implements OnInit {
       this.restriction = event.restriction ?? null
       this.draft = event.draft ?? false
       this.images = event.media ?? []
+      
+      // Sicherstellen, dass images ein Array ist
+      if (!Array.isArray(this.images)) {
+        this.images = [];
+      }
 
       // Datum & Zeit
       const start = new Date(event.date_start)
@@ -269,7 +274,14 @@ export class EventCreateComponent implements OnInit {
       const priceDec = this.price ? new Decimal(this.price) : undefined
 
       // Medien verarbeiten
-      const mediaIds = await this.imageUploadComponent.uploadImages()
+      let mediaIds = await this.imageUploadComponent.uploadImages()
+      
+      // Wenn keine Bilder hochgeladen wurden, aber existierende Bilder vorhanden sind,
+      // behalten wir die existierenden Bilder bei
+      if (mediaIds.length === 0 && this.images.length > 0) {
+        console.log('Keine neuen Bilder hochgeladen, behalte existierende:', this.images);
+        mediaIds = [...this.images];
+      }
       
       // Sicherstellen, dass wir die aktualisierten Media-IDs verwenden
       this.images = mediaIds
