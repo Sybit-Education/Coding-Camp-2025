@@ -318,7 +318,7 @@
         </div>
       }
 
-      <div>
+      <div class="flex flex-col space-y-4">
         <button
           type="submit"
           class="w-full cursor-pointer rounded-2xl bg-[var(--colors-light-blue)] p-5 text-white"
@@ -328,6 +328,14 @@
             (eventId ? 'create-event.updateevent' : 'create-event.createevent')
               | translate
           }}
+        </button>
+        
+        <button
+          type="button"
+          class="w-full cursor-pointer rounded-2xl bg-gray-300 p-5 text-gray-800 hover:bg-gray-400"
+          (click)="cancelEvent()"
+        >
+          {{ 'create-event.cancel' | translate }}
         </button>
       </div>
     </div>

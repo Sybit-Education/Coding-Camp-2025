@@ -401,6 +401,13 @@ export class EventCreateComponent implements OnInit {
     }
   }
 
+  /**
+   * Bricht die Erstellung/Bearbeitung des Events ab und navigiert zurück zur Übersicht
+   */
+  cancelEvent(): void {
+    this.router.navigate(['/admin']);
+  }
+
   private async postNewImages(): Promise<RecordId<'media'>[]> {
     const result: RecordId<'media'>[] = []
     try {
