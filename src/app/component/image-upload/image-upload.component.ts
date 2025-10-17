@@ -153,11 +153,11 @@ export class ImageUploadComponent implements OnInit, OnChanges {
   async removeImage(index: number) {
     // Speichere das zu löschende Bild
     const imageToRemove = this.previews[index];
-    
+
     // Entferne das Bild aus der Vorschau
     this.previews.splice(index, 1);
     this.previewsChange.emit(this.previews);
-    
+
     try {
       // Wenn es ein HTTP-Bild ist (existierendes Bild), finde die Media-ID und lösche es
       if (imageToRemove.startsWith('http')) {
@@ -172,7 +172,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
           }
         }
       }
-      
+
       // Aktualisiere die Media-IDs und informiere die Eltern-Komponente
       const mediaIds = await this.uploadImages();
       this.mediaIdsChange.emit(mediaIds);
@@ -258,6 +258,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
                   fileName = imageData.fileName;
                   // Extrahiere den MIME-Type aus dem vollständigen Type
                   fileType = imageData.mimeType.split('/')[1];
+                // oxlint-disable-next-line no-unused-vars
                 } catch (e) {
                   // Fallback, falls JSON-Parsing fehlschlägt
                   file = image.split(',')[1];

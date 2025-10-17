@@ -5,7 +5,6 @@ import {
   inject,
   OnInit,
   ViewChild,
-  signal,
 } from '@angular/core'
 import { SnackBarService } from '../../services/snack-bar.service'
 import { FormsModule } from '@angular/forms'
@@ -37,11 +36,11 @@ import { sanitizeQuillContent } from '../../utils/quill-sanitizer'
   selector: 'app-event-create',
   standalone: true,
   imports: [
-    FormsModule, 
-    TranslateModule, 
-    CommonModule, 
-    QuillEditorComponent, 
-    LocationInputComponent, 
+    FormsModule,
+    TranslateModule,
+    CommonModule,
+    QuillEditorComponent,
+    LocationInputComponent,
     OrganizerInputComponent,
     ImageUploadComponent
   ],
@@ -144,7 +143,7 @@ export class EventCreateComponent implements OnInit {
       this.restriction = event.restriction ?? null
       this.draft = event.draft ?? false
       this.images = event.media ?? []
-      
+
       // Sicherstellen, dass images ein Array ist
       if (!Array.isArray(this.images)) {
         this.images = [];
@@ -275,14 +274,14 @@ export class EventCreateComponent implements OnInit {
 
       // Medien verarbeiten
       let mediaIds = await this.imageUploadComponent.uploadImages()
-      
+
       // Wenn keine Bilder hochgeladen wurden, aber existierende Bilder vorhanden sind,
       // behalten wir die existierenden Bilder bei
       if (mediaIds.length === 0 && this.images.length > 0) {
         console.log('Keine neuen Bilder hochgeladen, behalte existierende:', this.images);
         mediaIds = [...this.images];
       }
-      
+
       // Sicherstellen, dass wir die aktualisierten Media-IDs verwenden
       this.images = mediaIds
 

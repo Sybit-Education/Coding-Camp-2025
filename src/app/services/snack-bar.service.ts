@@ -13,26 +13,26 @@ export interface SnackBarData {
   providedIn: 'root'
 })
 export class SnackBarService {
-  private snackBarSubject = new Subject<SnackBarData | null>();
+  private readonly snackBarSubject = new Subject<SnackBarData | null>();
   snackBar$ = this.snackBarSubject.asObservable();
 
-  showMessage(message: string, type: SnackBarType = 'info', duration: number = 5000): void {
+  showMessage(message: string, type: SnackBarType = 'info', duration = 5000): void {
     this.snackBarSubject.next({ message, type, duration });
   }
 
-  showSuccess(message: string, duration: number = 5000): void {
+  showSuccess(message: string, duration = 5000): void {
     this.showMessage(message, 'success', duration);
   }
 
-  showError(message: string, duration: number = 5000): void {
+  showError(message: string, duration = 5000): void {
     this.showMessage(message, 'error', duration);
   }
 
-  showWarning(message: string, duration: number = 5000): void {
+  showWarning(message: string, duration = 5000): void {
     this.showMessage(message, 'warning', duration);
   }
 
-  showInfo(message: string, duration: number = 5000): void {
+  showInfo(message: string, duration = 5000): void {
     this.showMessage(message, 'info', duration);
   }
 
