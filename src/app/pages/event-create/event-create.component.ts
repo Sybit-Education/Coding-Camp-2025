@@ -408,6 +408,28 @@ export class EventCreateComponent implements OnInit {
     this.router.navigate(['/admin']);
   }
 
+  /**
+   * Löscht das aktuelle Event nach Bestätigung
+   */
+  deleteEvent(): void {
+    if (!this.eventId) {
+      return; // Nichts zu löschen, wenn es ein neues Event ist
+    }
+
+    if (confirm('Sind Sie sicher, dass Sie dieses Event löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.')) {
+      this.eventService.deleteEvent(this.eventId)
+        .then(() => {
+          this.snackBarService.showSuccess('Event erfolgreich gelöscht');
+          this.router.navigate(['/admin']);
+        })
+        .catch(error => {
+          console.error('Fehler beim Löschen des Events:', error);
+          this.snackBarService.showError(`Fehler beim Löschen des Events: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`);
+          this.markForCheck();
+        });
+    }
+  }
+
   private async postNewImages(): Promise<RecordId<'media'>[]> {
     const result: RecordId<'media'>[] = []
     try {

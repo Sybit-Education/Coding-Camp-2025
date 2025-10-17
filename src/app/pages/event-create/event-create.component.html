@@ -337,6 +337,17 @@
         >
           {{ 'create-event.cancel' | translate }}
         </button>
+        
+        <!-- Löschen-Button (nur bei bestehenden Events anzeigen) -->
+        @if (eventId) {
+          <button
+            type="button"
+            class="w-full cursor-pointer rounded-2xl bg-red-500 p-5 text-white hover:bg-red-600"
+            (click)="deleteEvent()"
+          >
+            {{ 'create-event.delete' | translate }}
+          </button>
+        }
       </div>
     </div>
   </form>
