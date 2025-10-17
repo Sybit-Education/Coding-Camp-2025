@@ -312,9 +312,9 @@ export class EventCreateComponent implements OnInit {
         } else {
           this.errorTime = false
         }
-        
+
         this.snackBarService.showError('Bitte füllen Sie alle Pflichtfelder aus (Name, Datum, Uhrzeit).')
-        
+
         // Fokus auf das erste Feld mit Fehler setzen
         setTimeout(() => this.focusFirstErrorField(), 100)
         return
@@ -418,13 +418,13 @@ export class EventCreateComponent implements OnInit {
 
     if (confirm('Sind Sie sicher, dass Sie dieses Event löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.')) {
       try {
-        await this.eventService.delete(this.eventId);
+        this.eventService.delete(this.eventId);
         this.snackBarService.showSuccess('Event erfolgreich gelöscht');
-        
+
         // Kurze Verzögerung, um sicherzustellen, dass die Löschung verarbeitet wurde
         setTimeout(() => {
-          this.router.navigate(['/admin'], { 
-            queryParams: { refresh: new Date().getTime() } 
+          this.router.navigate(['/admin'], {
+            queryParams: { refresh: new Date().getTime() }
           });
         }, 300);
       } catch (error: unknown) {
