@@ -12,7 +12,7 @@ import {
   inject,
 } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { RecordId } from 'surrealdb'
+import { RecordId, StringRecordId } from 'surrealdb'
 import { MediaService } from '../../services/media.service'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { Media } from '../../models/media.model'
@@ -162,7 +162,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       console.error('Fehler beim Aktualisieren der Media-IDs nach dem Entfernen:', error)
     })
   }
-  
+
   /**
    * Extrahiert die korrekte Bild-URL aus dem Preview-String
    * Unterstützt sowohl normale URLs als auch JSON-Strings mit Metadaten
@@ -171,7 +171,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
     if (src.startsWith('http')) {
       return src;
     }
-    
+
     try {
       if (src.startsWith('{') && src.endsWith('}')) {
         const imageData = JSON.parse(src);
@@ -180,7 +180,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
     } catch (e) {
       console.error('Fehler beim Parsen des JSON-Strings:', e);
     }
-    
+
     return src;
   }
 
@@ -230,7 +230,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
               let file: string;
               let fileName: string;
               let fileType: string;
-              
+
               // Prüfen, ob es sich um ein JSON-Objekt mit Metadaten handelt
               if (image.startsWith('{') && image.endsWith('}')) {
                 try {
@@ -251,10 +251,11 @@ export class ImageUploadComponent implements OnInit, OnChanges {
                 fileName = `${this.eventName.replace(/[^a-zA-Z0-9]/g, '_')}_${i}`;
                 fileType = image.split(';')[0].split('/')[1];
               }
-              
+
               // Eindeutige ID generieren
-              const uniqueId = `${fileName.replace(/[^a-zA-Z0-9.]/g, '_')}_${Date.now()}`;
-              
+              const uniqueId = new StringRecordId(`media:${fileName.replace(/[^a-zA-Z0-9.]/g, '_')}_${Date.now()}`);
+              console.log('uniqueID: ' + uniqueId)
+
               const newMedia: Media = {
                 id: uniqueId as unknown as RecordId<'media'>,
                 file: file,
