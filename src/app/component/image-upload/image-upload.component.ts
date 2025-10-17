@@ -253,7 +253,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
               }
 
               // Eindeutige ID generieren
-              const uniqueId = new StringRecordId(`media:${fileName.replace(/[^a-zA-Z0-9.]/g, '_')}_${Date.now()}`);
+              const uniqueId = new StringRecordId(`media:${fileName.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}`);
               console.log('uniqueID: ' + uniqueId)
 
               const newMedia: Media = {
