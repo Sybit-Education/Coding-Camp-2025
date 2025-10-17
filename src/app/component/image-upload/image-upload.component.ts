@@ -29,34 +29,34 @@ import { TranslateModule } from '@ngx-translate/core'
 })
 export class ImageUploadComponent implements OnInit, OnChanges {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>
-  
+
   @Input() previews: string[] = []
   @Input() eventName = ''
   @Input() existingImages: RecordId<'media'>[] = []
-  
+
   @Output() previewsChange = new EventEmitter<string[]>()
   @Output() mediaIdsChange = new EventEmitter<RecordId<'media'>[]>()
-  
+
   isDragging = false
-  
+
   private readonly mediaService = inject(MediaService)
   private readonly markForCheck = injectMarkForCheck()
   private readonly snackBarService = inject(SnackBarService)
-  
+
   ngOnInit(): void {
     // Lade existierende Bilder, wenn vorhanden
     this.loadExistingImagesIfPresent();
   }
-  
+
   ngOnChanges(changes: SimpleChanges): void {
     // Wenn sich existingImages ändert und Werte enthält, lade die Bilder
-    if (changes['existingImages'] && 
-        changes['existingImages'].currentValue && 
+    if (changes['existingImages'] &&
+        changes['existingImages'].currentValue &&
         changes['existingImages'].currentValue.length > 0) {
       this.loadExistingImagesIfPresent();
     }
   }
-  
+
   private loadExistingImagesIfPresent(): void {
     if (this.existingImages && this.existingImages.length > 0) {
       // Nur laden, wenn die Vorschau noch leer ist, um Duplikate zu vermeiden
@@ -65,7 +65,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       }
     }
   }
-  
+
   // ===== File Upload Handling =====
   onAreaClick() {
     this.fileInput.nativeElement.click()
@@ -123,7 +123,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       reader.readAsDataURL(file)
     }
   }
-  
+
   private loadExistingImages() {
     console.log('Lade existierende Bilder:', this.existingImages);
     this.existingImages.forEach((image) => {
@@ -146,7 +146,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
   removeImage(index: number) {
     this.previews.splice(index, 1)
     this.previewsChange.emit(this.previews)
-    
+
     // Wenn wir ein Bild entfernen, sollten wir auch die Eltern-Komponente informieren
     // damit sie weiß, dass sich die Bilder geändert haben
     this.uploadImages().then(mediaIds => {
@@ -155,10 +155,10 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       console.error('Fehler beim Aktualisieren der Media-IDs nach dem Entfernen:', error)
     })
   }
-  
+
   async uploadImages(): Promise<RecordId<'media'>[]> {
     const result: RecordId<'media'>[] = []
-    
+
     try {
       // Wenn keine Vorschaubilder vorhanden sind, aber existierende Bilder übergeben wurden,
       // geben wir die existierenden Bilder zurück
@@ -166,7 +166,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
         console.log('Keine neuen Bilder, behalte existierende:', this.existingImages);
         return [...this.existingImages];
       }
-      
+
       // Zuerst existierende Medien sammeln
       for (const image of this.previews) {
         if (image.startsWith('http')) {
@@ -181,7 +181,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
                 const url = await this.mediaService.getMediaUrl(mediaId);
                 return url === image;
               });
-              
+
               if (matchingExistingImage) {
                 result.push(matchingExistingImage);
               }
@@ -191,10 +191,10 @@ export class ImageUploadComponent implements OnInit, OnChanges {
           }
         }
       }
-      
+
       // Dann neue Bilder hochladen
       const newImages = this.previews.filter(img => !img.startsWith('http'))
-      
+
       const resultMedias: Media[] = (
         await Promise.all(
           newImages.map(async (image: string, i: number) => {
@@ -221,13 +221,13 @@ export class ImageUploadComponent implements OnInit, OnChanges {
           }),
         )
       ).filter((media): media is Media => media !== null)
-      
+
       // Neue Media-IDs hinzufügen
       result.push(...resultMedias.map((media) => media.id as RecordId<'media'>))
-      
+
       // Event emittieren mit allen Media-IDs
       this.mediaIdsChange.emit(result)
-      
+
       console.log('Hochgeladene und existierende Medien:', result)
       return result
     } catch (error) {
