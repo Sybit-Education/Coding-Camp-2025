@@ -270,6 +270,9 @@ export class EventCreateComponent implements OnInit {
 
       // Medien verarbeiten
       const mediaIds = await this.imageUploadComponent.uploadImages()
+      
+      // Sicherstellen, dass wir die aktualisierten Media-IDs verwenden
+      this.images = mediaIds
 
       const payload: AppEvent = {
         name: this.eventName,

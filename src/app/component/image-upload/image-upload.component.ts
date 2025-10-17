@@ -138,6 +138,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
         }
       }).catch(error => {
         console.error('Fehler beim Laden des Bildes:', error);
+        // Trotz Fehler fortfahren und andere Bilder laden
       });
     });
   }
@@ -145,37 +146,54 @@ export class ImageUploadComponent implements OnInit, OnChanges {
   removeImage(index: number) {
     this.previews.splice(index, 1)
     this.previewsChange.emit(this.previews)
+    
+    // Wenn wir ein Bild entfernen, sollten wir auch die Eltern-Komponente informieren
+    // damit sie weiß, dass sich die Bilder geändert haben
+    this.uploadImages().then(mediaIds => {
+      this.mediaIdsChange.emit(mediaIds)
+    }).catch(error => {
+      console.error('Fehler beim Aktualisieren der Media-IDs nach dem Entfernen:', error)
+    })
   }
   
   async uploadImages(): Promise<RecordId<'media'>[]> {
     const result: RecordId<'media'>[] = []
+    
     try {
+      // Zuerst existierende Medien sammeln
+      for (const image of this.previews) {
+        if (image.startsWith('http')) {
+          try {
+            const existingMedia = await this.mediaService.getMediaByUrl(image)
+            if (existingMedia && existingMedia.id) {
+              result.push(existingMedia.id as RecordId<'media'>)
+            }
+          } catch (error) {
+            console.error('Fehler beim Abrufen des existierenden Mediums:', error)
+          }
+        }
+      }
+      
+      // Dann neue Bilder hochladen
+      const newImages = this.previews.filter(img => !img.startsWith('http'))
+      
       const resultMedias: Media[] = (
         await Promise.all(
-          this.previews.map(async (image: string, i: number) => {
+          newImages.map(async (image: string, i: number) => {
             try {
-              if (image.startsWith('http')) {
-                const existingMedia = await this.mediaService.getMediaByUrl(image)
-                if (existingMedia) {
-                  return existingMedia
-                } else {
-                  return null
-                }
-              } else {
-                const newMedia: Media = {
-                  id: (this.eventName.replace(/[^a-zA-Z0-9]/g, '_') +
-                    '_' +
-                    i +
-                    '_' +
-                    image
-                      .split(';')[0]
-                      .split('/')[1]) as unknown as RecordId<'media'>,
-                  file: image.split(',')[1],
-                  fileName: this.eventName.replace(/[^a-zA-Z0-9]/g, '_') + '_' + i,
-                  fileType: image.split(';')[0].split('/')[1],
-                }
-                return await this.mediaService.postMedia(newMedia)
+              const newMedia: Media = {
+                id: (this.eventName.replace(/[^a-zA-Z0-9]/g, '_') +
+                  '_' +
+                  (i + Date.now()) + // Timestamp hinzufügen für Eindeutigkeit
+                  '_' +
+                  image
+                    .split(';')[0]
+                    .split('/')[1]) as unknown as RecordId<'media'>,
+                file: image.split(',')[1],
+                fileName: this.eventName.replace(/[^a-zA-Z0-9]/g, '_') + '_' + i,
+                fileType: image.split(';')[0].split('/')[1],
               }
+              return await this.mediaService.postMedia(newMedia)
             } catch (error) {
               console.error(`Fehler beim Verarbeiten des Bildes ${i}:`, error)
               this.snackBarService.showError(`Fehler beim Hochladen des Bildes ${i+1}: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`)
@@ -185,8 +203,14 @@ export class ImageUploadComponent implements OnInit, OnChanges {
           }),
         )
       ).filter((media): media is Media => media !== null)
+      
+      // Neue Media-IDs hinzufügen
       result.push(...resultMedias.map((media) => media.id as RecordId<'media'>))
+      
+      // Event emittieren mit allen Media-IDs
       this.mediaIdsChange.emit(result)
+      
+      console.log('Hochgeladene und existierende Medien:', result)
       return result
     } catch (error) {
       console.error('Fehler beim Hochladen der Bilder:', error)
