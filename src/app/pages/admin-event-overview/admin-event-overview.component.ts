@@ -24,7 +24,7 @@ import { FormsModule } from '@angular/forms'
 import { Organizer } from '../../models/organizer.interface'
 import { RecordId } from 'surrealdb'
 import { NavigationEnd } from '@angular/router';
-import { takeUntilDestroyed, inject as injectCore } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -46,7 +46,7 @@ export class AdminEventOverviewComponent implements OnInit {
   private readonly eventService = inject(EventService)
   private readonly organizerService = inject(OrganizerService)
   private readonly router = inject(Router)
-  private readonly destroyRef = injectCore(DestroyRef)
+  private readonly destroyRef = inject(DestroyRef)
 
   // Loading state
   isLoading = signal(true)
