@@ -411,16 +411,22 @@ export class EventCreateComponent implements OnInit {
   /**
    * Löscht das aktuelle Event nach Bestätigung
    */
-  deleteEvent(): void {
+  async deleteEvent(): Promise<void> {
     if (!this.eventId) {
       return; // Nichts zu löschen, wenn es ein neues Event ist
     }
 
     if (confirm('Sind Sie sicher, dass Sie dieses Event löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.')) {
       try {
-        this.eventService.delete(this.eventId);
+        await this.eventService.delete(this.eventId);
         this.snackBarService.showSuccess('Event erfolgreich gelöscht');
-        this.router.navigate(['/admin']);
+        
+        // Kurze Verzögerung, um sicherzustellen, dass die Löschung verarbeitet wurde
+        setTimeout(() => {
+          this.router.navigate(['/admin'], { 
+            queryParams: { refresh: new Date().getTime() } 
+          });
+        }, 300);
       } catch (error: unknown) {
         console.error('Fehler beim Löschen des Events:', error);
         this.snackBarService.showError(`Fehler beim Löschen des Events: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`);
