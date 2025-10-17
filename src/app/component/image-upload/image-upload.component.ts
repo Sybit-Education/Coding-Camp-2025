@@ -164,7 +164,12 @@ export class ImageUploadComponent implements OnInit, OnChanges {
         const existingMedia = await this.mediaService.getMediaByUrl(imageToRemove);
         if (existingMedia && existingMedia.id) {
           console.log('Lösche existierendes Bild aus der Datenbank:', existingMedia.id);
-          await this.mediaService.deleteMedia(existingMedia.id);
+          const deleted = await this.mediaService.deleteMedia(existingMedia.id);
+          if (deleted) {
+            console.log(`Bild mit ID ${existingMedia.id} erfolgreich gelöscht`);
+          } else {
+            console.warn(`Bild mit ID ${existingMedia.id} konnte nicht gelöscht werden`);
+          }
         }
       }
       
