@@ -8,7 +8,7 @@ import {
   DestroyRef,
 } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { RouterModule, Router } from '@angular/router'
+import { RouterModule, Router, NavigationEnd } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 import { Event } from '../../models/event.interface'
 import { EventService } from '../../services/event.service'
@@ -22,7 +22,6 @@ import {
 import { FormsModule } from '@angular/forms'
 import { Organizer } from '../../models/organizer.interface'
 import { RecordId } from 'surrealdb'
-import { NavigationEnd } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs/operators';
 
