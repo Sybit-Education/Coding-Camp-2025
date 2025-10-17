@@ -3,8 +3,10 @@ import {
   inject,
   signal,
   OnInit,
+  OnDestroy,
   ViewEncapsulation,
   ChangeDetectionStrategy,
+  DestroyRef,
 } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule, Router } from '@angular/router'
@@ -22,7 +24,7 @@ import { FormsModule } from '@angular/forms'
 import { Organizer } from '../../models/organizer.interface'
 import { RecordId } from 'surrealdb'
 import { NavigationEnd } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, inject as injectCore } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -44,6 +46,7 @@ export class AdminEventOverviewComponent implements OnInit {
   private readonly eventService = inject(EventService)
   private readonly organizerService = inject(OrganizerService)
   private readonly router = inject(Router)
+  private readonly destroyRef = injectCore(DestroyRef)
 
   // Loading state
   isLoading = signal(true)
@@ -97,7 +100,7 @@ export class AdminEventOverviewComponent implements OnInit {
     this.router.events
       .pipe(
         filter((e): e is NavigationEnd => e instanceof NavigationEnd),
-        takeUntilDestroyed(this)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((event) => {
         if (event.urlAfterRedirects.startsWith('/admin/event')) {
