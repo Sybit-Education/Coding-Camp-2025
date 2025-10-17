@@ -171,26 +171,6 @@
         [selectedOrganizer]="selectedOrganizer"
         (organizerSelected)="setOrganizer($event)"
       ></app-organizer-input>
-
-      <!-- Preis -->
-      <div>
-        <label for="price">{{ 'create-event.price' | translate }}</label>
-        <input
-          id="price"
-          name="price"
-          type="number"
-          min="0"
-          step="0.01"
-          placeholder="0.00"
-          [(ngModel)]="price"
-          class="p-[0.75rem 1rem] w-full"
-        />
-      </div>
-
-      <div class="required m-0 mt-5"></div>
-      <div>
-        <p>{{ 'create-event.hint' | translate }}</p>
-      </div>
     </div>
 
     <!-- Rechte Spalte mit vertikalem Abstand -->
@@ -221,21 +201,6 @@
           class="w-full rounded-md border"
         >
         </quill-editor>
-      </div>
-
-      <!-- Einschränkungen -->
-      <div>
-        <label for="restriction">{{
-          'create-event.restrictions' | translate
-        }}</label>
-        <input
-          id="restriction"
-          name="restriction"
-          type="text"
-          [(ngModel)]="restriction"
-          class="p-[0.75rem 1rem] w-full"
-          placeholder="{{ 'create-event.restrictionsexample' | translate }}"
-        />
       </div>
 
       <!-- Themen -->
@@ -308,6 +273,35 @@
         />
       </div>
 
+     <!-- Einschränkungen -->
+      <div>
+        <label for="restriction">{{
+          'create-event.restrictions' | translate
+        }}</label>
+        <input
+          id="restriction"
+          name="restriction"
+          type="text"
+          [(ngModel)]="restriction"
+          class="p-[0.75rem 1rem] w-full"
+          placeholder="{{ 'create-event.restrictionsexample' | translate }}"
+        />
+      </div>
+      <!-- Preis -->
+      <div>
+        <label for="price">{{ 'create-event.price' | translate }}</label>
+        <input
+          id="price"
+          name="price"
+          type="number"
+          min="0"
+          step="0.01"
+          placeholder="0.00"
+          [(ngModel)]="price"
+          class="p-[0.75rem 1rem] w-full"
+        />
+      </div>
+      <!-- Bild-Upload -->
       <div
         class="flex flex-col items-center justify-center rounded-[6px] border-2 border-black bg-[#6d7cbc]"
       >
