@@ -45,7 +45,7 @@
 
       <!-- Datum und Zeit -->
       <div class="grid grid-cols-2 gap-[1rem]">
-        <ng-container *ngIf="!this.errorDate; else errorDate">
+        @if (!this.errorDate) {
           <div class="my-4">
             <label for="date" class="required">{{
               'create-event.startdate' | translate
@@ -60,8 +60,7 @@
               required="true"
             />
           </div>
-        </ng-container>
-        <ng-template #errorDate>
+        } @else {
           <div class="my-4">
             <label
               for="errorDate"
@@ -81,8 +80,8 @@
                {{ 'create-event.error.date' | translate }}
             </p>
           </div>
-        </ng-template>
-        <ng-container *ngIf="!this.errorTime; else errorTime">
+        }
+        @if (!this.errorTime) {
           <div class="my-4">
             <label for="time" class="required">{{
               'create-event.starttime' | translate
@@ -97,8 +96,7 @@
               required="true"
             />
           </div>
-        </ng-container>
-        <ng-template #errorTime>
+        } @else {
           <div class="my-4">
             <label
               for="errorTime"
@@ -118,7 +116,7 @@
               {{ 'create-event.error.time' | translate }}
             </p>
          </div>
-        </ng-template>
+        }
       </div>
 
       @if (timePeriode) {
