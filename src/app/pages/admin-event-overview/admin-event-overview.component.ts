@@ -21,6 +21,9 @@ import {
 import { FormsModule } from '@angular/forms'
 import { Organizer } from '../../models/organizer.interface'
 import { RecordId } from 'surrealdb'
+import { NavigationEnd } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-admin-event-overview',
@@ -89,6 +92,18 @@ export class AdminEventOverviewComponent implements OnInit {
   ngOnInit(): void {
     // Zuerst alle Veranstalter laden, dann erst die Events
     this.loadOrganizersAndEvents();
+
+      // Bei jeder Navigation zur selben Route erneut laden
+    this.router.events
+      .pipe(
+        filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+        takeUntilDestroyed(this)
+      )
+      .subscribe((event) => {
+        if (event.urlAfterRedirects.startsWith('/admin/event')) {
+          this.loadOrganizersAndEvents();
+        }
+      })
   }
 
   // Lade Organisatoren und dann Events in der richtigen Reihenfolge
@@ -96,10 +111,10 @@ export class AdminEventOverviewComponent implements OnInit {
     try {
       // Zuerst Organisatoren laden
       await this.loadOrganizers();
-      
+
       // Dann Events laden
       const eventsList = await this.eventService.getAllEvents();
-      
+
       // Sort events by start date (ascending)
       const sortedEvents = [...eventsList].sort((a, b) => {
         const dateA = new Date(a.date_start);
