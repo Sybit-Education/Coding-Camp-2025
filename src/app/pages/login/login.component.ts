@@ -4,6 +4,7 @@ import { Login } from '../../models/login.module'
 import { LoginService } from '../../services/login.service'
 import { Component, inject, OnInit } from '@angular/core'
 import { TranslateModule } from '@ngx-translate/core'
+import { SnackBarService } from '../../services/snack-bar.service'
 
 @Component({
   selector: 'app-page-login',
@@ -18,6 +19,7 @@ export class LoginPageComponent implements OnInit {
   unauthorizedErrorCode = 401
 
   private readonly loginService = inject(LoginService)
+  private readonly snackBarService = inject(SnackBarService)
 
   ngOnInit(): void {
     this.loginService.isLoggedIn().then((isLoggedIn) => {
@@ -34,12 +36,20 @@ export class LoginPageComponent implements OnInit {
   async handleLogin() {
     this.isError = false
 
-    const result = await this.loginService.login(this.loginParams)
+    try {
+      const result = await this.loginService.login(this.loginParams)
 
-    if (!result) {
+      if (!result) {
+        this.isError = true
+        this.snackBarService.showError('Login fehlgeschlagen. Bitte überprüfen Sie Ihre Anmeldedaten.')
+        return
+      }
+      this.snackBarService.showSuccess('Login erfolgreich')
+      this.loginService.switchRoute()
+    } catch (error) {
       this.isError = true
-      return
+      console.error('Fehler beim Login:', error)
+      this.snackBarService.showError(`Fehler beim Login: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`)
     }
-    this.loginService.switchRoute()
   }
 }

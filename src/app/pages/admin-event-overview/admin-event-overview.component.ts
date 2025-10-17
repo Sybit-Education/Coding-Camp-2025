@@ -5,9 +5,10 @@ import {
   OnInit,
   ViewEncapsulation,
   ChangeDetectionStrategy,
+  DestroyRef,
 } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { RouterModule, Router } from '@angular/router'
+import { RouterModule, Router, NavigationEnd } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 import { Event } from '../../models/event.interface'
 import { EventService } from '../../services/event.service'
@@ -21,6 +22,8 @@ import {
 import { FormsModule } from '@angular/forms'
 import { Organizer } from '../../models/organizer.interface'
 import { RecordId } from 'surrealdb'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-admin-event-overview',
@@ -41,6 +44,7 @@ export class AdminEventOverviewComponent implements OnInit {
   private readonly eventService = inject(EventService)
   private readonly organizerService = inject(OrganizerService)
   private readonly router = inject(Router)
+  private readonly destroyRef = inject(DestroyRef)
 
   // Loading state
   isLoading = signal(true)
@@ -89,6 +93,18 @@ export class AdminEventOverviewComponent implements OnInit {
   ngOnInit(): void {
     // Zuerst alle Veranstalter laden, dann erst die Events
     this.loadOrganizersAndEvents();
+
+      // Bei jeder Navigation zur selben Route erneut laden
+    this.router.events
+      .pipe(
+        filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe((event) => {
+        if (event.urlAfterRedirects.startsWith('/admin/event')) {
+          this.loadOrganizersAndEvents();
+        }
+      })
   }
 
   // Lade Organisatoren und dann Events in der richtigen Reihenfolge
@@ -96,10 +112,10 @@ export class AdminEventOverviewComponent implements OnInit {
     try {
       // Zuerst Organisatoren laden
       await this.loadOrganizers();
-      
+
       // Dann Events laden
       const eventsList = await this.eventService.getAllEvents();
-      
+
       // Sort events by start date (ascending)
       const sortedEvents = [...eventsList].sort((a, b) => {
         const dateA = new Date(a.date_start);
@@ -146,11 +162,11 @@ export class AdminEventOverviewComponent implements OnInit {
       const organizers = await this.organizerService.getAllOrganizers();
       const map = new Map<string, Organizer>();
 
-      organizers.forEach((organizer) => {
+      for (const organizer of organizers) {
         if (organizer.id) {
           map.set(String(organizer.id), organizer);
         }
-      });
+      }
 
       this.organizersMap.set(map);
     } catch (error) {

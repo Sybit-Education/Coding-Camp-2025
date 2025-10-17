@@ -1,0 +1,12 @@
+:host {
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+div {
+  pointer-events: auto;
+}
