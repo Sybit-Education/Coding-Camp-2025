@@ -4,7 +4,10 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnChanges,
+  OnInit,
   Output,
+  SimpleChanges,
   ViewChild,
   inject,
 } from '@angular/core'
@@ -24,7 +27,7 @@ import { TranslateModule } from '@ngx-translate/core'
   styleUrl: './image-upload.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ImageUploadComponent {
+export class ImageUploadComponent implements OnInit, OnChanges {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>
   
   @Input() previews: string[] = []
@@ -40,10 +43,26 @@ export class ImageUploadComponent {
   private readonly markForCheck = injectMarkForCheck()
   private readonly snackBarService = inject(SnackBarService)
   
-  constructor() {
+  ngOnInit(): void {
     // Lade existierende Bilder, wenn vorhanden
-    if (this.existingImages.length > 0) {
-      this.loadExistingImages()
+    this.loadExistingImagesIfPresent();
+  }
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    // Wenn sich existingImages ändert und Werte enthält, lade die Bilder
+    if (changes['existingImages'] && 
+        changes['existingImages'].currentValue && 
+        changes['existingImages'].currentValue.length > 0) {
+      this.loadExistingImagesIfPresent();
+    }
+  }
+  
+  private loadExistingImagesIfPresent(): void {
+    if (this.existingImages && this.existingImages.length > 0) {
+      // Nur laden, wenn die Vorschau noch leer ist, um Duplikate zu vermeiden
+      if (this.previews.length === 0) {
+        this.loadExistingImages();
+      }
     }
   }
   
@@ -106,15 +125,21 @@ export class ImageUploadComponent {
   }
   
   private loadExistingImages() {
+    console.log('Lade existierende Bilder:', this.existingImages);
     this.existingImages.forEach((image) => {
       this.mediaService.getMediaUrl(image).then((url) => {
         if (url) {
-          this.previews.push(url)
-          this.previewsChange.emit(this.previews)
-          this.markForCheck()
+          // Prüfen, ob das Bild bereits in den Vorschauen vorhanden ist
+          if (!this.previews.includes(url)) {
+            this.previews.push(url);
+            this.previewsChange.emit(this.previews);
+            this.markForCheck();
+          }
         }
-      })
-    })
+      }).catch(error => {
+        console.error('Fehler beim Laden des Bildes:', error);
+      });
+    });
   }
 
   removeImage(index: number) {

@@ -190,6 +190,7 @@ export class EventCreateComponent implements OnInit {
       }
 
       // Images werden in der ImageUploadComponent geladen
+      console.log('Existierende Bilder für ImageUploadComponent:', this.images);
     } catch (err) {
       console.error('Fehler beim Laden des Events:', err)
     }
