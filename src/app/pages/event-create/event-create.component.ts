@@ -290,10 +290,7 @@ export class EventCreateComponent implements OnInit {
   async saveEvent() {
     try {
       // Location ist kein Pflichtfeld mehr
-      if (!this.selectedOrganizer) {
-        this.snackBarService.showError('Bitte wählen Sie einen Veranstalter aus oder erstellen Sie einen neuen')
-        return
-      }
+      // Organisator ist kein Pflichtfeld mehr
 
       if (
         this.eventName === '' ||
