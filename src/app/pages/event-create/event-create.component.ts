@@ -423,9 +423,7 @@ export class EventCreateComponent implements OnInit {
 
         // Kurze Verzögerung, um sicherzustellen, dass die Löschung verarbeitet wurde
         setTimeout(() => {
-          this.router.navigate(['/admin'], {
-            queryParams: { refresh: new Date().getTime() }
-          });
+          this.router.navigate(['/admin']);
         }, 300);
       } catch (error: unknown) {
         console.error('Fehler beim Löschen des Events:', error);
