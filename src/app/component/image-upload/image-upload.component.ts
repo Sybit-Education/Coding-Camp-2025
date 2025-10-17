@@ -150,17 +150,31 @@ export class ImageUploadComponent implements OnInit, OnChanges {
     });
   }
 
-  removeImage(index: number) {
-    this.previews.splice(index, 1)
-    this.previewsChange.emit(this.previews)
-
-    // Wenn wir ein Bild entfernen, sollten wir auch die Eltern-Komponente informieren
-    // damit sie weiß, dass sich die Bilder geändert haben
-    this.uploadImages().then(mediaIds => {
-      this.mediaIdsChange.emit(mediaIds)
-    }).catch(error => {
-      console.error('Fehler beim Aktualisieren der Media-IDs nach dem Entfernen:', error)
-    })
+  async removeImage(index: number) {
+    // Speichere das zu löschende Bild
+    const imageToRemove = this.previews[index];
+    
+    // Entferne das Bild aus der Vorschau
+    this.previews.splice(index, 1);
+    this.previewsChange.emit(this.previews);
+    
+    try {
+      // Wenn es ein HTTP-Bild ist (existierendes Bild), finde die Media-ID und lösche es
+      if (imageToRemove.startsWith('http')) {
+        const existingMedia = await this.mediaService.getMediaByUrl(imageToRemove);
+        if (existingMedia && existingMedia.id) {
+          console.log('Lösche existierendes Bild aus der Datenbank:', existingMedia.id);
+          await this.mediaService.deleteMedia(existingMedia.id);
+        }
+      }
+      
+      // Aktualisiere die Media-IDs und informiere die Eltern-Komponente
+      const mediaIds = await this.uploadImages();
+      this.mediaIdsChange.emit(mediaIds);
+    } catch (error) {
+      console.error('Fehler beim Löschen des Bildes:', error);
+      this.snackBarService.showError(`Fehler beim Löschen des Bildes: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`);
+    }
   }
 
   /**
