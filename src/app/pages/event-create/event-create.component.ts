@@ -42,7 +42,7 @@ import { sanitizeQuillContent } from '../../utils/quill-sanitizer'
     QuillEditorComponent,
     LocationInputComponent,
     OrganizerInputComponent,
-    ImageUploadComponent
+    ImageUploadComponent,
   ],
   templateUrl: './event-create.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -146,7 +146,7 @@ export class EventCreateComponent implements OnInit {
 
       // Sicherstellen, dass images ein Array ist
       if (!Array.isArray(this.images)) {
-        this.images = [];
+        this.images = []
       }
 
       // Datum & Zeit
@@ -194,7 +194,7 @@ export class EventCreateComponent implements OnInit {
       }
 
       // Images werden in der ImageUploadComponent geladen
-      console.log('Existierende Bilder für ImageUploadComponent:', this.images);
+      console.log('Existierende Bilder für ImageUploadComponent:', this.images)
     } catch (err) {
       console.error('Fehler beim Laden des Events:', err)
     }
@@ -222,9 +222,7 @@ export class EventCreateComponent implements OnInit {
     }
   }
 
-
   // ===== Speichern =====
-
 
   async saveEvent() {
     try {
@@ -252,7 +250,9 @@ export class EventCreateComponent implements OnInit {
           this.errorTime = false
         }
 
-        this.snackBarService.showError('Bitte füllen Sie alle Pflichtfelder aus (Name, Datum, Uhrzeit).')
+        this.snackBarService.showError(
+          'Bitte füllen Sie alle Pflichtfelder aus (Name, Datum, Uhrzeit).',
+        )
 
         // Fokus auf das erste Feld mit Fehler setzen
         setTimeout(() => this.focusFirstErrorField(), 100)
@@ -278,8 +278,11 @@ export class EventCreateComponent implements OnInit {
       // Wenn keine Bilder hochgeladen wurden, aber existierende Bilder vorhanden sind,
       // behalten wir die existierenden Bilder bei
       if (mediaIds.length === 0 && this.images.length > 0) {
-        console.log('Keine neuen Bilder hochgeladen, behalte existierende:', this.images);
-        mediaIds = [...this.images];
+        console.log(
+          'Keine neuen Bilder hochgeladen, behalte existierende:',
+          this.images,
+        )
+        mediaIds = [...this.images]
       }
 
       // Sicherstellen, dass wir die aktualisierten Media-IDs verwenden
@@ -304,7 +307,10 @@ export class EventCreateComponent implements OnInit {
 
       // Event speichern (Update oder Create)
       if (this.eventId !== undefined) {
-        const updated = await this.eventService.updateEvent(this.eventId, payload)
+        const updated = await this.eventService.updateEvent(
+          this.eventId,
+          payload,
+        )
         if (!updated) {
           this.snackBarService.showError('Update hat keine Daten zurückgegeben')
           this.markForCheck()
@@ -324,14 +330,18 @@ export class EventCreateComponent implements OnInit {
           // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
           this.router.navigate(['/admin'])
         } else {
-          this.snackBarService.showError('Erstellen des Events fehlgeschlagen, keine Daten zurückgegeben')
+          this.snackBarService.showError(
+            'Erstellen des Events fehlgeschlagen, keine Daten zurückgegeben',
+          )
           this.markForCheck()
           return
         }
       }
     } catch (error) {
       console.error('Fehler beim Speichern des Events:', error)
-      this.snackBarService.showError(`Fehler beim Speichern des Events: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`)
+      this.snackBarService.showError(
+        `Fehler beim Speichern des Events: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
+      )
       this.markForCheck()
     }
   }
@@ -354,7 +364,7 @@ export class EventCreateComponent implements OnInit {
    * Bricht die Erstellung/Bearbeitung des Events ab und navigiert zurück zur Übersicht
    */
   cancelEvent(): void {
-    this.router.navigate(['/admin']);
+    this.router.navigate(['/admin'])
   }
 
   /**
@@ -362,24 +372,29 @@ export class EventCreateComponent implements OnInit {
    */
   async deleteEvent(): Promise<void> {
     if (!this.eventId) {
-      return; // Nichts zu löschen, wenn es ein neues Event ist
+      return // Nichts zu löschen, wenn es ein neues Event ist
     }
 
-    if (confirm('Sind Sie sicher, dass Sie dieses Event löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.')) {
+    if (
+      confirm(
+        'Sind Sie sicher, dass Sie dieses Event löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.',
+      )
+    ) {
       try {
-        this.eventService.delete(this.eventId);
-        this.snackBarService.showSuccess('Event erfolgreich gelöscht');
+        this.eventService.delete(this.eventId)
+        this.snackBarService.showSuccess('Event erfolgreich gelöscht')
 
         // Kurze Verzögerung, um sicherzustellen, dass die Löschung verarbeitet wurde
         setTimeout(() => {
-          this.router.navigate(['/admin']);
-        }, 300);
+          this.router.navigate(['/admin'])
+        }, 300)
       } catch (error: unknown) {
-        console.error('Fehler beim Löschen des Events:', error);
-        this.snackBarService.showError(`Fehler beim Löschen des Events: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`);
-        this.markForCheck();
+        console.error('Fehler beim Löschen des Events:', error)
+        this.snackBarService.showError(
+          `Fehler beim Löschen des Events: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
+        )
+        this.markForCheck()
       }
     }
   }
-
 }

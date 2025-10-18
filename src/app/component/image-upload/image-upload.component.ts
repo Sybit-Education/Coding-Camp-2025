@@ -45,15 +45,17 @@ export class ImageUploadComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     // Lade existierende Bilder, wenn vorhanden
-    this.loadExistingImagesIfPresent();
+    this.loadExistingImagesIfPresent()
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     // Wenn sich existingImages ändert und Werte enthält, lade die Bilder
-    if (changes['existingImages'] &&
-        changes['existingImages'].currentValue &&
-        changes['existingImages'].currentValue.length > 0) {
-      this.loadExistingImagesIfPresent();
+    if (
+      changes['existingImages'] &&
+      changes['existingImages'].currentValue &&
+      changes['existingImages'].currentValue.length > 0
+    ) {
+      this.loadExistingImagesIfPresent()
     }
   }
 
@@ -61,7 +63,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
     if (this.existingImages && this.existingImages.length > 0) {
       // Nur laden, wenn die Vorschau noch leer ist, um Duplikate zu vermeiden
       if (this.previews.length === 0) {
-        this.loadExistingImages();
+        this.loadExistingImages()
       }
     }
   }
@@ -103,7 +105,9 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       }
       const maxFileSize = 5 * 1024 * 1024
       if (file.size > maxFileSize) {
-        this.snackBarService.showError(`Datei zu groß (max. 5 MB): ${file.name}`)
+        this.snackBarService.showError(
+          `Datei zu groß (max. 5 MB): ${file.name}`,
+        )
         continue
       }
       this.createPreview(file)
@@ -119,7 +123,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
           const dataWithMetadata = {
             dataUrl: reader.result,
             fileName: file.name,
-            mimeType: file.type
+            mimeType: file.type,
           }
           // Speichere das Objekt als JSON-String
           this.previews.push(JSON.stringify(dataWithMetadata))
@@ -132,53 +136,64 @@ export class ImageUploadComponent implements OnInit, OnChanges {
   }
 
   private loadExistingImages() {
-    console.log('Lade existierende Bilder:', this.existingImages);
+    console.log('Lade existierende Bilder:', this.existingImages)
     this.existingImages.forEach((image) => {
-      this.mediaService.getMediaUrl(image).then((url) => {
-        if (url) {
-          // Prüfen, ob das Bild bereits in den Vorschauen vorhanden ist
-          if (!this.previews.includes(url)) {
-            this.previews.push(url);
-            this.previewsChange.emit(this.previews);
-            this.markForCheck();
+      this.mediaService
+        .getMediaUrl(image)
+        .then((url) => {
+          if (url) {
+            // Prüfen, ob das Bild bereits in den Vorschauen vorhanden ist
+            if (!this.previews.includes(url)) {
+              this.previews.push(url)
+              this.previewsChange.emit(this.previews)
+              this.markForCheck()
+            }
           }
-        }
-      }).catch(error => {
-        console.error('Fehler beim Laden des Bildes:', error);
-        // Trotz Fehler fortfahren und andere Bilder laden
-      });
-    });
+        })
+        .catch((error) => {
+          console.error('Fehler beim Laden des Bildes:', error)
+          // Trotz Fehler fortfahren und andere Bilder laden
+        })
+    })
   }
 
   async removeImage(index: number) {
     // Speichere das zu löschende Bild
-    const imageToRemove = this.previews[index];
+    const imageToRemove = this.previews[index]
 
     // Entferne das Bild aus der Vorschau
-    this.previews.splice(index, 1);
-    this.previewsChange.emit(this.previews);
+    this.previews.splice(index, 1)
+    this.previewsChange.emit(this.previews)
 
     try {
       // Wenn es ein HTTP-Bild ist (existierendes Bild), finde die Media-ID und lösche es
       if (imageToRemove.startsWith('http')) {
-        const existingMedia = await this.mediaService.getMediaByUrl(imageToRemove);
+        const existingMedia =
+          await this.mediaService.getMediaByUrl(imageToRemove)
         if (existingMedia && existingMedia.id) {
-          console.log('Lösche existierendes Bild aus der Datenbank:', existingMedia.id);
-          const deleted = await this.mediaService.deleteMedia(existingMedia.id);
+          console.log(
+            'Lösche existierendes Bild aus der Datenbank:',
+            existingMedia.id,
+          )
+          const deleted = await this.mediaService.deleteMedia(existingMedia.id)
           if (deleted) {
-            console.log(`Bild mit ID ${existingMedia.id} erfolgreich gelöscht`);
+            console.log(`Bild mit ID ${existingMedia.id} erfolgreich gelöscht`)
           } else {
-            console.warn(`Bild mit ID ${existingMedia.id} konnte nicht gelöscht werden`);
+            console.warn(
+              `Bild mit ID ${existingMedia.id} konnte nicht gelöscht werden`,
+            )
           }
         }
       }
 
       // Aktualisiere die Media-IDs und informiere die Eltern-Komponente
-      const mediaIds = await this.uploadImages();
-      this.mediaIdsChange.emit(mediaIds);
+      const mediaIds = await this.uploadImages()
+      this.mediaIdsChange.emit(mediaIds)
     } catch (error) {
-      console.error('Fehler beim Löschen des Bildes:', error);
-      this.snackBarService.showError(`Fehler beim Löschen des Bildes: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`);
+      console.error('Fehler beim Löschen des Bildes:', error)
+      this.snackBarService.showError(
+        `Fehler beim Löschen des Bildes: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
+      )
     }
   }
 
@@ -188,19 +203,19 @@ export class ImageUploadComponent implements OnInit, OnChanges {
    */
   getSrcForPreview(src: string): string {
     if (src.startsWith('http')) {
-      return src;
+      return src
     }
 
     try {
       if (src.startsWith('{') && src.endsWith('}')) {
-        const imageData = JSON.parse(src);
-        return imageData.dataUrl;
+        const imageData = JSON.parse(src)
+        return imageData.dataUrl
       }
     } catch (e) {
-      console.error('Fehler beim Parsen des JSON-Strings:', e);
+      console.error('Fehler beim Parsen des JSON-Strings:', e)
     }
 
-    return src;
+    return src
   }
 
   async uploadImages(): Promise<RecordId<'media'>[]> {
@@ -210,8 +225,11 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       // Wenn keine Vorschaubilder vorhanden sind, aber existierende Bilder übergeben wurden,
       // geben wir die existierenden Bilder zurück
       if (this.previews.length === 0 && this.existingImages.length > 0) {
-        console.log('Keine neuen Bilder, behalte existierende:', this.existingImages);
-        return [...this.existingImages];
+        console.log(
+          'Keine neuen Bilder, behalte existierende:',
+          this.existingImages,
+        )
+        return [...this.existingImages]
       }
 
       // Zuerst existierende Medien sammeln
@@ -224,56 +242,64 @@ export class ImageUploadComponent implements OnInit, OnChanges {
             } else {
               // Wenn wir keine Media-ID für die URL finden können,
               // versuchen wir, die ID aus den existingImages zu finden
-              const matchingExistingImage = this.existingImages.find(async (mediaId) => {
-                const url = await this.mediaService.getMediaUrl(mediaId);
-                return url === image;
-              });
+              const matchingExistingImage = this.existingImages.find(
+                async (mediaId) => {
+                  const url = await this.mediaService.getMediaUrl(mediaId)
+                  return url === image
+                },
+              )
 
               if (matchingExistingImage) {
-                result.push(matchingExistingImage);
+                result.push(matchingExistingImage)
               }
             }
           } catch (error) {
-            console.error('Fehler beim Abrufen des existierenden Mediums:', error)
+            console.error(
+              'Fehler beim Abrufen des existierenden Mediums:',
+              error,
+            )
           }
         }
       }
 
       // Dann neue Bilder hochladen
-      const newImages = this.previews.filter(img => !img.startsWith('http'))
+      const newImages = this.previews.filter((img) => !img.startsWith('http'))
 
       const resultMedias: Media[] = (
         await Promise.all(
           newImages.map(async (image: string, i: number) => {
             try {
-              let file: string;
-              let fileName: string;
-              let fileType: string;
+              let file: string
+              let fileName: string
+              let fileType: string
 
               // Prüfen, ob es sich um ein JSON-Objekt mit Metadaten handelt
               if (image.startsWith('{') && image.endsWith('}')) {
                 try {
-                  const imageData = JSON.parse(image);
-                  file = imageData.dataUrl.split(',')[1];
-                  fileName = imageData.fileName;
+                  const imageData = JSON.parse(image)
+                  file = imageData.dataUrl.split(',')[1]
+                  fileName = imageData.fileName
                   // Extrahiere den MIME-Type aus dem vollständigen Type
-                  fileType = imageData.mimeType.split('/')[1];
-                // oxlint-disable-next-line no-unused-vars
+                  fileType = imageData.mimeType.split('/')[1]
+                  // oxlint-disable-next-line no-unused-vars
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 } catch (e) {
                   // Fallback, falls JSON-Parsing fehlschlägt
-                  file = image.split(',')[1];
-                  fileName = `${this.eventName.replace(/[^a-zA-Z0-9]/g, '_')}_${i}`;
-                  fileType = image.split(';')[0].split('/')[1];
+                  file = image.split(',')[1]
+                  fileName = `${this.eventName.replace(/[^a-zA-Z0-9]/g, '_')}_${i}`
+                  fileType = image.split(';')[0].split('/')[1]
                 }
               } else {
                 // Fallback für ältere Daten ohne Metadaten
-                file = image.split(',')[1];
-                fileName = `${this.eventName.replace(/[^a-zA-Z0-9]/g, '_')}_${i}`;
-                fileType = image.split(';')[0].split('/')[1];
+                file = image.split(',')[1]
+                fileName = `${this.eventName.replace(/[^a-zA-Z0-9]/g, '_')}_${i}`
+                fileType = image.split(';')[0].split('/')[1]
               }
 
               // Eindeutige ID generieren
-              const uniqueId = new StringRecordId(`media:${fileName.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}`);
+              const uniqueId = new StringRecordId(
+                `media:${fileName.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}`,
+              )
               console.log('uniqueID: ' + uniqueId)
 
               const newMedia: Media = {
@@ -285,7 +311,9 @@ export class ImageUploadComponent implements OnInit, OnChanges {
               return await this.mediaService.postMedia(newMedia)
             } catch (error) {
               console.error(`Fehler beim Verarbeiten des Bildes ${i}:`, error)
-              this.snackBarService.showError(`Fehler beim Hochladen des Bildes ${i+1}: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`)
+              this.snackBarService.showError(
+                `Fehler beim Hochladen des Bildes ${i + 1}: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
+              )
               this.markForCheck()
               return null
             }
@@ -303,7 +331,9 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       return result
     } catch (error) {
       console.error('Fehler beim Hochladen der Bilder:', error)
-      this.snackBarService.showError(`Fehler beim Hochladen der Bilder: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`)
+      this.snackBarService.showError(
+        `Fehler beim Hochladen der Bilder: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
+      )
       this.markForCheck()
       return result
     }

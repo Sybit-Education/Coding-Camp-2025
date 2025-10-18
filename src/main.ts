@@ -25,7 +25,9 @@ import { environment } from './environments/environment'
 import { FavoriteService } from '@app/services/favorite.service'
 import { LoginService } from '@app/services/login.service'
 
-console.log(`App is running in ${environment.configName || 'development'} mode.`)
+console.log(
+  `App is running in ${environment.configName || 'development'} mode.`,
+)
 
 // Aktiviere Produktionsmodus, wenn nicht in Entwicklung
 if (environment.production) {

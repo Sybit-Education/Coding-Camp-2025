@@ -51,7 +51,7 @@ export class MediaService {
       return null
     }
   }
-  
+
   /**
    * Löscht ein Medium aus der Datenbank
    * @param id Die ID des zu löschenden Mediums

@@ -15,7 +15,13 @@ import { SnackBarComponent } from './component/snack-bar/snack-bar.component'
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent, FooterComponent, BottomNavComponent, SnackBarComponent],
+  imports: [
+    RouterOutlet,
+    HeaderComponent,
+    FooterComponent,
+    BottomNavComponent,
+    SnackBarComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

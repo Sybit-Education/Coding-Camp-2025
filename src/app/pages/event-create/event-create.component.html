@@ -1,9 +1,7 @@
 <div
   class="flex flex-col items-center justify-center rounded-2xl bg-[var(--colors-light-blue)] p-5"
 >
-  <form
-    class="rounded-2xl bg-white p-6"
-  >
+  <form class="rounded-2xl bg-white p-6">
     <!-- Event Name -->
     <div>
       <label for="eventName" class="required">{{
@@ -19,71 +17,72 @@
         [class]="this.errorName ? 'error' : ''"
         required="true"
       />
-      @if(this.errorName) {
-        <p class="mt-2 text-sm error">
+      @if (this.errorName) {
+        <p class="error mt-2 text-sm">
           {{ 'create-event.error.name' | translate }}
         </p>
       }
     </div>
 
     <!-- Datum und Zeit -->
-    <div class="flex flex-col grid gap-[3rem] sm:grid-cols-[1fr] md:w-full md:grid-cols-[1fr_1fr]">
-
+    <div
+      class="flex grid flex-col gap-[3rem] sm:grid-cols-[1fr] md:w-full md:grid-cols-[1fr_1fr]"
+    >
       <div class="grid grid-cols-2 gap-[1rem]">
-          <div class="my-4">
-            <label for="date" class="required">{{
-              'create-event.startdate' | translate
-            }}</label>
+        <div class="my-4">
+          <label for="date" class="required">{{
+            'create-event.startdate' | translate
+          }}</label>
+          <input
+            #dateStartInput
+            id="date"
+            type="date"
+            [(ngModel)]="dateStart"
+            name="dateStart"
+            class="w-full"
+            [class]="this.errorDate ? 'error' : ''"
+            required="true"
+          />
+          @if (this.errorDate) {
+            <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+              {{ 'create-event.error.date' | translate }}
+            </p>
+          }
+          <!-- Zeitspanne -->
+          <div class="mx-2 my-2">
             <input
-              #dateStartInput
-              id="date"
-              type="date"
-              [(ngModel)]="dateStart"
-              name="dateStart"
-              class="w-full"
-              [class]="this.errorDate ? 'error' : ''"
-              required="true"
+              id="timePeriode"
+              name="timePeriode"
+              type="checkbox"
+              [(ngModel)]="timePeriode"
+              class="cursor-pointer"
             />
-            @if(this.errorDate) {
-              <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                {{ 'create-event.error.date' | translate }}
-              </p>
-            }
-            <!-- Zeitspanne -->
-            <div class="my-2 mx-2">
-              <input
-                id="timePeriode"
-                name="timePeriode"
-                type="checkbox"
-                [(ngModel)]="timePeriode"
-                class="cursor-pointer"
-              />
-              <label for="timePeriode" class="ms-2 w-full cursor-pointer">
-                {{ 'create-event.timespan' | translate }}
-              </label>
-            </div>
+            <label for="timePeriode" class="ms-2 w-full cursor-pointer">
+              {{ 'create-event.timespan' | translate }}
+            </label>
           </div>
-          <!-- Startzeit -->
-          <div class="my-4">
-            <label for="time" class="required">{{
-              'create-event.starttime' | translate
-            }}</label>
-            <input
-              #timeStartInput
-              id="time"
-              type="time"
-              [(ngModel)]="timeStart"
-              name="timeStart"
-              class="w-full"
-              [class]="this.errorTime ? 'error' : ''"
-              required="true"
-            />
-            @if (this.errorTime) {
-              <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                {{ 'create-event.error.time' | translate }}
-              </p>
-            }
-          </div>
+        </div>
+        <!-- Startzeit -->
+        <div class="my-4">
+          <label for="time" class="required">{{
+            'create-event.starttime' | translate
+          }}</label>
+          <input
+            #timeStartInput
+            id="time"
+            type="time"
+            [(ngModel)]="timeStart"
+            name="timeStart"
+            class="w-full"
+            [class]="this.errorTime ? 'error' : ''"
+            required="true"
+          />
+          @if (this.errorTime) {
+            <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+              {{ 'create-event.error.time' | translate }}
+            </p>
+          }
+        </div>
       </div>
 
       @if (timePeriode) {
@@ -98,7 +97,7 @@
               class="w-full"
             />
           </div>
-          <div  class="my-4">
+          <div class="my-4">
             <label for="time">{{ 'create-event.endtime' | translate }}</label>
             <input
               id="time"
@@ -110,10 +109,11 @@
           </div>
         </div>
       }
-
     </div>
 
-    <div class="flex flex-col grid gap-[3rem] sm:grid-cols-[1fr] md:w-full md:grid-cols-[1fr_1fr]">
+    <div
+      class="flex grid flex-col gap-[3rem] sm:grid-cols-[1fr] md:w-full md:grid-cols-[1fr_1fr]"
+    >
       <!-- Location Auswahl -->
       <app-location-input
         [locations]="locations"
@@ -129,35 +129,37 @@
       ></app-organizer-input>
     </div>
 
-      <!-- Beschreibung -->
-      <div class="my-4">
-        <label for="description">{{
-          'create-event.description' | translate
-        }}</label>
-        <quill-editor
-          name="description"
-          [maxLength]="5000"
-          [styles]="{minHeight: '250px'}"
-          [(ngModel)]="description"
-          [placeholder]="'Beschreibung eingeben...'"
-          [format]="'html'"
-          [modules]="{
-            toolbar: [
-              ['bold', 'italic', 'underline'],
-              [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-              ['link'],
-            ],
-            clipboard: {
-              matchVisual: false
-            }
-          }"
-          theme="snow"
-          class="w-full rounded-md border"
-        >
-        </quill-editor>
-      </div>
+    <!-- Beschreibung -->
+    <div class="my-4">
+      <label for="description">{{
+        'create-event.description' | translate
+      }}</label>
+      <quill-editor
+        name="description"
+        [maxLength]="5000"
+        [styles]="{ minHeight: '250px' }"
+        [(ngModel)]="description"
+        [placeholder]="'Beschreibung eingeben...'"
+        [format]="'html'"
+        [modules]="{
+          toolbar: [
+            ['bold', 'italic', 'underline'],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            ['link'],
+          ],
+          clipboard: {
+            matchVisual: false,
+          },
+        }"
+        theme="snow"
+        class="w-full rounded-md border"
+      >
+      </quill-editor>
+    </div>
 
-    <div class="flex flex-col grid gap-[3rem] sm:grid-cols-[1fr] md:w-full md:grid-cols-[1fr_1fr]">
+    <div
+      class="flex grid flex-col gap-[3rem] sm:grid-cols-[1fr] md:w-full md:grid-cols-[1fr_1fr]"
+    >
       <div class="flex flex-col">
         <!-- Themen -->
         <h3>
@@ -184,9 +186,9 @@
         </div>
         <div
           id="choose-category"
-          class="rounded-lg bg-white shadow-sm dark:bg-gray-100 my-4"
+          class="my-4 rounded-lg bg-white shadow-sm dark:bg-gray-100"
         >
-          <ul class="p-3 text-gray-700 dark:text-gray-200 list-none mb-0">
+          <ul class="mb-0 list-none p-3 text-gray-700 dark:text-gray-200">
             @for (topic of topics; track topic) {
               <li>
                 <div>
@@ -212,39 +214,38 @@
         </div>
       </div>
       <div>
+        <!-- Mehr Infos -->
+        <div class="my-4 mt-6">
+          <label for="moreInfoLink">{{
+            'create-event.moreinfo' | translate
+          }}</label>
+          <input
+            id="moreInfoLink"
+            name="moreInfoLink"
+            type="url"
+            placeholder="{{ 'create-event.moreinfoexample' | translate }}"
+            [(ngModel)]="moreInfoLink"
+            class="w-full"
+          />
+        </div>
 
-      <!-- Mehr Infos -->
-      <div class="my-4 mt-6">
-        <label for="moreInfoLink">{{
-          'create-event.moreinfo' | translate
-        }}</label>
-        <input
-          id="moreInfoLink"
-          name="moreInfoLink"
-          type="url"
-          placeholder="{{ 'create-event.moreinfoexample' | translate }}"
-          [(ngModel)]="moreInfoLink"
-          class="w-full"
-        />
-      </div>
-
-     <!-- Einschränkungen -->
-      <div class="my-4">
-        <label for="restriction">{{
-          'create-event.restrictions' | translate
-        }}</label>
-        <input
-          id="restriction"
-          name="restriction"
-          type="text"
-          [(ngModel)]="restriction"
-          class="w-full"
-          placeholder="{{ 'create-event.restrictionsexample' | translate }}"
-        />
-      </div>
-      <!-- Preis -->
-      <div class="my-4">
-        <label for="price">{{ 'create-event.price' | translate }}</label>
+        <!-- Einschränkungen -->
+        <div class="my-4">
+          <label for="restriction">{{
+            'create-event.restrictions' | translate
+          }}</label>
+          <input
+            id="restriction"
+            name="restriction"
+            type="text"
+            [(ngModel)]="restriction"
+            class="w-full"
+            placeholder="{{ 'create-event.restrictionsexample' | translate }}"
+          />
+        </div>
+        <!-- Preis -->
+        <div class="my-4">
+          <label for="price">{{ 'create-event.price' | translate }}</label>
           <input
             id="price"
             name="price"
@@ -261,12 +262,12 @@
 
     <div>
       <!-- Bild-Upload -->
-      <app-image-upload 
+      <app-image-upload
         [(previews)]="previews"
         [eventName]="eventName"
-        [existingImages]="images">
+        [existingImages]="images"
+      >
       </app-image-upload>
-
 
       <!-- Button: Event erstellen -->
       @if (this.errorDate || this.errorName || this.errorTime) {
@@ -277,36 +278,38 @@
         </div>
       }
     </div>
-      <div class="flex flex-col grid gap-[3rem] w-full my-8 sm:grid-cols-[1fr] md:grid-cols-[1fr_1fr] lg:grid-cols-[1fr_1fr_1fr]">
-        <button
-          type="submit"
-          class="w-full cursor-pointer rounded-2xl bg-blue-600 hover:bg-blue-700 p-5 text-white"
-          (click)="saveEvent()"
-        >
-          {{
-            (eventId ? 'create-event.updateevent' : 'create-event.createevent')
-              | translate
-          }}
-        </button>
+    <div
+      class="my-8 flex grid w-full flex-col gap-[3rem] sm:grid-cols-[1fr] md:grid-cols-[1fr_1fr] lg:grid-cols-[1fr_1fr_1fr]"
+    >
+      <button
+        type="submit"
+        class="w-full cursor-pointer rounded-2xl bg-blue-600 p-5 text-white hover:bg-blue-700"
+        (click)="saveEvent()"
+      >
+        {{
+          (eventId ? 'create-event.updateevent' : 'create-event.createevent')
+            | translate
+        }}
+      </button>
 
+      <button
+        type="button"
+        class="w-full cursor-pointer rounded-2xl bg-gray-300 p-5 text-gray-800 hover:bg-gray-400"
+        (click)="cancelEvent()"
+      >
+        {{ 'create-event.cancel' | translate }}
+      </button>
+
+      <!-- Löschen-Button (nur bei bestehenden Events anzeigen) -->
+      @if (eventId) {
         <button
           type="button"
-          class="w-full cursor-pointer rounded-2xl bg-gray-300 p-5 text-gray-800 hover:bg-gray-400"
-          (click)="cancelEvent()"
+          class="w-full cursor-pointer rounded-2xl bg-red-500 p-5 text-white hover:bg-red-600"
+          (click)="deleteEvent()"
         >
-          {{ 'create-event.cancel' | translate }}
+          {{ 'create-event.delete' | translate }}
         </button>
-
-        <!-- Löschen-Button (nur bei bestehenden Events anzeigen) -->
-        @if (eventId) {
-          <button
-            type="button"
-            class="w-full cursor-pointer rounded-2xl bg-red-500 p-5 text-white hover:bg-red-600"
-            (click)="deleteEvent()"
-          >
-            {{ 'create-event.delete' | translate }}
-          </button>
-        }
-      </div>
+      }
+    </div>
   </form>
 </div>

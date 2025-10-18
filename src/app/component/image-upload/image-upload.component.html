@@ -1,4 +1,6 @@
-<div class="flex flex-col items-center justify-center rounded-[6px] border-2 border-black bg-[#6d7cbc]">
+<div
+  class="flex flex-col items-center justify-center rounded-[6px] border-2 border-black bg-[#6d7cbc]"
+>
   <button
     class="flex h-[200px] w-full flex-col items-center justify-center"
     (dragover)="onDragOver($event)"
@@ -30,12 +32,12 @@
       @for (src of previews; track src; let i = $index) {
         <div class="m-1">
           <div
-            class="relative overflow-hidden rounded-md align-top leading-none rounded-lg border-2 border-gray-500"
+            class="relative overflow-hidden rounded-lg rounded-md border-2 border-gray-500 align-top leading-none"
           >
             <img
               [src]="getSrcForPreview(src)"
               alt="Bild-Vorschau {{ i + 1 }}"
-              class="rounded-md max-h-50 max-w-50 object-cover"
+              class="max-h-50 max-w-50 rounded-md object-cover"
             />
             <button
               (click)="removeImage(i)"

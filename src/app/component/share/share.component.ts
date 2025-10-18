@@ -98,10 +98,10 @@ export class ShareComponent {
    * Generiert die Event-URL für die aktuelle Veranstaltung
    */
   private getEventUrl(): string {
-    const id = this.event?.id?.id ?? '';
-    if (!id) return '';
+    const id = this.event?.id?.id ?? ''
+    if (!id) return ''
 
-    const baseUrl = window.location.origin;
-    return `${baseUrl}/event/${id}`;
+    const baseUrl = window.location.origin
+    return `${baseUrl}/event/${id}`
   }
 }

@@ -39,7 +39,10 @@
           type="button"
           (click)="togglePassword()"
           class="absolute inset-y-0 right-0 z-20 px-3"
-          aria-label="{{ (showPassword ? 'login.hidePassword' : 'login.showPassword') | translate }}"
+          aria-label="{{
+            (showPassword ? 'login.hidePassword' : 'login.showPassword')
+              | translate
+          }}"
         >
           <svg
             class="size-3.5 shrink-0"

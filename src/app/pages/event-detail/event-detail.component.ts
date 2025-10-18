@@ -25,7 +25,7 @@ import { FavoriteButtonComponent } from '../../component/favorite-button/favorit
 import { ShareComponent } from '../../component/share/share.component'
 import { CalendarExportComponent } from '../../component/calendar-export/calendar-export.component'
 import { MediaService } from '@app/services/media.service'
-import { ImageCarouselComponent } from "@app/component/image-carousel/image-carousel.component";
+import { ImageCarouselComponent } from '@app/component/image-carousel/image-carousel.component'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -186,7 +186,9 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       let mediaUrlPromise: Promise<(string | null)[]> = Promise.resolve([null])
       if (foundEvent.media?.length > 0) {
         mediaUrlPromise = Promise.all(
-          foundEvent.media.map((mediaId) => this.mediaService.getMediaUrl(mediaId))
+          foundEvent.media.map((mediaId) =>
+            this.mediaService.getMediaUrl(mediaId),
+          ),
         )
         promises.push(mediaUrlPromise)
       }
@@ -235,7 +237,12 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     if (!this.fromCategory) {
       this.router.navigate(['/'])
     } else {
-      this.router.navigate(['/kategorie'], { queryParams: { id: this.fromCategory.split(',')[0], name: this.fromCategory.split(',')[1] || '' } })
+      this.router.navigate(['/kategorie'], {
+        queryParams: {
+          id: this.fromCategory.split(',')[0],
+          name: this.fromCategory.split(',')[1] || '',
+        },
+      })
     }
   }
 
@@ -244,12 +251,12 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   }
 
   startRoute() {
-    const lat = this.location!.geo_point!.point[1];
-    const lng = this.location!.geo_point!.point[0];
+    const lat = this.location!.geo_point!.point[1]
+    const lng = this.location!.geo_point!.point[0]
 
-    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`
 
-    window.open(url, "_blank");
+    window.open(url, '_blank')
   }
 
   /**
@@ -257,11 +264,10 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
    * Wird für die Meta-Tags verwendet
    */
   getEventUrl(): string {
-    if (!this.event || !this.event.id) return window.location.href;
+    if (!this.event || !this.event.id) return window.location.href
 
-    const id = this.event.id.id || '';
-    const baseUrl = window.location.origin;
-    return `${baseUrl}/event/${id}`;
+    const id = this.event.id.id || ''
+    const baseUrl = window.location.origin
+    return `${baseUrl}/event/${id}`
   }
-
 }
