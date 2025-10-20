@@ -168,9 +168,8 @@ DEFINE INDEX OVERWRITE name ON user FIELDS name UNIQUE;
 
 DEFINE ACCESS OVERWRITE user ON DATABASE TYPE RECORD SIGNIN (
   SELECT * FROM user WHERE name = $username AND crypto::argon2::compare(password, $password) )
-  DURATION FOR TOKEN 8h, FOR SESSION 8h
+  DURATION FOR TOKEN 48h, FOR SESSION 48h
 ;
-
 
 
 
