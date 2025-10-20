@@ -1,0 +1,53 @@
+<div
+  class="flex flex-col items-center justify-center rounded-[6px] border-2 border-black bg-[#6d7cbc]"
+>
+  <button
+    class="flex h-[200px] w-full flex-col items-center justify-center"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave()"
+    (drop)="onDrop($event)"
+    (keydown)="onAreaClick()"
+    (click)="onAreaClick()"
+    tabindex="0"
+    [class.hovering]="isDragging"
+  >
+    <div class="mb-2 text-[1.1rem] font-medium text-white">
+      {{ 'Bild hier ablegen oder klicken zum Auswählen' | translate }}
+    </div>
+    <div class="text-[0.9rem] text-black">
+      {{ 'JPG, PNG - Max. 5 MB pro Bild' | translate }}
+    </div>
+    <input
+      #fileInput
+      type="file"
+      multiple
+      [attr.accept]="'image/png, image/jpeg'"
+      (change)="onFilesSelected($event)"
+      style="display: none"
+    />
+  </button>
+
+  @if (previews.length) {
+    <div class="grid grid-flow-row-dense grid-cols-4 gap-2">
+      @for (src of previews; track src; let i = $index) {
+        <div class="m-1">
+          <div
+            class="relative overflow-hidden rounded-lg rounded-md border-2 border-gray-500 align-top leading-none"
+          >
+            <img
+              [src]="getSrcForPreview(src)"
+              alt="Bild-Vorschau {{ i + 1 }}"
+              class="max-h-50 max-w-50 rounded-md object-cover"
+            />
+            <button
+              (click)="removeImage(i)"
+              class="absolute top-1 right-1 flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 bg-white/80 shadow-md hover:bg-gray-500 hover:text-white"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -8,9 +8,22 @@
   </a>
 
   <!-- Meta-Tags für Social Media Sharing -->
-  <meta property="og:title" [attr.content]="event?.name || '1200 Jahre Radolfzell'" />
-  <meta property="og:description" [attr.content]="event?.description ? (event?.description | slice:0:150) + '...' : 'Veranstaltung im Rahmen von 1200 Jahre Radolfzell'" />
-  <meta property="og:image" [attr.content]="mediaUrl || '/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg'" />
+  <meta
+    property="og:title"
+    [attr.content]="event?.name || '1200 Jahre Radolfzell'"
+  />
+  <meta
+    property="og:description"
+    [attr.content]="
+      event?.description
+        ? (event?.description | slice: 0 : 150) + '...'
+        : 'Veranstaltung im Rahmen von 1200 Jahre Radolfzell'
+    "
+  />
+  <meta
+    property="og:image"
+    [attr.content]="mediaUrl || '/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg'"
+  />
   <meta property="og:url" [attr.content]="getEventUrl()" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -24,10 +37,10 @@
         <div class="relative">
           <button
             (click)="goBack()"
-            class="absolute left-3 top-3 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/80 shadow-md hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 opacity-80"
+            class="absolute top-3 left-3 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/80 opacity-80 shadow-md hover:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
             aria-label="{{ 'event-detail.back' | translate }}"
           >
-            <span class="text-3xl font-mono font-extrabold">←</span>
+            <span class="font-mono text-3xl font-extrabold">←</span>
           </button>
 
           @if (mediaUrl && mediaUrl.length !== 0) {
@@ -35,11 +48,11 @@
               <app-image-carousel
                 [images]="mediaUrl"
                 [eventName]="event.name"
-                class="rounded-t-2xl object-cover sm:w-full aspect-[4/3]"
+                class="aspect-[4/3] rounded-t-2xl object-cover sm:w-full"
               ></app-image-carousel>
             } @else {
               <img
-                class="rounded-t-2xl object-cover sm:w-full aspect-[4/3]"
+                class="aspect-[4/3] rounded-t-2xl object-cover sm:w-full"
                 [alt]="
                   event.name
                     ? 'Bild der Veranstaltung: ' + event.name
@@ -136,11 +149,14 @@
                 <p>{{ organizer?.name }}</p>
               </div>
             </div>
-              <div class="relative flex flex-col items-center space-y-2">
-                <div class="flex gap-4">
-                  <app-share [event]="event" [location]="location"></app-share>
-                  <app-calendar-export [event]="event" [location]="location"></app-calendar-export>
-               </div>
+            <div class="relative flex flex-col items-center space-y-2">
+              <div class="flex gap-4">
+                <app-share [event]="event" [location]="location"></app-share>
+                <app-calendar-export
+                  [event]="event"
+                  [location]="location"
+                ></app-calendar-export>
+              </div>
             </div>
           </div>
         </div>
@@ -275,7 +291,6 @@
       </section>
     </article>
   }
-
 
   <div class="edit mb-20 flex items-center justify-center">
     @if (isLoggedIn) {

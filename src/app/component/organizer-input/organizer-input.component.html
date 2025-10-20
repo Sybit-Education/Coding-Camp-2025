@@ -1,0 +1,84 @@
+<div>
+  <select
+    id="organizer"
+    name="organizer"
+    [(ngModel)]="selectedOrganizer"
+    (ngModelChange)="setOrganizer($event)"
+    class="p-[0.75rem 1rem] w-full cursor-pointer"
+  >
+    <option [ngValue]="null">
+      {{ 'create-event.organizer' | translate }}
+    </option>
+    @for (organizer of organizers; track organizer) {
+      <option [ngValue]="organizer">
+        {{ organizer.name }}
+      </option>
+    }
+  </select>
+  <button
+    type="button"
+    class="mt-2 w-full rounded-2xl bg-[var(--colors-light-blue)] p-2 text-white"
+    (click)="showNewOrganizerForm()"
+  >
+    {{ 'create-event.neworganizer' | translate }}
+  </button>
+</div>
+
+<!-- Neuer Veranstalter -->
+@if (newOrganizer) {
+  <div class="space-y-2 rounded-xl border-2 border-black p-2">
+    <p>
+      <label for="organizername">{{
+        'create-event.neworganizername' | translate
+      }}</label>
+      <input
+        id="organizername"
+        name="organizername"
+        type="text"
+        [(ngModel)]="organizername"
+        class="p-[0.75rem 1rem] w-full"
+        required
+      />
+    </p>
+    <p>
+      <label for="organizerphone">{{
+        'create-event.neworganizerphone' | translate
+      }}</label>
+      <input
+        id="organizerphone"
+        name="organizerphone"
+        type="number"
+        [(ngModel)]="organizerphone"
+        class="p-[0.75rem 1rem] w-full"
+      />
+    </p>
+    <p>
+      <label for="organizermail">{{
+        'create-event.neworganizermail' | translate
+      }}</label>
+      <input
+        id="organizermail"
+        name="organizermail"
+        type="text"
+        [(ngModel)]="organizermail"
+        class="p-[0.75rem 1rem] w-full"
+      />
+    </p>
+    <div class="mt-4 flex justify-end space-x-2">
+      <button
+        type="button"
+        class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100"
+        (click)="cancelNewOrganizer()"
+      >
+        {{ 'create-event.cancel' | translate }}
+      </button>
+      <button
+        type="button"
+        class="rounded-lg bg-[var(--colors-light-blue)] px-4 py-2 text-sm font-medium text-white hover:bg-blue-800"
+        (click)="saveOrganizer()"
+      >
+        {{ 'create-event.save' | translate }}
+      </button>
+    </div>
+  </div>
+}

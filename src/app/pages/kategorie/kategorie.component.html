@@ -31,7 +31,11 @@
             {{ 'EVENTS.PAST_EVENT' | translate }}
           </div>
         }
-        <app-event-card [event]="event" [class.opacity-70]="event.isPast" [fromCategory]="fromCategory">
+        <app-event-card
+          [event]="event"
+          [class.opacity-70]="event.isPast"
+          [fromCategory]="fromCategory"
+        >
         </app-event-card>
       </div>
     }

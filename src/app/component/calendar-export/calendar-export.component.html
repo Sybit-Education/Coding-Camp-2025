@@ -16,15 +16,15 @@
         <p>{{ '📅' }}</p>
       </div>
     </button>
-    <p class="mt-1 text-sm font-bold text-center">
+    <p class="mt-1 text-center text-sm font-bold">
       {{ 'SHARE.ADD_TO_CALENDAR' | translate }}
     </p>
   </div>
 
   <!-- Calendar Options Dropdown -->
   @if (showCalendarOptions()) {
-    <div 
-      class="absolute top-16 right-0 z-10 w-64 rounded-md bg-white p-2 shadow-lg ring-1 ring-black ring-opacity-5"
+    <div
+      class="ring-opacity-5 absolute top-16 right-0 z-10 w-64 rounded-md bg-white p-2 shadow-lg ring-1 ring-black"
       role="menu"
       aria-labelledby="calendar-menu-button"
     >

@@ -5,9 +5,10 @@ import {
   OnInit,
   ViewEncapsulation,
   ChangeDetectionStrategy,
+  DestroyRef,
 } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { RouterModule, Router } from '@angular/router'
+import { RouterModule, Router, NavigationEnd } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 import { Event } from '../../models/event.interface'
 import { EventService } from '../../services/event.service'
@@ -21,6 +22,8 @@ import {
 import { FormsModule } from '@angular/forms'
 import { Organizer } from '../../models/organizer.interface'
 import { RecordId } from 'surrealdb'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { filter } from 'rxjs/operators'
 
 @Component({
   selector: 'app-admin-event-overview',
@@ -41,6 +44,7 @@ export class AdminEventOverviewComponent implements OnInit {
   private readonly eventService = inject(EventService)
   private readonly organizerService = inject(OrganizerService)
   private readonly router = inject(Router)
+  private readonly destroyRef = inject(DestroyRef)
 
   // Loading state
   isLoading = signal(true)
@@ -88,24 +92,36 @@ export class AdminEventOverviewComponent implements OnInit {
 
   ngOnInit(): void {
     // Zuerst alle Veranstalter laden, dann erst die Events
-    this.loadOrganizersAndEvents();
+    this.loadOrganizersAndEvents()
+
+    // Bei jeder Navigation zur selben Route erneut laden
+    this.router.events
+      .pipe(
+        filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((event) => {
+        if (event.urlAfterRedirects.startsWith('/admin/event')) {
+          this.loadOrganizersAndEvents()
+        }
+      })
   }
 
   // Lade Organisatoren und dann Events in der richtigen Reihenfolge
   private async loadOrganizersAndEvents(): Promise<void> {
     try {
       // Zuerst Organisatoren laden
-      await this.loadOrganizers();
-      
+      await this.loadOrganizers()
+
       // Dann Events laden
-      const eventsList = await this.eventService.getAllEvents();
-      
+      const eventsList = await this.eventService.getAllEvents()
+
       // Sort events by start date (ascending)
       const sortedEvents = [...eventsList].sort((a, b) => {
-        const dateA = new Date(a.date_start);
-        const dateB = new Date(b.date_start);
-        return dateA.getTime() - dateB.getTime();
-      });
+        const dateA = new Date(a.date_start)
+        const dateB = new Date(b.date_start)
+        return dateA.getTime() - dateB.getTime()
+      })
 
       // Transform data for the table
       const tableData = sortedEvents.map((event) => {
@@ -115,19 +131,19 @@ export class AdminEventOverviewComponent implements OnInit {
           date_start: new Date(event.date_start).getTime(), // Timestamp für die Sortierung
           organizer: this.getOrganizerName(event),
           originalId: event.id, // Keep original ID for actions
-        };
-      });
+        }
+      })
 
-      this.events.set(sortedEvents);
-      this.rows.set(tableData);
-      this.temp.set([...tableData]);
+      this.events.set(sortedEvents)
+      this.rows.set(tableData)
+      this.temp.set([...tableData])
 
       // Wende die Standardsortierung an
-      this.rows.set(this.sortData(tableData, this.currentSorts()));
+      this.rows.set(this.sortData(tableData, this.currentSorts()))
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error('Error loading data:', error)
     } finally {
-      this.isLoading.set(false);
+      this.isLoading.set(false)
     }
   }
 
@@ -143,19 +159,19 @@ export class AdminEventOverviewComponent implements OnInit {
   // Lade alle Veranstalter und erstelle eine Map für schnellen Zugriff
   private async loadOrganizers(): Promise<void> {
     try {
-      const organizers = await this.organizerService.getAllOrganizers();
-      const map = new Map<string, Organizer>();
+      const organizers = await this.organizerService.getAllOrganizers()
+      const map = new Map<string, Organizer>()
 
-      organizers.forEach((organizer) => {
+      for (const organizer of organizers) {
         if (organizer.id) {
-          map.set(String(organizer.id), organizer);
+          map.set(String(organizer.id), organizer)
         }
-      });
+      }
 
-      this.organizersMap.set(map);
+      this.organizersMap.set(map)
     } catch (error) {
-      console.error('Fehler beim Laden der Veranstalter:', error);
-      throw error; // Fehler weiterleiten, damit die aufrufende Funktion reagieren kann
+      console.error('Fehler beim Laden der Veranstalter:', error)
+      throw error // Fehler weiterleiten, damit die aufrufende Funktion reagieren kann
     }
   }
 

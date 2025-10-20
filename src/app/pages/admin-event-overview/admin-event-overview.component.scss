@@ -25,14 +25,14 @@
 .tailwind-table
   .datatable-header-cell.sortable.sort-active.sort-asc
   .datatable-header-cell-wrapper:after {
-  @apply m-1 text-blue-600 font-mono font-bold;
+  @apply m-1 font-mono font-bold text-blue-600;
   content: '↑';
 }
 
 .tailwind-table
   .datatable-header-cell.sortable.sort-active.sort-desc
   .datatable-header-cell-wrapper:after {
-  @apply m-1 text-blue-600 font-mono font-bold;
+  @apply m-1 font-mono font-bold text-blue-600;
   content: '↓';
 }
 
