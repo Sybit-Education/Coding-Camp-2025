@@ -201,6 +201,12 @@ export class AdminEventOverviewComponent implements OnInit {
     return organizerId
   }
 
+  // Navigate to preview event page
+  previewEvent(eventId: RecordId): void {
+    // Öffne die Event-Detailseite in einem neuen Tab
+    window.open(`/event/${String(eventId)}`, '_blank');
+  }
+
   // Navigate to edit event page
   editEvent(eventId: RecordId): void {
     this.router.navigate(['/admin/event', String(eventId)])
