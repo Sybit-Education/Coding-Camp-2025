@@ -6,11 +6,13 @@ import { Location } from '../../models/location.interface'
 import { LocationService } from '../../services/location.service'
 import { SnackBarService } from '../../services/snack-bar.service'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
+import { GeometryPoint } from 'surrealdb'
+import { MapComponent } from '../map/map.component'
 
 @Component({
   selector: 'app-location-input',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule],
+  imports: [CommonModule, FormsModule, TranslateModule, MapComponent],
   templateUrl: './location-input.component.html',
   styleUrls: ['./location-input.component.scss'],
 })
@@ -25,6 +27,7 @@ export class LocationInputComponent {
   plz = ''
   city = ''
   newLocation = false
+  latlng: GeometryPoint | undefined
 
   // Services
   private readonly locationService = inject(LocationService)
@@ -81,6 +84,7 @@ export class LocationInputComponent {
       street: this.address || undefined,
       zip_code: this.plz || undefined,
       city: this.city || 'Radolfzell',
+      geo_point: this.latlng || undefined,
     }
 
     try {
@@ -103,5 +107,10 @@ export class LocationInputComponent {
       )
       this.markForCheck()
     }
+  }
+
+  onLocationSelected($event: [number, number]) {
+    this.latlng = new GeometryPoint($event)
+    console.log('Ausgewählte Koordinaten:', this.latlng)
   }
 }
