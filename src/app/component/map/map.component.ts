@@ -183,7 +183,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
             const pos = ev.target.getLatLng()
             // Angular informieren (Event + Change Detection falls nötig)
             this.ngZone.run(() => {
-              this.locationSelected.emit([pos.lat, pos.lng])
+              this.locationSelected.emit([pos.lng, pos.lat])
             })
           })
         } else {
@@ -193,7 +193,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
         // Emit initial/aktuellen Wert an die App (innerhalb der Angular zone)
         this.ngZone.run(() => {
-          this.locationSelected.emit([latlng.lat, latlng.lng])
+          this.locationSelected.emit([latlng.lng, latlng.lat])
         })
       }
 
