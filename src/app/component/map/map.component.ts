@@ -153,12 +153,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
       this.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors',
-        maxZoom: 20,
+        maxZoom: 19,
         updateWhenIdle: true,
         updateWhenZooming: false,
         tileSize: 256,
         zoomOffset: 0,
-        minZoom: 3,
+        minZoom: 13,
         detectRetina: false,
       }).addTo(this.map)
 
