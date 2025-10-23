@@ -40,4 +40,34 @@ export class LocationService {
     )
     return result[0]
   }
+
+  /**
+   * Aktualisiert eine bestehende Location
+   * @param id Die ID der zu aktualisierenden Location
+   * @param location Die aktualisierten Daten
+   * @returns Promise mit der aktualisierten Location
+   */
+  async update(id: RecordId<'location'>, location: Partial<Location>): Promise<Location> {
+    try {
+      return await this.surrealdb.postUpdate<Location>(id, location)
+    } catch (error) {
+      console.error(`Fehler beim Aktualisieren der Location mit ID ${id}:`, error)
+      throw error
+    }
+  }
+
+  /**
+   * Löscht eine Location
+   * @param id Die ID der zu löschenden Location
+   * @returns Promise, der anzeigt, ob das Löschen erfolgreich war
+   */
+  async delete(id: RecordId<'location'>): Promise<boolean> {
+    try {
+      await this.surrealdb.deleteRow(id)
+      return true
+    } catch (error) {
+      console.error(`Fehler beim Löschen der Location mit ID ${id}:`, error)
+      throw error
+    }
+  }
 }

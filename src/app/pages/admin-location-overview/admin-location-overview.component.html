@@ -1,0 +1,199 @@
+<div class="container mx-auto px-4 py-6">
+  <div class="mb-6 flex flex-col items-center justify-between md:flex-row">
+    <h1 class="mb-4 text-2xl font-bold text-gray-800 md:mb-0">
+      {{ 'ADMIN.LOCATIONS.TITLE' | translate }}
+    </h1>
+    <div class="flex space-x-4">
+      <div class="relative">
+        <input
+          type="text"
+          [(ngModel)]="filterValue"
+          (keyup)="updateFilter()"
+          placeholder="{{ 'ADMIN.LOCATIONS.SEARCH' | translate }}"
+          class="rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="absolute top-2.5 right-3 h-5 w-5 text-gray-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          />
+        </svg>
+      </div>
+      <a
+        [routerLink]="['/admin/location/create']"
+        class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="mr-2 h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 4v16m8-8H4"
+          />
+        </svg>
+        {{ 'ADMIN.LOCATIONS.CREATE_NEW' | translate }}
+      </a>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="flex items-center justify-center py-12">
+      <div
+        class="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"
+      ></div>
+      <span class="ml-3">{{ 'COMMON.LOADING' | translate }}</span>
+    </div>
+  } @else if (locations().length === 0) {
+    <div class="rounded-lg bg-white py-8 text-center shadow">
+      <p class="mb-4 text-gray-500">
+        {{ 'ADMIN.LOCATIONS.NO_LOCATIONS' | translate }}
+      </p>
+      <a
+        [routerLink]="['/admin/location/create']"
+        class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+      >
+        {{ 'ADMIN.LOCATIONS.CREATE_NEW' | translate }}
+      </a>
+    </div>
+  } @else {
+    <div class="overflow-hidden rounded-lg bg-white shadow">
+      <ngx-datatable
+        class="tailwind-table"
+        [rows]="rows()"
+        [columnMode]="'force'"
+        [headerHeight]="50"
+        [footerHeight]="0"
+        [rowHeight]="'auto'"
+        [scrollbarH]="true"
+        [scrollbarV]="false"
+        [reorderable]="false"
+        [sorts]="currentSorts()"
+        (sort)="onSort($event)"
+      >
+        <!-- Thumbnail Column Template -->
+        <ngx-datatable-column
+          name="Bild"
+          prop="thumbnail"
+          [width]="10"
+          [flexGrow]="0"
+          [sortable]="false"
+        >
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            @if (row.thumbnail) {
+              <img 
+                [src]="row.thumbnail" 
+                alt="Thumbnail" 
+                class="location-thumbnail"
+                onerror="this.src='assets/images/placeholder.png'; this.onerror=null;"
+              />
+            } @else {
+              <div class="location-thumbnail-placeholder">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+            }
+          </ng-template>
+        </ngx-datatable-column>
+
+        <!-- Name Column Template -->
+        <ngx-datatable-column name="Name" prop="name" [flexGrow]="3">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <a
+              href="javascript:void(0)"
+              (click)="editLocation(row.originalId)"
+              class="text-blue-600 hover:text-blue-800 hover:underline"
+            >
+              {{ row.name }}
+            </a>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <!-- City Column Template -->
+        <ngx-datatable-column
+          name="Stadt"
+          prop="city"
+          [flexGrow]="1"
+        >
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <span class="text-gray-600">{{ value }}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <!-- Street Column Template -->
+        <ngx-datatable-column
+          name="Straße"
+          prop="street"
+          [flexGrow]="1"
+        >
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <span class="text-gray-600">{{ value || '-' }}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <!-- Actions Column Template -->
+        <ngx-datatable-column name="Aktionen" [sortable]="false" [width]="10">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <div class="flex space-x-2">
+              <button
+                (click)="editLocation(row.originalId)"
+                class="p-1 text-blue-600 hover:text-blue-800 focus:outline-none"
+                title="{{ 'ADMIN.LOCATIONS.EDIT' | translate }}"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
+              </button>
+              <button
+                (click)="deleteLocation(row.originalId)"
+                class="p-1 text-red-600 hover:text-red-800 focus:outline-none"
+                title="{{ 'ADMIN.LOCATIONS.DELETE' | translate }}"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  }
+</div>

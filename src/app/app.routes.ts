@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router'
 import { LoginService } from './services/login.service'
+import { AdminLocationOverviewComponent } from './pages/admin-location-overview/admin-location-overview.component'
 
 export const routes: Routes = [
   {
@@ -64,6 +65,15 @@ export const routes: Routes = [
       ).then((m) => m.AdminEventOverviewComponent),
     canActivate: [LoginService],
     title: 'Admin: Veranstaltungen',
+  },
+  {
+    path: 'admin/locations',
+    loadComponent: () =>
+      import(
+        './pages/admin-location-overview/admin-location-overview.component'
+      ).then((m) => m.AdminLocationOverviewComponent),
+    canActivate: [LoginService],
+    title: 'Admin: Orte',
   },
   {
     path: 'admin/create',

@@ -204,6 +204,14 @@
       "DELETE": "Delete",
       "SEARCH": "Search ...",
       "CREATE_NEW": "Create new ..."
+    },
+    "LOCATIONS": {
+      "TITLE": "Manage Locations",
+      "CREATE_NEW": "New Location",
+      "SEARCH": "Search locations...",
+      "NO_LOCATIONS": "No locations found",
+      "EDIT": "Edit",
+      "DELETE": "Delete"
     }
   }
 }

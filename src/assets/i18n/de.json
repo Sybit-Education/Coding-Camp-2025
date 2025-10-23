@@ -200,6 +200,14 @@
       "EDIT": "Bearbeiten ...",
       "DELETE": "Löschen",
       "SEARCH": "Suchen ..."
+    },
+    "LOCATIONS": {
+      "TITLE": "Orte verwalten",
+      "CREATE_NEW": "Neuen Ort erstellen",
+      "SEARCH": "Orte suchen...",
+      "NO_LOCATIONS": "Keine Orte gefunden",
+      "EDIT": "Bearbeiten",
+      "DELETE": "Löschen"
     }
   }
 }
