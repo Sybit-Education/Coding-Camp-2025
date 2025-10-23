@@ -63,6 +63,14 @@ export class AdminEventOverviewComponent implements OnInit {
   ])
   columns: TableColumn[] = [
     {
+      prop: 'thumbnail',
+      name: 'Bild',
+      sortable: false,
+      width: 10,
+      flexGrow: 0,
+      resizeable: false,
+    },
+    {
       prop: 'date_start',
       name: 'Datum',
       sortable: true,
@@ -131,6 +139,7 @@ export class AdminEventOverviewComponent implements OnInit {
           date_start: new Date(event.date_start).getTime(), // Timestamp für die Sortierung
           organizer: this.getOrganizerName(event),
           originalId: event.id, // Keep original ID for actions
+          thumbnail: this.getFirstImageUrl(event), // Get first image for thumbnail
         }
       })
 
@@ -271,6 +280,17 @@ export class AdminEventOverviewComponent implements OnInit {
     this.rows.set(sortedTemp)
   }
 
+  // Get the first image URL from an event
+  getFirstImageUrl(event: Event): string | null {
+    if (event.media && Array.isArray(event.media) && event.media.length > 0) {
+      const firstMedia = event.media[0];
+      if (typeof firstMedia === 'object' && firstMedia && 'file' in firstMedia) {
+        return firstMedia.file as string;
+      }
+    }
+    return null;
+  }
+
   // Delete event
   async deleteEvent(eventId: RecordId) {
     if (confirm('Möchten Sie diese Veranstaltung wirklich löschen?')) {
@@ -300,6 +320,7 @@ export class AdminEventOverviewComponent implements OnInit {
           date_start: new Date(event.date_start).getTime(), // Timestamp für die Sortierung
           organizer: this.getOrganizerName(event),
           originalId: event.id,
+          thumbnail: this.getFirstImageUrl(event), // Get first image for thumbnail
         }
       })
 
