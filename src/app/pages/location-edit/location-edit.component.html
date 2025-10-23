@@ -8,7 +8,7 @@
       {{ 'COMMON.BACK' | translate }}
     </button>
     <h1 class="text-2xl font-bold text-gray-800">
-      {{ isEditMode() ? 'Ort bearbeiten' : 'Neuen Ort erstellen' }}
+      {{ isEditMode() ? ('ADMIN.LOCATIONS.FORM.TITLE_EDIT' | translate) : ('ADMIN.LOCATIONS.FORM.TITLE_CREATE' | translate) }}
     </h1>
   </div>
 
@@ -32,7 +32,7 @@
           <!-- Name -->
           <div class="col-span-2">
             <label for="name" class="mb-2 block font-medium text-gray-700">
-              Name <span class="text-red-500">*</span>
+              {{ 'ADMIN.LOCATIONS.FORM.NAME' | translate }} <span class="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -46,7 +46,7 @@
             />
             @if (locationForm.get('name')?.invalid && locationForm.get('name')?.touched) {
               <p class="mt-1 text-sm text-red-500">
-                Bitte geben Sie einen Namen ein.
+                {{ 'ADMIN.LOCATIONS.FORM.NAME_REQUIRED' | translate }}
               </p>
             }
           </div>
@@ -54,7 +54,7 @@
           <!-- Straße -->
           <div>
             <label for="street" class="mb-2 block font-medium text-gray-700">
-              Straße
+              {{ 'ADMIN.LOCATIONS.FORM.STREET' | translate }}
             </label>
             <input
               type="text"
@@ -67,7 +67,7 @@
           <!-- PLZ -->
           <div>
             <label for="zip_code" class="mb-2 block font-medium text-gray-700">
-              PLZ
+              {{ 'ADMIN.LOCATIONS.FORM.ZIP' | translate }}
             </label>
             <input
               type="text"
@@ -80,7 +80,7 @@
           <!-- Stadt -->
           <div>
             <label for="city" class="mb-2 block font-medium text-gray-700">
-              Stadt
+              {{ 'ADMIN.LOCATIONS.FORM.CITY' | translate }}
             </label>
             <input
               type="text"
@@ -93,7 +93,7 @@
 
         <!-- Bilder -->
         <div class="mb-6">
-          <label class="mb-2 block font-medium text-gray-700">Bilder</label>
+          <label class="mb-2 block font-medium text-gray-700">{{ 'ADMIN.LOCATIONS.FORM.IMAGES' | translate }}</label>
           
           <!-- Vorhandene Bilder anzeigen -->
           @if (uploadedImages() && uploadedImages().length > 0) {
@@ -152,7 +152,7 @@
               class="rounded-lg bg-red-600 px-6 py-2 font-medium text-white transition-colors hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none"
             >
               <mat-icon class="mr-1">delete</mat-icon>
-              Löschen
+              {{ 'ADMIN.LOCATIONS.DELETE' | translate }}
             </button>
           }
         </div>

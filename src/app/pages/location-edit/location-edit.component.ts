@@ -13,7 +13,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { Location } from '../../models/location.interface'
 import { LocationService } from '../../services/location.service'
 import { Media } from '../../models/media.interface'
@@ -41,6 +41,7 @@ export class LocationEditComponent implements OnInit {
   private readonly router = inject(Router)
   private readonly fb = inject(FormBuilder)
   private readonly locationService = inject(LocationService)
+  private readonly translate = inject(TranslateService)
 
   locationForm!: FormGroup
   isLoading = signal(true)
@@ -69,18 +70,32 @@ export class LocationEditComponent implements OnInit {
   }
 
   private async checkRouteParams(): Promise<void> {
+    this.isLoading.set(true);
     const id = this.route.snapshot.paramMap.get('id')
     
     if (id && id !== 'create') {
       this.isEditMode.set(true)
       try {
+        console.log('Lade Location mit ID:', id);
         const locationId = `location:${id}` as unknown as RecordId<'location'>
         this.locationId.set(locationId)
         await this.loadLocation(locationId)
       } catch (error) {
         console.error('Fehler beim Laden des Ortes:', error)
-        this.errorMessage.set('Der Ort konnte nicht geladen werden.')
+        this.errorMessage.set(this.translate.instant('ADMIN.LOCATIONS.FORM.LOAD_ERROR'))
       }
+    } else {
+      // Im Erstellungsmodus leeres Formular initialisieren
+      this.isEditMode.set(false)
+      this.locationId.set(null)
+      this.uploadedImages.set([])
+      this.locationForm.reset({
+        name: '',
+        street: '',
+        zip_code: '',
+        city: 'Radolfzell',
+        geo_point: { type: 'Point', longLat: null }
+      })
     }
     
     this.isLoading.set(false)
@@ -91,6 +106,8 @@ export class LocationEditComponent implements OnInit {
       const location = await this.locationService.getLocationByID(id)
       
       if (location) {
+        console.log('Geladene Location:', location);
+        
         // Formular mit den Daten des Ortes befüllen
         this.locationForm.patchValue({
           name: location.name,
@@ -103,6 +120,8 @@ export class LocationEditComponent implements OnInit {
         // Bilder laden, falls vorhanden
         if (location.media && Array.isArray(location.media)) {
           this.uploadedImages.set(location.media)
+        } else {
+          this.uploadedImages.set([])
         }
       }
     } catch (error) {
@@ -141,7 +160,7 @@ export class LocationEditComponent implements OnInit {
       this.router.navigate(['/admin/locations'])
     } catch (error) {
       console.error('Fehler beim Speichern des Ortes:', error)
-      this.errorMessage.set('Der Ort konnte nicht gespeichert werden.')
+      this.errorMessage.set(this.translate.instant('ADMIN.LOCATIONS.FORM.SAVE_ERROR'))
     } finally {
       this.isSubmitting.set(false)
     }
@@ -179,13 +198,13 @@ export class LocationEditComponent implements OnInit {
   async deleteLocation(): Promise<void> {
     if (!this.isEditMode() || !this.locationId()) return
 
-    if (confirm('Möchten Sie diesen Ort wirklich löschen?')) {
+    if (confirm(this.translate.instant('ADMIN.LOCATIONS.FORM.DELETE_CONFIRM'))) {
       try {
         await this.locationService.delete(this.locationId()!)
         this.router.navigate(['/admin/locations'])
       } catch (error) {
         console.error('Fehler beim Löschen des Ortes:', error)
-        this.errorMessage.set('Der Ort konnte nicht gelöscht werden.')
+        this.errorMessage.set(this.translate.instant('ADMIN.LOCATIONS.FORM.DELETE_ERROR'))
       }
     }
   }
