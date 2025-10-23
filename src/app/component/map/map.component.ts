@@ -129,7 +129,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     if (!this.L || !this.leafletLoaded) return
     try {
       // Center falls keine Koordinaten übergeben wurden
-      const center = (this.coordinates ?? [47.75, 8.97]).slice() as [number, number]
+      const center = (this.coordinates ?? [47.75, 8.97]).slice() as [
+        number,
+        number,
+      ]
 
       this.map = this.L.map('map', {
         center,
@@ -142,6 +145,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         trackResize: false,
         renderer: new this.L.Canvas(),
         attributionControl: false,
+        maxBounds: this.L.latLngBounds(
+          this.L.latLng(47.76, 8.942),
+          this.L.latLng(47.733, 8.992),
+        ),
       })
 
       this.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
