@@ -203,7 +203,8 @@
       "EDIT": "Edit ...",
       "DELETE": "Delete",
       "SEARCH": "Search ...",
-      "CREATE_NEW": "Create new ..."
+      "CREATE_NEW": "Create new ...",
+      "PREVIEW": "Preview"
     }
   }
 }
