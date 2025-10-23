@@ -78,16 +78,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     if (!this.L || !this.leafletLoaded) return
     try {
       this.map = this.L.map('map', {
+        ...this.getCommonMapOptions(),
         center: (this.coordinates ?? [51, 9]).slice() as [number, number],
         zoom: 18,
-        scrollWheelZoom: true,
-        preferCanvas: true,
-        fadeAnimation: false,
-        markerZoomAnimation: false,
-        zoomAnimation: false,
-        trackResize: false,
-        renderer: new this.L.Canvas(),
-        attributionControl: false,
       })
 
       const greenIcon = new this.L.Icon({
@@ -135,16 +128,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       ]
 
       this.map = this.L.map('map', {
+        ...this.getCommonMapOptions(),
         center,
         zoom: 13,
-        scrollWheelZoom: true,
-        preferCanvas: true,
-        fadeAnimation: false,
-        markerZoomAnimation: false,
-        zoomAnimation: false,
-        trackResize: false,
-        renderer: new this.L.Canvas(),
-        attributionControl: false,
         maxBounds: this.L.latLngBounds(
           this.L.latLng(47.76, 8.942),
           this.L.latLng(47.733, 8.992),
@@ -208,6 +194,21 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       this.map.on('click', this.clickHandler)
     } catch (error) {
       console.error('Fehler bei der Initialisierung der Karte (Add):', error)
+    }
+  }
+
+  private getCommonMapOptions(): Partial<LeafletNS.MapOptions> {
+    return {
+      minZoom: 13,
+      maxZoom: 19,
+      scrollWheelZoom: true,
+      preferCanvas: true,
+      fadeAnimation: false,
+      markerZoomAnimation: false,
+      zoomAnimation: false,
+      trackResize: false,
+      renderer: new this.L!.Canvas(),
+      attributionControl: false,
     }
   }
 }
