@@ -17,9 +17,9 @@ import { TranslateModule } from '@ngx-translate/core'
 import { Location } from '../../models/location.interface'
 import { LocationService } from '../../services/location.service'
 import { Media } from '../../models/media.interface'
-import { UploadImageComponent } from '../../component/upload-image/upload-image.component'
 import { MatIconModule } from '@angular/material/icon'
 import { RecordId } from 'surrealdb'
+import { UploadImageComponent } from '../../component/upload-image/upload-image.component'
 
 @Component({
   selector: 'app-location-edit',
@@ -74,7 +74,7 @@ export class LocationEditComponent implements OnInit {
     if (id && id !== 'create') {
       this.isEditMode.set(true)
       try {
-        const locationId = `location:${id}` as RecordId<'location'>
+        const locationId = `location:${id}` as unknown as RecordId<'location'>
         this.locationId.set(locationId)
         await this.loadLocation(locationId)
       } catch (error) {
