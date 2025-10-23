@@ -204,7 +204,7 @@ export class AdminEventOverviewComponent implements OnInit {
   // Navigate to preview event page
   previewEvent(eventId: RecordId): void {
     // Öffne die Event-Detailseite in einem neuen Tab
-    window.open(`/event/${String(eventId)}`, '_blank');
+    window.open(`/event/${String(eventId.id)}`, '_blank');
   }
 
   // Navigate to edit event page
