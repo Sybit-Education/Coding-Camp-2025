@@ -77,7 +77,12 @@ export class LocationEditComponent implements OnInit {
       this.isEditMode.set(true)
       try {
         console.log('Lade Location mit ID:', id);
-        const locationId = `location:${id}` as unknown as RecordId<'location'>
+        // Prüfen, ob die ID bereits das Präfix "location:" enthält
+        const locationId = id.includes('location:') 
+          ? id as unknown as RecordId<'location'> 
+          : `location:${id}` as unknown as RecordId<'location'>;
+        
+        console.log('Formatierte Location ID:', locationId);
         this.locationId.set(locationId)
         await this.loadLocation(locationId)
       } catch (error) {
@@ -103,6 +108,7 @@ export class LocationEditComponent implements OnInit {
 
   private async loadLocation(id: RecordId<'location'>): Promise<void> {
     try {
+      console.log('Rufe getLocationByID auf mit ID:', id);
       const location = await this.locationService.getLocationByID(id)
       
       if (location) {
@@ -123,6 +129,9 @@ export class LocationEditComponent implements OnInit {
         } else {
           this.uploadedImages.set([])
         }
+      } else {
+        console.error('Location nicht gefunden oder undefiniert');
+        this.errorMessage.set(this.translate.instant('ADMIN.LOCATIONS.FORM.LOAD_ERROR'))
       }
     } catch (error) {
       console.error('Fehler beim Laden des Ortes:', error)
