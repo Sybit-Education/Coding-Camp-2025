@@ -199,7 +199,8 @@
       "NO_EVENTS": "Keine Events gefunden",
       "EDIT": "Bearbeiten ...",
       "DELETE": "Löschen",
-      "SEARCH": "Suchen ..."
+      "SEARCH": "Suchen ...",
+      "PREVIEW": "Vorschau"
     }
   }
 }

@@ -194,7 +194,8 @@
       "CREATE_NEW": "Créer un nouveau ...",
       "NO_EVENTS": "Aucun événement trouvé",
       "DELETE": "Supprimer",
-      "EDIT": "Modifier ..."
+      "EDIT": "Modifier ...",
+      "PREVIEW": "Preview"
     }
   }
 }

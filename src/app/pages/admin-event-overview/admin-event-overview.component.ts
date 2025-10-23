@@ -24,6 +24,7 @@ import { Organizer } from '../../models/organizer.interface'
 import { RecordId } from 'surrealdb'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { filter } from 'rxjs/operators'
+import { MediaService } from '@app/services/media.service'
 
 @Component({
   selector: 'app-admin-event-overview',
@@ -43,6 +44,7 @@ import { filter } from 'rxjs/operators'
 export class AdminEventOverviewComponent implements OnInit {
   private readonly eventService = inject(EventService)
   private readonly organizerService = inject(OrganizerService)
+  private readonly mediaService = inject(MediaService)
   private readonly router = inject(Router)
   private readonly destroyRef = inject(DestroyRef)
 
@@ -62,6 +64,14 @@ export class AdminEventOverviewComponent implements OnInit {
     { prop: 'date_start', dir: SortDirection.asc }, // Standardsortierung nach Datum aufsteigend
   ])
   columns: TableColumn[] = [
+    {
+      prop: 'thumbnail',
+      name: 'Bild',
+      sortable: false,
+      width: 10,
+      flexGrow: 0,
+      resizeable: false,
+    },
     {
       prop: 'date_start',
       name: 'Datum',
@@ -131,9 +141,11 @@ export class AdminEventOverviewComponent implements OnInit {
           date_start: new Date(event.date_start).getTime(), // Timestamp für die Sortierung
           organizer: this.getOrganizerName(event),
           originalId: event.id, // Keep original ID for actions
+          thumbnail: this.getFirstImageUrl(event), // Get first image for thumbnail
         }
       })
 
+      console.log('Events:', tableData);
       this.events.set(sortedEvents)
       this.rows.set(tableData)
       this.temp.set([...tableData])
@@ -201,6 +213,12 @@ export class AdminEventOverviewComponent implements OnInit {
     return organizerId
   }
 
+  // Navigate to preview event page
+  previewEvent(eventId: RecordId): void {
+    // Öffne die Event-Detailseite in einem neuen Tab
+    window.open(`/event/${String(eventId.id)}`, '_blank');
+  }
+
   // Navigate to edit event page
   editEvent(eventId: RecordId): void {
     this.router.navigate(['/admin/event', String(eventId)])
@@ -265,6 +283,15 @@ export class AdminEventOverviewComponent implements OnInit {
     this.rows.set(sortedTemp)
   }
 
+  // Get the first image URL from an event
+  getFirstImageUrl(event: Event): string | null {
+    if (event.media && Array.isArray(event.media) && event.media.length > 0) {
+      const firstMedia = event.media[0];
+      return this.mediaService.getMediaUrl(firstMedia);
+    }
+    return null;
+  }
+
   // Delete event
   async deleteEvent(eventId: RecordId) {
     if (confirm('Möchten Sie diese Veranstaltung wirklich löschen?')) {
@@ -294,6 +321,7 @@ export class AdminEventOverviewComponent implements OnInit {
           date_start: new Date(event.date_start).getTime(), // Timestamp für die Sortierung
           organizer: this.getOrganizerName(event),
           originalId: event.id,
+          thumbnail: this.getFirstImageUrl(event), // Get first image for thumbnail
         }
       })
 
