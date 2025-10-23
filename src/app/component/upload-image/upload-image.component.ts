@@ -2,11 +2,12 @@ import { Component, EventEmitter, Output } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { MatIconModule } from '@angular/material/icon'
 import { Media } from '../../models/media.interface'
+import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-upload-image',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, TranslateModule],
   templateUrl: './upload-image.component.html',
   styleUrl: './upload-image.component.scss',
 })
