@@ -75,6 +75,24 @@ export const routes: Routes = [
     title: 'Admin: Orte',
   },
   {
+    path: 'admin/location/create',
+    loadComponent: () =>
+      import('./pages/location-edit/location-edit.component').then(
+        (m) => m.LocationEditComponent
+      ),
+    canActivate: [LoginService],
+    title: 'Ort erstellen',
+  },
+  {
+    path: 'admin/location/:id',
+    loadComponent: () =>
+      import('./pages/location-edit/location-edit.component').then(
+        (m) => m.LocationEditComponent
+      ),
+    canActivate: [LoginService],
+    title: 'Ort bearbeiten',
+  },
+  {
     path: 'admin/create',
     loadComponent: () =>
       import('./pages/event-create/event-create.component').then(

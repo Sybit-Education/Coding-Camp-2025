@@ -1,0 +1,165 @@
+<div class="container mx-auto px-4 py-6">
+  <div class="mb-6 flex items-center">
+    <button
+      (click)="cancel()"
+      class="mr-4 inline-flex items-center rounded-lg bg-gray-200 px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-300 focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:outline-none"
+    >
+      <mat-icon class="mr-1">arrow_back</mat-icon>
+      {{ 'COMMON.BACK' | translate }}
+    </button>
+    <h1 class="text-2xl font-bold text-gray-800">
+      {{ isEditMode() ? 'Ort bearbeiten' : 'Neuen Ort erstellen' }}
+    </h1>
+  </div>
+
+  @if (isLoading()) {
+    <div class="flex items-center justify-center py-12">
+      <div
+        class="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"
+      ></div>
+      <span class="ml-3">{{ 'COMMON.LOADING' | translate }}</span>
+    </div>
+  } @else {
+    <div class="rounded-lg bg-white p-6 shadow-md">
+      @if (errorMessage()) {
+        <div class="mb-4 rounded-lg bg-red-100 p-4 text-red-700">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <form [formGroup]="locationForm" (ngSubmit)="onSubmit()">
+        <div class="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+          <!-- Name -->
+          <div class="col-span-2">
+            <label for="name" class="mb-2 block font-medium text-gray-700">
+              Name <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="name"
+              formControlName="name"
+              class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
+              [class.border-red-500]="
+                locationForm.get('name')?.invalid &&
+                locationForm.get('name')?.touched
+              "
+            />
+            @if (
+              locationForm.get('name')?.invalid &&
+              locationForm.get('name')?.touched
+            ) {
+              <p class="mt-1 text-sm text-red-500">
+                Bitte geben Sie einen Namen ein.
+              </p>
+            }
+          </div>
+
+          <!-- Straße -->
+          <div>
+            <label for="street" class="mb-2 block font-medium text-gray-700">
+              Straße
+            </label>
+            <input
+              type="text"
+              id="street"
+              formControlName="street"
+              class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+
+          <!-- PLZ -->
+          <div>
+            <label for="zip_code" class="mb-2 block font-medium text-gray-700">
+              PLZ
+            </label>
+            <input
+              type="text"
+              id="zip_code"
+              formControlName="zip_code"
+              class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+
+          <!-- Stadt -->
+          <div>
+            <label for="city" class="mb-2 block font-medium text-gray-700">
+              Stadt
+            </label>
+            <input
+              type="text"
+              id="city"
+              formControlName="city"
+              class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+        </div>
+
+        <!-- Bilder -->
+        <div class="mb-6">
+          <label class="mb-2 block font-medium text-gray-700">Bilder</label>
+          
+          <!-- Vorhandene Bilder anzeigen -->
+          @if (uploadedImages().length > 0) {
+            <div class="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+              @for (image of uploadedImages(); track $index) {
+                <div class="relative">
+                  <img
+                    [src]="image.file"
+                    alt="Bild des Ortes"
+                    class="h-32 w-full rounded-lg object-cover"
+                  />
+                  <button
+                    type="button"
+                    (click)="removeImage($index)"
+                    class="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white hover:bg-red-600 focus:outline-none"
+                  >
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+              }
+            </div>
+          }
+          
+          <!-- Bild-Upload-Komponente -->
+          <app-upload-image (imagesUploaded)="onImagesUploaded($event)"></app-upload-image>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex flex-wrap justify-between gap-4">
+          <div>
+            <button
+              type="button"
+              (click)="cancel()"
+              class="mr-4 rounded-lg border border-gray-300 bg-white px-6 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-100 focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:outline-none"
+            >
+              {{ 'COMMON.CANCEL' | translate }}
+            </button>
+            <button
+              type="submit"
+              [disabled]="isSubmitting()"
+              class="rounded-lg bg-blue-600 px-6 py-2 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:opacity-50"
+            >
+              @if (isSubmitting()) {
+                <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+                <span class="ml-2">Speichern...</span>
+              } @else {
+                {{ 'COMMON.SAVE' | translate }}
+              }
+            </button>
+          </div>
+          
+          @if (isEditMode()) {
+            <button
+              type="button"
+              (click)="deleteLocation()"
+              class="rounded-lg bg-red-600 px-6 py-2 font-medium text-white transition-colors hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none"
+            >
+              <mat-icon class="mr-1">delete</mat-icon>
+              Löschen
+            </button>
+          }
+        </div>
+      </form>
+    </div>
+  }
+</div>

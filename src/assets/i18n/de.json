@@ -207,7 +207,21 @@
       "SEARCH": "Orte suchen...",
       "NO_LOCATIONS": "Keine Orte gefunden",
       "EDIT": "Bearbeiten",
-      "DELETE": "Löschen"
+      "DELETE": "Löschen",
+      "FORM": {
+        "TITLE_CREATE": "Neuen Ort erstellen",
+        "TITLE_EDIT": "Ort bearbeiten",
+        "NAME": "Name",
+        "STREET": "Straße",
+        "ZIP": "PLZ",
+        "CITY": "Stadt",
+        "IMAGES": "Bilder",
+        "NAME_REQUIRED": "Bitte geben Sie einen Namen ein.",
+        "SAVE_ERROR": "Der Ort konnte nicht gespeichert werden.",
+        "LOAD_ERROR": "Der Ort konnte nicht geladen werden.",
+        "DELETE_ERROR": "Der Ort konnte nicht gelöscht werden.",
+        "DELETE_CONFIRM": "Möchten Sie diesen Ort wirklich löschen?"
+      }
     }
   }
 }
