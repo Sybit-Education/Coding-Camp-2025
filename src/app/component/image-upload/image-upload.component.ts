@@ -138,22 +138,18 @@ export class ImageUploadComponent implements OnInit, OnChanges {
   private loadExistingImages() {
     console.log('Lade existierende Bilder:', this.existingImages)
     this.existingImages.forEach((image) => {
-      this.mediaService
-        .getMediaUrl(image)
-        .then((url) => {
-          if (url) {
-            // Prüfen, ob das Bild bereits in den Vorschauen vorhanden ist
-            if (!this.previews.includes(url)) {
-              this.previews.push(url)
-              this.previewsChange.emit(this.previews)
-              this.markForCheck()
-            }
-          }
-        })
-        .catch((error) => {
-          console.error('Fehler beim Laden des Bildes:', error)
-          // Trotz Fehler fortfahren und andere Bilder laden
-        })
+      const url = this.mediaService.getMediaUrl(image)
+
+      if (url) {
+        // Prüfen, ob das Bild bereits in den Vorschauen vorhanden ist
+        if (!this.previews.includes(url)) {
+          this.previews.push(url)
+          this.previewsChange.emit(this.previews)
+          this.markForCheck()
+        }
+      } else {
+        console.warn('Konnte Bild-URL nicht laden für Media-ID:', image)
+      }
     })
   }
 

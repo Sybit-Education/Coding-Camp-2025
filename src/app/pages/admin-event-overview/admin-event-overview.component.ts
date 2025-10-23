@@ -24,6 +24,7 @@ import { Organizer } from '../../models/organizer.interface'
 import { RecordId } from 'surrealdb'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { filter } from 'rxjs/operators'
+import { MediaService } from '@app/services/media.service'
 
 @Component({
   selector: 'app-admin-event-overview',
@@ -43,6 +44,7 @@ import { filter } from 'rxjs/operators'
 export class AdminEventOverviewComponent implements OnInit {
   private readonly eventService = inject(EventService)
   private readonly organizerService = inject(OrganizerService)
+  private readonly mediaService = inject(MediaService)
   private readonly router = inject(Router)
   private readonly destroyRef = inject(DestroyRef)
 
@@ -143,6 +145,7 @@ export class AdminEventOverviewComponent implements OnInit {
         }
       })
 
+      console.log('Events:', tableData);
       this.events.set(sortedEvents)
       this.rows.set(tableData)
       this.temp.set([...tableData])
@@ -284,9 +287,7 @@ export class AdminEventOverviewComponent implements OnInit {
   getFirstImageUrl(event: Event): string | null {
     if (event.media && Array.isArray(event.media) && event.media.length > 0) {
       const firstMedia = event.media[0];
-      if (typeof firstMedia === 'object' && firstMedia && 'file' in firstMedia) {
-        return firstMedia.file as string;
-      }
+      return this.mediaService.getMediaUrl(firstMedia);
     }
     return null;
   }
