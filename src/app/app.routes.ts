@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router'
 import { LoginService } from './services/login.service'
-import { AdminLocationOverviewComponent } from './pages/admin-location-overview/admin-location-overview.component'
 
 export const routes: Routes = [
   {
