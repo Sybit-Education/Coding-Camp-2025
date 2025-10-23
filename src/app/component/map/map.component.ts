@@ -130,10 +130,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       this.map = this.L.map('map', {
         ...this.getCommonMapOptions(),
         center,
-        zoom: 13,
+        zoom: 12,
         maxBounds: this.L.latLngBounds(
-          this.L.latLng(47.76, 8.942),
-          this.L.latLng(47.733, 8.992),
+          this.L.latLng(47.713, 8.868),
+          this.L.latLng(47.797, 9.077),
         ),
       })
 
@@ -144,7 +144,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         updateWhenZooming: false,
         tileSize: 256,
         zoomOffset: 0,
-        minZoom: 13,
+        minZoom: 12,
         detectRetina: false,
       }).addTo(this.map)
 
@@ -199,7 +199,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
   private getCommonMapOptions(): Partial<LeafletNS.MapOptions> {
     return {
-      minZoom: 13,
+      minZoom: 12,
       maxZoom: 19,
       scrollWheelZoom: true,
       preferCanvas: true,
