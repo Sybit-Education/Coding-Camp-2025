@@ -44,10 +44,7 @@
                 locationForm.get('name')?.touched
               "
             />
-            @if (
-              locationForm.get('name')?.invalid &&
-              locationForm.get('name')?.touched
-            ) {
+            @if (locationForm.get('name')?.invalid && locationForm.get('name')?.touched) {
               <p class="mt-1 text-sm text-red-500">
                 Bitte geben Sie einen Namen ein.
               </p>
@@ -99,7 +96,7 @@
           <label class="mb-2 block font-medium text-gray-700">Bilder</label>
           
           <!-- Vorhandene Bilder anzeigen -->
-          @if (uploadedImages().length > 0) {
+          @if (uploadedImages() && uploadedImages().length > 0) {
             <div class="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
               @for (image of uploadedImages(); track $index) {
                 <div class="relative">
