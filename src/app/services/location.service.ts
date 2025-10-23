@@ -49,7 +49,9 @@ export class LocationService {
    */
   async update(id: RecordId<'location'>, location: Partial<Location>): Promise<Location> {
     try {
-      return await this.surrealdb.postUpdate<Location>(id, location)
+      // Stelle sicher, dass alle erforderlichen Felder vorhanden sind
+      const updatedLocation = { name: '', ...location } as Location;
+      return await this.surrealdb.postUpdate<Location>(id, updatedLocation)
     } catch (error) {
       console.error(`Fehler beim Aktualisieren der Location mit ID ${id}:`, error)
       throw error

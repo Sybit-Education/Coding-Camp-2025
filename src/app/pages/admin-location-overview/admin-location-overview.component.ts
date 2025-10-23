@@ -215,7 +215,7 @@ export class AdminLocationOverviewComponent implements OnInit {
     if (confirm('Möchten Sie diesen Ort wirklich löschen?')) {
       try {
         // Verwende direkt den Location-Service zum Löschen
-        await this.locationService.delete(locationId)
+        await this.locationService.delete(locationId as RecordId<'location'>)
         console.log('Location erfolgreich gelöscht')
       } catch (deleteError) {
         console.error('Fehler beim Löschen:', deleteError)
