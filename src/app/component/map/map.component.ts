@@ -6,10 +6,12 @@ import {
   OnDestroy,
   NgZone,
   inject,
+  Output,
+  EventEmitter,
 } from '@angular/core'
 
 // Lazy-Loading für Leaflet
-import type { Map } from 'leaflet'
+import type { Map, Marker } from 'leaflet'
 
 @Component({
   selector: 'app-map',
@@ -23,8 +25,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private map?: Map
   private L?: typeof import('leaflet')
   private leafletLoaded = false
+  private marker?: Marker
 
   @Input() coordinates!: [number, number]
+  @Output() coordinatesChange = new EventEmitter<[number, number]>()
 
   private readonly ngZone: NgZone = inject(NgZone)
 
@@ -107,7 +111,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       })
 
       // Marker hinzufügen ohne slice() für weniger Objektkopien
-      this.L.marker(this.coordinates as [number, number], {
+      this.marker = this.L.marker([this.coordinates[1], this.coordinates[0]], {
         icon: greenIcon,
       }).addTo(this.map)
 
@@ -124,6 +128,22 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         minZoom: 1,
         detectRetina: false, // Deaktiviere Retina-Erkennung für weniger Kachel-Downloads
       }).addTo(this.map)
+
+      // Klick-Event hinzufügen
+      this.map.on('click', (e) => {
+        const { lat, lng } = e.latlng;
+        const newCoords: [number, number] = [lng, lat]; // Leaflet gibt [lat, lng] zurück, wir brauchen [lng, lat]
+        
+        // Marker aktualisieren
+        if (this.marker && this.map) {
+          this.marker.setLatLng([lat, lng]);
+        }
+        
+        // Koordinaten zurück an die Parent-Komponente senden
+        this.ngZone.run(() => {
+          this.coordinatesChange.emit(newCoords);
+        });
+      });
     } catch (error) {
       console.error('Fehler bei der Initialisierung der Karte:', error)
     }
