@@ -228,6 +228,18 @@ export class LocationEditComponent implements OnInit {
   updateCoordinates(newCoordinates: [number, number]): void {
     this.coordinates.set(newCoordinates)
     console.log('Neue Koordinaten gesetzt:', newCoordinates)
+    
+    // Aktualisiere auch das Formular
+    const geoPointControl = this.locationForm.get('geo_point');
+    if (geoPointControl) {
+      geoPointControl.patchValue({
+        type: 'Point',
+        longLat: newCoordinates
+      });
+    }
+    
+    // Markiere das Formular als "berührt", damit Validierungen ausgelöst werden
+    this.markForCheck();
   }
 
   // Navigation

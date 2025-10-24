@@ -114,6 +114,7 @@
             <app-map
               id="map"
               [coordinates]="coordinates()"
+              [addLocation]="true"
               (coordinatesChange)="updateCoordinates($event)"
             ></app-map>
           </div>
@@ -124,6 +125,9 @@
               >Koordinaten: {{ coordinates()[0].toFixed(6) }},
               {{ coordinates()[1].toFixed(6) }}</span
             >
+            <span class="ml-2 text-xs text-blue-600">
+              (Klicken Sie auf die Karte oder ziehen Sie den Marker, um die Position zu ändern)
+            </span>
           </div>
         </div>
 
