@@ -95,11 +95,11 @@
         <div class="mb-6">
           <label class="mb-2 block font-medium text-gray-700">Standort auf der Karte</label>
           <p class="mb-2 text-sm text-gray-600">Klicken Sie auf die Karte, um den Standort zu setzen.</p>
-          
+
           <div class="h-96 w-full rounded-lg border border-gray-300 overflow-hidden">
             <app-map [coordinates]="coordinates()" (coordinatesChange)="updateCoordinates($event)"></app-map>
           </div>
-          
+
           <div class="mt-2 flex items-center text-sm text-gray-600">
             <mat-icon class="mr-1 text-gray-500">info</mat-icon>
             <span>Koordinaten: {{ coordinates()[0].toFixed(6) }}, {{ coordinates()[1].toFixed(6) }}</span>
@@ -109,7 +109,7 @@
         <!-- Bilder -->
         <div class="mb-6">
           <label class="mb-2 block font-medium text-gray-700">{{ 'ADMIN.LOCATIONS.FORM.IMAGES' | translate }}</label>
-          
+
           <!-- Vorhandene Bilder anzeigen -->
           @if (uploadedImages().length) {
             <div class="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
@@ -131,7 +131,7 @@
               }
             </div>
           }
-          
+
           <!-- Bild-Upload-Komponente -->
           <app-upload-image (imagesUploaded)="onImagesUploaded($event)"></app-upload-image>
         </div>
@@ -159,7 +159,7 @@
               }
             </button>
           </div>
-          
+
           @if (isEditMode()) {
             <button
               type="button"

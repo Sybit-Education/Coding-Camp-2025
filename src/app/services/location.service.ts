@@ -15,9 +15,7 @@ export class LocationService {
     id: RecordId<'location'> | StringRecordId,
   ): Promise<Location> {
     try {
-      console.log('LocationService.getLocationByID aufgerufen mit ID:', id);
       const result = await this.surrealdb.getByRecordId<Location>(id);
-      console.log('LocationService.getLocationByID Ergebnis:', result);
       return result;
     } catch (error) {
       console.error('Fehler in LocationService.getLocationByID:', error);

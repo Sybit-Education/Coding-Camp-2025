@@ -128,7 +128,7 @@ DEFINE FIELD OVERWRITE id ON location;
 DEFINE FIELD OVERWRITE name ON location TYPE string;
 DEFINE FIELD OVERWRITE street ON location TYPE option<string>;
 DEFINE FIELD OVERWRITE city ON location TYPE option<string> DEFAULT Radolfzell;
-DEFINE FIELD OVERWRITE zip_code ON TABLE location TYPE option<number>;
+DEFINE FIELD OVERWRITE zip_code ON TABLE location TYPE option<string>;
 DEFINE FIELD OVERWRITE geo_point ON location TYPE option<point>;
 
 

@@ -18,11 +18,13 @@ import { Location } from '../../models/location.interface'
 import { LocationService } from '../../services/location.service'
 import { Media } from '../../models/media.interface'
 import { MatIconModule } from '@angular/material/icon'
-import { StringRecordId } from 'surrealdb'
+import { GeometryPoint, StringRecordId } from 'surrealdb'
 import { UploadImageComponent } from '../../component/upload-image/upload-image.component'
 import { SnackBarService } from '../../services/snack-bar.service'
 import { injectMarkForCheck } from '../../utils/zoneless-helpers'
 import { MapComponent } from '../../component/map/map.component'
+import { GeoPoint } from '@app/models/event.interface'
+import { point } from 'leaflet'
 
 @Component({
   selector: 'app-location-edit',
@@ -51,7 +53,7 @@ export class LocationEditComponent implements OnInit {
 
   // Reactive Form
   locationForm!: FormGroup
-  
+
   // UI-Status
   isLoading = signal(true)
   isSubmitting = signal(false)
@@ -59,9 +61,9 @@ export class LocationEditComponent implements OnInit {
   locationId = signal<StringRecordId | null>(null)
   uploadedImages = signal<Media[]>([])
   errorMessage = signal<string | null>(null)
-  
+
   // Karten-Koordinaten
-  coordinates = signal<[number, number]>([9.1732, 47.7331]) // Default: Radolfzell
+  coordinates = signal<[number, number]>([47.7331, 9.1732]) // Default: Radolfzell
 
   ngOnInit(): void {
     this.initForm()
@@ -130,10 +132,10 @@ export class LocationEditComponent implements OnInit {
           city: location.city || 'Radolfzell',
           geo_point: location.geo_point || { type: 'Point', longLat: null },
         })
-        
+
         // Geo-Koordinaten setzen, falls vorhanden
         if (location.geo_point && location.geo_point.coordinates) {
-          this.coordinates.set(location.geo_point.coordinates as [number, number]);
+          this.coordinates.set([location.geo_point.coordinates[1], location.geo_point.coordinates[0]] as [number, number]);
         }
 
         // Bilder laden, falls vorhanden
@@ -165,10 +167,7 @@ export class LocationEditComponent implements OnInit {
       const formData = this.locationForm.value
 
       // Aktuelle Koordinaten in das Formular übernehmen
-      formData.geo_point = {
-        type: 'Point',
-        coordinates: this.coordinates()
-      };
+      formData.geo_point = new GeometryPoint([ this.coordinates()[1],  this.coordinates()[0] ]);
 
       // Bilder hinzufügen
       const locationData: Location = {
@@ -225,7 +224,7 @@ export class LocationEditComponent implements OnInit {
     this.coordinates.set(newCoordinates);
     console.log('Neue Koordinaten gesetzt:', newCoordinates);
   }
-  
+
   // Navigation
   cancel(): void {
     this.router.navigate(['/admin/locations'])
