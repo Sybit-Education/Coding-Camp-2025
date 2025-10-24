@@ -132,8 +132,8 @@ export class LocationEditComponent implements OnInit {
         })
         
         // Geo-Koordinaten setzen, falls vorhanden
-        if (location.geo_point && location.geo_point.longLat) {
-          this.coordinates.set(location.geo_point.longLat as [number, number]);
+        if (location.geo_point && location.geo_point.coordinates) {
+          this.coordinates.set(location.geo_point.coordinates as [number, number]);
         }
 
         // Bilder laden, falls vorhanden
@@ -167,7 +167,7 @@ export class LocationEditComponent implements OnInit {
       // Aktuelle Koordinaten in das Formular übernehmen
       formData.geo_point = {
         type: 'Point',
-        longLat: this.coordinates()
+        coordinates: this.coordinates()
       };
 
       // Bilder hinzufügen

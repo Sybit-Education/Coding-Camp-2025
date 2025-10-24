@@ -1,5 +1,11 @@
-import { GeometryPoint, RecordId } from 'surrealdb'
+import { RecordId } from 'surrealdb'
 import { Media } from './media.interface'
+
+// Define our own GeometryPoint interface to match SurrealDB's structure
+export interface GeometryPoint {
+  type: 'Point'
+  coordinates: [number, number] // [longitude, latitude]
+}
 
 export interface Location extends Record<string, unknown> {
   id?: RecordId<'location'>
