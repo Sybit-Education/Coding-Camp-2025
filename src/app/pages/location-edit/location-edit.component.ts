@@ -12,6 +12,7 @@ import {
   FormGroup,
   ReactiveFormsModule,
   Validators,
+  FormsModule,
 } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { Location } from '../../models/location.interface'
@@ -20,6 +21,8 @@ import { Media } from '../../models/media.interface'
 import { MatIconModule } from '@angular/material/icon'
 import { StringRecordId } from 'surrealdb'
 import { UploadImageComponent } from '../../component/upload-image/upload-image.component'
+import { SnackBarService } from '../../services/snack-bar.service'
+import { injectMarkForCheck } from '../../utils/zoneless-helpers'
 
 @Component({
   selector: 'app-location-edit',
@@ -27,6 +30,7 @@ import { UploadImageComponent } from '../../component/upload-image/upload-image.
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     TranslateModule,
     RouterModule,
     UploadImageComponent,
@@ -42,11 +46,23 @@ export class LocationEditComponent implements OnInit {
   private readonly fb = inject(FormBuilder)
   private readonly locationService = inject(LocationService)
   private readonly translate = inject(TranslateService)
+  private readonly snackBarService = inject(SnackBarService)
+  private readonly markForCheck = injectMarkForCheck()
 
+  // Reactive Form
   locationForm!: FormGroup
+  
+  // Template-driven Form Felder (für einfache Bearbeitung)
+  locationName = ''
+  street = ''
+  zipCode = ''
+  city = 'Radolfzell'
+  
+  // UI-Status
   isLoading = signal(true)
   isSubmitting = signal(false)
   isEditMode = signal(false)
+  showSimpleForm = signal(false)
   locationId = signal<StringRecordId | null>(null)
   uploadedImages = signal<Media[]>([])
   errorMessage = signal<string | null>(null)
@@ -67,6 +83,12 @@ export class LocationEditComponent implements OnInit {
         longLat: [null],
       }),
     })
+    
+    // Template-driven Form Felder initialisieren
+    this.locationName = ''
+    this.street = ''
+    this.zipCode = ''
+    this.city = 'Radolfzell'
   }
 
   private async checkRouteParams(): Promise<void> {
@@ -118,6 +140,12 @@ export class LocationEditComponent implements OnInit {
           city: location.city || 'Radolfzell',
           geo_point: location.geo_point || { type: 'Point', longLat: null },
         })
+        
+        // Template-driven Form Felder befüllen
+        this.locationName = location.name
+        this.street = location.street || ''
+        this.zipCode = location.zip_code || ''
+        this.city = location.city || 'Radolfzell'
 
         // Bilder laden, falls vorhanden
         if (location.media && Array.isArray(location.media)) {
@@ -136,6 +164,11 @@ export class LocationEditComponent implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
+    // Prüfen, welches Formular verwendet wird
+    if (this.showSimpleForm()) {
+      return this.saveSimpleForm();
+    }
+    
     if (this.locationForm.invalid) {
       this.markFormGroupTouched(this.locationForm)
       return
@@ -156,9 +189,11 @@ export class LocationEditComponent implements OnInit {
       if (this.isEditMode() && this.locationId()) {
         // Ort aktualisieren
         await this.locationService.update(this.locationId()!, locationData)
+        this.snackBarService.showSuccess('Ort erfolgreich aktualisiert')
       } else {
         // Neuen Ort erstellen
         await this.locationService.postLocation(locationData)
+        this.snackBarService.showSuccess('Ort erfolgreich erstellt')
       }
 
       // Zurück zur Übersicht navigieren
@@ -166,6 +201,52 @@ export class LocationEditComponent implements OnInit {
     } catch (error) {
       console.error('Fehler beim Speichern des Ortes:', error)
       this.errorMessage.set(this.translate.instant('ADMIN.LOCATIONS.FORM.SAVE_ERROR'))
+    } finally {
+      this.isSubmitting.set(false)
+    }
+  }
+  
+  /**
+   * Speichert das einfache Formular (Template-driven)
+   */
+  async saveSimpleForm(): Promise<void> {
+    if (!this.locationName) {
+      this.snackBarService.showError('Bitte einen Namen für den Ort eingeben!')
+      return
+    }
+
+    this.isSubmitting.set(true)
+    this.errorMessage.set(null)
+
+    const location: Location = {
+      name: this.locationName,
+      street: this.street || undefined,
+      zip_code: this.zipCode || undefined,
+      city: this.city || 'Radolfzell',
+      media: this.uploadedImages(),
+    }
+
+    try {
+      console.log('Speichere Ort:', location)
+      
+      if (this.isEditMode() && this.locationId()) {
+        // Ort aktualisieren
+        await this.locationService.update(this.locationId()!, location)
+        this.snackBarService.showSuccess('Ort erfolgreich aktualisiert')
+      } else {
+        // Neuen Ort erstellen
+        await this.locationService.postLocation(location)
+        this.snackBarService.showSuccess('Ort erfolgreich erstellt')
+      }
+      
+      // Zurück zur Übersicht navigieren
+      this.router.navigate(['/admin/locations'])
+    } catch (error) {
+      console.error('Fehler beim Speichern des Ortes:', error)
+      this.snackBarService.showError(
+        `Fehler beim Speichern des Ortes: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`
+      )
+      this.markForCheck()
     } finally {
       this.isSubmitting.set(false)
     }
@@ -195,6 +276,11 @@ export class LocationEditComponent implements OnInit {
     this.uploadedImages.set(images)
   }
 
+  // UI-Steuerung
+  toggleFormType(): void {
+    this.showSimpleForm.update(value => !value)
+  }
+  
   // Navigation
   cancel(): void {
     this.router.navigate(['/admin/locations'])
