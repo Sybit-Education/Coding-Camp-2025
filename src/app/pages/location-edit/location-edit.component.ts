@@ -18,7 +18,7 @@ import { Location } from '../../models/location.interface'
 import { LocationService } from '../../services/location.service'
 import { Media } from '../../models/media.interface'
 import { MatIconModule } from '@angular/material/icon'
-import { RecordId } from 'surrealdb'
+import { StringRecordId } from 'surrealdb'
 import { UploadImageComponent } from '../../component/upload-image/upload-image.component'
 
 @Component({
@@ -47,7 +47,7 @@ export class LocationEditComponent implements OnInit {
   isLoading = signal(true)
   isSubmitting = signal(false)
   isEditMode = signal(false)
-  locationId = signal<RecordId<'location'> | null>(null)
+  locationId = signal<StringRecordId | null>(null)
   uploadedImages = signal<Media[]>([])
   errorMessage = signal<string | null>(null)
 
@@ -72,19 +72,15 @@ export class LocationEditComponent implements OnInit {
   private async checkRouteParams(): Promise<void> {
     this.isLoading.set(true);
     const id = this.route.snapshot.paramMap.get('id')
-    
+
     if (id && id !== 'create') {
       this.isEditMode.set(true)
       try {
         console.log('Lade Location mit ID:', id);
+        const locationId = new StringRecordId(id)
         // Prüfen, ob die ID bereits das Präfix "location:" enthält
-        const locationId = id.includes('location:') 
-          ? id as unknown as RecordId<'location'> 
-          : `location:${id}` as unknown as RecordId<'location'>;
-        
-        console.log('Formatierte Location ID:', locationId);
-        this.locationId.set(locationId)
-        await this.loadLocation(locationId)
+        this.locationId.set(locationId);
+        await this.loadLocation(locationId);
       } catch (error) {
         console.error('Fehler beim Laden des Ortes:', error)
         this.errorMessage.set(this.translate.instant('ADMIN.LOCATIONS.FORM.LOAD_ERROR'))
@@ -102,18 +98,18 @@ export class LocationEditComponent implements OnInit {
         geo_point: { type: 'Point', longLat: null }
       })
     }
-    
+
     this.isLoading.set(false)
   }
 
-  private async loadLocation(id: RecordId<'location'>): Promise<void> {
+  private async loadLocation(id: StringRecordId): Promise<void> {
     try {
       console.log('Rufe getLocationByID auf mit ID:', id);
       const location = await this.locationService.getLocationByID(id)
-      
+
       if (location) {
         console.log('Geladene Location:', location);
-        
+
         // Formular mit den Daten des Ortes befüllen
         this.locationForm.patchValue({
           name: location.name,
@@ -122,7 +118,7 @@ export class LocationEditComponent implements OnInit {
           city: location.city || 'Radolfzell',
           geo_point: location.geo_point || { type: 'Point', longLat: null },
         })
-        
+
         // Bilder laden, falls vorhanden
         if (location.media && Array.isArray(location.media)) {
           this.uploadedImages.set(location.media)
@@ -150,7 +146,7 @@ export class LocationEditComponent implements OnInit {
 
     try {
       const formData = this.locationForm.value
-      
+
       // Bilder hinzufügen
       const locationData: Location = {
         ...formData,
@@ -179,7 +175,7 @@ export class LocationEditComponent implements OnInit {
   private markFormGroupTouched(formGroup: FormGroup): void {
     Object.values(formGroup.controls).forEach(control => {
       control.markAsTouched()
-      
+
       if ((control as any).controls) {
         this.markFormGroupTouched(control as FormGroup)
       }
