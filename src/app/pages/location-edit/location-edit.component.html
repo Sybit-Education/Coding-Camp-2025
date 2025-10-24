@@ -8,7 +8,11 @@
       {{ 'COMMON.BACK' | translate }}
     </button>
     <h1 class="text-2xl font-bold text-gray-800">
-      {{ isEditMode() ? ('ADMIN.LOCATIONS.FORM.TITLE_EDIT' | translate) : ('ADMIN.LOCATIONS.FORM.TITLE_CREATE' | translate) }}
+      {{
+        isEditMode()
+          ? ('ADMIN.LOCATIONS.FORM.TITLE_EDIT' | translate)
+          : ('ADMIN.LOCATIONS.FORM.TITLE_CREATE' | translate)
+      }}
     </h1>
   </div>
 
@@ -32,7 +36,8 @@
           <!-- Name -->
           <div class="col-span-2">
             <label for="name" class="mb-2 block font-medium text-gray-700">
-              {{ 'ADMIN.LOCATIONS.FORM.NAME' | translate }} <span class="text-red-500">*</span>
+              {{ 'ADMIN.LOCATIONS.FORM.NAME' | translate }}
+              <span class="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -44,7 +49,10 @@
                 locationForm.get('name')?.touched
               "
             />
-            @if (locationForm.get('name')?.invalid && locationForm.get('name')?.touched) {
+            @if (
+              locationForm.get('name')?.invalid &&
+              locationForm.get('name')?.touched
+            ) {
               <p class="mt-1 text-sm text-red-500">
                 {{ 'ADMIN.LOCATIONS.FORM.NAME_REQUIRED' | translate }}
               </p>
@@ -93,26 +101,44 @@
 
         <!-- Karte für Standort -->
         <div class="mb-6">
-          <label for="map" class="mb-2 block font-medium text-gray-700">Standort auf der Karte</label>
-          <p class="mb-2 text-sm text-gray-600">Klicken Sie auf die Karte, um den Standort zu setzen.</p>
+          <label for="map" class="mb-2 block font-medium text-gray-700"
+            >Standort auf der Karte</label
+          >
+          <p class="mb-2 text-sm text-gray-600">
+            Klicken Sie auf die Karte, um den Standort zu setzen.
+          </p>
 
-          <div class="h-96 w-full rounded-lg border border-gray-300 overflow-hidden">
-            <app-map id="map" [coordinates]="coordinates()" (coordinatesChange)="updateCoordinates($event)"></app-map>
+          <div
+            class="h-96 w-full overflow-hidden rounded-lg border border-gray-300"
+          >
+            <app-map
+              id="map"
+              [coordinates]="coordinates()"
+              (coordinatesChange)="updateCoordinates($event)"
+            ></app-map>
           </div>
 
           <div class="mt-2 flex items-center text-sm text-gray-600">
             <mat-icon class="mr-1 text-gray-500">info</mat-icon>
-            <span>Koordinaten: {{ coordinates()[0].toFixed(6) }}, {{ coordinates()[1].toFixed(6) }}</span>
+            <span
+              >Koordinaten: {{ coordinates()[0].toFixed(6) }},
+              {{ coordinates()[1].toFixed(6) }}</span
+            >
           </div>
         </div>
 
         <!-- Bilder -->
         <div class="mb-6">
-          <label for="images" class="mb-2 block font-medium text-gray-700">{{ 'ADMIN.LOCATIONS.FORM.IMAGES' | translate }}</label>
+          <label for="images" class="mb-2 block font-medium text-gray-700">{{
+            'ADMIN.LOCATIONS.FORM.IMAGES' | translate
+          }}</label>
 
           <!-- Vorhandene Bilder anzeigen -->
           @if (uploadedImages().length) {
-            <div id="images" class="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            <div
+              id="images"
+              class="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+            >
               @for (image of uploadedImages(); track $index) {
                 <div class="relative">
                   <img
@@ -133,7 +159,9 @@
           }
 
           <!-- Bild-Upload-Komponente -->
-          <app-upload-image (imagesUploaded)="onImagesUploaded($event)"></app-upload-image>
+          <app-upload-image
+            (imagesUploaded)="onImagesUploaded($event)"
+          ></app-upload-image>
         </div>
 
         <!-- Buttons -->
@@ -152,7 +180,9 @@
               class="rounded-lg bg-blue-600 px-6 py-2 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:opacity-50"
             >
               @if (isSubmitting()) {
-                <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+                <span
+                  class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+                ></span>
                 <span class="ml-2">Speichern...</span>
               } @else {
                 {{ 'COMMON.SAVE' | translate }}

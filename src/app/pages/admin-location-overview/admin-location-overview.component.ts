@@ -144,13 +144,21 @@ export class AdminLocationOverviewComponent implements OnInit {
 
   // Get the first image URL from a location
   getFirstImageUrl(location: Location): string | null {
-    if (location.media && Array.isArray(location.media) && location.media.length > 0) {
-      const firstMedia = location.media[0];
-      if (typeof firstMedia === 'object' && firstMedia && 'file' in firstMedia) {
-        return firstMedia.file as string;
+    if (
+      location.media &&
+      Array.isArray(location.media) &&
+      location.media.length > 0
+    ) {
+      const firstMedia = location.media[0]
+      if (
+        typeof firstMedia === 'object' &&
+        firstMedia &&
+        'file' in firstMedia
+      ) {
+        return firstMedia.file as string
       }
     }
-    return null;
+    return null
   }
 
   // Navigate to edit location page

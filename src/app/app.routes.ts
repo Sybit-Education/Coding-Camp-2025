@@ -78,7 +78,7 @@ export const routes: Routes = [
     path: 'admin/location/create',
     loadComponent: () =>
       import('./pages/location-edit/location-edit.component').then(
-        (m) => m.LocationEditComponent
+        (m) => m.LocationEditComponent,
       ),
     canActivate: [LoginService],
     title: 'Ort erstellen',
@@ -87,7 +87,7 @@ export const routes: Routes = [
     path: 'admin/location/:id',
     loadComponent: () =>
       import('./pages/location-edit/location-edit.component').then(
-        (m) => m.LocationEditComponent
+        (m) => m.LocationEditComponent,
       ),
     canActivate: [LoginService],
     title: 'Ort bearbeiten',

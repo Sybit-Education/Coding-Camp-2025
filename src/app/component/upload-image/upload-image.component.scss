@@ -6,7 +6,7 @@
   transition: all 0.3s ease;
   background-color: #f9fafb;
   cursor: pointer;
-  
+
   &.dragging {
     border-color: #3b82f6;
     background-color: rgba(59, 130, 246, 0.05);
@@ -41,7 +41,7 @@
   cursor: pointer;
   font-weight: 500;
   transition: background-color 0.2s;
-  
+
   &:hover {
     background-color: #2563eb;
   }

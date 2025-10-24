@@ -49,7 +49,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       import('leaflet')
         .then((Lmod) => {
           // Lmod.default falls CommonJS, sonst Lmod
-          this.L = (Lmod as unknown as { default?: typeof import('leaflet') }).default ?? Lmod
+          this.L =
+            (Lmod as unknown as { default?: typeof import('leaflet') })
+              .default ?? Lmod
           this.leafletLoaded = true
           requestAnimationFrame(() => {
             if (this.addLocation) {
@@ -115,19 +117,19 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
       // Klick-Event hinzufügen
       this.map.on('click', (e) => {
-        const { lat, lng } = e.latlng;
-        const newCoords: [number, number] = [lng, lat]; // Leaflet gibt [lat, lng] zurück, wir brauchen [lng, lat]
+        const { lat, lng } = e.latlng
+        const newCoords: [number, number] = [lng, lat] // Leaflet gibt [lat, lng] zurück, wir brauchen [lng, lat]
 
         // Marker aktualisieren
         if (this.marker && this.map) {
-          this.marker.setLatLng([lat, lng]);
+          this.marker.setLatLng([lat, lng])
         }
 
         // Koordinaten zurück an die Parent-Komponente senden
         this.ngZone.run(() => {
-          this.coordinatesChange.emit(newCoords);
-        });
-      });
+          this.coordinatesChange.emit(newCoords)
+        })
+      })
     } catch (error) {
       console.error('Fehler bei der Initialisierung der Karte (Show):', error)
     }
@@ -191,7 +193,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
           // Wenn der Marker per Drag verschoben wird, emitte die neuen Koordinaten
           this.marker.on('dragend', (ev: unknown) => {
-            const pos = (ev as { target: { getLatLng(): { lat: number; lng: number } } }).target.getLatLng()
+            const pos = (
+              ev as { target: { getLatLng(): { lat: number; lng: number } } }
+            ).target.getLatLng()
             // Angular informieren (Event + Change Detection falls nötig)
             this.ngZone.run(() => {
               this.locationSelected.emit([pos.lng, pos.lat])

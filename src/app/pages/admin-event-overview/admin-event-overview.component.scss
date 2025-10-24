@@ -18,11 +18,15 @@
   @apply text-blue-600;
 }
 
-.tailwind-table .datatable-header-cell.sortable.sort-active.sort-asc .datatable-header-cell-wrapper:after {
+.tailwind-table
+  .datatable-header-cell.sortable.sort-active.sort-asc
+  .datatable-header-cell-wrapper:after {
   content: '↑';
 }
 
-.tailwind-table .datatable-header-cell.sortable.sort-active.sort-desc .datatable-header-cell-wrapper:after {
+.tailwind-table
+  .datatable-header-cell.sortable.sort-active.sort-desc
+  .datatable-header-cell-wrapper:after {
   content: '↓';
 }
 

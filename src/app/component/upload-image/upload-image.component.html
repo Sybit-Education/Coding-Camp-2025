@@ -1,4 +1,4 @@
-<div 
+<div
   class="upload-container"
   [class.dragging]="isDragging"
   (dragover)="onDragOver($event)"
@@ -11,13 +11,13 @@
     <p class="or-text">- oder -</p>
     <label class="file-select-button">
       <span>Datei auswählen</span>
-      <input 
-        type="file" 
-        accept="image/*" 
-        multiple 
-        (change)="onFileSelected($event)" 
+      <input
+        type="file"
+        accept="image/*"
+        multiple
+        (change)="onFileSelected($event)"
         class="hidden-input"
-      >
+      />
     </label>
   </div>
 </div>
