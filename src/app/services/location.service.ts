@@ -55,7 +55,7 @@ export class LocationService {
    * @param location Die aktualisierten Daten
    * @returns Promise mit der aktualisierten Location
    */
-  async update(id: RecordId<'location'>, location: Partial<Location>): Promise<Location> {
+  async update(id: RecordId<'location'> | StringRecordId, location: Partial<Location>): Promise<Location> {
     try {
       // Stelle sicher, dass alle erforderlichen Felder vorhanden sind
       const updatedLocation = { name: '', ...location } as Location;
@@ -71,7 +71,7 @@ export class LocationService {
    * @param id Die ID der zu löschenden Location
    * @returns Promise, der anzeigt, ob das Löschen erfolgreich war
    */
-  async delete(id: RecordId<'location'>): Promise<boolean> {
+  async delete(id: RecordId<'location'> | StringRecordId): Promise<boolean> {
     try {
       await this.surrealdb.deleteRow(id)
       return true
