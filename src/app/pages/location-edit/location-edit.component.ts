@@ -60,7 +60,7 @@ export class LocationEditComponent implements OnInit {
   errorMessage = signal<string | null>(null)
 
   // Karten-Koordinaten
-  coordinates = signal<[number, number]>([47.7331, 9.1732]) // Default: Radolfzell
+  coordinates = signal<[number, number]>([9.1732, 47.7331]) // Default: Radolfzell
 
   ngOnInit(): void {
     this.initForm()
@@ -132,7 +132,7 @@ export class LocationEditComponent implements OnInit {
 
         // Geo-Koordinaten setzen, falls vorhanden
         if (location.geo_point && location.geo_point.coordinates) {
-          this.coordinates.set([location.geo_point.coordinates[1], location.geo_point.coordinates[0]] as [number, number]);
+          this.coordinates.set(location.geo_point.coordinates as [number, number]);
         }
 
         // Bilder laden, falls vorhanden
@@ -164,7 +164,7 @@ export class LocationEditComponent implements OnInit {
       const formData = this.locationForm.value
 
       // Aktuelle Koordinaten in das Formular übernehmen
-      formData.geo_point = new GeometryPoint([ this.coordinates()[1],  this.coordinates()[0] ]);
+      formData.geo_point = new GeometryPoint(this.coordinates());
 
       // Bilder hinzufügen
       const locationData: Location = {
