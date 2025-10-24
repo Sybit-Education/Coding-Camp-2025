@@ -81,20 +81,22 @@ export class LocationEditComponent implements OnInit {
   }
 
   private async checkRouteParams(): Promise<void> {
-    this.isLoading.set(true);
+    this.isLoading.set(true)
     const id = this.route.snapshot.paramMap.get('id')
 
     if (id && id !== 'create') {
       this.isEditMode.set(true)
       try {
-        console.log('Lade Location mit ID:', id);
+        console.log('Lade Location mit ID:', id)
         const locationId = new StringRecordId(id)
         // Prüfen, ob die ID bereits das Präfix "location:" enthält
-        this.locationId.set(locationId);
-        await this.loadLocation(locationId);
+        this.locationId.set(locationId)
+        await this.loadLocation(locationId)
       } catch (error) {
         console.error('Fehler beim Laden des Ortes:', error)
-        this.errorMessage.set(this.translate.instant('ADMIN.LOCATIONS.FORM.LOAD_ERROR'))
+        this.errorMessage.set(
+          this.translate.instant('ADMIN.LOCATIONS.FORM.LOAD_ERROR'),
+        )
       }
     } else {
       // Im Erstellungsmodus leeres Formular initialisieren
@@ -106,7 +108,7 @@ export class LocationEditComponent implements OnInit {
         street: '',
         zip_code: '',
         city: 'Radolfzell',
-        geo_point: { type: 'Point', longLat: null }
+        geo_point: { type: 'Point', longLat: null },
       })
     }
 
@@ -115,11 +117,11 @@ export class LocationEditComponent implements OnInit {
 
   private async loadLocation(id: StringRecordId): Promise<void> {
     try {
-      console.log('Rufe getLocationByID auf mit ID:', id);
+      console.log('Rufe getLocationByID auf mit ID:', id)
       const location = await this.locationService.getLocationByID(id)
 
       if (location) {
-        console.log('Geladene Location:', location);
+        console.log('Geladene Location:', location)
 
         // Formular mit den Daten des Ortes befüllen
         this.locationForm.patchValue({
@@ -132,7 +134,9 @@ export class LocationEditComponent implements OnInit {
 
         // Geo-Koordinaten setzen, falls vorhanden
         if (location.geo_point && location.geo_point.coordinates) {
-          this.coordinates.set(location.geo_point.coordinates as [number, number]);
+          this.coordinates.set(
+            location.geo_point.coordinates as [number, number],
+          )
         }
 
         // Bilder laden, falls vorhanden
@@ -142,8 +146,10 @@ export class LocationEditComponent implements OnInit {
           this.uploadedImages.set([])
         }
       } else {
-        console.error('Location nicht gefunden oder undefiniert');
-        this.errorMessage.set(this.translate.instant('ADMIN.LOCATIONS.FORM.LOAD_ERROR'))
+        console.error('Location nicht gefunden oder undefiniert')
+        this.errorMessage.set(
+          this.translate.instant('ADMIN.LOCATIONS.FORM.LOAD_ERROR'),
+        )
       }
     } catch (error) {
       console.error('Fehler beim Laden des Ortes:', error)
@@ -164,7 +170,7 @@ export class LocationEditComponent implements OnInit {
       const formData = this.locationForm.value
 
       // Aktuelle Koordinaten in das Formular übernehmen
-      formData.geo_point = new GeometryPoint(this.coordinates());
+      formData.geo_point = new GeometryPoint(this.coordinates())
 
       // Bilder hinzufügen
       const locationData: Location = {
@@ -186,7 +192,9 @@ export class LocationEditComponent implements OnInit {
       this.router.navigate(['/admin/locations'])
     } catch (error) {
       console.error('Fehler beim Speichern des Ortes:', error)
-      this.errorMessage.set(this.translate.instant('ADMIN.LOCATIONS.FORM.SAVE_ERROR'))
+      this.errorMessage.set(
+        this.translate.instant('ADMIN.LOCATIONS.FORM.SAVE_ERROR'),
+      )
     } finally {
       this.isSubmitting.set(false)
     }
@@ -194,7 +202,7 @@ export class LocationEditComponent implements OnInit {
 
   // Hilfsfunktion, um alle Formularfelder als berührt zu markieren
   private markFormGroupTouched(formGroup: FormGroup): void {
-    Object.values(formGroup.controls).forEach(control => {
+    Object.values(formGroup.controls).forEach((control) => {
       control.markAsTouched()
 
       if ((control as { controls: Record<string, unknown> }).controls) {
@@ -218,8 +226,8 @@ export class LocationEditComponent implements OnInit {
 
   // Karten-Funktionen
   updateCoordinates(newCoordinates: [number, number]): void {
-    this.coordinates.set(newCoordinates);
-    console.log('Neue Koordinaten gesetzt:', newCoordinates);
+    this.coordinates.set(newCoordinates)
+    console.log('Neue Koordinaten gesetzt:', newCoordinates)
   }
 
   // Navigation
@@ -230,13 +238,17 @@ export class LocationEditComponent implements OnInit {
   async deleteLocation(): Promise<void> {
     if (!this.isEditMode() || !this.locationId()) return
 
-    if (confirm(this.translate.instant('ADMIN.LOCATIONS.FORM.DELETE_CONFIRM'))) {
+    if (
+      confirm(this.translate.instant('ADMIN.LOCATIONS.FORM.DELETE_CONFIRM'))
+    ) {
       try {
         await this.locationService.delete(this.locationId()!)
         this.router.navigate(['/admin/locations'])
       } catch (error) {
         console.error('Fehler beim Löschen des Ortes:', error)
-        this.errorMessage.set(this.translate.instant('ADMIN.LOCATIONS.FORM.DELETE_ERROR'))
+        this.errorMessage.set(
+          this.translate.instant('ADMIN.LOCATIONS.FORM.DELETE_ERROR'),
+        )
       }
     }
   }
