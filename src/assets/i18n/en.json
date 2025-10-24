@@ -204,28 +204,6 @@
       "DELETE": "Delete",
       "SEARCH": "Search ...",
       "CREATE_NEW": "Create new ..."
-    },
-    "LOCATIONS": {
-      "TITLE": "Manage Locations",
-      "CREATE_NEW": "New Location",
-      "SEARCH": "Search locations...",
-      "NO_LOCATIONS": "No locations found",
-      "EDIT": "Edit",
-      "DELETE": "Delete",
-      "FORM": {
-        "TITLE_CREATE": "Create New Location",
-        "TITLE_EDIT": "Edit Location",
-        "NAME": "Name",
-        "STREET": "Street",
-        "ZIP": "ZIP Code",
-        "CITY": "City",
-        "IMAGES": "Images",
-        "NAME_REQUIRED": "Please enter a name.",
-        "SAVE_ERROR": "The location could not be saved.",
-        "LOAD_ERROR": "The location could not be loaded.",
-        "DELETE_ERROR": "The location could not be deleted.",
-        "DELETE_CONFIRM": "Do you really want to delete this location?"
-      }
     }
   }
 }

@@ -48,6 +48,25 @@
   @apply p-4 text-gray-700;
 }
 
+/* Thumbnail styles */
+.event-thumbnail {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.event-thumbnail-placeholder {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f4f6;
+  border-radius: 4px;
+}
+
 .tailwind-table .datatable-footer {
   display: none;
 }

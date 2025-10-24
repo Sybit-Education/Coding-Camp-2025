@@ -76,6 +76,11 @@
         />
       </div>
     </div>
+    <app-map
+      [addLocation]="true"
+      (locationSelected)="onLocationSelected($event)"
+      class="w-full"
+    ></app-map>
     <div class="mt-4 flex justify-end space-x-2">
       <button
         type="button"

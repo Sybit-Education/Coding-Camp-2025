@@ -16,9 +16,9 @@ export class MediaService {
     return result[0]
   }
 
-  async getMediaUrl(
+  getMediaUrl(
     mediaRecordId: RecordId<'media'> | undefined,
-  ): Promise<string | null> {
+  ): string | null {
     if (!mediaRecordId) return null
 
     try {
