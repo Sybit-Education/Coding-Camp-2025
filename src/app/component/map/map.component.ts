@@ -49,7 +49,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       import('leaflet')
         .then((Lmod) => {
           // Lmod.default falls CommonJS, sonst Lmod
-          this.L = (Lmod as any).default ?? Lmod
+          this.L = (Lmod as unknown as { default?: typeof import('leaflet') }).default ?? Lmod
           this.leafletLoaded = true
           requestAnimationFrame(() => {
             if (this.addLocation) {
@@ -179,9 +179,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       })
 
       // Klick-Handler: erstelle Marker beim ersten Klick, setze / verschiebe ihn danach
-      this.clickHandler = (e: any) => {
+      this.clickHandler = (e: unknown) => {
         // e.latlng ist das Ergebnis von Leaflet -> benutze es direkt
-        const latlng = e.latlng as { lat: number; lng: number }
+        const latlng = (e as { latlng: { lat: number; lng: number } }).latlng
         console.log(latlng)
         if (!this.marker) {
           this.marker = this.L!.marker([latlng.lat, latlng.lng], {
@@ -190,8 +190,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
           }).addTo(this.map!)
 
           // Wenn der Marker per Drag verschoben wird, emitte die neuen Koordinaten
-          this.marker.on('dragend', (ev: any) => {
-            const pos = ev.target.getLatLng()
+          this.marker.on('dragend', (ev: unknown) => {
+            const pos = (ev as { target: { getLatLng(): { lat: number; lng: number } } }).target.getLatLng()
             // Angular informieren (Event + Change Detection falls nötig)
             this.ngZone.run(() => {
               this.locationSelected.emit([pos.lng, pos.lat])

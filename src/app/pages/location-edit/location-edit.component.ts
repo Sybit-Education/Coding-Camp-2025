@@ -197,7 +197,7 @@ export class LocationEditComponent implements OnInit {
     Object.values(formGroup.controls).forEach(control => {
       control.markAsTouched()
 
-      if ((control as any).controls) {
+      if ((control as { controls: Record<string, unknown> }).controls) {
         this.markFormGroupTouched(control as FormGroup)
       }
     })
