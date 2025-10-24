@@ -139,35 +139,14 @@
             'ADMIN.LOCATIONS.FORM.IMAGES' | translate
           }}</label>
 
-          <!-- Vorhandene Bilder anzeigen -->
-          @if (uploadedImages().length) {
-            <div
-              id="images"
-              class="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
-            >
-              @for (image of uploadedImages(); track $index) {
-                <div class="relative">
-                  <img
-                    [src]="image.file"
-                    alt="Bild des Ortes"
-                    class="h-32 w-full rounded-lg object-cover"
-                  />
-                  <button
-                    type="button"
-                    (click)="removeImage($index)"
-                    class="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white hover:bg-red-600 focus:outline-none"
-                  >
-                    <mat-icon>close</mat-icon>
-                  </button>
-                </div>
-              }
-            </div>
-          }
-
           <!-- Bild-Upload-Komponente -->
-          <app-upload-image
-            (imagesUploaded)="onImagesUploaded($event)"
-          ></app-upload-image>
+          <app-image-upload
+            [previews]="previews()"
+            [existingImages]="mediaIds()"
+            [eventName]="locationForm.get('name')?.value || 'location'"
+            (previewsChange)="onPreviewsChange($event)"
+            (mediaIdsChange)="onMediaIdsChange($event)"
+          ></app-image-upload>
         </div>
 
         <!-- Buttons -->

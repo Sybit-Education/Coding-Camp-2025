@@ -19,7 +19,7 @@ import { LocationService } from '../../services/location.service'
 import { Media } from '../../models/media.interface'
 import { MatIconModule } from '@angular/material/icon'
 import { GeometryPoint, StringRecordId } from 'surrealdb'
-import { UploadImageComponent } from '../../component/upload-image/upload-image.component'
+import { ImageUploadComponent } from '../../component/image-upload/image-upload.component'
 import { SnackBarService } from '../../services/snack-bar.service'
 import { injectMarkForCheck } from '../../utils/zoneless-helpers'
 import { MapComponent } from '../../component/map/map.component'
@@ -31,7 +31,7 @@ import { MapComponent } from '../../component/map/map.component'
     ReactiveFormsModule,
     TranslateModule,
     RouterModule,
-    UploadImageComponent,
+    ImageUploadComponent,
     MatIconModule,
     MapComponent,
   ],
@@ -56,7 +56,8 @@ export class LocationEditComponent implements OnInit {
   isSubmitting = signal(false)
   isEditMode = signal(false)
   locationId = signal<StringRecordId | null>(null)
-  uploadedImages = signal<Media[]>([])
+  mediaIds = signal<RecordId<'media'>[]>([])
+  previews = signal<string[]>([])
   errorMessage = signal<string | null>(null)
 
   // Karten-Koordinaten
@@ -141,9 +142,9 @@ export class LocationEditComponent implements OnInit {
 
         // Bilder laden, falls vorhanden
         if (location.media && Array.isArray(location.media)) {
-          this.uploadedImages.set(location.media)
+          this.mediaIds.set(location.media.map(media => media.id as RecordId<'media'>))
         } else {
-          this.uploadedImages.set([])
+          this.mediaIds.set([])
         }
       } else {
         console.error('Location nicht gefunden oder undefiniert')
@@ -175,7 +176,7 @@ export class LocationEditComponent implements OnInit {
       // Bilder hinzufügen
       const locationData: Location = {
         ...formData,
-        media: this.uploadedImages(),
+        media: this.mediaIds().map(id => ({ id })),
       }
 
       if (this.isEditMode() && this.locationId()) {
@@ -212,16 +213,12 @@ export class LocationEditComponent implements OnInit {
   }
 
   // Bilder-Handling
-  onImagesUploaded(images: Media[]): void {
-    // Neue Bilder zu vorhandenen hinzufügen
-    const currentImages = this.uploadedImages()
-    this.uploadedImages.set([...currentImages, ...images])
+  onMediaIdsChange(mediaIds: RecordId<'media'>[]): void {
+    this.mediaIds.set(mediaIds);
   }
 
-  removeImage(index: number): void {
-    const images = [...this.uploadedImages()]
-    images.splice(index, 1)
-    this.uploadedImages.set(images)
+  onPreviewsChange(previews: string[]): void {
+    this.previews.set(previews);
   }
 
   // Karten-Funktionen
