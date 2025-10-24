@@ -93,11 +93,11 @@
 
         <!-- Karte für Standort -->
         <div class="mb-6">
-          <label class="mb-2 block font-medium text-gray-700">Standort auf der Karte</label>
+          <label for="map" class="mb-2 block font-medium text-gray-700">Standort auf der Karte</label>
           <p class="mb-2 text-sm text-gray-600">Klicken Sie auf die Karte, um den Standort zu setzen.</p>
 
           <div class="h-96 w-full rounded-lg border border-gray-300 overflow-hidden">
-            <app-map [coordinates]="coordinates()" (coordinatesChange)="updateCoordinates($event)"></app-map>
+            <app-map id="map" [coordinates]="coordinates()" (coordinatesChange)="updateCoordinates($event)"></app-map>
           </div>
 
           <div class="mt-2 flex items-center text-sm text-gray-600">
@@ -108,11 +108,11 @@
 
         <!-- Bilder -->
         <div class="mb-6">
-          <label class="mb-2 block font-medium text-gray-700">{{ 'ADMIN.LOCATIONS.FORM.IMAGES' | translate }}</label>
+          <label for="images" class="mb-2 block font-medium text-gray-700">{{ 'ADMIN.LOCATIONS.FORM.IMAGES' | translate }}</label>
 
           <!-- Vorhandene Bilder anzeigen -->
           @if (uploadedImages().length) {
-            <div class="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            <div id="images" class="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
               @for (image of uploadedImages(); track $index) {
                 <div class="relative">
                   <img

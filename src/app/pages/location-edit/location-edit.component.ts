@@ -23,9 +23,6 @@ import { UploadImageComponent } from '../../component/upload-image/upload-image.
 import { SnackBarService } from '../../services/snack-bar.service'
 import { injectMarkForCheck } from '../../utils/zoneless-helpers'
 import { MapComponent } from '../../component/map/map.component'
-import { GeoPoint } from '@app/models/event.interface'
-import { point } from 'leaflet'
-
 @Component({
   selector: 'app-location-edit',
   standalone: true,
@@ -200,7 +197,7 @@ export class LocationEditComponent implements OnInit {
     Object.values(formGroup.controls).forEach(control => {
       control.markAsTouched()
 
-      if ((control as any).controls) {
+      if ((control as unknown).controls) {
         this.markFormGroupTouched(control as FormGroup)
       }
     })
