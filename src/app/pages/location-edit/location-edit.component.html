@@ -100,7 +100,7 @@
             <label class="mb-2 block font-medium text-gray-700">{{ 'ADMIN.LOCATIONS.FORM.IMAGES' | translate }}</label>
             
             <!-- Vorhandene Bilder anzeigen -->
-            @if (uploadedImages()?.length) {
+            @if (uploadedImages().length) {
               <div class="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                 @for (image of uploadedImages(); track $index) {
                   <div class="relative">
@@ -233,7 +233,7 @@
             <label class="mb-2 block font-medium text-gray-700">{{ 'ADMIN.LOCATIONS.FORM.IMAGES' | translate }}</label>
             
             <!-- Vorhandene Bilder anzeigen -->
-            @if (uploadedImages()?.length) {
+            @if (uploadedImages().length) {
               <div class="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                 @for (image of uploadedImages(); track $index) {
                   <div class="relative">
