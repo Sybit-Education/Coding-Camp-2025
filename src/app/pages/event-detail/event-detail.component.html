@@ -188,8 +188,8 @@
           <div class="map">
             <app-map
               [coordinates]="[
-                location!.geo_point!.point[1],
-                location!.geo_point!.point[0],
+                location!.geo_point!.coordinates[1],
+                location!.geo_point!.coordinates[0],
               ]"
             ></app-map>
             <div class="sr-only">
