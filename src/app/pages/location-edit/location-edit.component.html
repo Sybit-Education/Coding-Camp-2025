@@ -110,12 +110,14 @@
 
           <div
             class="h-96 w-full overflow-hidden rounded-lg border border-gray-300"
+            style="position: relative;"
           >
             <app-map
               id="map"
               [coordinates]="coordinates()"
               [addLocation]="true"
               (coordinatesChange)="updateCoordinates($event)"
+              style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
             ></app-map>
           </div>
 

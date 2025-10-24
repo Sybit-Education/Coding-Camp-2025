@@ -59,6 +59,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
             } else {
               this.initializeMapForShowLocation()
             }
+            // Karte neu zeichnen, um sicherzustellen, dass sie die richtige Größe hat
+            this.invalidateSize();
           })
         })
         .catch((err) => console.error('Fehler beim Laden von Leaflet:', err))
@@ -83,7 +85,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     try {
       this.map = this.L.map('map', {
         ...this.getCommonMapOptions(),
-        center: (this.coordinates ?? [51, 9]).slice() as [number, number],
+        center: [
+          (this.coordinates ? this.coordinates[1] : 47.75),
+          (this.coordinates ? this.coordinates[0] : 8.97)
+        ],
         zoom: 18,
       })
 
@@ -99,7 +104,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       })
 
       if (this.coordinates) {
-        this.marker = this.L.marker(this.coordinates as [number, number], {
+        // Leaflet erwartet [lat, lng], wir haben [lng, lat]
+        this.marker = this.L.marker([this.coordinates[1], this.coordinates[0]], {
           icon: greenIcon,
           draggable: true, // Marker ist verschiebbar
         }).addTo(this.map)
@@ -181,14 +187,13 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     if (!this.L || !this.leafletLoaded) return
     try {
       // Center falls keine Koordinaten übergeben wurden
-      const center = (this.coordinates ?? [47.75, 8.97]).slice() as [
-        number,
-        number,
-      ]
+      // Leaflet erwartet [lat, lng], wir haben [lng, lat]
+      const lat = this.coordinates ? this.coordinates[1] : 47.75;
+      const lng = this.coordinates ? this.coordinates[0] : 8.97;
 
       this.map = this.L.map('map', {
         ...this.getCommonMapOptions(),
-        center,
+        center: [lat, lng],
         zoom: 12,
         maxBounds: this.L.latLngBounds(
           this.L.latLng(47.713, 8.868),
@@ -219,6 +224,26 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         shadowSize: [41, 41],
       })
 
+      // Wenn wir bereits Koordinaten haben, setze den Marker sofort
+      if (this.coordinates) {
+        this.marker = this.L.marker([lat, lng], {
+          icon,
+          draggable: true,
+        }).addTo(this.map);
+
+        // Wenn der Marker per Drag verschoben wird, emitte die neuen Koordinaten
+        this.marker.on('dragend', (ev: unknown) => {
+          const pos = (
+            ev as { target: { getLatLng(): { lat: number; lng: number } } }
+          ).target.getLatLng();
+          // Angular informieren (Event + Change Detection falls nötig)
+          this.ngZone.run(() => {
+            this.coordinatesChange.emit([pos.lng, pos.lat]);
+            this.locationSelected.emit([pos.lng, pos.lat]);
+          });
+        });
+      }
+
       // Klick-Handler: erstelle Marker beim ersten Klick, setze / verschiebe ihn danach
       this.clickHandler = (e: unknown) => {
         // e.latlng ist das Ergebnis von Leaflet -> benutze es direkt
@@ -237,6 +262,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
             ).target.getLatLng()
             // Angular informieren (Event + Change Detection falls nötig)
             this.ngZone.run(() => {
+              this.coordinatesChange.emit([pos.lng, pos.lat])
               this.locationSelected.emit([pos.lng, pos.lat])
             })
           })
@@ -247,6 +273,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
         // Emit initial/aktuellen Wert an die App (innerhalb der Angular zone)
         this.ngZone.run(() => {
+          this.coordinatesChange.emit([latlng.lng, latlng.lat])
           this.locationSelected.emit([latlng.lng, latlng.lat])
         })
       }
@@ -267,9 +294,18 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       fadeAnimation: false,
       markerZoomAnimation: false,
       zoomAnimation: false,
-      trackResize: false,
+      trackResize: true, // Auf true setzen, damit die Karte auf Größenänderungen reagiert
       renderer: new this.L!.Canvas(),
       attributionControl: false,
+    }
+  }
+
+  // Hilfsmethode, um die Karte neu zu zeichnen, wenn der Container seine Größe ändert
+  private invalidateSize(): void {
+    if (this.map) {
+      setTimeout(() => {
+        this.map?.invalidateSize();
+      }, 100);
     }
   }
 }
