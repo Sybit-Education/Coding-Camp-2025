@@ -16,9 +16,7 @@ export class MediaService {
     return result[0]
   }
 
-  getMediaUrl(
-    mediaRecordId: RecordId<'media'> | undefined,
-  ): string | null {
+  getMediaUrl(mediaRecordId: RecordId<'media'> | undefined): string | null {
     if (!mediaRecordId) return null
 
     try {

@@ -14,7 +14,13 @@ export class LocationService {
   async getLocationByID(
     id: RecordId<'location'> | StringRecordId,
   ): Promise<Location> {
-    return await this.surrealdb.getByRecordId<Location>(id)
+    try {
+      const result = await this.surrealdb.getByRecordId<Location>(id)
+      return result
+    } catch (error) {
+      console.error('Fehler in LocationService.getLocationByID:', error)
+      throw error
+    }
   }
 
   async getAllLocations(): Promise<Location[]> {
@@ -39,5 +45,43 @@ export class LocationService {
       location,
     )
     return result[0]
+  }
+
+  /**
+   * Aktualisiert eine bestehende Location
+   * @param id Die ID der zu aktualisierenden Location
+   * @param location Die aktualisierten Daten
+   * @returns Promise mit der aktualisierten Location
+   */
+  async update(
+    id: RecordId<'location'> | StringRecordId,
+    location: Partial<Location>,
+  ): Promise<Location> {
+    try {
+      // Stelle sicher, dass alle erforderlichen Felder vorhanden sind
+      const updatedLocation = { name: '', ...location } as Location
+      return await this.surrealdb.postUpdate<Location>(id, updatedLocation)
+    } catch (error) {
+      console.error(
+        `Fehler beim Aktualisieren der Location mit ID ${id}:`,
+        error,
+      )
+      throw error
+    }
+  }
+
+  /**
+   * Löscht eine Location
+   * @param id Die ID der zu löschenden Location
+   * @returns Promise, der anzeigt, ob das Löschen erfolgreich war
+   */
+  async delete(id: RecordId<'location'> | StringRecordId): Promise<boolean> {
+    try {
+      await this.surrealdb.deleteRow(id)
+      return true
+    } catch (error) {
+      console.error(`Fehler beim Löschen der Location mit ID ${id}:`, error)
+      throw error
+    }
   }
 }
