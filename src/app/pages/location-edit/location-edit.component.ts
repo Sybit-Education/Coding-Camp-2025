@@ -18,7 +18,7 @@ import { Location } from '../../models/location.interface'
 import { LocationService } from '../../services/location.service'
 import { Media } from '../../models/media.interface'
 import { MatIconModule } from '@angular/material/icon'
-import { GeometryPoint, StringRecordId } from 'surrealdb'
+import { GeometryPoint, StringRecordId, RecordId } from 'surrealdb'
 import { ImageUploadComponent } from '../../component/image-upload/image-upload.component'
 import { SnackBarService } from '../../services/snack-bar.service'
 import { injectMarkForCheck } from '../../utils/zoneless-helpers'
@@ -103,7 +103,7 @@ export class LocationEditComponent implements OnInit {
       // Im Erstellungsmodus leeres Formular initialisieren
       this.isEditMode.set(false)
       this.locationId.set(null)
-      this.uploadedImages.set([])
+      this.mediaIds.set([])
       this.locationForm.reset({
         name: '',
         street: '',
