@@ -204,6 +204,9 @@
       "DELETE": "Delete",
       "SEARCH": "Search ...",
       "CREATE_NEW": "Create new ..."
+    },
+    "LOCATIONS": {
+      "DELETE": "Delete"
     }
   }
 }
