@@ -4,6 +4,7 @@ import {
   inject,
   OnDestroy,
   OnInit,
+  PLATFORM_ID,
 } from '@angular/core'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { Subscription } from 'rxjs'
@@ -26,6 +27,7 @@ import { ShareComponent } from '../../component/share/share.component'
 import { MediaService } from '@app/services/media.service'
 import { ImageCarouselComponent } from '@app/component/image-carousel/image-carousel.component'
 import { CalendarExportComponent } from "@app/component/calendar-export/calendar-export.component";
+import { isPlatformBrowser } from '@angular/common'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -66,6 +68,8 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   private readonly loginservice = inject(LoginService)
   private readonly mediaService = inject(MediaService)
   private readonly markForCheck = injectMarkForCheck()
+  private readonly platformId = inject(PLATFORM_ID)
+  private readonly isBrowser = isPlatformBrowser(this.platformId)
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params) => {
@@ -212,8 +216,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       // Warte auf alle Promises
       await Promise.all(promises)
 
-      // Batch-Update für weniger Change Detection Zyklen
-      requestAnimationFrame(() => {
+      const applyUpdates = () => {
         if (foundEvent.media?.length > 0) {
           mediaUrlPromise.then((url) => {
             this.mediaUrl = url
@@ -224,9 +227,17 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
         organizerPromise.then((organizer) => (this.organizer = organizer))
         typePromise.then((type) => (this.type = type))
 
-        document.title = `${this.event!.name} - 1200 Jahre Radolfzell`
+        if (this.isBrowser) {
+          document.title = `${this.event!.name} - 1200 Jahre Radolfzell`
+        }
         this.markForCheck()
-      })
+      }
+
+      if (this.isBrowser && typeof requestAnimationFrame !== 'undefined') {
+        requestAnimationFrame(applyUpdates)
+      } else {
+        applyUpdates()
+      }
     } catch (err) {
       this.error = `Fehler beim Laden: ${err}`
       this.announceError(`Fehler beim Laden: ${err}`)
@@ -253,6 +264,10 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   }
 
   startRoute() {
+    if (!this.isBrowser) {
+      return
+    }
+
     const lat = this.location!.geo_point!.coordinates[1]
     const lng = this.location!.geo_point!.coordinates[0]
 
@@ -266,9 +281,16 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
    * Wird für die Meta-Tags verwendet
    */
   getEventUrl(): string {
-    if (!this.event || !this.event.id) return window.location.href
+    if (!this.event || !this.event.id) {
+      return this.isBrowser ? window.location.href : ''
+    }
 
     const id = this.event.id.id || ''
+
+    if (!this.isBrowser) {
+      return `/event/${id}`
+    }
+
     const baseUrl = window.location.origin
     return `${baseUrl}/event/${id}`
   }

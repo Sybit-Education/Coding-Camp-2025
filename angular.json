@@ -74,12 +74,12 @@
             },
             "production-de": {
               "extends": "production",
-              "i18nFile": "src/app/locale/de.json",
+              "i18nFile": "src/assets/i18n/de.json",
               "i18nLocale": "de"
             },
             "production-en": {
               "extends": "production",
-              "i18nFile": "src/app/locale/en.json",
+              "i18nFile": "src/assets/i18n/en.json",
               "i18nLocale": "en"
             },
             "staging": {

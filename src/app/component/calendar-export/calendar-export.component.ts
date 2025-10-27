@@ -4,6 +4,7 @@ import {
   ElementRef,
   HostListener,
   Input,
+  PLATFORM_ID,
   inject,
   signal,
 } from '@angular/core'
@@ -11,6 +12,7 @@ import { TranslateModule } from '@ngx-translate/core'
 import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
 import { CalendarExportService } from '../../services/calendar-export.service'
+import { isPlatformBrowser } from '@angular/common'
 
 @Component({
   selector: 'app-calendar-export',
@@ -27,6 +29,8 @@ export class CalendarExportComponent {
 
   private readonly calendarService = inject(CalendarExportService)
   private readonly elementRef = inject(ElementRef)
+  private readonly platformId = inject(PLATFORM_ID)
+  private readonly isBrowser = isPlatformBrowser(this.platformId)
 
   /**
    * Zeigt die Kalenderoptionen an oder versteckt sie
@@ -40,6 +44,10 @@ export class CalendarExportComponent {
    */
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
+    if (!this.isBrowser) {
+      return
+    }
+
     if (
       !this.elementRef.nativeElement.contains(event.target) &&
       this.showCalendarOptions()
@@ -53,6 +61,9 @@ export class CalendarExportComponent {
    */
   @HostListener('document:keydown.escape')
   onEscapePress(): void {
+    if (!this.isBrowser) {
+      return
+    }
     if (this.showCalendarOptions()) {
       this.showCalendarOptions.set(false)
     }
@@ -64,6 +75,9 @@ export class CalendarExportComponent {
   private getEventUrl(): string {
     const id = this.event?.id?.id ?? ''
     if (!id) return ''
+    if (!this.isBrowser) {
+      return `/event/${id}`
+    }
 
     const baseUrl = window.location.origin
     return `${baseUrl}/event/${id}`
@@ -99,7 +113,9 @@ export class CalendarExportComponent {
       eventUrl,
     )
     const url = this.calendarService.generateGoogleCalendarUrl(calEvent)
-    window.open(url, '_blank')
+    if (this.isBrowser) {
+      window.open(url, '_blank')
+    }
     this.showCalendarOptions.set(false)
   }
 
@@ -116,7 +132,9 @@ export class CalendarExportComponent {
       eventUrl,
     )
     const url = this.calendarService.generateOutlookCalendarUrl(calEvent)
-    window.open(url, '_blank')
+    if (this.isBrowser) {
+      window.open(url, '_blank')
+    }
     this.showCalendarOptions.set(false)
   }
 

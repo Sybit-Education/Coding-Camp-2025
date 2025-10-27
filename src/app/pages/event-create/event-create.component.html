@@ -30,12 +30,12 @@
     >
       <div class="grid grid-cols-2 gap-[1rem]">
         <div class="my-4">
-          <label for="date" class="required">{{
+          <label for="dateStart" class="required">{{
             'create-event.startdate' | translate
           }}</label>
           <input
             #dateStartInput
-            id="date"
+            id="dateStart"
             type="date"
             [(ngModel)]="dateStart"
             name="dateStart"
@@ -55,6 +55,7 @@
               name="timePeriode"
               type="checkbox"
               [(ngModel)]="timePeriode"
+              (ngModelChange)="onTimePeriodToggle($event)"
               class="cursor-pointer"
             />
             <label for="timePeriode" class="ms-2 w-full cursor-pointer">
@@ -64,12 +65,12 @@
         </div>
         <!-- Startzeit -->
         <div class="my-4">
-          <label for="time" class="required">{{
+          <label for="timeStart" class="required">{{
             'create-event.starttime' | translate
           }}</label>
           <input
             #timeStartInput
-            id="time"
+            id="timeStart"
             type="time"
             [(ngModel)]="timeStart"
             name="timeStart"
@@ -88,22 +89,22 @@
       @if (timePeriode) {
         <div class="grid grid-cols-2 gap-[1rem]">
           <div class="my-4">
-            <label for="date">{{ 'create-event.enddate' | translate }}</label>
+            <label for="dateEnd">{{ 'create-event.enddate' | translate }}</label>
             <input
-              id="date"
+              id="dateEnd"
               type="date"
               [(ngModel)]="dateEnd"
-              name="dateStart"
+              name="dateEnd"
               class="w-full"
             />
           </div>
           <div class="my-4">
-            <label for="time">{{ 'create-event.endtime' | translate }}</label>
+            <label for="timeEnd">{{ 'create-event.endtime' | translate }}</label>
             <input
-              id="time"
+              id="timeEnd"
               type="time"
               [(ngModel)]="timeEnd"
-              name="timeStart"
+              name="timeEnd"
               class="w-full"
             />
           </div>

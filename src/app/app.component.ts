@@ -12,6 +12,7 @@ import { filter } from 'rxjs/operators'
 import { BottomNavComponent } from './component/bottom-nav/bottom-nav.component'
 import { UpdateService } from './pwa/update.service'
 import { SnackBarComponent } from './component/snack-bar/snack-bar.component'
+import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,7 @@ import { SnackBarComponent } from './component/snack-bar/snack-bar.component'
     FooterComponent,
     BottomNavComponent,
     SnackBarComponent,
+    TranslateModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

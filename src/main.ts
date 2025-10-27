@@ -39,6 +39,17 @@ registerLocaleData(localeDe)
 registerLocaleData(localeEn)
 registerLocaleData(localeFr)
 
+function resolveSavedLanguage(): string | null {
+  try {
+    if (typeof window !== 'undefined' && window?.localStorage) {
+      return window.localStorage.getItem('selectedLanguage')
+    }
+  } catch (error) {
+    console.warn('Konnte gespeicherte Sprache nicht laden:', error)
+  }
+  return null
+}
+
 // Erweitere die App-Konfiguration mit zusätzlichen Providern
 const bootstrapConfig: ApplicationConfig = {
   providers: [
@@ -52,7 +63,7 @@ const bootstrapConfig: ApplicationConfig = {
     {
       provide: LOCALE_ID,
       useFactory: () => {
-        const savedLang = localStorage.getItem('selectedLanguage')
+        const savedLang = resolveSavedLanguage()
         switch (savedLang) {
           case 'en':
             return 'en-GB'

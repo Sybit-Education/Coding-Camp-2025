@@ -3,9 +3,16 @@
   class="app-container bg-[#fffff]/90"
   [class.carousel-layout]="isCarouselPage"
 >
+  <a
+    class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2"
+    href="#main-content"
+  >
+    {{ 'COMMON.SKIP_TO_MAIN' | translate }}
+  </a>
   <app-header></app-header>
 
   <main
+    id="main-content"
     class="relative container mx-auto min-h-screen max-w-5xl p-2 pt-[240px]"
   >
     <router-outlet />

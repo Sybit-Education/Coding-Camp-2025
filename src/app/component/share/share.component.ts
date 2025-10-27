@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input, PLATFORM_ID, inject } from '@angular/core'
 import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
 import { TranslateModule } from '@ngx-translate/core'
+import { isPlatformBrowser } from '@angular/common'
 
 @Component({
   selector: 'app-share',
@@ -15,7 +16,15 @@ export class ShareComponent {
   @Input() location: Location | null = null
   showCopyMessage = false
 
+  private readonly platformId = inject(PLATFORM_ID)
+  private readonly isBrowser = isPlatformBrowser(this.platformId)
+
   sharePage() {
+    if (!this.isBrowser) {
+      console.warn('Sharing ist außerhalb des Browsers nicht verfügbar.')
+      return
+    }
+
     if (!this.event?.id) {
       console.error('Kein Event oder Event-ID vorhanden')
       return
@@ -50,6 +59,9 @@ export class ShareComponent {
   }
 
   canBrowserShareData(data: ShareData | undefined): boolean {
+    if (!this.isBrowser) {
+      return false
+    }
     if (!navigator.share || !navigator.canShare) {
       return false
     }
@@ -58,6 +70,9 @@ export class ShareComponent {
   }
 
   private copyToClipboard(text: string) {
+    if (!this.isBrowser) {
+      return
+    }
     navigator.clipboard.writeText(text).catch(() => {
       // Alternativer Fallback für ältere Browser
       this.fallbackCopyToClipboard(text)
@@ -65,6 +80,9 @@ export class ShareComponent {
   }
 
   private fallbackCopyToClipboard(text: string) {
+    if (!this.isBrowser) {
+      return
+    }
     try {
       const textArea = document.createElement('textarea')
       textArea.value = text
@@ -100,6 +118,10 @@ export class ShareComponent {
   private getEventUrl(): string {
     const id = this.event?.id?.id ?? ''
     if (!id) return ''
+
+    if (!this.isBrowser) {
+      return `/event/${id}`
+    }
 
     const baseUrl = window.location.origin
     return `${baseUrl}/event/${id}`

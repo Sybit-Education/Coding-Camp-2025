@@ -6,8 +6,9 @@ import {
   ViewEncapsulation,
   ChangeDetectionStrategy,
   DestroyRef,
+  PLATFORM_ID,
 } from '@angular/core'
-import { CommonModule } from '@angular/common'
+import { CommonModule, isPlatformBrowser } from '@angular/common'
 import { RouterModule, Router, NavigationEnd } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 import { Event } from '../../models/event.interface'
@@ -47,6 +48,8 @@ export class AdminEventOverviewComponent implements OnInit {
   private readonly mediaService = inject(MediaService)
   private readonly router = inject(Router)
   private readonly destroyRef = inject(DestroyRef)
+  private readonly platformId = inject(PLATFORM_ID)
+  private readonly isBrowser = isPlatformBrowser(this.platformId)
 
   // Loading state
   isLoading = signal(true)
@@ -215,7 +218,9 @@ export class AdminEventOverviewComponent implements OnInit {
   // Navigate to preview event page
   previewEvent(eventId: RecordId): void {
     // Öffne die Event-Detailseite in einem neuen Tab
-    window.open(`/event/${String(eventId.id)}`, '_blank')
+    if (this.isBrowser) {
+      window.open(`/event/${String(eventId.id)}`, '_blank')
+    }
   }
 
   // Navigate to edit event page

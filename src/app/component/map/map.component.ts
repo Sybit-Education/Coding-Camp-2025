@@ -8,7 +8,9 @@ import {
   Output,
   EventEmitter,
   inject,
+  PLATFORM_ID,
 } from '@angular/core'
+import { isPlatformBrowser } from '@angular/common'
 
 // Lazy-Loading für Leaflet
 import type { Map, MapOptions, Marker } from 'leaflet'
@@ -36,8 +38,14 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   @Output() locationSelected = new EventEmitter<[number, number]>()
 
   private readonly ngZone: NgZone = inject(NgZone)
+  private readonly platformId = inject(PLATFORM_ID)
+  private readonly isBrowser = isPlatformBrowser(this.platformId)
 
   ngAfterViewInit(): void {
+    if (!this.isBrowser) {
+      return
+    }
+
     // Ein dynamischer Import, danach initialisieren wir je nach Modus
     this.ngZone.runOutsideAngular(() => {
       // optional prefetch script hint (wie in deinem Code)
