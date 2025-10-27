@@ -4,7 +4,10 @@
       (click)="cancel()"
       class="mr-4 inline-flex items-center rounded-lg bg-gray-200 px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-300 focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:outline-none"
     >
-      <mat-icon class="mr-1">arrow_back</mat-icon>
+      <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19-7-7 7-7"/>
+      </svg>
+
       {{ 'COMMON.BACK' | translate }}
     </button>
     <h1 class="text-2xl font-bold text-gray-800">
@@ -122,7 +125,10 @@
           </div>
 
           <div class="mt-2 flex items-center text-sm text-gray-600">
-            <mat-icon class="mr-1 text-gray-500">info</mat-icon>
+            <svg class="w-3 h-3 mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+            </svg>
+
             <span
               >Koordinaten: {{ coordinates()[0].toFixed(6) }},
               {{ coordinates()[1].toFixed(6) }}</span
@@ -181,7 +187,6 @@
               (click)="deleteLocation()"
               class="rounded-lg bg-red-600 px-6 py-2 font-medium text-white transition-colors hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none"
             >
-              <mat-icon class="mr-1">delete</mat-icon>
               {{ 'ADMIN.LOCATIONS.DELETE' | translate }}
             </button>
           }
