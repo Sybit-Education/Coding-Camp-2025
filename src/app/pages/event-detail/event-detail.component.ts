@@ -23,7 +23,6 @@ import { TypeDB } from '../../models/typeDB.interface'
 import { TranslateModule } from '@ngx-translate/core'
 import { FavoriteButtonComponent } from '../../component/favorite-button/favorite-button.component'
 import { ShareComponent } from '../../component/share/share.component'
-import { CalendarExportComponent } from '../../component/calendar-export/calendar-export.component'
 import { MediaService } from '@app/services/media.service'
 import { ImageCarouselComponent } from '@app/component/image-carousel/image-carousel.component'
 
@@ -38,7 +37,6 @@ import { ImageCarouselComponent } from '@app/component/image-carousel/image-caro
     FavoriteButtonComponent,
     ShareComponent,
     ImageCarouselComponent,
-    CalendarExportComponent,
   ],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',

@@ -1,7 +1,7 @@
 @if (eventId) {
   <button
     (click)="toggleFavorite($event)"
-    class="ml-2 focus:outline-none"
+    class="ml-2 focus:outline-none h-[26px] w-[26px]"
     [title]="(isFavorite ? 'FAVORITES.REMOVE' : 'FAVORITES.ADD') | translate"
   >
     <!-- Solid star when favorited -->

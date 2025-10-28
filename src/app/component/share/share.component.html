@@ -1,8 +1,8 @@
-<div class="relative">
+<div class="relative cursor-pointer">
   <button
     type="button"
-    (click)="sharePage()"
-    class="group rounded-full border border-1 border-black p-3 transition hover:bg-gray-200"
+    (click)="toggleShareOptions()"
+    class="group rounded-full p-3 transition hover:bg-gray-200"
     aria-label="{{ 'SHARE.SHARE' | translate }}"
   >
     <div
@@ -12,6 +12,52 @@
       📤
     </div>
   </button>
+
+  @if (showShareOptions()) {
+    <div
+      class="ring-opacity-5 absolute top-16 right-0 z-10 w-64 rounded-md bg-white p-2 shadow-lg ring-1 ring-black"
+      role="menu"
+      aria-labelledby="calendar-menu-button"
+    >
+      <div class="py-1">
+        <!-- <button
+          class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+          (click)="exportToICalendar()"
+          role="menuitem"
+        >
+          {{ 'SHARE.DOWNLOAD_ICAL' | translate }}
+        </button> -->
+        <button
+          class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+          (click)="sharePage()"
+          role="menuitem"
+        >
+          Link kopieren
+        </button>
+        <button
+          class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+          (click)="openInGoogleCalendar()"
+          role="menuitem"
+        >
+          {{ 'SHARE.GOOGLE_CALENDAR' | translate }}
+        </button>
+        <button
+          class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+          (click)="openInOutlookCalendar()"
+          role="menuitem"
+        >
+          {{ 'SHARE.OUTLOOK_CALENDAR' | translate }}
+        </button>
+        <button
+          class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+          (click)="openInAppleCalendar()"
+          role="menuitem"
+        >
+          {{ 'SHARE.APPLE_CALENDAR' | translate }}
+        </button>
+      </div>
+    </div>
+  }
 
   <!-- Benachrichtigung für Benutzer, wenn Link kopiert wurde -->
   @if (showCopyMessage) {
