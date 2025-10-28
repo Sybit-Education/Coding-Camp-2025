@@ -16,7 +16,8 @@ import {
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { Location } from '../../models/location.interface'
 import { LocationService } from '../../services/location.service'
-import { Media } from '../../models/media.interface'
+import { Media } from '../../models/media.model'
+import { MediaService } from '../../services/media.service'
 import { MatIconModule } from '@angular/material/icon'
 import { GeometryPoint, StringRecordId, RecordId } from 'surrealdb'
 import { ImageUploadComponent } from '../../component/image-upload/image-upload.component'
@@ -44,6 +45,7 @@ export class LocationEditComponent implements OnInit {
   private readonly router = inject(Router)
   private readonly fb = inject(FormBuilder)
   private readonly locationService = inject(LocationService)
+  private readonly mediaService = inject(MediaService)
   private readonly translate = inject(TranslateService)
   private readonly snackBarService = inject(SnackBarService)
   private readonly markForCheck = injectMarkForCheck()
@@ -173,10 +175,21 @@ export class LocationEditComponent implements OnInit {
       // Aktuelle Koordinaten in das Formular übernehmen
       formData.geo_point = new GeometryPoint(this.coordinates())
 
+      // Sammle alle neuen Medien, die noch nicht in der Datenbank sind
+      // Diese werden von der ImageUploadComponent als Objekte ohne ID bereitgestellt
+      const newMediaData: Media[] = [];
+      const existingMediaIds = this.mediaIds().filter(id => id !== undefined);
+
+      // Verarbeite neue Medien und speichere sie in der Datenbank
+      const newMediaIds = await this.processNewMedia(newMediaData);
+      
+      // Kombiniere bestehende und neue Medien-IDs
+      const allMediaIds = [...existingMediaIds, ...newMediaIds];
+
       // Bilder hinzufügen
       const locationData: Location = {
         ...formData,
-        media: this.mediaIds().map(id => ({ id })),
+        media: allMediaIds.map(id => ({ id })),
       }
 
       if (this.isEditMode() && this.locationId()) {
@@ -215,10 +228,41 @@ export class LocationEditComponent implements OnInit {
   // Bilder-Handling
   onMediaIdsChange(mediaIds: RecordId<'media'>[]): void {
     this.mediaIds.set(mediaIds);
+    this.markForCheck();
   }
 
   onPreviewsChange(previews: string[]): void {
     this.previews.set(previews);
+    this.markForCheck();
+  }
+
+  /**
+   * Speichert ein Bild in der Datenbank über den MediaService
+   * @param mediaData Die Mediendaten, die gespeichert werden sollen
+   * @returns Die ID des gespeicherten Mediums
+   */
+  private async saveMedia(mediaData: Media): Promise<RecordId<'media'>> {
+    try {
+      const savedMedia = await this.mediaService.postMedia(mediaData);
+      return savedMedia.id as RecordId<'media'>;
+    } catch (error) {
+      console.error('Fehler beim Speichern des Mediums:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Verarbeitet neue Medien und gibt die IDs zurück
+   * @param newMediaData Array von Mediendaten
+   * @returns Array von Media-RecordIds
+   */
+  private async processNewMedia(newMediaData: Media[]): Promise<RecordId<'media'>[]> {
+    if (!newMediaData || newMediaData.length === 0) {
+      return [];
+    }
+
+    const mediaPromises = newMediaData.map(media => this.saveMedia(media));
+    return await Promise.all(mediaPromises);
   }
 
   // Karten-Funktionen
