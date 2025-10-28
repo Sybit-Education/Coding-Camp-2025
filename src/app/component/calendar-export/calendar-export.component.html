@@ -4,7 +4,7 @@
     <button
       type="button"
       (click)="toggleCalendarOptions()"
-      class="group rounded-full bg-green-200 p-3 transition hover:bg-green-300 focus:ring-2 focus:ring-green-400 focus:outline-none active:ring-green-600"
+      class="group rounded-full bg-green-200 p-3 transition border border-1 border-black hover:bg-green-300 focus:ring-2 focus:ring-green-400 focus:outline-none active:ring-green-600"
       aria-label="{{ 'SHARE.ADD_TO_CALENDAR' | translate }}"
       aria-expanded="{{ showCalendarOptions() }}"
       aria-haspopup="true"
@@ -13,12 +13,10 @@
         class="relative flex h-[26px] w-[26px] items-center justify-center rounded-full"
         aria-hidden="true"
       >
-        <p>{{ '📅' }}</p>
+        📅
       </div>
     </button>
-    <p class="mt-1 text-center text-sm font-bold">
-      {{ 'SHARE.ADD_TO_CALENDAR' | translate }}
-    </p>
+
   </div>
 
   <!-- Calendar Options Dropdown -->

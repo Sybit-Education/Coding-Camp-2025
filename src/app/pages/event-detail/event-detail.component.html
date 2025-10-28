@@ -71,26 +71,32 @@
             </div>
           }
         </div>
-        <div class="justify-left flex w-full items-center">
-          <app-favorite-button
-            class="px-2 pt-8"
-            [eventId]="event.id"
-          ></app-favorite-button>
-          <h1 class="px-2 pt-2">
-            {{ event.name }}
-          </h1>
+        <div class="flex w-full items-center justify-between">
+          <div class="ml-10">
+            <h1 class="text-2xl">
+              {{ event.name }}
+            </h1>
+          </div>
+          <div class="flex items-center justify-center gap-4">
+            <div class="mt-10 mb-4">
+              <app-favorite-button [eventId]="event.id"></app-favorite-button>
+            </div>
+            <app-share [event]="event" [location]="location" class="mt-10 mb-4 text-2xl mr-10 "></app-share>
+          </div>
         </div>
         <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
         <div class="flex justify-between">
           <div
-            class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-xl"
+            class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl"
           >
-            <div class="grid grid-cols-[1fr_3fr]">
-              <div
-                class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-amber-300"
-                aria-hidden="true"
-              >
-                <span aria-hidden="true">📅</span>
+            <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+              <div class="flex items-center justify-center">
+                <div
+                  class="flex h-[50px] w-[50px] items-center justify-center rounded-full"
+                  aria-hidden="true"
+                >
+                  <span aria-hidden="true">📅</span>
+                </div>
               </div>
               <div>
                 <h3>
@@ -101,12 +107,14 @@
                 </p>
               </div>
             </div>
-            <div class="grid grid-cols-[1fr_3fr]">
-              <div
-                class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-red-300"
-                aria-hidden="true"
-              >
-                <span aria-hidden="true">📍</span>
+            <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+              <div class="flex items-center justify-center">
+                <div
+                  class="flex h-[50px] w-[50px] items-center justify-center rounded-full"
+                  aria-hidden="true"
+                >
+                  <span aria-hidden="true">📍</span>
+                </div>
               </div>
               <div>
                 <h3>
@@ -115,12 +123,14 @@
                 <p>{{ location?.name }}</p>
               </div>
             </div>
-            <div class="grid grid-cols-[1fr_3fr]">
-              <div
-                class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-green-300"
-                aria-hidden="true"
-              >
-                <span aria-hidden="true">💶</span>
+            <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+              <div class="flex items-center justify-center">
+                <div
+                  class="flex h-[50px] w-[50px] items-center justify-center rounded-full"
+                  aria-hidden="true"
+                >
+                  <span aria-hidden="true">💶</span>
+                </div>
               </div>
               <div>
                 <h3>
@@ -135,12 +145,14 @@
                 </p>
               </div>
             </div>
-            <div class="grid grid-cols-[1fr_3fr]">
-              <div
-                class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-purple-400"
-                aria-hidden="true"
-              >
-                <span aria-hidden="true">👥</span>
+            <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+              <div class="flex items-center justify-center">
+                <div
+                  class="flex h-[50px] w-[50px] items-center justify-center rounded-full"
+                  aria-hidden="true"
+                >
+                  <span aria-hidden="true">👥</span>
+                </div>
               </div>
               <div>
                 <h3>
