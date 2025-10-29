@@ -236,6 +236,8 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   goBack() {
     if (!this.fromCategory) {
       this.router.navigate(['/'])
+    } else if (this.fromCategory.includes('keine')) {
+      this.router.navigate(['/kategorie'])
     } else {
       this.router.navigate(['/kategorie'], {
         queryParams: {
