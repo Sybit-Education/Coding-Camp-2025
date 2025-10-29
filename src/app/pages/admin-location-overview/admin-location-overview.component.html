@@ -114,14 +114,6 @@
           [sortable]="false"
         >
           <ng-template let-row="row" ngx-datatable-cell-template>
-            @if (row.thumbnail) {
-              <img
-                [src]="row.thumbnail"
-                alt="Thumbnail"
-                class="location-thumbnail"
-                onerror="this.src='assets/images/placeholder.png'; this.onerror=null;"
-              />
-            } @else {
               <div class="location-thumbnail-placeholder">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -144,7 +136,6 @@
                   />
                 </svg>
               </div>
-            }
           </ng-template>
         </ngx-datatable-column>
 

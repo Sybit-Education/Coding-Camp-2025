@@ -122,7 +122,6 @@ export class AdminLocationOverviewComponent implements OnInit {
       const tableData = sortedLocations.map((location) => {
         return {
           ...location,
-          thumbnail: this.getFirstImageUrl(location),
           originalId: location.id, // Keep original ID for actions
           city: location.city || 'Radolfzell', // Default city
           street: location.street || '',
@@ -142,24 +141,6 @@ export class AdminLocationOverviewComponent implements OnInit {
     }
   }
 
-  // Get the first image URL from a location
-  getFirstImageUrl(location: Location): string | null {
-    if (
-      location.media &&
-      Array.isArray(location.media) &&
-      location.media.length > 0
-    ) {
-      const firstMedia = location.media[0]
-      if (
-        typeof firstMedia === 'object' &&
-        firstMedia &&
-        'file' in firstMedia
-      ) {
-        return firstMedia.file as string
-      }
-    }
-    return null
-  }
 
   // Navigate to edit location page
   editLocation(locationId: RecordId): void {
