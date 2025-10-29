@@ -83,7 +83,6 @@ export class LocationEditComponent implements OnInit {
     if (id && id !== 'create') {
       this.isEditMode.set(true)
       try {
-        console.log('Lade Location mit ID:', id)
         const locationId = new StringRecordId(id)
         // Prüfen, ob die ID bereits das Präfix "location:" enthält
         this.locationId.set(locationId)
@@ -112,11 +111,9 @@ export class LocationEditComponent implements OnInit {
 
   private async loadLocation(id: StringRecordId): Promise<void> {
     try {
-      console.log('Rufe getLocationByID auf mit ID:', id)
       const location = await this.locationService.getLocationByID(id)
 
       if (location) {
-        console.log('Geladene Location:', location)
 
         // Formular mit den Daten des Ortes befüllen
         this.locationForm.patchValue({
@@ -134,7 +131,6 @@ export class LocationEditComponent implements OnInit {
           )
         }
       } else {
-        console.error('Location nicht gefunden oder undefiniert')
         this.errorMessage.set(
           this.translate.instant('ADMIN.LOCATIONS.FORM.LOAD_ERROR'),
         )
@@ -205,7 +201,6 @@ export class LocationEditComponent implements OnInit {
   // Karten-Funktionen
   updateCoordinates(newCoordinates: [number, number]): void {
     this.coordinates.set(newCoordinates)
-    console.log('Neue Koordinaten gesetzt:', newCoordinates)
 
     // Aktualisiere auch das Formular
     const geoPointControl = this.locationForm.get('geo_point');
