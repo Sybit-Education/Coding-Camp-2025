@@ -20,10 +20,11 @@ export class MediaService {
     if (!mediaRecordId) return null
 
     try {
-      const mediaURL = String(mediaRecordId)
-        .replace(/_(?=[^_]*$)/, '.')
-        .split(':')[1]
-      return this.mediaBaseUrl + mediaURL
+      const idString = String(mediaRecordId)
+      const cleanId = idString.includes(':') ? idString.split(':')[1] : idString
+      const mediaFileName = cleanId.replace(/_(?=[^_]*$)/, '.')
+
+      return this.mediaBaseUrl + mediaFileName
     } catch (error) {
       console.warn('Fehler beim Laden der Media:', error)
       return null
@@ -37,11 +38,18 @@ export class MediaService {
     return await this.getMediaUrl(mediaArray[0])
   }
 
-  async getMediasById(mediaRecordId: RecordId<'media'>): Promise<Media> {
-    return this.surrealdb.getByRecordId<Media>(
-        new StringRecordId(`media:${mediaRecordId}`),
-      )
+  async getMediaById(mediaId: RecordId<'media'>): Promise<Media> {
+    return this.surrealdb.getByRecordId<Media>(mediaId)
   }
+
+  async getMediasByIdList(mediaIds: RecordId<'media'>[]): Promise<Media[]> {
+    const resultList: Media[] = []
+    for (const mediaId of mediaIds) {
+      resultList.push(await this.getMediaById(mediaId))
+    }
+    return resultList
+  }
+
 
   async getMediaByUrl(url: string): Promise<Media | null> {
     try {

@@ -33,10 +33,10 @@ export class ImageUploadComponent implements OnInit, OnChanges {
 
   @Input() previews: string[] = []
   @Input() eventName = ''
-  @Input() existingImages: RecordId<'media'>[] = []
+  @Input() existingImages: Media[] = []
 
   @Output() previewsChange = new EventEmitter<string[]>()
-  @Output() mediaIdsChange = new EventEmitter<RecordId<'media'>[]>()
+  @Output() mediaChange = new EventEmitter<Media[]>()
 
   isDragging = false
 
@@ -142,7 +142,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
   private loadExistingImages() {
     console.log('Lade existierende Bilder:', this.existingImages)
     this.existingImages.forEach((image) => {
-      const url = this.mediaService.getMediaUrl(image)
+      const url = this.mediaService.getMediaUrl(image.id)
 
       if (url) {
         // Prüfen, ob das Bild bereits in den Vorschauen vorhanden ist
@@ -187,8 +187,8 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       }
 
       // Aktualisiere die Media-IDs und informiere die Eltern-Komponente
-      const mediaIds = await this.uploadImages()
-      this.mediaIdsChange.emit(mediaIds)
+      const media = await this.uploadImages()
+      this.mediaChange.emit(media)
     } catch (error) {
       console.error('Fehler beim Löschen des Bildes:', error)
       this.snackBarService.showError(
@@ -218,8 +218,8 @@ export class ImageUploadComponent implements OnInit, OnChanges {
     return src
   }
 
-  async uploadImages(): Promise<RecordId<'media'>[]> {
-    const result: RecordId<'media'>[] = []
+  async uploadImages(): Promise<Media[]> {
+    const result: Media[] = []
 
     try {
       // Wenn keine Vorschaubilder vorhanden sind, aber existierende Bilder übergeben wurden,
@@ -238,13 +238,13 @@ export class ImageUploadComponent implements OnInit, OnChanges {
           try {
             const existingMedia = await this.mediaService.getMediaByUrl(image)
             if (existingMedia && existingMedia.id) {
-              result.push(existingMedia.id as RecordId<'media'>)
+              result.push(existingMedia)
             } else {
               // Wenn wir keine Media-ID für die URL finden können,
               // versuchen wir, die ID aus den existingImages zu finden
               const matchingExistingImage = this.existingImages.find(
-                async (mediaId) => {
-                  const url = await this.mediaService.getMediaUrl(mediaId)
+                async (media) => {
+                  const url = await this.mediaService.getMediaUrl(media.id)
                   return url === image
                 },
               )
@@ -326,10 +326,10 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       ).filter((media): media is Media => media !== null)
 
       // Neue Media-IDs hinzufügen
-      result.push(...resultMedias.map((media) => media.id as RecordId<'media'>))
+      result.push(...resultMedias.map((media) => media))
 
       // Event emittieren mit allen Media-IDs
-      this.mediaIdsChange.emit(result)
+      this.mediaChange.emit(result)
 
       console.log('Hochgeladene und existierende Medien:', result)
       return result
@@ -374,7 +374,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       // TODO: add exception
       // }
       media!.copyright = copyright
-      media!.cretaor = creator
+      media!.creator = creator
       this.mediaService.updateMedia(media!.id!, media!)
     }
 

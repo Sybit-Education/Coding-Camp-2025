@@ -186,8 +186,8 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       let mediaUrlPromise: Promise<(string | null)[]> = Promise.resolve([null])
       if (foundEvent.media?.length > 0) {
         mediaUrlPromise = Promise.all(
-          foundEvent.media.map((mediaId) =>
-            this.mediaService.getMediaUrl(mediaId),
+          foundEvent.media.map((media) =>
+            this.mediaService.getMediaUrl(media),
           ),
         )
         promises.push(mediaUrlPromise)

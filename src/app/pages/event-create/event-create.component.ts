@@ -195,10 +195,7 @@ export class EventCreateComponent implements OnInit {
         if (topic) this.selectedTopics.push(topic)
       }
 
-
-      event.media.forEach((media) => {
-        this.
-      })
+      this.images = await this.mediaService.getMediasByIdList(event.media)
 
       // Images werden in der ImageUploadComponent geladen
       console.log('Existierende Bilder für ImageUploadComponent:', this.images)
@@ -280,20 +277,31 @@ export class EventCreateComponent implements OnInit {
       const priceDec = this.price ? new Decimal(this.price) : undefined
 
       // Medien verarbeiten
-      let mediaIds = await this.imageUploadComponent.uploadImages()
+      const medias = await this.imageUploadComponent.uploadImages()
+
+      const finalMediaIds: RecordId<'media'>[] = []
+      const finalMedia: Media[] = []
+      for (const media of medias) {
+        finalMediaIds.push(media.id!);
+        finalMedia.push(media);
+      }
 
       // Wenn keine Bilder hochgeladen wurden, aber existierende Bilder vorhanden sind,
       // behalten wir die existierenden Bilder bei
-      if (mediaIds.length === 0 && this.images.length > 0) {
+      if (medias.length === 0 && this.images.length > 0) {
         console.log(
           'Keine neuen Bilder hochgeladen, behalte existierende:',
           this.images,
         )
-        mediaIds = [...this.images]
+        for (const media of this.images) {
+        finalMedia.push(media);
+        finalMediaIds.push(media.id!);
+      }
+
       }
 
       // Sicherstellen, dass wir die aktualisierten Media-IDs verwenden
-      this.images = mediaIds
+      this.images = finalMedia
 
       const payload: AppEvent = {
         name: this.eventName,
@@ -307,7 +315,7 @@ export class EventCreateComponent implements OnInit {
         event_type: this.selectedEventType?.id ?? undefined,
         location: this.selectedLocation?.id ?? undefined,
         topic: this.selectedTopics.map((t) => t.id!),
-        media: mediaIds,
+        media: finalMediaIds,
         age: this.age ?? undefined,
         restriction: this.restriction || undefined,
       }
