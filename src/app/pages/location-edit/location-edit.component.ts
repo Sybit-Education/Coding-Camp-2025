@@ -16,10 +16,8 @@ import {
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { Location } from '../../models/location.interface'
 import { LocationService } from '../../services/location.service'
-import { Media } from '../../models/media.model'
-import { MediaService } from '../../services/media.service'
 import { MatIconModule } from '@angular/material/icon'
-import { GeometryPoint, StringRecordId, RecordId } from 'surrealdb'
+import { GeometryPoint, StringRecordId } from 'surrealdb'
 import { SnackBarService } from '../../services/snack-bar.service'
 import { injectMarkForCheck } from '../../utils/zoneless-helpers'
 import { MapComponent } from '../../component/map/map.component'
@@ -100,7 +98,6 @@ export class LocationEditComponent implements OnInit {
       // Im Erstellungsmodus leeres Formular initialisieren
       this.isEditMode.set(false)
       this.locationId.set(null)
-      this.mediaIds.set([])
       this.locationForm.reset({
         name: '',
         street: '',
@@ -167,7 +164,6 @@ export class LocationEditComponent implements OnInit {
       // Bilder hinzufügen
       const locationData: Location = {
         ...formData,
-        media: allMediaIds.map(id => ({ id })),
       }
 
       if (this.isEditMode() && this.locationId()) {
