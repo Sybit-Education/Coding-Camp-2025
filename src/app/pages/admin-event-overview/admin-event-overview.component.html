@@ -50,6 +50,27 @@
     </div>
   </div>
 
+  <div class="mb-4 border-b border-gray-200">
+    <nav class="flex -mb-px space-x-6" aria-label="Admin Navigation">
+      <a
+        [routerLink]="['/admin/events']"
+        routerLinkActive="border-blue-600 text-blue-600"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="whitespace-nowrap border-b-2 border-transparent px-1 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 hover:border-gray-300"
+      >
+        {{ 'ADMIN.EVENTS.TITLE' | translate }}
+      </a>
+      <a
+        [routerLink]="['/admin/locations']"
+        routerLinkActive="border-blue-600 text-blue-600"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="whitespace-nowrap border-b-2 border-transparent px-1 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 hover:border-gray-300"
+      >
+        {{ 'ADMIN.LOCATIONS.TITLE' | translate }}
+      </a>
+    </nav>
+  </div>
+
   @if (isLoading()) {
     <div class="flex items-center justify-center py-12">
       <div
