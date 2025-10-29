@@ -43,7 +43,6 @@ export class LocationEditComponent implements OnInit {
   private readonly router = inject(Router)
   private readonly fb = inject(FormBuilder)
   private readonly locationService = inject(LocationService)
-  private readonly mediaService = inject(MediaService)
   private readonly translate = inject(TranslateService)
   private readonly snackBarService = inject(SnackBarService)
   private readonly markForCheck = injectMarkForCheck()
@@ -56,8 +55,6 @@ export class LocationEditComponent implements OnInit {
   isSubmitting = signal(false)
   isEditMode = signal(false)
   locationId = signal<StringRecordId | null>(null)
-  mediaIds = signal<RecordId<'media'>[]>([])
-  previews = signal<string[]>([])
   errorMessage = signal<string | null>(null)
 
   // Karten-Koordinaten
@@ -206,45 +203,8 @@ export class LocationEditComponent implements OnInit {
     })
   }
 
-  // Bilder-Handling
-  onMediaIdsChange(mediaIds: RecordId<'media'>[]): void {
-    this.mediaIds.set(mediaIds);
-    this.markForCheck();
-  }
 
-  onPreviewsChange(previews: string[]): void {
-    this.previews.set(previews);
-    this.markForCheck();
-  }
 
-  /**
-   * Speichert ein Bild in der Datenbank über den MediaService
-   * @param mediaData Die Mediendaten, die gespeichert werden sollen
-   * @returns Die ID des gespeicherten Mediums
-   */
-  private async saveMedia(mediaData: Media): Promise<RecordId<'media'>> {
-    try {
-      const savedMedia = await this.mediaService.postMedia(mediaData);
-      return savedMedia.id as RecordId<'media'>;
-    } catch (error) {
-      console.error('Fehler beim Speichern des Mediums:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Verarbeitet neue Medien und gibt die IDs zurück
-   * @param newMediaData Array von Mediendaten
-   * @returns Array von Media-RecordIds
-   */
-  private async processNewMedia(newMediaData: Media[]): Promise<RecordId<'media'>[]> {
-    if (!newMediaData || newMediaData.length === 0) {
-      return [];
-    }
-
-    const mediaPromises = newMediaData.map(media => this.saveMedia(media));
-    return await Promise.all(mediaPromises);
-  }
 
   // Karten-Funktionen
   updateCoordinates(newCoordinates: [number, number]): void {
