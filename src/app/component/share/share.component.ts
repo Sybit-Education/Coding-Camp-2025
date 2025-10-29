@@ -16,7 +16,7 @@ export class ShareComponent {
   showCopyMessage = false
 
   sharePage() {
-    if (!this.event || !this.event.id) {
+    if (!this.event?.id) {
       console.error('Kein Event oder Event-ID vorhanden')
       return
     }

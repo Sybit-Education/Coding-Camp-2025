@@ -23,9 +23,9 @@ import { TypeDB } from '../../models/typeDB.interface'
 import { TranslateModule } from '@ngx-translate/core'
 import { FavoriteButtonComponent } from '../../component/favorite-button/favorite-button.component'
 import { ShareComponent } from '../../component/share/share.component'
-import { CalendarExportComponent } from '../../component/calendar-export/calendar-export.component'
 import { MediaService } from '@app/services/media.service'
 import { ImageCarouselComponent } from '@app/component/image-carousel/image-carousel.component'
+import { CalendarExportComponent } from "@app/component/calendar-export/calendar-export.component";
 
 @Component({
   selector: 'app-event-detail-page',
@@ -38,8 +38,8 @@ import { ImageCarouselComponent } from '@app/component/image-carousel/image-caro
     FavoriteButtonComponent,
     ShareComponent,
     ImageCarouselComponent,
-    CalendarExportComponent,
-  ],
+    CalendarExportComponent
+],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -236,6 +236,8 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   goBack() {
     if (!this.fromCategory) {
       this.router.navigate(['/'])
+    } else if (this.fromCategory.includes('keine')) {
+      this.router.navigate(['/kategorie'])
     } else {
       this.router.navigate(['/kategorie'], {
         queryParams: {
