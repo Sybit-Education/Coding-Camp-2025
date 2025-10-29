@@ -145,7 +145,6 @@ export class AdminEventOverviewComponent implements OnInit {
         }
       })
 
-      console.log('Events:', tableData)
       this.events.set(sortedEvents)
       this.rows.set(tableData)
       this.temp.set([...tableData])

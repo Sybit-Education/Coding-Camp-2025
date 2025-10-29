@@ -189,13 +189,17 @@
   },
   "ADMIN": {
     "EVENTS": {
-      "TITLE": "Administration",
+      "TITLE": "Events",
       "SEARCH": "Recherche ...",
       "CREATE_NEW": "Créer un nouveau ...",
       "NO_EVENTS": "Aucun événement trouvé",
       "DELETE": "Supprimer",
       "EDIT": "Modifier ...",
       "PREVIEW": "Preview"
-    }
+    },
+    "LOCATIONS": {
+      "TITLE": "Locations"
+    },
+    "TITLE": "Administration"
   }
 }

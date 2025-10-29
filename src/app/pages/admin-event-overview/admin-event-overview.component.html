@@ -1,7 +1,7 @@
 <div class="container mx-auto px-4 py-6">
   <div class="mb-6 flex flex-col items-center justify-between md:flex-row">
     <h1 class="mb-4 text-2xl font-bold text-gray-800 md:mb-0">
-      {{ 'ADMIN.EVENTS.TITLE' | translate }}
+      {{ 'ADMIN.TITLE' | translate }}
     </h1>
     <div class="flex space-x-4">
       <div class="relative">
@@ -53,10 +53,10 @@
   <div class="mb-4 border-b border-gray-200">
     <nav class="flex -mb-px space-x-6" aria-label="Admin Navigation">
       <a
-        [routerLink]="['/admin/events']"
+        [routerLink]="['/admin/']"
         routerLinkActive="border-blue-600 text-blue-600"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="whitespace-nowrap border-b-2 border-transparent px-1 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 hover:border-gray-300"
+        class="whitespace-nowrap border-b-2 border-transparent px-1 py-2 text-xl font-bold text-blue-600 hover:text-blue-800 hover:border-gray-300"
       >
         {{ 'ADMIN.EVENTS.TITLE' | translate }}
       </a>
@@ -64,7 +64,7 @@
         [routerLink]="['/admin/locations']"
         routerLinkActive="border-blue-600 text-blue-600"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="whitespace-nowrap border-b-2 border-transparent px-1 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 hover:border-gray-300"
+        class="whitespace-nowrap border-b-2 border-transparent px-1 py-2 text-xl font-medium text-gray-600 hover:text-blue-800 hover:border-gray-300"
       >
         {{ 'ADMIN.LOCATIONS.TITLE' | translate }}
       </a>

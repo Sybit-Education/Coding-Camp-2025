@@ -194,16 +194,16 @@
   },
   "ADMIN": {
     "EVENTS": {
-      "TITLE": "Administration",
-      "CREATE_NEW": "Neu anlegen ...",
+      "TITLE": "Events",
+      "CREATE_NEW": "Neues Event ...",
       "NO_EVENTS": "Keine Events gefunden",
       "EDIT": "Bearbeiten ...",
       "DELETE": "Löschen",
       "SEARCH": "Suchen ..."
     },
     "LOCATIONS": {
-      "TITLE": "Orte verwalten",
-      "CREATE_NEW": "Neuen Ort erstellen",
+      "TITLE": "Orte",
+      "CREATE_NEW": "Neuer Ort ...",
       "SEARCH": "Orte suchen...",
       "NO_LOCATIONS": "Keine Orte gefunden",
       "PREVIEW": "Vorschau",
@@ -223,6 +223,7 @@
         "DELETE_ERROR": "Der Ort konnte nicht gelöscht werden.",
         "DELETE_CONFIRM": "Möchten Sie diesen Ort wirklich löschen?"
       }
-    }
+    },
+    "TITLE": "Administration"
   }
 }

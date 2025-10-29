@@ -198,15 +198,18 @@
   },
   "ADMIN": {
     "EVENTS": {
-      "TITLE": "Administration",
+      "TITLE": "Events",
       "NO_EVENTS": "No events found.",
       "EDIT": "Edit ...",
       "DELETE": "Delete",
       "SEARCH": "Search ...",
-      "CREATE_NEW": "Create new ..."
+      "CREATE_NEW": "New Event ..."
     },
     "LOCATIONS": {
-      "DELETE": "Delete"
-    }
+      "DELETE": "Delete",
+      "TITLE": "Locations",
+      "CREATE_NEW": "New Location ..."
+    },
+    "TITLE": "Administration"
   }
 }
