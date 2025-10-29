@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, inject, Input, signal } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
 import { TranslateModule } from '@ngx-translate/core'
-import { CalendarExportService } from '@app/services/calendar-export.service'
 
 @Component({
   selector: 'app-share',
@@ -16,13 +15,8 @@ export class ShareComponent {
   @Input() location: Location | null = null
   showCopyMessage = false
 
-  showShareOptions = signal(false)
-
-  private readonly calendarService = inject(CalendarExportService)
-  private readonly elementRef = inject(ElementRef)
-
   sharePage() {
-    if (!this.event || !this.event.id) {
+    if (!this.event?.id) {
       console.error('Kein Event oder Event-ID vorhanden')
       return
     }
@@ -109,113 +103,5 @@ export class ShareComponent {
 
     const baseUrl = window.location.origin
     return `${baseUrl}/event/${id}`
-  }
-
-
-  /**
-   * Zeigt die Kalenderoptionen an oder versteckt sie
-   */
-  toggleShareOptions(): void {
-    this.showShareOptions.update((value) => !value)
-  }
-
-  /**
-   * Schließt das Dropdown-Menü, wenn außerhalb geklickt wird
-   */
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent): void {
-    if (
-      !this.elementRef.nativeElement.contains(event.target) &&
-      this.showShareOptions()
-    ) {
-      this.showShareOptions.set(false)
-    }
-  }
-
-  /**
-   * Schließt das Dropdown-Menü bei Escape-Taste
-   */
-  @HostListener('document:keydown.escape')
-  onEscapePress(): void {
-    if (this.showShareOptions()) {
-      this.showShareOptions.set(false)
-    }
-  }
-
-  /**
-   * Exportiert das Event als iCal-Datei (.ics)
-   */
-  exportToICalendar(): void {
-    if (!this.event) return
-
-    const eventUrl = this.getEventUrl()
-    const calEvent = this.calendarService.createCalendarEvent(
-      this.event,
-      this.location,
-      eventUrl,
-    )
-    const filename = `${this.event.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`
-    this.calendarService.downloadICalFile(calEvent, filename)
-    this.showShareOptions.set(false)
-  }
-
-  /**
-   * Öffnet das Event im Google Kalender
-   */
-  openInGoogleCalendar(): void {
-    if (!this.event) return
-
-    const eventUrl = this.getEventUrl()
-    const calEvent = this.calendarService.createCalendarEvent(
-      this.event,
-      this.location,
-      eventUrl,
-    )
-    const url = this.calendarService.generateGoogleCalendarUrl(calEvent)
-    window.open(url, '_blank')
-    this.showShareOptions.set(false)
-  }
-
-  /**
-   * Öffnet das Event im Outlook Kalender
-   */
-  openInOutlookCalendar(): void {
-    if (!this.event) return
-
-    const eventUrl = this.getEventUrl()
-    const calEvent = this.calendarService.createCalendarEvent(
-      this.event,
-      this.location,
-      eventUrl,
-    )
-    const url = this.calendarService.generateOutlookCalendarUrl(calEvent)
-    window.open(url, '_blank')
-    this.showShareOptions.set(false)
-  }
-
-  /**
-   * Öffnet das Event im Apple Kalender
-   *
-   * Hinweis: Diese Methode funktioniert am besten auf macOS/iOS Geräten
-   */
-  openInAppleCalendar(): void {
-    if (!this.event) return
-
-    // Für Apple Kalender laden wir die iCal-Datei direkt herunter
-    // und öffnen sie mit dem webcal:// Protokoll
-    const eventUrl = this.getEventUrl()
-    const calEvent = this.calendarService.createCalendarEvent(
-      this.event,
-      this.location,
-      eventUrl,
-    )
-
-    // Für Apple Kalender ist es am einfachsten, die iCal-Datei direkt herunterzuladen
-    // Das Betriebssystem wird sie dann mit der Kalender-App öffnen
-    this.calendarService.downloadICalFile(
-      calEvent,
-      `${this.event.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`,
-    )
-    this.showShareOptions.set(false)
   }
 }

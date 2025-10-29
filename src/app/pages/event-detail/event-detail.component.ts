@@ -25,6 +25,7 @@ import { FavoriteButtonComponent } from '../../component/favorite-button/favorit
 import { ShareComponent } from '../../component/share/share.component'
 import { MediaService } from '@app/services/media.service'
 import { ImageCarouselComponent } from '@app/component/image-carousel/image-carousel.component'
+import { CalendarExportComponent } from "@app/component/calendar-export/calendar-export.component";
 
 @Component({
   selector: 'app-event-detail-page',
@@ -37,7 +38,8 @@ import { ImageCarouselComponent } from '@app/component/image-carousel/image-caro
     FavoriteButtonComponent,
     ShareComponent,
     ImageCarouselComponent,
-  ],
+    CalendarExportComponent
+],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

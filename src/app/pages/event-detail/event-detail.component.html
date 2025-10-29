@@ -37,7 +37,7 @@
         <div class="relative">
           <button
             (click)="goBack()"
-            class="absolute top-3 left-3 cursor-pointer z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/80 opacity-80 shadow-md hover:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            class="absolute top-3 left-3 z-10 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-white/80 opacity-80 shadow-md hover:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
             aria-label="{{ 'event-detail.back' | translate }}"
           >
             <span class="font-mono text-3xl font-extrabold">←</span>
@@ -77,15 +77,13 @@
               {{ event.name }}
             </h1>
           </div>
-          <div class="flex items-center justify-center gap-4">
-            <div class="mt-10 mb-4">
-              <app-favorite-button [eventId]="event.id"></app-favorite-button>
-            </div>
-            <app-share
+          <div class="gap-2 mt-10 mb-4 mr-4 flex items-center justify-center">
+            <app-favorite-button [eventId]="event.id" class="p-2"></app-favorite-button>
+            <app-share [event]="event" [location]="location"></app-share>
+            <app-calendar-export
               [event]="event"
               [location]="location"
-              class="mt-10 mr-10 mb-4 text-2xl"
-            ></app-share>
+            ></app-calendar-export>
           </div>
         </div>
         <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
@@ -242,12 +240,12 @@
                   <span aria-hidden="true">👤</span>
                 </div>
               </div>
-                <div>
-                  <h3>
-                    {{ 'event-detail.name' | translate }}
-                  </h3>
-                  <p>{{ organizer?.name }}</p>
-                </div>
+              <div>
+                <h3>
+                  {{ 'event-detail.name' | translate }}
+                </h3>
+                <p>{{ organizer?.name }}</p>
+              </div>
             </div>
             @if (organizer?.email) {
               <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
@@ -259,19 +257,19 @@
                     <span aria-hidden="true">📧</span>
                   </div>
                 </div>
-                  <div>
-                    <h3>
-                      {{ 'event-detail.email' | translate }}
-                    </h3>
-                    <p>
-                      <a
-                        href="mailto:{{ organizer?.email }}"
-                        class="text-blue-700 underline hover:text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                      >
-                        {{ organizer?.email }}
-                      </a>
-                    </p>
-                  </div>
+                <div>
+                  <h3>
+                    {{ 'event-detail.email' | translate }}
+                  </h3>
+                  <p>
+                    <a
+                      href="mailto:{{ organizer?.email }}"
+                      class="text-blue-700 underline hover:text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    >
+                      {{ organizer?.email }}
+                    </a>
+                  </p>
+                </div>
               </div>
             }
             @if (organizer?.phonenumber) {
@@ -284,19 +282,19 @@
                     <span aria-hidden="true">☎️</span>
                   </div>
                 </div>
-                  <div>
-                    <h3>
-                      {{ 'event-detail.phone' | translate }}
-                    </h3>
-                    <p>
-                      <a
-                        href="tel:{{ organizer?.phonenumber }}"
-                        class="text-blue-700 underline hover:text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                      >
-                        {{ organizer?.phonenumber }}
-                      </a>
-                    </p>
-                  </div>
+                <div>
+                  <h3>
+                    {{ 'event-detail.phone' | translate }}
+                  </h3>
+                  <p>
+                    <a
+                      href="tel:{{ organizer?.phonenumber }}"
+                      class="text-blue-700 underline hover:text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    >
+                      {{ organizer?.phonenumber }}
+                    </a>
+                  </p>
+                </div>
               </div>
             }
           </div>
