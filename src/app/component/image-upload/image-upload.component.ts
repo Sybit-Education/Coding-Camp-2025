@@ -18,11 +18,12 @@ import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { Media } from '../../models/media.model'
 import { SnackBarService } from '../../services/snack-bar.service'
 import { TranslateModule } from '@ngx-translate/core'
+import { FormsModule } from '@angular/forms'
 
 @Component({
   selector: 'app-image-upload',
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule,FormsModule],
   templateUrl: './image-upload.component.html',
   styleUrl: './image-upload.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,6 +39,9 @@ export class ImageUploadComponent implements OnInit, OnChanges {
   @Output() mediaIdsChange = new EventEmitter<RecordId<'media'>[]>()
 
   isDragging = false
+
+  openSettingsIndex: number | null = null;
+  pictureInfos: { copyright: string; creator: string }[] = [];
 
   private readonly mediaService = inject(MediaService)
   private readonly markForCheck = injectMarkForCheck()
@@ -292,6 +296,8 @@ export class ImageUploadComponent implements OnInit, OnChanges {
                 fileType = image.split(';')[0].split('/')[1]
               }
 
+              const info = this.pictureInfos[i] || { copyright: '', creator: '' }
+
               // Eindeutige ID generieren
               const uniqueId = new StringRecordId(
                 `media:${fileName.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}`,
@@ -303,6 +309,8 @@ export class ImageUploadComponent implements OnInit, OnChanges {
                 file: file,
                 fileName: fileName,
                 fileType: fileType,
+                copyright: info.copyright || '',
+                creator: info.creator || '',
               }
               return await this.mediaService.postMedia(newMedia)
             } catch (error) {
@@ -334,4 +342,47 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       return result
     }
   }
+
+  openPictureSettings(index: number) {
+    if (!this.pictureInfos[index]) {
+      this.pictureInfos[index] = { copyright: '', creator: '' };
+    }
+    this.openSettingsIndex = index;
+  }
+
+  closePictureSettings() {
+    this.openSettingsIndex = null;
+  }
+
+  async saveSettings(index: number, copyright: string, creator: string) {
+  const info = this.pictureInfos[index];
+  if (!info) return;
+
+  try {
+    const previewData = this.previews[index];
+
+    if (previewData.startsWith('{') && previewData.endsWith('}')) {
+      const parsed = JSON.parse(previewData);
+      parsed.copyright = info.copyright || '';
+      parsed.creator = info.creator || '';
+      this.previews[index] = JSON.stringify(parsed);
+    }
+
+    else if (previewData.startsWith('http')) {
+      const media = await this.mediaService.getMediaByUrl(previewData)
+      // if(media){
+      // TODO: add exception
+      // }
+      media!.copyright = copyright
+      media!.cretaor = creator
+      this.mediaService.updateMedia(media!.id!, media!)
+    }
+
+    this.previewsChange.emit(this.previews);
+    this.markForCheck();
+  } catch (error) {
+    console.error('Fehler beim Aktualisieren der Bilddaten:', error);
+  }
+}
+
 }

@@ -2,7 +2,7 @@
   class="flex flex-col items-center justify-center rounded-[6px] border-2 border-black bg-[#6d7cbc]"
 >
   <button
-    class="flex h-[200px] w-full flex-col items-center justify-center"
+    class="flex h-[100px] w-full flex-col items-center justify-center cursor-pointer"
     (dragover)="onDragOver($event)"
     (dragleave)="onDragLeave()"
     (drop)="onDrop($event)"
@@ -26,28 +26,77 @@
       style="display: none"
     />
   </button>
-
-  @if (previews.length) {
-    <div class="grid grid-flow-row-dense grid-cols-4 gap-2">
-      @for (src of previews; track src; let i = $index) {
-        <div class="m-1">
-          <div
-            class="relative overflow-hidden rounded-lg rounded-md border-2 border-gray-500 align-top leading-none"
-          >
-            <img
-              [src]="getSrcForPreview(src)"
-              alt="Bild-Vorschau {{ i + 1 }}"
-              class="max-h-50 max-w-50 rounded-md object-cover"
-            />
-            <button
-              (click)="removeImage(i)"
-              class="absolute top-1 right-1 flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 bg-white/80 shadow-md hover:bg-gray-500 hover:text-white"
-            >
-              ✕
-            </button>
-          </div>
+</div>
+@if (previews.length) {
+    <div
+  class="flex overflow-x-auto gap-2 p-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent"
+>
+  @for (src of previews; track src; let i = $index) {
+    <div class="flex-none">
+      <div
+        class="relative overflow-hidden rounded-lg border-2 border-gray-500 align-top leading-none"
+      >
+      @if (openSettingsIndex !== i) {
+        <img
+          [src]="getSrcForPreview(src)"
+          alt="Bild-Vorschau {{ i + 1 }}"
+          class="w-40 h-40 rounded-md object-cover"
+        />
+      } @else {
+        <img
+          [src]="getSrcForPreview(src)"
+          alt="Bild-Vorschau {{ i + 1 }}"
+          class="w-50 h-40 rounded-md object-cover"
+        />
+      }
+        <button
+          (click)="removeImage(i)"
+          class="absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full border border-gray-300 bg-white/80 shadow-md hover:bg-gray-500 hover:text-white"
+        >
+          ✕
+        </button>
+        <button
+          (click)="openPictureSettings(i)"
+          class="absolute top-1 right-8 flex h-6 w-6 items-center justify-center rounded-full border border-gray-300 bg-white/80 shadow-md hover:bg-gray-500 hover:text-white"
+        >
+          ⚙
+        </button>
+      </div>
+      @if (openSettingsIndex === i) {
+        <div
+        class="relative left-0 right-0 z-10 mt-2 rounded-lg border border-gray-400 bg-white p-3 shadow-lg w-50"
+      >
+        <div class="flex flex-col gap-2">
+          <input
+            type="text"
+            placeholder="Copyright..."
+            [(ngModel)]="pictureInfos[i].copyright"
+            class="rounded-md border border-gray-300 px-2 py-1 text-sm focus:border-blue-500 focus:outline-none"
+          />
+          <input
+            type="text"
+            placeholder="Fotograf..."
+            [(ngModel)]="pictureInfos[i].creator"
+            class="rounded-md border border-gray-300 px-2 py-1 text-sm focus:border-blue-500 focus:outline-none"
+          />
+          <div class="flex justify-end gap-2 mt-1">
+        <button
+          (click)="saveSettings(i, pictureInfos[i].copyright, pictureInfos[i].creator)"
+          class="rounded-md bg-blue-600 px-3 py-1 text-white text-sm hover:bg-blue-700"
+        >
+          Speichern
+        </button>
+        <button
+          (click)="closePictureSettings()"
+          class="rounded-md bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300"
+        >
+          Abbrechen
+        </button>
+      </div>
         </div>
+      </div>
       }
     </div>
   }
 </div>
+  }

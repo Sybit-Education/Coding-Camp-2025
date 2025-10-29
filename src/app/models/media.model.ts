@@ -5,4 +5,6 @@ export interface Media extends Record<string, unknown> {
   file: string
   fileName: string
   fileType: string
+  copyright?: string
+  cretaor?: string
 }

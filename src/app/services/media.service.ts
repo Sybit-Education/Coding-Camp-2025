@@ -37,6 +37,12 @@ export class MediaService {
     return await this.getMediaUrl(mediaArray[0])
   }
 
+  async getMediasById(mediaRecordId: RecordId<'media'>): Promise<Media> {
+    return this.surrealdb.getByRecordId<Media>(
+        new StringRecordId(`media:${mediaRecordId}`),
+      )
+  }
+
   async getMediaByUrl(url: string): Promise<Media | null> {
     try {
       const id = url.substring(url.lastIndexOf('/') + 1).replace('.', '_')
@@ -48,6 +54,11 @@ export class MediaService {
       console.warn('Fehler beim Laden der Media:', error)
       return null
     }
+  }
+
+  async updateMedia(id: RecordId<'media'>, media: Media) {
+    const result = await this.surrealdb.postUpdate<Media>(id, media)
+    return result
   }
 
   /**
