@@ -20,7 +20,6 @@ import { Media } from '../../models/media.model'
 import { MediaService } from '../../services/media.service'
 import { MatIconModule } from '@angular/material/icon'
 import { GeometryPoint, StringRecordId, RecordId } from 'surrealdb'
-import { ImageUploadComponent } from '../../component/image-upload/image-upload.component'
 import { SnackBarService } from '../../services/snack-bar.service'
 import { injectMarkForCheck } from '../../utils/zoneless-helpers'
 import { MapComponent } from '../../component/map/map.component'
@@ -32,7 +31,6 @@ import { MapComponent } from '../../component/map/map.component'
     ReactiveFormsModule,
     TranslateModule,
     RouterModule,
-    ImageUploadComponent,
     MatIconModule,
     MapComponent,
   ],
@@ -141,13 +139,6 @@ export class LocationEditComponent implements OnInit {
             location.geo_point.coordinates as [number, number],
           )
         }
-
-        // Bilder laden, falls vorhanden
-        if (location.media && Array.isArray(location.media)) {
-          this.mediaIds.set(location.media.map(media => media.id as RecordId<'media'>))
-        } else {
-          this.mediaIds.set([])
-        }
       } else {
         console.error('Location nicht gefunden oder undefiniert')
         this.errorMessage.set(
@@ -175,16 +166,6 @@ export class LocationEditComponent implements OnInit {
       // Aktuelle Koordinaten in das Formular übernehmen
       formData.geo_point = new GeometryPoint(this.coordinates())
 
-      // Sammle alle neuen Medien, die noch nicht in der Datenbank sind
-      // Diese werden von der ImageUploadComponent als Objekte ohne ID bereitgestellt
-      const newMediaData: Media[] = [];
-      const existingMediaIds = this.mediaIds().filter(id => id !== undefined);
-
-      // Verarbeite neue Medien und speichere sie in der Datenbank
-      const newMediaIds = await this.processNewMedia(newMediaData);
-      
-      // Kombiniere bestehende und neue Medien-IDs
-      const allMediaIds = [...existingMediaIds, ...newMediaIds];
 
       // Bilder hinzufügen
       const locationData: Location = {
@@ -269,7 +250,7 @@ export class LocationEditComponent implements OnInit {
   updateCoordinates(newCoordinates: [number, number]): void {
     this.coordinates.set(newCoordinates)
     console.log('Neue Koordinaten gesetzt:', newCoordinates)
-    
+
     // Aktualisiere auch das Formular
     const geoPointControl = this.locationForm.get('geo_point');
     if (geoPointControl) {
@@ -278,7 +259,7 @@ export class LocationEditComponent implements OnInit {
         longLat: newCoordinates
       });
     }
-    
+
     // Markiere das Formular als "berührt", damit Validierungen ausgelöst werden
     this.markForCheck();
   }

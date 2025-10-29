@@ -139,22 +139,6 @@
           </div>
         </div>
 
-        <!-- Bilder -->
-        <div class="mb-6">
-          <label for="images" class="mb-2 block font-medium text-gray-700">{{
-            'ADMIN.LOCATIONS.FORM.IMAGES' | translate
-          }}</label>
-
-          <!-- Bild-Upload-Komponente -->
-          <app-image-upload
-            [previews]="previews()"
-            [existingImages]="mediaIds()"
-            [eventName]="locationForm.get('name')?.value || 'location'"
-            (previewsChange)="onPreviewsChange($event)"
-            (mediaIdsChange)="onMediaIdsChange($event)"
-          ></app-image-upload>
-        </div>
-
         <!-- Buttons -->
         <div class="flex flex-wrap justify-between gap-4">
           <div>
