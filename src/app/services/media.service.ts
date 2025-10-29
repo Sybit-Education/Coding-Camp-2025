@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
-import { Media } from '../models/media.model'
+import { Media } from '../models/media.interface'
 import { RecordId, StringRecordId } from 'surrealdb'
 import { environment } from '@environments/environment'
 @Injectable({
