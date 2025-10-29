@@ -37,7 +37,7 @@
         <div class="relative">
           <button
             (click)="goBack()"
-            class="absolute top-3 left-3 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/80 opacity-80 shadow-md hover:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            class="absolute top-3 left-3 z-10 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-white/80 opacity-80 shadow-md hover:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
             aria-label="{{ 'event-detail.back' | translate }}"
           >
             <span class="font-mono text-3xl font-extrabold">←</span>
@@ -71,26 +71,34 @@
             </div>
           }
         </div>
-        <div class="justify-left flex w-full items-center">
-          <app-favorite-button
-            class="px-2 pt-8"
-            [eventId]="event.id"
-          ></app-favorite-button>
-          <h1 class="px-2 pt-2">
-            {{ event.name }}
-          </h1>
+        <div class="flex w-full items-center justify-between">
+          <div class="ml-10">
+            <h1 class="text-2xl">
+              {{ event.name }}
+            </h1>
+          </div>
+          <div class="gap-2 mt-10 mb-4 mr-4 flex items-center justify-center text-2xl">
+            <app-favorite-button [eventId]="event.id" class="p-2"></app-favorite-button>
+            <app-share [event]="event" [location]="location"></app-share>
+            <app-calendar-export
+              [event]="event"
+              [location]="location"
+            ></app-calendar-export>
+          </div>
         </div>
         <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
         <div class="flex justify-between">
           <div
-            class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-xl"
+            class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl"
           >
-            <div class="grid grid-cols-[1fr_3fr]">
-              <div
-                class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-amber-300"
-                aria-hidden="true"
-              >
-                <span aria-hidden="true">📅</span>
+            <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+              <div class="flex items-center justify-center">
+                <div
+                  class="flex h-[50px] w-[50px] items-center justify-center rounded-full"
+                  aria-hidden="true"
+                >
+                  <span aria-hidden="true">📅</span>
+                </div>
               </div>
               <div>
                 <h3>
@@ -101,12 +109,14 @@
                 </p>
               </div>
             </div>
-            <div class="grid grid-cols-[1fr_3fr]">
-              <div
-                class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-red-300"
-                aria-hidden="true"
-              >
-                <span aria-hidden="true">📍</span>
+            <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+              <div class="flex items-center justify-center">
+                <div
+                  class="flex h-[50px] w-[50px] items-center justify-center rounded-full"
+                  aria-hidden="true"
+                >
+                  <span aria-hidden="true">📍</span>
+                </div>
               </div>
               <div>
                 <h3>
@@ -115,12 +125,14 @@
                 <p>{{ location?.name }}</p>
               </div>
             </div>
-            <div class="grid grid-cols-[1fr_3fr]">
-              <div
-                class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-green-300"
-                aria-hidden="true"
-              >
-                <span aria-hidden="true">💶</span>
+            <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+              <div class="flex items-center justify-center">
+                <div
+                  class="flex h-[50px] w-[50px] items-center justify-center rounded-full"
+                  aria-hidden="true"
+                >
+                  <span aria-hidden="true">💶</span>
+                </div>
               </div>
               <div>
                 <h3>
@@ -135,27 +147,20 @@
                 </p>
               </div>
             </div>
-            <div class="grid grid-cols-[1fr_3fr]">
-              <div
-                class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-purple-400"
-                aria-hidden="true"
-              >
-                <span aria-hidden="true">👥</span>
+            <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+              <div class="flex items-center justify-center">
+                <div
+                  class="flex h-[50px] w-[50px] items-center justify-center rounded-full"
+                  aria-hidden="true"
+                >
+                  <span aria-hidden="true">👥</span>
+                </div>
               </div>
               <div>
                 <h3>
                   {{ 'event-detail.organizer' | translate }}
                 </h3>
                 <p>{{ organizer?.name }}</p>
-              </div>
-            </div>
-            <div class="relative flex flex-col items-center space-y-2">
-              <div class="flex gap-4">
-                <app-share [event]="event" [location]="location"></app-share>
-                <app-calendar-export
-                  [event]="event"
-                  [location]="location"
-                ></app-calendar-export>
               </div>
             </div>
           </div>
@@ -218,20 +223,22 @@
         class="contact mt-10 mb-18 rounded-2xl bg-gray-100 shadow-2xl"
         [attr.aria-labelledby]="'contact-heading'"
       >
-        <h2 id="contact-heading">
-          {{ 'event-detail.contact' | translate }}
+        <h2 id="contact-heading" class="ml-10">
+          {{ 'event-detail.organizer' | translate }}
         </h2>
         <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
         <div class="flex justify-between">
           <div
-            class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-xl"
+            class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl"
           >
-            <div class="grid grid-cols-[1fr_3fr]">
-              <div
-                class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-purple-400"
-                aria-hidden="true"
-              >
-                <span aria-hidden="true">👤</span>
+            <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+              <div class="flex items-center justify-center">
+                <div
+                  class="flex h-[50px] w-[50px] items-center justify-center rounded-full"
+                  aria-hidden="true"
+                >
+                  <span aria-hidden="true">👤</span>
+                </div>
               </div>
               <div>
                 <h3>
@@ -241,12 +248,14 @@
               </div>
             </div>
             @if (organizer?.email) {
-              <div class="grid grid-cols-[1fr_3fr]">
-                <div
-                  class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-red-300"
-                  aria-hidden="true"
-                >
-                  <span aria-hidden="true">📧</span>
+              <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+                <div class="flex items-center justify-center">
+                  <div
+                    class="flex h-[50px] w-[50px] items-center justify-center rounded-full"
+                    aria-hidden="true"
+                  >
+                    <span aria-hidden="true">📧</span>
+                  </div>
                 </div>
                 <div>
                   <h3>
@@ -264,12 +273,14 @@
               </div>
             }
             @if (organizer?.phonenumber) {
-              <div class="grid grid-cols-[1fr_3fr]">
-                <div
-                  class="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-amber-300"
-                  aria-hidden="true"
-                >
-                  <span aria-hidden="true">☎️</span>
+              <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+                <div class="flex items-center justify-center">
+                  <div
+                    class="flex h-[50px] w-[50px] items-center justify-center rounded-full"
+                    aria-hidden="true"
+                  >
+                    <span aria-hidden="true">☎️</span>
+                  </div>
                 </div>
                 <div>
                   <h3>
