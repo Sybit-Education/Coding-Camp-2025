@@ -188,8 +188,8 @@
           <div class="h-96 w-full overflow-hidden rounded-2xl shadow-2xl">
             <app-map
               [coordinates]="[
-                location!.geo_point!.coordinates[1],
                 location!.geo_point!.coordinates[0],
+                location!.geo_point!.coordinates[1],
               ]"
             ></app-map>
             <div class="sr-only">
