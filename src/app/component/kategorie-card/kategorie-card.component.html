@@ -1,6 +1,5 @@
 <div
-  class="flex aspect-[4/3] items-center justify-center rounded-lg text-center shadow-xl transition-transform duration-300 hover:scale-105"
-  [ngStyle]="{ 'background-color': backgroundColor() }"
+  class="flex aspect-[4/3] items-center justify-center rounded-lg text-center shadow-xl transition-transform duration-300 hover:scale-105 hover:shadow-xl hover:border border-gray-300 focus:ring-2 focus:ring-yellow-400"
 >
   <a
     [routerLink]="['/kategorie']"
@@ -8,12 +7,13 @@
     class="flex h-full w-full cursor-pointer items-center justify-center"
   >
     <div class="align-middle">
-      <p
-        [ngStyle]="{ color: textColor() }"
-        class="items-center justify-center text-center font-semibold transition-transform duration-300 hover:scale-105"
-      >
+      <p class="items-center justify-center text-center font-semibold transition-transform duration-300 ">
         {{ text }}
       </p>
+      <div
+        class="h-1 w-auto rounded transition-transform duration-300 scale-x-150 "
+        [ngStyle]="{ 'background-color': backgroundColor() }"
+      ></div>
     </div>
   </a>
 </div>
