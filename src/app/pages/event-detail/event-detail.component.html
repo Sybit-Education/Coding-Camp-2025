@@ -185,7 +185,7 @@
             {{ 'event-detail.arrival' | translate }}
           </h2>
           <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
-          <div class="map">
+          <div class="h-96 w-full overflow-hidden rounded-2xl shadow-2xl">
             <app-map
               [coordinates]="[
                 location!.geo_point!.coordinates[1],
