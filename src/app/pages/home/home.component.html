@@ -10,12 +10,12 @@
   </a>
 
   <!-- Debug-Info -->
-  <div
-    *ngIf="displayEvents.length === 0"
-    class="mb-4 rounded bg-yellow-100 p-4"
-  >
-    Lade Events... ({{ events.length }} Events verfügbar)
-  </div>
+
+  @if (displayEvents.length === 0) {
+    <div class="mb-4 rounded bg-yellow-100 p-4">
+      Lade Events... ({{ events.length }} Events verfügbar)
+    </div>
+  }
 
   <!-- Aktuelle Events -->
   <section
@@ -48,6 +48,12 @@
       </div>
     </div>
   </section>
+
+  <div class="h-24 max-w-3xl">
+    <app-event-card
+      [isMoreCard]="true"
+    ></app-event-card>
+  </div>
 
   <!-- Kategorien -->
   <section
