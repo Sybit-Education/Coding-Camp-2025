@@ -20,6 +20,7 @@ import { Event } from '../../models/event.interface'
 import { Topic } from '../../models/topic.interface'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { TypeDB } from '@app/models/typeDB.interface'
+import { AllEventButtonComponent } from "@app/component/all-event-button/all-event-button.component";
 
 type EventOrMore = Event & { isMore?: boolean }
 
@@ -32,7 +33,8 @@ type EventOrMore = Event & { isMore?: boolean }
     RouterModule,
     EventCardComponent,
     KategorieCardComponent,
-  ],
+    AllEventButtonComponent
+],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

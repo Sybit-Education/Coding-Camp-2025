@@ -1,4 +1,4 @@
-<article>
+<div class="relative grid grid-cols-1 justify-center">
   <h1 class="sr-only">
     {{ 'home.title' | translate }}
   </h1>
@@ -49,10 +49,8 @@
     </div>
   </section>
 
-  <div class="h-24 max-w-3xl">
-    <app-event-card
-      [isMoreCard]="true"
-    ></app-event-card>
+  <div class="flex justify-center">
+    <app-all-event-button/>
   </div>
 
   <!-- Kategorien -->
@@ -76,4 +74,4 @@
       }
     </div>
   </section>
-</article>
+</div>
