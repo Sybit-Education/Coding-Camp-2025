@@ -82,7 +82,7 @@ export class LocationInputComponent {
     const location: Location = {
       name: this.locationName,
       street: this.address || undefined,
-      zip_code: this.plz || undefined,
+      zip_code: this.plz.toString() || undefined,
       city: this.city || 'Radolfzell',
       geo_point: this.latlng || undefined,
     }

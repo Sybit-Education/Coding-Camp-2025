@@ -193,13 +193,36 @@
   },
   "ADMIN": {
     "EVENTS": {
-      "TITLE": "Administration",
-      "CREATE_NEW": "Neu anlegen ...",
+      "TITLE": "Events",
+      "CREATE_NEW": "Neues Event ...",
       "NO_EVENTS": "Keine Events gefunden",
       "EDIT": "Bearbeiten ...",
       "DELETE": "Löschen",
-      "SEARCH": "Suchen ...",
-      "PREVIEW": "Vorschau"
-    }
+      "SEARCH": "Suchen ..."
+    },
+    "LOCATIONS": {
+      "TITLE": "Orte",
+      "CREATE_NEW": "Neuer Ort ...",
+      "SEARCH": "Orte suchen...",
+      "NO_LOCATIONS": "Keine Orte gefunden",
+      "PREVIEW": "Vorschau",
+      "EDIT": "Bearbeiten",
+      "DELETE": "Löschen",
+      "FORM": {
+        "TITLE_CREATE": "Neuen Ort erstellen",
+        "TITLE_EDIT": "Ort bearbeiten",
+        "NAME": "Name",
+        "STREET": "Straße",
+        "ZIP": "PLZ",
+        "CITY": "Stadt",
+        "IMAGES": "Bilder",
+        "NAME_REQUIRED": "Bitte geben Sie einen Namen ein.",
+        "SAVE_ERROR": "Der Ort konnte nicht gespeichert werden.",
+        "LOAD_ERROR": "Der Ort konnte nicht geladen werden.",
+        "DELETE_ERROR": "Der Ort konnte nicht gelöscht werden.",
+        "DELETE_CONFIRM": "Möchten Sie diesen Ort wirklich löschen?"
+      }
+    },
+    "TITLE": "Administration"
   }
 }

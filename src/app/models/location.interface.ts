@@ -1,4 +1,5 @@
 import { GeometryPoint, RecordId } from 'surrealdb'
+
 export interface Location extends Record<string, unknown> {
   id?: RecordId<'location'>
   name: string
