@@ -9,7 +9,7 @@
           type="text"
           [(ngModel)]="filterValue"
           (keyup)="updateFilter()"
-          placeholder="{{ 'ADMIN.EVENTS.SEARCH' | translate }}"
+          placeholder="{{ 'ADMIN.LOCATIONS.SEARCH' | translate }}"
           class="rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />
         <svg
@@ -28,7 +28,7 @@
         </svg>
       </div>
       <a
-        [routerLink]="['/admin/create']"
+        [routerLink]="['/admin/location/create']"
         class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
       >
         <svg
@@ -45,7 +45,7 @@
             d="M12 4v16m8-8H4"
           />
         </svg>
-        {{ 'ADMIN.EVENTS.CREATE_NEW' | translate }}
+        {{ 'ADMIN.LOCATIONS.CREATE_NEW' | translate }}
       </a>
     </div>
   </div>
@@ -56,7 +56,7 @@
         [routerLink]="['/admin/']"
         routerLinkActive="border-blue-600 text-blue-600"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="whitespace-nowrap border-b-2 border-transparent px-1 py-2 text-xl font-bold text-blue-600 hover:text-blue-800 hover:border-gray-300"
+        class="whitespace-nowrap border-b-2 border-transparent px-1 py-2 text-xl font-medium text-gray-600 hover:text-blue-800 hover:border-gray-300"
       >
         {{ 'ADMIN.EVENTS.TITLE' | translate }}
       </a>
@@ -64,7 +64,7 @@
         [routerLink]="['/admin/locations']"
         routerLinkActive="border-blue-600 text-blue-600"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="whitespace-nowrap border-b-2 border-transparent px-1 py-2 text-xl font-medium text-gray-600 hover:text-blue-800 hover:border-gray-300"
+        class="whitespace-nowrap border-b-2 border-transparent px-1 py-2 text-xl font-bold text-blue-600 hover:text-blue-800 hover:border-gray-300"
       >
         {{ 'ADMIN.LOCATIONS.TITLE' | translate }}
       </a>
@@ -78,16 +78,16 @@
       ></div>
       <span class="ml-3">{{ 'COMMON.LOADING' | translate }}</span>
     </div>
-  } @else if (events().length === 0) {
+  } @else if (locations().length === 0) {
     <div class="rounded-lg bg-white py-8 text-center shadow">
       <p class="mb-4 text-gray-500">
-        {{ 'ADMIN.EVENTS.NO_EVENTS' | translate }}
+        {{ 'ADMIN.LOCATIONS.NO_LOCATIONS' | translate }}
       </p>
       <a
-        [routerLink]="['/admin/create']"
+        [routerLink]="['/admin/location/create']"
         class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
       >
-        {{ 'ADMIN.EVENTS.CREATE_NEW' | translate }}
+        {{ 'ADMIN.LOCATIONS.CREATE_NEW' | translate }}
       </a>
     </div>
   } @else {
@@ -114,14 +114,7 @@
           [sortable]="false"
         >
           <ng-template let-row="row" ngx-datatable-cell-template>
-            @if (row.thumbnail) {
-              <img
-                [src]="row.thumbnail"
-                alt="Thumbnail"
-                class="event-thumbnail"
-              />
-            } @else {
-              <div class="event-thumbnail-placeholder">
+              <div class="location-thumbnail-placeholder">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="h-6 w-6 text-gray-400"
@@ -133,23 +126,16 @@
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
-                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                   />
                 </svg>
               </div>
-            }
-          </ng-template>
-        </ngx-datatable-column>
-
-        <!-- Date Column Template -->
-        <ngx-datatable-column
-          name="Datum"
-          prop="date_start"
-          [width]="10"
-          [flexGrow]="0"
-        >
-          <ng-template let-row="row" ngx-datatable-cell-template>
-            <span class="text-gray-700">{{ row.date_display }}</span>
           </ng-template>
         </ngx-datatable-column>
 
@@ -158,7 +144,7 @@
           <ng-template let-row="row" ngx-datatable-cell-template>
             <a
               href="javascript:void(0)"
-              (click)="editEvent(row.originalId)"
+              (click)="editLocation(row.originalId)"
               class="text-blue-600 hover:text-blue-800 hover:underline"
             >
               {{ row.name }}
@@ -166,14 +152,17 @@
           </ng-template>
         </ngx-datatable-column>
 
-        <!-- Organizer Column Template -->
-        <ngx-datatable-column
-          name="Veranstalter"
-          prop="organizer"
-          [flexGrow]="1"
-        >
+        <!-- City Column Template -->
+        <ngx-datatable-column name="Stadt" prop="city" [flexGrow]="1">
           <ng-template let-value="value" ngx-datatable-cell-template>
             <span class="text-gray-600">{{ value }}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <!-- Street Column Template -->
+        <ngx-datatable-column name="Straße" prop="street" [flexGrow]="1">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <span class="text-gray-600">{{ value || '-' }}</span>
           </ng-template>
         </ngx-datatable-column>
 
@@ -182,35 +171,9 @@
           <ng-template let-row="row" ngx-datatable-cell-template>
             <div class="flex space-x-2">
               <button
-                (click)="previewEvent(row.originalId)"
-                class="p-1 text-green-600 hover:text-green-800 focus:outline-none"
-                title="{{ 'ADMIN.EVENTS.PREVIEW' | translate }}"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                  />
-                </svg>
-              </button>
-              <button
-                (click)="editEvent(row.originalId)"
+                (click)="editLocation(row.originalId)"
                 class="p-1 text-blue-600 hover:text-blue-800 focus:outline-none"
-                title="{{ 'ADMIN.EVENTS.EDIT' | translate }}"
+                title="{{ 'ADMIN.LOCATIONS.EDIT' | translate }}"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -228,9 +191,9 @@
                 </svg>
               </button>
               <button
-                (click)="deleteEvent(row.originalId)"
+                (click)="deleteLocation(row.originalId)"
                 class="p-1 text-red-600 hover:text-red-800 focus:outline-none"
-                title="{{ 'ADMIN.EVENTS.DELETE' | translate }}"
+                title="{{ 'ADMIN.LOCATIONS.DELETE' | translate }}"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

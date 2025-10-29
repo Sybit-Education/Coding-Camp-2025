@@ -253,8 +253,8 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   }
 
   startRoute() {
-    const lat = this.location!.geo_point!.point[1]
-    const lng = this.location!.geo_point!.point[0]
+    const lat = this.location!.geo_point!.coordinates[1]
+    const lng = this.location!.geo_point!.coordinates[0]
 
     const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`
 
