@@ -1,5 +1,5 @@
 <div
-  class="flex flex-col items-center justify-center rounded-[6px] border-2 border-black bg-[#6d7cbc]"
+  class="flex flex-col items-center justify-center rounded-[6px] border-3 border-gray-400 border-dashed bg-gray-200"
 >
   <button
     class="flex h-[200px] w-full flex-col items-center justify-center"
@@ -11,10 +11,14 @@
     tabindex="0"
     [class.hovering]="isDragging"
   >
-    <div class="mb-2 text-[1.1rem] font-medium text-white">
+    <svg class="w-12 h-12 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+      <path fill-rule="evenodd" d="M12 3a1 1 0 0 1 .78.375l4 5a1 1 0 1 1-1.56 1.25L13 6.85V14a1 1 0 1 1-2 0V6.85L8.78 9.626a1 1 0 1 1-1.56-1.25l4-5A1 1 0 0 1 12 3ZM9 14v-1H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-4v1a3 3 0 1 1-6 0Zm8 2a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H17Z" clip-rule="evenodd"/>
+    </svg>
+
+    <div class="mb-2 text-[1.1rem] font-medium text-black">
       {{ 'Bild hier ablegen oder klicken zum Auswählen' | translate }}
     </div>
-    <div class="text-[0.9rem] text-black">
+    <div class="text-[0.9rem] text-black-700">
       {{ 'JPG, PNG - Max. 5 MB pro Bild' | translate }}
     </div>
     <input

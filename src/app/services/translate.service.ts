@@ -1,13 +1,16 @@
-import { Injectable, inject, signal } from '@angular/core'
+import { Injectable, inject, signal, PLATFORM_ID } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { toSignal } from '@angular/core/rxjs-interop'
+import { isPlatformBrowser } from '@angular/common'
 
 @Injectable({
   providedIn: 'root',
 })
 export class I18nService {
   private readonly translateService = inject(TranslateService)
+  private readonly platformId = inject(PLATFORM_ID)
+  private readonly isBrowser = isPlatformBrowser(this.platformId)
 
   // Signal für reaktiven State
   readonly currentLangState = signal<string>('de')
@@ -31,14 +34,16 @@ export class I18nService {
     this.translateService.setFallbackLang('de')
 
     // Browser-Sprache erkennen oder Standardsprache verwenden
-    const browserLang = this.translateService.getBrowserLang()
+    const browserLang = this.isBrowser
+      ? this.translateService.getBrowserLang()
+      : undefined
     const initialLang =
       browserLang && ['de', 'en', 'fr'].includes(browserLang)
         ? browserLang
         : 'de'
 
     // Gespeicherte Sprache aus localStorage verwenden, falls vorhanden
-    const savedLang = localStorage.getItem('selectedLanguage')
+    const savedLang = this.getStoredLanguage()
 
     // Sprache setzen
     this.use(savedLang || initialLang)
@@ -54,10 +59,10 @@ export class I18nService {
     this.currentLangState.set(lang)
     this.currentLangSubject.next(lang)
 
-    localStorage.setItem('selectedLanguage', lang)
+    this.persistLanguage(lang)
 
     // Aktualisiere das LOCALE_ID für Angular-interne Formatierungen
-    document.documentElement.lang = lang
+    this.updateDocumentLang(lang)
 
     // Aktualisiere das LOCALE_ID dynamisch
     this.updateLocaleId(lang)
@@ -67,6 +72,10 @@ export class I18nService {
    * Aktualisiert das LOCALE_ID dynamisch, um Datums- und Zahlenformatierungen zu aktualisieren
    */
   private updateLocaleId(lang: string): void {
+    if (!this.isBrowser) {
+      return
+    }
+
     // Bestimme das Locale basierend auf der Sprache
     let locale = 'de-DE'
     switch (lang) {
@@ -108,5 +117,38 @@ export class I18nService {
    */
   getLangs(): readonly string[] {
     return this.translateService.getLangs()
+  }
+
+  private getStoredLanguage(): string | null {
+    if (!this.isBrowser) {
+      return null
+    }
+
+    try {
+      return window.localStorage.getItem('selectedLanguage')
+    } catch (error) {
+      console.warn('Konnte gespeicherte Sprache nicht lesen:', error)
+      return null
+    }
+  }
+
+  private persistLanguage(lang: string): void {
+    if (!this.isBrowser) {
+      return
+    }
+
+    try {
+      window.localStorage.setItem('selectedLanguage', lang)
+    } catch (error) {
+      console.warn('Konnte Sprache nicht speichern:', error)
+    }
+  }
+
+  private updateDocumentLang(lang: string): void {
+    if (!this.isBrowser) {
+      return
+    }
+
+    document.documentElement.lang = lang
   }
 }

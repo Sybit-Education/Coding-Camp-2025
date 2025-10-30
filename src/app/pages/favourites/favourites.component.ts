@@ -69,9 +69,13 @@ export class FavouritesComponent implements OnInit, OnDestroy {
     )
 
     // Lade die Favoriten mit requestAnimationFrame statt setTimeout für bessere Performance
-    requestAnimationFrame(() => {
+    if (typeof requestAnimationFrame !== 'undefined') {
+      requestAnimationFrame(() => {
+        this.favoriteService.loadFavoriteEvents()
+      })
+    } else {
       this.favoriteService.loadFavoriteEvents()
-    })
+    }
   }
 
   navigateToEvent(event: Event): void {

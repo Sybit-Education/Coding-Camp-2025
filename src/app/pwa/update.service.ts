@@ -39,7 +39,9 @@ export class UpdateService {
       return Promise.resolve(false)
     }
     return this.swUpdate.activateUpdate().then(() => {
-      window.location.reload()
+      if (typeof window !== 'undefined') {
+        window.location.reload()
+      }
       return true
     })
   }

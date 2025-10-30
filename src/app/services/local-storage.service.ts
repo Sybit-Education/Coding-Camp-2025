@@ -1,12 +1,16 @@
-import { Injectable, signal } from '@angular/core'
+import { Injectable, inject, signal } from '@angular/core'
 import { BehaviorSubject } from 'rxjs'
 import { Event } from '../models/event.interface'
+import { isPlatformBrowser } from '@angular/common'
+import { PLATFORM_ID } from '@angular/core'
 
 @Injectable({
   providedIn: 'root',
 })
 export class LocalStorageService {
   private readonly SAVED_EVENTS_KEY = 'saved_events'
+  private readonly platformId = inject(PLATFORM_ID)
+  private readonly isBrowser = isPlatformBrowser(this.platformId)
 
   // Signal für reaktiven State
   readonly savedEventsSignal = signal<string[]>(this.getSavedEventIds())
@@ -47,13 +51,32 @@ export class LocalStorageService {
   }
 
   getSavedEventIds(): string[] {
-    const savedEvents = localStorage.getItem(this.SAVED_EVENTS_KEY)
-    const ids = savedEvents ? JSON.parse(savedEvents) : []
-    return ids
+    if (!this.isBrowser) {
+      return []
+    }
+
+    try {
+      const savedEvents = window.localStorage.getItem(this.SAVED_EVENTS_KEY)
+      return savedEvents ? JSON.parse(savedEvents) : []
+    } catch (error) {
+      console.warn('LocalStorage ist nicht verfügbar:', error)
+      return []
+    }
   }
 
   private setSavedEventIds(eventIds: string[]): void {
-    localStorage.setItem(this.SAVED_EVENTS_KEY, JSON.stringify(eventIds))
+    if (!this.isBrowser) {
+      return
+    }
+
+    try {
+      window.localStorage.setItem(
+        this.SAVED_EVENTS_KEY,
+        JSON.stringify(eventIds),
+      )
+    } catch (error) {
+      console.warn('Konnte LocalStorage nicht schreiben:', error)
+    }
   }
 
   filterSavedEvents(events: Event[]): Event[] {

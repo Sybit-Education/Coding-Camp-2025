@@ -165,7 +165,6 @@
     "arrival": "Arrival",
     "adress": "Address",
     "eventlocation": "Event location",
-    "contact": "Contact details",
     "name": "Name",
     "email": "Email",
     "phone": "Phone",
@@ -198,13 +197,18 @@
   },
   "ADMIN": {
     "EVENTS": {
-      "TITLE": "Administration",
+      "TITLE": "Events",
       "NO_EVENTS": "No events found.",
       "EDIT": "Edit ...",
       "DELETE": "Delete",
       "SEARCH": "Search ...",
-      "CREATE_NEW": "Create new ...",
-      "PREVIEW": "Preview"
-    }
+      "CREATE_NEW": "New Event ..."
+    },
+    "LOCATIONS": {
+      "DELETE": "Delete",
+      "TITLE": "Locations",
+      "CREATE_NEW": "New Location ..."
+    },
+    "TITLE": "Administration"
   }
 }

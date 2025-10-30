@@ -72,8 +72,9 @@ export class EventCreateComponent implements OnInit {
   price: string | null = null
   dateStart = ''
   timeStart = ''
-  dateEnd? = ''
-  timeEnd? = ''
+  dateEnd = ''
+  timeEnd = ''
+
   age: number | null = null
   restriction: string | null = null
   draft = false
@@ -219,6 +220,21 @@ export class EventCreateComponent implements OnInit {
       this.selectedTopics.push(topic)
     } else {
       this.selectedTopics = this.selectedTopics.filter((t) => t.id !== topic.id)
+    }
+  }
+
+  onTimePeriodToggle(enabled: boolean): void {
+    this.timePeriode = enabled
+
+    if (!enabled) {
+      this.dateEnd = ''
+      this.timeEnd = ''
+    } else if (!this.dateEnd && this.dateStart) {
+      // Voreinstellung: Enddatum = Startdatum für schnellere Eingabe
+      this.dateEnd = this.dateStart
+      if (!this.timeEnd && this.timeStart) {
+        this.timeEnd = this.timeStart
+      }
     }
   }
 

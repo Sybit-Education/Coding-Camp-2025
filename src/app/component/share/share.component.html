@@ -2,19 +2,16 @@
   <button
     type="button"
     (click)="sharePage()"
-    class="group rounded-full bg-blue-200 p-3 transition hover:bg-blue-300 focus:ring-2 focus:ring-blue-400 focus:outline-none active:ring-blue-600"
+    class="group rounded-full p-2 transition hover:bg-gray-200 cursor-pointer"
     aria-label="{{ 'SHARE.SHARE' | translate }}"
   >
     <div
       class="relative flex h-[26px] w-[26px] items-center justify-center rounded-full"
       aria-hidden="true"
     >
-      <p>{{ '📤' }}</p>
+      📤
     </div>
   </button>
-  <p class="mt-1 text-center text-sm font-bold">
-    {{ 'SHARE.SHARE' | translate }}
-  </p>
 
   <!-- Benachrichtigung für Benutzer, wenn Link kopiert wurde -->
   @if (showCopyMessage) {

@@ -5,8 +5,9 @@ import {
   inject,
   Input,
   OnInit,
+  PLATFORM_ID,
 } from '@angular/core'
-import { CommonModule } from '@angular/common'
+import { CommonModule, isPlatformBrowser } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { I18nService } from '../../services/translate.service'
 import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component'
@@ -113,6 +114,8 @@ export class HeaderComponent implements OnInit {
   currentSrc = ''
 
   private readonly i18nService: I18nService = inject(I18nService)
+  private readonly platformId = inject(PLATFORM_ID)
+  private readonly isBrowser = isPlatformBrowser(this.platformId)
 
   constructor() {
     this.currentLang = this.i18nService.getCurrentLang()
@@ -144,6 +147,12 @@ export class HeaderComponent implements OnInit {
    * Aktualisiert sowohl den Shrink‑Status als auch den aktuellen Logopfad.
    */
   private updateState(): void {
+    if (!this.isBrowser) {
+      this.isShrunk = false
+      this.currentSrc = this.pickLogoForState()
+      return
+    }
+
     this.isShrunk = window.scrollY > this.shrinkThreshold
     this.currentSrc = this.pickLogoForState()
   }
@@ -153,6 +162,9 @@ export class HeaderComponent implements OnInit {
    * Information wird für die Auswahl der passenden Logovariante benötigt.
    */
   private isDarkMode(): boolean {
+    if (!this.isBrowser) {
+      return false
+    }
     return (
       window.matchMedia &&
       window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -169,11 +181,14 @@ export class HeaderComponent implements OnInit {
    * weniger reduzierte Variante (etwa ohne „Jahre“) verwendet wird.
    */
   private pickLogoForState(): string {
-    const dark = this.isDarkMode()
-    const w = window.innerWidth
-
     const choose = (src?: ThemeSrc) =>
-      src ? (dark ? src.dark : src.light) : ''
+      src ? (this.isDarkMode() ? src.dark : src.light) : ''
+
+    if (!this.isBrowser) {
+      return choose(this.logo.full)
+    }
+
+    const w = window.innerWidth
 
     // Groß: immer Vollversion
     if (!this.isShrunk) {

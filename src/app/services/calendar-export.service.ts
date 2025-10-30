@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core'
+import { Injectable, PLATFORM_ID, inject } from '@angular/core'
 import { Event } from '../models/event.interface'
 import { Location } from '../models/location.interface'
+import { isPlatformBrowser } from '@angular/common'
 
 export interface CalendarEvent {
   title: string
@@ -15,15 +16,22 @@ export interface CalendarEvent {
   providedIn: 'root',
 })
 export class CalendarExportService {
+  private readonly platformId = inject(PLATFORM_ID)
+  private readonly isBrowser = isPlatformBrowser(this.platformId)
+
   /**
    * Entfernt HTML-Tags aus einem String
    */
   private stripHtml(html: string): string {
-    // Temporäres div-Element erstellen
-    const tempDiv = document.createElement('div')
-    tempDiv.innerHTML = html
-    // Text ohne HTML-Tags zurückgeben
-    return tempDiv.textContent || tempDiv.innerText || ''
+    if (this.isBrowser) {
+      // Temporäres div-Element erstellen
+      const tempDiv = document.createElement('div')
+      tempDiv.innerHTML = html
+      // Text ohne HTML-Tags zurückgeben
+      return tempDiv.textContent || tempDiv.innerText || ''
+    }
+
+    return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
   }
 
   /**
@@ -203,6 +211,10 @@ END:VCALENDAR`
    * das webcal-Protokoll, das von Apple Kalendern unterstützt wird.
    */
   generateAppleCalendarUrl(calEvent: CalendarEvent): string {
+    if (!this.isBrowser) {
+      return ''
+    }
+
     // Für Apple Kalender verwenden wir das webcal:// Protokoll
     // Dies funktioniert auf macOS und iOS Geräten
 
@@ -224,6 +236,10 @@ END:VCALENDAR`
    * Erstellt und downloadet eine .ics Datei
    */
   downloadICalFile(calEvent: CalendarEvent, filename = 'event.ics'): void {
+    if (!this.isBrowser) {
+      return
+    }
+
     const icalContent = this.generateICalFile(calEvent)
     const blob = new Blob([icalContent], {
       type: 'text/calendar;charset=utf-8',

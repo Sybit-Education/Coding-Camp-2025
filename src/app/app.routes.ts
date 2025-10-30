@@ -66,31 +66,31 @@ export const routes: Routes = [
     title: 'Admin: Veranstaltungen',
   },
   {
-    path: 'admin/create',
-    loadComponent: () =>
-      import('./pages/event-create/event-create.component').then(
-        (m) => m.EventCreateComponent,
-      ),
-    canActivate: [LoginService],
-    title: 'Veranstaltung erstellen',
-  },
-  {
-    path: 'admin/event/:id',
-    loadComponent: () =>
-      import('./pages/event-create/event-create.component').then(
-        (m) => m.EventCreateComponent,
-      ),
-    canActivate: [LoginService],
-    title: 'Veranstaltung erstellen',
-  },
-  {
-    path: 'admin',
+    path: 'admin/locations',
     loadComponent: () =>
       import(
-        './pages/admin-event-overview/admin-event-overview.component'
-      ).then((m) => m.AdminEventOverviewComponent),
+        './pages/admin-location-overview/admin-location-overview.component'
+      ).then((m) => m.AdminLocationOverviewComponent),
     canActivate: [LoginService],
-    title: 'Admin: Veranstaltungen',
+    title: 'Admin: Orte',
+  },
+  {
+    path: 'admin/location/create',
+    loadComponent: () =>
+      import('./pages/location-edit/location-edit.component').then(
+        (m) => m.LocationEditComponent,
+      ),
+    canActivate: [LoginService],
+    title: 'Ort erstellen',
+  },
+  {
+    path: 'admin/location/:id',
+    loadComponent: () =>
+      import('./pages/location-edit/location-edit.component').then(
+        (m) => m.LocationEditComponent,
+      ),
+    canActivate: [LoginService],
+    title: 'Ort bearbeiten',
   },
   {
     path: 'admin/create',

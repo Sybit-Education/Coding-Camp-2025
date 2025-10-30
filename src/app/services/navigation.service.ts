@@ -34,7 +34,9 @@ export class NavigationService {
    * Navigiert zurück in der Browser-Historie
    */
   goBack(): void {
-    window.history.back()
+    if (typeof window !== 'undefined' && window.history) {
+      window.history.back()
+    }
     this.markForCheck()
   }
 }
