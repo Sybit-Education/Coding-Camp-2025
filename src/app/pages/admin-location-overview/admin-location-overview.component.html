@@ -51,12 +51,12 @@
   </div>
 
   <div class="mb-4 border-b border-gray-200">
-    <nav class="flex -mb-px space-x-6" aria-label="Admin Navigation">
+    <nav class="-mb-px flex space-x-6" aria-label="Admin Navigation">
       <a
         [routerLink]="['/admin/']"
         routerLinkActive="border-blue-600 text-blue-600"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="whitespace-nowrap border-b-2 border-transparent px-1 py-2 text-xl font-medium text-gray-600 hover:text-blue-800 hover:border-gray-300"
+        class="border-b-2 border-transparent px-1 py-2 text-xl font-medium whitespace-nowrap text-gray-600 hover:border-gray-300 hover:text-blue-800"
       >
         {{ 'ADMIN.EVENTS.TITLE' | translate }}
       </a>
@@ -64,7 +64,7 @@
         [routerLink]="['/admin/locations']"
         routerLinkActive="border-blue-600 text-blue-600"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="whitespace-nowrap border-b-2 border-transparent px-1 py-2 text-xl font-bold text-blue-600 hover:text-blue-800 hover:border-gray-300"
+        class="border-b-2 border-transparent px-1 py-2 text-xl font-bold whitespace-nowrap text-blue-600 hover:border-gray-300 hover:text-blue-800"
       >
         {{ 'ADMIN.LOCATIONS.TITLE' | translate }}
       </a>
@@ -114,28 +114,28 @@
           [sortable]="false"
         >
           <ng-template let-row="row" ngx-datatable-cell-template>
-              <div class="location-thumbnail-placeholder">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                  />
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-              </div>
+            <div class="location-thumbnail-placeholder">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+            </div>
           </ng-template>
         </ngx-datatable-column>
 

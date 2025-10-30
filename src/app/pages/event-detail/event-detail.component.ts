@@ -25,7 +25,7 @@ import { FavoriteButtonComponent } from '../../component/favorite-button/favorit
 import { ShareComponent } from '../../component/share/share.component'
 import { MediaService } from '@app/services/media.service'
 import { ImageCarouselComponent } from '@app/component/image-carousel/image-carousel.component'
-import { CalendarExportComponent } from "@app/component/calendar-export/calendar-export.component";
+import { CalendarExportComponent } from '@app/component/calendar-export/calendar-export.component'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -38,8 +38,8 @@ import { CalendarExportComponent } from "@app/component/calendar-export/calendar
     FavoriteButtonComponent,
     ShareComponent,
     ImageCarouselComponent,
-    CalendarExportComponent
-],
+    CalendarExportComponent,
+  ],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -186,9 +186,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       let mediaUrlPromise: Promise<(string | null)[]> = Promise.resolve([null])
       if (foundEvent.media?.length > 0) {
         mediaUrlPromise = Promise.all(
-          foundEvent.media.map((media) =>
-            this.mediaService.getMediaUrl(media),
-          ),
+          foundEvent.media.map((media) => this.mediaService.getMediaUrl(media)),
         )
         promises.push(mediaUrlPromise)
       }

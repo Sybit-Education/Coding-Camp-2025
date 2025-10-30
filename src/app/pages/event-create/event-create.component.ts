@@ -282,8 +282,8 @@ export class EventCreateComponent implements OnInit {
       const finalMediaIds: RecordId<'media'>[] = []
       const finalMedia: Media[] = []
       for (const media of medias) {
-        finalMediaIds.push(media.id!);
-        finalMedia.push(media);
+        finalMediaIds.push(media.id!)
+        finalMedia.push(media)
       }
 
       // Wenn keine Bilder hochgeladen wurden, aber existierende Bilder vorhanden sind,
@@ -294,10 +294,9 @@ export class EventCreateComponent implements OnInit {
           this.images,
         )
         for (const media of this.images) {
-        finalMedia.push(media);
-        finalMediaIds.push(media.id!);
-      }
-
+          finalMedia.push(media)
+          finalMediaIds.push(media.id!)
+        }
       }
 
       // Sicherstellen, dass wir die aktualisierten Media-IDs verwenden

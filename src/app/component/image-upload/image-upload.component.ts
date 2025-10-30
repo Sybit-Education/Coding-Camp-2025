@@ -23,7 +23,7 @@ import { FormsModule } from '@angular/forms'
 @Component({
   selector: 'app-image-upload',
   standalone: true,
-  imports: [CommonModule, TranslateModule,FormsModule],
+  imports: [CommonModule, TranslateModule, FormsModule],
   templateUrl: './image-upload.component.html',
   styleUrl: './image-upload.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,8 +40,8 @@ export class ImageUploadComponent implements OnInit, OnChanges {
 
   isDragging = false
 
-  openSettingsIndex: number | null = null;
-  pictureInfos: { copyright: string; creator: string }[] = [];
+  openSettingsIndex: number | null = null
+  pictureInfos: { copyright: string; creator: string }[] = []
 
   private readonly mediaService = inject(MediaService)
   private readonly markForCheck = injectMarkForCheck()
@@ -63,11 +63,11 @@ export class ImageUploadComponent implements OnInit, OnChanges {
     }
   }
 
-  private loadExistingImagesIfPresent(): void {
+  private async loadExistingImagesIfPresent(): Promise<void> {
     if (this.existingImages && this.existingImages.length > 0) {
       // Nur laden, wenn die Vorschau noch leer ist, um Duplikate zu vermeiden
       if (this.previews.length === 0) {
-        this.loadExistingImages()
+        await this.loadExistingImages()
       }
     }
   }
@@ -139,20 +139,20 @@ export class ImageUploadComponent implements OnInit, OnChanges {
     }
   }
 
-  private loadExistingImages() {
+  private async loadExistingImages(): Promise<void> {
     console.log('Lade existierende Bilder:', this.existingImages)
-    this.existingImages.forEach((image) => {
+    this.existingImages.forEach((image, index) => {
       const url = this.mediaService.getMediaUrl(image.id)
 
-      if (url) {
-        // Prüfen, ob das Bild bereits in den Vorschauen vorhanden ist
-        if (!this.previews.includes(url)) {
-          this.previews.push(url)
-          this.previewsChange.emit(this.previews)
-          this.markForCheck()
+      if (url && !this.previews.includes(url)) {
+        this.previews.push(url)
+        this.previewsChange.emit(this.previews)
+
+        // 🟩 initialize pictureInfos for existing images
+        this.pictureInfos[index] = {
+          copyright: image.copyright || '',
+          creator: image.creator || '',
         }
-      } else {
-        console.warn('Konnte Bild-URL nicht laden für Media-ID:', image)
       }
     })
   }
@@ -296,7 +296,10 @@ export class ImageUploadComponent implements OnInit, OnChanges {
                 fileType = image.split(';')[0].split('/')[1]
               }
 
-              const info = this.pictureInfos[i] || { copyright: '', creator: '' }
+              const info = this.pictureInfos[i] || {
+                copyright: '',
+                creator: '',
+              }
 
               // Eindeutige ID generieren
               const uniqueId = new StringRecordId(
@@ -345,44 +348,46 @@ export class ImageUploadComponent implements OnInit, OnChanges {
 
   openPictureSettings(index: number) {
     if (!this.pictureInfos[index]) {
-      this.pictureInfos[index] = { copyright: '', creator: '' };
+      this.pictureInfos[index] = { copyright: '', creator: '' }
     }
-    this.openSettingsIndex = index;
+    this.openSettingsIndex = index
   }
 
   closePictureSettings() {
-    this.openSettingsIndex = null;
+    this.openSettingsIndex = null
   }
 
   async saveSettings(index: number, copyright: string, creator: string) {
-  const info = this.pictureInfos[index];
-  if (!info) return;
+    const info = this.pictureInfos[index]
+    if (!info) return
 
-  try {
-    const previewData = this.previews[index];
+    try {
+      const previewData = this.previews[index]
 
-    if (previewData.startsWith('{') && previewData.endsWith('}')) {
-      const parsed = JSON.parse(previewData);
-      parsed.copyright = info.copyright || '';
-      parsed.creator = info.creator || '';
-      this.previews[index] = JSON.stringify(parsed);
+      if (previewData.startsWith('{') && previewData.endsWith('}')) {
+        const parsed = JSON.parse(previewData)
+        parsed.copyright = info.copyright || ''
+        parsed.creator = info.creator || ''
+        this.previews[index] = JSON.stringify(parsed)
+      } else if (previewData.startsWith('http')) {
+        const media = await this.mediaService.getMediaByUrl(previewData)
+        // if(media){
+        // TODO: add exception
+        // }
+        media!.copyright = copyright
+        media!.creator = creator
+        this.mediaService.updateMedia(media!.id!, media!)
+      }
+
+      this.previewsChange.emit(this.previews)
+      this.markForCheck()
+      this.closePictureSettings()
+      this.snackBarService.showSuccess(`Bild erfolgreich aktualisiert!`)
+    } catch (error) {
+      console.error('Fehler beim Aktualisieren der Bilddaten:', error)
+      this.snackBarService.showError(
+        `Fehler beim Aktualisieren der Bilddaten: ${error}`,
+      )
     }
-
-    else if (previewData.startsWith('http')) {
-      const media = await this.mediaService.getMediaByUrl(previewData)
-      // if(media){
-      // TODO: add exception
-      // }
-      media!.copyright = copyright
-      media!.creator = creator
-      this.mediaService.updateMedia(media!.id!, media!)
-    }
-
-    this.previewsChange.emit(this.previews);
-    this.markForCheck();
-  } catch (error) {
-    console.error('Fehler beim Aktualisieren der Bilddaten:', error);
   }
-}
-
 }
