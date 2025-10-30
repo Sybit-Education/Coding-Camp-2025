@@ -5,13 +5,18 @@
       <div class="flex h-full w-full justify-center rounded-t-2xl">
         <img
           class="w-full rounded-t-2xl object-cover"
-          [src]="item"
+          [src]="item.url"
           [alt]="
             eventName
               ? 'Bild der Veranstaltung: ' + eventName
               : 'Veranstaltungsbild'
           "
         />
+        <div
+                class="absolute right-0 bottom-0 px-2 py-1 bg-black opacity-75 rounded-tl-xl"
+              >
+                <div class="text-white text-sm">{{ item.copyright }} – {{ item.creator }}</div>
+              </div>
       </div>
     }
   }
