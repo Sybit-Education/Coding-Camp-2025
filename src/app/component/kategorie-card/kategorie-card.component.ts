@@ -19,16 +19,16 @@ import { getContrastTextColor } from '../../utils/color.utils'
 export class KategorieCardComponent {
   @Input() text!: string
   @Input() set color(value: string) {
-    this.backgroundColor.set(value || '#ffffff')
+    this.categoryColor.set(value || '#ffffff')
   }
   @Input() id!: RecordId<'topic'> | RecordId<'event_type'>
 
   // Signals für reaktive Verarbeitung
-  protected readonly backgroundColor = signal<string>('#ffffff')
+  protected readonly categoryColor = signal<string>('#ffffff')
 
   // Berechne die optimale Textfarbe basierend auf der Hintergrundfarbe
   protected readonly textColor = computed(() => {
-    return getContrastTextColor(this.backgroundColor()) === 'white'
+    return getContrastTextColor(this.categoryColor()) === 'white'
       ? '#6d7cbc'
       : ' #3b4ea3'
   })
