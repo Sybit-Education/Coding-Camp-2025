@@ -52,19 +52,11 @@
         <div
           class="relative overflow-hidden rounded-lg border-2 border-gray-500 align-top leading-none"
         >
-          @if (openSettingsIndex !== i) {
-            <img
-              [src]="getSrcForPreview(src)"
-              alt="Bild-Vorschau {{ i + 1 }}"
-              class="h-40 w-40 rounded-md object-cover"
-            />
-          } @else {
-            <img
-              [src]="getSrcForPreview(src)"
-              alt="Bild-Vorschau {{ i + 1 }}"
-              class="h-40 w-50 rounded-md object-cover"
-            />
-          }
+          <img
+            [src]="getSrcForPreview(src)"
+            alt="Bild-Vorschau {{ i + 1 }}"
+            class="h-40 w-50 rounded-md object-cover"
+          />
           <button
             (click)="removeImage(i)"
             class="absolute top-1 right-1 flex h-6 w-6 items-center justify-center rounded-full border border-gray-300 bg-white/80 shadow-md hover:bg-gray-500 hover:text-white"
@@ -95,22 +87,16 @@
                 [(ngModel)]="pictureInfos[i].creator"
                 class="rounded-md border border-gray-300 px-2 py-1 text-sm focus:border-blue-500 focus:outline-none"
               />
-              <div class="mt-1 flex justify-end gap-2">
+              <div class="flex justify-center gap-2">
                 <button
-                  (click)="
-                    saveSettings(
-                      i,
-                      pictureInfos[i].copyright,
-                      pictureInfos[i].creator
-                    )
-                  "
-                  class="rounded-md bg-blue-600 px-3 py-1 text-sm text-white hover:bg-blue-700"
+                  (click)="saveSettings(i)"
+                  class="cursor-pointer rounded-md bg-blue-600 px-3 py-1 text-sm text-white hover:bg-blue-700"
                 >
                   Speichern
                 </button>
                 <button
                   (click)="closePictureSettings()"
-                  class="rounded-md bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300"
+                  class="cursor-pointer rounded-md bg-gray-200 px-3 py-1 text-sm hover:bg-gray-300"
                 >
                   Abbrechen
                 </button>

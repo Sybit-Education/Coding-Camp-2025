@@ -54,20 +54,29 @@ export class ImageUploadComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     // Wenn sich existingImages ändert und Werte enthält, lade die Bilder
-    if (
-      changes['existingImages'] &&
-      changes['existingImages'].currentValue &&
-      changes['existingImages'].currentValue.length > 0
-    ) {
+    if (changes['existingImages']?.currentValue.length > 0) {
       this.loadExistingImagesIfPresent()
     }
   }
 
   private async loadExistingImagesIfPresent(): Promise<void> {
-    if (this.existingImages && this.existingImages.length > 0) {
-      // Nur laden, wenn die Vorschau noch leer ist, um Duplikate zu vermeiden
+    if (this.existingImages.length > 0) {
       if (this.previews.length === 0) {
-        await this.loadExistingImages()
+        console.log('Lade existierende Bilder:', this.existingImages)
+        this.existingImages.forEach((image, index) => {
+          const url = this.mediaService.getMediaUrl(image.id)
+
+          if (url && !this.previews.includes(url)) {
+            this.previews.push(url)
+            this.previewsChange.emit(this.previews)
+
+            // 🟩 initialize pictureInfos for existing images
+            this.pictureInfos[index] = {
+              copyright: image.copyright || '',
+              creator: image.creator || '',
+            }
+          }
+        })
       }
     }
   }
@@ -139,24 +148,6 @@ export class ImageUploadComponent implements OnInit, OnChanges {
     }
   }
 
-  private async loadExistingImages(): Promise<void> {
-    console.log('Lade existierende Bilder:', this.existingImages)
-    this.existingImages.forEach((image, index) => {
-      const url = this.mediaService.getMediaUrl(image.id)
-
-      if (url && !this.previews.includes(url)) {
-        this.previews.push(url)
-        this.previewsChange.emit(this.previews)
-
-        // 🟩 initialize pictureInfos for existing images
-        this.pictureInfos[index] = {
-          copyright: image.copyright || '',
-          creator: image.creator || '',
-        }
-      }
-    })
-  }
-
   async removeImage(index: number) {
     // Speichere das zu löschende Bild
     const imageToRemove = this.previews[index]
@@ -170,7 +161,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       if (imageToRemove.startsWith('http')) {
         const existingMedia =
           await this.mediaService.getMediaByUrl(imageToRemove)
-        if (existingMedia && existingMedia.id) {
+        if (existingMedia?.id) {
           console.log(
             'Lösche existierendes Bild aus der Datenbank:',
             existingMedia.id,
@@ -237,14 +228,14 @@ export class ImageUploadComponent implements OnInit, OnChanges {
         if (image.startsWith('http')) {
           try {
             const existingMedia = await this.mediaService.getMediaByUrl(image)
-            if (existingMedia && existingMedia.id) {
+            if (existingMedia?.id) {
               result.push(existingMedia)
             } else {
               // Wenn wir keine Media-ID für die URL finden können,
               // versuchen wir, die ID aus den existingImages zu finden
               const matchingExistingImage = this.existingImages.find(
                 async (media) => {
-                  const url = await this.mediaService.getMediaUrl(media.id)
+                  const url = this.mediaService.getMediaUrl(media.id)
                   return url === image
                 },
               )
@@ -281,18 +272,16 @@ export class ImageUploadComponent implements OnInit, OnChanges {
                   fileName = imageData.fileName
                   // Extrahiere den MIME-Type aus dem vollständigen Type
                   fileType = imageData.mimeType.split('/')[1]
-                  // oxlint-disable-next-line no-unused-vars
-                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                } catch (e) {
+                } catch {
                   // Fallback, falls JSON-Parsing fehlschlägt
                   file = image.split(',')[1]
-                  fileName = `${this.eventName.replace(/[^a-zA-Z0-9]/g, '_')}_${i}`
+                  fileName = `${this.eventName.replaceAll(/[^a-zA-Z0-9]/g, '_')}_${i}`
                   fileType = image.split(';')[0].split('/')[1]
                 }
               } else {
                 // Fallback für ältere Daten ohne Metadaten
                 file = image.split(',')[1]
-                fileName = `${this.eventName.replace(/[^a-zA-Z0-9]/g, '_')}_${i}`
+                fileName = `${this.eventName.replaceAll(/[^a-zA-Z0-9]/g, '_')}_${i}`
                 fileType = image.split(';')[0].split('/')[1]
               }
 
@@ -303,7 +292,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
 
               // Eindeutige ID generieren
               const uniqueId = new StringRecordId(
-                `media:${fileName.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}`,
+                `media:${fileName.replaceAll(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}`,
               )
               console.log('uniqueID: ' + uniqueId)
 
@@ -357,7 +346,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
     this.openSettingsIndex = null
   }
 
-  async saveSettings(index: number, copyright: string, creator: string) {
+  async saveSettings(index: number) {
     const info = this.pictureInfos[index]
     if (!info) return
 
@@ -374,8 +363,8 @@ export class ImageUploadComponent implements OnInit, OnChanges {
         // if(media){
         // TODO: add exception
         // }
-        media!.copyright = copyright
-        media!.creator = creator
+        media!.copyright = info.copyright
+        media!.creator = info.creator
         this.mediaService.updateMedia(media!.id!, media!)
       }
 
