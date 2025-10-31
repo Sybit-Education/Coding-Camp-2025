@@ -60,7 +60,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
               this.initializeMapForShowLocation()
             }
             // Karte neu zeichnen, um sicherzustellen, dass sie die richtige Größe hat
-            this.invalidateSize();
+            this.invalidateSize()
           })
         })
         .catch((err) => console.error('Fehler beim Laden von Leaflet:', err))
@@ -86,8 +86,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       this.map = this.L.map('map', {
         ...this.getCommonMapOptions(),
         center: [
-          (this.coordinates ? this.coordinates[1] : 47.75),
-          (this.coordinates ? this.coordinates[0] : 8.97)
+          this.coordinates ? this.coordinates[1] : 47.75,
+          this.coordinates ? this.coordinates[0] : 8.97,
         ],
         zoom: 18,
       })
@@ -105,11 +105,14 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
       if (this.coordinates) {
         // Leaflet erwartet [lat, lng], wir haben [lng, lat]
-        this.marker = this.L.marker([this.coordinates[1], this.coordinates[0]], {
-          icon: greenIcon,
-          draggable: true, // Marker ist verschiebbar
-        }).addTo(this.map)
-        
+        this.marker = this.L.marker(
+          [this.coordinates[1], this.coordinates[0]],
+          {
+            icon: greenIcon,
+            draggable: true, // Marker ist verschiebbar
+          },
+        ).addTo(this.map)
+
         // Wenn der Marker per Drag verschoben wird, emitte die neuen Koordinaten
         this.marker.on('dragend', (ev: unknown) => {
           const pos = (
@@ -152,12 +155,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
             popupAnchor: [1, -34],
             shadowSize: [41, 41],
           })
-          
+
           this.marker = this.L!.marker([lat, lng], {
             icon: greenIcon,
             draggable: true,
           }).addTo(this.map)
-          
+
           // Wenn der Marker per Drag verschoben wird, emitte die neuen Koordinaten
           this.marker.on('dragend', (ev: unknown) => {
             const pos = (
@@ -188,8 +191,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     try {
       // Center falls keine Koordinaten übergeben wurden
       // Leaflet erwartet [lat, lng], wir haben [lng, lat]
-      const lat = this.coordinates ? this.coordinates[1] : 47.75;
-      const lng = this.coordinates ? this.coordinates[0] : 8.97;
+      const lat = this.coordinates ? this.coordinates[1] : 47.75
+      const lng = this.coordinates ? this.coordinates[0] : 8.97
 
       this.map = this.L.map('map', {
         ...this.getCommonMapOptions(),
@@ -229,19 +232,19 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         this.marker = this.L.marker([lat, lng], {
           icon,
           draggable: true,
-        }).addTo(this.map);
+        }).addTo(this.map)
 
         // Wenn der Marker per Drag verschoben wird, emitte die neuen Koordinaten
         this.marker.on('dragend', (ev: unknown) => {
           const pos = (
             ev as { target: { getLatLng(): { lat: number; lng: number } } }
-          ).target.getLatLng();
+          ).target.getLatLng()
           // Angular informieren (Event + Change Detection falls nötig)
           this.ngZone.run(() => {
-            this.coordinatesChange.emit([pos.lng, pos.lat]);
-            this.locationSelected.emit([pos.lng, pos.lat]);
-          });
-        });
+            this.coordinatesChange.emit([pos.lng, pos.lat])
+            this.locationSelected.emit([pos.lng, pos.lat])
+          })
+        })
       }
 
       // Klick-Handler: erstelle Marker beim ersten Klick, setze / verschiebe ihn danach
@@ -304,8 +307,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private invalidateSize(): void {
     if (this.map) {
       setTimeout(() => {
-        this.map?.invalidateSize();
-      }, 100);
+        this.map?.invalidateSize()
+      }, 100)
     }
   }
 }

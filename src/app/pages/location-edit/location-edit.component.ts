@@ -114,7 +114,6 @@ export class LocationEditComponent implements OnInit {
       const location = await this.locationService.getLocationByID(id)
 
       if (location) {
-
         // Formular mit den Daten des Ortes befüllen
         this.locationForm.patchValue({
           name: location.name,
@@ -156,7 +155,6 @@ export class LocationEditComponent implements OnInit {
       // Aktuelle Koordinaten in das Formular übernehmen
       formData.geo_point = new GeometryPoint(this.coordinates())
 
-
       // Bilder hinzufügen
       const locationData: Location = {
         ...formData,
@@ -195,24 +193,21 @@ export class LocationEditComponent implements OnInit {
     })
   }
 
-
-
-
   // Karten-Funktionen
   updateCoordinates(newCoordinates: [number, number]): void {
     this.coordinates.set(newCoordinates)
 
     // Aktualisiere auch das Formular
-    const geoPointControl = this.locationForm.get('geo_point');
+    const geoPointControl = this.locationForm.get('geo_point')
     if (geoPointControl) {
       geoPointControl.patchValue({
         type: 'Point',
-        longLat: newCoordinates
-      });
+        longLat: newCoordinates,
+      })
     }
 
     // Markiere das Formular als "berührt", damit Validierungen ausgelöst werden
-    this.markForCheck();
+    this.markForCheck()
   }
 
   // Navigation

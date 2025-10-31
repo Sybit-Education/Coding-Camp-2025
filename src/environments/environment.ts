@@ -1,5 +1,5 @@
 export const environment = {
-  configName: '',
+  configName: 'local',
   production: false,
   surrealDbAddress: 'https://surrealdb.sybit.education',
   surrealDbNamespace: '1200.sybit.education',

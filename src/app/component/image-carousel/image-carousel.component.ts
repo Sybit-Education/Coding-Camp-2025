@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon'
   templateUrl: './image-carousel.component.html',
 })
 export class ImageCarouselComponent {
-  @Input() images: (string | null)[] = []
+  @Input() images: { url: string; copyright: string; creator: string }[] = []
   @Input() eventName = ''
 
   selectedImageIndex = 0

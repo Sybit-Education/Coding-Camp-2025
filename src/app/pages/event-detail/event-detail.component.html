@@ -20,10 +20,10 @@
         : 'Veranstaltung im Rahmen von 1200 Jahre Radolfzell'
     "
   />
-  <meta
+  <!-- <meta
     property="og:image"
-    [attr.content]="mediaUrl || '/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg'"
-  />
+    [attr.content]="mediaList[0].url || '/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg'"
+  /> -->
   <meta property="og:url" [attr.content]="getEventUrl()" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -43,10 +43,10 @@
             <span class="font-mono text-3xl font-extrabold">←</span>
           </button>
 
-          @if (mediaUrl && mediaUrl.length !== 0) {
-            @if (mediaUrl.length > 1) {
+          @if (mediaList[0].url && mediaList[0].url.length !== 0) {
+            @if (mediaList.length > 1) {
               <app-image-carousel
-                [images]="mediaUrl"
+                [images]="mediaList"
                 [eventName]="event.name"
                 class="aspect-[4/3] rounded-t-2xl object-cover sm:w-full"
               ></app-image-carousel>
@@ -58,8 +58,13 @@
                     ? 'Bild der Veranstaltung: ' + event.name
                     : 'Veranstaltungsbild'
                 "
-                [src]="mediaUrl[0]"
+                [src]="mediaList[0].url"
               />
+              <div
+                class="absolute right-0 bottom-0 px-2 py-1 bg-black opacity-75 rounded-tl-xl"
+              >
+                <div class="text-white text-sm">{{ mediaList[0].copyright }} – {{ mediaList[0].creator }}</div>
+              </div>
             }
           } @else {
             <div class="flex w-full justify-center py-2">
@@ -77,8 +82,13 @@
               {{ event.name }}
             </h1>
           </div>
-          <div class="gap-2 mt-10 mb-4 mr-4 flex items-center justify-center text-2xl">
-            <app-favorite-button [eventId]="event.id" class="p-2"></app-favorite-button>
+          <div
+            class="mt-10 mr-4 mb-4 flex items-center justify-center gap-2 text-2xl"
+          >
+            <app-favorite-button
+              [eventId]="event.id"
+              class="p-2"
+            ></app-favorite-button>
             <app-share [event]="event" [location]="location"></app-share>
             <app-calendar-export
               [event]="event"
