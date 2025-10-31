@@ -7,7 +7,6 @@ import {
   signal,
 } from '@angular/core'
 import { RouterModule } from '@angular/router'
-import { RecordId } from 'surrealdb'
 import { getContrastTextColor } from '../../utils/color.utils'
 
 @Component({
@@ -21,7 +20,6 @@ export class KategorieCardComponent {
   @Input() set color(value: string) {
     this.backgroundColor.set(value || '#ffffff')
   }
-  @Input() id!: RecordId<'topic'> | RecordId<'event_type'>
 
   // Signals für reaktive Verarbeitung
   protected readonly backgroundColor = signal<string>('#ffffff')
