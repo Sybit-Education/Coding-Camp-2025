@@ -3,18 +3,54 @@ import { SurrealdbService } from './surrealdb.service'
 import { Media } from '../models/media.interface'
 import { RecordId, StringRecordId } from 'surrealdb'
 import { environment } from '@environments/environment'
+import { HttpClient } from '@angular/common/http'
+import { lastValueFrom } from 'rxjs'
 @Injectable({
   providedIn: 'root',
 })
 export class MediaService {
   private readonly surrealdb: SurrealdbService = inject(SurrealdbService)
+  private readonly http = inject(HttpClient)
 
   private readonly mediaBaseUrl: string = environment.MEDIA_BASE_URL
+
+
 
   async postMedia(media: Media) {
     const result = await this.surrealdb.post<Media>('media', media)
     return result[0]
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async postMediaToGoService(media: any) {
+    const url = 'https://1200-jahre-radolfzell.sybit.education/media/upload'
+
+    const body = {
+      id: media.id,
+      file: `data:image/${media.fileType};base64,${media.file}`,
+      fileName: media.fileName,
+      fileType: media.fileType,
+      copyright: media.copyright,
+      creator: media.creator,
+      env: environment.configName,
+    }
+
+    const options = { headers: { 'Content-Type': 'application/json' } }
+
+    const response = await lastValueFrom(
+      this.http.post<{ success: boolean; id: string }>(url, body, options)
+    )
+
+    const fullId = response.id.startsWith('media:')
+    ? response.id
+    : `media:${response.id}`
+
+
+    return fullId as unknown as RecordId<'media'>
+}
+
+
+
 
   getMediaUrl(mediaRecordId: RecordId<'media'> | undefined): string | null {
     if (!mediaRecordId) return null
