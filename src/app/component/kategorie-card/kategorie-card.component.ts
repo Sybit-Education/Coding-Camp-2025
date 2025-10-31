@@ -3,12 +3,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  computed,
   signal,
 } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { RecordId } from 'surrealdb'
-import { getContrastTextColor } from '../../utils/color.utils'
 
 @Component({
   selector: 'app-kategorie-card',
@@ -25,11 +23,4 @@ export class KategorieCardComponent {
 
   // Signals für reaktive Verarbeitung
   protected readonly categoryColor = signal<string>('#ffffff')
-
-  // Berechne die optimale Textfarbe basierend auf der Hintergrundfarbe
-  protected readonly textColor = computed(() => {
-    return getContrastTextColor(this.categoryColor()) === 'white'
-      ? '#6d7cbc'
-      : ' #3b4ea3'
-  })
 }
