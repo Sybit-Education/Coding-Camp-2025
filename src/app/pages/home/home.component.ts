@@ -86,7 +86,7 @@ export class HomeComponent implements OnInit {
           this.displayEvents.push({ isMore: true } as EventOrMore)
         }
       } else {
-        this.displayEvents = this.events.slice(0, 5)
+        this.displayEvents = this.events.slice(0, 6)
       }
 
       this.topicsOrTypes.push(...topics)
