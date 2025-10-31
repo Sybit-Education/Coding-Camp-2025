@@ -52,7 +52,7 @@ export class KategorieComponent implements OnInit {
       // Daten neu laden, wenn sich die Parameter ändern
       this.initilizeData().then(() => this.markForCheck())
 
-      this.returnLink = 'kategorie/' + this.name || ''
+      this.returnLink = this.name ? this.name : 'kategorie'
     })
   }
   private readonly eventService: EventService = inject(EventService)
@@ -78,13 +78,13 @@ export class KategorieComponent implements OnInit {
       this.id = this.getEventIdFromName(topics, typeDB)
 
       // Filtere Events basierend auf der ID
-      const rawEvents = !this.id
-        ? allEvents
-        : allEvents.filter(
+      const rawEvents = this.id
+        ? allEvents.filter(
             (event) =>
               event.topic?.some((topic) => topic.id === this.id) ||
               event.event_type?.id === this.id,
           )
+        : allEvents
 
       // Optimiere Location-Ladung durch Caching
       this.events = await Promise.all(

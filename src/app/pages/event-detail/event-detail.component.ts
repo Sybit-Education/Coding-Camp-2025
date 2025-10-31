@@ -25,7 +25,7 @@ import { FavoriteButtonComponent } from '../../component/favorite-button/favorit
 import { ShareComponent } from '../../component/share/share.component'
 import { MediaService } from '@app/services/media.service'
 import { ImageCarouselComponent } from '@app/component/image-carousel/image-carousel.component'
-import { CalendarExportComponent } from "@app/component/calendar-export/calendar-export.component";
+import { CalendarExportComponent } from '@app/component/calendar-export/calendar-export.component'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -38,8 +38,8 @@ import { CalendarExportComponent } from "@app/component/calendar-export/calendar
     FavoriteButtonComponent,
     ShareComponent,
     ImageCarouselComponent,
-    CalendarExportComponent
-],
+    CalendarExportComponent,
+  ],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -56,7 +56,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   mediaUrl: (string | null)[] = []
 
   protected isLoggedIn = false
-  private fromCategory = ''
+  private returnLink = ''
 
   private readonly eventService = inject(EventService)
   private readonly locationService = inject(LocationService)
@@ -69,8 +69,8 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params) => {
-      this.fromCategory = params.get('fromCategory') || ''
-      console.log('fromCategory:', this.fromCategory)
+      this.returnLink = params.get('returnLink') || ''
+      console.log('returnLink:', this.returnLink)
     })
 
     this.route.paramMap.subscribe((params) => {
@@ -234,17 +234,15 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   }
 
   goBack() {
-    if (!this.fromCategory) {
-      this.router.navigate(['/'])
-    } else if (this.fromCategory.includes('keine')) {
-      this.router.navigate(['/kategorie'])
+    if (this.returnLink) {
+      if (this.returnLink === 'kategorie') {
+        this.router.navigate(['/kategorie'])
+        return
+      } else {
+        this.router.navigate(['/kategorie'], { queryParams: { name: this.returnLink } })
+      }
     } else {
-      this.router.navigate(['/kategorie'], {
-        queryParams: {
-          id: this.fromCategory.split(',')[0],
-          name: this.fromCategory.split(',')[1] || '',
-        },
-      })
+      this.router.navigate(['/'])
     }
   }
 
@@ -266,7 +264,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
    * Wird für die Meta-Tags verwendet
    */
   getEventUrl(): string {
-    if (!this.event || !this.event.id) return window.location.href
+    if (!this.event?.id) return window.location.href
 
     const id = this.event.id.id || ''
     const baseUrl = window.location.origin
