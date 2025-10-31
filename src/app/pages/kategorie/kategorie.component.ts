@@ -37,11 +37,13 @@ export class KategorieComponent implements OnInit {
   topics: Topic[] = []
   id: RecordIdValue | null = null
   name: string | null = null
+  description: string | null = null
   loading = true
 
   private readonly route = inject(ActivatedRoute)
   private readonly markForCheck = injectMarkForCheck()
   fromCategory = ''
+  currentTopic: Promise<Topic> | null = null
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
@@ -66,6 +68,7 @@ export class KategorieComponent implements OnInit {
   async initilizeData() {
     this.loading = true
     try {
+      this.currentTopic = this.topicService.getTopicByID(this.id)
       // Lade Topics und Events parallel
       const [topics, allEvents] = await Promise.all([
         this.topicService.getAllTopics(),
