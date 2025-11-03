@@ -2,7 +2,7 @@
   <a
     [routerLink]="['/event', event?.id?.id]"
     [queryParams]="{ fromCategory: fromCategory || null }"
-    class="justify-top focus:ring-opacity-50 flex aspect-[1/1] h-full w-full cursor-pointer flex-col items-center overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl focus:ring-2 focus:ring-yellow-400"
+    class="card justify-top aspect-[1/1] mt-2"
   >
     <div class="relative h-[50%] w-full overflow-hidden bg-gray-100">
       @if (mediaUrl) {
@@ -22,13 +22,13 @@
         </div>
       }
     </div>
-    <div class="h-[50%] w-full space-y-2 p-4">
+    <div class="h-[50%] w-full space-y-2 p-4 text-left">
       <h3
         class="line-clamp-2 text-base leading-tight font-semibold text-gray-800"
       >
         {{ event?.name || 'Event Name' }}
       </h3>
-      <div class="flex items-center text-gray-700">
+      <div class="flex leading-tight text-gray-700">
         <span class="mr-2">📅</span>
         <span class="text-sm">
           {{
@@ -36,7 +36,7 @@
           }}
         </span>
       </div>
-      <div class="flex items-center text-gray-700">
+      <div class="flex leading-tight text-gray-700">
         <span class="mr-2">📍</span>
         <span class="text-sm">{{
           location?.name || 'Ort wird bekannt gegeben'
@@ -47,7 +47,7 @@
 } @else {
   <a
     [routerLink]="['/kategorie']"
-    class="justify-top focus:ring-opacity-50 flex aspect-[1/1] h-full w-full cursor-pointer flex-col items-center overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl focus:ring-4 focus:ring-yellow-400"
+    class="card justify-top aspect-[1/1] mt-2"
     tabindex="0"
   >
     <div
