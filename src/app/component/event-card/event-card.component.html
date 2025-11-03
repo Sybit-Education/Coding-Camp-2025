@@ -24,11 +24,11 @@
     </div>
     <div class="h-[50%] w-full space-y-2 p-4 text-left">
       <h3
-        class="line-clamp-2 text-base leading-tight font-semibold text-gray-800"
+        class="line-clamp-2 text-base font-semibold text-gray-800"
       >
         {{ event?.name || 'Event Name' }}
       </h3>
-      <div class="flex leading-tight text-gray-700">
+      <div class="flex text-gray-700">
         <span class="mr-2">📅</span>
         <span class="text-sm">
           {{
@@ -36,7 +36,7 @@
           }}
         </span>
       </div>
-      <div class="flex leading-tight text-gray-700">
+      <div class="flex text-gray-700">
         <span class="mr-2">📍</span>
         <span class="text-sm">{{
           location?.name || 'Ort wird bekannt gegeben'
