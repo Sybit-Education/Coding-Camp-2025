@@ -43,7 +43,7 @@
             <span class="font-mono text-3xl font-extrabold">←</span>
           </button>
 
-          @if (mediaList[0].url && mediaList[0].url.length !== 0) {
+          @if (mediaList.length !== 0) {
             @if (mediaList.length > 1) {
               <app-image-carousel
                 [images]="mediaList"
@@ -61,9 +61,11 @@
                 [src]="mediaList[0].url"
               />
               <div
-                class="absolute right-0 bottom-0 px-2 py-1 bg-black opacity-75 rounded-tl-xl"
+                class="absolute right-0 bottom-0 rounded-tl-xl bg-black px-2 py-1 opacity-75"
               >
-                <div class="text-white text-sm">{{ mediaList[0].copyright }} – {{ mediaList[0].creator }}</div>
+                <div class="text-sm text-white">
+                  {{ mediaList[0].copyright }} – {{ mediaList[0].creator }}
+                </div>
               </div>
             }
           } @else {

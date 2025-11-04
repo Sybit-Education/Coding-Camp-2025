@@ -178,29 +178,30 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
 
       // Setze Basis-Daten
       this.event = foundEvent
+      console.log(foundEvent)
 
       // Starte alle Ladeprozesse parallel
       const promises: Promise<unknown>[] = []
 
       // Media-URL laden
       let mediaPromise: Promise<
-      { url: string; copyright: string; creator: string }[]
-    > = Promise.resolve([])
+        { url: string; copyright: string; creator: string }[]
+      > = Promise.resolve([])
 
       if (foundEvent.media?.length > 0) {
-      mediaPromise = Promise.all(
-        foundEvent.media.map(async (mediaId) => {
-          const media = await this.mediaService.getMediaById(mediaId)
-          const url = this.mediaService.getMediaUrl(media.id)
-          return {
-            url: url || '',
-            copyright: media.copyright || '',
-            creator: media.creator || '',
-          }
-        }),
-      )
-      promises.push(mediaPromise)
-    }
+        mediaPromise = Promise.all(
+          foundEvent.media.map(async (mediaId) => {
+            const media = await this.mediaService.getMediaById(mediaId)
+            const url = this.mediaService.getMediaUrl(media.id)
+            return {
+              url: url || '',
+              copyright: media.copyright || '',
+              creator: media.creator || '',
+            }
+          }),
+        )
+        promises.push(mediaPromise)
+      }
 
       // Extrahiere IDs für parallele Ladung
       const locationId = this.event?.['location']
@@ -223,15 +224,15 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
 
       // Batch-Update für weniger Change Detection Zyklen
       requestAnimationFrame(async () => {
-      const mediaResults = await mediaPromise
-
-      if (mediaResults.length > 0) {
-        this.mediaList = mediaResults.map((m) => ({
-          url: m.url,
-          copyright: m.copyright,
-          creator: m.creator,
-        }))
-      }
+        const mediaResults = await mediaPromise
+        console.log(mediaResults.length)
+        if (mediaResults.length > 0) {
+          this.mediaList = mediaResults.map((m) => ({
+            url: m.url,
+            copyright: m.copyright,
+            creator: m.creator,
+          }))
+        }
 
         locationPromise.then((location) => (this.location = location))
         organizerPromise.then((organizer) => (this.organizer = organizer))

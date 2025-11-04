@@ -14,8 +14,6 @@ export class MediaService {
 
   private readonly mediaBaseUrl: string = environment.MEDIA_BASE_URL
 
-
-
   async postMedia(media: Media) {
     const result = await this.surrealdb.post<Media>('media', media)
     return result[0]
@@ -38,19 +36,15 @@ export class MediaService {
     const options = { headers: { 'Content-Type': 'application/json' } }
 
     const response = await lastValueFrom(
-      this.http.post<{ success: boolean; id: string }>(url, body, options)
+      this.http.post<{ success: boolean; id: string }>(url, body, options),
     )
 
     const fullId = response.id.startsWith('media:')
-    ? response.id
-    : `media:${response.id}`
-
+      ? response.id
+      : `media:${response.id}`
 
     return fullId as unknown as RecordId<'media'>
-}
-
-
-
+  }
 
   getMediaUrl(mediaRecordId: RecordId<'media'> | undefined): string | null {
     if (!mediaRecordId) return null
