@@ -69,7 +69,7 @@ export class MediaService {
   }
 
   async getMediaById(mediaId: RecordId<'media'>): Promise<Media> {
-    return this.surrealdb.getByRecordId<Media>(mediaId)
+    return await this.surrealdb.getByRecordId<Media>(mediaId)
   }
 
   async getMediasByIdList(mediaIds: RecordId<'media'>[]): Promise<Media[]> {
