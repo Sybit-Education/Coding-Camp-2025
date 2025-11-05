@@ -5,13 +5,20 @@
       <div class="flex h-full w-full justify-center rounded-t-2xl">
         <img
           class="w-full rounded-t-2xl object-cover"
-          [src]="item"
+          [src]="item.url"
           [alt]="
             eventName
               ? 'Bild der Veranstaltung: ' + eventName
               : 'Veranstaltungsbild'
           "
         />
+        <div
+          class="absolute right-0 bottom-0 rounded-tl-xl bg-black px-2 py-1 opacity-75"
+        >
+          <div class="text-sm text-white">
+            {{ item.copyright }} – {{ item.creator }}
+          </div>
+        </div>
       </div>
     }
   }
@@ -29,8 +36,22 @@
         "
         aria-label="Vorheriges Bild"
       >
-        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19-7-7 7-7"/>
+        <svg
+          class="h-5 w-5"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m15 19-7-7 7-7"
+          />
         </svg>
       </button>
     </div>
@@ -40,10 +61,23 @@
         (click)="selectedImageIndex = (selectedImageIndex + 1) % images.length"
         aria-label="Nächstes Bild"
       >
-        <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
+        <svg
+          class="h-6 w-6"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m9 5 7 7-7 7"
+          />
         </svg>
-
       </button>
     </div>
   </div>

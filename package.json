@@ -35,6 +35,7 @@
     "@swimlane/ngx-datatable": "^22.0.0",
     "@tailwindcss/postcss": "^4.1.12",
     "@types/leaflet": "^1.9.20",
+    "browser-image-compression": "^2.0.2",
     "leaflet": "^1.9.4",
     "ngx-cookie-service": "^20.1.0",
     "ngx-quill": "^28.0.1",

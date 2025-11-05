@@ -141,7 +141,6 @@ export class AdminLocationOverviewComponent implements OnInit {
     }
   }
 
-
   // Navigate to edit location page
   editLocation(locationId: RecordId): void {
     this.router.navigate(['/admin/location', String(locationId)])
