@@ -31,7 +31,13 @@
                 [src]="mediaList[0].url"
               />
               <div class="absolute right-0 bottom-0 rounded-tl-xl bg-black px-2 py-1 opacity-75">
-                <div class="text-sm text-white">{{ mediaList[0].copyright }} – {{ mediaList[0].creator }}</div>
+                <div class="text-sm text-white">
+                  {{ mediaList[0].copyright }}
+                  @if (mediaList[0].copyright && mediaList[0].creator) {
+                    –
+                  }
+                  {{ mediaList[0].creator }}
+                </div>
               </div>
             }
           } @else {
