@@ -4,9 +4,11 @@ import {
   OnInit,
   inject,
 } from '@angular/core'
+import { ScreenSize } from '@app/models/screenSize.enum'
 import { CommonModule } from '@angular/common'
 import { RouterModule, Router } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
+import { firstValueFrom } from 'rxjs'
 
 import { EventCardComponent } from '../../component/event-card/event-card.component'
 import { KategorieCardComponent } from '../../component/kategorie-card/kategorie-card.component'
@@ -20,6 +22,8 @@ import { Event } from '../../models/event.interface'
 import { Topic } from '../../models/topic.interface'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { TypeDB } from '@app/models/typeDB.interface'
+import { AllEventButtonComponent } from '@app/component/all-event-button/all-event-button.component'
+import { SharedStateService } from '@app/services/shared-state.service'
 
 type EventOrMore = Event & { isMore?: boolean }
 
@@ -32,6 +36,7 @@ type EventOrMore = Event & { isMore?: boolean }
     RouterModule,
     EventCardComponent,
     KategorieCardComponent,
+    AllEventButtonComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -42,8 +47,11 @@ export class HomeComponent implements OnInit {
   displayEvents: EventOrMore[] = []
   topics: Topic[] = []
 
+  isSmall = true
+
   topicsOrTypes: (Topic | TypeDB)[] = []
 
+  readonly sharedStateService = inject(SharedStateService)
   private readonly eventService = inject(EventService)
   private readonly locationService = inject(LocationService)
   private readonly topicService = inject(TopicService)
@@ -56,6 +64,13 @@ export class HomeComponent implements OnInit {
   }
 
   async initializeData() {
+    const screen: ScreenSize = await firstValueFrom(
+      this.sharedStateService.getSizeOfScreen(),
+    )
+    if (screen !== ScreenSize.SMALL) {
+      this.isSmall = false
+    }
+
     try {
       const [events, topics, eventTypes] = await Promise.all([
         this.eventService.getAllEvents(),
@@ -64,15 +79,17 @@ export class HomeComponent implements OnInit {
       ])
 
       this.events = this.getUpcomingEvents(events)
-      this.displayEvents = this.events.slice(0, 4)
-
-      if (this.events.length > 4) {
-        // Karte als Platzhalter für „Mehr anzeigen“
-        this.displayEvents.push({ isMore: true } as EventOrMore)
+      if (this.isSmall) {
+        this.displayEvents = this.events.slice(0, 4)
+        if (this.events.length > 4) {
+          // Karte als Platzhalter für „Mehr anzeigen“
+          this.displayEvents.push({ isMore: true } as EventOrMore)
+        }
+      } else {
+        this.displayEvents = this.events.slice(0, 6)
       }
 
-      this.topicsOrTypes.push(...topics)
-      this.topicsOrTypes.push(...eventTypes)
+      this.topicsOrTypes.push(...topics, ...eventTypes)
     } catch (error) {
       console.error('Fehler beim Laden der Daten:', error)
     }
