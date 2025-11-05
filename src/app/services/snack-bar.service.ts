@@ -16,11 +16,7 @@ export class SnackBarService {
   private readonly snackBarSubject = new Subject<SnackBarData | null>()
   snackBar$ = this.snackBarSubject.asObservable()
 
-  showMessage(
-    message: string,
-    type: SnackBarType = 'info',
-    duration = 5000,
-  ): void {
+  showMessage(message: string, type: SnackBarType = 'info', duration = 5000): void {
     this.snackBarSubject.next({ message, type, duration })
   }
 

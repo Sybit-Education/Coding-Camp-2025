@@ -9,16 +9,8 @@
     class="relative mx-5 flex w-full max-w-md items-center justify-around overflow-hidden rounded-3xl border border-[#fbd2bc]/50 bg-[#fbd2bc]/90 px-1 shadow-xl backdrop-blur-xl"
   >
     <!-- Wellen-Akzent: entspricht dem Bogen‑Motiv des Jubiläumsdesigns -->
-    <svg
-      class="absolute left-0 h-full w-full text-[#c70d56]/40"
-      viewBox="0 0 100 10"
-      [attr.preserveAspectRatio]="'none'"
-    >
-      <path
-        [attr.d]="'M0 5 Q20 0 40 5 T80 5 T120 5 V10 H0 Z'"
-        fill="currentColor"
-        fill-opacity="0.3"
-      ></path>
+    <svg class="absolute left-0 h-full w-full text-[#c70d56]/40" viewBox="0 0 100 10" [attr.preserveAspectRatio]="'none'">
+      <path [attr.d]="'M0 5 Q20 0 40 5 T80 5 T120 5 V10 H0 Z'" fill="currentColor" fill-opacity="0.3"></path>
     </svg>
 
     <!-- Navigationseinträge -->
@@ -46,9 +38,7 @@
               "
             />
           </svg>
-          <span class="m-1 text-xs font-medium tracking-wide">{{
-            'bottom-nav.home' | translate
-          }}</span>
+          <span class="m-1 text-xs font-medium tracking-wide">{{ 'bottom-nav.home' | translate }}</span>
         </a>
       </span>
 
@@ -74,15 +64,11 @@
               "
             />
           </svg>
-          <span class="m-1 text-xs font-medium tracking-wide">{{
-            'bottom-nav.favorites' | translate
-          }}</span>
+          <span class="m-1 text-xs font-medium tracking-wide">{{ 'bottom-nav.favorites' | translate }}</span>
         </a>
       </span>
 
-      <span
-        class="mx-2 flex w-full flex-1 justify-center sm:mt-0 sm:ml-auto sm:w-auto sm:flex-1 sm:justify-end"
-      >
+      <span class="mx-2 flex w-full flex-1 justify-center sm:mt-0 sm:ml-auto sm:w-auto sm:flex-1 sm:justify-end">
         <a
           routerLink="/more"
           routerLinkActive="text-[#c70d56] bg-[#ffffff40] rounded-xl scale-110"
@@ -106,9 +92,7 @@
             />
           </svg>
 
-          <span class="mt-1 text-xs font-medium tracking-wide"
-            >{{ 'bottom-nav.more' | translate }} &hellip;</span
-          >
+          <span class="mt-1 text-xs font-medium tracking-wide">{{ 'bottom-nav.more' | translate }} &hellip;</span>
         </a>
       </span>
     </div>

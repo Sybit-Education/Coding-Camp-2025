@@ -74,9 +74,7 @@ export class FavoriteService {
       for (const id of savedEventIds) {
         try {
           // Prüfe, ob die ID bereits das "event:"-Präfix hat
-          const recordId = id.startsWith('event:')
-            ? new StringRecordId(id)
-            : new StringRecordId(`event:${id}`)
+          const recordId = id.startsWith('event:') ? new StringRecordId(id) : new StringRecordId(`event:${id}`)
 
           const event = await this.eventService.getEventByID(recordId)
 
@@ -92,10 +90,8 @@ export class FavoriteService {
 
       // Sortiere Events nach Startdatum (aufsteigend)
       const sortedEvents = events.toSorted((a, b) => {
-        const dateA =
-          a.date_start instanceof Date ? a.date_start : new Date(a.date_start)
-        const dateB =
-          b.date_start instanceof Date ? b.date_start : new Date(b.date_start)
+        const dateA = a.date_start instanceof Date ? a.date_start : new Date(a.date_start)
+        const dateB = b.date_start instanceof Date ? b.date_start : new Date(b.date_start)
         return dateA.getTime() - dateB.getTime()
       })
 

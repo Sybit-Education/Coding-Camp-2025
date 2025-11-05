@@ -29,9 +29,6 @@ export class LanguageSwitcherComponent {
   }
 
   getLangTitle(lang: string): string {
-    return (
-      this.langMap[lang as keyof typeof this.langMap]?.title ||
-      lang.toUpperCase()
-    )
+    return this.langMap[lang as keyof typeof this.langMap]?.title || lang.toUpperCase()
   }
 }

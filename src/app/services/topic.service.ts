@@ -24,9 +24,7 @@ export class TopicService {
   private async fetchAllTopics(): Promise<Topic[]> {
     try {
       const result = await this.surrealdb.getAll<Topic>('topic')
-      return (result || []).map(
-        (item: Record<string, unknown>) => ({ ...item }) as unknown as Topic,
-      )
+      return (result || []).map((item: Record<string, unknown>) => ({ ...item }) as unknown as Topic)
     } catch (error) {
       console.error('Fehler beim Laden der Topics:', error)
       return []
@@ -48,10 +46,7 @@ export class TopicService {
     const cachedTopics = this.allTopics()
     const now = Date.now()
 
-    if (
-      cachedTopics.length > 0 &&
-      now - this.lastTopicsFetch < this.CACHE_TTL
-    ) {
+    if (cachedTopics.length > 0 && now - this.lastTopicsFetch < this.CACHE_TTL) {
       return cachedTopics
     }
 

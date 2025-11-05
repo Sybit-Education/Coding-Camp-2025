@@ -11,9 +11,7 @@ export class LocationService {
 
   //************** GET **************
 
-  async getLocationByID(
-    id: RecordId<'location'> | StringRecordId,
-  ): Promise<Location> {
+  async getLocationByID(id: RecordId<'location'> | StringRecordId): Promise<Location> {
     try {
       const result = await this.surrealdb.getByRecordId<Location>(id)
       return result
@@ -40,10 +38,7 @@ export class LocationService {
   //************** POST **************
 
   async postLocation(location: Location): Promise<Location> {
-    const result: Location[] = await this.surrealdb.post<Location>(
-      'location',
-      location,
-    )
+    const result: Location[] = await this.surrealdb.post<Location>('location', location)
     return result[0]
   }
 
@@ -53,19 +48,13 @@ export class LocationService {
    * @param location Die aktualisierten Daten
    * @returns Promise mit der aktualisierten Location
    */
-  async update(
-    id: RecordId<'location'> | StringRecordId,
-    location: Partial<Location>,
-  ): Promise<Location> {
+  async update(id: RecordId<'location'> | StringRecordId, location: Partial<Location>): Promise<Location> {
     try {
       // Stelle sicher, dass alle erforderlichen Felder vorhanden sind
       const updatedLocation = { name: '', ...location } as Location
       return await this.surrealdb.postUpdate<Location>(id, updatedLocation)
     } catch (error) {
-      console.error(
-        `Fehler beim Aktualisieren der Location mit ID ${id}:`,
-        error,
-      )
+      console.error(`Fehler beim Aktualisieren der Location mit ID ${id}:`, error)
       throw error
     }
   }

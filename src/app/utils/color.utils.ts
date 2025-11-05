@@ -25,9 +25,7 @@ export function getColorBrightness(hexColor: string): number {
  * @param backgroundColor Hintergrundfarbe als Hex-String (mit oder ohne #)
  * @returns 'white' oder 'black' als optimale Textfarbe
  */
-export function getContrastTextColor(
-  backgroundColor: string,
-): 'white' | 'black' {
+export function getContrastTextColor(backgroundColor: string): 'white' | 'black' {
   const brightness = getColorBrightness(backgroundColor)
 
   // Schwellwert für Lesbarkeit (128 ist die Mitte des Helligkeitsspektrums)

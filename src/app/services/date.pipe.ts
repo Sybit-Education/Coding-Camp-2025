@@ -30,11 +30,7 @@ export class DateTimeRangePipe implements PipeTransform, OnDestroy {
   // Cache für formatierte Datumswerte
   private readonly dateCache = new Map<string, string>()
 
-  transform(
-    startIso: string | Date | null,
-    endIso?: string | Date | null,
-    locale?: string,
-  ): string {
+  transform(startIso: string | Date | null, endIso?: string | Date | null, locale?: string): string {
     if (!startIso) return ''
 
     // Erstelle einen Cache-Key

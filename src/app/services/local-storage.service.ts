@@ -12,9 +12,7 @@ export class LocalStorageService {
   readonly savedEventsSignal = signal<string[]>(this.getSavedEventIds())
 
   // BehaviorSubject für Abwärtskompatibilität
-  private readonly savedEventsSubject = new BehaviorSubject<string[]>(
-    this.getSavedEventIds(),
-  )
+  private readonly savedEventsSubject = new BehaviorSubject<string[]>(this.getSavedEventIds())
 
   savedEvents$ = this.savedEventsSubject.asObservable()
 
@@ -58,9 +56,7 @@ export class LocalStorageService {
 
   filterSavedEvents(events: Event[]): Event[] {
     const savedIds = this.getSavedEventIds()
-    return events.filter(
-      (event) => event.id && savedIds.includes(String(event.id)),
-    )
+    return events.filter((event) => event.id && savedIds.includes(String(event.id)))
   }
 
   getSavedEventsCount(): number {

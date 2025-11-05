@@ -37,14 +37,9 @@ export class SurrealdbService extends Surreal {
       })
       await this.ready
       this.connectionInitialized = true
-      console.log(
-        `SurrealDB-Verbindung [${environment.surrealDbDatabase}] initialisiert`,
-      )
+      console.log(`SurrealDB-Verbindung [${environment.surrealDbDatabase}] initialisiert`)
     } catch (error) {
-      console.error(
-        'Fehler bei der Initialisierung der SurrealDB-Verbindung:',
-        error,
-      )
+      console.error('Fehler bei der Initialisierung der SurrealDB-Verbindung:', error)
       this.connectionPromise = null
       throw error
     }
@@ -69,9 +64,7 @@ export class SurrealdbService extends Surreal {
     return await super.authenticate(token)
   }
 
-  async getByRecordId<T extends Record<string, unknown>>(
-    recordId: RecordId<string> | StringRecordId,
-  ): Promise<T> {
+  async getByRecordId<T extends Record<string, unknown>>(recordId: RecordId<string> | StringRecordId): Promise<T> {
     // Stelle sicher, dass die Verbindung initialisiert ist
     await this.initialize()
     const result = await super.select<T>(recordId)
@@ -86,19 +79,13 @@ export class SurrealdbService extends Surreal {
   }
 
   // 3) Einfügen und die neuen Datensätze zurückbekommen
-  async post<T extends Record<string, unknown>>(
-    table: string,
-    payload?: T | T[],
-  ): Promise<T[]> {
+  async post<T extends Record<string, unknown>>(table: string, payload?: T | T[]): Promise<T[]> {
     // Stelle sicher, dass die Verbindung initialisiert ist
     await this.initialize()
     return await super.insert<T>(table, payload)
   }
 
-  async postUpdate<T extends Record<string, unknown>>(
-    id: RecordId<string> | StringRecordId,
-    payload?: T,
-  ): Promise<T> {
+  async postUpdate<T extends Record<string, unknown>>(id: RecordId<string> | StringRecordId, payload?: T): Promise<T> {
     try {
       // Stelle sicher, dass die Verbindung initialisiert ist
       await this.initialize()

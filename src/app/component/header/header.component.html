@@ -17,9 +17,7 @@ Corporate‑Designs.
   }"
 >
   <!-- Sprachumschalter oben rechts -->
-  <app-language-switcher
-    class="absolute top-1 right-4 z-20"
-  ></app-language-switcher>
+  <app-language-switcher class="absolute top-1 right-4 z-20"></app-language-switcher>
   <!-- Logo-Container: richtet das Logo zentriert oder links aus -->
   <div
     class="relative z-10 flex w-full items-center transition-all duration-1200"
@@ -30,11 +28,7 @@ Corporate‑Designs.
   >
     <a routerLink="/">
       <img
-        [src]="
-          isShrunk
-            ? '/Radolfzell_1200_Jahre_Logo_small.svg'
-            : '/Radolfzell_1200_Jahre_Logo.svg'
-        "
+        [src]="isShrunk ? '/Radolfzell_1200_Jahre_Logo_small.svg' : '/Radolfzell_1200_Jahre_Logo.svg'"
         alt="1200 Jahre Radolfzell"
         rel="preload"
         fetchpriority="high"

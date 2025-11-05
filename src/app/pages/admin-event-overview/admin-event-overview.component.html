@@ -19,31 +19,15 @@
           viewBox="0 0 24 24"
           stroke="currentColor"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-          />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
       </div>
       <a
         [routerLink]="['/admin/create']"
         class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="mr-2 h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 4v16m8-8H4"
-          />
+        <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
         {{ 'ADMIN.EVENTS.CREATE_NEW' | translate }}
       </a>
@@ -73,9 +57,7 @@
 
   @if (isLoading()) {
     <div class="flex items-center justify-center py-12">
-      <div
-        class="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"
-      ></div>
+      <div class="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"></div>
       <span class="ml-3">{{ 'COMMON.LOADING' | translate }}</span>
     </div>
   } @else if (events().length === 0) {
@@ -106,20 +88,10 @@
         (sort)="onSort($event)"
       >
         <!-- Thumbnail Column Template -->
-        <ngx-datatable-column
-          name="Bild"
-          prop="thumbnail"
-          [width]="10"
-          [flexGrow]="0"
-          [sortable]="false"
-        >
+        <ngx-datatable-column name="Bild" prop="thumbnail" [width]="10" [flexGrow]="0" [sortable]="false">
           <ng-template let-row="row" ngx-datatable-cell-template>
             @if (row.thumbnail) {
-              <img
-                [src]="row.thumbnail"
-                alt="Thumbnail"
-                class="event-thumbnail"
-              />
+              <img [src]="row.thumbnail" alt="Thumbnail" class="event-thumbnail" />
             } @else {
               <div class="event-thumbnail-placeholder">
                 <svg
@@ -142,12 +114,7 @@
         </ngx-datatable-column>
 
         <!-- Date Column Template -->
-        <ngx-datatable-column
-          name="Datum"
-          prop="date_start"
-          [width]="10"
-          [flexGrow]="0"
-        >
+        <ngx-datatable-column name="Datum" prop="date_start" [width]="10" [flexGrow]="0">
           <ng-template let-row="row" ngx-datatable-cell-template>
             <span class="text-gray-700">{{ row.date_display }}</span>
           </ng-template>
@@ -167,11 +134,7 @@
         </ngx-datatable-column>
 
         <!-- Organizer Column Template -->
-        <ngx-datatable-column
-          name="Veranstalter"
-          prop="organizer"
-          [flexGrow]="1"
-        >
+        <ngx-datatable-column name="Veranstalter" prop="organizer" [flexGrow]="1">
           <ng-template let-value="value" ngx-datatable-cell-template>
             <span class="text-gray-600">{{ value }}</span>
           </ng-template>
@@ -186,19 +149,8 @@
                 class="p-1 text-green-600 hover:text-green-800 focus:outline-none"
                 title="{{ 'ADMIN.EVENTS.PREVIEW' | translate }}"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -212,13 +164,7 @@
                 class="p-1 text-blue-600 hover:text-blue-800 focus:outline-none"
                 title="{{ 'ADMIN.EVENTS.EDIT' | translate }}"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -232,13 +178,7 @@
                 class="p-1 text-red-600 hover:text-red-800 focus:outline-none"
                 title="{{ 'ADMIN.EVENTS.DELETE' | translate }}"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"

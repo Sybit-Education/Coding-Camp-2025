@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit,
-  inject,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core'
 
 import { Event } from '../../models/event.interface'
 import { Router } from '@angular/router'
@@ -47,9 +41,7 @@ export class FavouritesComponent implements OnInit, OnDestroy {
       this.favoriteService.favoriteEvents$
         .pipe(
           distinctUntilChanged(
-            (prev, curr) =>
-              prev.length === curr.length &&
-              prev.every((event, i) => event.id?.id === curr[i].id?.id),
+            (prev, curr) => prev.length === curr.length && prev.every((event, i) => event.id?.id === curr[i].id?.id),
           ),
         )
         .subscribe((events) => {
@@ -59,13 +51,11 @@ export class FavouritesComponent implements OnInit, OnDestroy {
 
     // Abonniere den Ladezustand mit distinctUntilChanged
     this.subscriptions.add(
-      this.favoriteService.loading$
-        .pipe(distinctUntilChanged())
-        .subscribe((loading) => {
-          this.loading = loading
-          // Change Detection auslösen, da wir OnPush verwenden
-          this.markForCheck()
-        }),
+      this.favoriteService.loading$.pipe(distinctUntilChanged()).subscribe((loading) => {
+        this.loading = loading
+        // Change Detection auslösen, da wir OnPush verwenden
+        this.markForCheck()
+      }),
     )
 
     // Lade die Favoriten mit requestAnimationFrame statt setTimeout für bessere Performance

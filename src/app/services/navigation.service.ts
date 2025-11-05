@@ -18,10 +18,7 @@ export class NavigationService {
    * @param commands Die Routing-Befehle (Route-Pfad)
    * @param extras Zusätzliche Routing-Optionen
    */
-  async navigateTo(
-    commands: undefined[],
-    extras?: NavigationExtras,
-  ): Promise<boolean> {
+  async navigateTo(commands: undefined[], extras?: NavigationExtras): Promise<boolean> {
     const result = await this.router.navigate(commands, extras)
 
     // Stelle sicher, dass Change Detection ausgelöst wird

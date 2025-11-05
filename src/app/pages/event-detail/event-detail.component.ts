@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnDestroy,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { Subscription } from 'rxjs'
 import { MapComponent } from '../../component/map/map.component'
@@ -106,9 +100,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     console.error(`Fehler: ${message}`)
   }
 
-  async loadType(
-    typeId: RecordId<'event_type'> | undefined,
-  ): Promise<TypeDB | null> {
+  async loadType(typeId: RecordId<'event_type'> | undefined): Promise<TypeDB | null> {
     if (typeId) {
       try {
         const type = await this.eventService.getEventTypeByID(typeId)
@@ -128,12 +120,9 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  async loadLocation(
-    locationId: RecordId<'location'>,
-  ): Promise<Location | null> {
+  async loadLocation(locationId: RecordId<'location'>): Promise<Location | null> {
     try {
-      const foundLocation =
-        await this.locationService.getLocationByID(locationId)
+      const foundLocation = await this.locationService.getLocationByID(locationId)
 
       if (foundLocation) {
         return foundLocation
@@ -147,12 +136,9 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  async loadOrganizer(
-    organizerId: RecordId<'organizer'>,
-  ): Promise<Organizer | null> {
+  async loadOrganizer(organizerId: RecordId<'organizer'>): Promise<Organizer | null> {
     try {
-      const foundOrganizer =
-        await this.organizerService.getOrganizerByID(organizerId)
+      const foundOrganizer = await this.organizerService.getOrganizerByID(organizerId)
 
       if (foundOrganizer) {
         return foundOrganizer
@@ -183,9 +169,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       const promises: Promise<unknown>[] = []
 
       // Media-URL laden
-      let mediaPromise: Promise<
-        { url: string; copyright: string; creator: string }[]
-      > = Promise.resolve([])
+      let mediaPromise: Promise<{ url: string; copyright: string; creator: string }[]> = Promise.resolve([])
 
       if (foundEvent.media?.length > 0) {
         mediaPromise = Promise.all(
@@ -208,12 +192,8 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       const typeId = this.event?.['event_type']
 
       // Lade alle abhängigen Daten parallel
-      const locationPromise = locationId
-        ? this.loadLocation(locationId)
-        : Promise.resolve(null)
-      const organizerPromise = organizerId
-        ? this.loadOrganizer(organizerId)
-        : Promise.resolve(null)
+      const locationPromise = locationId ? this.loadLocation(locationId) : Promise.resolve(null)
+      const organizerPromise = organizerId ? this.loadOrganizer(organizerId) : Promise.resolve(null)
       const typePromise = typeId ? this.loadType(typeId) : Promise.resolve(null)
 
       promises.push(locationPromise, organizerPromise, typePromise)
