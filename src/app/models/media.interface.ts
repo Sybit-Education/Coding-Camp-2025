@@ -7,3 +7,8 @@ export interface Media extends Record<string, unknown> {
   fileName?: string
   fileType?: string
 }
+
+export interface UploadMedia extends Media {
+  file?: string
+  env?: string
+}

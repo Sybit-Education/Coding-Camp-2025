@@ -178,7 +178,6 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
 
       // Setze Basis-Daten
       this.event = foundEvent
-      console.log(foundEvent)
 
       // Starte alle Ladeprozesse parallel
       const promises: Promise<unknown>[] = []
@@ -225,7 +224,6 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       // Batch-Update für weniger Change Detection Zyklen
       requestAnimationFrame(async () => {
         const mediaResults = await mediaPromise
-        console.log(mediaResults.length)
         if (mediaResults.length > 0) {
           this.mediaList = mediaResults.map((m) => ({
             url: m.url,

@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
-import { Media } from '../models/media.interface'
+import { Media, UploadMedia } from '../models/media.interface'
 import { RecordId, StringRecordId } from 'surrealdb'
 import { environment } from '@environments/environment'
 import { HttpClient } from '@angular/common/http'
@@ -13,6 +13,7 @@ export class MediaService {
   private readonly http = inject(HttpClient)
 
   private readonly mediaBaseUrl: string = environment.MEDIA_BASE_URL
+  private readonly mediaGetSuffix: string = environment.MEDIA_GET_SUFFIX
 
   async postMedia(media: Media) {
     const result = await this.surrealdb.post<Media>('media', media)
@@ -20,23 +21,14 @@ export class MediaService {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async postMediaToGoService(media: any) {
-    const url = 'https://1200-jahre-radolfzell.sybit.education/media/upload'
+  async postMediaToGoService(media: UploadMedia) {
 
-    const body = {
-      id: media.id,
-      file: `data:image/${media.fileType};base64,${media.file}`,
-      fileName: media.fileName,
-      fileType: media.fileType,
-      copyright: media.copyright,
-      creator: media.creator,
-      env: environment.configName,
-    }
+    media.env = environment.configName
 
     const options = { headers: { 'Content-Type': 'application/json' } }
 
     const response = await lastValueFrom(
-      this.http.post<{ success: boolean; id: string }>(url, body, options),
+      this.http.post<{ success: boolean; id: string }>(`${this.mediaBaseUrl}/upload`, media, options),
     )
 
     const fullId = response.id.startsWith('media:')
@@ -54,7 +46,7 @@ export class MediaService {
       const cleanId = idString.includes(':') ? idString.split(':')[1] : idString
       const mediaFileName = cleanId.replace(/_(?=[^_]*$)/, '.')
 
-      return this.mediaBaseUrl + mediaFileName
+      return this.mediaBaseUrl + this.mediaGetSuffix + mediaFileName
     } catch (error) {
       console.warn('Fehler beim Laden der Media:', error)
       return null

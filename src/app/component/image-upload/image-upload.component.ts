@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common'
 import { RecordId, StringRecordId } from 'surrealdb'
 import { MediaService } from '../../services/media.service'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
-import { Media } from '../../models/media.interface'
+import { Media, UploadMedia } from '../../models/media.interface'
 import { SnackBarService } from '../../services/snack-bar.service'
 import { TranslateModule } from '@ngx-translate/core'
 import { FormsModule } from '@angular/forms'
@@ -366,9 +366,9 @@ export class ImageUploadComponent implements OnInit, OnChanges {
           const uniqueId = uniqueIdStr as unknown as RecordId<'media'>
 
           // --- c) Media-Objekt für Upload ---
-          const mediaToUpload: Media = {
+          const mediaToUpload: UploadMedia = {
             id: uniqueId,
-            file: base64Payload, // nur Base64-Part
+            file: `data:image/${fileType};base64,${base64Payload}`,
             fileName: originalFileName,
             fileType: fileType,
             copyright: info.copyright,
@@ -450,9 +450,6 @@ export class ImageUploadComponent implements OnInit, OnChanges {
         this.previews[index] = JSON.stringify(parsed)
       } else if (previewData.startsWith('http')) {
         const media = await this.mediaService.getMediaByUrl(previewData)
-        // if(media){
-        // TODO: add exception
-        // }
         media!.copyright = info.copyright
         media!.creator = info.creator
         this.mediaService.updateMedia(media!.id!, media!)
