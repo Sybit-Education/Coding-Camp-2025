@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/cor
 import { CommonModule } from '@angular/common'
 import { RouterModule, Router } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
-import { firstValueFrom } from 'rxjs'
 
 import { EventCardComponent } from '../../component/event-card/event-card.component'
 import { KategorieCardComponent } from '../../component/kategorie-card/kategorie-card.component'
@@ -34,6 +33,7 @@ export class HomeComponent implements OnInit {
   events: Event[] = []
   displayEvents: EventOrMore[] = []
   topics: Topic[] = []
+  screenSize = ScreenSize
 
   isSmall = true
 
@@ -52,11 +52,6 @@ export class HomeComponent implements OnInit {
   }
 
   async initializeData() {
-    const screen: ScreenSize = await firstValueFrom(this.sharedStateService.getSizeOfScreen())
-    if (screen !== ScreenSize.SMALL) {
-      this.isSmall = false
-    }
-
     try {
       const [events, topics, eventTypes] = await Promise.all([
         this.eventService.getAllEvents(),
