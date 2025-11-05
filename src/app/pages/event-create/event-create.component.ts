@@ -308,6 +308,16 @@ export class EventCreateComponent implements OnInit {
         } else {
           console.log('Event erfolgreich aktualisiert:', updated)
           this.snackBarService.showSuccess('Event erfolgreich aktualisiert')
+
+          for (const media of this.imageUploadComponent.deletedImages) {
+            try {
+              console.log('Lösche existierendes Bild aus der Datenbank:', media.id)
+              await this.mediaService.deleteMedia(media.id!)
+            } catch (err) {
+              console.error('Fehler beim endgültigen Löschen:', err)
+            }
+          }
+
           // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
           this.router.navigate(['/admin'])
         }

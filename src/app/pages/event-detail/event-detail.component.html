@@ -22,22 +22,28 @@
               <app-image-carousel
                 [images]="mediaList"
                 [eventName]="event.name"
-                class="aspect-[4/3] rounded-t-2xl object-cover sm:w-full"
+                class="aspect-[4/3] h-[650px] rounded-t-2xl object-cover sm:w-full"
               ></app-image-carousel>
             } @else {
               <img
-                class="aspect-[4/3] rounded-t-2xl object-cover sm:w-full"
+                class="aspect-[4/3] h-[650px] rounded-t-2xl object-cover sm:w-full"
                 [alt]="event.name ? 'Bild der Veranstaltung: ' + event.name : 'Veranstaltungsbild'"
                 [src]="mediaList[0].url"
               />
               <div class="absolute right-0 bottom-0 rounded-tl-xl bg-black px-2 py-1 opacity-75">
-                <div class="text-sm text-white">{{ mediaList[0].copyright }} – {{ mediaList[0].creator }}</div>
+                <div class="text-sm text-white">
+                  {{ mediaList[0].copyright }}
+                  @if (mediaList[0].copyright && mediaList[0].creator) {
+                    –
+                  }
+                  {{ mediaList[0].creator }}
+                </div>
               </div>
             }
           } @else {
             <div class="flex w-full justify-center py-2">
               <img
-                class="rounded-2xl opacity-30"
+                class="h-[650px] rounded-2xl opacity-30"
                 src="/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg"
                 alt="1200 Jahre Radolfzell Logo"
               />

@@ -4,7 +4,7 @@
     @if ($index === selectedImageIndex) {
       <div class="flex h-full w-full justify-center rounded-t-2xl">
         <img
-          class="w-full rounded-t-2xl object-cover"
+          class="h-[650px] w-full rounded-t-2xl object-cover"
           [src]="item.url"
           [alt]="eventName ? 'Bild der Veranstaltung: ' + eventName : 'Veranstaltungsbild'"
         />

@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
-import { ScreenSize } from '@app/models/screenSize.enum'
 import { CommonModule } from '@angular/common'
 import { RouterModule, Router } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
@@ -19,6 +18,7 @@ import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { TypeDB } from '@app/models/typeDB.interface'
 import { AllEventButtonComponent } from '@app/component/all-event-button/all-event-button.component'
 import { SharedStateService } from '@app/services/shared-state.service'
+import { ScreenSize } from '@app/models/screenSize.enum'
 
 type EventOrMore = Event & { isMore?: boolean }
 
@@ -86,7 +86,7 @@ export class HomeComponent implements OnInit {
 
   private getUpcomingEvents(events: Event[]): Event[] {
     // Prüfe, ob wir ein gültiges Cache-Ergebnis haben (nicht älter als 5 Minuten)
-    if (this.cachedEvents && this.cachedEvents.input === events && Date.now() - this.cachedEvents.timestamp < 300000) {
+    if (this.cachedEvents?.input === events && Date.now() - this.cachedEvents.timestamp < 300000) {
       return this.cachedEvents.output
     }
 

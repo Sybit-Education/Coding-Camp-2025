@@ -43,6 +43,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
 
   openSettingsIndex: number | null = null
   pictureInfos: { copyright: string; creator: string }[] = []
+  deletedImages: Media[] = []
 
   private readonly mediaService = inject(MediaService)
   private readonly markForCheck = injectMarkForCheck()
@@ -190,18 +191,14 @@ export class ImageUploadComponent implements OnInit, OnChanges {
     this.previewsChange.emit([...this.previews])
 
     try {
-      // Wenn es ein HTTP-Bild ist (existierendes Bild), finde die Media-ID und lösche es
+      // Wenn es ein HTTP-Bild ist (existierendes Bild), finde die Media-ID und merke es zum löschen vor
       if (imageToRemove.startsWith('http')) {
         const existingMedia = await this.mediaService.getMediaByUrl(imageToRemove)
         if (existingMedia?.id) {
-          console.log('Lösche existierendes Bild aus der Datenbank:', existingMedia.id)
-          const deleted = await this.mediaService.deleteMedia(existingMedia.id)
-          if (deleted) {
-            console.log(`Bild mit ID ${existingMedia.id} erfolgreich gelöscht`)
-          } else {
-            console.warn(`Bild mit ID ${existingMedia.id} konnte nicht gelöscht werden`)
-          }
+          this.deletedImages.push(existingMedia)
         }
+        const media = await this.uploadImages()
+        this.mediaChange.emit([...media])
       }
 
       // Aktualisiere die Media-IDs und informiere die Eltern-Komponente
