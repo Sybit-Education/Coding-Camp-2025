@@ -53,7 +53,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   error: string | null = null
   eventId = ''
 
-  mediaUrl: (string | null)[] = []
+  mediaList: { url: string; copyright: string; creator: string }[] = []
 
   protected isLoggedIn = false
   private returnLink = ''
@@ -183,14 +183,23 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       const promises: Promise<unknown>[] = []
 
       // Media-URL laden
-      let mediaUrlPromise: Promise<(string | null)[]> = Promise.resolve([null])
+      let mediaPromise: Promise<
+        { url: string; copyright: string; creator: string }[]
+      > = Promise.resolve([])
+
       if (foundEvent.media?.length > 0) {
-        mediaUrlPromise = Promise.all(
-          foundEvent.media.map((mediaId) =>
-            this.mediaService.getMediaUrl(mediaId),
-          ),
+        mediaPromise = Promise.all(
+          foundEvent.media.map(async (mediaId) => {
+            const media = await this.mediaService.getMediaById(mediaId)
+            const url = this.mediaService.getMediaUrl(media.id)
+            return {
+              url: url || '',
+              copyright: media.copyright || '',
+              creator: media.creator || '',
+            }
+          }),
         )
-        promises.push(mediaUrlPromise)
+        promises.push(mediaPromise)
       }
 
       // Extrahiere IDs für parallele Ladung
@@ -213,11 +222,14 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       await Promise.all(promises)
 
       // Batch-Update für weniger Change Detection Zyklen
-      requestAnimationFrame(() => {
-        if (foundEvent.media?.length > 0) {
-          mediaUrlPromise.then((url) => {
-            this.mediaUrl = url
-          })
+      requestAnimationFrame(async () => {
+        const mediaResults = await mediaPromise
+        if (mediaResults.length > 0) {
+          this.mediaList = mediaResults.map((m) => ({
+            url: m.url,
+            copyright: m.copyright,
+            creator: m.creator,
+          }))
         }
 
         locationPromise.then((location) => (this.location = location))

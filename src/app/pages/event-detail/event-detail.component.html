@@ -7,26 +7,6 @@
     {{ 'event-detail.skip-to-content' | translate }}
   </a>
 
-  <!-- Meta-Tags für Social Media Sharing -->
-  <meta
-    property="og:title"
-    [attr.content]="event?.name || '1200 Jahre Radolfzell'"
-  />
-  <meta
-    property="og:description"
-    [attr.content]="
-      event?.description
-        ? (event?.description | slice: 0 : 150) + '...'
-        : 'Veranstaltung im Rahmen von 1200 Jahre Radolfzell'
-    "
-  />
-  <meta
-    property="og:image"
-    [attr.content]="mediaUrl || '/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg'"
-  />
-  <meta property="og:url" [attr.content]="getEventUrl()" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
   @if (event) {
     <article class="flex flex-col p-2">
       <section
@@ -43,10 +23,10 @@
             <span class="font-mono text-3xl font-extrabold">←</span>
           </button>
 
-          @if (mediaUrl && mediaUrl.length !== 0) {
-            @if (mediaUrl.length > 1) {
+          @if (mediaList.length !== 0) {
+            @if (mediaList.length > 1) {
               <app-image-carousel
-                [images]="mediaUrl"
+                [images]="mediaList"
                 [eventName]="event.name"
                 class="aspect-[4/3] rounded-t-2xl object-cover sm:w-full"
               ></app-image-carousel>
@@ -58,8 +38,15 @@
                     ? 'Bild der Veranstaltung: ' + event.name
                     : 'Veranstaltungsbild'
                 "
-                [src]="mediaUrl[0]"
+                [src]="mediaList[0].url"
               />
+              <div
+                class="absolute right-0 bottom-0 rounded-tl-xl bg-black px-2 py-1 opacity-75"
+              >
+                <div class="text-sm text-white">
+                  {{ mediaList[0].copyright }} – {{ mediaList[0].creator }}
+                </div>
+              </div>
             }
           } @else {
             <div class="flex w-full justify-center py-2">
@@ -77,8 +64,13 @@
               {{ event.name }}
             </h1>
           </div>
-          <div class="gap-2 mt-10 mb-4 mr-4 flex items-center justify-center text-2xl">
-            <app-favorite-button [eventId]="event.id" class="p-2"></app-favorite-button>
+          <div
+            class="mt-10 mr-4 mb-4 flex items-center justify-center gap-2 text-2xl"
+          >
+            <app-favorite-button
+              [eventId]="event.id"
+              class="p-2"
+            ></app-favorite-button>
             <app-share [event]="event" [location]="location"></app-share>
             <app-calendar-export
               [event]="event"
