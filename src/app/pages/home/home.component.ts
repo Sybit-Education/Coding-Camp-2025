@@ -80,11 +80,7 @@ export class HomeComponent implements OnInit {
 
       this.events = this.getUpcomingEvents(events)
       if (this.isSmall) {
-        this.displayEvents = this.events.slice(0, 4)
-        if (this.events.length > 4) {
-          // Karte als Platzhalter für „Mehr anzeigen“
-          this.displayEvents.push({ isMore: true } as EventOrMore)
-        }
+        this.displayEvents = this.events.slice(0, 5)
       } else {
         this.displayEvents = this.events.slice(0, 6)
       }
