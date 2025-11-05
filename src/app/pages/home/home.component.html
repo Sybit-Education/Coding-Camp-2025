@@ -1,4 +1,4 @@
-<article>
+<div class="relative grid grid-cols-1 justify-center">
   <h1 class="sr-only">
     {{ 'home.title' | translate }}
   </h1>
@@ -20,11 +20,28 @@
     </h2>
 
     <!-- Horizontaler Scroll-Container für Events -->
-    <div class="scrollbar-hide card-snap -mx-2 mb-5 w-full snap-x snap-mandatory overflow-x-auto scroll-smooth pb-4">
-      <div class="event-row flex min-w-max gap-4 px-2 pb-8">
+    @if ((sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL) {
+      <div class="scrollbar-hide card-snap -mx-2 mb-5 w-full snap-x snap-mandatory overflow-x-auto scroll-smooth pb-4">
+        <div class="event-row flex min-w-max gap-4 px-2 pb-8">
+          @for (event of displayEvents; track $index) {
+            <app-event-card
+              class="h-full w-[calc(100vw-6rem)] snap-center"
+              [event]="event.isMore ? null : event"
+              [isMoreCard]="!!event.isMore"
+              [attr.aria-label]="
+                event.name
+                  ? 'Veranstaltung: ' + event.name + ' am ' + (event.date_start | date: 'dd.MM.yyyy')
+                  : 'Mehr Veranstaltungen anzeigen'
+              "
+            ></app-event-card>
+          }
+        </div>
+      </div>
+    } @else {
+      <div class="flex flex-wrap justify-center gap-4">
         @for (event of displayEvents; track $index) {
           <app-event-card
-            class="h-full w-[calc(100vw-6rem)] snap-center"
+            class="w-full max-w-sm flex-shrink-0 sm:w-1/2 lg:w-1/3"
             [event]="event.isMore ? null : event"
             [isMoreCard]="!!event.isMore"
             [attr.aria-label]="
@@ -35,23 +52,23 @@
           ></app-event-card>
         }
       </div>
-    </div>
+    }
   </section>
 
-  <div class="h-24 max-w-3xl">
-    <app-event-card [isMoreCard]="true"></app-event-card>
+  <div class="mt-10 flex justify-center">
+    <app-all-event-button />
   </div>
 
   <!-- Kategorien -->
-  <section [attr.aria-labelledby]="'home.tags.aria-lable-catagories-heading' | translate">
+  <section [attr.aria-labelledby]="'home.tags.aria-lable-catagories-heading' | translate" class="mt-20">
     <h2 [id]="'home.tags.aria-lable-catagories-heading' | translate">
       {{ 'home.categories' | translate }}
     </h2>
 
     <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
       @for (kategorie of topicsOrTypes; track kategorie.id) {
-        <app-kategorie-card [color]="kategorie.color" [text]="kategorie.name" [id]="kategorie.id!"> </app-kategorie-card>
+        <app-kategorie-card [color]="kategorie.color" [text]="kategorie.name" />
       }
     </div>
   </section>
-</article>
+</div>

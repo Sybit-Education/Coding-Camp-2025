@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core'
 import { RouterModule } from '@angular/router'
-import { RecordId } from 'surrealdb'
 
 @Component({
   selector: 'app-kategorie-card',
@@ -14,7 +13,6 @@ export class KategorieCardComponent {
   @Input() set color(value: string) {
     this.categoryColor.set(value || '#ffffff')
   }
-  @Input() id!: RecordId<'topic'> | RecordId<'event_type'>
 
   // Signals für reaktive Verarbeitung
   protected readonly categoryColor = signal<string>('#ffffff')

@@ -24,7 +24,7 @@ export class EventCardComponent implements OnInit, OnDestroy {
 
   @Input() isMoreCard = false
 
-  @Input() fromCategory = ''
+  @Input() returnLink = ''
 
   location: Location | null = null
   eventType: EventType | null = null

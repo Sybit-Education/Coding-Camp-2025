@@ -15,13 +15,16 @@ import { Event } from '../../models/event.interface'
 import { Topic } from '../../models/topic.interface'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { TypeDB } from '@app/models/typeDB.interface'
+import { AllEventButtonComponent } from '@app/component/all-event-button/all-event-button.component'
+import { SharedStateService } from '@app/services/shared-state.service'
+import { ScreenSize } from '@app/models/screenSize.enum'
 
 type EventOrMore = Event & { isMore?: boolean }
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, TranslateModule, RouterModule, EventCardComponent, KategorieCardComponent],
+  imports: [CommonModule, TranslateModule, RouterModule, EventCardComponent, KategorieCardComponent, AllEventButtonComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,9 +33,13 @@ export class HomeComponent implements OnInit {
   events: Event[] = []
   displayEvents: EventOrMore[] = []
   topics: Topic[] = []
+  screenSize = ScreenSize
+
+  isSmall = true
 
   topicsOrTypes: (Topic | TypeDB)[] = []
 
+  readonly sharedStateService = inject(SharedStateService)
   private readonly eventService = inject(EventService)
   private readonly locationService = inject(LocationService)
   private readonly topicService = inject(TopicService)
@@ -53,15 +60,13 @@ export class HomeComponent implements OnInit {
       ])
 
       this.events = this.getUpcomingEvents(events)
-      this.displayEvents = this.events.slice(0, 4)
-
-      if (this.events.length > 4) {
-        // Karte als Platzhalter für „Mehr anzeigen“
-        this.displayEvents.push({ isMore: true } as EventOrMore)
+      if (this.isSmall) {
+        this.displayEvents = this.events.slice(0, 5)
+      } else {
+        this.displayEvents = this.events.slice(0, 6)
       }
 
-      this.topicsOrTypes.push(...topics)
-      this.topicsOrTypes.push(...eventTypes)
+      this.topicsOrTypes.push(...topics, ...eventTypes)
     } catch (error) {
       console.error('Fehler beim Laden der Daten:', error)
     }
@@ -76,7 +81,7 @@ export class HomeComponent implements OnInit {
 
   private getUpcomingEvents(events: Event[]): Event[] {
     // Prüfe, ob wir ein gültiges Cache-Ergebnis haben (nicht älter als 5 Minuten)
-    if (this.cachedEvents && this.cachedEvents.input === events && Date.now() - this.cachedEvents.timestamp < 300000) {
+    if (this.cachedEvents?.input === events && Date.now() - this.cachedEvents.timestamp < 300000) {
       return this.cachedEvents.output
     }
 
