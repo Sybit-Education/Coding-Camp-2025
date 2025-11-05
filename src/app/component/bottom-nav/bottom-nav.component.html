@@ -80,6 +80,34 @@
         </a>
       </span>
 
+      <span class="flex-1">
+        <a
+          routerLink="/kategorie"
+          routerLinkActive="text-[#c70d56] bg-[#ffffff40] rounded-xl scale-110"
+          class="relative m-1 flex transform flex-col items-center justify-center p-0.5 text-[#3b4ea3] transition hover:text-[#c70d56]"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="h-6 w-6"
+          >
+            <path
+              [attr.stroke-linecap]="'round'"
+              [attr.stroke-linejoin]="'round'"
+              [attr.d]="
+                'M21 21l-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607z'
+              "
+            />
+          </svg>
+          <span class="m-1 text-xs font-medium tracking-wide">{{
+            'bottom-nav.all-events' | translate
+          }}</span>
+        </a>
+      </span>
+
       <span
         class="mx-2 flex w-full flex-1 justify-center sm:mt-0 sm:ml-auto sm:w-auto sm:flex-1 sm:justify-end"
       >
