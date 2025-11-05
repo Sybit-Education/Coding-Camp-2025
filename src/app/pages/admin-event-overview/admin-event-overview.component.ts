@@ -1,24 +1,11 @@
-import {
-  Component,
-  inject,
-  signal,
-  OnInit,
-  ViewEncapsulation,
-  ChangeDetectionStrategy,
-  DestroyRef,
-} from '@angular/core'
+import { Component, inject, signal, OnInit, ViewEncapsulation, ChangeDetectionStrategy, DestroyRef } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule, Router, NavigationEnd } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 import { Event } from '../../models/event.interface'
 import { EventService } from '../../services/event.service'
 import { OrganizerService } from '../../services/organizer.service'
-import {
-  NgxDatatableModule,
-  TableColumn,
-  SortEvent,
-  SortDirection,
-} from '@swimlane/ngx-datatable'
+import { NgxDatatableModule, TableColumn, SortEvent, SortDirection } from '@swimlane/ngx-datatable'
 import { FormsModule } from '@angular/forms'
 import { Organizer } from '../../models/organizer.interface'
 import { RecordId } from 'surrealdb'
@@ -29,13 +16,7 @@ import { MediaService } from '@app/services/media.service'
 @Component({
   selector: 'app-admin-event-overview',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    TranslateModule,
-    NgxDatatableModule,
-    FormsModule,
-  ],
+  imports: [CommonModule, RouterModule, TranslateModule, NgxDatatableModule, FormsModule],
   templateUrl: './admin-event-overview.component.html',
   styleUrl: './admin-event-overview.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -236,15 +217,11 @@ export class AdminEventOverviewComponent implements OnInit {
   }
 
   // Sortiere Daten basierend auf Sortierkriterien
-  private sortData(
-    data: Record<string, unknown>[],
-    sorts: { prop: string; dir: SortDirection }[],
-  ): Record<string, unknown>[] {
+  private sortData(data: Record<string, unknown>[], sorts: { prop: string; dir: SortDirection }[]): Record<string, unknown>[] {
     if (sorts.length === 0) return data
 
     const sort = sorts[0] // Wir verwenden nur die erste Sortierung
-    const dir =
-      sort.dir === SortDirection.asc || sort.dir === SortDirection.desc ? 1 : -1
+    const dir = sort.dir === SortDirection.asc || sort.dir === SortDirection.desc ? 1 : -1
 
     return [...data].sort((a, b) => {
       // Spezielle Behandlung für Datumsspalte

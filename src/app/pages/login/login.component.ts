@@ -41,9 +41,7 @@ export class LoginPageComponent implements OnInit {
 
       if (!result) {
         this.isError = true
-        this.snackBarService.showError(
-          'Login fehlgeschlagen. Bitte überprüfen Sie Ihre Anmeldedaten.',
-        )
+        this.snackBarService.showError('Login fehlgeschlagen. Bitte überprüfen Sie Ihre Anmeldedaten.')
         return
       }
       this.snackBarService.showSuccess('Login erfolgreich')
@@ -51,9 +49,7 @@ export class LoginPageComponent implements OnInit {
     } catch (error) {
       this.isError = true
       console.error('Fehler beim Login:', error)
-      this.snackBarService.showError(
-        `Fehler beim Login: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
-      )
+      this.snackBarService.showError(`Fehler beim Login: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`)
     }
   }
 }

@@ -32,10 +32,7 @@ export class OrganizerService {
   //************** POST **************
 
   async postOrganizer(organizer: Organizer): Promise<Organizer> {
-    const result: Organizer[] = await this.surrealdb.post<Organizer>(
-      'organizer',
-      organizer,
-    )
+    const result: Organizer[] = await this.surrealdb.post<Organizer>('organizer', organizer)
     return result[0]
   }
 }

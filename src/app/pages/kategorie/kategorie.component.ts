@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 import { EventCardComponent } from '../../component/event-card/event-card.component'
@@ -52,8 +47,7 @@ export class KategorieComponent implements OnInit {
       // Daten neu laden, wenn sich die Parameter ändern
       this.initilizeData().then(() => this.markForCheck())
 
-      this.fromCategory =
-        (this.id?.toString() || 'keineID') + ',' + (this.name || 'keinName')
+      this.fromCategory = (this.id?.toString() || 'keineID') + ',' + (this.name || 'keinName')
     })
   }
   private readonly eventService: EventService = inject(EventService)
@@ -67,21 +61,14 @@ export class KategorieComponent implements OnInit {
     this.loading = true
     try {
       // Lade Topics und Events parallel
-      const [topics, allEvents] = await Promise.all([
-        this.topicService.getAllTopics(),
-        this.eventService.getAllEvents(),
-      ])
+      const [topics, allEvents] = await Promise.all([this.topicService.getAllTopics(), this.eventService.getAllEvents()])
 
       this.topics = topics
 
       // Filtere Events basierend auf der ID
       const rawEvents = !this.id
         ? allEvents
-        : allEvents.filter(
-            (event) =>
-              event.topic?.some((topic) => topic.id === this.id) ||
-              event.event_type?.id === this.id,
-          )
+        : allEvents.filter((event) => event.topic?.some((topic) => topic.id === this.id) || event.event_type?.id === this.id)
 
       // Optimiere Location-Ladung durch Caching
       this.events = await Promise.all(
@@ -92,10 +79,7 @@ export class KategorieComponent implements OnInit {
           if (event.location) {
             const locationId = String(event.location)
             if (!this.locationCache.has(locationId)) {
-              this.locationCache.set(
-                locationId,
-                this.locationService.getLocationByID(event.location),
-              )
+              this.locationCache.set(locationId, this.locationService.getLocationByID(event.location))
             }
 
             locationData = await this.locationCache.get(locationId)
@@ -110,9 +94,7 @@ export class KategorieComponent implements OnInit {
       // Markiere vergangene Events und sortiere nach Datum (aufsteigend)
       const now = new Date()
       this.events = this.events.map((event) => {
-        const endDate = event.date_end
-          ? new Date(event.date_end)
-          : new Date(event.date_start)
+        const endDate = event.date_end ? new Date(event.date_end) : new Date(event.date_start)
         return {
           ...event,
           isPast: endDate < now,

@@ -1,12 +1,8 @@
-<div
-  class="flex flex-col items-center justify-center rounded-2xl bg-[var(--colors-light-blue)] p-5"
->
+<div class="flex flex-col items-center justify-center rounded-2xl bg-[var(--colors-light-blue)] p-5">
   <form class="rounded-2xl bg-white p-6">
     <!-- Event Name -->
     <div>
-      <label for="eventName" class="required">{{
-        'create-event.eventname' | translate
-      }}</label>
+      <label for="eventName" class="required">{{ 'create-event.eventname' | translate }}</label>
       <input
         #eventNameInput
         id="eventName"
@@ -25,14 +21,10 @@
     </div>
 
     <!-- Datum und Zeit -->
-    <div
-      class="flex grid flex-col gap-[3rem] sm:grid-cols-[1fr] md:w-full md:grid-cols-[1fr_1fr]"
-    >
+    <div class="flex grid flex-col gap-[3rem] sm:grid-cols-[1fr] md:w-full md:grid-cols-[1fr_1fr]">
       <div class="grid grid-cols-2 gap-[1rem]">
         <div class="my-4">
-          <label for="date" class="required">{{
-            'create-event.startdate' | translate
-          }}</label>
+          <label for="date" class="required">{{ 'create-event.startdate' | translate }}</label>
           <input
             #dateStartInput
             id="date"
@@ -50,13 +42,7 @@
           }
           <!-- Zeitspanne -->
           <div class="mx-2 my-2">
-            <input
-              id="timePeriode"
-              name="timePeriode"
-              type="checkbox"
-              [(ngModel)]="timePeriode"
-              class="cursor-pointer"
-            />
+            <input id="timePeriode" name="timePeriode" type="checkbox" [(ngModel)]="timePeriode" class="cursor-pointer" />
             <label for="timePeriode" class="ms-2 w-full cursor-pointer">
               {{ 'create-event.timespan' | translate }}
             </label>
@@ -64,9 +50,7 @@
         </div>
         <!-- Startzeit -->
         <div class="my-4">
-          <label for="time" class="required">{{
-            'create-event.starttime' | translate
-          }}</label>
+          <label for="time" class="required">{{ 'create-event.starttime' | translate }}</label>
           <input
             #timeStartInput
             id="time"
@@ -89,31 +73,17 @@
         <div class="grid grid-cols-2 gap-[1rem]">
           <div class="my-4">
             <label for="date">{{ 'create-event.enddate' | translate }}</label>
-            <input
-              id="date"
-              type="date"
-              [(ngModel)]="dateEnd"
-              name="dateStart"
-              class="w-full"
-            />
+            <input id="date" type="date" [(ngModel)]="dateEnd" name="dateStart" class="w-full" />
           </div>
           <div class="my-4">
             <label for="time">{{ 'create-event.endtime' | translate }}</label>
-            <input
-              id="time"
-              type="time"
-              [(ngModel)]="timeEnd"
-              name="timeStart"
-              class="w-full"
-            />
+            <input id="time" type="time" [(ngModel)]="timeEnd" name="timeStart" class="w-full" />
           </div>
         </div>
       }
     </div>
 
-    <div
-      class="flex grid flex-col gap-[3rem] sm:grid-cols-[1fr] md:w-full md:grid-cols-[1fr_1fr]"
-    >
+    <div class="flex grid flex-col gap-[3rem] sm:grid-cols-[1fr] md:w-full md:grid-cols-[1fr_1fr]">
       <!-- Location Auswahl -->
       <app-location-input
         [locations]="locations"
@@ -131,9 +101,7 @@
 
     <!-- Beschreibung -->
     <div class="my-4">
-      <label for="description">{{
-        'create-event.description' | translate
-      }}</label>
+      <label for="description">{{ 'create-event.description' | translate }}</label>
       <quill-editor
         name="description"
         [maxLength]="5000"
@@ -142,11 +110,7 @@
         [placeholder]="'Beschreibung eingeben...'"
         [format]="'html'"
         [modules]="{
-          toolbar: [
-            ['bold', 'italic', 'underline'],
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-            ['link'],
-          ],
+          toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered' }, { 'list': 'bullet' }], ['link']],
           clipboard: {
             matchVisual: false,
           },
@@ -157,9 +121,7 @@
       </quill-editor>
     </div>
 
-    <div
-      class="flex grid flex-col gap-[3rem] sm:grid-cols-[1fr] md:w-full md:grid-cols-[1fr_1fr]"
-    >
+    <div class="flex grid flex-col gap-[3rem] sm:grid-cols-[1fr] md:w-full md:grid-cols-[1fr_1fr]">
       <div class="flex flex-col">
         <!-- Themen -->
         <h3>
@@ -184,10 +146,7 @@
             }
           </select>
         </div>
-        <div
-          id="choose-category"
-          class="my-4 rounded-lg bg-white shadow-sm dark:bg-gray-100"
-        >
+        <div id="choose-category" class="my-4 rounded-lg bg-white shadow-sm dark:bg-gray-100">
           <ul class="mb-0 list-none p-3 text-gray-700 dark:text-gray-200">
             @for (topic of topics; track topic) {
               <li>
@@ -201,10 +160,7 @@
                     (change)="toggleTopicSelection($event, topic)"
                     class="h-4 w-4 cursor-pointer"
                   />
-                  <label
-                    for="checkbox{{ topic.id }}"
-                    class="ms-2 w-full cursor-pointer text-gray-900 dark:text-gray-700"
-                  >
+                  <label for="checkbox{{ topic.id }}" class="ms-2 w-full cursor-pointer text-gray-900 dark:text-gray-700">
                     {{ topic.name }}
                   </label>
                 </div>
@@ -216,9 +172,7 @@
       <div>
         <!-- Mehr Infos -->
         <div class="my-4 mt-6">
-          <label for="moreInfoLink">{{
-            'create-event.moreinfo' | translate
-          }}</label>
+          <label for="moreInfoLink">{{ 'create-event.moreinfo' | translate }}</label>
           <input
             id="moreInfoLink"
             name="moreInfoLink"
@@ -231,9 +185,7 @@
 
         <!-- Einschränkungen -->
         <div class="my-4">
-          <label for="restriction">{{
-            'create-event.restrictions' | translate
-          }}</label>
+          <label for="restriction">{{ 'create-event.restrictions' | translate }}</label>
           <input
             id="restriction"
             name="restriction"
@@ -262,12 +214,7 @@
 
     <div>
       <!-- Bild-Upload -->
-      <app-image-upload
-        [(previews)]="previews"
-        [eventName]="eventName"
-        [existingImages]="images"
-      >
-      </app-image-upload>
+      <app-image-upload [(previews)]="previews" [eventName]="eventName" [existingImages]="images"> </app-image-upload>
 
       <!-- Button: Event erstellen -->
       @if (this.errorDate || this.errorName || this.errorTime) {
@@ -278,18 +225,13 @@
         </div>
       }
     </div>
-    <div
-      class="my-8 flex grid w-full flex-col gap-[3rem] sm:grid-cols-[1fr] md:grid-cols-[1fr_1fr] lg:grid-cols-[1fr_1fr_1fr]"
-    >
+    <div class="my-8 flex grid w-full flex-col gap-[3rem] sm:grid-cols-[1fr] md:grid-cols-[1fr_1fr] lg:grid-cols-[1fr_1fr_1fr]">
       <button
         type="submit"
         class="w-full cursor-pointer rounded-2xl bg-blue-600 p-5 text-white hover:bg-blue-700"
         (click)="saveEvent()"
       >
-        {{
-          (eventId ? 'create-event.updateevent' : 'create-event.createevent')
-            | translate
-        }}
+        {{ (eventId ? 'create-event.updateevent' : 'create-event.createevent') | translate }}
       </button>
 
       <button

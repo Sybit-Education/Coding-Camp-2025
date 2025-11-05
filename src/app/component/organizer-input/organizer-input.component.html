@@ -28,9 +28,7 @@
 @if (newOrganizer) {
   <div class="space-y-2 rounded-xl border-2 border-black p-2">
     <p>
-      <label for="organizername">{{
-        'create-event.neworganizername' | translate
-      }}</label>
+      <label for="organizername">{{ 'create-event.neworganizername' | translate }}</label>
       <input
         id="organizername"
         name="organizername"
@@ -41,9 +39,7 @@
       />
     </p>
     <p>
-      <label for="organizerphone">{{
-        'create-event.neworganizerphone' | translate
-      }}</label>
+      <label for="organizerphone">{{ 'create-event.neworganizerphone' | translate }}</label>
       <input
         id="organizerphone"
         name="organizerphone"
@@ -53,16 +49,8 @@
       />
     </p>
     <p>
-      <label for="organizermail">{{
-        'create-event.neworganizermail' | translate
-      }}</label>
-      <input
-        id="organizermail"
-        name="organizermail"
-        type="text"
-        [(ngModel)]="organizermail"
-        class="p-[0.75rem 1rem] w-full"
-      />
+      <label for="organizermail">{{ 'create-event.neworganizermail' | translate }}</label>
+      <input id="organizermail" name="organizermail" type="text" [(ngModel)]="organizermail" class="p-[0.75rem 1rem] w-full" />
     </p>
     <div class="mt-4 flex justify-end space-x-2">
       <button

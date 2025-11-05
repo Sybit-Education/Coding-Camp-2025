@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { ActivatedRoute } from '@angular/router'
 
@@ -18,8 +13,7 @@ import { ActivatedRoute } from '@angular/router'
 
       <div class="rounded-lg bg-white p-6 shadow-md">
         <p class="text-gray-600">
-          Diese Seite wird in Kürze verfügbar sein. Hier werden Informationen zu
-          "{{ pageTitle }}" angezeigt.
+          Diese Seite wird in Kürze verfügbar sein. Hier werden Informationen zu "{{ pageTitle }}" angezeigt.
         </p>
 
         <div class="mt-8 flex justify-center">

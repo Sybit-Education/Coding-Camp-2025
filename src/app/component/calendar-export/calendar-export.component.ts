@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  HostListener,
-  Input,
-  inject,
-  signal,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, Input, inject, signal } from '@angular/core'
 import { TranslateModule } from '@ngx-translate/core'
 import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
@@ -40,10 +32,7 @@ export class CalendarExportComponent {
    */
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
-    if (
-      !this.elementRef.nativeElement.contains(event.target) &&
-      this.showCalendarOptions()
-    ) {
+    if (!this.elementRef.nativeElement.contains(event.target) && this.showCalendarOptions()) {
       this.showCalendarOptions.set(false)
     }
   }
@@ -76,11 +65,7 @@ export class CalendarExportComponent {
     if (!this.event) return
 
     const eventUrl = this.getEventUrl()
-    const calEvent = this.calendarService.createCalendarEvent(
-      this.event,
-      this.location,
-      eventUrl,
-    )
+    const calEvent = this.calendarService.createCalendarEvent(this.event, this.location, eventUrl)
     const filename = `${this.event.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`
     this.calendarService.downloadICalFile(calEvent, filename)
     this.showCalendarOptions.set(false)
@@ -93,11 +78,7 @@ export class CalendarExportComponent {
     if (!this.event) return
 
     const eventUrl = this.getEventUrl()
-    const calEvent = this.calendarService.createCalendarEvent(
-      this.event,
-      this.location,
-      eventUrl,
-    )
+    const calEvent = this.calendarService.createCalendarEvent(this.event, this.location, eventUrl)
     const url = this.calendarService.generateGoogleCalendarUrl(calEvent)
     window.open(url, '_blank')
     this.showCalendarOptions.set(false)
@@ -110,11 +91,7 @@ export class CalendarExportComponent {
     if (!this.event) return
 
     const eventUrl = this.getEventUrl()
-    const calEvent = this.calendarService.createCalendarEvent(
-      this.event,
-      this.location,
-      eventUrl,
-    )
+    const calEvent = this.calendarService.createCalendarEvent(this.event, this.location, eventUrl)
     const url = this.calendarService.generateOutlookCalendarUrl(calEvent)
     window.open(url, '_blank')
     this.showCalendarOptions.set(false)
@@ -131,18 +108,11 @@ export class CalendarExportComponent {
     // Für Apple Kalender laden wir die iCal-Datei direkt herunter
     // und öffnen sie mit dem webcal:// Protokoll
     const eventUrl = this.getEventUrl()
-    const calEvent = this.calendarService.createCalendarEvent(
-      this.event,
-      this.location,
-      eventUrl,
-    )
+    const calEvent = this.calendarService.createCalendarEvent(this.event, this.location, eventUrl)
 
     // Für Apple Kalender ist es am einfachsten, die iCal-Datei direkt herunterzuladen
     // Das Betriebssystem wird sie dann mit der Kalender-App öffnen
-    this.calendarService.downloadICalFile(
-      calEvent,
-      `${this.event.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`,
-    )
+    this.calendarService.downloadICalFile(calEvent, `${this.event.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`)
     this.showCalendarOptions.set(false)
   }
 }

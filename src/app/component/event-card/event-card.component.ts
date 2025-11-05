@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnInit,
-  OnDestroy,
-  inject,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input, OnInit, OnDestroy, inject } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { Subscription } from 'rxjs'
@@ -72,11 +65,7 @@ export class EventCardComponent implements OnInit, OnDestroy {
 
     try {
       // Verwende Promise.all für parallele Ausführung
-      const [location, eventType, mediaUrl] = await Promise.all([
-        this.loadLocation(),
-        this.loadEventType(),
-        this.loadMedia(),
-      ])
+      const [location, eventType, mediaUrl] = await Promise.all([this.loadLocation(), this.loadEventType(), this.loadMedia()])
 
       // Batch-Update der Komponenten-Properties für weniger Change Detection Zyklen
       setTimeout(() => {
@@ -87,12 +76,7 @@ export class EventCardComponent implements OnInit, OnDestroy {
         // Change Detection auslösen, da wir OnPush verwenden
         this.markForCheck()
 
-        console.log(
-          'Event-Card geladen:',
-          this.event?.name,
-          'Media URL:',
-          this.mediaUrl,
-        )
+        console.log('Event-Card geladen:', this.event?.name, 'Media URL:', this.mediaUrl)
       }, 0)
     } catch (error) {
       console.error('Fehler beim Laden der Event-Details:', error)

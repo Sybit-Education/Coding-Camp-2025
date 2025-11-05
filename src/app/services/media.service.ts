@@ -20,9 +20,7 @@ export class MediaService {
     return result[0]
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async postMediaToGoService(media: UploadMedia) {
-
     media.env = environment.configName
 
     const options = { headers: { 'Content-Type': 'application/json' } }
@@ -31,9 +29,7 @@ export class MediaService {
       this.http.post<{ success: boolean; id: string }>(`${this.mediaBaseUrl}/upload`, media, options),
     )
 
-    const fullId = response.id.startsWith('media:')
-      ? response.id
-      : `media:${response.id}`
+    const fullId = response.id.startsWith('media:') ? response.id : `media:${response.id}`
 
     return fullId as unknown as RecordId<'media'>
   }
@@ -53,9 +49,7 @@ export class MediaService {
     }
   }
 
-  async getFirstMediaUrl(
-    mediaArray: RecordId<'media'>[] | undefined,
-  ): Promise<string | null> {
+  async getFirstMediaUrl(mediaArray: RecordId<'media'>[] | undefined): Promise<string | null> {
     if (!mediaArray || mediaArray.length === 0) return null
     return await this.getMediaUrl(mediaArray[0])
   }
@@ -75,9 +69,7 @@ export class MediaService {
   async getMediaByUrl(url: string): Promise<Media | null> {
     try {
       const id = url.substring(url.lastIndexOf('/') + 1).replace('.', '_')
-      const media = await this.surrealdb.getByRecordId<Media>(
-        new StringRecordId(`media:${id}`),
-      )
+      const media = await this.surrealdb.getByRecordId<Media>(new StringRecordId(`media:${id}`))
       return media || null
     } catch (error) {
       console.warn('Fehler beim Laden der Media:', error)
