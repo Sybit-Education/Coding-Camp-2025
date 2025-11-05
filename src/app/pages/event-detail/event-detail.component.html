@@ -1,18 +1,12 @@
 <div>
   <!-- Skip-Link für Screenreader -->
-  <a
-    href="#event-content"
-    class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2"
-  >
+  <a href="#event-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2">
     {{ 'event-detail.skip-to-content' | translate }}
   </a>
 
   @if (event) {
     <article class="flex flex-col p-2">
-      <section
-        id="event-content"
-        class="info-card rounded-2xl bg-gray-100 shadow-2xl"
-      >
+      <section id="event-content" class="info-card rounded-2xl bg-gray-100 shadow-2xl">
         <!-- Back-Button in der oberen linken Ecke -->
         <div class="relative">
           <button
@@ -33,19 +27,11 @@
             } @else {
               <img
                 class="aspect-[4/3] rounded-t-2xl object-cover sm:w-full"
-                [alt]="
-                  event.name
-                    ? 'Bild der Veranstaltung: ' + event.name
-                    : 'Veranstaltungsbild'
-                "
+                [alt]="event.name ? 'Bild der Veranstaltung: ' + event.name : 'Veranstaltungsbild'"
                 [src]="mediaList[0].url"
               />
-              <div
-                class="absolute right-0 bottom-0 rounded-tl-xl bg-black px-2 py-1 opacity-75"
-              >
-                <div class="text-sm text-white">
-                  {{ mediaList[0].copyright }} – {{ mediaList[0].creator }}
-                </div>
+              <div class="absolute right-0 bottom-0 rounded-tl-xl bg-black px-2 py-1 opacity-75">
+                <div class="text-sm text-white">{{ mediaList[0].copyright }} – {{ mediaList[0].creator }}</div>
               </div>
             }
           } @else {
@@ -64,31 +50,18 @@
               {{ event.name }}
             </h1>
           </div>
-          <div
-            class="mt-10 mr-4 mb-4 flex items-center justify-center gap-2 text-2xl"
-          >
-            <app-favorite-button
-              [eventId]="event.id"
-              class="p-2"
-            ></app-favorite-button>
+          <div class="mt-10 mr-4 mb-4 flex items-center justify-center gap-2 text-2xl">
+            <app-favorite-button [eventId]="event.id" class="p-2"></app-favorite-button>
             <app-share [event]="event" [location]="location"></app-share>
-            <app-calendar-export
-              [event]="event"
-              [location]="location"
-            ></app-calendar-export>
+            <app-calendar-export [event]="event" [location]="location"></app-calendar-export>
           </div>
         </div>
         <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
         <div class="flex justify-between">
-          <div
-            class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl"
-          >
+          <div class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl">
             <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
               <div class="flex items-center justify-center">
-                <div
-                  class="flex h-[50px] w-[50px] items-center justify-center rounded-full"
-                  aria-hidden="true"
-                >
+                <div class="flex h-[50px] w-[50px] items-center justify-center rounded-full" aria-hidden="true">
                   <span aria-hidden="true">📅</span>
                 </div>
               </div>
@@ -103,10 +76,7 @@
             </div>
             <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
               <div class="flex items-center justify-center">
-                <div
-                  class="flex h-[50px] w-[50px] items-center justify-center rounded-full"
-                  aria-hidden="true"
-                >
+                <div class="flex h-[50px] w-[50px] items-center justify-center rounded-full" aria-hidden="true">
                   <span aria-hidden="true">📍</span>
                 </div>
               </div>
@@ -119,10 +89,7 @@
             </div>
             <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
               <div class="flex items-center justify-center">
-                <div
-                  class="flex h-[50px] w-[50px] items-center justify-center rounded-full"
-                  aria-hidden="true"
-                >
+                <div class="flex h-[50px] w-[50px] items-center justify-center rounded-full" aria-hidden="true">
                   <span aria-hidden="true">💶</span>
                 </div>
               </div>
@@ -141,10 +108,7 @@
             </div>
             <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
               <div class="flex items-center justify-center">
-                <div
-                  class="flex h-[50px] w-[50px] items-center justify-center rounded-full"
-                  aria-hidden="true"
-                >
+                <div class="flex h-[50px] w-[50px] items-center justify-center rounded-full" aria-hidden="true">
                   <span aria-hidden="true">👥</span>
                 </div>
               </div>
@@ -160,10 +124,7 @@
       </section>
 
       @if (event.description) {
-        <section
-          class="desc mt-10 rounded-2xl"
-          aria-labelledby="description-heading"
-        >
+        <section class="desc mt-10 rounded-2xl" aria-labelledby="description-heading">
           <h2 id="description-heading">
             {{ 'event-detail.description' | translate }}
           </h2>
@@ -174,21 +135,13 @@
         </section>
       }
       @if (location?.geo_point) {
-        <section
-          class="map mt-10"
-          [attr.aria-labelledby]="'directions-heading'"
-        >
+        <section class="map mt-10" [attr.aria-labelledby]="'directions-heading'">
           <h2 id="directions-heading" class="text-2xl font-bold text-blue-900">
             {{ 'event-detail.arrival' | translate }}
           </h2>
           <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
           <div class="h-96 w-full overflow-hidden rounded-2xl shadow-2xl">
-            <app-map
-              [coordinates]="[
-                location!.geo_point!.coordinates[0],
-                location!.geo_point!.coordinates[1],
-              ]"
-            ></app-map>
+            <app-map [coordinates]="[location!.geo_point!.coordinates[0], location!.geo_point!.coordinates[1]]"></app-map>
             <div class="sr-only">
               <p>
                 {{ 'event-detail.eventlocation' | translate }}:
@@ -202,33 +155,22 @@
             </div>
           </div>
           <div class="flex w-full justify-center py-8">
-            <button
-              class="h-12 cursor-pointer rounded-md bg-green-400 px-4 shadow hover:opacity-90"
-              (click)="startRoute()"
-            >
+            <button class="h-12 cursor-pointer rounded-md bg-green-400 px-4 shadow hover:opacity-90" (click)="startRoute()">
               📍 Route starten
             </button>
           </div>
         </section>
       }
-      <section
-        class="contact mt-10 mb-18 rounded-2xl bg-gray-100 shadow-2xl"
-        [attr.aria-labelledby]="'contact-heading'"
-      >
+      <section class="contact mt-10 mb-18 rounded-2xl bg-gray-100 shadow-2xl" [attr.aria-labelledby]="'contact-heading'">
         <h2 id="contact-heading" class="ml-10">
           {{ 'event-detail.organizer' | translate }}
         </h2>
         <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
         <div class="flex justify-between">
-          <div
-            class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl"
-          >
+          <div class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl">
             <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
               <div class="flex items-center justify-center">
-                <div
-                  class="flex h-[50px] w-[50px] items-center justify-center rounded-full"
-                  aria-hidden="true"
-                >
+                <div class="flex h-[50px] w-[50px] items-center justify-center rounded-full" aria-hidden="true">
                   <span aria-hidden="true">👤</span>
                 </div>
               </div>
@@ -242,10 +184,7 @@
             @if (organizer?.email) {
               <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
                 <div class="flex items-center justify-center">
-                  <div
-                    class="flex h-[50px] w-[50px] items-center justify-center rounded-full"
-                    aria-hidden="true"
-                  >
+                  <div class="flex h-[50px] w-[50px] items-center justify-center rounded-full" aria-hidden="true">
                     <span aria-hidden="true">📧</span>
                   </div>
                 </div>
@@ -267,10 +206,7 @@
             @if (organizer?.phonenumber) {
               <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
                 <div class="flex items-center justify-center">
-                  <div
-                    class="flex h-[50px] w-[50px] items-center justify-center rounded-full"
-                    aria-hidden="true"
-                  >
+                  <div class="flex h-[50px] w-[50px] items-center justify-center rounded-full" aria-hidden="true">
                     <span aria-hidden="true">☎️</span>
                   </div>
                 </div>
@@ -297,10 +233,7 @@
 
   <div class="edit mb-20 flex items-center justify-center">
     @if (isLoggedIn) {
-      <button
-        class="hover*:bg-blue-600 rounded-full bg-blue-500 px-4 py-2 font-bold text-white"
-        (click)="editEvent()"
-      >
+      <button class="hover*:bg-blue-600 rounded-full bg-blue-500 px-4 py-2 font-bold text-white" (click)="editEvent()">
         {{ 'event-detail.edit' | translate }}
       </button>
     }

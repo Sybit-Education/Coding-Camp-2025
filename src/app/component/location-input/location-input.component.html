@@ -27,9 +27,7 @@
 <!-- Neue Location -->
 @if (newLocation) {
   <div class="space-y-2 rounded-xl border-2 border-black p-2">
-    <label for="locationName">{{
-      'create-event.newlocationname' | translate
-    }}</label>
+    <label for="locationName">{{ 'create-event.newlocationname' | translate }}</label>
     <input
       id="locationName"
       name="locationName"
@@ -38,9 +36,7 @@
       placeholder="{{ 'create-event.newlocationnameexample' | translate }}"
       class="p-[0.75rem 1rem] w-full placeholder:text-gray-400"
     />
-    <label for="address">{{
-      'create-event.newlocationaddress' | translate
-    }}</label>
+    <label for="address">{{ 'create-event.newlocationaddress' | translate }}</label>
     <input
       id="address"
       name="address"
@@ -51,36 +47,15 @@
     />
     <div class="grid grid-cols-2 gap-[1rem]">
       <div>
-        <label for="postalCode">{{
-          'create-event.newlocationplz' | translate
-        }}</label>
-        <input
-          id="postalCode"
-          name="plz"
-          type="number"
-          [(ngModel)]="plz"
-          class="p-[0.75rem 1rem] w-full"
-        />
+        <label for="postalCode">{{ 'create-event.newlocationplz' | translate }}</label>
+        <input id="postalCode" name="plz" type="number" [(ngModel)]="plz" class="p-[0.75rem 1rem] w-full" />
       </div>
       <div>
-        <label for="city">{{
-          'create-event.newlocationcity' | translate
-        }}</label>
-        <input
-          id="city"
-          name="city"
-          type="text"
-          [(ngModel)]="city"
-          required
-          class="p-[0.75rem 1rem] w-full"
-        />
+        <label for="city">{{ 'create-event.newlocationcity' | translate }}</label>
+        <input id="city" name="city" type="text" [(ngModel)]="city" required class="p-[0.75rem 1rem] w-full" />
       </div>
     </div>
-    <app-map
-      [addLocation]="true"
-      (locationSelected)="onLocationSelected($event)"
-      class="w-full"
-    ></app-map>
+    <app-map [addLocation]="true" (locationSelected)="onLocationSelected($event)" class="w-full"></app-map>
     <div class="mt-4 flex justify-end space-x-2">
       <button
         type="button"

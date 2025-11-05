@@ -1,9 +1,4 @@
-import {
-  afterNextRender,
-  ChangeDetectorRef,
-  inject,
-  signal,
-} from '@angular/core'
+import { afterNextRender, ChangeDetectorRef, inject, signal } from '@angular/core'
 import { toSignal } from '@angular/core/rxjs-interop'
 import { Observable } from 'rxjs'
 

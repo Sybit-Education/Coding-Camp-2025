@@ -55,19 +55,19 @@
     }
   </section>
 
-  <div class="mt-4 flex justify-center">
+  <div class="mt-10 flex justify-center">
     <app-all-event-button />
   </div>
 
   <!-- Kategorien -->
-  <section [attr.aria-labelledby]="'home.tags.aria-lable-catagories-heading' | translate">
+  <section [attr.aria-labelledby]="'home.tags.aria-lable-catagories-heading' | translate" class="mt-20">
     <h2 [id]="'home.tags.aria-lable-catagories-heading' | translate">
       {{ 'home.categories' | translate }}
     </h2>
 
     <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
       @for (kategorie of topicsOrTypes; track kategorie.id) {
-        <app-kategorie-card [color]="kategorie.color" [text]="kategorie.name"> </app-kategorie-card>
+        <app-kategorie-card [color]="kategorie.color" [text]="kategorie.name"/>
       }
     </div>
   </section>

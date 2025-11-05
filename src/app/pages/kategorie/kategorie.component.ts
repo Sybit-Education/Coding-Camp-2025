@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 import { EventCardComponent } from '../../component/event-card/event-card.component'
@@ -79,11 +74,7 @@ export class KategorieComponent implements OnInit {
 
       // Filtere Events basierend auf der ID
       const rawEvents = this.id
-        ? allEvents.filter(
-            (event) =>
-              event.topic?.some((topic) => topic.id === this.id) ||
-              event.event_type?.id === this.id,
-          )
+        ? allEvents.filter((event) => event.topic?.some((topic) => topic.id === this.id) || event.event_type?.id === this.id)
         : allEvents
 
       // Optimiere Location-Ladung durch Caching
@@ -95,10 +86,7 @@ export class KategorieComponent implements OnInit {
           if (event.location) {
             const locationId = String(event.location)
             if (!this.locationCache.has(locationId)) {
-              this.locationCache.set(
-                locationId,
-                this.locationService.getLocationByID(event.location),
-              )
+              this.locationCache.set(locationId, this.locationService.getLocationByID(event.location))
             }
 
             locationData = await this.locationCache.get(locationId)
@@ -113,9 +101,7 @@ export class KategorieComponent implements OnInit {
       // Markiere vergangene Events und sortiere nach Datum (aufsteigend)
       const now = new Date()
       this.events = this.events.map((event) => {
-        const endDate = event.date_end
-          ? new Date(event.date_end)
-          : new Date(event.date_start)
+        const endDate = event.date_end ? new Date(event.date_end) : new Date(event.date_start)
         return {
           ...event,
           isPast: endDate < now,
@@ -144,10 +130,7 @@ export class KategorieComponent implements OnInit {
       this.markForCheck()
     }
   }
-  private getEventIdFromName(
-    topics: Topic[],
-    typeDB: TypeDB[],
-  ): RecordIdValue | null {
+  private getEventIdFromName(topics: Topic[], typeDB: TypeDB[]): RecordIdValue | null {
     const topic = topics.find((t) => t.name === this.name)
     const type = typeDB.find((t) => t.name === this.name)
 

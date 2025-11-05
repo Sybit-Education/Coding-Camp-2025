@@ -121,9 +121,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       const maxFileSize = 5 * 1024 * 1024
       console.log('File size before compress', file.size / 1024 / 1024)
       if (file.size > maxFileSize) {
-        this.snackBarService.showError(
-          `Datei zu groß (max. 5 MB): ${file.name}`,
-        )
+        this.snackBarService.showError(`Datei zu groß (max. 5 MB): ${file.name}`)
         continue
       }
       this.createPreview(file)
@@ -162,10 +160,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       }
       reader.readAsDataURL(compressedBlob as Blob)
     } catch (err) {
-      console.warn(
-        'Bildkompression fehlgeschlagen, Fallback auf original:',
-        err,
-      )
+      console.warn('Bildkompression fehlgeschlagen, Fallback auf original:', err)
       // Fallback
       const reader = new FileReader()
       reader.onload = () => {
@@ -197,20 +192,14 @@ export class ImageUploadComponent implements OnInit, OnChanges {
     try {
       // Wenn es ein HTTP-Bild ist (existierendes Bild), finde die Media-ID und lösche es
       if (imageToRemove.startsWith('http')) {
-        const existingMedia =
-          await this.mediaService.getMediaByUrl(imageToRemove)
+        const existingMedia = await this.mediaService.getMediaByUrl(imageToRemove)
         if (existingMedia?.id) {
-          console.log(
-            'Lösche existierendes Bild aus der Datenbank:',
-            existingMedia.id,
-          )
+          console.log('Lösche existierendes Bild aus der Datenbank:', existingMedia.id)
           const deleted = await this.mediaService.deleteMedia(existingMedia.id)
           if (deleted) {
             console.log(`Bild mit ID ${existingMedia.id} erfolgreich gelöscht`)
           } else {
-            console.warn(
-              `Bild mit ID ${existingMedia.id} konnte nicht gelöscht werden`,
-            )
+            console.warn(`Bild mit ID ${existingMedia.id} konnte nicht gelöscht werden`)
           }
         }
       }
@@ -289,9 +278,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
           if (existingViaUrl?.id) {
             // Duplikate vermeiden (nach String-ID)
             const existingIdStr = this.idToString(existingViaUrl.id)
-            if (
-              !collected.some((m) => this.idToString(m.id) === existingIdStr)
-            ) {
+            if (!collected.some((m) => this.idToString(m.id) === existingIdStr)) {
               collected.push(existingViaUrl)
             }
             continue
@@ -302,9 +289,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
             const url = await this.mediaService.getMediaUrl(existing.id)
             if (url === preview) {
               const existingIdStr = this.idToString(existing.id)
-              if (
-                !collected.some((m) => this.idToString(m.id) === existingIdStr)
-              ) {
+              if (!collected.some((m) => this.idToString(m.id) === existingIdStr)) {
                 collected.push(existing)
               }
               break
@@ -316,9 +301,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       }
 
       // 3) Neue Bilder (Base64/JSON) hochladen
-      const newImageEntries = this.previews
-        .map((p, i) => ({ p, i }))
-        .filter((e) => !e.p.startsWith('http'))
+      const newImageEntries = this.previews.map((p, i) => ({ p, i })).filter((e) => !e.p.startsWith('http'))
 
       for (const { p: raw, i: originalIndex } of newImageEntries) {
         try {
@@ -350,14 +333,9 @@ export class ImageUploadComponent implements OnInit, OnChanges {
           }
 
           // b) generiere id
-          const sanitizedEventName = this.eventName.replace(
-            /[^A-Za-z0-9_]/g,
-            '_',
-          )
+          const sanitizedEventName = this.eventName.replace(/[^A-Za-z0-9_]/g, '_')
 
-          const safeOriginalFileName = originalFileName
-            .replace(/\.[^/.]+$/, '')
-            .replace(/[^A-Za-z0-9_-]/g, '_')
+          const safeOriginalFileName = originalFileName.replace(/\.[^/.]+$/, '').replace(/[^A-Za-z0-9_-]/g, '_')
 
           const timestamp = Date.now()
 
@@ -376,31 +354,26 @@ export class ImageUploadComponent implements OnInit, OnChanges {
           }
 
           // --- d) Upload → erhält ID (RecordId<'media'> | string)
-        const uploadedId = await this.mediaService.postMediaToGoService(mediaToUpload)
+          const uploadedId = await this.mediaService.postMediaToGoService(mediaToUpload)
 
-        // In String normalisieren
-        const uploadedIdStr = this.idToString(
-          uploadedId as unknown as RecordId<'media'> | string,
-        )
+          // In String normalisieren
+          const uploadedIdStr = this.idToString(uploadedId as unknown as RecordId<'media'> | string)
 
-        // RecordId für getMediaById bauen
-        const uploadedRecordId =
-          typeof uploadedId === 'string'
-            ? (new StringRecordId(uploadedIdStr) as unknown as RecordId<'media'>)
-            : (uploadedId as RecordId<'media'>)
+          // RecordId für getMediaById bauen
+          const uploadedRecordId =
+            typeof uploadedId === 'string'
+              ? (new StringRecordId(uploadedIdStr) as unknown as RecordId<'media'>)
+              : (uploadedId as RecordId<'media'>)
 
-        // Details laden (falls Service kein vollständiges Media zurückgibt)
-        const uploadedMedia = await this.mediaService.getMediaById(uploadedRecordId)
+          // Details laden (falls Service kein vollständiges Media zurückgibt)
+          const uploadedMedia = await this.mediaService.getMediaById(uploadedRecordId)
 
-        // Duplikate vermeiden
-        if (!collected.some(m => this.idToString(m.id) === uploadedIdStr)) {
-          collected.push(uploadedMedia)
-        }
+          // Duplikate vermeiden
+          if (!collected.some((m) => this.idToString(m.id) === uploadedIdStr)) {
+            collected.push(uploadedMedia)
+          }
         } catch (error) {
-          console.error(
-            `Fehler beim Upload des Bildes #${originalIndex + 1}:`,
-            error,
-          )
+          console.error(`Fehler beim Upload des Bildes #${originalIndex + 1}:`, error)
           this.snackBarService.showError(
             `Fehler beim Hochladen des Bildes ${originalIndex + 1}: ${
               error instanceof Error ? error.message : 'Unbekannter Fehler'
@@ -416,9 +389,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
     } catch (error) {
       console.error('Fehler beim Hochladen der Bilder:', error)
       this.snackBarService.showError(
-        `Fehler beim Hochladen der Bilder: ${
-          error instanceof Error ? error.message : 'Unbekannter Fehler'
-        }`,
+        `Fehler beim Hochladen der Bilder: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
       )
       this.mediaChange.emit(collected)
       return collected
@@ -461,9 +432,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       this.snackBarService.showSuccess(`Bild erfolgreich aktualisiert!`)
     } catch (error) {
       console.error('Fehler beim Aktualisieren der Bilddaten:', error)
-      this.snackBarService.showError(
-        `Fehler beim Aktualisieren der Bilddaten: ${error}`,
-      )
+      this.snackBarService.showError(`Fehler beim Aktualisieren der Bilddaten: ${error}`)
     }
   }
 }

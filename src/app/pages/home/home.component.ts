@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  inject,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
 import { ScreenSize } from '@app/models/screenSize.enum'
 import { CommonModule } from '@angular/common'
 import { RouterModule, Router } from '@angular/router'
@@ -30,14 +25,7 @@ type EventOrMore = Event & { isMore?: boolean }
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [
-    CommonModule,
-    TranslateModule,
-    RouterModule,
-    EventCardComponent,
-    KategorieCardComponent,
-    AllEventButtonComponent,
-  ],
+  imports: [CommonModule, TranslateModule, RouterModule, EventCardComponent, KategorieCardComponent, AllEventButtonComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -64,9 +52,7 @@ export class HomeComponent implements OnInit {
   }
 
   async initializeData() {
-    const screen: ScreenSize = await firstValueFrom(
-      this.sharedStateService.getSizeOfScreen(),
-    )
+    const screen: ScreenSize = await firstValueFrom(this.sharedStateService.getSizeOfScreen())
     if (screen !== ScreenSize.SMALL) {
       this.isSmall = false
     }
@@ -100,11 +86,7 @@ export class HomeComponent implements OnInit {
 
   private getUpcomingEvents(events: Event[]): Event[] {
     // Prüfe, ob wir ein gültiges Cache-Ergebnis haben (nicht älter als 5 Minuten)
-    if (
-      this.cachedEvents &&
-      this.cachedEvents.input === events &&
-      Date.now() - this.cachedEvents.timestamp < 300000
-    ) {
+    if (this.cachedEvents && this.cachedEvents.input === events && Date.now() - this.cachedEvents.timestamp < 300000) {
       return this.cachedEvents.output
     }
 
@@ -114,11 +96,7 @@ export class HomeComponent implements OnInit {
     const result = events
       .filter((event) => {
         const eventStartDate = new Date(event.date_start)
-        const eventStartDay = new Date(
-          eventStartDate.getFullYear(),
-          eventStartDate.getMonth(),
-          eventStartDate.getDate(),
-        )
+        const eventStartDay = new Date(eventStartDate.getFullYear(), eventStartDate.getMonth(), eventStartDate.getDate())
 
         if (eventStartDay < today) {
           return false

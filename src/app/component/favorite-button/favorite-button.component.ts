@@ -41,9 +41,7 @@ export class FavoriteButtonComponent implements OnInit, OnDestroy {
 
   private updateFavoriteStatus(): void {
     if (this.eventId) {
-      const currentStatus = this.favoriteService.isEventFavorite(
-        this.eventId.toString(),
-      )
+      const currentStatus = this.favoriteService.isEventFavorite(this.eventId.toString())
       this.isFavorite = currentStatus
     }
   }

@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  inject,
-  OnInit,
-  ViewChild,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core'
 import { SnackBarService } from '../../services/snack-bar.service'
 import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
@@ -167,31 +160,26 @@ export class EventCreateComponent implements OnInit {
       // Organizer
       if (event.organizer) {
         const organizerId = event.organizer.id
-        this.selectedOrganizer =
-          this.organizers.find((o) => o.id?.id === organizerId) || null
+        this.selectedOrganizer = this.organizers.find((o) => o.id?.id === organizerId) || null
         this.setOrganizer(this.selectedOrganizer)
       }
 
       // Location
       if (event.location) {
         const locationId = event.location.id
-        this.selectedLocation =
-          this.locations.find((l) => l.id?.id === locationId) || null
+        this.selectedLocation = this.locations.find((l) => l.id?.id === locationId) || null
         this.setLocation(this.selectedLocation)
       }
 
       // Event Type
       const eventTypeId = event.event_type?.id
-      this.selectedEventType =
-        this.eventTypes.find((e) => e.id?.id === eventTypeId) || null
+      this.selectedEventType = this.eventTypes.find((e) => e.id?.id === eventTypeId) || null
       this.setSelectedEventType(this.selectedEventType)
 
       // Topics
       const topicIds = event.topic || []
       for (const topicId of topicIds) {
-        const topic = this.topics.find(
-          (t) => t.id?.id === (topicId?.id ?? topicId),
-        )
+        const topic = this.topics.find((t) => t.id?.id === (topicId?.id ?? topicId))
         if (topic) this.selectedTopics.push(topic)
       }
 
@@ -233,11 +221,7 @@ export class EventCreateComponent implements OnInit {
       // Location ist kein Pflichtfeld mehr
       // Organisator ist kein Pflichtfeld mehr
 
-      if (
-        this.eventName === '' ||
-        this.dateStart === '' ||
-        this.timeStart === ''
-      ) {
+      if (this.eventName === '' || this.dateStart === '' || this.timeStart === '') {
         if (this.eventName === '') {
           this.errorName = true
         } else {
@@ -254,9 +238,7 @@ export class EventCreateComponent implements OnInit {
           this.errorTime = false
         }
 
-        this.snackBarService.showError(
-          'Bitte füllen Sie alle Pflichtfelder aus (Name, Datum, Uhrzeit).',
-        )
+        this.snackBarService.showError('Bitte füllen Sie alle Pflichtfelder aus (Name, Datum, Uhrzeit).')
 
         // Fokus auf das erste Feld mit Fehler setzen
         setTimeout(() => this.focusFirstErrorField(), 100)
@@ -289,10 +271,7 @@ export class EventCreateComponent implements OnInit {
       // Wenn keine Bilder hochgeladen wurden, aber existierende Bilder vorhanden sind,
       // behalten wir die existierenden Bilder bei
       if (medias.length === 0 && this.images.length > 0) {
-        console.log(
-          'Keine neuen Bilder hochgeladen, behalte existierende:',
-          this.images,
-        )
+        console.log('Keine neuen Bilder hochgeladen, behalte existierende:', this.images)
         for (const media of this.images) {
           finalMedia.push(media)
           finalMediaIds.push(media.id!)
@@ -321,10 +300,7 @@ export class EventCreateComponent implements OnInit {
 
       // Event speichern (Update oder Create)
       if (this.eventId !== undefined) {
-        const updated = await this.eventService.updateEvent(
-          this.eventId,
-          payload,
-        )
+        const updated = await this.eventService.updateEvent(this.eventId, payload)
         if (!updated) {
           this.snackBarService.showError('Update hat keine Daten zurückgegeben')
           this.markForCheck()
@@ -344,9 +320,7 @@ export class EventCreateComponent implements OnInit {
           // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
           this.router.navigate(['/admin'])
         } else {
-          this.snackBarService.showError(
-            'Erstellen des Events fehlgeschlagen, keine Daten zurückgegeben',
-          )
+          this.snackBarService.showError('Erstellen des Events fehlgeschlagen, keine Daten zurückgegeben')
           this.markForCheck()
           return
         }
@@ -389,11 +363,7 @@ export class EventCreateComponent implements OnInit {
       return // Nichts zu löschen, wenn es ein neues Event ist
     }
 
-    if (
-      confirm(
-        'Sind Sie sicher, dass Sie dieses Event löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.',
-      )
-    ) {
+    if (confirm('Sind Sie sicher, dass Sie dieses Event löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.')) {
       try {
         this.eventService.delete(this.eventId)
         this.snackBarService.showSuccess('Event erfolgreich gelöscht')

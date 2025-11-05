@@ -13,13 +13,7 @@ export class SharedStateService {
 
   getSizeOfScreen(): Observable<ScreenSize> {
     return this.breakpointObserver
-      .observe([
-        Breakpoints.XSmall,
-        Breakpoints.Small,
-        Breakpoints.Medium,
-        Breakpoints.Large,
-        Breakpoints.XLarge,
-      ])
+      .observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
       .pipe(
         takeUntil(this.destroy$),
         map((result) => {

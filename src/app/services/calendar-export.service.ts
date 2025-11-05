@@ -29,14 +29,9 @@ export class CalendarExportService {
   /**
    * Erstellt ein CalendarEvent-Objekt aus einem Event und optional einem Location-Objekt
    */
-  createCalendarEvent(
-    event: Event,
-    location?: Location | null,
-    eventUrl?: string,
-  ): CalendarEvent {
+  createCalendarEvent(event: Event, location?: Location | null, eventUrl?: string): CalendarEvent {
     // Standardwerte für Enddatum setzen, falls nicht vorhanden
-    const endDate =
-      event.date_end || new Date(event.date_start.getTime() + 60 * 60 * 1000) // +1h als Standard
+    const endDate = event.date_end || new Date(event.date_start.getTime() + 60 * 60 * 1000) // +1h als Standard
 
     // Location-String erstellen
     let locationStr = ''
@@ -45,9 +40,7 @@ export class CalendarExportService {
       if (location.name) parts.push(location.name)
       if (location.street) parts.push(location.street)
       if (location.zip_code || location.city) {
-        const cityPart = [location.zip_code, location.city]
-          .filter(Boolean)
-          .join(' ')
+        const cityPart = [location.zip_code, location.city].filter(Boolean).join(' ')
         if (cityPart) parts.push(cityPart)
       }
       locationStr = parts.join(', ')
@@ -101,9 +94,7 @@ export class CalendarExportService {
    */
   generateICalFile(calEvent: CalendarEvent): string {
     const startDate = this.formatDateForICal(calEvent.startDate)
-    const endDate = this.formatDateForICal(
-      calEvent.endDate || calEvent.startDate,
-    )
+    const endDate = this.formatDateForICal(calEvent.endDate || calEvent.startDate)
 
     // Beschreibung sicher escapen
     const description = this.escapeICalText(calEvent.description || '')
@@ -113,9 +104,7 @@ export class CalendarExportService {
     const location = this.escapeICalText(calEvent.location)
 
     // URL hinzufügen, falls vorhanden
-    const urlLine = calEvent.url
-      ? `URL:${this.escapeICalText(calEvent.url)}\n`
-      : ''
+    const urlLine = calEvent.url ? `URL:${this.escapeICalText(calEvent.url)}\n` : ''
 
     return `BEGIN:VCALENDAR
 VERSION:2.0
@@ -172,10 +161,7 @@ END:VCALENDAR`
   generateOutlookCalendarUrl(calEvent: CalendarEvent): string {
     // Formatiere Datum im ISO-Format für Outlook
     const startISO = calEvent.startDate.toISOString()
-    const endISO = (
-      calEvent.endDate ||
-      new Date(calEvent.startDate.getTime() + 60 * 60 * 1000)
-    ).toISOString()
+    const endISO = (calEvent.endDate || new Date(calEvent.startDate.getTime() + 60 * 60 * 1000)).toISOString()
 
     // Stelle sicher, dass die Beschreibung keine HTML-Tags enthält
     const cleanDescription = this.stripHtml(calEvent.description || '')

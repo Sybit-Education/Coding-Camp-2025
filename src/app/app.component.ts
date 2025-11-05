@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core'
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router'
 
 import { HeaderComponent } from './component/header/header.component'
@@ -15,13 +10,7 @@ import { SnackBarComponent } from './component/snack-bar/snack-bar.component'
 
 @Component({
   selector: 'app-root',
-  imports: [
-    RouterOutlet,
-    HeaderComponent,
-    FooterComponent,
-    BottomNavComponent,
-    SnackBarComponent,
-  ],
+  imports: [RouterOutlet, HeaderComponent, FooterComponent, BottomNavComponent, SnackBarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,11 +30,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => {
-        this.isCarouselPage = event.url === '/'
-      })
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
+      this.isCarouselPage = event.url === '/'
+    })
 
     // Prüfe auf Updates beim Start
     this.updateService.checkForUpdate()

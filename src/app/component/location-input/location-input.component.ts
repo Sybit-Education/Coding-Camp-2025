@@ -73,9 +73,7 @@ export class LocationInputComponent {
    */
   async saveLocation() {
     if (!this.locationName) {
-      this.snackBarService.showError(
-        'Bitte einen Namen für die Location eingeben!',
-      )
+      this.snackBarService.showError('Bitte einen Namen für die Location eingeben!')
       return
     }
 

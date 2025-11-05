@@ -67,9 +67,7 @@ export class OrganizerInputComponent {
    */
   async saveOrganizer() {
     if (!this.organizername && !this.organizermail && !this.organizerphone) {
-      this.snackBarService.showError(
-        'Bitte mindestens einen Wert für den Veranstalter eingeben!',
-      )
+      this.snackBarService.showError('Bitte mindestens einen Wert für den Veranstalter eingeben!')
       return
     }
 
@@ -81,8 +79,7 @@ export class OrganizerInputComponent {
 
     try {
       console.log('Speichere neuen Organizer:', organizer)
-      const savedOrganizer =
-        await this.organizerService.postOrganizer(organizer)
+      const savedOrganizer = await this.organizerService.postOrganizer(organizer)
       console.log('Organizer gespeichert:', savedOrganizer)
       this.selectedOrganizer = savedOrganizer
       this.newOrganizer = false // Formular schließen
@@ -90,9 +87,7 @@ export class OrganizerInputComponent {
       this.organizerSelected.emit(savedOrganizer)
 
       // Füge den neuen Organizer zur Liste hinzu, wenn er noch nicht enthalten ist
-      if (
-        !this.organizers.some((org) => org.id?.id === savedOrganizer.id?.id)
-      ) {
+      if (!this.organizers.some((org) => org.id?.id === savedOrganizer.id?.id)) {
         this.organizers.push(savedOrganizer)
       }
     } catch (error) {
