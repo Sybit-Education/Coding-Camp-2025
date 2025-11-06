@@ -8,18 +8,18 @@ function registerIcons(registry: MatIconRegistry, sanitizer: DomSanitizer) {
   }
 
   // Zentrale Registrierung aller benutzten Icons
-  register('calendar', 'assets/icons/calendar.svg')
-  register('home', 'assets/icons/home.svg')
-  register('favourites', 'assets/icons/favourites.svg')
-  register('search', 'assets/icons/search.svg')
-  register('more', 'assets/icons/more.svg')
-  register('chevron-right', 'assets/icons/chevron-right.svg')
+  register('calendar', '/icons/calendar.svg')
+  register('home', '/icons/home.svg')
+  register('favourites', '/icons/favourites.svg')
+  register('search', '/icons/search.svg')
+  register('more', '/icons/more.svg')
+  register('chevron-right', '/icons/chevron-right.svg')
 
   // More-Menü Icons
-  register('users', 'assets/icons/users.svg')
-  register('info-circle', 'assets/icons/info-circle.svg')
-  register('shield-check', 'assets/icons/shield-check.svg')
-  register('key', 'assets/icons/key.svg')
+  register('users', '/icons/users.svg')
+  register('info-circle', '/icons/info-circle.svg')
+  register('shield-check', '/icons/shield-check.svg')
+  register('key', '/icons/key.svg')
 }
 
 export function provideAppIcons(): EnvironmentProviders {
