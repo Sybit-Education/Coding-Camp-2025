@@ -1,31 +1,24 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges, inject } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges, inject } from '@angular/core'
 import { SafeHtml } from '@angular/platform-browser'
 import { IconRegistryService } from './icon-registry.service'
 
 @Component({
   selector: 'app-icon',
   standalone: true,
-  template: `<span class="inline-block" [innerHTML]="safeSvg"></span>`,
+  template: `<span class="app-icon-inner" [innerHTML]="safeSvg"></span>`,
   styles: [
     `
       :host {
         display: inline-block;
         line-height: 0;
         color: inherit;
+        width: 1em;
+        height: 1em;
       }
-      :host(.size-5) {
-        width: 1.25rem;
-        height: 1.25rem;
-      }
-      :host(.size-8) {
-        width: 2rem;
-        height: 2rem;
-      }
-      :host(.h-6) {
-        height: 1.5rem;
-      }
-      :host(.w-6) {
-        width: 1.5rem;
+      :host .app-icon-inner {
+        display: block;
+        width: 100%;
+        height: 100%;
       }
     `,
   ],
@@ -37,12 +30,19 @@ export class IconComponent implements OnChanges {
   safeSvg: SafeHtml | null = null
 
   private readonly registry = inject(IconRegistryService)
+  private readonly cdr = inject(ChangeDetectorRef)
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['name']?.currentValue) {
       this.registry.get(this.name).subscribe({
-        next: (svg) => (this.safeSvg = svg),
-        error: () => (this.safeSvg = null),
+        next: (svg) => {
+          this.safeSvg = svg
+          this.cdr.markForCheck()
+        },
+        error: () => {
+          this.safeSvg = null
+          this.cdr.markForCheck()
+        },
       })
     }
   }
