@@ -2,14 +2,10 @@
   <button
     type="button"
     (click)="sharePage()"
-    class="cursor-pointer rounded-full p-2 transition hover:bg-gray-200"
+    class="action-button"
     aria-label="{{ 'SHARE.SHARE' | translate }}"
   >
-      <app-icon
-        name="share"
-        class="h-6 w-6"
-        aria-hidden="true"
-      ></app-icon>
+      <app-icon name="share" aria-hidden="true"></app-icon>
   </button>
 
   <!-- Benachrichtigung für Benutzer, wenn Link kopiert wurde -->
