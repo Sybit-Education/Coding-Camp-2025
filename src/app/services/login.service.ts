@@ -111,7 +111,7 @@ export class LoginService implements CanActivate {
 
     // Check if token is expired using the decoder
     if (this.decoder.isTokenExpired(token)) {
-      console.log('Token is expired, clearing token')
+      console.info('Token is expired, clearing token')
       this.cookieService.delete('token')
       return false
     }

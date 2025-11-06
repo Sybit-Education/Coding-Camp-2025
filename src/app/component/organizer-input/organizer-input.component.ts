@@ -78,9 +78,7 @@ export class OrganizerInputComponent {
     }
 
     try {
-      console.log('Speichere neuen Organizer:', organizer)
       const savedOrganizer = await this.organizerService.postOrganizer(organizer)
-      console.log('Organizer gespeichert:', savedOrganizer)
       this.selectedOrganizer = savedOrganizer
       this.newOrganizer = false // Formular schließen
       this.snackBarService.showSuccess('Veranstalter erfolgreich gespeichert')

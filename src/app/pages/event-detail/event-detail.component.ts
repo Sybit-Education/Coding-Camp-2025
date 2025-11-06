@@ -64,7 +64,6 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params) => {
       this.returnLink = params.get('returnLink') || ''
-      console.log('returnLink:', this.returnLink)
     })
 
     this.route.paramMap.subscribe((params) => {

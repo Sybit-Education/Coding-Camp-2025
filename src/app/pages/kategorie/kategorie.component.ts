@@ -120,8 +120,6 @@ export class KategorieComponent implements OnInit {
         const dateB = new Date(b.date_start).getTime()
         return dateA - dateB
       })
-
-      console.log('Kategorie-Events geladen:', this.events.length)
     } catch (error) {
       console.error('Fehler beim Laden der Events:', error)
     } finally {

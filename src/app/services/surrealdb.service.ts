@@ -37,9 +37,8 @@ export class SurrealdbService extends Surreal {
       })
       await this.ready
       this.connectionInitialized = true
-      console.log(`SurrealDB-Verbindung [${environment.surrealDbDatabase}] initialisiert`)
     } catch (error) {
-      console.error('Fehler bei der Initialisierung der SurrealDB-Verbindung:', error)
+      console.error('Fehler bei der Initialisierung der Verbindung:', error)
       this.connectionPromise = null
       throw error
     }

@@ -86,9 +86,7 @@ export class LocationInputComponent {
     }
 
     try {
-      console.log('Speichere neue Location:', location)
       const savedLocation = await this.locationService.postLocation(location)
-      console.log('Location gespeichert:', savedLocation)
       this.selectedLocation = savedLocation
       this.newLocation = false // Formular schließen
       this.snackBarService.showSuccess('Location erfolgreich gespeichert')
@@ -109,6 +107,5 @@ export class LocationInputComponent {
 
   onLocationSelected($event: [number, number]) {
     this.latlng = new GeometryPoint($event)
-    console.log('Ausgewählte Koordinaten:', this.latlng)
   }
 }

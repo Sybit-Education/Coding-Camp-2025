@@ -31,7 +31,6 @@ export class FavoriteService {
   })
 
   async initializeData(): Promise<void> {
-    console.log('FavoriteService initialized')
 
     // Initialisiere den Service mit einem leeren Array
     this.favoriteEventsSubject.next([])
@@ -39,7 +38,6 @@ export class FavoriteService {
     // Effekt für Änderungen an gespeicherten Events
     // In einer vollständigen Implementierung würde hier effect() verwendet werden
     this.localStorageService.savedEvents$.subscribe(() => {
-      console.log('Saved events changed, reloading favorites')
       this.loadFavoriteEvents()
     })
 
@@ -81,7 +79,7 @@ export class FavoriteService {
           if (event) {
             events.push(event)
           } else {
-            console.log(`Event with ID ${id} not found`)
+            console.info(`Event with ID ${id} not found`)
           }
         } catch (err) {
           console.error(`Error loading event with ID ${id}:`, err)
