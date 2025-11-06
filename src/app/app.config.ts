@@ -6,6 +6,7 @@ import { Observable } from 'rxjs'
 import { provideAnimations } from '@angular/platform-browser/animations'
 
 import { routes } from './app.routes'
+import { provideAppIcons } from './icons/icons.provider'
 
 // Eigener TranslateLoader, der keine speziellen Tokens benötigt
 class CustomTranslateLoader implements TranslateLoader {
@@ -30,6 +31,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withComponentInputBinding(), withViewTransitions(), withPreloading(PreloadAllModules)),
     provideHttpClient(withInterceptorsFromDi()),
     provideAnimations(),
+    provideAppIcons(),
     importProvidersFrom(
       TranslateModule.forRoot({
         loader: {
