@@ -90,7 +90,7 @@
                 <h3>
                   {{ 'event-detail.where' | translate }}
                 </h3>
-                <p>{{ location?.name }}</p>
+                <p>{{ location?.name || 'Ort wird bekannt gegeben' }}</p>
               </div>
             </div>
             <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
@@ -112,19 +112,21 @@
                 </p>
               </div>
             </div>
-            <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
-              <div class="flex items-center justify-center">
-                <div class="flex h-[50px] w-[50px] items-center justify-center rounded-full" aria-hidden="true">
-                  <span aria-hidden="true">👥</span>
+            @if (organizer) {
+              <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+                <div class="flex items-center justify-center">
+                  <div class="flex h-[50px] w-[50px] items-center justify-center rounded-full" aria-hidden="true">
+                    <span aria-hidden="true">👥</span>
+                  </div>
+                </div>
+                <div>
+                  <h3>
+                    {{ 'event-detail.organizer' | translate }}
+                  </h3>
+                  <p>{{ organizer.name }}</p>
                 </div>
               </div>
-              <div>
-                <h3>
-                  {{ 'event-detail.organizer' | translate }}
-                </h3>
-                <p>{{ organizer?.name }}</p>
-              </div>
-            </div>
+            }
           </div>
         </div>
       </section>
@@ -167,73 +169,75 @@
           </div>
         </section>
       }
-      <section class="contact mt-10 mb-18 rounded-2xl bg-gray-100 shadow-2xl" [attr.aria-labelledby]="'contact-heading'">
-        <h2 id="contact-heading" class="ml-10">
-          {{ 'event-detail.organizer' | translate }}
-        </h2>
-        <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
-        <div class="flex justify-between">
-          <div class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl">
-            <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
-              <div class="flex items-center justify-center">
-                <div class="flex h-[50px] w-[50px] items-center justify-center rounded-full" aria-hidden="true">
-                  <span aria-hidden="true">👤</span>
+      @if (organizer) {
+        <section class="contact mt-10 mb-18 rounded-2xl bg-gray-100 shadow-2xl" [attr.aria-labelledby]="'contact-heading'">
+          <h2 id="contact-heading" class="ml-10">
+            {{ 'event-detail.organizer' | translate }}
+          </h2>
+          <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
+          <div class="flex justify-between">
+            <div class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl">
+              <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+                <div class="flex items-center justify-center">
+                  <div class="flex h-[50px] w-[50px] items-center justify-center rounded-full" aria-hidden="true">
+                    <span aria-hidden="true">👤</span>
+                  </div>
+                </div>
+                <div>
+                  <h3>
+                    {{ 'event-detail.name' | translate }}
+                  </h3>
+                  <p>{{ organizer.name }}</p>
                 </div>
               </div>
-              <div>
-                <h3>
-                  {{ 'event-detail.name' | translate }}
-                </h3>
-                <p>{{ organizer?.name }}</p>
-              </div>
+              @if (organizer.email) {
+                <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+                  <div class="flex items-center justify-center">
+                    <div class="flex h-[50px] w-[50px] items-center justify-center rounded-full" aria-hidden="true">
+                      <span aria-hidden="true">📧</span>
+                    </div>
+                  </div>
+                  <div>
+                    <h3>
+                      {{ 'event-detail.email' | translate }}
+                    </h3>
+                    <p>
+                      <a
+                        href="mailto:{{ organizer.email }}"
+                        class="text-blue-700 underline hover:text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      >
+                        {{ organizer.email }}
+                      </a>
+                    </p>
+                  </div>
+                </div>
+              }
+              @if (organizer.phonenumber) {
+                <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+                  <div class="flex items-center justify-center">
+                    <div class="flex h-[50px] w-[50px] items-center justify-center rounded-full" aria-hidden="true">
+                      <span aria-hidden="true">☎️</span>
+                    </div>
+                  </div>
+                  <div>
+                    <h3>
+                      {{ 'event-detail.phone' | translate }}
+                    </h3>
+                    <p>
+                      <a
+                        href="tel:{{ organizer.phonenumber }}"
+                        class="text-blue-700 underline hover:text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      >
+                        {{ organizer.phonenumber }}
+                      </a>
+                    </p>
+                  </div>
+                </div>
+              }
             </div>
-            @if (organizer?.email) {
-              <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
-                <div class="flex items-center justify-center">
-                  <div class="flex h-[50px] w-[50px] items-center justify-center rounded-full" aria-hidden="true">
-                    <span aria-hidden="true">📧</span>
-                  </div>
-                </div>
-                <div>
-                  <h3>
-                    {{ 'event-detail.email' | translate }}
-                  </h3>
-                  <p>
-                    <a
-                      href="mailto:{{ organizer?.email }}"
-                      class="text-blue-700 underline hover:text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    >
-                      {{ organizer?.email }}
-                    </a>
-                  </p>
-                </div>
-              </div>
-            }
-            @if (organizer?.phonenumber) {
-              <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
-                <div class="flex items-center justify-center">
-                  <div class="flex h-[50px] w-[50px] items-center justify-center rounded-full" aria-hidden="true">
-                    <span aria-hidden="true">☎️</span>
-                  </div>
-                </div>
-                <div>
-                  <h3>
-                    {{ 'event-detail.phone' | translate }}
-                  </h3>
-                  <p>
-                    <a
-                      href="tel:{{ organizer?.phonenumber }}"
-                      class="text-blue-700 underline hover:text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    >
-                      {{ organizer?.phonenumber }}
-                    </a>
-                  </p>
-                </div>
-              </div>
-            }
           </div>
-        </div>
-      </section>
+        </section>
+      }
     </article>
   }
 

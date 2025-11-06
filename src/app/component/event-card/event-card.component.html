@@ -17,19 +17,23 @@
         </div>
       }
     </div>
-    <div class="h-[50%] w-full space-y-2 p-4 text-left">
-      <h3 class="line-clamp-2 text-base leading-tight font-semibold text-gray-800">
-        {{ event?.name || 'Event Name' }}
-      </h3>
-      <div class="flex text-gray-700">
-        <span class="mr-2">📅</span>
-        <span class="text-sm">
-          {{ event?.date_start || null | dateTimeRange: event?.date_end || null }}
-        </span>
+    <div class="h-[50%] w-full pr-4 pl-4 text-left">
+      <div class="h-[40%] pt-1">
+        <h3 class="line-clamp-2 truncate text-base leading-tight font-semibold text-gray-800">
+          {{ event?.name || 'Event Name' }}
+        </h3>
       </div>
-      <div class="flex text-gray-700">
-        <span class="mr-2">📍</span>
-        <span class="text-sm">{{ location?.name || 'Ort wird bekannt gegeben' }}</span>
+      <div class="h-[60%] w-full pb-2">
+        <div class="flex h-[35%] text-gray-700">
+          <span class="mr-2">📍</span>
+          <span class="truncate text-sm">{{ location?.name || 'Ort wird bekannt gegeben' }}</span>
+        </div>
+        <div class="flex h-[65%] text-gray-700">
+          <span class="mr-2">📅</span>
+          <span class="text-sm">
+            {{ event?.date_start || null | dateTimeRange: event?.date_end || null }}
+          </span>
+        </div>
       </div>
     </div>
   </a>
