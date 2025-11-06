@@ -1,0 +1,108 @@
+<button
+  (click)="openFullscreen()"
+  class="absolute top-3 right-3 z-10 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-white/80 opacity-80 shadow-md hover:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+  aria-label="Bild im Vollbild anzeigen"
+>
+  TST
+</button>
+<ng-template #imageTemplate>
+  @if (images.length !== 0) {
+    <div class="relative h-full max-h-[90vh] w-full max-w-[90vw] rounded-t-2xl sm:w-full">
+      <!-- Bilder -->
+      @for (item of images; track $index) {
+        @if ($index === selectedImageIndex) {
+          <div class="flex h-full w-full justify-center rounded-t-2xl">
+            <img
+              class="animate-fadeIn w-full rounded-t-2xl object-cover opacity-0"
+              [class.h-[650px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.XLARGE"
+              [class.h-[500px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.LARGE"
+              [class.h-[500px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.MEDIUM"
+              [class.h-[350px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL"
+              [src]="item.url"
+              [alt]="eventName ? 'Bild der Veranstaltung: ' + eventName : 'Veranstaltungsbild'"
+            />
+            <div class="absolute right-0 bottom-0 rounded-tl-xl bg-black px-2 py-1 opacity-75">
+              <div class="text-sm text-white">
+                {{ item.copyright }}
+                @if (item.copyright && item.creator) {
+                  –
+                }
+                {{ item.creator }}
+              </div>
+            </div>
+          </div>
+        }
+      }
+
+      @if (images.length > 1) {
+        <!-- Buttons über dem Bild -->
+        <div class="pointer-events-none absolute inset-0 grid grid-cols-2 items-center p-4">
+          <div class="flex items-center justify-start">
+            <button
+              class="pointer-events-auto cursor-pointer rounded-full bg-black/50 p-2 text-5xl text-white hover:scale-125"
+              (click)="selectedImageIndex = (selectedImageIndex - 1 + images.length) % images.length"
+              aria-label="Vorheriges Bild"
+            >
+              <svg
+                class="h-5 w-5"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19-7-7 7-7" />
+              </svg>
+            </button>
+          </div>
+          <div class="flex items-center justify-end">
+            <button
+              class="pointer-events-auto cursor-pointer rounded-full bg-black/50 p-2 text-5xl text-white hover:scale-125"
+              (click)="selectedImageIndex = (selectedImageIndex + 1) % images.length"
+              aria-label="Nächstes Bild"
+            >
+              <svg
+                class="h-6 w-6"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="flex w-full justify-center py-2">
+      <img
+        class="rounded-2xl opacity-30"
+        [class.h-[650px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.XLARGE"
+        [class.h-[500px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.LARGE"
+        [class.h-[500px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.MEDIUM"
+        [class.h-[350px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL"
+        src="/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg"
+        alt="1200 Jahre Radolfzell Logo"
+      />
+    </div>
+  }
+</ng-template>
+<ng-container *ngTemplateOutlet="imageTemplate"></ng-container>
+
+@if (isFullscreen) {
+  <div class="fixed inset-0 z-550 flex items-center justify-center bg-black/90">
+    <ng-container *ngTemplateOutlet="imageTemplate"></ng-container>
+    <button
+      class="absolute top-4 right-4 text-2xl text-white hover:scale-125"
+      (click)="closeFullscreen()"
+      aria-label="Vollbild schließen"
+    >
+      ✕
+    </button>
+  </div>
+}

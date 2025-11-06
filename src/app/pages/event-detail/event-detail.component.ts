@@ -18,10 +18,10 @@ import { TranslateModule } from '@ngx-translate/core'
 import { FavoriteButtonComponent } from '../../component/favorite-button/favorite-button.component'
 import { ShareComponent } from '../../component/share/share.component'
 import { MediaService } from '@app/services/media.service'
-import { ImageCarouselComponent } from '@app/component/image-carousel/image-carousel.component'
 import { CalendarExportComponent } from '@app/component/calendar-export/calendar-export.component'
 import { ScreenSize } from '@app/models/screenSize.enum'
 import { SharedStateService } from '@app/services/shared-state.service'
+import { EventImageComponent } from '@app/component/event-image/event-image.component'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -33,7 +33,7 @@ import { SharedStateService } from '@app/services/shared-state.service'
     DateTimeRangePipe,
     FavoriteButtonComponent,
     ShareComponent,
-    ImageCarouselComponent,
+    EventImageComponent,
     CalendarExportComponent,
   ],
   styleUrl: './event-detail.component.scss',

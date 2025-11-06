@@ -16,58 +16,39 @@
           >
             <span class="font-mono text-3xl font-extrabold">←</span>
           </button>
-
-          @if (mediaList.length !== 0) {
-            @if (mediaList.length > 1) {
-              <app-image-carousel
-                [images]="mediaList"
-                [eventName]="event.name"
-                class="aspect-[4/3] rounded-t-2xl object-cover sm:w-full"
-              ></app-image-carousel>
-            } @else {
-              <img
-                class="aspect-[4/3] rounded-t-2xl object-cover sm:w-full"
-                [class.h-[650px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.XLARGE"
-                [class.h-[500px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.LARGE"
-                [class.h-[350px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL"
-                [alt]="event.name ? 'Bild der Veranstaltung: ' + event.name : 'Veranstaltungsbild'"
-                [src]="mediaList[0].url"
-              />
-              <div class="absolute right-0 bottom-0 rounded-tl-xl bg-black px-2 py-1 opacity-75">
-                <div class="text-sm text-white">
-                  {{ mediaList[0].copyright }}
-                  @if (mediaList[0].copyright && mediaList[0].creator) {
-                    –
-                  }
-                  {{ mediaList[0].creator }}
-                </div>
-              </div>
-            }
-          } @else {
-            <div class="flex w-full justify-center py-2">
-              <img
-                class="rounded-2xl opacity-30"
-                [class.h-[650px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.XLARGE"
-                [class.h-[500px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.LARGE"
-                [class.h-[350px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL"
-                src="/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg"
-                alt="1200 Jahre Radolfzell Logo"
-              />
-            </div>
-          }
+          <app-event-image
+            [images]="mediaList"
+            [eventName]="event.name"
+            class="aspect-[4/3] w-full rounded-t-2xl object-cover"
+          ></app-event-image>
         </div>
-        <div class="flex w-full items-center justify-between">
-          <div class="ml-10">
+        @if ((this.sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL) {
+          <div class="mr-2 ml-5">
             <h1 class="text-2xl">
               {{ event.name }}
             </h1>
           </div>
-          <div class="mt-10 mr-4 mb-4 flex items-center justify-center gap-2 text-2xl">
-            <app-favorite-button [eventId]="event.id" class="p-2"></app-favorite-button>
-            <app-share [event]="event" [location]="location"></app-share>
-            <app-calendar-export [event]="event" [location]="location"></app-calendar-export>
+          <div class="flex justify-end">
+            <div class="mr-2 mb-1 flex items-center justify-center gap-2 text-2xl">
+              <app-favorite-button [eventId]="event.id" class="p-2"></app-favorite-button>
+              <app-share [event]="event" [location]="location"></app-share>
+              <app-calendar-export [event]="event" [location]="location"></app-calendar-export>
+            </div>
           </div>
-        </div>
+        } @else {
+          <div class="flex w-full items-center justify-between">
+            <div class="ml-10">
+              <h1 class="text-2xl">
+                {{ event.name }}
+              </h1>
+            </div>
+            <div class="mt-10 mr-4 mb-4 flex items-center justify-center gap-2 text-2xl">
+              <app-favorite-button [eventId]="event.id" class="p-2"></app-favorite-button>
+              <app-share [event]="event" [location]="location"></app-share>
+              <app-calendar-export [event]="event" [location]="location"></app-calendar-export>
+            </div>
+          </div>
+        }
         <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
         <div class="flex justify-between">
           <div class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl">

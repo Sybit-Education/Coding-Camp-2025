@@ -2,14 +2,14 @@ import { Component, inject, Input } from '@angular/core'
 import { MatIconModule } from '@angular/material/icon'
 import { ScreenSize } from '@app/models/screenSize.enum'
 import { SharedStateService } from '@app/services/shared-state.service'
-import { AsyncPipe } from '@angular/common'
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common'
 
 @Component({
-  selector: 'app-image-carousel',
-  imports: [MatIconModule, AsyncPipe],
-  templateUrl: './image-carousel.component.html',
+  selector: 'app-event-image',
+  imports: [MatIconModule, AsyncPipe, NgTemplateOutlet],
+  templateUrl: './event-image.component.html',
 })
-export class ImageCarouselComponent {
+export class EventImageComponent {
   @Input() images: { url: string; copyright: string; creator: string }[] = []
   @Input() eventName = ''
 
@@ -17,4 +17,14 @@ export class ImageCarouselComponent {
   screenSize = ScreenSize
 
   selectedImageIndex = 0
+
+  isFullscreen = false
+
+  openFullscreen() {
+    this.isFullscreen = true
+  }
+
+  closeFullscreen() {
+    this.isFullscreen = false
+  }
 }
