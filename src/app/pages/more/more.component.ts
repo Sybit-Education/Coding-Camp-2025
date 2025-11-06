@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core'
 
 import { Router, RouterModule } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
-import { MatIconModule } from '@angular/material/icon'
+import { IconComponent } from '../../icons/icon.component'
 
 interface MoreMenuItem {
   title: string
@@ -15,7 +15,7 @@ interface MoreMenuItem {
 @Component({
   selector: 'app-more',
   standalone: true,
-  imports: [RouterModule, TranslateModule, CommonModule, MatIconModule],
+  imports: [RouterModule, TranslateModule, CommonModule, IconComponent],
   templateUrl: './more.component.html',
   styles: [
     `

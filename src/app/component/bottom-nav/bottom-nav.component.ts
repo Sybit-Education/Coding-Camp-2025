@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core'
 
 import { RouterModule } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
-import { MatIconModule } from '@angular/material/icon'
+import { IconComponent } from '../../icons/icon.component'
 
 /**
  * Interface zur Definition der Navigationspunkte.
@@ -28,7 +28,7 @@ export interface BottomNavItem {
   selector: 'app-bottom-nav',
   // Die Komponente ist standalone und importiert alle benötigten Module selbst.
   standalone: true,
-  imports: [RouterModule, TranslateModule, MatIconModule],
+  imports: [RouterModule, TranslateModule, IconComponent],
   templateUrl: './bottom-nav.component.html',
   styleUrls: ['./bottom-nav.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

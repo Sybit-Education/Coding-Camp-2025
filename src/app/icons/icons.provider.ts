@@ -1,10 +1,9 @@
 import { APP_INITIALIZER, EnvironmentProviders, makeEnvironmentProviders } from '@angular/core'
-import { DomSanitizer } from '@angular/platform-browser'
-import { MatIconRegistry } from '@angular/material/icon'
+import { IconRegistryService } from './icon-registry.service'
 
-function registerIcons(registry: MatIconRegistry, sanitizer: DomSanitizer) {
+function registerIcons(registry: IconRegistryService) {
   const register = (name: string, url: string) => {
-    registry.addSvgIcon(name, sanitizer.bypassSecurityTrustResourceUrl(url))
+    registry.register(name, url)
   }
 
   // Zentrale Registrierung aller benutzten Icons
@@ -24,12 +23,11 @@ function registerIcons(registry: MatIconRegistry, sanitizer: DomSanitizer) {
 
 export function provideAppIcons(): EnvironmentProviders {
   return makeEnvironmentProviders([
-    MatIconRegistry,
     {
       provide: APP_INITIALIZER,
       multi: true,
-      deps: [MatIconRegistry, DomSanitizer],
-      useFactory: (registry: MatIconRegistry, sanitizer: DomSanitizer) => () => registerIcons(registry, sanitizer),
+      deps: [IconRegistryService],
+      useFactory: (registry: IconRegistryService) => () => registerIcons(registry),
     },
   ])
 }
