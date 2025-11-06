@@ -12,8 +12,10 @@ import { IconRegistryService } from './icon-registry.service'
         display: inline-block;
         line-height: 0;
         color: inherit;
-        width: 1em;
-        height: 1em;
+        /* Größe über Tailwind-Klassen steuerbar (z. B. h-4, w-6).
+           Wir setzen keine feste width/height mehr, sondern nur ein 1:1 Seitenverhältnis,
+           damit sich die jeweils gesetzte Dimension (Höhe oder Breite) auf die andere überträgt. */
+        aspect-ratio: 1 / 1;
       }
       :host .app-icon-inner {
         display: block;
