@@ -11,11 +11,13 @@ import { LocalStorageService } from '../../services/local-storage.service'
 import { MediaService } from '../../services/media.service'
 import { TranslateModule } from '@ngx-translate/core'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
+import { MatIconModule } from "@angular/material/icon";
+import { IconComponent } from "@app/icons/icon.component";
 
 @Component({
   selector: 'app-event-card',
   standalone: true,
-  imports: [CommonModule, DateTimeRangePipe, TranslateModule, RouterModule],
+  imports: [CommonModule, DateTimeRangePipe, TranslateModule, RouterModule, MatIconModule, IconComponent],
   templateUrl: './event-card.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

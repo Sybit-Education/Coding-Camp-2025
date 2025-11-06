@@ -20,6 +20,8 @@ import { ShareComponent } from '../../component/share/share.component'
 import { MediaService } from '@app/services/media.service'
 import { ImageCarouselComponent } from '@app/component/image-carousel/image-carousel.component'
 import { CalendarExportComponent } from '@app/component/calendar-export/calendar-export.component'
+import { MatIconModule } from "@angular/material/icon";
+import { IconComponent } from "@app/icons/icon.component";
 
 @Component({
   selector: 'app-event-detail-page',
@@ -33,7 +35,9 @@ import { CalendarExportComponent } from '@app/component/calendar-export/calendar
     ShareComponent,
     ImageCarouselComponent,
     CalendarExportComponent,
-  ],
+    MatIconModule,
+    IconComponent
+],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

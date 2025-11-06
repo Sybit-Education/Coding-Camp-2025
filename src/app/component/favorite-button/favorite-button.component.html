@@ -2,7 +2,7 @@
   <div class="relative">
     <button
       (click)="toggleFavorite($event)"
-      class="h-[26px] w-[26px] cursor-pointer focus:outline-none"
+      class="cursor-pointer rounded-full p-2 transition hover:bg-gray-200"
       [title]="(isFavorite ? 'FAVORITES.REMOVE' : 'FAVORITES.ADD') | translate"
     >
       <!-- Solid star when favorited -->
