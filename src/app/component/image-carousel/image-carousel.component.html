@@ -4,12 +4,21 @@
     @if ($index === selectedImageIndex) {
       <div class="flex h-full w-full justify-center rounded-t-2xl">
         <img
-          class="h-[650px] w-full rounded-t-2xl object-cover"
+          class="animate-fadeIn w-full rounded-t-2xl object-cover opacity-0"
+          [class.h-[650px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.XLARGE"
+          [class.h-[500px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.LARGE"
+          [class.h-[350px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL"
           [src]="item.url"
           [alt]="eventName ? 'Bild der Veranstaltung: ' + eventName : 'Veranstaltungsbild'"
         />
         <div class="absolute right-0 bottom-0 rounded-tl-xl bg-black px-2 py-1 opacity-75">
-          <div class="text-sm text-white">{{ item.copyright }} – {{ item.creator }}</div>
+          <div class="text-sm text-white">
+            {{ item.copyright }}
+            @if (item.copyright && item.creator) {
+              –
+            }
+            {{ item.creator }}
+          </div>
         </div>
       </div>
     }
@@ -19,7 +28,7 @@
   <div class="pointer-events-none absolute inset-0 grid grid-cols-2 items-center p-4">
     <div class="flex items-center justify-start">
       <button
-        class="pointer-events-auto rounded-full bg-black/50 p-2 text-5xl text-white hover:bg-black/50"
+        class="pointer-events-auto cursor-pointer rounded-full bg-black/50 p-2 text-5xl text-white hover:scale-125"
         (click)="selectedImageIndex = (selectedImageIndex - 1 + images.length) % images.length"
         aria-label="Vorheriges Bild"
       >
@@ -38,7 +47,7 @@
     </div>
     <div class="flex items-center justify-end">
       <button
-        class="pointer-events-auto rounded-full bg-black/50 p-2 text-5xl text-white hover:bg-black/50"
+        class="pointer-events-auto cursor-pointer rounded-full bg-black/50 p-2 text-5xl text-white hover:scale-125"
         (click)="selectedImageIndex = (selectedImageIndex + 1) % images.length"
         aria-label="Nächstes Bild"
       >

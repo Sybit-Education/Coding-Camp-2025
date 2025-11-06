@@ -20,6 +20,8 @@ import { ShareComponent } from '../../component/share/share.component'
 import { MediaService } from '@app/services/media.service'
 import { ImageCarouselComponent } from '@app/component/image-carousel/image-carousel.component'
 import { CalendarExportComponent } from '@app/component/calendar-export/calendar-export.component'
+import { ScreenSize } from '@app/models/screenSize.enum'
+import { SharedStateService } from '@app/services/shared-state.service'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -51,6 +53,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
 
   protected isLoggedIn = false
   private returnLink = ''
+  screenSize = ScreenSize
 
   private readonly eventService = inject(EventService)
   private readonly locationService = inject(LocationService)
@@ -60,6 +63,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   private readonly loginservice = inject(LoginService)
   private readonly mediaService = inject(MediaService)
   private readonly markForCheck = injectMarkForCheck()
+  readonly sharedStateService = inject(SharedStateService)
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params) => {
