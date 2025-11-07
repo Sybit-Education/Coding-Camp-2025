@@ -106,8 +106,8 @@ export class SurrealdbService extends Surreal {
     // Stelle sicher, dass die Verbindung initialisiert ist
     await this.initialize()
 
-    // Volltextsuche über Event-, Organizer- und Location-Felder
-    const sql = `
+    // 1) Versuch: Echte Volltextsuche mit @@ (setzt vorhandene FULLTEXT-Indizes voraus)
+    const ftsSql = `
 LET $q = $q;
 LET $orgs = SELECT id FROM organizer WHERE name @@ $q;
 LET $locs = SELECT id FROM location WHERE name @@ $q OR street @@ $q OR city @@ $q;
@@ -117,10 +117,29 @@ WHERE name @@ $q
    OR organizer IN $orgs
    OR location IN $locs;
 `
-
-    const results = await super.query(sql, { q: query })
-    const last = results[results.length - 1] as { result?: unknown[] } | undefined
-    const events = (last?.result ?? []) as AppEvent[]
-    return events
+    try {
+      const results = await super.query(ftsSql, { q: query })
+      const last = results[results.length - 1] as { result?: unknown[] } | undefined
+      return (last?.result ?? []) as AppEvent[]
+    } catch (err) {
+      // 2) Fallback: Substring-Suche ohne FTS-Index (funktioniert ohne FULLTEXT-Indizes)
+      console.warn('FTS-Indizes nicht verfügbar – weiche auf Substring-Suche aus.', err)
+      const fallbackSql = `
+LET $q = string::lowercase($q ?? '');
+LET $orgs = SELECT id FROM organizer WHERE string::contains(string::lowercase(name ?? ''), $q);
+LET $locs = SELECT id FROM location WHERE
+  string::contains(string::lowercase(name ?? ''), $q) OR
+  string::contains(string::lowercase(street ?? ''), $q) OR
+  string::contains(string::lowercase(city ?? ''), $q);
+SELECT * FROM event
+WHERE string::contains(string::lowercase(name ?? ''), $q)
+   OR string::contains(string::lowercase(description ?? ''), $q)
+   OR organizer IN $orgs
+   OR location IN $locs;
+`
+      const results = await super.query(fallbackSql, { q: query })
+      const last = results[results.length - 1] as { result?: unknown[] } | undefined
+      return (last?.result ?? []) as AppEvent[]
+    }
   }
 }
