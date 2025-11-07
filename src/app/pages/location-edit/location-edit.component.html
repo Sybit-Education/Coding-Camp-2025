@@ -1,23 +1,17 @@
 <app-go-back-button [siteToGo]="'/admin'" class="mb-4 flex px-6"></app-go-back-button>
 <div class="flex px-6">
   <span class="ml-2 text-left text-2xl font-bold text-gray-800">
-    {{ isEditMode() ? ('ADMIN.LOCATIONS.FORM.TITLE_EDIT' | translate) : ('ADMIN.LOCATIONS.FORM.TITLE_CREATE' | translate) }}
+    {{ isEditMode() ? 'Ort bearbeiten' : 'Ort erstellen' }}
   </span>
 </div>
 <div class="container mx-auto px-4 py-6">
-  <!-- <div class="mb-6 flex items-center">
-    <h1 class="text-2xl font-bold text-gray-800">
-      {{ isEditMode() ? ('ADMIN.LOCATIONS.FORM.TITLE_EDIT' | translate) : ('ADMIN.LOCATIONS.FORM.TITLE_CREATE' | translate) }}
-    </h1>
-  </div> -->
-
   @if (isLoading()) {
     <div class="flex items-center justify-center py-12">
       <div class="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"></div>
       <span class="ml-3">{{ 'COMMON.LOADING' | translate }}</span>
     </div>
   } @else {
-    <div class="rounded-lg bg-white p-6 shadow-md">
+    <div class="rounded-lg bg-white p-6 shadow-2xl">
       @if (errorMessage()) {
         <div class="mb-4 rounded-lg bg-red-100 p-4 text-red-700">
           {{ errorMessage() }}

@@ -38,7 +38,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private readonly ngZone: NgZone = inject(NgZone)
 
   ngAfterViewInit(): void {
-    console.log('Init map component')
     // Ein dynamischer Import, danach initialisieren wir je nach Modus
     this.ngZone.runOutsideAngular(() => {
       // optional prefetch script hint (wie in deinem Code)
@@ -80,7 +79,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
      Show-Mode (zeige feste Location)
      ----------------------------- */
   private initializeMapForShowLocation(): void {
-    console.log('Init map for show')
     if (!this.L || !this.leafletLoaded) return
     try {
       this.map = this.L.map('map', {
@@ -173,7 +171,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
      Add-Mode (Marker per Klick)
      ----------------------------- */
   private initializeMapForAddLocation(): void {
-    console.log('Init map for add')
     if (!this.L || !this.leafletLoaded) return
     try {
       // Center falls keine Koordinaten übergeben wurden

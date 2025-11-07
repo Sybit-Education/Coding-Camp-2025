@@ -1,10 +1,9 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core'
 
 import { Router, RouterModule } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 import { IconComponent } from '../../icons/icon.component'
-import { LoginService } from '@app/services/login.service'
 
 interface MoreMenuItem {
   title: string
@@ -27,16 +26,8 @@ interface MoreMenuItem {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MoreComponent implements OnInit {
+export class MoreComponent {
   private readonly router: Router = inject(Router)
-  private readonly loginService = inject(LoginService)
-  loggedIn = false
-
-  ngOnInit(): void {
-    this.loginService.isLoggedIn().then((isLoggedIn) => {
-      this.loggedIn = isLoggedIn
-    })
-  }
 
   /**
    * Navigiert zu einer bestimmten Route

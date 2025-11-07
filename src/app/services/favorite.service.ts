@@ -31,7 +31,6 @@ export class FavoriteService {
   })
 
   async initializeData(): Promise<void> {
-
     // Initialisiere den Service mit einem leeren Array
     this.favoriteEventsSubject.next([])
 

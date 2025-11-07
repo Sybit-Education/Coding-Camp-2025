@@ -11,9 +11,9 @@ import { TranslateModule } from '@ngx-translate/core'
   templateUrl: './go-back-button.component.html',
 })
 export class GoBackComponent {
-  @Input({ required: true }) siteToGo!: string | string[]
+  @Input() siteToGo?: string | string[]
   @Input() queryParams?: Record<string, string | number | boolean | null | undefined>
-  @Input() label = 'zur Home Seite'
+  @Input() label? = 'zur Home Seite'
 
   private readonly router = inject(Router)
   private readonly location = inject(Location)

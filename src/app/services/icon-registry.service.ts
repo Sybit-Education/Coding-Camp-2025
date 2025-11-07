@@ -1,15 +1,16 @@
-import { Injectable } from '@angular/core'
+import { inject, Injectable } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { HttpClient } from '@angular/common/http'
 import { Observable, of } from 'rxjs'
-import { map, shareReplay, switchMap } from 'rxjs/operators'
+import { map, shareReplay } from 'rxjs/operators'
 
 @Injectable({ providedIn: 'root' })
 export class IconRegistryService {
-  private urls = new Map<string, string>()
-  private cache = new Map<string, Observable<SafeHtml>>()
+  private readonly urls = new Map<string, string>()
+  private readonly cache = new Map<string, Observable<SafeHtml>>()
 
-  constructor(private readonly http: HttpClient, private readonly sanitizer: DomSanitizer) {}
+  private readonly sanitizer = inject(DomSanitizer)
+  private readonly http = inject(HttpClient)
 
   register(name: string, url: string): void {
     this.urls.set(name, url)
@@ -17,7 +18,6 @@ export class IconRegistryService {
 
   get(name: string): Observable<SafeHtml> {
     if (this.cache.has(name)) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return this.cache.get(name)!
     }
 

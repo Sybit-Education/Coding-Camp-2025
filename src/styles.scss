@@ -73,7 +73,7 @@
   }
 
   .action-button {
-    @apply w-12 h-12 cursor-pointer rounded-full p-2 bg-white/80 opacity-80 transition hover:text-[#3b4ea3] shadow-md hover:bg-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none;
+    @apply h-12 w-12 cursor-pointer rounded-full bg-white/80 p-2 opacity-80 shadow-md transition hover:bg-gray-200 hover:text-[#3b4ea3] focus:ring-2 focus:ring-blue-500 focus:outline-none;
   }
 }
 
@@ -184,8 +184,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0.5; }
-  to { opacity: 1; }
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .animate-fadeIn {
