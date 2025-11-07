@@ -17,7 +17,7 @@
   </select>
   <button
     type="button"
-    class="mt-2 w-full rounded-2xl bg-[var(--colors-light-blue)] p-2 text-white"
+    class="mt-2 w-full cursor-pointer rounded-2xl bg-[var(--colors-light-blue)] p-2 text-white"
     (click)="showNewOrganizerForm()"
   >
     {{ 'create-event.neworganizer' | translate }}
@@ -49,14 +49,14 @@
     <div class="mt-4 flex justify-end space-x-2">
       <button
         type="button"
-        class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100"
+        class="cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100"
         (click)="cancelNewOrganizer()"
       >
         {{ 'create-event.cancel' | translate }}
       </button>
       <button
         type="button"
-        class="rounded-lg bg-[var(--colors-light-blue)] px-4 py-2 text-sm font-medium text-white hover:bg-blue-800"
+        class="cursor-pointer rounded-lg bg-[var(--colors-light-blue)] px-4 py-2 text-sm font-medium text-white hover:bg-blue-800"
         (click)="saveOrganizer()"
       >
         Erstellen
