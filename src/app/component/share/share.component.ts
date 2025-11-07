@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
 import { TranslateModule } from '@ngx-translate/core'
+import { IconComponent } from "@app/icons/icon.component";
 
 @Component({
   selector: 'app-share',
-  imports: [TranslateModule],
+  imports: [TranslateModule, IconComponent],
   templateUrl: './share.component.html',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
