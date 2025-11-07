@@ -111,6 +111,26 @@ export class SurrealdbService extends Surreal {
       return []
     }
 
+    // Vorab: Analyzer-Output und Teilmengen zählen (hilft bei Debugging)
+    try {
+      const analyzeRes = await super.query('SELECT search::analyze("simple_ft", $q) AS tokens;', { q })
+      const tokens = (analyzeRes?.[0] as any)?.result?.[0]?.tokens ?? []
+      console.debug('[SurrealdbService] analyze(simple_ft)', tokens)
+
+      const directCntRes = await super.query('SELECT count() AS c FROM event WHERE name @@ $q OR description @@ $q;', { q })
+      const orgCntRes = await super.query('SELECT count() AS c FROM organizer WHERE name @@ $q;', { q })
+      const locCntRes = await super.query(
+        'SELECT count() AS c FROM location WHERE name @@ $q OR street @@ $q OR city @@ $q;',
+        { q },
+      )
+      const c1 = (directCntRes?.[0] as any)?.result?.[0]?.c ?? 0
+      const c2 = (orgCntRes?.[0] as any)?.result?.[0]?.c ?? 0
+      const c3 = (locCntRes?.[0] as any)?.result?.[0]?.c ?? 0
+      console.debug('[SurrealdbService] FTS subsets', { eventsBySelf: c1, organizers: c2, locations: c3 })
+    } catch (preErr) {
+      console.warn('[SurrealdbService] Pre-FTS diagnostics failed (non-fatal)', preErr)
+    }
+
     // Vereinfachte FTS-Abfrage über Event-, Organizer- und Location-Felder
     const ftsSql = `SELECT * FROM event
 WHERE name @@ $q
@@ -123,11 +143,16 @@ WHERE name @@ $q
 
     try {
       const results = await super.query(ftsSql, { q })
-      console.debug('[SurrealdbService] FTS raw', results)
       const last = results[results.length - 1] as { result?: unknown[] } | undefined
       const ftsEvents = (last?.result ?? []) as AppEvent[]
       console.debug('[SurrealdbService] FTS result count', { count: ftsEvents.length, ms: Math.round(performance.now() - t0) })
+
       if (ftsEvents.length > 0) {
+        // Logge ein paar Titel zur Verifikation
+        console.debug(
+          '[SurrealdbService] FTS sample',
+          ftsEvents.slice(0, 3).map((e: any) => e?.name ?? e?.id),
+        )
         return ftsEvents
       }
     } catch (err) {
@@ -150,7 +175,6 @@ WHERE string::contains(string::lowercase(name ?? ''), $q)
     const t1 = performance.now()
     console.debug('[SurrealdbService] Running fallback substring search', { q, fallbackSql })
     const resultsFallback = await super.query(fallbackSql, { q })
-    console.debug('[SurrealdbService] Fallback raw', resultsFallback)
     const lastFallback = resultsFallback[resultsFallback.length - 1] as { result?: unknown[] } | undefined
     const events = (lastFallback?.result ?? []) as AppEvent[]
     console.debug('[SurrealdbService] Fallback result count', { count: events.length, ms: Math.round(performance.now() - t1) })
