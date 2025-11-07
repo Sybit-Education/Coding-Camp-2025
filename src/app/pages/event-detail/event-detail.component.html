@@ -11,10 +11,10 @@
         <div class="relative">
           <button
             (click)="goBack()"
-            class="absolute top-3 left-3 z-10 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-white/80 opacity-80 shadow-md hover:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            class="action-button absolute top-3 left-3 z-10"
             aria-label="{{ 'event-detail.back' | translate }}"
           >
-            <span class="font-mono text-3xl font-extrabold">←</span>
+            <app-icon name="back" aria-hidden="true"></app-icon>
           </button>
 
           @if (mediaList.length !== 0) {

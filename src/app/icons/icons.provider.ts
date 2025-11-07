@@ -7,6 +7,7 @@ function registerIcons(registry: IconRegistryService) {
   }
 
   // Zentrale Registrierung aller benutzten Icons
+  register('back', '/svg/back.svg')
   register('calendar', '/svg/calendar.svg')
   register('location', '/svg/location.svg')
   register('price', '/svg/price.svg')

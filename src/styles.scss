@@ -73,7 +73,7 @@
   }
 
   .action-button {
-    @apply w-12 h-12 cursor-pointer rounded-full p-2 transition hover:text-[#3b4ea3] hover:bg-gray-200;
+    @apply w-12 h-12 cursor-pointer rounded-full p-2 bg-white/80 opacity-80 transition hover:text-[#3b4ea3] shadow-md hover:bg-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none;
   }
 }
 
