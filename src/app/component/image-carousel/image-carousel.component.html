@@ -16,43 +16,23 @@
   }
 
   <!-- Buttons über dem Bild -->
-  <div class="pointer-events-none absolute inset-0 grid grid-cols-2 items-center p-4">
+  <div class="absolute inset-0 grid grid-cols-2 items-center p-4">
     <div class="flex items-center justify-start">
       <button
-        class="pointer-events-auto rounded-full bg-black/50 p-2 text-5xl text-white hover:bg-black/50"
+        class="action-button bg-black/40 text-white hover:bg-black/80"
         (click)="selectedImageIndex = (selectedImageIndex - 1 + images.length) % images.length"
         aria-label="Vorheriges Bild"
       >
-        <svg
-          class="h-5 w-5"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19-7-7 7-7" />
-        </svg>
+        <app-icon name="arrow_back" aria-hidden="true"></app-icon>
       </button>
     </div>
     <div class="flex items-center justify-end">
       <button
-        class="pointer-events-auto rounded-full bg-black/50 p-2 text-5xl text-white hover:bg-black/50"
+        class="action-button bg-black/40 text-white hover:bg-black/80"
         (click)="selectedImageIndex = (selectedImageIndex + 1) % images.length"
         aria-label="Nächstes Bild"
       >
-        <svg
-          class="h-6 w-6"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7" />
-        </svg>
+        <app-icon name="arrow_forward" aria-hidden="true"></app-icon>
       </button>
     </div>
   </div>

@@ -1,9 +1,10 @@
 import { Component, Input } from '@angular/core'
 import { MatIconModule } from '@angular/material/icon'
+import { IconComponent } from "@app/icons/icon.component";
 
 @Component({
   selector: 'app-image-carousel',
-  imports: [MatIconModule],
+  imports: [MatIconModule, IconComponent],
   templateUrl: './image-carousel.component.html',
 })
 export class ImageCarouselComponent {
