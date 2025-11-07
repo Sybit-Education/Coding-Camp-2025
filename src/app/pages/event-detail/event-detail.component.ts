@@ -22,6 +22,8 @@ import { CalendarExportComponent } from '@app/component/calendar-export/calendar
 import { ScreenSize } from '@app/models/screenSize.enum'
 import { SharedStateService } from '@app/services/shared-state.service'
 import { EventImageComponent } from '@app/component/event-image/event-image.component'
+import { MatIconModule } from '@angular/material/icon'
+import { IconComponent } from '@app/icons/icon.component'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -35,6 +37,8 @@ import { EventImageComponent } from '@app/component/event-image/event-image.comp
     ShareComponent,
     EventImageComponent,
     CalendarExportComponent,
+    MatIconModule,
+    IconComponent,
   ],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',

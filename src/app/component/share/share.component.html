@@ -2,10 +2,10 @@
   <button
     type="button"
     (click)="sharePage()"
-    class="group cursor-pointer rounded-full p-2 transition hover:bg-gray-200"
+    class="action-button"
     aria-label="{{ 'SHARE.SHARE' | translate }}"
   >
-    <div class="relative flex h-[26px] w-[26px] items-center justify-center rounded-full" aria-hidden="true">📤</div>
+      <app-icon name="share" aria-hidden="true"></app-icon>
   </button>
 
   <!-- Benachrichtigung für Benutzer, wenn Link kopiert wurde -->

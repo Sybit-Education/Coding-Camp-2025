@@ -1,17 +1,15 @@
 <div class="relative">
   <!-- Calendar Button -->
-  <div class="group">
-    <button
-      type="button"
-      (click)="toggleCalendarOptions()"
-      class="group cursor-pointer rounded-full p-2 transition hover:bg-gray-200"
-      aria-label="{{ 'SHARE.ADD_TO_CALENDAR' | translate }}"
-      aria-expanded="{{ showCalendarOptions() }}"
-      aria-haspopup="true"
-    >
-      <div class="relative flex h-[26px] w-[26px] items-center justify-center rounded-full" aria-hidden="true">📅</div>
-    </button>
-  </div>
+  <button
+    type="button"
+    (click)="toggleCalendarOptions()"
+    class="action-button"
+    aria-label="{{ 'SHARE.ADD_TO_CALENDAR' | translate }}"
+    aria-expanded="{{ showCalendarOptions() }}"
+    aria-haspopup="true"
+  >
+    <app-icon name="cal-share" aria-hidden="true"></app-icon>
+  </button>
 
   <!-- Calendar Options Dropdown -->
   @if (showCalendarOptions()) {

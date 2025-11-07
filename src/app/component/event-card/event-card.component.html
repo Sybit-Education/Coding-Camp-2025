@@ -25,11 +25,11 @@
       </div>
       <div class="h-[60%] w-full pb-2">
         <div class="flex h-[35%] text-gray-700">
-          <span class="mr-2">📍</span>
+          <app-icon name="calendar" class="mr-2 h-4 w-4" aria-hidden="true"></app-icon>
           <span class="truncate text-sm">{{ location?.name || 'Ort wird bekannt gegeben' }}</span>
         </div>
         <div class="flex h-[65%] text-gray-700">
-          <span class="mr-2">📅</span>
+          <app-icon name="location" class="mr-2 h-4 w-4" aria-hidden="true"></app-icon>
           <span class="text-sm">
             {{ event?.date_start || null | dateTimeRange: event?.date_end || null }}
           </span>

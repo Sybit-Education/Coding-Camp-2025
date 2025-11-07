@@ -11,10 +11,10 @@
         <div class="relative">
           <button
             (click)="goBack()"
-            class="absolute top-3 left-3 z-10 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-white/80 opacity-80 shadow-md hover:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            class="action-button absolute top-3 left-3 z-10"
             aria-label="{{ 'event-detail.back' | translate }}"
           >
-            <span class="font-mono text-3xl font-extrabold">←</span>
+            <app-icon name="back" aria-hidden="true"></app-icon>
           </button>
           <app-event-image
             [images]="mediaList"
@@ -31,8 +31,8 @@
           <div class="flex justify-end">
             <div class="mr-2 mb-1 flex items-center justify-center gap-2 text-2xl">
               <app-favorite-button [eventId]="event.id" class="p-2"></app-favorite-button>
-              <app-share [event]="event" [location]="location"></app-share>
-              <app-calendar-export [event]="event" [location]="location"></app-calendar-export>
+              <app-share [event]="event" [location]="location" class="p-2"></app-share>
+              <app-calendar-export [event]="event" [location]="location" class="p-2"></app-calendar-export>
             </div>
           </div>
         } @else {
@@ -54,8 +54,8 @@
           <div class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl">
             <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
               <div class="flex items-center justify-center">
-                <div class="flex h-[50px] w-[50px] items-center justify-center rounded-full" aria-hidden="true">
-                  <span aria-hidden="true">📅</span>
+                <div class="flex items-center justify-center" aria-hidden="true">
+                  <app-icon name="calendar" class="h-8 w-8" aria-hidden="true"></app-icon>
                 </div>
               </div>
               <div>
@@ -69,8 +69,8 @@
             </div>
             <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
               <div class="flex items-center justify-center">
-                <div class="flex h-[50px] w-[50px] items-center justify-center rounded-full" aria-hidden="true">
-                  <span aria-hidden="true">📍</span>
+                <div class="flex items-center justify-center" aria-hidden="true">
+                  <app-icon name="location" class="h-8 w-8" aria-hidden="true"></app-icon>
                 </div>
               </div>
               <div>
@@ -82,8 +82,8 @@
             </div>
             <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
               <div class="flex items-center justify-center">
-                <div class="flex h-[50px] w-[50px] items-center justify-center rounded-full" aria-hidden="true">
-                  <span aria-hidden="true">💶</span>
+                <div class="flex items-center justify-center" aria-hidden="true">
+                  <app-icon name="price" class="h-8 w-8" aria-hidden="true"></app-icon>
                 </div>
               </div>
               <div>
@@ -103,7 +103,7 @@
               <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
                 <div class="flex items-center justify-center">
                   <div class="flex h-[50px] w-[50px] items-center justify-center rounded-full" aria-hidden="true">
-                    <span aria-hidden="true">👥</span>
+                    <app-icon name="organizer" class="h-8 w-8" aria-hidden="true"></app-icon>
                   </div>
                 </div>
                 <div>
@@ -130,7 +130,7 @@
         </section>
       }
       @if (location?.geo_point) {
-        <section class="map mt-10" [attr.aria-labelledby]="'directions-heading'">
+        <section class="map mt-10" aria-labelledby="directions-heading">
           <h2 id="directions-heading" class="text-2xl font-bold text-blue-900">
             {{ 'event-detail.arrival' | translate }}
           </h2>
@@ -151,7 +151,7 @@
           </div>
           <div class="flex w-full justify-center py-8">
             <button class="h-12 cursor-pointer rounded-md bg-green-400 px-4 shadow hover:opacity-90" (click)="startRoute()">
-              📍 Route starten
+              <app-icon name="location" class="h-4 w-4" aria-hidden="true"></app-icon> Route starten
             </button>
           </div>
         </section>
@@ -167,7 +167,7 @@
               <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
                 <div class="flex items-center justify-center">
                   <div class="flex h-[50px] w-[50px] items-center justify-center rounded-full" aria-hidden="true">
-                    <span aria-hidden="true">👤</span>
+                    <app-icon name="organizer" class="h-8 w-8" aria-hidden="true"></app-icon>
                   </div>
                 </div>
                 <div>
@@ -222,6 +222,52 @@
                 </div>
               }
             </div>
+            <<<<<<< HEAD =======
+            @if (organizer?.email) {
+              <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+                <div class="flex items-center justify-center">
+                  <div class="flex items-center justify-center" aria-hidden="true">
+                    <app-icon name="mail" class="h-8 w-8" aria-hidden="true"></app-icon>
+                  </div>
+                </div>
+                <div>
+                  <h3>
+                    {{ 'event-detail.email' | translate }}
+                  </h3>
+                  <p>
+                    <a
+                      href="mailto:{{ organizer?.email }}"
+                      class="text-blue-700 underline hover:text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    >
+                      {{ organizer?.email }}
+                    </a>
+                  </p>
+                </div>
+              </div>
+            }
+            @if (organizer?.phonenumber) {
+              <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+                <div class="flex items-center justify-center">
+                  <div class="flex items-center justify-center" aria-hidden="true">
+                    <app-icon name="phone" class="h-8 w-8" aria-hidden="true"></app-icon>
+                  </div>
+                </div>
+                <div>
+                  <h3>
+                    {{ 'event-detail.phone' | translate }}
+                  </h3>
+                  <p>
+                    <a
+                      href="tel:{{ organizer?.phonenumber }}"
+                      class="text-blue-700 underline hover:text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    >
+                      {{ organizer?.phonenumber }}
+                    </a>
+                  </p>
+                </div>
+              </div>
+            }
+            >>>>>>> main
           </div>
         </section>
       }
