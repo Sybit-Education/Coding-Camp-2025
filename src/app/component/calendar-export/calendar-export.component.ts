@@ -3,11 +3,12 @@ import { TranslateModule } from '@ngx-translate/core'
 import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
 import { CalendarExportService } from '../../services/calendar-export.service'
+import { IconComponent } from "@app/icons/icon.component";
 
 @Component({
   selector: 'app-calendar-export',
   standalone: true,
-  imports: [TranslateModule],
+  imports: [TranslateModule, IconComponent],
   templateUrl: './calendar-export.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

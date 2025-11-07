@@ -12,33 +12,14 @@
     @for (item of menuItems; track item; let i = $index) {
       <ng-template #linkContent>
         <div class="mr-4 text-[#3b4ea3]" aria-hidden="true">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="size-8"
-            aria-hidden="true"
-          >
-            <path [attr.stroke-linecap]="'round'" [attr.stroke-linejoin]="'round'" [attr.d]="item.icon" />
-          </svg>
+          <app-icon [name]="item.icon" class="size-8" aria-hidden="true"></app-icon>
         </div>
         <div>
           <h2 id="menu-item-{{ i }}">{{ item.title | translate }}</h2>
           <p class="mt-1 text-gray-600">{{ item.description | translate }}</p>
         </div>
         <div class="ml-auto text-[#3b4ea3]" aria-hidden="true">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="size-5"
-          >
-            <path [attr.stroke-linecap]="'round'" [attr.stroke-linejoin]="'round'" [attr.d]="'m8.25 4.5 7.5 7.5-7.5 7.5'" />
-          </svg>
+          <app-icon name="chevron-right" class="size-5" aria-hidden="true"></app-icon>
         </div>
       </ng-template>
 
