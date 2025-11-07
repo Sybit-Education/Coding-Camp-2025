@@ -8,11 +8,12 @@ import { distinctUntilChanged } from 'rxjs/operators'
 import { EventCardComponent } from '../../component/event-card/event-card.component'
 import { TranslateModule } from '@ngx-translate/core'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
+import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
 
 @Component({
   selector: 'app-favourites',
   standalone: true,
-  imports: [EventCardComponent, TranslateModule],
+  imports: [EventCardComponent, TranslateModule, GoBackComponent],
   templateUrl: './favourites.component.html',
   styles: [
     `

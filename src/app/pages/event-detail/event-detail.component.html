@@ -1,6 +1,7 @@
+<app-go-back-button [siteToGo]="goBackSite" [queryParams]="goBackParams"> </app-go-back-button>
 <div>
   <!-- Skip-Link für Screenreader -->
-  <a href="#event-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2">
+  <a href="#event-content" class="sr-only mt-2 focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2">
     {{ 'event-detail.skip-to-content' | translate }}
   </a>
 
@@ -9,13 +10,6 @@
       <section id="event-content" class="info-card rounded-2xl bg-gray-100 shadow-2xl">
         <!-- Back-Button in der oberen linken Ecke -->
         <div class="relative">
-          <button
-            (click)="goBack()"
-            class="action-button absolute top-3 left-3 z-10"
-            aria-label="{{ 'event-detail.back' | translate }}"
-          >
-            <app-icon name="back" aria-hidden="true"></app-icon>
-          </button>
           <app-event-image
             [images]="mediaList"
             [eventName]="event.name"
