@@ -62,12 +62,15 @@ export class KategorieComponent implements OnInit {
   private readonly locationCache = new Map<string, Promise<AppLocation>>()
 
   onSearchChange(term: string) {
+    console.debug('[KategorieComponent] searchChange', { term })
     this.searchTerm = term
     // Daten neu laden unter Berücksichtigung des Suchbegriffs
     this.initilizeData().then(() => this.markForCheck())
   }
 
   async initilizeData() {
+    const t0 = performance.now()
+    console.debug('[KategorieComponent] initializeData:start', { searchTerm: this.searchTerm, name: this.name })
     this.loading = true
     try {
       // Lade Topics und Events parallel
@@ -84,15 +87,20 @@ export class KategorieComponent implements OnInit {
 
       // Filtere Events basierend auf Suchbegriff und/oder ID
       let rawEvents: AppEvent[] = []
+      let usedFts = false
       if (this.searchTerm && this.searchTerm.trim().length > 0) {
+        usedFts = true
         const searched = await this.surreal.fulltextSearchEvents(this.searchTerm.trim())
+        console.debug('[KategorieComponent] FTS returned', { total: searched.length })
         rawEvents = this.id
           ? searched.filter((event) => event.topic?.some((topic) => topic.id === this.id) || event.event_type?.id === this.id)
           : searched
       } else {
+        const totalAll = allEvents.length
         rawEvents = this.id
           ? allEvents.filter((event) => event.topic?.some((topic) => topic.id === this.id) || event.event_type?.id === this.id)
           : allEvents
+        console.debug('[KategorieComponent] Using preloaded events', { totalAll, afterFilter: rawEvents.length })
       }
 
       // Optimiere Location-Ladung durch Caching
@@ -138,6 +146,8 @@ export class KategorieComponent implements OnInit {
         const dateB = new Date(b.date_start).getTime()
         return dateA - dateB
       })
+      const t1 = performance.now()
+      console.debug('[KategorieComponent] initializeData:done', { returned: this.events.length, ms: Math.round(t1 - t0) })
     } catch (error) {
       console.error('Fehler beim Laden der Events:', error)
     } finally {
