@@ -25,9 +25,7 @@ export class SharedStateService {
 
           if (xSmall || small) {
             return ScreenSize.SMALL
-          } else if (medium) {
-            return ScreenSize.MEDIUM
-          } else if (large) {
+          } else if (large || medium) {
             return ScreenSize.LARGE
           } else if (xLarge) {
             return ScreenSize.XLARGE
