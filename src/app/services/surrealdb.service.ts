@@ -113,8 +113,9 @@ export class SurrealdbService extends Surreal {
 
     // Vorab: Analyzer-Output und Teilmengen zählen (hilft bei Debugging)
     try {
-      const analyzeRes = await super.query('SELECT search::analyze("simple_ft", $q) AS tokens;', { q })
-      const tokens = (analyzeRes?.[0] as any)?.result?.[0]?.tokens ?? []
+      const analyzeRes = await super.query('RETURN search::analyze("simple_ft", $q);', { q })
+      const tokensRaw = (analyzeRes?.[0] as any)?.result
+      const tokens = Array.isArray(tokensRaw) ? tokensRaw : (tokensRaw?.tokens ?? [])
       console.debug('[SurrealdbService] analyze(simple_ft)', tokens)
 
       const directCntRes = await super.query('SELECT count() AS c FROM event WHERE name @@ $q OR description @@ $q;', { q })
