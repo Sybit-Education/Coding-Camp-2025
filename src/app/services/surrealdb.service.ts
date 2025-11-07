@@ -106,24 +106,43 @@ export class SurrealdbService extends Surreal {
     // Stelle sicher, dass die Verbindung initialisiert ist
     await this.initialize()
 
-    // 1) Versuch: Echte Volltextsuche mit @@ (setzt vorhandene FULLTEXT-Indizes voraus)
+    // 1) Versuch: Echte Volltextsuche mit @@ (setzt vorhandene SEARCH-Indizes voraus)
     const ftsSql = `
 LET $q = $q;
-LET $orgs = SELECT id FROM organizer WHERE name @@ $q;
-LET $locs = SELECT id FROM location WHERE name @@ $q OR street @@ $q OR city @@ $q;
 SELECT * FROM event
 WHERE name @@ $q
    OR description @@ $q
-   OR organizer IN $orgs
-   OR location IN $locs;
+   OR organizer IN (SELECT id FROM organizer WHERE name @@ $q)
+   OR location IN (SELECT id FROM location WHERE name @@ $q OR street @@ $q OR city @@ $q);
 `
     try {
       const results = await super.query(ftsSql, { q: query })
       const last = results[results.length - 1] as { result?: unknown[] } | undefined
-      return (last?.result ?? []) as AppEvent[]
+      const ftsEvents = (last?.result ?? []) as AppEvent[]
+      if (ftsEvents.length > 0) {
+        return ftsEvents
+      }
+
+      // 2) Fallback: Substring-Suche, wenn FTS keine Ergebnisse liefert
+      const fallbackSql = `
+LET $q = string::lowercase($q ?? '');
+LET $orgs = SELECT id FROM organizer WHERE string::contains(string::lowercase(name ?? ''), $q);
+LET $locs = SELECT id FROM location WHERE
+  string::contains(string::lowercase(name ?? ''), $q) OR
+  string::contains(string::lowercase(street ?? ''), $q) OR
+  string::contains(string::lowercase(city ?? ''), $q);
+SELECT * FROM event
+WHERE string::contains(string::lowercase(name ?? ''), $q)
+   OR string::contains(string::lowercase(description ?? ''), $q)
+   OR organizer IN $orgs
+   OR location IN $locs;
+`
+      const resultsFallback = await super.query(fallbackSql, { q: query })
+      const lastFallback = resultsFallback[resultsFallback.length - 1] as { result?: unknown[] } | undefined
+      return (lastFallback?.result ?? []) as AppEvent[]
     } catch (err) {
-      // 2) Fallback: Substring-Suche ohne FTS-Index (funktioniert ohne FULLTEXT-Indizes)
-      console.warn('FTS-Indizes nicht verfügbar – weiche auf Substring-Suche aus.', err)
+      // 3) Fallback bei Fehlern in der FTS-Ausführung
+      console.warn('FTS-Suche fehlgeschlagen – weiche auf Substring-Suche aus.', err)
       const fallbackSql = `
 LET $q = string::lowercase($q ?? '');
 LET $orgs = SELECT id FROM organizer WHERE string::contains(string::lowercase(name ?? ''), $q);
