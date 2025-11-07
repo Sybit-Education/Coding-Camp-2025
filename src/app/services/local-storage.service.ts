@@ -25,8 +25,6 @@ export class LocalStorageService {
       // Beide State-Mechanismen aktualisieren
       this.savedEventsSignal.set(savedIds)
       this.savedEventsSubject.next(savedIds)
-
-      console.log(`Event ${eventId} zu Favoriten hinzugefügt`)
     }
   }
 

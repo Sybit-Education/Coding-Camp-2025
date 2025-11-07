@@ -75,8 +75,6 @@ export class EventCardComponent implements OnInit, OnDestroy {
 
         // Change Detection auslösen, da wir OnPush verwenden
         this.markForCheck()
-
-        console.log('Event-Card geladen:', this.event?.name, 'Media URL:', this.mediaUrl)
       }, 0)
     } catch (error) {
       console.error('Fehler beim Laden der Event-Details:', error)

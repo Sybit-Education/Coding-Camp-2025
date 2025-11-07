@@ -325,7 +325,6 @@ export class EventCreateComponent implements OnInit {
         const created = await this.eventService.postEvent(payload)
         if (created && created.length > 0) {
           this.eventId = created[0].id
-          console.log('Event erfolgreich erstellt:', created[0])
           this.snackBarService.showSuccess('Event erfolgreich erstellt')
           // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
           this.router.navigate(['/admin'])

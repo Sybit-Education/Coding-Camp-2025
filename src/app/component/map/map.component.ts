@@ -231,7 +231,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       this.clickHandler = (e: unknown) => {
         // e.latlng ist das Ergebnis von Leaflet -> benutze es direkt
         const latlng = (e as { latlng: { lat: number; lng: number } }).latlng
-        console.log(latlng)
         if (!this.marker) {
           this.marker = this.L!.marker([latlng.lat, latlng.lng], {
             icon,
