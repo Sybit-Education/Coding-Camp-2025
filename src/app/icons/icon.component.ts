@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges, inject } from '@angular/core'
 import { SafeHtml } from '@angular/platform-browser'
-import { IconRegistryService } from './icon-registry.service'
+import { IconRegistryService } from '../services/icon-registry.service'
 
 @Component({
   selector: 'app-icon',
