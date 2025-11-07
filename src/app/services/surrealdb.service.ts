@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import Surreal, { RecordId, StringRecordId, Token } from 'surrealdb'
 import { environment } from '../../environments/environment'
+import { Event as AppEvent } from '../models/event.interface'
 
 @Injectable({
   providedIn: 'root',
@@ -99,5 +100,27 @@ export class SurrealdbService extends Surreal {
 
   async deleteRow(recordId: RecordId<string> | StringRecordId) {
     await super.delete(recordId)
+  }
+
+  async fulltextSearchEvents(query: string): Promise<AppEvent[]> {
+    // Stelle sicher, dass die Verbindung initialisiert ist
+    await this.initialize()
+
+    // Volltextsuche über Event-, Organizer- und Location-Felder
+    const sql = `
+LET $q = $q;
+LET $orgs = SELECT id FROM organizer WHERE name @@ $q;
+LET $locs = SELECT id FROM location WHERE name @@ $q OR street @@ $q OR city @@ $q;
+SELECT * FROM event
+WHERE name @@ $q
+   OR description @@ $q
+   OR organizer IN $orgs
+   OR location IN $locs;
+`
+
+    const results = await super.query(sql, { q: query })
+    const last = results[results.length - 1] as { result?: unknown[] } | undefined
+    const events = (last?.result ?? []) as AppEvent[]
+    return events
   }
 }

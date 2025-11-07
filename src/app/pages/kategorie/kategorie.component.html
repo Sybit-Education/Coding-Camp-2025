@@ -3,6 +3,8 @@
     {{ this.name }}
   </h1>
 
+  <app-search-box (searchChange)="onSearchChange($event)"></app-search-box>
+
   <!-- Ladeanzeige -->
   @if (loading) {
     <div class="flex items-center justify-center p-8">
