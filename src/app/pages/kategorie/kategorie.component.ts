@@ -62,8 +62,12 @@ export class KategorieComponent implements OnInit {
   private readonly locationCache = new Map<string, Promise<AppLocation>>()
 
   onSearchChange(term: string) {
-    console.debug('[KategorieComponent] searchChange', { term })
-    this.searchTerm = term
+    console.log('[KategorieComponent] searchChange', term)
+    const normalized = term ?? ''
+    if (this.searchTerm === normalized) {
+      return
+    }
+    this.searchTerm = normalized
     // Daten neu laden unter Berücksichtigung des Suchbegriffs
     this.initilizeData().then(() => this.markForCheck())
   }

@@ -14,6 +14,8 @@ export class SearchBoxComponent {
 
   onInput(event: Event): void {
     const target = event.target as HTMLInputElement
-    this.searchChange.emit(target.value ?? '')
+    const value = target.value ?? ''
+    console.log('[SearchBoxComponent] onInput', value)
+    this.searchChange.emit(value)
   }
 }
