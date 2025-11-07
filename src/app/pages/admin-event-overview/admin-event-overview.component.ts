@@ -274,7 +274,6 @@ export class AdminEventOverviewComponent implements OnInit {
       try {
         // Verwende direkt den Event-Service zum Löschen
         this.eventService.delete(eventId)
-        console.log('Event erfolgreich gelöscht')
       } catch (deleteError) {
         console.error('Fehler beim Löschen:', deleteError)
       }

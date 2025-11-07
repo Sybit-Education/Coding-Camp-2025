@@ -90,7 +90,6 @@ export class MediaService {
   async deleteMedia(id: RecordId<'media'> | StringRecordId): Promise<boolean> {
     try {
       await this.surrealdb.deleteRow(id)
-      console.log(`Medium mit ID ${id} erfolgreich gelöscht`)
       return true
     } catch (error) {
       console.error(`Fehler beim Löschen des Mediums mit ID ${id}:`, error)
