@@ -1,10 +1,3 @@
-<button
-  (click)="openFullscreen()"
-  class="absolute top-3 right-3 z-10 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-white/80 opacity-80 shadow-md hover:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
-  aria-label="Bild im Vollbild anzeigen"
->
-  TST
-</button>
 <ng-template #imageTemplate>
   @if (images.length !== 0) {
     <div class="relative h-full max-h-[90vh] rounded-t-2xl" [class.w-[90vw]]="isFullscreen" [class.w-full]="!isFullscreen">
@@ -25,7 +18,7 @@
               [alt]="eventName ? 'Bild der Veranstaltung: ' + eventName : 'Veranstaltungsbild'"
             />
             @if (item.copyright || item.creator) {
-              <div class="absolute right-0 bottom-0 rounded-tl-xl bg-black px-2 py-1 opacity-75">
+              <div class="absolute bottom-0 left-0 rounded-tr-xl bg-black px-3 py-1 opacity-75">
                 <div class="text-sm text-white">
                   {{ item.copyright }}
                   @if (item.copyright && item.creator) {
@@ -34,6 +27,15 @@
                   {{ item.creator }}
                 </div>
               </div>
+            }
+            @if (!isFullscreen) {
+              <button
+                (click)="openFullscreen()"
+                class="pointer-events-auto absolute right-0 bottom-0 z-10 m-4 flex cursor-pointer items-center justify-center rounded-full bg-black/50 p-2 text-white hover:scale-125"
+                aria-label="Bild im Vollbild anzeigen"
+              >
+                <app-icon name="pan_zoom" class="h-6 w-6" aria-hidden="true"></app-icon>
+              </button>
             }
           </div>
         }
@@ -49,7 +51,7 @@
               aria-label="Vorheriges Bild"
             >
               <svg
-                class="h-5 w-5"
+                class="h-6 w-6"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -84,13 +86,15 @@
       }
     </div>
   } @else {
-    <div class="flex w-full justify-center py-2">
+    <div
+      class="flex w-full justify-center py-2"
+      [class.h-[650px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.XLARGE && !isFullscreen"
+      [class.h-[500px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.LARGE && !isFullscreen"
+      [class.h-[500px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.MEDIUM && !isFullscreen"
+      [class.h-[350px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL && !isFullscreen"
+    >
       <img
-        class="rounded-2xl opacity-30"
-        [class.h-[650px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.XLARGE"
-        [class.h-[500px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.LARGE"
-        [class.h-[500px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.MEDIUM"
-        [class.h-[350px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL"
+        class="w-full rounded-t-2xl object-contain opacity-30"
         src="/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg"
         alt="1200 Jahre Radolfzell Logo"
       />

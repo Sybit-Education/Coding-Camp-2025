@@ -24,9 +24,9 @@
           </div>
           <div class="flex justify-end">
             <div class="mr-2 mb-1 flex items-center justify-center gap-2 text-2xl">
-              <app-favorite-button [eventId]="event.id" class="p-2"></app-favorite-button>
-              <app-share [event]="event" [location]="location" class="p-2"></app-share>
-              <app-calendar-export [event]="event" [location]="location" class="p-2"></app-calendar-export>
+              <app-favorite-button [eventId]="event.id" class="p-1"></app-favorite-button>
+              <app-calendar-export [event]="event" [location]="location" class="p-1"></app-calendar-export>
+              <app-share [event]="event" [location]="location" class="p-1"></app-share>
             </div>
           </div>
         } @else {
@@ -36,10 +36,10 @@
                 {{ event.name }}
               </h1>
             </div>
-            <div class="mt-10 mr-4 mb-4 flex items-center justify-center gap-2 text-2xl">
-              <app-favorite-button [eventId]="event.id" class="p-2"></app-favorite-button>
-              <app-share [event]="event" [location]="location"></app-share>
-              <app-calendar-export [event]="event" [location]="location"></app-calendar-export>
+            <div class="mt-10 mr-3 mb-4 flex items-center justify-center gap-2 text-2xl">
+              <app-favorite-button [eventId]="event.id" class="p-1"></app-favorite-button>
+              <app-calendar-export [event]="event" [location]="location" class="p-1"></app-calendar-export>
+              <app-share [event]="event" [location]="location" class="p-1"></app-share>
             </div>
           </div>
         }
@@ -216,8 +216,7 @@
                 </div>
               }
             </div>
-            <<<<<<< HEAD =======
-            @if (organizer?.email) {
+            @if (organizer.email) {
               <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
                 <div class="flex items-center justify-center">
                   <div class="flex items-center justify-center" aria-hidden="true">
@@ -230,16 +229,16 @@
                   </h3>
                   <p>
                     <a
-                      href="mailto:{{ organizer?.email }}"
+                      href="mailto:{{ organizer.email }}"
                       class="text-blue-700 underline hover:text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     >
-                      {{ organizer?.email }}
+                      {{ organizer.email }}
                     </a>
                   </p>
                 </div>
               </div>
             }
-            @if (organizer?.phonenumber) {
+            @if (organizer.phonenumber) {
               <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
                 <div class="flex items-center justify-center">
                   <div class="flex items-center justify-center" aria-hidden="true">
@@ -252,16 +251,15 @@
                   </h3>
                   <p>
                     <a
-                      href="tel:{{ organizer?.phonenumber }}"
+                      href="tel:{{ organizer.phonenumber }}"
                       class="text-blue-700 underline hover:text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     >
-                      {{ organizer?.phonenumber }}
+                      {{ organizer.phonenumber }}
                     </a>
                   </p>
                 </div>
               </div>
             }
-            >>>>>>> main
           </div>
         </section>
       }

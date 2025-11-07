@@ -3,10 +3,11 @@ import { MatIconModule } from '@angular/material/icon'
 import { ScreenSize } from '@app/models/screenSize.enum'
 import { SharedStateService } from '@app/services/shared-state.service'
 import { AsyncPipe, NgTemplateOutlet } from '@angular/common'
+import { IconComponent } from '@app/icons/icon.component'
 
 @Component({
   selector: 'app-event-image',
-  imports: [MatIconModule, AsyncPipe, NgTemplateOutlet],
+  imports: [MatIconModule, AsyncPipe, NgTemplateOutlet, IconComponent],
   templateUrl: './event-image.component.html',
 })
 export class EventImageComponent {
