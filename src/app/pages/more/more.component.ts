@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core'
 
 import { Router, RouterModule } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 import { IconComponent } from '../../icons/icon.component'
+import { LoginService } from '@app/services/login.service'
 
 interface MoreMenuItem {
   title: string
@@ -26,8 +27,16 @@ interface MoreMenuItem {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MoreComponent {
+export class MoreComponent implements OnInit {
   private readonly router: Router = inject(Router)
+  private readonly loginService = inject(LoginService)
+  loggedIn = false
+
+  ngOnInit(): void {
+    this.loginService.isLoggedIn().then((isLoggedIn) => {
+      this.loggedIn = isLoggedIn
+    })
+  }
 
   /**
    * Navigiert zu einer bestimmten Route
@@ -52,25 +61,25 @@ export class MoreComponent {
   }
   menuItems: MoreMenuItem[] = [
     {
-      title: 'MORE.TEAM.TITLE',
+      title: 'Das Team',
       route: '/team',
       description: 'MORE.TEAM.DESCRIPTION',
       icon: 'users',
     },
     {
-      title: 'MORE.IMPRINT.TITLE',
+      title: 'Impressum',
       route: 'https://www.radolfzell.de/impressum',
       description: 'MORE.IMPRINT.DESCRIPTION',
       icon: 'info-circle',
     },
     {
-      title: 'MORE.PRIVACY.TITLE',
+      title: 'Datenschutz',
       route: 'https://www.radolfzell.de/datenschutz',
       description: 'MORE.PRIVACY.DESCRIPTION',
       icon: 'shield-check',
     },
     {
-      title: 'MORE.LOGIN.TITLE',
+      title: 'Admin',
       route: '/login',
       description: 'MORE.LOGIN.DESCRIPTION',
       icon: 'key',
