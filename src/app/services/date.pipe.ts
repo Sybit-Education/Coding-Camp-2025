@@ -92,11 +92,11 @@ export class DateTimeRangePipe implements PipeTransform, OnDestroy {
     // Sprachspezifische Formatierung
     switch (currentLang) {
       case 'en':
-        return formatDate(date, 'MMMM d, y – h:mm a', locale)
+        return formatDate(date, 'MMM d, y – h:mm a', locale)
       case 'fr':
-        return formatDate(date, "d MMMM y – HH'h'mm", locale)
+        return formatDate(date, "d MMM y – HH'h'mm", locale)
       default: // Deutsch
-        return formatDate(date, "d. MMMM y – HH:mm 'Uhr'", locale)
+        return formatDate(date, "d. MMM y – HH:mm 'Uhr'", locale)
     }
   }
 
@@ -106,18 +106,18 @@ export class DateTimeRangePipe implements PipeTransform, OnDestroy {
     // Sprachspezifische Formatierung für Zeitbereiche am selben Tag
     switch (currentLang) {
       case 'en': {
-        const sEn = formatDate(start, 'MMMM d, y – h:mm', locale)
+        const sEn = formatDate(start, 'MMM d, y – h:mm', locale)
         const eEn = formatDate(end, 'h:mm a', locale)
         return `${sEn} to ${eEn}`
       }
       case 'fr': {
-        const sFr = formatDate(start, "d MMMM y – HH'h'mm", locale)
+        const sFr = formatDate(start, "d MMM y – HH'h'mm", locale)
         const eFr = formatDate(end, "HH'h'mm", locale)
         return `${sFr} à ${eFr}`
       }
       default: {
         // Deutsch
-        const sDe = formatDate(start, 'd. MMMM y – HH:mm', locale)
+        const sDe = formatDate(start, 'd. MMM y – HH:mm', locale)
         const eDe = formatDate(end, 'HH:mm', locale)
         return `${sDe} bis ${eDe} Uhr`
       }
@@ -130,19 +130,19 @@ export class DateTimeRangePipe implements PipeTransform, OnDestroy {
     // Sprachspezifische Formatierung für mehrtägige Zeitbereiche
     switch (currentLang) {
       case 'en': {
-        const sEn = formatDate(start, 'MMMM d, y – h:mm a', locale)
-        const eEn = formatDate(end, 'MMMM d, y – h:mm a', locale)
+        const sEn = formatDate(start, 'MMM d, y – h:mm a', locale)
+        const eEn = formatDate(end, 'MMM d, y – h:mm a', locale)
         return `${sEn} to ${eEn}`
       }
       case 'fr': {
-        const sFr = formatDate(start, "d MMMM y – HH'h'mm", locale)
-        const eFr = formatDate(end, "d MMMM y – HH'h'mm", locale)
+        const sFr = formatDate(start, "d MMM y – HH'h'mm", locale)
+        const eFr = formatDate(end, "d MMM y – HH'h'mm", locale)
         return `${sFr} au ${eFr}`
       }
       default: {
         // Deutsch
-        const sDe = formatDate(start, "d. MMMM y – HH:mm 'Uhr'", locale)
-        const eDe = formatDate(end, "d. MMMM y – HH:mm 'Uhr'", locale)
+        const sDe = formatDate(start, "d. MMM y – HH:mm 'Uhr'", locale)
+        const eDe = formatDate(end, "d. MMM y – HH:mm 'Uhr'", locale)
         return `${sDe} bis ${eDe}`
       }
     }

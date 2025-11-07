@@ -35,8 +35,6 @@ export class HomeComponent implements OnInit {
   topics: Topic[] = []
   screenSize = ScreenSize
 
-  isSmall = true
-
   topicsOrTypes: (Topic | TypeDB)[] = []
 
   readonly sharedStateService = inject(SharedStateService)
@@ -60,11 +58,7 @@ export class HomeComponent implements OnInit {
       ])
 
       this.events = this.getUpcomingEvents(events)
-      if (this.isSmall) {
-        this.displayEvents = this.events.slice(0, 5)
-      } else {
-        this.displayEvents = this.events.slice(0, 6)
-      }
+      this.displayEvents = this.events.slice(0, 6)
 
       this.topicsOrTypes.push(...topics, ...eventTypes)
     } catch (error) {

@@ -18,10 +18,13 @@ import { TranslateModule } from '@ngx-translate/core'
 import { FavoriteButtonComponent } from '../../component/favorite-button/favorite-button.component'
 import { ShareComponent } from '../../component/share/share.component'
 import { MediaService } from '@app/services/media.service'
-import { ImageCarouselComponent } from '@app/component/image-carousel/image-carousel.component'
 import { CalendarExportComponent } from '@app/component/calendar-export/calendar-export.component'
-import { MatIconModule } from "@angular/material/icon";
-import { IconComponent } from "@app/icons/icon.component";
+import { ScreenSize } from '@app/models/screenSize.enum'
+import { SharedStateService } from '@app/services/shared-state.service'
+import { EventImageComponent } from '@app/component/event-image/event-image.component'
+import { MatIconModule } from '@angular/material/icon'
+import { IconComponent } from '@app/icons/icon.component'
+import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -33,11 +36,13 @@ import { IconComponent } from "@app/icons/icon.component";
     DateTimeRangePipe,
     FavoriteButtonComponent,
     ShareComponent,
-    ImageCarouselComponent,
+    EventImageComponent,
     CalendarExportComponent,
     MatIconModule,
-    IconComponent
-],
+    IconComponent,
+
+    GoBackComponent,
+  ],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -50,11 +55,14 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   type: TypeDB | null = null
   error: string | null = null
   eventId = ''
+  goBackSite: string | string[] = '/'
+  goBackParams?: Record<string, string | number | boolean | null | undefined>
 
   mediaList: { url: string; copyright: string; creator: string }[] = []
 
   protected isLoggedIn = false
   private returnLink = ''
+  screenSize = ScreenSize
 
   private readonly eventService = inject(EventService)
   private readonly locationService = inject(LocationService)
@@ -64,6 +72,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   private readonly loginservice = inject(LoginService)
   private readonly mediaService = inject(MediaService)
   private readonly markForCheck = injectMarkForCheck()
+  readonly sharedStateService = inject(SharedStateService)
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params) => {
@@ -87,6 +96,16 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
         this.isLoggedIn = isLoggedIn
       }),
     )
+    if (this.returnLink) {
+      if (this.returnLink === 'kategorie') {
+        this.goBackSite = ['/kategorie']
+      } else {
+        this.goBackSite = ['/kategorie']
+        this.goBackParams = { name: this.returnLink }
+      }
+    } else {
+      this.goBackSite = ['/']
+    }
   }
 
   ngOnDestroy(): void {
@@ -225,19 +244,6 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     } catch (err) {
       this.error = `Fehler beim Laden: ${err}`
       this.announceError(`Fehler beim Laden: ${err}`)
-    }
-  }
-
-  goBack() {
-    if (this.returnLink) {
-      if (this.returnLink === 'kategorie') {
-        this.router.navigate(['/kategorie'])
-        return
-      } else {
-        this.router.navigate(['/kategorie'], { queryParams: { name: this.returnLink } })
-      }
-    } else {
-      this.router.navigate(['/'])
     }
   }
 

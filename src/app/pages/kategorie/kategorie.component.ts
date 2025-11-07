@@ -14,6 +14,7 @@ import { Location as AppLocation } from '../../models/location.interface'
 import { RecordIdValue } from 'surrealdb'
 import { CommonModule } from '@angular/common'
 import { TypeDB } from '@app/models/typeDB.interface'
+import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
 
 interface EventWithResolvedLocation extends AppEvent {
   locationName: string
@@ -23,7 +24,7 @@ interface EventWithResolvedLocation extends AppEvent {
 @Component({
   selector: 'app-kategorie',
   standalone: true,
-  imports: [TranslateModule, EventCardComponent, CommonModule],
+  imports: [TranslateModule, EventCardComponent, CommonModule, GoBackComponent],
   templateUrl: './kategorie.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

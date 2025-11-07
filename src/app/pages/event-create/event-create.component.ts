@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core'
 import { SnackBarService } from '../../services/snack-bar.service'
 import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
@@ -26,6 +26,7 @@ import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { sanitizeQuillContent } from '../../utils/quill-sanitizer'
 import { Media } from '@app/models/media.interface'
 import { MediaService } from '@app/services/media.service'
+import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
 
 @Component({
   selector: 'app-event-create',
@@ -38,6 +39,7 @@ import { MediaService } from '@app/services/media.service'
     LocationInputComponent,
     OrganizerInputComponent,
     ImageUploadComponent,
+    GoBackComponent,
   ],
   templateUrl: './event-create.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -58,6 +60,8 @@ export class EventCreateComponent implements OnInit {
   private readonly markForCheck = injectMarkForCheck()
   private readonly router = inject(Router)
   private readonly snackBarService = inject(SnackBarService)
+
+  isEditMode = signal(false)
 
   // ===== State & Formfelder =====
   event: AppEvent | null = null
@@ -124,6 +128,7 @@ export class EventCreateComponent implements OnInit {
   }
 
   private async loadEvent(eventId: RecordId<'event'> | StringRecordId) {
+    this.isEditMode.set(true)
     await this.initializeData()
     try {
       const event = await this.eventService.getEventByID(eventId)
