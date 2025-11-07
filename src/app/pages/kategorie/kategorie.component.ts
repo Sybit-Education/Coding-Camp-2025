@@ -30,19 +30,25 @@ interface EventWithResolvedLocation extends AppEvent {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KategorieComponent implements OnInit {
-  events: EventWithResolvedLocation[] = []
+  private readonly route = inject(ActivatedRoute)
+  private readonly markForCheck = injectMarkForCheck()
+  private readonly surreal = inject(SurrealdbService)
 
+  private readonly eventService: EventService = inject(EventService)
+  private readonly locationService: LocationService = inject(LocationService)
+  private readonly topicService: TopicService = inject(TopicService)
+
+  events: EventWithResolvedLocation[] = []
   topics: Topic[] = []
   eventTypes: TypeDB[] = []
   id: RecordIdValue | null = null
   name: string | null = null
   loading = true
-
-  private readonly route = inject(ActivatedRoute)
-  private readonly markForCheck = injectMarkForCheck()
-  private readonly surreal = inject(SurrealdbService)
   returnLink = ''
   searchTerm = ''
+
+  // Cache für Locations, um wiederholte Anfragen zu vermeiden
+  private readonly locationCache = new Map<string, Promise<AppLocation>>()
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
@@ -54,22 +60,15 @@ export class KategorieComponent implements OnInit {
       this.returnLink = this.name ? this.name : 'kategorie'
     })
   }
-  private readonly eventService: EventService = inject(EventService)
-  private readonly locationService: LocationService = inject(LocationService)
-  private readonly topicService: TopicService = inject(TopicService)
-
-  // Cache für Locations, um wiederholte Anfragen zu vermeiden
-  private readonly locationCache = new Map<string, Promise<AppLocation>>()
-
   onSearchChange(term: string) {
     console.log('[KategorieComponent] searchChange', term)
-    const normalized = term ?? ''
-    if (this.searchTerm === normalized) {
-      return
-    }
-    this.searchTerm = normalized
-    // Daten neu laden unter Berücksichtigung des Suchbegriffs
-    this.initilizeData().then(() => this.markForCheck())
+
+    this.searchTerm = term.trim()
+    this.surreal.fulltextSearchEvents(this.searchTerm).then((searched: AppEvent[]) => {
+      console.debug('[KategorieComponent] FTS returned', { total: searched.length })
+      // Daten neu laden unter Berücksichtigung des Suchbegriffs
+      this.initilizeData().then(() => this.markForCheck())
+    })
   }
 
   async initilizeData() {
