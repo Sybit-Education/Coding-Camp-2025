@@ -14,6 +14,7 @@ import { Location as AppLocation } from '../../models/location.interface'
 import { RecordIdValue } from 'surrealdb'
 import { CommonModule } from '@angular/common'
 import { TypeDB } from '@app/models/typeDB.interface'
+import { SurrealdbService } from '../../services/surrealdb.service'
 
 interface EventWithResolvedLocation extends AppEvent {
   locationName: string
@@ -34,6 +35,7 @@ export class KategorieComponent implements OnInit {
   private readonly eventService: EventService = inject(EventService)
   private readonly locationService: LocationService = inject(LocationService)
   private readonly topicService: TopicService = inject(TopicService)
+  private readonly surreal: SurrealdbService = inject(SurrealdbService)
 
   events: EventWithResolvedLocation[] = []
   topics: Topic[] = []
@@ -42,6 +44,9 @@ export class KategorieComponent implements OnInit {
   name: string | null = null
   loading = true
   returnLink = ''
+  searchTerm = ''
+  private allEvents: AppEvent[] = []
+  private searchDebounce: number | null = null
 
   // Cache für Locations, um wiederholte Anfragen zu vermeiden
   private readonly locationCache = new Map<string, Promise<AppLocation>>()
@@ -73,57 +78,10 @@ export class KategorieComponent implements OnInit {
       this.eventTypes = typeDB
 
       this.id = this.getEventIdFromName(topics, typeDB)
+      this.allEvents = allEvents
 
-      // Filtere Events basierend auf der ID (ohne Volltextsuche)
-      const totalAll = allEvents.length
-      const rawEvents: AppEvent[] = this.id
-        ? allEvents.filter((event) => event.topic?.some((topic) => topic.id === this.id) || event.event_type?.id === this.id)
-        : allEvents
-      console.debug('[KategorieComponent] Using preloaded events', { totalAll, afterFilter: rawEvents.length })
+      await this.performSearch(this.searchTerm)
 
-      // Optimiere Location-Ladung durch Caching
-      this.events = await Promise.all(
-        rawEvents.map(async (event) => {
-          // Verwende Cache für Locations
-          let locationData: AppLocation | undefined
-
-          if (event.location) {
-            const locationId = String(event.location)
-            if (!this.locationCache.has(locationId)) {
-              this.locationCache.set(locationId, this.locationService.getLocationByID(event.location))
-            }
-
-            locationData = await this.locationCache.get(locationId)
-          }
-          return {
-            ...event,
-            locationName: locationData?.name ?? 'Unbekannter Ort',
-          }
-        }),
-      )
-
-      // Markiere vergangene Events und sortiere nach Datum (aufsteigend)
-      const now = new Date()
-      this.events = this.events.map((event) => {
-        const endDate = event.date_end ? new Date(event.date_end) : new Date(event.date_start)
-        return {
-          ...event,
-          isPast: endDate < now,
-        }
-      })
-
-      // Sortiere Events: Aktuelle Events nach Datum (aufsteigend), vergangene Events ans Ende
-      this.events.sort((a, b) => {
-        // Wenn ein Event vergangen ist und das andere nicht, kommt das aktuelle zuerst
-        if (a.isPast && !b.isPast) return 1
-        if (!a.isPast && b.isPast) return -1
-
-        // Wenn beide Events den gleichen Status haben (beide vergangen oder beide aktuell),
-        // sortiere nach Datum aufsteigend
-        const dateA = new Date(a.date_start).getTime()
-        const dateB = new Date(b.date_start).getTime()
-        return dateA - dateB
-      })
       const t1 = performance.now()
       console.debug('[KategorieComponent] initializeData:done', { returned: this.events.length, ms: Math.round(t1 - t0) })
     } catch (error) {
@@ -134,6 +92,83 @@ export class KategorieComponent implements OnInit {
       this.markForCheck()
     }
   }
+  onSearchChange(term: string) {
+    this.searchTerm = (term ?? '').trim()
+    if (this.searchDebounce) {
+      window.clearTimeout(this.searchDebounce)
+    }
+    this.searchDebounce = window.setTimeout(() => {
+      void this.performSearch(this.searchTerm)
+    }, 300)
+  }
+
+  private async performSearch(q: string) {
+    const t0 = performance.now()
+    this.loading = true
+    try {
+      // Basisliste ggf. nach Kategorie einschränken
+      const categoryId = this.id
+      let baseList = this.allEvents
+      if (categoryId) {
+        baseList = baseList.filter(
+          (event) => event.topic?.some((topic) => topic.id === categoryId) || event.event_type?.id === categoryId,
+        )
+      }
+
+      let resultEvents: AppEvent[]
+      if (q) {
+        const searchResults = await this.surreal.fulltextSearchEvents(q)
+        resultEvents = categoryId
+          ? searchResults.filter(
+              (event) => event.topic?.some((topic) => topic.id === categoryId) || event.event_type?.id === categoryId,
+            )
+          : searchResults
+      } else {
+        resultEvents = baseList
+      }
+
+      // Locations auflösen (mit Cache) + isPast markieren
+      const mapped = await Promise.all(
+        resultEvents.map(async (event) => {
+          let locationData: AppLocation | undefined
+
+          if (event.location) {
+            const locationId = String(event.location)
+            if (!this.locationCache.has(locationId)) {
+              this.locationCache.set(locationId, this.locationService.getLocationByID(event.location))
+            }
+            locationData = await this.locationCache.get(locationId)
+          }
+
+          const endDate = event.date_end ? new Date(event.date_end) : new Date(event.date_start)
+          return {
+            ...event,
+            locationName: locationData?.name ?? 'Unbekannter Ort',
+            isPast: endDate < new Date(),
+          } as EventWithResolvedLocation
+        }),
+      )
+
+      // Sortierung: aktuelle vor vergangenen, dann nach Startdatum
+      mapped.sort((a, b) => {
+        if (a.isPast && !b.isPast) return 1
+        if (!a.isPast && b.isPast) return -1
+        const dateA = new Date(a.date_start).getTime()
+        const dateB = new Date(b.date_start).getTime()
+        return dateA - dateB
+      })
+
+      this.events = mapped
+      console.debug('[KategorieComponent] performSearch:done', { q, returned: this.events.length, ms: Math.round(performance.now() - t0) })
+    } catch (error) {
+      console.error('[KategorieComponent] performSearch:error', error)
+      this.events = []
+    } finally {
+      this.loading = false
+      this.markForCheck()
+    }
+  }
+
   private getEventIdFromName(topics: Topic[], typeDB: TypeDB[]): RecordIdValue | null {
     const topic = topics.find((t) => t.name === this.name)
     const type = typeDB.find((t) => t.name === this.name)
