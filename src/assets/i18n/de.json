@@ -227,6 +227,7 @@
   },
   "SEARCH": {
     "LABEL": "Suche",
-    "PLACEHOLDER": "Suchen ..."
+    "PLACEHOLDER": "Suchen ...",
+    "SEARCHING": "Es wird gesucht ..."
   }
 }

@@ -203,6 +203,7 @@
   },
   "SEARCH": {
     "PLACEHOLDER": "Rechercher...",
-    "LABEL": "Rechercher"
+    "LABEL": "Rechercher",
+    "SEARCHING": "Recherche en cours..."
   }
 }
