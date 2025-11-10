@@ -52,25 +52,25 @@ export class MoreComponent {
   }
   menuItems: MoreMenuItem[] = [
     {
-      title: 'MORE.TEAM.TITLE',
+      title: 'Das Team',
       route: '/team',
       description: 'MORE.TEAM.DESCRIPTION',
       icon: 'users',
     },
     {
-      title: 'MORE.IMPRINT.TITLE',
+      title: 'Impressum',
       route: 'https://www.radolfzell.de/impressum',
       description: 'MORE.IMPRINT.DESCRIPTION',
       icon: 'info-circle',
     },
     {
-      title: 'MORE.PRIVACY.TITLE',
+      title: 'Datenschutz',
       route: 'https://www.radolfzell.de/datenschutz',
       description: 'MORE.PRIVACY.DESCRIPTION',
       icon: 'shield-check',
     },
     {
-      title: 'MORE.LOGIN.TITLE',
+      title: 'Admin',
       route: '/login',
       description: 'MORE.LOGIN.DESCRIPTION',
       icon: 'key',

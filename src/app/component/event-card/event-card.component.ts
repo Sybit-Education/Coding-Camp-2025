@@ -11,8 +11,8 @@ import { LocalStorageService } from '../../services/local-storage.service'
 import { MediaService } from '../../services/media.service'
 import { TranslateModule } from '@ngx-translate/core'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
-import { MatIconModule } from "@angular/material/icon";
-import { IconComponent } from "@app/icons/icon.component";
+import { MatIconModule } from '@angular/material/icon'
+import { IconComponent } from '@app/icons/icon.component'
 
 @Component({
   selector: 'app-event-card',

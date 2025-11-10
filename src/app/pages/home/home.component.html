@@ -21,8 +21,8 @@
 
     <!-- Horizontaler Scroll-Container für Events -->
     @if ((sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL) {
-      <div class="scrollbar-hide card-snap -mx-2 mb-5 w-full snap-x snap-mandatory overflow-x-auto scroll-smooth pb-4">
-        <div class="event-row flex min-w-max gap-4 px-2 pb-8">
+      <div class="scrollbar-hide card-snap mb-5 w-full snap-x snap-mandatory overflow-x-auto scroll-smooth">
+        <div class="event-row flex min-w-max gap-4 px-2">
           @for (event of displayEvents; track $index) {
             <app-event-card
               class="h-full w-[calc(100vw-6rem)] snap-center"
@@ -38,7 +38,7 @@
         </div>
       </div>
     } @else {
-      <div class="flex flex-wrap justify-center gap-4">
+      <div class="mb-10 flex flex-wrap justify-center gap-4">
         @for (event of displayEvents; track $index) {
           <app-event-card
             class="w-full max-w-sm flex-shrink-0 sm:w-1/2 lg:w-1/3"
@@ -55,17 +55,17 @@
     }
   </section>
 
-  <div class="mt-10 flex justify-center">
+  <div class="flex justify-center">
     <app-all-event-button />
   </div>
 
   <!-- Kategorien -->
-  <section [attr.aria-labelledby]="'home.tags.aria-lable-catagories-heading' | translate" class="mt-20">
+  <section [attr.aria-labelledby]="'home.tags.aria-lable-catagories-heading' | translate" class="mt-12 mb-12">
     <h2 [id]="'home.tags.aria-lable-catagories-heading' | translate">
       {{ 'home.categories' | translate }}
     </h2>
 
-    <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+    <div class="mr-2 ml-2 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
       @for (kategorie of topicsOrTypes; track kategorie.id) {
         <app-kategorie-card [color]="kategorie.color" [text]="kategorie.name" />
       }

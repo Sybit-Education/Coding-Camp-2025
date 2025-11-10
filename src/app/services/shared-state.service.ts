@@ -23,9 +23,9 @@ export class SharedStateService {
           const large = result.breakpoints[Breakpoints.Large] ?? false
           const xLarge = result.breakpoints[Breakpoints.XLarge] ?? false
 
-          if (xSmall || small || medium) {
+          if (xSmall || small) {
             return ScreenSize.SMALL
-          } else if (large) {
+          } else if (large || medium) {
             return ScreenSize.LARGE
           } else if (xLarge) {
             return ScreenSize.XLARGE
