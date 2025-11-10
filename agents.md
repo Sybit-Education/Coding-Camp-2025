@@ -98,14 +98,14 @@ ServiceWorkerModule.register('ngsw-worker.js', {
 ```html
 <!-- barrierefreies & i18n-konformes UI -->
 <a href="#mainContent" class="skip-link sr-only focus:not-sr-only">
-  {{ 'SKIP_TO_MAIN' | translate }}
+  Zum Hauptinhalt springen
 </a>
 <main id="mainContent">
   <h1 i18n="@@pageTitle">{{ 'PAGE_TITLE' }}</h1>
   <button
     class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded focus:outline-yellow-500"
-    [attr.aria-label]="('SAVE' | translate)">
-    {{ 'SAVE' | translate }}
+    [attr.aria-label]="Speichern">
+    Speichern
   </button>
   <div aria-live="polite">{{ notificationMessage }}</div>
 </main>

@@ -1,7 +1,7 @@
 <div class="container mx-auto px-4 py-6">
   <div class="mb-6 flex flex-col items-center justify-between md:flex-row">
     <h1 class="mb-4 text-2xl font-bold text-gray-800 md:mb-0">
-      {{ 'ADMIN.TITLE' | translate }}
+      Administration
     </h1>
     <div class="flex space-x-4">
       <div class="relative">
@@ -9,7 +9,7 @@
           type="text"
           [(ngModel)]="filterValue"
           (keyup)="updateFilter()"
-          placeholder="{{ 'ADMIN.EVENTS.SEARCH' | translate }}"
+          placeholder="Suchen..."
           class="rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />
         <svg
@@ -29,7 +29,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
-        {{ 'ADMIN.EVENTS.CREATE_NEW' | translate }}
+        Neues Event ...
       </a>
     </div>
   </div>
@@ -42,7 +42,7 @@
         [routerLinkActiveOptions]="{ exact: true }"
         class="border-b-2 border-transparent px-1 py-2 text-xl font-bold whitespace-nowrap text-blue-600 hover:border-gray-300 hover:text-blue-800"
       >
-        {{ 'ADMIN.EVENTS.TITLE' | translate }}
+        Events
       </a>
       <a
         [routerLink]="['/admin/locations']"
@@ -50,7 +50,7 @@
         [routerLinkActiveOptions]="{ exact: true }"
         class="border-b-2 border-transparent px-1 py-2 text-xl font-medium whitespace-nowrap text-gray-600 hover:border-gray-300 hover:text-blue-800"
       >
-        {{ 'ADMIN.LOCATIONS.TITLE' | translate }}
+        Orte
       </a>
     </nav>
   </div>
@@ -58,18 +58,18 @@
   @if (isLoading()) {
     <div class="flex items-center justify-center py-12">
       <div class="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"></div>
-      <span class="ml-3">{{ 'COMMON.LOADING' | translate }}</span>
+      <span class="ml-3">Laden</span>
     </div>
   } @else if (events().length === 0) {
     <div class="rounded-lg bg-white py-8 text-center shadow">
       <p class="mb-4 text-gray-500">
-        {{ 'ADMIN.EVENTS.NO_EVENTS' | translate }}
+        Keine Events gefunden.
       </p>
       <a
         [routerLink]="['/admin/create']"
         class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
       >
-        {{ 'ADMIN.EVENTS.CREATE_NEW' | translate }}
+        Neues Event ...
       </a>
     </div>
   } @else {
@@ -147,7 +147,7 @@
               <button
                 (click)="previewEvent(row.originalId)"
                 class="p-1 text-green-600 hover:text-green-800 focus:outline-none"
-                title="{{ 'ADMIN.EVENTS.PREVIEW' | translate }}"
+                title="Vorschau"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -162,7 +162,7 @@
               <button
                 (click)="editEvent(row.originalId)"
                 class="p-1 text-blue-600 hover:text-blue-800 focus:outline-none"
-                title="{{ 'ADMIN.EVENTS.EDIT' | translate }}"
+                title="Bearbeiten ..."
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
@@ -176,7 +176,7 @@
               <button
                 (click)="deleteEvent(row.originalId)"
                 class="p-1 text-red-600 hover:text-red-800 focus:outline-none"
-                title="{{ 'ADMIN.EVENTS.DELETE' | translate }}"
+                title="Löschen"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path

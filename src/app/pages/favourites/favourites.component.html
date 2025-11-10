@@ -1,11 +1,7 @@
 <app-go-back-button> </app-go-back-button>
 <article>
-  <h1>
-    {{ 'FAVORITES.TITLE' | translate }}
-  </h1>
-  <p class="mb-4 text-gray-600 italic">
-    {{ 'FAVORITES.LOCAL_STORAGE_NOTICE' | translate }}
-  </p>
+  <h1>Meine Favoriten</h1>
+  <p class="mb-4 text-gray-600 italic">Hinweis: Favoriten werden nur lokal auf diesem Gerät gespeichert.</p>
 
   @if (loading) {
     <div class="py-8 text-center">
@@ -20,7 +16,7 @@
             "
           ></path>
         </svg>
-        <span class="ml-2">{{ 'FAVORITES.LOADING' | translate }}</span>
+        <span class="ml-2">Lade Favoriten...</span>
       </div>
     </div>
   }
@@ -45,17 +41,13 @@
           />
         </svg>
       </div>
-      <p class="mb-2 text-center text-lg">
-        {{ 'FAVORITES.EMPTY.TITLE' | translate }}
-      </p>
-      <p class="mb-4 text-center text-gray-600">
-        {{ 'FAVORITES.EMPTY.DESCRIPTION' | translate }}
-      </p>
+      <p class="mb-2 text-center text-lg">Du hast noch keine Favoriten gespeichert.</p>
+      <p class="mb-4 text-center text-gray-600">Füge Events zu deinen Favoriten hinzu, um sie hier zu sehen.</p>
       <button
         (click)="navigateToHome()"
         class="mt-4 rounded-md bg-[#3b4ea3] px-4 py-2 text-white transition-colors hover:bg-[#2c3a7a]"
       >
-        {{ 'FAVORITES.EMPTY.BUTTON' | translate }}
+        Zur Übersicht
       </button>
     </div>
   }
@@ -68,7 +60,7 @@
           <button
             (click)="removeFavourite($event, event)"
             class="absolute top-2 right-2 rounded-full bg-white p-1 text-yellow-500 shadow-md transition-colors hover:text-yellow-700"
-            [title]="'FAVORITES.REMOVE' | translate"
+            [title]="'Aus Favoriten entfernen'"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6">
               <path

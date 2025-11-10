@@ -2,7 +2,7 @@
 <div>
   <!-- Skip-Link für Screenreader -->
   <a href="#event-content" class="sr-only mt-2 focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2">
-    {{ 'event-detail.skip-to-content' | translate }}
+    Zum Veranstaltungsinhalt springen
   </a>
 
   @if (event) {
@@ -53,9 +53,7 @@
                 </div>
               </div>
               <div>
-                <h3>
-                  {{ 'event-detail.when' | translate }}
-                </h3>
+                <h3>Wann?</h3>
                 <p>
                   {{ event.date_start! | dateTimeRange: event.date_end }}
                 </p>
@@ -68,9 +66,7 @@
                 </div>
               </div>
               <div>
-                <h3>
-                  {{ 'event-detail.where' | translate }}
-                </h3>
+                <h3>Wo?</h3>
                 <p>{{ location?.name || 'Ort wird bekannt gegeben' }}</p>
               </div>
             </div>
@@ -81,14 +77,12 @@
                 </div>
               </div>
               <div>
-                <h3>
-                  {{ 'event-detail.costs' | translate }}
-                </h3>
+                <h3>Preis</h3>
                 <p>
                   @if (event.price !== undefined && +event.price > 0) {
                     {{ event.price }} €
                   } @else {
-                    {{ 'event-detail.free' | translate }}
+                    gratis
                   }
                 </p>
               </div>
@@ -101,9 +95,7 @@
                   </div>
                 </div>
                 <div>
-                  <h3>
-                    {{ 'event-detail.organizer' | translate }}
-                  </h3>
+                  <h3>Veranstalter</h3>
                   <p>{{ organizer.name }}</p>
                 </div>
               </div>
@@ -114,9 +106,7 @@
 
       @if (event.description) {
         <section class="desc mt-10 rounded-2xl" aria-labelledby="description-heading">
-          <h2 id="description-heading">
-            {{ 'event-detail.description' | translate }}
-          </h2>
+          <h2 id="description-heading">Beschreibung</h2>
           <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
           <p [innerHTML]="event.description">
             {{ event.description }}
@@ -125,19 +115,17 @@
       }
       @if (location?.geo_point) {
         <section class="map mt-10" aria-labelledby="directions-heading">
-          <h2 id="directions-heading" class="text-2xl font-bold text-blue-900">
-            {{ 'event-detail.arrival' | translate }}
-          </h2>
+          <h2 id="directions-heading" class="text-2xl font-bold text-blue-900">Anreise</h2>
           <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
           <div class="h-96 w-full overflow-hidden rounded-2xl shadow-2xl">
             <app-map [coordinates]="[location!.geo_point!.coordinates[0], location!.geo_point!.coordinates[1]]"></app-map>
             <div class="sr-only">
               <p>
-                {{ 'event-detail.eventlocation' | translate }}:
+                Veranstaltungsort:
                 {{ location?.name }}
               </p>
               <p>
-                {{ 'event-detail.adress' | translate }}: {{ location?.street }},
+                Adresse: {{ location?.street }},
                 {{ location?.zip_code }}
                 {{ location?.city }}
               </p>
@@ -152,9 +140,7 @@
       }
       @if (organizer) {
         <section class="contact mt-10 mb-18 rounded-2xl bg-gray-100 shadow-2xl" [attr.aria-labelledby]="'contact-heading'">
-          <h2 id="contact-heading" class="ml-10">
-            {{ 'event-detail.organizer' | translate }}
-          </h2>
+          <h2 id="contact-heading" class="ml-10">Veranstalter</h2>
           <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
           <div class="flex justify-between">
             <div class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl">
@@ -165,9 +151,7 @@
                   </div>
                 </div>
                 <div>
-                  <h3>
-                    {{ 'event-detail.name' | translate }}
-                  </h3>
+                  <h3>Name</h3>
                   <p>{{ organizer.name }}</p>
                 </div>
               </div>
@@ -179,9 +163,7 @@
                     </div>
                   </div>
                   <div>
-                    <h3>
-                      {{ 'event-detail.email' | translate }}
-                    </h3>
+                    <h3>E-Mail</h3>
                     <p>
                       <a
                         href="mailto:{{ organizer.email }}"
@@ -201,9 +183,7 @@
                     </div>
                   </div>
                   <div>
-                    <h3>
-                      {{ 'event-detail.phone' | translate }}
-                    </h3>
+                    <h3>Telefon</h3>
                     <p>
                       <a
                         href="tel:{{ organizer.phonenumber }}"
@@ -225,7 +205,7 @@
   <div class="edit mb-20 flex items-center justify-center">
     @if (isLoggedIn) {
       <button class="hover*:bg-blue-600 rounded-full bg-blue-500 px-4 py-2 font-bold text-white" (click)="editEvent()">
-        {{ 'event-detail.edit' | translate }}
+        Bearbeiten
       </button>
     }
   </div>

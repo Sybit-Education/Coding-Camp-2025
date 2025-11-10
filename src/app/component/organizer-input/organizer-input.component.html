@@ -6,9 +6,7 @@
     (ngModelChange)="setOrganizer($event)"
     class="p-[0.75rem 1rem] w-full cursor-pointer"
   >
-    <option [ngValue]="null">
-      {{ 'create-event.organizer' | translate }}
-    </option>
+    <option [ngValue]="null">Veranstalter wählen...</option>
     @for (organizer of organizers; track organizer) {
       <option [ngValue]="organizer">
         {{ organizer.name }}
@@ -20,7 +18,7 @@
     class="mt-2 w-full cursor-pointer rounded-2xl bg-[var(--colors-light-blue)] p-2 text-white"
     (click)="showNewOrganizerForm()"
   >
-    {{ 'create-event.neworganizer' | translate }}
+    Neuen Veranstalter erstellen
   </button>
 </div>
 
@@ -28,7 +26,7 @@
 @if (newOrganizer) {
   <div class="space-y-2 rounded-xl border-2 border-black p-2">
     <p>
-      <label for="organizername">{{ 'create-event.neworganizername' | translate }}</label>
+      <label for="organizername">Name</label>
       <input
         id="organizername"
         name="organizername"
@@ -39,11 +37,11 @@
       />
     </p>
     <p>
-      <label for="organizerphone">{{ 'create-event.neworganizerphone' | translate }}</label>
+      <label for="organizerphone">Telefonnummer</label>
       <input id="organizerphone" name="organizerphone" type="tel" [(ngModel)]="organizerphone" class="p-[0.75rem 1rem] w-full" />
     </p>
     <p>
-      <label for="organizermail">{{ 'create-event.neworganizermail' | translate }}</label>
+      <label for="organizermail">E-Mail</label>
       <input id="organizermail" name="organizermail" type="email" [(ngModel)]="organizermail" class="p-[0.75rem 1rem] w-full" />
     </p>
     <div class="mt-4 flex justify-end space-x-2">
@@ -52,7 +50,7 @@
         class="cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100"
         (click)="cancelNewOrganizer()"
       >
-        {{ 'create-event.cancel' | translate }}
+        Abbrechen
       </button>
       <button
         type="button"

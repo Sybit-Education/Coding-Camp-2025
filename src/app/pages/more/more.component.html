@@ -1,14 +1,14 @@
 <div>
   <!-- Skip-Link für Screenreader -->
   <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2">
-    {{ 'i18y.to-main-content' | translate }}
+    Zum Hauptinhalt springen
   </a>
 
   <h1 id="main-content">
-    {{ 'bottom-nav.more' | translate }}
+    Mehr
   </h1>
 
-  <nav class="grid gap-4" [attr.aria-label]="'MORE.ARIA-LABLE' | translate" role="navigation">
+  <nav class="grid gap-4" [attr.aria-label]="'Weitere Optionen'" role="navigation">
     @for (item of menuItems; track item; let i = $index) {
       <ng-template #linkContent>
         <div class="mr-4 flex h-full items-center justify-center text-[#3b4ea3]" aria-hidden="true">
@@ -16,7 +16,7 @@
         </div>
         <div>
           <h2 id="menu-item-{{ i }}">{{ item.title }}</h2>
-          <p class="mt-1 text-gray-600">{{ item.description | translate }}</p>
+          <p class="mt-1 text-gray-600">{{ item.description }}</p>
         </div>
         <div class="ml-auto text-[#3b4ea3]" aria-hidden="true">
           <app-icon name="chevron-right" class="size-5" aria-hidden="true"></app-icon>
