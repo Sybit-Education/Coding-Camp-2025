@@ -94,6 +94,9 @@ export class KategorieComponent implements OnInit {
     if (this.searchDebounce) {
       window.clearTimeout(this.searchDebounce)
     }
+    // Spinner sofort anzeigen und Change Detection triggern
+    this.searching = true
+    this.markForCheck()
     this.searchDebounce = window.setTimeout(() => {
       void this.performSearch(this.searchTerm)
     }, 300)
@@ -101,6 +104,8 @@ export class KategorieComponent implements OnInit {
 
   private async performSearch(q: string) {
     this.searching = true
+    // Sofort rendern, damit der Spinner zuverlässig sichtbar ist
+    this.markForCheck()
     try {
       // Basisliste ggf. nach Kategorie einschränken
       const categoryId = this.id
