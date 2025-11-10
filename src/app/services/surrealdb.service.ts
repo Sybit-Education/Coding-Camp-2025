@@ -140,8 +140,8 @@ export class SurrealdbService extends Surreal {
     console.debug('[SurrealdbService] Running FTS', { q, ftsSql })
 
     try {
-      const res = await super.query(ftsSql, { q })
-      const rows: AppEvent[] = Array.isArray(res) && res[0]?.result ? (res[0].result as AppEvent[]) : []
+      const res = (await super.query(ftsSql, { q })) as any[]
+      const rows: AppEvent[] = Array.isArray(res) && res[0] && Array.isArray((res[0] as any).result) ? ((res[0] as any).result as AppEvent[]) : []
 
       console.debug('[SurrealdbService] FTS result count', { count: rows.length, ms: Math.round(performance.now() - t0) })
 
