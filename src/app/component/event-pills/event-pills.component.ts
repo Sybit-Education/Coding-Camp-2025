@@ -1,11 +1,9 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, Component, inject, Inject, Input, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, Input, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { TopicService } from '../../services/topic.service'
 import { EventService } from '../../services/event.service'
 import type { Event } from '../../models/event.interface'
-import type { Topic } from '@app/models/topic.interface'
-import type { TypeDB } from '@app/models/typeDB.interface'
 
 
 interface Pill {
@@ -13,7 +11,6 @@ interface Pill {
   color?: string | null
   textColor: string
   slug: string
-  href: string
 }
 
 /**
@@ -28,7 +25,7 @@ interface Pill {
   templateUrl: './event-pills.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EventPillsComponent  {
+export class EventPillsComponent implements OnChanges {
   @Input() event: Event | null = null
 
   /**
@@ -39,53 +36,80 @@ export class EventPillsComponent  {
   private readonly eventService = inject(EventService)
   private readonly topicService = inject(TopicService)
 
-  async pills(): Promise<Pill[]> {
-    if (!this.event) return []
+  pills: Pill[] = []
 
-    console.log('Generiere Pills für Event:', this.event)
+  private readonly cdr = inject(ChangeDetectorRef)
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['event']) {
+      this.buildPills()
+    }
+  }
+
+  private async buildPills(): Promise<void> {
+    if (!this.event) {
+      this.pills = []
+      this.cdr.markForCheck()
+      return
+    }
+
     const result: Pill[] = []
 
     const allEventType = await this.eventService.getAllEventTypes()
-    console.log('Alle EventTypes:', allEventType)
-
-    const eventType = allEventType.find((et) => et.id === this.event?.event_type) as TypeDB | undefined
+    const eventType = allEventType.find((et) => et.id === this.event?.event_type)
     if (eventType?.name) {
-      const color = eventType.color ?? null
-      const label = eventType.name
-      const slug = ''
+      const color = (eventType as any).color ?? null
+      const label = eventType.name as string
+      const slug = this.slugify(label)
       result.push({
         label,
         color,
         textColor: this.computeTextColor(color),
         slug,
-        href: `${this.categoryRouteBase}/${slug}`,
       })
     }
-    console.log('Pills nach EventType:', result)
 
-    
     const allTopics = await this.topicService.getAllTopics()
-    console.log('Alle Topics:', allTopics)
     for (const t of this.event?.topic || []) {
       const topic = allTopics.find((top) => top.id === t)
       if (topic?.name) {
         const color = topic.color ?? null
         const label = topic.name
-        const slug = ''
+        const slug = this.slugify(label)
         result.push({
           label,
           color,
           textColor: this.computeTextColor(color),
           slug,
-          href: `${this.categoryRouteBase}/${slug}`,
         })
-        
       }
     }
-    console.log('Pills nach Topics:', result)
 
-    return result
-  }    
+    this.pills = result
+    this.cdr.markForCheck()
+  }
+
+  private slugify(name: string): string {
+    const map: Record<string, string> = {
+      ä: 'ae',
+      ö: 'oe',
+      ü: 'ue',
+      Ä: 'ae',
+      Ö: 'oe',
+      Ü: 'ue',
+      ß: 'ss',
+    }
+    const replaced = name
+      .split('')
+      .map((c) => map[c] ?? c)
+      .join('')
+    return replaced
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+  }
     
 
   private computeTextColor(bg?: string | null): string {

@@ -3,7 +3,8 @@
     <a
       role="listitem"
       class="h-8 w-12 inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium transition-colors hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c70d56] focus-visible:ring-offset-2"
-      [routerLink]="pill.href"
+      [routerLink]="categoryRouteBase"
+      [queryParams]="{ name: pill.slug }"
       [title]="pill.label"
       [attr.aria-label]="'Kategorie: ' + pill.label"
       [ngStyle]="{
