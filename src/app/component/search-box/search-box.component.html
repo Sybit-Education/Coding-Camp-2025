@@ -1,10 +1,10 @@
-<div class="my-4">
-  <label class="sr-only" for="fts-input">{{ 'SEARCH.ARIA_LABEL' | translate }}</label>
+<div class="my-4 relative">
+  <label class="sr-only" for="fts-input">Suche</label>
   <input
     id="fts-input"
     type="search"
     class="w-full rounded-xl border border-gray-300 px-3 py-2 shadow-sm focus:border-[#c70d56] focus:outline-none"
-    [attr.placeholder]="'SEARCH.PLACEHOLDER' | translate"
+    placeholder="Suchen ..."
     (input)="onInput($event)"
     (search)="onInput($event)"
   />

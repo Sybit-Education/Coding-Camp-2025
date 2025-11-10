@@ -32,14 +32,6 @@ export interface Event extends Record<string, unknown> {
   media: RecordId<'media'>[]
 }
 
-export interface EventSearchResult extends Event {
-  relevance: number
-  name_hl?: string
-  description_hl?: string
-  organizer_hl?: string
-  location_name_hl?: string
-  city_hl?: string
-}
 export interface GeoPoint {
   type: 'Point'
   longLat: [number, number] // [longitude, latitude]

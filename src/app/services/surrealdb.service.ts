@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import Surreal, { RecordId, StringRecordId, Token } from 'surrealdb'
 import { environment } from '../../environments/environment'
-import { Event as AppEvent, EventSearchResult } from '../models/event.interface'
+import { Event as AppEvent } from '../models/event.interface'
 
 @Injectable({
   providedIn: 'root',
@@ -115,14 +115,6 @@ export class SurrealdbService extends Surreal {
     // Gewichtete FTS-Abfrage mit Highlight-Feldern (name/description/organizer/location/city)
     const ftsSql = `SELECT 
         *,
-        search::highlight('<span class="highlight">', '</span>', 0) AS name_hl,
-        search::highlight('<span class="highlight">', '</span>', 1) AS description_hl,
-        search::highlight('<span class="highlight">', '</span>', 2) AS restrictionhl,
-        search::highlight('<span class="highlight">', '</span>', 3) AS organizer_hl,
-        search::highlight('<span class="highlight">', '</span>', 4) AS location_name_hl,
-        search::highlight('<span class="highlight">', '</span>', 5) AS city_hl,
-        search::highlight('<span class="highlight">', '</span>', 6) AS event_type_hl,
-        search::highlight('<span class="highlight">', '</span>', 7) AS topic_hl,
         (search::score(0)*3     -- name
           + search::score(1)*2  -- description
           + search::score(2)    -- restriction
@@ -148,9 +140,15 @@ export class SurrealdbService extends Surreal {
     const t0 = performance.now()
 
     try {
-      const result = (await super.query(ftsSql, { 'q': q }))[0] as EventSearchResult[] // Index 0, da nur eine, erste Query im Batch
+      const result = (await super.query(ftsSql, { 'q': q }))[0] as AppEvent[] // Index 0, da nur eine, erste Query im Batch
 
       if (result.length > 0) {
+        console.debug('[SurrealdbService] FTS query successful', {
+          query: ftsSql,
+          params: { q },
+          duration: performance.now() - t0,
+          result: result,
+        })
         return result
       }
     } catch (err) {
