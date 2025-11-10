@@ -140,16 +140,18 @@ export class SurrealdbService extends Surreal {
     console.debug('[SurrealdbService] Running FTS', { q, ftsSql })
 
     try {
-      const results = await super.query(ftsSql, { q })
-      console.debug('[SurrealdbService] FTS result count', { count: results.length, ms: Math.round(performance.now() - t0) })
+      const res = await super.query(ftsSql, { q })
+      const rows: AppEvent[] = Array.isArray(res) && res[0]?.result ? (res[0].result as AppEvent[]) : []
 
-      if (results.length > 0) {
+      console.debug('[SurrealdbService] FTS result count', { count: rows.length, ms: Math.round(performance.now() - t0) })
+
+      if (rows.length > 0) {
         // Logge ein paar Titel zur Verifikation
         console.debug(
           '[SurrealdbService] FTS sample',
-          results.slice(0, 3).map((e: any) => e?.name ?? e?.id),
+          rows.slice(0, 3).map((e: any) => e?.name ?? e?.id),
         )
-        return results as AppEvent[]
+        return rows
       }
     } catch (err) {
       console.warn('[SurrealdbService] FTS query failed, will fallback', err)
