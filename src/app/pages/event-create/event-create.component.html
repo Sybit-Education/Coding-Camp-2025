@@ -8,7 +8,7 @@
   <form class="rounded-2xl bg-white p-6 shadow-2xl">
     <!-- Event Name -->
     <div>
-      <label for="eventName" class="required">{{ 'create-event.eventname' | translate }}</label>
+      <label for="eventName" class="required">Name</label>
       <input
         #eventNameInput
         id="eventName"
@@ -20,9 +20,7 @@
         required="true"
       />
       @if (this.errorName) {
-        <p class="error mt-2 text-sm">
-          {{ 'create-event.error.name' | translate }}
-        </p>
+        <p class="error mt-2 text-sm">Bitte geben Sie einen Eventnamen ein.</p>
       }
     </div>
 
@@ -30,10 +28,10 @@
     <div class="flex grid flex-col gap-[3rem] sm:grid-cols-[1fr] md:w-full md:grid-cols-[1fr_1fr]">
       <div class="grid grid-cols-2 gap-[1rem]">
         <div class="my-4">
-          <label for="date" class="required">{{ 'create-event.startdate' | translate }}</label>
+          <label for="startDate" class="required">Startdatum</label>
           <input
             #dateStartInput
-            id="date"
+            id="startDate"
             type="date"
             [(ngModel)]="dateStart"
             name="dateStart"
@@ -42,24 +40,20 @@
             required="true"
           />
           @if (this.errorDate) {
-            <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-              {{ 'create-event.error.date' | translate }}
-            </p>
+            <p class="mt-2 text-sm text-red-600 dark:text-red-500">Bitte geben Sie ein Startdatum ein.</p>
           }
           <!-- Zeitspanne -->
           <div class="mx-2 my-2">
             <input id="timePeriode" name="timePeriode" type="checkbox" [(ngModel)]="timePeriode" class="cursor-pointer" />
-            <label for="timePeriode" class="ms-2 w-full cursor-pointer">
-              {{ 'create-event.timespan' | translate }}
-            </label>
+            <label for="timePeriode" class="ms-2 w-full cursor-pointer"> Zeitspanne </label>
           </div>
         </div>
         <!-- Startzeit -->
         <div class="my-4">
-          <label for="time" class="required">{{ 'create-event.starttime' | translate }}</label>
+          <label for="startTime" class="required">Startzeit</label>
           <input
             #timeStartInput
-            id="time"
+            id="startTime"
             type="time"
             [(ngModel)]="timeStart"
             name="timeStart"
@@ -68,9 +62,7 @@
             required="true"
           />
           @if (this.errorTime) {
-            <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-              {{ 'create-event.error.time' | translate }}
-            </p>
+            <p class="mt-2 text-sm text-red-600 dark:text-red-500">Bitte geben Sie eine Startzeit ein.</p>
           }
         </div>
       </div>
@@ -78,12 +70,12 @@
       @if (timePeriode) {
         <div class="grid grid-cols-2 gap-[1rem]">
           <div class="my-4">
-            <label for="date">{{ 'create-event.enddate' | translate }}</label>
-            <input id="date" type="date" [(ngModel)]="dateEnd" name="dateEnd" class="w-full" />
+            <label for="endDate">Enddatum</label>
+            <input id="endDate" type="date" [(ngModel)]="dateEnd" name="dateEnd" class="w-full" />
           </div>
           <div class="my-4">
-            <label for="time">{{ 'create-event.endtime' | translate }}</label>
-            <input id="time" type="time" [(ngModel)]="timeEnd" name="timeEnd" class="w-full" />
+            <label for="endTime">Endzeit</label>
+            <input id="endTime" type="time" [(ngModel)]="timeEnd" name="timeEnd" class="w-full" />
           </div>
         </div>
       }
@@ -107,7 +99,7 @@
 
     <!-- Beschreibung -->
     <div class="my-4">
-      <label for="description">{{ 'create-event.description' | translate }}</label>
+      <label for="description">Eventbeschreibung</label>
       <quill-editor
         name="description"
         [maxLength]="5000"
@@ -130,9 +122,7 @@
     <div class="flex grid flex-col gap-[3rem] sm:grid-cols-[1fr] md:w-full md:grid-cols-[1fr_1fr]">
       <div class="flex flex-col">
         <!-- Themen -->
-        <h3>
-          {{ 'create-event.topics' | translate }}
-        </h3>
+        <h3>Themen des Events</h3>
         <!-- Event-Typ -->
         <div>
           <select
@@ -142,9 +132,7 @@
             (ngModelChange)="setSelectedEventType($event)"
             class="border-Gray-600 w-full cursor-pointer rounded-[6px] border-2"
           >
-            <option [ngValue]="null">
-              {{ 'create-event.topics' | translate }}
-            </option>
+            <option [ngValue]="null">Themen des Events</option>
             @for (eventType of eventTypes; track eventType) {
               <option [ngValue]="eventType">
                 {{ eventType.name }}
@@ -178,12 +166,12 @@
       <div>
         <!-- Mehr Infos -->
         <div class="my-4 mt-6">
-          <label for="moreInfoLink">{{ 'create-event.moreinfo' | translate }}</label>
+          <label for="moreInfoLink">Mehr Infos</label>
           <input
             id="moreInfoLink"
             name="moreInfoLink"
             type="url"
-            placeholder="{{ 'create-event.moreinfoexample' | translate }}"
+            placeholder="https://..."
             [(ngModel)]="moreInfoLink"
             class="w-full"
           />
@@ -191,19 +179,19 @@
 
         <!-- Einschränkungen -->
         <div class="my-4">
-          <label for="restriction">{{ 'create-event.restrictions' | translate }}</label>
+          <label for="restriction">Einschränkungen</label>
           <input
             id="restriction"
             name="restriction"
             type="text"
             [(ngModel)]="restriction"
             class="w-full"
-            placeholder="{{ 'create-event.restrictionsexample' | translate }}"
+            placeholder="z.B. Treppen"
           />
         </div>
         <!-- Preis -->
         <div class="my-4">
-          <label for="price">{{ 'create-event.price' | translate }}</label>
+          <label for="price">Preis (€)</label>
           <input
             id="price"
             name="price"
@@ -225,9 +213,7 @@
       <!-- Button: Event erstellen -->
       @if (this.errorDate || this.errorName || this.errorTime) {
         <div>
-          <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-            {{ 'create-event.error.general' | translate }}
-          </p>
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">Bitte füllen Sie alle Pflichtfelder aus.</p>
         </div>
       }
     </div>
@@ -237,7 +223,7 @@
         class="w-full cursor-pointer rounded-2xl bg-blue-600 p-5 text-white hover:bg-blue-700"
         (click)="saveEvent()"
       >
-        {{ (eventId ? 'create-event.updateevent' : 'create-event.createevent') | translate }}
+        {{ eventId ? 'Aktualisieren' : 'Erstellen' }}
       </button>
 
       <button
@@ -245,7 +231,7 @@
         class="w-full cursor-pointer rounded-2xl bg-gray-300 p-5 text-gray-800 hover:bg-gray-400"
         (click)="cancelEvent()"
       >
-        {{ 'create-event.cancel' | translate }}
+        Abbrechen
       </button>
 
       <!-- Löschen-Button (nur bei bestehenden Events anzeigen) -->
@@ -255,7 +241,7 @@
           class="w-full cursor-pointer rounded-2xl bg-red-500 p-5 text-white hover:bg-red-600"
           (click)="deleteEvent()"
         >
-          {{ 'create-event.delete' | translate }}
+          Löschen ...
         </button>
       }
     </div>

@@ -54,25 +54,25 @@ export class MoreComponent {
     {
       title: 'Das Team',
       route: '/team',
-      description: 'MORE.TEAM.DESCRIPTION',
+      description: 'Lernen Sie das Team hinter der 1200-Jahre-Radolfzell App kennen.',
       icon: 'users',
     },
     {
       title: 'Impressum',
       route: 'https://www.radolfzell.de/impressum',
-      description: 'MORE.IMPRINT.DESCRIPTION',
+      description: 'Rechtliche Informationen und Kontaktdaten.',
       icon: 'info-circle',
     },
     {
       title: 'Datenschutz',
       route: 'https://www.radolfzell.de/datenschutz',
-      description: 'MORE.PRIVACY.DESCRIPTION',
+      description: 'Informationen zum Datenschutz und zur Datenverarbeitung.',
       icon: 'shield-check',
     },
     {
       title: 'Admin',
       route: '/login',
-      description: 'MORE.LOGIN.DESCRIPTION',
+      description: 'Interne Datenverwaltung der Einträge.',
       icon: 'key',
     },
   ]

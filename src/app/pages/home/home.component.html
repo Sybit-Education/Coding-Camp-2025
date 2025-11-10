@@ -1,10 +1,8 @@
 <div class="relative grid grid-cols-1 justify-center">
-  <h1 class="sr-only">
-    {{ 'home.title' | translate }}
-  </h1>
+  <h1 class="sr-only">1200 Jahre Radolfzell</h1>
   <!-- Skip-Link für Screenreader -->
   <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2"
-    >{{ 'home.main-content' | translate }}
+    >Zum Hauptinhalt springen
   </a>
 
   <!-- Debug-Info -->
@@ -14,10 +12,8 @@
   }
 
   <!-- Aktuelle Events -->
-  <section [attr.aria-labelledby]="'home.tags.aria-lable-event-heading' | translate">
-    <h2 [id]="'home.tags.aria-lable-event-heading' | translate">
-      {{ 'home.current' | translate }}
-    </h2>
+  <section [attr.aria-labelledby]="'events-heading'">
+    <h2 [id]="'events-heading'">Aktuelle Veranstaltungen</h2>
 
     <!-- Horizontaler Scroll-Container für Events -->
     @if ((sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL) {
@@ -60,9 +56,9 @@
   </div>
 
   <!-- Kategorien -->
-  <section [attr.aria-labelledby]="'home.tags.aria-lable-catagories-heading' | translate" class="mt-12 mb-12">
-    <h2 [id]="'home.tags.aria-lable-catagories-heading' | translate">
-      {{ 'home.categories' | translate }}
+  <section [attr.aria-labelledby]="'categories-heading'" class="mt-12 mb-12">
+    <h2 [id]="'categories-heading'">
+      Themen Kategorien
     </h2>
 
     <div class="mr-2 ml-2 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">

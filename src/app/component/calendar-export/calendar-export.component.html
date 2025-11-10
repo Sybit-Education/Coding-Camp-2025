@@ -4,7 +4,7 @@
     type="button"
     (click)="toggleCalendarOptions()"
     class="action-button"
-    aria-label="{{ 'SHARE.ADD_TO_CALENDAR' | translate }}"
+    aria-label="Zum Kalender"
     aria-expanded="{{ showCalendarOptions() }}"
     aria-haspopup="true"
   >
@@ -24,28 +24,28 @@
           (click)="exportToICalendar()"
           role="menuitem"
         >
-          {{ 'SHARE.DOWNLOAD_ICAL' | translate }}
+          Als iCal-Datei (.ics)
         </button>
         <button
           class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           (click)="openInGoogleCalendar()"
           role="menuitem"
         >
-          {{ 'SHARE.GOOGLE_CALENDAR' | translate }}
+          Google Kalender
         </button>
         <button
           class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           (click)="openInOutlookCalendar()"
           role="menuitem"
         >
-          {{ 'SHARE.OUTLOOK_CALENDAR' | translate }}
+          Outlook Kalender
         </button>
         <button
           class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           (click)="openInAppleCalendar()"
           role="menuitem"
         >
-          {{ 'SHARE.APPLE_CALENDAR' | translate }}
+          Apple Kalender
         </button>
       </div>
     </div>

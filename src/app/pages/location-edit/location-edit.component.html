@@ -8,7 +8,7 @@
   @if (isLoading()) {
     <div class="flex items-center justify-center py-12">
       <div class="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"></div>
-      <span class="ml-3">{{ 'COMMON.LOADING' | translate }}</span>
+      <span class="ml-3">Laden ...</span>
     </div>
   } @else {
     <div class="rounded-lg bg-white p-6 shadow-2xl">
@@ -23,7 +23,7 @@
           <!-- Name -->
           <div class="col-span-2">
             <label for="name" class="mb-2 block font-medium text-gray-700">
-              {{ 'ADMIN.LOCATIONS.FORM.NAME' | translate }}
+              Name
               <span class="text-red-500">*</span>
             </label>
             <input
@@ -35,7 +35,7 @@
             />
             @if (locationForm.get('name')?.invalid && locationForm.get('name')?.touched) {
               <p class="mt-1 text-sm text-red-500">
-                {{ 'ADMIN.LOCATIONS.FORM.NAME_REQUIRED' | translate }}
+                Bitte geben Sie einen Namen ein.
               </p>
             }
           </div>
@@ -43,7 +43,7 @@
           <!-- Straße -->
           <div>
             <label for="street" class="mb-2 block font-medium text-gray-700">
-              {{ 'ADMIN.LOCATIONS.FORM.STREET' | translate }}
+              Straße
             </label>
             <input
               type="text"
@@ -56,7 +56,7 @@
           <!-- PLZ -->
           <div>
             <label for="zip_code" class="mb-2 block font-medium text-gray-700">
-              {{ 'ADMIN.LOCATIONS.FORM.ZIP' | translate }}
+              PLZ
             </label>
             <input
               type="text"
@@ -69,7 +69,7 @@
           <!-- Stadt -->
           <div>
             <label for="city" class="mb-2 block font-medium text-gray-700">
-              {{ 'ADMIN.LOCATIONS.FORM.CITY' | translate }}
+              Stadt
             </label>
             <input
               type="text"
@@ -129,7 +129,7 @@
               (click)="cancel()"
               class="mr-4 rounded-lg border border-gray-300 bg-white px-6 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-100 focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:outline-none"
             >
-              {{ 'COMMON.CANCEL' | translate }}
+              Abbrechen
             </button>
             <button
               type="submit"
@@ -140,7 +140,7 @@
                 <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
                 <span class="ml-2">Speichern...</span>
               } @else {
-                {{ 'COMMON.SAVE' | translate }}
+                {{isEditMode() ? 'Ändern...' : 'Speichern...'}}
               }
             </button>
           </div>
@@ -151,7 +151,7 @@
               (click)="deleteLocation()"
               class="rounded-lg bg-red-600 px-6 py-2 font-medium text-white transition-colors hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none"
             >
-              {{ 'ADMIN.LOCATIONS.DELETE' | translate }}
+              Löschen
             </button>
           }
         </div>

@@ -3,7 +3,7 @@
     <button
       (click)="toggleFavorite($event)"
       class="action-button"
-      [title]="(isFavorite ? 'FAVORITES.REMOVE' : 'FAVORITES.ADD') | translate"
+      [title]="isFavorite ? 'Aus Favoriten entfernen' : 'Zu Favoriten hinzufügen'"
     >
       <!-- Solid star when favorited -->
       @if (isFavorite) {
