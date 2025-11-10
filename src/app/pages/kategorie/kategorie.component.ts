@@ -63,8 +63,6 @@ export class KategorieComponent implements OnInit {
   }
 
   async initilizeData() {
-    const t0 = performance.now()
-    console.debug('[KategorieComponent] initializeData:start', { name: this.name })
     this.loading = true
     try {
       // Lade Topics und Events parallel
@@ -81,9 +79,6 @@ export class KategorieComponent implements OnInit {
       this.allEvents = allEvents
 
       await this.performSearch(this.searchTerm)
-
-      const t1 = performance.now()
-      console.debug('[KategorieComponent] initializeData:done', { returned: this.events.length, ms: Math.round(t1 - t0) })
     } catch (error) {
       console.error('Fehler beim Laden der Events:', error)
     } finally {
@@ -103,7 +98,6 @@ export class KategorieComponent implements OnInit {
   }
 
   private async performSearch(q: string) {
-    const t0 = performance.now()
     this.loading = true
     try {
       // Basisliste ggf. nach Kategorie einschränken
@@ -159,7 +153,6 @@ export class KategorieComponent implements OnInit {
       })
 
       this.events = mapped
-      console.debug('[KategorieComponent] performSearch:done', { q, returned: this.events.length, ms: Math.round(performance.now() - t0) })
     } catch (error) {
       console.error('[KategorieComponent] performSearch:error', error)
       this.events = []

@@ -224,5 +224,9 @@
       }
     },
     "TITLE": "Administration"
+  },
+  "SEARCH": {
+    "LABEL": "Suche",
+    "PLACEHOLDER": "Suchen ..."
   }
 }

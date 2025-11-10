@@ -103,7 +103,6 @@ export class SurrealdbService extends Surreal {
   }
 
   async fulltextSearchEvents(query: string): Promise<AppEvent[]> {
-    console.debug('[SurrealdbService] fulltextSearchEvents called', { query })
     await this.initialize()
 
     const q = (query ?? '').trim()
@@ -137,18 +136,10 @@ export class SurrealdbService extends Surreal {
       ORDER BY relevance DESC
       LIMIT 30;`
 
-    const t0 = performance.now()
-
     try {
       const result = (await super.query(ftsSql, { 'q': q }))[0] as AppEvent[] // Index 0, da nur eine, erste Query im Batch
 
       if (result.length > 0) {
-        console.debug('[SurrealdbService] FTS query successful', {
-          query: ftsSql,
-          params: { q },
-          duration: performance.now() - t0,
-          result: result,
-        })
         return result
       }
     } catch (err) {

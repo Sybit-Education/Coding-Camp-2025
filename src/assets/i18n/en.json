@@ -210,5 +210,9 @@
       "CREATE_NEW": "New Location ..."
     },
     "TITLE": "Administration"
+  },
+  "SEARCH": {
+    "LABEL": "Search",
+    "PLACEHOLDER": "Search ..."
   }
 }

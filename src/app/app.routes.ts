@@ -100,11 +100,6 @@ export const routes: Routes = [
     title: 'Veranstaltung erstellen',
   },
   {
-    path: 'search',
-    loadComponent: () => import('./pages/search/search.component').then((m) => m.SearchComponent),
-    title: 'Suche',
-  },
-  {
     path: '**',
     redirectTo: '',
   },
