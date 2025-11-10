@@ -1,5 +1,11 @@
-<div class="flex flex-col items-center justify-center rounded-2xl bg-[var(--colors-light-blue)] p-5">
-  <form class="rounded-2xl bg-white p-6">
+<app-go-back-button class="mb-4 flex px-6"></app-go-back-button>
+<div class="flex px-6">
+  <span class="ml-2 text-left text-2xl font-bold text-gray-800">
+    {{ isEditMode() ? 'Event bearbeiten' : 'Event erstellen' }}
+  </span>
+</div>
+<div class="flex flex-col items-center justify-center rounded-2xl p-5">
+  <form class="rounded-2xl bg-white p-6 shadow-2xl">
     <!-- Event Name -->
     <div>
       <label for="eventName" class="required">{{ 'create-event.eventname' | translate }}</label>
@@ -73,11 +79,11 @@
         <div class="grid grid-cols-2 gap-[1rem]">
           <div class="my-4">
             <label for="date">{{ 'create-event.enddate' | translate }}</label>
-            <input id="date" type="date" [(ngModel)]="dateEnd" name="dateStart" class="w-full" />
+            <input id="date" type="date" [(ngModel)]="dateEnd" name="dateEnd" class="w-full" />
           </div>
           <div class="my-4">
             <label for="time">{{ 'create-event.endtime' | translate }}</label>
-            <input id="time" type="time" [(ngModel)]="timeEnd" name="timeStart" class="w-full" />
+            <input id="time" type="time" [(ngModel)]="timeEnd" name="timeEnd" class="w-full" />
           </div>
         </div>
       }

@@ -1,3 +1,4 @@
+<app-go-back-button> </app-go-back-button>
 <article>
   <h1>
     {{ this.name }}
@@ -19,7 +20,7 @@
     </div>
   }
 
-  <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+  <div class="mr-2 ml-2 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
     @for (event of events; track $index) {
       <div class="relative">
         @if (event.isPast) {

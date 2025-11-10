@@ -17,7 +17,7 @@
   </select>
   <button
     type="button"
-    class="mt-2 w-full rounded-2xl bg-[var(--colors-light-blue)] p-2 text-white"
+    class="mt-2 w-full cursor-pointer rounded-2xl bg-[var(--colors-light-blue)] p-2 text-white"
     (click)="showNewLocationForm()"
   >
     {{ 'create-event.newlocation' | translate }}
@@ -48,28 +48,50 @@
     <div class="grid grid-cols-2 gap-[1rem]">
       <div>
         <label for="postalCode">{{ 'create-event.newlocationplz' | translate }}</label>
-        <input id="postalCode" name="plz" type="number" [(ngModel)]="plz" class="p-[0.75rem 1rem] w-full" />
+        <input
+          id="postalCode"
+          name="plz"
+          type="number"
+          [(ngModel)]="plz"
+          placeholder="Postleitzahl"
+          class="p-[0.75rem 1rem] w-full"
+        />
       </div>
       <div>
         <label for="city">{{ 'create-event.newlocationcity' | translate }}</label>
-        <input id="city" name="city" type="text" [(ngModel)]="city" required class="p-[0.75rem 1rem] w-full" />
+        <input
+          id="city"
+          name="city"
+          type="text"
+          [(ngModel)]="city"
+          required
+          placeholder="Stadt- oder Ortsname"
+          class="p-[0.75rem 1rem] w-full"
+        />
       </div>
     </div>
-    <app-map [addLocation]="true" (locationSelected)="onLocationSelected($event)" class="w-full"></app-map>
+    <div class="h-96 w-full overflow-hidden rounded-lg border border-gray-300" style="position: relative">
+      <app-map
+        id="map"
+        [addLocation]="true"
+        (locationSelected)="onLocationSelected($event)"
+        class="absolute top-0 left-0 h-full w-full"
+      ></app-map>
+    </div>
     <div class="mt-4 flex justify-end space-x-2">
       <button
         type="button"
-        class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100"
+        class="cursor-pointer rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100"
         (click)="cancelNewLocation()"
       >
         {{ 'create-event.cancel' | translate }}
       </button>
       <button
         type="button"
-        class="rounded-lg bg-[var(--colors-light-blue)] px-4 py-2 text-sm font-medium text-white hover:bg-blue-800"
+        class="cursor-pointer rounded-lg bg-[var(--colors-light-blue)] px-4 py-2 text-sm font-medium text-white hover:bg-blue-800"
         (click)="saveLocation()"
       >
-        {{ 'create-event.save' | translate }}
+        Erstellen
       </button>
     </div>
   </div>
