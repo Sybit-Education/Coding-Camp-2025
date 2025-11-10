@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import Surreal, { RecordId, StringRecordId, Token } from 'surrealdb'
 import { environment } from '../../environments/environment'
-import { Event as AppEvent } from '../models/event.interface'
+import { Event as AppEvent, EventSearchResult } from '../models/event.interface'
 
 @Injectable({
   providedIn: 'root',
@@ -117,41 +117,41 @@ export class SurrealdbService extends Surreal {
         *,
         search::highlight('<span class="highlight">', '</span>', 0) AS name_hl,
         search::highlight('<span class="highlight">', '</span>', 1) AS description_hl,
-        search::highlight('<span class="highlight">', '</span>', 2) AS organizer_hl,
-        search::highlight('<span class="highlight">', '</span>', 3) AS location_name_hl,
-        search::highlight('<span class="highlight">', '</span>', 4) AS city_hl,
-        (search::score(0)*3
-         + search::score(1)*2
-         + search::score(2)*2
-         + search::score(3)*2
-         + search::score(4)
+        search::highlight('<span class="highlight">', '</span>', 2) AS restrictionhl,
+        search::highlight('<span class="highlight">', '</span>', 3) AS organizer_hl,
+        search::highlight('<span class="highlight">', '</span>', 4) AS location_name_hl,
+        search::highlight('<span class="highlight">', '</span>', 5) AS city_hl,
+        search::highlight('<span class="highlight">', '</span>', 6) AS event_type_hl,
+        search::highlight('<span class="highlight">', '</span>', 7) AS topic_hl,
+        (search::score(0)*3     -- name
+          + search::score(1)*2  -- description
+          + search::score(2)    -- restriction
+          + search::score(3)*2  -- organizer
+          + search::score(4)*2  -- location name
+          + search::score(5)    -- city
+          + search::score(6)    -- event type
+          + search::score(7)    -- topic
         ) AS relevance
       FROM event
       WHERE
-         name @0@ $q
-         OR description @1@ $q
-         OR organizer.name @2@ $q
-         OR location.name @3@ $q
-         OR location.city @4@ $q
+        name @0@ $q
+        OR description @1@ $q
+        OR restriction @2@ $q
+        OR organizer.name @3@ $q
+        OR location.name @4@ $q
+        OR location.city @5@ $q
+        OR event_type.name @6@ $q
+        OR topic.name @7@ $q
       ORDER BY relevance DESC
-      LIMIT 20;`
+      LIMIT 30;`
 
     const t0 = performance.now()
-    console.debug('[SurrealdbService] Running FTS', { q, ftsSql })
 
     try {
-      const res = (await super.query(ftsSql, { q })) as any[]
-      const rows: AppEvent[] = Array.isArray(res) && res[0] && Array.isArray((res[0] as any).result) ? ((res[0] as any).result as AppEvent[]) : []
+      const result = (await super.query(ftsSql, { 'q': q }))[0] as EventSearchResult[] // Index 0, da nur eine, erste Query im Batch
 
-      console.debug('[SurrealdbService] FTS result count', { count: rows.length, ms: Math.round(performance.now() - t0) })
-
-      if (rows.length > 0) {
-        // Logge ein paar Titel zur Verifikation
-        console.debug(
-          '[SurrealdbService] FTS sample',
-          rows.slice(0, 3).map((e: any) => e?.name ?? e?.id),
-        )
-        return rows
+      if (result.length > 0) {
+        return result
       }
     } catch (err) {
       console.warn('[SurrealdbService] FTS query failed, will fallback', err)
