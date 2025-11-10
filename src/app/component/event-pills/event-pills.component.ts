@@ -1,9 +1,12 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, Inject, Input, OnInit } from '@angular/core'
 import { RouterModule } from '@angular/router'
+import { TopicService } from '../../services/topic.service'
+import { EventService } from '../../services/event.service'
 import type { Event } from '../../models/event.interface'
+import type { Topic } from '@app/models/topic.interface'
+import type { TypeDB } from '@app/models/typeDB.interface'
 
-type MinimalCategory = { name: string; color?: string | null }
 
 interface Pill {
   label: string
@@ -25,7 +28,7 @@ interface Pill {
   templateUrl: './event-pills.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EventPillsComponent {
+export class EventPillsComponent  {
   @Input() event: Event | null = null
 
   /**
@@ -33,17 +36,23 @@ export class EventPillsComponent {
    * Ziel-Link wird als `${categoryRouteBase}/${slug}` erzeugt.
    */
   @Input() categoryRouteBase = '/kategorie'
+  private readonly eventService = inject(EventService)
+  private readonly topicService = inject(TopicService)
 
-  get pills(): Pill[] {
+  async pills(): Promise<Pill[]> {
     if (!this.event) return []
 
+    console.log('Generiere Pills für Event:', this.event)
     const result: Pill[] = []
 
-    const eventType = (this.event as unknown as { event_type?: MinimalCategory | null })?.event_type
+    const allEventType = await this.eventService.getAllEventTypes()
+    console.log('Alle EventTypes:', allEventType)
+
+    const eventType = allEventType.find((et) => et.id === this.event?.event_type) as TypeDB | undefined
     if (eventType?.name) {
       const color = eventType.color ?? null
       const label = eventType.name
-      const slug = this.slugify(label)
+      const slug = ''
       result.push({
         label,
         color,
@@ -52,46 +61,32 @@ export class EventPillsComponent {
         href: `${this.categoryRouteBase}/${slug}`,
       })
     }
+    console.log('Pills nach EventType:', result)
 
-    const topics = (this.event as unknown as { topic?: MinimalCategory[] | null })?.topic ?? []
-    for (const t of topics) {
-      if (!t?.name) continue
-      const color = t.color ?? null
-      const label = t.name
-      const slug = this.slugify(label)
-      result.push({
-        label,
-        color,
-        textColor: this.computeTextColor(color),
-        slug,
-        href: `${this.categoryRouteBase}/${slug}`,
-      })
+    
+    const allTopics = await this.topicService.getAllTopics()
+    console.log('Alle Topics:', allTopics)
+    for (const t of this.event?.topic || []) {
+      const topic = allTopics.find((top) => top.id === t)
+      if (topic?.name) {
+        const color = topic.color ?? null
+        const label = topic.name
+        const slug = ''
+        result.push({
+          label,
+          color,
+          textColor: this.computeTextColor(color),
+          slug,
+          href: `${this.categoryRouteBase}/${slug}`,
+        })
+        
+      }
     }
+    console.log('Pills nach Topics:', result)
 
     return result
-  }
-
-  private slugify(name: string): string {
-    const map: Record<string, string> = {
-      ä: 'ae',
-      ö: 'oe',
-      ü: 'ue',
-      Ä: 'ae',
-      Ö: 'oe',
-      Ü: 'ue',
-      ß: 'ss',
-    }
-    const replaced = name
-      .split('')
-      .map((c) => map[c] ?? c)
-      .join('')
-    return replaced
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '')
-  }
+  }    
+    
 
   private computeTextColor(bg?: string | null): string {
     if (!bg) return '#1F2937' // Tailwind gray-800 als Standard
