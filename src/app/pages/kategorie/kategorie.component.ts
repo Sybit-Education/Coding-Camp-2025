@@ -35,6 +35,7 @@ export class KategorieComponent implements OnInit {
   eventTypes: TypeDB[] = []
   id: RecordIdValue | null = null
   name: string | null = null
+  slug: string | null = null
   loading = true
 
   private readonly route = inject(ActivatedRoute)
@@ -43,12 +44,15 @@ export class KategorieComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
-      this.name = params['name'] || null
+      // Unterstütze neues 'slug' und für Abwärtskompatibilität 'name' (als slug)
+      this.slug = params['slug'] || params['name'] || null
+      // Anzeigename wird nach dem Laden aus slug aufgelöst
+      this.name = null
 
       // Daten neu laden, wenn sich die Parameter ändern
       this.initilizeData().then(() => this.markForCheck())
 
-      this.returnLink = this.name ? this.name : 'kategorie'
+      this.returnLink = this.slug ? this.slug : 'kategorie'
     })
   }
   private readonly eventService: EventService = inject(EventService)
@@ -71,7 +75,13 @@ export class KategorieComponent implements OnInit {
       this.topics = topics
       this.eventTypes = typeDB
 
-      this.id = this.getEventIdFromName(topics, typeDB)
+      this.id = this.getEventIdFromSlug(topics, typeDB)
+      // Anzeigename aus slug auflösen (Thema oder Typ)
+      if (this.slug) {
+        const matchedTopic = topics.find((t) => t.slug === this.slug)
+        const matchedType = typeDB.find((t) => t.slug === this.slug)
+        this.name = matchedTopic?.name || matchedType?.name || this.name
+      }
 
       // Filtere Events basierend auf der ID
       const rawEvents = this.id
@@ -129,9 +139,10 @@ export class KategorieComponent implements OnInit {
       this.markForCheck()
     }
   }
-  private getEventIdFromName(topics: Topic[], typeDB: TypeDB[]): RecordIdValue | null {
-    const topic = topics.find((t) => t.name === this.name)
-    const type = typeDB.find((t) => t.name === this.name)
+  private getEventIdFromSlug(topics: Topic[], typeDB: TypeDB[]): RecordIdValue | null {
+    if (!this.slug) return null
+    const topic = topics.find((t) => t.slug === this.slug)
+    const type = typeDB.find((t) => t.slug === this.slug)
 
     return topic?.id?.id || type?.id?.id || null
   }
