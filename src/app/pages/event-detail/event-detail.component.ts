@@ -25,6 +25,7 @@ import { EventImageComponent } from '@app/component/event-image/event-image.comp
 import { MatIconModule } from '@angular/material/icon'
 import { IconComponent } from '@app/icons/icon.component'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
+import { EventPillsComponent } from '@app/component/event-pills/event-pills.component'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -40,6 +41,7 @@ import { GoBackComponent } from '@app/component/go-back-button/go-back-button.co
     CalendarExportComponent,
     MatIconModule,
     IconComponent,
+    EventPillsComponent,
 
     GoBackComponent,
   ],
