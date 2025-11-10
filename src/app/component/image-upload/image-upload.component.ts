@@ -233,7 +233,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
     return src
   }
 
-  private idToString(id: unknown): string {
+  idToString(id: unknown): string {
     if (!id && id !== 0) return ''
     if (typeof id === 'string') return id
     try {
