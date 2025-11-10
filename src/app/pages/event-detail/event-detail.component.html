@@ -17,35 +17,35 @@
           ></app-event-image>
         </div>
         @if ((this.sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL) {
-          <div class="mr-2 ml-5">
-            <h1 class="text-2xl">
-              {{ event.name }}
-            </h1>
+          <h1 class="text-2xl px-2 my-1">
+            {{ event.name }}
+          </h1>
+          <div class="px-2 text-xs">
+            <app-event-pills class="text-xs" [event]="event"></app-event-pills>
           </div>
-          <div class="flex justify-end">
-            <div class="mr-2 mb-1 flex items-center justify-center gap-2 text-2xl">
+          <div class="flex justify-end px-2">
+            <div class="mb-1 flex items-center justify-center gap-2">
               <app-favorite-button [eventId]="event.id" class="p-1"></app-favorite-button>
               <app-calendar-export [event]="event" [location]="location" class="p-1"></app-calendar-export>
               <app-share [event]="event" [location]="location" class="p-1"></app-share>
             </div>
           </div>
         } @else {
-          <div class="flex w-full items-center justify-between">
-            <div class="ml-10">
-              <h1 class="text-2xl">
-                {{ event.name }}
-              </h1>
-            </div>
-            <div class="mt-10 mr-3 mb-4 flex items-center justify-center gap-2 text-2xl">
+          <div class="flex w-full px-4 items-center justify-between">
+            <h1 class="text-2xl">
+              {{ event.name }}
+            </h1>
+          
+            <div class="flex items-center justify-center gap-2">
               <app-favorite-button [eventId]="event.id" class="p-1"></app-favorite-button>
               <app-calendar-export [event]="event" [location]="location" class="p-1"></app-calendar-export>
               <app-share [event]="event" [location]="location" class="p-1"></app-share>
             </div>
           </div>
+          <div class="px-4 text-xs">
+            <app-event-pills class="text-xs" [event]="event"></app-event-pills>
+          </div>  
         }
-        <div class="px-4 py-2">
-          <app-event-pills [event]="event"></app-event-pills>
-        </div>
         <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
         <div class="flex justify-between">
           <div class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl">

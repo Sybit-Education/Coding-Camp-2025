@@ -56,11 +56,13 @@ export class EventPillsComponent implements OnChanges {
     const result: Pill[] = []
 
     const allEventType = await this.eventService.getAllEventTypes()
-    const eventType = allEventType.find((et) => et.id === this.event?.event_type)
+    console.log('Alle Event Types geladen:', allEventType)
+    const eventType = allEventType.find((et) => et.id.id === this.event?.event_type?.id)
+    console.log('Event Type gefunden:', eventType)
     if (eventType?.name) {
       const color = (eventType as any).color ?? null
       const label = eventType.name as string
-      const slug = this.slugify(label)
+      const slug = eventType.slug as string
       result.push({
         label,
         color,
@@ -71,11 +73,11 @@ export class EventPillsComponent implements OnChanges {
 
     const allTopics = await this.topicService.getAllTopics()
     for (const t of this.event?.topic || []) {
-      const topic = allTopics.find((top) => top.id === t)
+      const topic = allTopics.find((top) => top.id?.id === t.id)
       if (topic?.name) {
         const color = topic.color ?? null
         const label = topic.name
-        const slug = this.slugify(label)
+        const slug = topic.slug
         result.push({
           label,
           color,
