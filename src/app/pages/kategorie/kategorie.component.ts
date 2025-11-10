@@ -46,6 +46,7 @@ export class KategorieComponent implements OnInit {
   loading = true
   returnLink = ''
   searchTerm = ''
+  searching = false
   private allEvents: AppEvent[] = []
   private searchDebounce: number | null = null
 
@@ -99,7 +100,7 @@ export class KategorieComponent implements OnInit {
   }
 
   private async performSearch(q: string) {
-    this.loading = true
+    this.searching = true
     try {
       // Basisliste ggf. nach Kategorie einschränken
       const categoryId = this.id
@@ -158,7 +159,7 @@ export class KategorieComponent implements OnInit {
       console.error('[KategorieComponent] performSearch:error', error)
       this.events = []
     } finally {
-      this.loading = false
+      this.searching = false
       this.markForCheck()
     }
   }

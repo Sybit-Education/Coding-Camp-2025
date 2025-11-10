@@ -15,11 +15,18 @@
       (input)="onSearchChange(($any($event.target)).value)"
       [attr.aria-label]="'SEARCH.LABEL' | translate"
       [placeholder]="'SEARCH.PLACEHOLDER' | translate"
+      [attr.aria-busy]="searching"
     />
+    @if (searching) {
+      <div class="mt-2 flex items-center text-sm text-gray-500" aria-live="polite" aria-busy="true">
+        <span class="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-t-transparent border-[#c70d56]"></span>
+        {{ 'SEARCH.SEARCHING' | translate }}
+      </div>
+    }
   </div>
 
-  <!-- Ladeanzeige -->
-  @if (loading) {
+  <!-- Ladeanzeige (nur für Initial-Load, nicht während der Suche) -->
+  @if (loading && !searchTerm) {
     <div class="flex items-center justify-center p-8">
       <div class="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-[#c70d56]"></div>
     </div>
