@@ -21,6 +21,8 @@ function registerIcons(registry: IconRegistryService) {
   register('cal-share', '/svg/cal-share.svg')
   register('event_upcoming', '/svg/event_upcoming.svg')
   register('pan_zoom', '/svg/pan_zoom.svg')
+  register('arrow_back', '/svg/arrow_back.svg')
+  register('arrow_forward', '/svg/arrow_forward.svg')
 
   // Navigation Bar
   register('home', '/svg/home.svg')
