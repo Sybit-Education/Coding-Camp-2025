@@ -38,6 +38,11 @@ export const routes: Routes = [
     title: 'Login',
   },
   {
+    path: 'kategorie/:slug',
+    loadComponent: () => import('./pages/kategorie/kategorie.component').then((m) => m.KategorieComponent),
+    title: 'Kategorie',
+  },
+  {
     path: 'kategorie',
     loadComponent: () => import('./pages/kategorie/kategorie.component').then((m) => m.KategorieComponent),
     title: 'Kategorie',

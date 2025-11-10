@@ -101,12 +101,14 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     if (this.returnLink) {
       if (this.returnLink === 'kategorie') {
         this.goBackSite = ['/kategorie']
+        this.goBackParams = undefined
       } else {
-        this.goBackSite = ['/kategorie']
-        this.goBackParams = { name: this.returnLink }
+        this.goBackSite = ['/kategorie', this.returnLink]
+        this.goBackParams = undefined
       }
     } else {
       this.goBackSite = ['/']
+      this.goBackParams = undefined
     }
   }
 

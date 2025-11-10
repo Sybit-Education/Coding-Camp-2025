@@ -43,9 +43,8 @@ export class KategorieComponent implements OnInit {
   returnLink = ''
 
   ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
-      // Unterstütze neues 'slug' und für Abwärtskompatibilität 'name' (als slug)
-      this.slug = params['slug'] || params['name'] || null
+    this.route.paramMap.subscribe((params) => {
+      this.slug = params.get('slug')
       // Anzeigename wird nach dem Laden aus slug aufgelöst
       this.name = null
 
