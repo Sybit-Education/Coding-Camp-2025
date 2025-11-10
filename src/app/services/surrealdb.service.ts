@@ -112,17 +112,29 @@ export class SurrealdbService extends Surreal {
       return []
     }
 
-    // Vereinfachte FTS-Abfrage über Event-, Organizer- und Location-Felder
-    const ftsSql = `SELECT *,
-        search::highlight("**", "**", 1) AS body,
-        search::highlight("##", "", 0) AS title,
-        search::score(0) + search::score(1) AS score
+    // Gewichtete FTS-Abfrage mit Highlight-Feldern (name/description/organizer/location/city)
+    const ftsSql = `SELECT 
+        *,
+        search::highlight('<span class="highlight">', '</span>', 0) AS name_hl,
+        search::highlight('<span class="highlight">', '</span>', 1) AS description_hl,
+        search::highlight('<span class="highlight">', '</span>', 2) AS organizer_hl,
+        search::highlight('<span class="highlight">', '</span>', 3) AS location_name_hl,
+        search::highlight('<span class="highlight">', '</span>', 4) AS city_hl,
+        (search::score(0)*3
+         + search::score(1)*2
+         + search::score(2)*2
+         + search::score(3)*2
+         + search::score(4)
+        ) AS relevance
       FROM event
-      WHERE name @@ $q
-        OR description @@ $q
-        OR organizer IN (SELECT id FROM organizer WHERE name @@ $q)
-        OR location IN (SELECT id FROM location WHERE name @@ $q OR street @@ $q OR city @@ $q)
-      ORDER BY score DESC;`
+      WHERE
+         name @0@ $q
+         OR description @1@ $q
+         OR organizer.name @2@ $q
+         OR location.name @3@ $q
+         OR location.city @4@ $q
+      ORDER BY relevance DESC
+      LIMIT 20;`
 
     const t0 = performance.now()
     console.debug('[SurrealdbService] Running FTS', { q, ftsSql })
