@@ -67,7 +67,7 @@
 
     <div class="mr-2 ml-2 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
       @for (kategorie of topicsOrTypes; track kategorie.id) {
-        <app-kategorie-card [color]="kategorie.color" [text]="kategorie.name" />
+        <app-kategorie-card [color]="kategorie.color" [text]="kategorie.name" [slug]="kategorie.slug"/>
       }
     </div>
   </section>
