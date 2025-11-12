@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 import { EventCardComponent } from '../../component/event-card/event-card.component'
 
@@ -40,6 +40,7 @@ export class KategorieComponent implements OnInit {
   loading = true
 
   private readonly route = inject(ActivatedRoute)
+  private readonly router = inject(Router)
   private readonly markForCheck = injectMarkForCheck()
 
   ngOnInit() {
@@ -75,9 +76,13 @@ export class KategorieComponent implements OnInit {
       if (this.slug) {
         const matchedTopic = topics.find((t) => t.slug === this.slug)
         const matchedType = typeDB.find((t) => t.slug === this.slug)
+        if (!matchedTopic && !matchedType) {
+          // 404-Fallback, wenn Slug weder Topic noch Event-Typ entspricht
+          this.router.navigate(['/404'])
+          return
+        }
         this.name = matchedTopic?.name || matchedType?.name || null
       } else {
-
         this.name = this.translate.instant('bottom-nav.all-events')
       }
 

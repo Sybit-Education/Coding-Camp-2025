@@ -105,7 +105,12 @@ export const routes: Routes = [
     title: 'Veranstaltung erstellen',
   },
   {
+    path: '404',
+    loadComponent: () => import('./pages/placeholder/placeholder.component').then((m) => m.PlaceholderComponent),
+    title: 'Seite nicht gefunden',
+  },
+  {
     path: '**',
-    redirectTo: '',
+    redirectTo: '404',
   },
 ]
