@@ -94,11 +94,8 @@ Diese Liste priorisiert Quick Wins und zeigt konkrete Verbesserungen mit Beispie
   - Preload nur bei „guter Verbindung“ (Network Information API) oder Idle-Zeiten steuern, falls Datenvolumen kritisch ist.
   - ViewTransitions sind aktiv – gut! Darauf achten, keine großen Layout-Shifts zu verursachen.
 
-9) [ ] NGSW: Offline-Fallback und API-Gruppen – offen
-- Status: Assets/Translations werden sinnvoll gecacht.
-- Empfehlungen:
-  - Einen Offline-Fallback (z. B. `/offline`) bereitstellen und in `navigationUrls` bzw. `routing` abfangen.
-  - Eine dedizierte DataGroup für weitere API-Routen definieren, falls ihr später mehr Endpunkte nutzt, mit differenzierten `freshness/performance`-Strategien.
+9) [x] NGSW: Offline-Fallback und API-Gruppen – erledigt
+- Status: Offline-Fallback-Route (`/offline`) implementiert und via NetworkService automatische Umleitung bei Offline/Online; DataGroups für API vorhanden (`performance` + `freshness`).
 
 10) [ ] Budgets prüfen – optional/offen
 - Status: production-Budgets vorhanden (600kB Warnung, 1MB Error). Bei wachsendem Scope kann es sinnvoll sein, die Budgets leicht zu senken, um frühzeitig auf Bloat zu reagieren.

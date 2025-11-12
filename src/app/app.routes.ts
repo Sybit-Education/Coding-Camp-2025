@@ -81,6 +81,11 @@ export const routes: Routes = [
     title: 'Veranstaltung bearbeiten',
   },
   {
+    path: 'offline',
+    loadComponent: () => import('./pages/offline/offline.component').then((m) => m.OfflineComponent),
+    title: 'Offline',
+  },
+  {
     path: '**',
     redirectTo: '',
   },
