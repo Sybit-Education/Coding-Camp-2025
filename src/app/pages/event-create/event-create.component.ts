@@ -266,10 +266,8 @@ export class EventCreateComponent implements OnInit {
       // Medien verarbeiten
       const medias = await this.imageUploadComponent.uploadImages()
 
-      const finalMediaIds = medias.map(
-        (m) => new StringRecordId(this.imageUploadComponent.idToString(m.id)) as unknown as RecordId<'media'>,
-      )
-      const finalMedia = medias.map((m) => m)
+      const finalMediaIds = medias.map((media) => new StringRecordId(media.id!) as unknown as RecordId<'media'>)
+      const finalMedia = medias.map((media) => media)
 
       // Wenn keine Bilder hochgeladen wurden, aber existierende Bilder vorhanden sind,
       // behalten wir die existierenden Bilder bei

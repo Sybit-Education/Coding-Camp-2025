@@ -237,8 +237,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
     if (!id && id !== 0) return ''
     if (typeof id === 'string') return id
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const s = (id as any)?.toString?.()
+      const s = (id as unknown)?.toString?.()
       if (typeof s === 'string' && s.length) return s
       // eslint-disable-next-line no-empty
     } catch {}
@@ -286,7 +285,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
             const url = await this.mediaService.getMediaUrl(existing.id)
             if (url === preview) {
               const existingIdStr = this.idToString(existing.id)
-              if (!collected.some((m) => this.idToString(m.id) === existingIdStr)) {
+              if (!collected.some((media) => this.idToString(media.id) === existingIdStr)) {
                 collected.push(existing)
               }
               break
