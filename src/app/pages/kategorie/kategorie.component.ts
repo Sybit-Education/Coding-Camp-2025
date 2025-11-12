@@ -40,7 +40,6 @@ export class KategorieComponent implements OnInit {
 
   private readonly route = inject(ActivatedRoute)
   private readonly markForCheck = injectMarkForCheck()
-  returnLink = ''
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
@@ -50,8 +49,6 @@ export class KategorieComponent implements OnInit {
 
       // Daten neu laden, wenn sich die Parameter ändern
       this.initilizeData().then(() => this.markForCheck())
-
-      this.returnLink = this.slug ? this.slug : 'kategorie'
     })
   }
   private readonly eventService: EventService = inject(EventService)
@@ -143,6 +140,6 @@ export class KategorieComponent implements OnInit {
     const topic = topics.find((t) => t.slug === this.slug)
     const type = typeDB.find((t) => t.slug === this.slug)
 
-    return topic?.id?.id || type?.id?.id || null
+    return type?.id?.id || topic?.id?.id || null
   }
 }

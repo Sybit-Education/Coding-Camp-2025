@@ -1,8 +1,7 @@
-<div class="flex flex-wrap gap-2" role="list">
+<ul class="flex flex-wrap gap-2">
   @for (pill of pills; track pill.slug) {
-    <a
-      role="listitem"
-      class="inline-flex items-center rounded-full border px-3 py-1 transition-colors hover:opacity-80 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c70d56] focus-visible:ring-offset-2"
+    <li
+      class="cursor-pointer inline-flex items-center rounded-full border px-3 py-1 transition-colors hover:opacity-80 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c70d56] focus-visible:ring-offset-2"
       [routerLink]="['/kategorie', pill.slug]"
       [title]="pill.label"
       [attr.aria-label]="'Kategorie: ' + pill.label"
@@ -13,6 +12,6 @@
       }"
     >
       <span class="truncate max-w-[12rem]">{{ pill.label }}</span>
-    </a>
+    </li>
   }
-</div>
+</ul>

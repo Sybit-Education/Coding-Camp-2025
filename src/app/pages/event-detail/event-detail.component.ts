@@ -63,7 +63,6 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   mediaList: { url: string; copyright: string; creator: string }[] = []
 
   protected isLoggedIn = false
-  private returnLink = ''
   screenSize = ScreenSize
 
   private readonly eventService = inject(EventService)
@@ -77,10 +76,6 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   readonly sharedStateService = inject(SharedStateService)
 
   ngOnInit(): void {
-    this.route.queryParamMap.subscribe((params) => {
-      this.returnLink = params.get('returnLink') || ''
-    })
-
     this.route.paramMap.subscribe((params) => {
       this.eventId = params.get('id') || ''
     })
@@ -98,18 +93,6 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
         this.isLoggedIn = isLoggedIn
       }),
     )
-    if (this.returnLink) {
-      if (this.returnLink === 'kategorie') {
-        this.goBackSite = ['/kategorie']
-        this.goBackParams = undefined
-      } else {
-        this.goBackSite = ['/kategorie', this.returnLink]
-        this.goBackParams = undefined
-      }
-    } else {
-      this.goBackSite = ['/']
-      this.goBackParams = undefined
-    }
   }
 
   ngOnDestroy(): void {

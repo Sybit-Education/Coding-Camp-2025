@@ -43,9 +43,9 @@ export const routes: Routes = [
     title: 'Kategorie',
   },
   {
-    path: 'kategorie',
+    path: 'all-events',
     loadComponent: () => import('./pages/kategorie/kategorie.component').then((m) => m.KategorieComponent),
-    title: 'Kategorie',
+    title: 'Alle Events',
   },
   {
     path: 'admin',
