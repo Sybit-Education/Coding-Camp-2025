@@ -1,9 +1,8 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core'
 import { provideRouter, withComponentInputBinding, withPreloading, PreloadAllModules, withViewTransitions } from '@angular/router'
-import { provideHttpClient, HttpClient, withInterceptorsFromDi } from '@angular/common/http'
+import { provideHttpClient, HttpClient, withInterceptorsFromDi, withFetch } from '@angular/common/http'
 import { TranslateLoader, TranslateModule, Translation } from '@ngx-translate/core'
 import { Observable } from 'rxjs'
-import { provideAnimations } from '@angular/platform-browser/animations'
 
 import { routes } from './app.routes'
 import { provideAppIcons } from './icons/icons.provider'
@@ -29,8 +28,7 @@ export function createTranslateLoader(http: HttpClient) {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes, withComponentInputBinding(), withViewTransitions(), withPreloading(PreloadAllModules)),
-    provideHttpClient(withInterceptorsFromDi()),
-    provideAnimations(),
+    provideHttpClient(withInterceptorsFromDi(), withFetch()),
     provideAppIcons(),
     importProvidersFrom(
       TranslateModule.forRoot({
