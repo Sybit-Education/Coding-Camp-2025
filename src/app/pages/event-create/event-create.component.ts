@@ -309,13 +309,21 @@ export class EventCreateComponent implements OnInit {
       }
 
       // Event speichern (Update oder Create)
-      if (this.eventId !== undefined) {
-        const updated = await this.eventService.updateEvent(this.eventId, payload)
-        if (!updated) {
-          this.snackBarService.showError('Update hat keine Daten zurückgegeben')
+      if (this.eventId === undefined) {
+        const created = await this.eventService.postEvent(payload)
+        if (created && created.length > 0) {
+          this.eventId = created[0].id
+          this.snackBarService.showSuccess('Event erfolgreich erstellt')
+          // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
+          this.router.navigate(['/admin'])
+        } else {
+          this.snackBarService.showError('Erstellen des Events fehlgeschlagen, keine Daten zurückgegeben')
           this.markForCheck()
           return
-        } else {
+        }
+      } else {
+        const updated = await this.eventService.updateEvent(this.eventId, payload)
+        if (updated) {
           console.log('Event erfolgreich aktualisiert:', updated)
           this.snackBarService.showSuccess('Event erfolgreich aktualisiert')
 
@@ -330,16 +338,8 @@ export class EventCreateComponent implements OnInit {
 
           // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
           this.router.navigate(['/admin'])
-        }
-      } else {
-        const created = await this.eventService.postEvent(payload)
-        if (created && created.length > 0) {
-          this.eventId = created[0].id
-          this.snackBarService.showSuccess('Event erfolgreich erstellt')
-          // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
-          this.router.navigate(['/admin'])
         } else {
-          this.snackBarService.showError('Erstellen des Events fehlgeschlagen, keine Daten zurückgegeben')
+          this.snackBarService.showError('Update hat keine Daten zurückgegeben')
           this.markForCheck()
           return
         }

@@ -129,9 +129,10 @@ export class ImageUploadComponent implements OnInit, OnChanges {
         this.snackBarService.showError(`Datei zu groß (max. 5 MB): ${file.name}`)
         continue
       }
-      this.createPreview(file).then(() => {
-        this.isUploading = false
-      })
+      this.createPreview(file)
+        .finally(() => {
+          this.isUploading = false
+        })
     }
   }
 
