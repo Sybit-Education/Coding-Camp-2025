@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges, inject } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input, OnChanges, SimpleChanges, inject } from '@angular/core'
 import { SafeHtml } from '@angular/platform-browser'
 import { IconRegistryService } from '../services/icon-registry.service'
 import { take } from 'rxjs'
@@ -29,6 +29,18 @@ import { take } from 'rxjs'
 })
 export class IconComponent implements OnChanges {
   @Input() name!: string
+  @Input() ariaLabel?: string
+  @Input() decorative = true
+
+  @HostBinding('attr.role') get hostRole() {
+    return this.decorative ? null : 'img'
+  }
+  @HostBinding('attr.aria-hidden') get hostAriaHidden() {
+    return this.decorative && !this.ariaLabel ? 'true' : null
+  }
+  @HostBinding('attr.aria-label') get hostAriaLabel() {
+    return this.decorative ? null : this.ariaLabel ?? null
+  }
 
   safeSvg: SafeHtml | null = null
 

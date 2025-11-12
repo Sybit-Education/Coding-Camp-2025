@@ -38,6 +38,13 @@ export class IconRegistryService {
   }
 
   private transformSvg(svg: string): string {
+    // Grundlegende Sanitization: entferne <script>, Inline-Event-Handler, javascript:-Links, foreignObject
+    svg = svg
+      .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '')
+      .replace(/\son\w+="[^"]*"/gi, '')
+      .replace(/\s(?:xlink:)?href="javascript:[^"]*"/gi, '')
+      .replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi, '')
+
     // Stelle sicher, dass root <svg> width/height auf 100% gesetzt ist, damit Host-Größe greift
     // und nutze ein vernünftiges preserveAspectRatio.
     if (svg.includes('<svg')) {

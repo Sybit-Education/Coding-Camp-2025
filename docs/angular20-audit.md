@@ -110,8 +110,8 @@ Diese Liste priorisiert Quick Wins und zeigt konkrete Verbesserungen mit Beispie
 
 ## Prio B – A11y
 
-12) [ ] Icons zugänglicher machen – offen
-- Problem: `app-icon` rendert ein `<span>` mit `innerHTML`. Screenreader-Verhalten ist unklar.
+12) [x] Icons zugänglicher machen – erledigt
+- Status: Erledigt – IconComponent setzt standardmäßig aria-hidden und unterstützt aria-label/role via Inputs.
 - Ziel:
   - Wenn dekorativ: `aria-hidden="true"`, `role="img"` vermeiden.
   - Wenn semantisch: `role="img"` + `aria-label="..."`
@@ -132,8 +132,8 @@ Diese Liste priorisiert Quick Wins und zeigt konkrete Verbesserungen mit Beispie
 
 ## Prio B – Sicherheit
 
-14) [ ] SVG-Sanitizing im IconRegistryService – offen
-- Problem: Es wird `bypassSecurityTrustHtml` verwendet. Das ist ok, wenn Quellen vertrauenswürdig sind – aber riskant, wenn externe Quellen zugelassen werden.
+14) [x] SVG-Sanitizing im IconRegistryService – erledigt
+- Status: Erledigt – Grundlegende SVG-Sanitization (Entfernen von <script>, on*-Attributen, javascript:-href, foreignObject) vor bypassSecurityTrustHtml.
 - Ziel:
   - Nur interne, geprüfte SVGs registrieren.
   - Alternativ vor `bypass...` eine Whitelist-Sanitization implementieren (oder `DOMPurify` in "safe SVG"-Konfiguration – Tradeoff: Zusatzabhängigkeit).
