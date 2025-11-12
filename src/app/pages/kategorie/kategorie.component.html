@@ -3,8 +3,30 @@
   <h1>
     {{ this.name }}
   </h1>
-  <!-- Ladeanzeige -->
-  @if (loading) {
+
+  <!-- Search input -->
+  <div class="mb-4">
+    <label class="sr-only" for="category-search">{{ 'SEARCH.LABEL' | translate }}</label>
+    <input
+      id="category-search"
+      type="search"
+      class="w-full rounded-2xl border border-gray-300 p-2"
+      [value]="searchTerm"
+      (input)="onSearchChange(($any($event.target)).value)"
+      [attr.aria-label]="'SEARCH.LABEL' | translate"
+      [placeholder]="'SEARCH.PLACEHOLDER' | translate"
+      [attr.aria-busy]="searching"
+    />
+    @if (searching) {
+      <div class="mt-2 flex items-center text-sm text-gray-500" aria-live="polite" aria-busy="true">
+        <span class="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-t-transparent border-[#c70d56]"></span>
+        {{ 'SEARCH.SEARCHING' | translate }}
+      </div>
+    }
+  </div>
+
+  <!-- Ladeanzeige (nur für Initial-Load, nicht während der Suche) -->
+  @if (loading && !searchTerm) {
     <app-loading-spinner />
     <div class="mr-2 ml-2 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       @for (item of [].constructor(3); track $index) {
@@ -21,28 +43,28 @@
           </div>
         </div>
       }
-    </div>
-  } @else {
-    <!-- Keine Events Meldung -->
-    @if (events.length === 0) {
-      <div class="rounded-lg bg-gray-100 p-4 text-center">
-        <p>
-          {{ 'EVENTS.NO_EVENTS_FOUND_IN_CATEGORY' | translate }}
-        </p>
       </div>
-    }
+  }
 
-    <div class="mr-2 ml-2 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-      @for (event of events; track $index) {
-        <div class="relative">
-          @if (event.isPast) {
-            <div class="absolute top-0 left-0 z-10 m-2 rounded bg-gray-700 px-2 py-1 text-xs text-white opacity-80">
-              {{ 'EVENTS.PAST_EVENT' | translate }}
-            </div>
-          }
-          <app-event-card [event]="event" [class.opacity-70]="event.isPast"> </app-event-card>
-        </div>
-      }
+  <!-- Keine Events Meldung -->
+  @if (!loading && events.length === 0) {
+    <div class="rounded-lg bg-gray-100 p-4 text-center">
+      <p>
+        {{ 'EVENTS.NO_EVENTS_FOUND_IN_CATEGORY' | translate }}
+      </p>
     </div>
   }
+
+  <div class="mr-2 ml-2 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+    @for (event of events; track $index) {
+      <div class="relative">
+        @if (event.isPast) {
+          <div class="absolute top-0 left-0 z-10 m-2 rounded bg-gray-700 px-2 py-1 text-xs text-white opacity-80">
+            {{ 'EVENTS.PAST_EVENT' | translate }}
+          </div>
+        }
+        <app-event-card [event]="event" [class.opacity-70]="event.isPast"> </app-event-card>
+      </div>
+    }
+  </div>
 </article>

@@ -31,8 +31,9 @@ export class I18nService {
     this.translateService.setFallbackLang('de')
 
     // Browser-Sprache erkennen oder Standardsprache verwenden
-    const browserLang = this.translateService.getBrowserLang()
-    const initialLang = browserLang && ['de', 'en', 'fr'].includes(browserLang) ? browserLang : 'de'
+    // const browserLang = this.translateService.getBrowserLang()
+    // const initialLang = browserLang && ['de', 'en', 'fr'].includes(browserLang) ? browserLang : 'de'
+    const initialLang = 'de'
 
     // Gespeicherte Sprache aus localStorage verwenden, falls vorhanden
     const savedLang = localStorage.getItem('selectedLanguage')
