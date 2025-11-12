@@ -317,7 +317,46 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     const startDate = event.date_start ? new Date(event.date_start) : null
     const endDate = event.date_end ? new Date(event.date_end) : null
 
-    const data: Record<string, unknown> = {
+    const data: {
+      '@context': 'https://schema.org'
+      '@type': 'Event'
+      name: string
+      url: string
+      eventStatus: string
+      eventAttendanceMode: string
+      description?: string
+      startDate?: string
+      endDate?: string
+      image?: string[]
+      location?: {
+        '@type': 'Place'
+        name: string
+        address: {
+          '@type': 'PostalAddress'
+          streetAddress?: string
+          postalCode?: string
+          addressLocality: string
+          addressCountry: string
+        }
+        geo?: {
+          '@type': 'GeoCoordinates'
+          latitude: number
+          longitude: number
+        }
+      }
+      organizer?: {
+        '@type': 'Organization'
+        name: string
+        email?: string
+        telephone?: string
+      }
+      offers?: {
+        '@type': 'Offer'
+        price: string
+        priceCurrency: string
+        availability: string
+      }
+    } = {
       '@context': 'https://schema.org',
       '@type': 'Event',
       name: event.name,
