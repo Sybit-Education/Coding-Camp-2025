@@ -43,7 +43,7 @@ export const routes: Routes = [
     title: 'Kategorie',
   },
   {
-    path: 'all-events',
+    path: 'event',
     loadComponent: () => import('./pages/kategorie/kategorie.component').then((m) => m.KategorieComponent),
     title: 'Alle Events',
   },

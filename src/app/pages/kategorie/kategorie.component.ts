@@ -15,6 +15,7 @@ import { RecordIdValue } from 'surrealdb'
 import { CommonModule } from '@angular/common'
 import { TypeDB } from '@app/models/typeDB.interface'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
+import { TranslateService } from '@ngx-translate/core'
 
 interface EventWithResolvedLocation extends AppEvent {
   locationName: string
@@ -44,9 +45,6 @@ export class KategorieComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
       this.slug = params.get('slug')
-      // Anzeigename wird nach dem Laden aus slug aufgelöst
-      this.name = null
-
       // Daten neu laden, wenn sich die Parameter ändern
       this.initilizeData().then(() => this.markForCheck())
     })
@@ -54,6 +52,7 @@ export class KategorieComponent implements OnInit {
   private readonly eventService: EventService = inject(EventService)
   private readonly locationService: LocationService = inject(LocationService)
   private readonly topicService: TopicService = inject(TopicService)
+  private readonly translate: TranslateService = inject(TranslateService)
 
   // Cache für Locations, um wiederholte Anfragen zu vermeiden
   private readonly locationCache = new Map<string, Promise<AppLocation>>()
@@ -76,7 +75,10 @@ export class KategorieComponent implements OnInit {
       if (this.slug) {
         const matchedTopic = topics.find((t) => t.slug === this.slug)
         const matchedType = typeDB.find((t) => t.slug === this.slug)
-        this.name = matchedTopic?.name || matchedType?.name || this.name
+        this.name = matchedTopic?.name || matchedType?.name || null
+      } else {
+
+        this.name = this.translate.instant('bottom-nav.all-events')
       }
 
       // Filtere Events basierend auf der ID
