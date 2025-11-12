@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, HostListener, inject, Input, OnInit
 import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { I18nService } from '../../services/translate.service'
-import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component'
+// import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component'
 
 // -----------------------------------------------------------------------------
 // HeaderComponent
@@ -45,7 +45,9 @@ interface LogoSet {
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule, LanguageSwitcherComponent],
+  imports: [CommonModule, RouterModule, 
+    // LanguageSwitcherComponent
+  ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
