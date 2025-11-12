@@ -107,7 +107,7 @@ export const routes: Routes = [
   {
     path: '404',
     loadComponent: () => import('./pages/placeholder/placeholder.component').then((m) => m.PlaceholderComponent),
-    title: 'Seite nicht gefunden',
+    title: '404 - Seite nicht gefunden',
   },
   {
     path: '**',

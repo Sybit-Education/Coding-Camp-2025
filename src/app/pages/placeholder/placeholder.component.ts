@@ -38,14 +38,12 @@ import { Meta, Title } from '@angular/platform-browser'
   `,
 })
 export class PlaceholderComponent implements OnInit {
-  pageTitle = 'Seite nicht gefunden'
-
   private readonly title = inject(Title)
   private readonly meta = inject(Meta)
 
   ngOnInit(): void {
     // Set explicit 404 SEO hints for SPAs
-    this.title.setTitle('404 – Seite nicht gefunden | 1200 Jahre Radolfzell')
+
     this.meta.updateTag({ name: 'robots', content: 'noindex, nofollow' })
     this.meta.updateTag({ name: 'prerender-status-code', content: '404' })
     this.meta.updateTag({ name: 'description', content: 'Die angeforderte Seite wurde nicht gefunden.' })
