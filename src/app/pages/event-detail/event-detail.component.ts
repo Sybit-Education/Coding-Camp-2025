@@ -358,8 +358,8 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       data.organizer = {
         '@type': 'Organization',
         name: this.organizer.name,
-        email: (this.organizer as any).email || undefined,
-        telephone: (this.organizer as any).phonenumber || undefined,
+        email: this.organizer.email || undefined,
+        telephone: this.organizer.phonenumber || undefined,
       }
     }
 
