@@ -26,6 +26,7 @@ import { MatIconModule } from '@angular/material/icon'
 import { IconComponent } from '@app/icons/icon.component'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
 import { Meta, Title } from '@angular/platform-browser'
+import { SeoService } from '@app/services/seo.service'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -75,6 +76,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   private readonly markForCheck = injectMarkForCheck()
   private readonly title = inject(Title)
   private readonly meta = inject(Meta)
+  private readonly seo = inject(SeoService)
   private readonly document = inject(DOCUMENT)
   readonly sharedStateService = inject(SharedStateService)
 
@@ -248,8 +250,26 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
         this.organizer = organizer
         this.type = type
 
-        this.title.setTitle(`${this.event!.name} - 1200 Jahre Radolfzell`)
-        this.updateMetaTags(this.event!, this.mediaList[0]?.url, this.location?.name || undefined)
+        const url = this.getEventUrl()
+        const toDate = (d?: Date) => (d ? new Date(d) : null)
+        const startDate = toDate(this.event!.date_start)
+        const endDate = toDate(this.event!.date_end)
+        const locale = navigator.language || 'de-DE'
+        let dateText = ''
+        if (startDate) {
+          const opts: Intl.DateTimeFormatOptions = { dateStyle: 'full', timeStyle: 'short' }
+          dateText = new Intl.DateTimeFormat(locale, opts).format(startDate)
+          if (endDate && endDate.getTime() !== startDate.getTime()) {
+            const endText = new Intl.DateTimeFormat(locale, opts).format(endDate)
+            dateText = `${dateText} – ${endText}`
+          }
+        }
+        const descriptionParts: string[] = []
+        if (dateText) descriptionParts.push(dateText)
+        if (this.location?.name) descriptionParts.push(this.location.name)
+        const description = descriptionParts.join(' • ') || this.event!.description || this.event!.name
+
+        this.seo.setSocialMeta(this.event!.name, description, url, this.mediaList[0]?.url, 'website')
         this.setStructuredData(this.event!, this.mediaList[0]?.url)
         this.markForCheck()
       })
