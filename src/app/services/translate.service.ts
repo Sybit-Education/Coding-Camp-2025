@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core'
+import { ApplicationRef, Injectable, inject, signal } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 import { Observable } from 'rxjs'
 import { toObservable } from '@angular/core/rxjs-interop'
@@ -8,6 +8,7 @@ import { toObservable } from '@angular/core/rxjs-interop'
 })
 export class I18nService {
   private readonly translateService = inject(TranslateService)
+  private readonly appRef = inject(ApplicationRef)
 
   // Single Source of Truth als Signal
   readonly currentLang = signal<string>('de')
@@ -53,6 +54,9 @@ export class I18nService {
 
     // Aktualisiere das LOCALE_ID dynamisch
     this.updateLocaleId(lang)
+
+    // Zoneless CD anstoßen, damit Pipes (z. B. DateTimeRange) ohne Reload neu rendern
+    this.appRef.tick()
   }
 
   /**
