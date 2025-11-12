@@ -6,7 +6,6 @@ import { EventService } from '../../services/event.service'
 import type { Event } from '../../models/event.interface'
 import { computeTextColor } from '@app/utils/color.utils'
 
-
 interface Pill {
   label: string
   color?: string | null

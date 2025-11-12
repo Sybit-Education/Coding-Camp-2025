@@ -10,28 +10,21 @@
     </div>
     <div class="mr-2 ml-2 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       @for (item of [].constructor(3); track $index) {
-        <div class="mx-auto bg-white rounded shadow-lg w-full rounded-2xl">
-          <div class="h-48 p-3 overflow-hidden bg-gray-200 animate-pulse">
-          </div>
-          <div class="p-3 h-">
-              <div class="grid grid-cols-2 gap-4 mt-2">
-                  <div class="h-8 col-span-2 bg-gray-200 rounded animate-pulse">
-                  </div>
-                  <div class="h-4 bg-gray-200 rounded animate-pulse">
-                  </div>
-                  <div class="h-4 bg-gray-200 rounded animate-pulse">
-                  </div>
-                  <div class="h-4  bg-gray-200 rounded animate-pulse">
-                  </div>
-                  <div class="h-4 bg-gray-200 rounded  animate-pulse">
-                  </div>
-              </div>
+        <div class="mx-auto w-full rounded rounded-2xl bg-white shadow-lg">
+          <div class="h-48 animate-pulse overflow-hidden bg-gray-200 p-3"></div>
+          <div class="h- p-3">
+            <div class="mt-2 grid grid-cols-2 gap-4">
+              <div class="col-span-2 h-8 animate-pulse rounded bg-gray-200"></div>
+              <div class="h-4 animate-pulse rounded bg-gray-200"></div>
+              <div class="h-4 animate-pulse rounded bg-gray-200"></div>
+              <div class="h-4 animate-pulse rounded bg-gray-200"></div>
+              <div class="h-4 animate-pulse rounded bg-gray-200"></div>
+            </div>
           </div>
         </div>
       }
     </div>
-  }
-  @else {
+  } @else {
     <!-- Keine Events Meldung -->
     @if (events.length === 0) {
       <div class="rounded-lg bg-gray-100 p-4 text-center">

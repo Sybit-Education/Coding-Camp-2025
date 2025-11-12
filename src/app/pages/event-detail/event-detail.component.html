@@ -17,7 +17,7 @@
           ></app-event-image>
         </div>
         @if ((this.sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL) {
-          <h1 class="text-2xl px-2 my-1">
+          <h1 class="my-1 px-2 text-2xl">
             {{ event.name }}
           </h1>
           <div class="px-2 text-xs">
@@ -31,11 +31,11 @@
             </div>
           </div>
         } @else {
-          <div class="flex w-full px-4 items-center justify-between">
+          <div class="flex w-full items-center justify-between px-4">
             <h1 class="text-2xl">
               {{ event.name }}
             </h1>
-          
+
             <div class="flex items-center justify-center gap-2">
               <app-favorite-button [eventId]="event.id" class="p-1"></app-favorite-button>
               <app-calendar-export [event]="event" [location]="location" class="p-1"></app-calendar-export>
@@ -44,7 +44,7 @@
           </div>
           <div class="px-4 text-xs">
             <app-event-pills class="text-xs" [event]="event"></app-event-pills>
-          </div>  
+          </div>
         }
         <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
         <div class="flex justify-between">

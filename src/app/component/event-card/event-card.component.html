@@ -1,8 +1,5 @@
 @if (!isMoreCard) {
-  <a
-    [routerLink]="['/event', event?.id?.id]"
-    class="justify-top card mt-2 aspect-[1/1]"
-  >
+  <a [routerLink]="['/event', event?.id?.id]" class="justify-top card mt-2 aspect-[1/1]">
     <div class="relative h-[50%] w-full overflow-hidden bg-gray-100">
       @if (mediaUrl) {
         <img [src]="mediaUrl" [alt]="event?.name || 'Event Bild'" class="h-full w-full object-cover" [attr.loading]="'lazy'" />
