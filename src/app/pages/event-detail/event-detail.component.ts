@@ -331,7 +331,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     const description = descriptionParts.join(' • ') || event.description || event.name
 
     const ogLocale = (navigator.language || 'de-DE').replace('-', '_')
-    const tags: Array<Record<string, string>> = [
+    const tags: Record<string, string>[] = [
       { name: 'description', content: description },
       { property: 'og:type', content: 'website' },
       { property: 'og:title', content: event.name },

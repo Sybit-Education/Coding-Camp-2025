@@ -27,7 +27,7 @@ export class SeoService {
       '_',
     )
 
-    const tags: Array<Record<string, string>> = [
+    const tags: Record<string, string>[] = [
       { name: 'description', content: description },
       { property: 'og:type', content: type },
       { property: 'og:title', content: title },
