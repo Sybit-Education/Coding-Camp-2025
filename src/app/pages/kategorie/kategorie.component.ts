@@ -14,6 +14,7 @@ import { Location as AppLocation } from '../../models/location.interface'
 import { RecordIdValue } from 'surrealdb'
 import { CommonModule } from '@angular/common'
 import { TypeDB } from '@app/models/typeDB.interface'
+import { SurrealdbService } from '../../services/surrealdb.service'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
 
 interface EventWithResolvedLocation extends AppEvent {
@@ -29,17 +30,28 @@ interface EventWithResolvedLocation extends AppEvent {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KategorieComponent implements OnInit {
-  events: EventWithResolvedLocation[] = []
+  private readonly route = inject(ActivatedRoute)
+  private readonly markForCheck = injectMarkForCheck()
 
+  private readonly eventService: EventService = inject(EventService)
+  private readonly locationService: LocationService = inject(LocationService)
+  private readonly topicService: TopicService = inject(TopicService)
+  private readonly surreal: SurrealdbService = inject(SurrealdbService)
+
+  events: EventWithResolvedLocation[] = []
   topics: Topic[] = []
   eventTypes: TypeDB[] = []
   id: RecordIdValue | null = null
   name: string | null = null
   loading = true
-
-  private readonly route = inject(ActivatedRoute)
-  private readonly markForCheck = injectMarkForCheck()
   returnLink = ''
+  searchTerm = ''
+  searching = false
+  private allEvents: AppEvent[] = []
+  private searchDebounce: number | null = null
+
+  // Cache für Locations, um wiederholte Anfragen zu vermeiden
+  private readonly locationCache = new Map<string, Promise<AppLocation>>()
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
@@ -51,12 +63,6 @@ export class KategorieComponent implements OnInit {
       this.returnLink = this.name ? this.name : 'kategorie'
     })
   }
-  private readonly eventService: EventService = inject(EventService)
-  private readonly locationService: LocationService = inject(LocationService)
-  private readonly topicService: TopicService = inject(TopicService)
-
-  // Cache für Locations, um wiederholte Anfragen zu vermeiden
-  private readonly locationCache = new Map<string, Promise<AppLocation>>()
 
   async initilizeData() {
     this.loading = true
@@ -72,55 +78,9 @@ export class KategorieComponent implements OnInit {
       this.eventTypes = typeDB
 
       this.id = this.getEventIdFromName(topics, typeDB)
+      this.allEvents = allEvents
 
-      // Filtere Events basierend auf der ID
-      const rawEvents = this.id
-        ? allEvents.filter((event) => event.topic?.some((topic) => topic.id === this.id) || event.event_type?.id === this.id)
-        : allEvents
-
-      // Optimiere Location-Ladung durch Caching
-      this.events = await Promise.all(
-        rawEvents.map(async (event) => {
-          // Verwende Cache für Locations
-          let locationData: AppLocation | undefined
-
-          if (event.location) {
-            const locationId = String(event.location)
-            if (!this.locationCache.has(locationId)) {
-              this.locationCache.set(locationId, this.locationService.getLocationByID(event.location))
-            }
-
-            locationData = await this.locationCache.get(locationId)
-          }
-          return {
-            ...event,
-            locationName: locationData?.name ?? 'Unbekannter Ort',
-          }
-        }),
-      )
-
-      // Markiere vergangene Events und sortiere nach Datum (aufsteigend)
-      const now = new Date()
-      this.events = this.events.map((event) => {
-        const endDate = event.date_end ? new Date(event.date_end) : new Date(event.date_start)
-        return {
-          ...event,
-          isPast: endDate < now,
-        }
-      })
-
-      // Sortiere Events: Aktuelle Events nach Datum (aufsteigend), vergangene Events ans Ende
-      this.events.sort((a, b) => {
-        // Wenn ein Event vergangen ist und das andere nicht, kommt das aktuelle zuerst
-        if (a.isPast && !b.isPast) return 1
-        if (!a.isPast && b.isPast) return -1
-
-        // Wenn beide Events den gleichen Status haben (beide vergangen oder beide aktuell),
-        // sortiere nach Datum aufsteigend
-        const dateA = new Date(a.date_start).getTime()
-        const dateB = new Date(b.date_start).getTime()
-        return dateA - dateB
-      })
+      await this.performSearch(this.searchTerm)
     } catch (error) {
       console.error('Fehler beim Laden der Events:', error)
     } finally {
@@ -129,6 +89,84 @@ export class KategorieComponent implements OnInit {
       this.markForCheck()
     }
   }
+  onSearchChange(term: string) {
+    this.searchTerm = (term ?? '').trim()
+    if (this.searchDebounce) {
+      window.clearTimeout(this.searchDebounce)
+    }
+
+    this.searchDebounce = window.setTimeout(() => {
+      void this.performSearch(this.searchTerm)
+    }, 300)
+  }
+
+  private async performSearch(searchTerm: string) {
+    this.searching = true
+    // Sofort rendern, damit der Spinner zuverlässig sichtbar ist
+    this.markForCheck()
+    try {
+      // Basisliste ggf. nach Kategorie einschränken
+      const categoryId = this.id
+      let baseList = this.allEvents
+      if (categoryId) {
+        baseList = baseList.filter(
+          (event) => event.topic?.some((topic) => topic.id === categoryId) || event.event_type?.id === categoryId,
+        )
+      }
+
+      let resultEvents: AppEvent[]
+      if (searchTerm) {
+        const searchResults = await this.surreal.fulltextSearchEvents(searchTerm)
+        resultEvents = categoryId
+          ? searchResults.filter(
+              (event) => event.topic?.some((topic) => topic.id === categoryId) || event.event_type?.id === categoryId,
+            )
+          : searchResults
+      } else {
+        resultEvents = baseList
+      }
+
+      // Locations auflösen (mit Cache) + isPast markieren
+      const mapped = await Promise.all(
+        resultEvents.map(async (event) => {
+          let locationData: AppLocation | undefined
+
+          if (event.location) {
+            const locationId = String(event.location)
+            if (!this.locationCache.has(locationId)) {
+              this.locationCache.set(locationId, this.locationService.getLocationByID(event.location))
+            }
+            locationData = await this.locationCache.get(locationId)
+          }
+
+          const endDate = event.date_end ? new Date(event.date_end) : new Date(event.date_start)
+          return {
+            ...event,
+            locationName: locationData?.name ?? 'Unbekannter Ort',
+            isPast: endDate < new Date(),
+          } as EventWithResolvedLocation
+        }),
+      )
+
+      // Sortierung: aktuelle vor vergangenen, dann nach Startdatum
+      mapped.sort((a, b) => {
+        if (a.isPast && !b.isPast) return 1
+        if (!a.isPast && b.isPast) return -1
+        const dateA = new Date(a.date_start).getTime()
+        const dateB = new Date(b.date_start).getTime()
+        return dateA - dateB
+      })
+
+      this.events = mapped
+    } catch (error) {
+      console.error('[KategorieComponent] performSearch:error', error)
+      this.events = []
+    } finally {
+      this.searching = false
+      this.markForCheck()
+    }
+  }
+
   private getEventIdFromName(topics: Topic[], typeDB: TypeDB[]): RecordIdValue | null {
     const topic = topics.find((t) => t.name === this.name)
     const type = typeDB.find((t) => t.name === this.name)
