@@ -97,10 +97,10 @@ Diese Liste priorisiert Quick Wins und zeigt konkrete Verbesserungen mit Beispie
 9) [x] NGSW: Offline-Fallback und API-Gruppen – erledigt
 - Status: Offline-Fallback-Route (`/offline`) implementiert und via NetworkService automatische Umleitung bei Offline/Online; DataGroups für API vorhanden (`performance` + `freshness`).
 
-10) [ ] Budgets prüfen – optional/offen
-- Status: production-Budgets vorhanden (600kB Warnung, 1MB Error). Bei wachsendem Scope kann es sinnvoll sein, die Budgets leicht zu senken, um frühzeitig auf Bloat zu reagieren.
+10) [x] Budgets prüfen – erledigt
+- Status: Budgets gestrafft (Initial: Warnung 550kB, Fehler 900kB). Aktueller Initial-Bundle liegt bei ~523kB und bleibt unter der Warnschwelle.
 - Empfehlung:
-  - Periodisch `ng build --configuration production` prüfen und Source-Map-Explorer/Bundle-Analyzer verwenden.
+  - Weiterhin periodisch `ng build --configuration production` prüfen und bei Wachstum Budgets nachziehen.
 
 11) [ ] Leaflet und CommonJS – offen
 - Status: `allowedCommonJsDependencies: ["leaflet", "quill-delta"]` – ok. Prüfen, ob ESM-Version verfügbar ist, um Tree-Shaking zu verbessern.
