@@ -5,9 +5,7 @@
   </h1>
   <!-- Ladeanzeige -->
   @if (loading) {
-    <div class="flex items-center justify-center p-8">
-      <div class="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-[#c70d56]"></div>
-    </div>
+    <app-loading-spinner/>
     <div class="mr-2 ml-2 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       @for (item of [].constructor(3); track $index) {
         <div class="mx-auto w-full rounded rounded-2xl bg-white shadow-lg">

@@ -20,11 +20,12 @@ import { SnackBarService } from '../../services/snack-bar.service'
 import { TranslateModule } from '@ngx-translate/core'
 import { FormsModule } from '@angular/forms'
 import imageCompression from 'browser-image-compression'
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component'
 
 @Component({
   selector: 'app-image-upload',
   standalone: true,
-  imports: [CommonModule, TranslateModule, FormsModule],
+  imports: [CommonModule, TranslateModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './image-upload.component.html',
   styleUrl: './image-upload.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -44,6 +45,8 @@ export class ImageUploadComponent implements OnInit, OnChanges {
   openSettingsIndex: number | null = null
   pictureInfos: { copyright: string; creator: string }[] = []
   deletedImages: Media[] = []
+
+  isUploading = false
 
   private readonly mediaService = inject(MediaService)
   private readonly markForCheck = injectMarkForCheck()
@@ -114,6 +117,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
   }
 
   private handleFiles(selected: File[]) {
+    this.isUploading = true
     for (const file of selected) {
       if (!RegExp(/image\/(png|jpeg)/).exec(file.type)) {
         this.snackBarService.showError(`Dateityp nicht erlaubt: ${file.name}`)
@@ -125,7 +129,9 @@ export class ImageUploadComponent implements OnInit, OnChanges {
         this.snackBarService.showError(`Datei zu groß (max. 5 MB): ${file.name}`)
         continue
       }
-      this.createPreview(file)
+      this.createPreview(file).then(() => {
+        this.isUploading = false
+      })
     }
   }
 
@@ -133,8 +139,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
     if (!file) return
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const options: any = {
+      const options = {
         maxSizeMB: 3.2,
         maxWidthOrHeight: 1920, // skaliert große Bilder etwas runter
         useWebWorker: true,

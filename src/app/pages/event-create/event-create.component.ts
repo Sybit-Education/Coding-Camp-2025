@@ -27,6 +27,7 @@ import { sanitizeQuillContent } from '../../utils/quill-sanitizer'
 import { Media } from '@app/models/media.interface'
 import { MediaService } from '@app/services/media.service'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
+import { LoadingSpinnerComponent } from "@app/component/loading-spinner/loading-spinner.component";
 
 @Component({
   selector: 'app-event-create',
@@ -40,7 +41,8 @@ import { GoBackComponent } from '@app/component/go-back-button/go-back-button.co
     OrganizerInputComponent,
     ImageUploadComponent,
     GoBackComponent,
-  ],
+    LoadingSpinnerComponent
+],
   templateUrl: './event-create.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -106,6 +108,8 @@ export class EventCreateComponent implements OnInit {
   // Images & Upload
   previews: string[] = []
   images: Media[] = []
+
+  isSaving = false
 
   // ===== Lifecycle =====
   ngOnInit() {
@@ -222,6 +226,7 @@ export class EventCreateComponent implements OnInit {
   // ===== Speichern =====
 
   async saveEvent() {
+    this.isSaving = true
     try {
       // Location ist kein Pflichtfeld mehr
       // Organisator ist kein Pflichtfeld mehr
@@ -346,6 +351,7 @@ export class EventCreateComponent implements OnInit {
       )
       this.markForCheck()
     }
+    this.isSaving = false
   }
 
   // ===== Media Handling =====

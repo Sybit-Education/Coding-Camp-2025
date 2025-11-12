@@ -8,6 +8,7 @@
     (click)="onAreaClick()"
     tabindex="0"
     [class.hovering]="isDragging"
+    [disabled]="isUploading"
   >
     <svg
       class="h-12 w-12 text-gray-800 dark:text-white"
@@ -40,6 +41,9 @@
       style="display: none"
     />
   </button>
+  @if (isUploading) {
+    <app-loading-spinner />
+  }
 </div>
 @if (previews.length) {
   <div class="scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent flex gap-2 overflow-x-auto p-2">
