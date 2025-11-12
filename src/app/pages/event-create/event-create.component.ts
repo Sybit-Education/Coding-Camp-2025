@@ -27,7 +27,7 @@ import { sanitizeQuillContent } from '../../utils/quill-sanitizer'
 import { Media } from '@app/models/media.interface'
 import { MediaService } from '@app/services/media.service'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
-import { LoadingSpinnerComponent } from "@app/component/loading-spinner/loading-spinner.component";
+import { LoadingSpinnerComponent } from '@app/component/loading-spinner/loading-spinner.component'
 
 @Component({
   selector: 'app-event-create',
@@ -41,8 +41,8 @@ import { LoadingSpinnerComponent } from "@app/component/loading-spinner/loading-
     OrganizerInputComponent,
     ImageUploadComponent,
     GoBackComponent,
-    LoadingSpinnerComponent
-],
+    LoadingSpinnerComponent,
+  ],
   templateUrl: './event-create.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

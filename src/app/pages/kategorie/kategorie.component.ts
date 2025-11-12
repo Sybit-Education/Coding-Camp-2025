@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common'
 import { TypeDB } from '@app/models/typeDB.interface'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
 import { TranslateService } from '@ngx-translate/core'
-import { LoadingSpinnerComponent } from "@app/component/loading-spinner/loading-spinner.component";
+import { LoadingSpinnerComponent } from '@app/component/loading-spinner/loading-spinner.component'
 
 interface EventWithResolvedLocation extends AppEvent {
   locationName: string
