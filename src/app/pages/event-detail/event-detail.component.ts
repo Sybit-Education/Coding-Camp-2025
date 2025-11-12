@@ -6,7 +6,7 @@ import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
 import { ActivatedRoute, Router } from '@angular/router'
 import { EventService } from '../../services/event.service'
-import { CommonModule } from '@angular/common'
+import { CommonModule, DOCUMENT } from '@angular/common'
 import { Organizer } from '../../models/organizer.interface'
 import { LocationService } from '../../services/location.service'
 import { OrganizerService } from '../../services/organizer.service'
@@ -75,6 +75,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   private readonly markForCheck = injectMarkForCheck()
   private readonly title = inject(Title)
   private readonly meta = inject(Meta)
+  private readonly document = inject(DOCUMENT)
   readonly sharedStateService = inject(SharedStateService)
 
   ngOnInit(): void {
@@ -249,6 +250,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
 
         this.title.setTitle(`${this.event!.name} - 1200 Jahre Radolfzell`)
         this.updateMetaTags(this.event!, this.mediaList[0]?.url, this.location?.name || undefined)
+        this.setStructuredData(this.event!, this.mediaList[0]?.url)
         this.markForCheck()
       })
     } catch (err) {
@@ -308,12 +310,15 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     if (locationName) descriptionParts.push(locationName)
     const description = descriptionParts.join(' • ') || event.description || event.name
 
+    const ogLocale = (navigator.language || 'de-DE').replace('-', '_')
     const tags: Array<Record<string, string>> = [
       { name: 'description', content: description },
       { property: 'og:type', content: 'website' },
       { property: 'og:title', content: event.name },
       { property: 'og:description', content: description },
       { property: 'og:url', content: url },
+      { property: 'og:site_name', content: '1200 Jahre Radolfzell' },
+      { property: 'og:locale', content: ogLocale },
       { name: 'twitter:card', content: imageUrl ? 'summary_large_image' : 'summary' },
       { name: 'twitter:title', content: event.name },
       { name: 'twitter:description', content: description },
@@ -321,11 +326,90 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
 
     if (imageUrl) {
       tags.push({ property: 'og:image', content: imageUrl })
+      tags.push({ property: 'og:image:alt', content: event.name })
       tags.push({ name: 'twitter:image', content: imageUrl })
+      tags.push({ name: 'twitter:image:alt', content: event.name })
     }
 
     for (const tag of tags) {
       this.meta.updateTag(tag as any)
     }
+  }
+
+  /**
+   * Fügt strukturierte Daten (Schema.org/JSON-LD) für Events hinzu,
+   * damit Suchmaschinen und Social Crawler die Veranstaltung besser verstehen.
+   */
+  private setStructuredData(event: Event, imageUrl?: string): void {
+    const scriptId = 'ld-json-event'
+    const existing = this.document.getElementById(scriptId)
+    if (existing?.parentNode) {
+      existing.parentNode.removeChild(existing)
+    }
+
+    const url = this.getEventUrl()
+    const startDate = event.date_start ? new Date(event.date_start) : null
+    const endDate = event.date_end ? new Date(event.date_end) : null
+
+    const data: any = {
+      '@context': 'https://schema.org',
+      '@type': 'Event',
+      name: event.name,
+      url,
+      eventStatus: 'https://schema.org/EventScheduled',
+      eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    }
+
+    if (event.description) data.description = event.description
+    if (startDate) data.startDate = startDate.toISOString()
+    if (endDate) data.endDate = endDate.toISOString()
+    if (imageUrl) data.image = [imageUrl]
+
+    if (this.location) {
+      const latitude = this.location.geo_point?.coordinates?.[1]
+      const longitude = this.location.geo_point?.coordinates?.[0]
+      data.location = {
+        '@type': 'Place',
+        name: (this.location as any).name,
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: (this.location as any).street || undefined,
+          postalCode: (this.location as any).zip_code || undefined,
+          addressLocality: (this.location as any).city || 'Radolfzell',
+          addressCountry: 'DE',
+        },
+      }
+      if (latitude != null && longitude != null) {
+        data.location.geo = {
+          '@type': 'GeoCoordinates',
+          latitude,
+          longitude,
+        }
+      }
+    }
+
+    if (this.organizer) {
+      data.organizer = {
+        '@type': 'Organization',
+        name: this.organizer.name,
+        email: (this.organizer as any).email || undefined,
+        telephone: (this.organizer as any).phonenumber || undefined,
+      }
+    }
+
+    if ((event as any).price != null) {
+      data.offers = {
+        '@type': 'Offer',
+        price: String((event as any).price),
+        priceCurrency: 'EUR',
+        availability: 'https://schema.org/InStock',
+      }
+    }
+
+    const script = this.document.createElement('script')
+    script.type = 'application/ld+json'
+    script.id = scriptId
+    script.text = JSON.stringify(data)
+    this.document.head.appendChild(script)
   }
 }
