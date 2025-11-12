@@ -41,7 +41,13 @@ export class IconRegistryService {
     // Grundlegende Sanitization: entferne <script>, Inline-Event-Handler, javascript:-Links, foreignObject
     svg = svg
       .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '')
-      .replace(/\son\w+="[^"]*"/gi, '')
+    // Remove all inline event handler attributes (on...) repeatedly until none remain
+    let prevSvg;
+    do {
+      prevSvg = svg;
+      svg = svg.replace(/\son\w+="[^"]*"/gi, '');
+    } while (svg !== prevSvg);
+    svg = svg
       .replace(/\s(?:xlink:)?href="javascript:[^"]*"/gi, '')
       .replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi, '')
 
