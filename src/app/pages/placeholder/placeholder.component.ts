@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
+import { Meta, Title } from '@angular/platform-browser'
 
 @Component({
   selector: 'app-placeholder',
@@ -36,6 +37,18 @@ import { RouterModule } from '@angular/router'
     </div>
   `,
 })
-export class PlaceholderComponent {
+export class PlaceholderComponent implements OnInit {
   pageTitle = 'Seite nicht gefunden'
+
+  private readonly title = inject(Title)
+  private readonly meta = inject(Meta)
+
+  ngOnInit(): void {
+    // Set explicit 404 SEO hints for SPAs
+    this.title.setTitle('404 – Seite nicht gefunden | 1200 Jahre Radolfzell')
+    this.meta.updateTag({ name: 'robots', content: 'noindex, nofollow' })
+    this.meta.updateTag({ name: 'prerender-status-code', content: '404' })
+    this.meta.updateTag({ name: 'description', content: 'Die angeforderte Seite wurde nicht gefunden.' })
+    this.meta.updateTag({ property: 'og:title', content: 'Seite nicht gefunden' })
+  }
 }
