@@ -41,7 +41,6 @@
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [
-              "leaflet",
               "quill-delta"
             ],
             "optimization": {

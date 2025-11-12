@@ -102,8 +102,8 @@ Diese Liste priorisiert Quick Wins und zeigt konkrete Verbesserungen mit Beispie
 - Empfehlung:
   - Weiterhin periodisch `ng build --configuration production` prüfen und bei Wachstum Budgets nachziehen.
 
-11) [ ] Leaflet und CommonJS – offen
-- Status: `allowedCommonJsDependencies: ["leaflet", "quill-delta"]` – ok. Prüfen, ob ESM-Version verfügbar ist, um Tree-Shaking zu verbessern.
+11) [x] Leaflet und CommonJS – erledigt
+- Status: Leaflet wird als ESM importiert; "leaflet" aus allowedCommonJsDependencies entfernt. Falls künftig Warnungen auftreten, prüfen, ob irgendwo `leaflet/dist/*` importiert wird.
 
 ## Prio B – A11y
 
