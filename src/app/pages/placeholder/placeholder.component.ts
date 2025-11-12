@@ -14,14 +14,6 @@ import { RouterModule } from '@angular/router'
 
       <div class="mt-8 flex items-center justify-center gap-3">
         <a routerLink="/" class="rounded bg-[#c70d56] px-4 py-2 text-white hover:opacity-90">Zur Startseite</a>
-        <button
-          type="button"
-          (click)="goBack()"
-          class="rounded border border-gray-300 px-4 py-2 hover:bg-gray-50"
-          aria-label="Zur vorherigen Seite zurückkehren"
-        >
-          Zurück
-        </button>
       </div>
 
       <div class="mt-10 flex justify-center">
@@ -46,13 +38,4 @@ import { RouterModule } from '@angular/router'
 })
 export class PlaceholderComponent {
   pageTitle = 'Seite nicht gefunden'
-
-  goBack(): void {
-    if (history.length > 1) {
-      history.back()
-    } else {
-      // Fallback zur Startseite
-      window.location.href = '/'
-    }
-  }
 }
