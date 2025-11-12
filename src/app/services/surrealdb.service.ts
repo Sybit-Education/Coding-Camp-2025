@@ -98,6 +98,8 @@ export class SurrealdbService extends Surreal {
   }
 
   async deleteRow(recordId: RecordId<string> | StringRecordId) {
+    // Stelle sicher, dass die Verbindung initialisiert ist
+    await this.initialize()
     await super.delete(recordId)
   }
 }
