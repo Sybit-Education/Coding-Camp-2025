@@ -1,7 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
-import { BehaviorSubject, Observable } from 'rxjs'
-import { toSignal } from '@angular/core/rxjs-interop'
+import { Observable } from 'rxjs'
+import { toObservable } from '@angular/core/rxjs-interop'
 
 @Injectable({
   providedIn: 'root',
@@ -9,15 +9,11 @@ import { toSignal } from '@angular/core/rxjs-interop'
 export class I18nService {
   private readonly translateService = inject(TranslateService)
 
-  // Signal für reaktiven State
-  readonly currentLangState = signal<string>('de')
+  // Single Source of Truth als Signal
+  readonly currentLang = signal<string>('de')
 
-  // BehaviorSubject für Abwärtskompatibilität
-  private readonly currentLangSubject = new BehaviorSubject<string>('de')
-  currentLang$ = this.currentLangSubject.asObservable()
-
-  // Signal aus Observable für Komponenten
-  readonly currentLang = toSignal(this.currentLang$, { initialValue: 'de' })
+  // Observable-API für Abwärtskompatibilität
+  readonly currentLang$ = toObservable(this.currentLang)
 
   constructor() {
     this.initializeTranslation()
@@ -47,9 +43,8 @@ export class I18nService {
   use(lang: string): void {
     this.translateService.use(lang)
 
-    // Beide State-Mechanismen aktualisieren
-    this.currentLangState.set(lang)
-    this.currentLangSubject.next(lang)
+    // Single Source of Truth aktualisieren
+    this.currentLang.set(lang)
 
     localStorage.setItem('selectedLanguage', lang)
 

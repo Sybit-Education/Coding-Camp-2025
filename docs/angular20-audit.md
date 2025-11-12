@@ -145,9 +145,9 @@ Diese Liste priorisiert Quick Wins und zeigt konkrete Verbesserungen mit Beispie
 - Datei: src/app/services/translate.service.ts exportiert `I18nService`.
 - Empfehlung: Entweder Datei in `i18n.service.ts` umbenennen oder Klasse an Dateinamen angleichen, um Auffindbarkeit zu erhöhen.
 
-17) [ ] Signals + Subjects doppelt in Services – offen
-- Beispiel: `LocalStorageService` (aus euren Referenzdateien) nutzt beides. Das ist ok für schrittweise Migration, aber langfristig vereinheitlichen (Signals bevorzugen).
-- Vorteil: Weniger doppelte States, kleinere Fehlerfläche.
+17) [x] Signals + Subjects vereinheitlicht – erledigt
+- Status: I18nService nutzt jetzt ein Signal als Single Source of Truth; für Abwärtskompatibilität wird ein Observable via `toObservable(this.currentLang)` exportiert.
+- Empfehlung: Weitere Services bei Bedarf analog migrieren, sobald sie dem Chat hinzugefügt wurden.
 
 18) [ ] Unit/E2E-Tests – offen
 - Empfehlung:
