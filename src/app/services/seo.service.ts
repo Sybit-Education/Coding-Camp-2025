@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core'
-import { Meta, Title } from '@angular/platform-browser'
+import { Meta, MetaDefinition, Title } from '@angular/platform-browser'
 import { CanActivateFn } from '@angular/router'
 
 @Injectable({ providedIn: 'root' })
@@ -27,7 +27,7 @@ export class SeoService {
       '_',
     )
 
-    const tags: Record<string, string>[] = [
+    const tags: MetaDefinition[] = [
       { name: 'description', content: description },
       { property: 'og:type', content: type },
       { property: 'og:title', content: title },
@@ -48,7 +48,7 @@ export class SeoService {
     }
 
     for (const tag of tags) {
-      this.meta.updateTag(tag as any)
+      this.meta.updateTag(tag)
     }
   }
 }

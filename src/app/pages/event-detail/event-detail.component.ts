@@ -25,7 +25,6 @@ import { EventImageComponent } from '@app/component/event-image/event-image.comp
 import { MatIconModule } from '@angular/material/icon'
 import { IconComponent } from '@app/icons/icon.component'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
-import { Meta, Title } from '@angular/platform-browser'
 import { SeoService } from '@app/services/seo.service'
 
 @Component({
@@ -74,8 +73,6 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   private readonly loginservice = inject(LoginService)
   private readonly mediaService = inject(MediaService)
   private readonly markForCheck = injectMarkForCheck()
-  private readonly title = inject(Title)
-  private readonly meta = inject(Meta)
   private readonly seo = inject(SeoService)
   private readonly document = inject(DOCUMENT)
   readonly sharedStateService = inject(SharedStateService)
@@ -304,57 +301,6 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     return `${baseUrl}/event/${id}`
   }
 
-  /**
-   * Aktualisiert Open Graph und Twitter Meta-Tags für Link-Previews
-   */
-  private updateMetaTags(event: Event, imageUrl?: string, locationName?: string): void {
-    const url = this.getEventUrl()
-
-    const toDate = (d?: Date) => (d ? new Date(d) : null)
-    const startDate = toDate(event.date_start)
-    const endDate = toDate(event.date_end)
-
-    const locale = navigator.language || 'de-DE'
-    let dateText = ''
-    if (startDate) {
-      const opts: Intl.DateTimeFormatOptions = { dateStyle: 'full', timeStyle: 'short' }
-      dateText = new Intl.DateTimeFormat(locale, opts).format(startDate)
-      if (endDate && endDate.getTime() !== startDate.getTime()) {
-        const endText = new Intl.DateTimeFormat(locale, opts).format(endDate)
-        dateText = `${dateText} – ${endText}`
-      }
-    }
-
-    const descriptionParts: string[] = []
-    if (dateText) descriptionParts.push(dateText)
-    if (locationName) descriptionParts.push(locationName)
-    const description = descriptionParts.join(' • ') || event.description || event.name
-
-    const ogLocale = (navigator.language || 'de-DE').replace('-', '_')
-    const tags: Record<string, string>[] = [
-      { name: 'description', content: description },
-      { property: 'og:type', content: 'website' },
-      { property: 'og:title', content: event.name },
-      { property: 'og:description', content: description },
-      { property: 'og:url', content: url },
-      { property: 'og:site_name', content: '1200 Jahre Radolfzell' },
-      { property: 'og:locale', content: ogLocale },
-      { name: 'twitter:card', content: imageUrl ? 'summary_large_image' : 'summary' },
-      { name: 'twitter:title', content: event.name },
-      { name: 'twitter:description', content: description },
-    ]
-
-    if (imageUrl) {
-      tags.push({ property: 'og:image', content: imageUrl })
-      tags.push({ property: 'og:image:alt', content: event.name })
-      tags.push({ name: 'twitter:image', content: imageUrl })
-      tags.push({ name: 'twitter:image:alt', content: event.name })
-    }
-
-    for (const tag of tags) {
-      this.meta.updateTag(tag as any)
-    }
-  }
 
   /**
    * Fügt strukturierte Daten (Schema.org/JSON-LD) für Events hinzu,
@@ -371,7 +317,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     const startDate = event.date_start ? new Date(event.date_start) : null
     const endDate = event.date_end ? new Date(event.date_end) : null
 
-    const data: any = {
+    const data: Record<string, unknown> = {
       '@context': 'https://schema.org',
       '@type': 'Event',
       name: event.name,
@@ -390,12 +336,12 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       const longitude = this.location.geo_point?.coordinates?.[0]
       data.location = {
         '@type': 'Place',
-        name: (this.location as any).name,
+        name: this.location.name,
         address: {
           '@type': 'PostalAddress',
-          streetAddress: (this.location as any).street || undefined,
-          postalCode: (this.location as any).zip_code || undefined,
-          addressLocality: (this.location as any).city || 'Radolfzell',
+          streetAddress: this.location.street || undefined,
+          postalCode: this.location.zip_code || undefined,
+          addressLocality: this.location.city || 'Radolfzell',
           addressCountry: 'DE',
         },
       }
@@ -417,10 +363,10 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       }
     }
 
-    if ((event as any).price != null) {
+    if (event.price != null) {
       data.offers = {
         '@type': 'Offer',
-        price: String((event as any).price),
+        price: String(event.price),
         priceCurrency: 'EUR',
         availability: 'https://schema.org/InStock',
       }
