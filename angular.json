@@ -41,6 +41,7 @@
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [
+              "leaflet",
               "quill-delta"
             ],
             "optimization": {
@@ -70,8 +71,7 @@
                 }
               ],
               "outputHashing": "all",
-              "serviceWorker": true,
-              "ngswConfigPath": "ngsw-config.json"
+              "serviceWorker": "ngsw-config.json"
             },
             "production-de": {
               "extends": "production",
