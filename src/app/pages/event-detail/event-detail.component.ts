@@ -25,6 +25,7 @@ import { EventImageComponent } from '@app/component/event-image/event-image.comp
 import { MatIconModule } from '@angular/material/icon'
 import { IconComponent } from '@app/icons/icon.component'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
+import { Meta, Title } from '@angular/platform-browser'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -72,6 +73,8 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   private readonly loginservice = inject(LoginService)
   private readonly mediaService = inject(MediaService)
   private readonly markForCheck = injectMarkForCheck()
+  private readonly title = inject(Title)
+  private readonly meta = inject(Meta)
   readonly sharedStateService = inject(SharedStateService)
 
   ngOnInit(): void {
@@ -81,14 +84,14 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
 
     this.route.paramMap.subscribe((params) => {
       this.eventId = params.get('id') || ''
+      if (this.eventId) {
+        const recordID = new StringRecordId('event:' + this.eventId)
+        this.loadEvent(recordID)
+      } else {
+        this.error = 'Event ID nicht gefunden'
+        this.announceError('Event ID nicht gefunden')
+      }
     })
-    if (this.eventId) {
-      const recordID = new StringRecordId('event:' + this.eventId)
-      this.loadEvent(recordID)
-    } else {
-      this.error = 'Event ID nicht gefunden'
-      this.announceError('Event ID nicht gefunden')
-    }
 
     // Subscription für Login-Status
     this.subscriptions.add(
@@ -225,7 +228,13 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
 
       // Batch-Update für weniger Change Detection Zyklen
       requestAnimationFrame(async () => {
-        const mediaResults = await mediaPromise
+        const [mediaResults, location, organizer, type] = await Promise.all([
+          mediaPromise,
+          locationPromise,
+          organizerPromise,
+          typePromise,
+        ])
+
         if (mediaResults.length > 0) {
           this.mediaList = mediaResults.map((m) => ({
             url: m.url,
@@ -234,11 +243,12 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
           }))
         }
 
-        locationPromise.then((location) => (this.location = location))
-        organizerPromise.then((organizer) => (this.organizer = organizer))
-        typePromise.then((type) => (this.type = type))
+        this.location = location
+        this.organizer = organizer
+        this.type = type
 
-        document.title = `${this.event!.name} - 1200 Jahre Radolfzell`
+        this.title.setTitle(`${this.event!.name} - 1200 Jahre Radolfzell`)
+        this.updateMetaTags(this.event!, this.mediaList[0]?.url, this.location?.name || undefined)
         this.markForCheck()
       })
     } catch (err) {
@@ -270,5 +280,52 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     const id = this.event.id.id || ''
     const baseUrl = window.location.origin
     return `${baseUrl}/event/${id}`
+  }
+
+  /**
+   * Aktualisiert Open Graph und Twitter Meta-Tags für Link-Previews
+   */
+  private updateMetaTags(event: Event, imageUrl?: string, locationName?: string): void {
+    const url = this.getEventUrl()
+
+    const toDate = (d?: Date) => (d ? new Date(d) : null)
+    const startDate = toDate(event.date_start)
+    const endDate = toDate(event.date_end)
+
+    const locale = navigator.language || 'de-DE'
+    let dateText = ''
+    if (startDate) {
+      const opts: Intl.DateTimeFormatOptions = { dateStyle: 'full', timeStyle: 'short' }
+      dateText = new Intl.DateTimeFormat(locale, opts).format(startDate)
+      if (endDate && endDate.getTime() !== startDate.getTime()) {
+        const endText = new Intl.DateTimeFormat(locale, opts).format(endDate)
+        dateText = `${dateText} – ${endText}`
+      }
+    }
+
+    const descriptionParts: string[] = []
+    if (dateText) descriptionParts.push(dateText)
+    if (locationName) descriptionParts.push(locationName)
+    const description = descriptionParts.join(' • ') || event.description || event.name
+
+    const tags: Array<Record<string, string>> = [
+      { name: 'description', content: description },
+      { property: 'og:type', content: 'website' },
+      { property: 'og:title', content: event.name },
+      { property: 'og:description', content: description },
+      { property: 'og:url', content: url },
+      { name: 'twitter:card', content: imageUrl ? 'summary_large_image' : 'summary' },
+      { name: 'twitter:title', content: event.name },
+      { name: 'twitter:description', content: description },
+    ]
+
+    if (imageUrl) {
+      tags.push({ property: 'og:image', content: imageUrl })
+      tags.push({ name: 'twitter:image', content: imageUrl })
+    }
+
+    for (const tag of tags) {
+      this.meta.updateTag(tag as any)
+    }
   }
 }
