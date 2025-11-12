@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges, inject } from '@angular/core'
 import { SafeHtml } from '@angular/platform-browser'
 import { IconRegistryService } from '../services/icon-registry.service'
+import { take } from 'rxjs'
 
 @Component({
   selector: 'app-icon',
@@ -36,7 +37,7 @@ export class IconComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['name']?.currentValue) {
-      this.registry.get(this.name).subscribe({
+      this.registry.get(this.name).pipe(take(1)).subscribe({
         next: (svg) => {
           this.safeSvg = svg
           this.cdr.markForCheck()
