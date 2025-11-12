@@ -102,16 +102,16 @@ export class SurrealdbService extends Surreal {
     await super.delete(recordId)
   }
 
-  async fulltextSearchEvents(query: string): Promise<AppEvent[]> {
+  async fulltextSearchEvents(searchTerm: string): Promise<AppEvent[]> {
     await this.initialize()
 
-    const q = (query ?? '').trim()
+    const q = (searchTerm ?? '').trim()
     if (!q) {
-      console.debug('[SurrealdbService] FTS skipped: empty query')
+      console.debug('[SurrealdbService] FTS skipped: empty searchTerm')
       return []
     }
 
-    // Gewichtete FTS-Abfrage mit Highlight-Feldern (name/description/organizer/location/city)
+    // Gewichtete FTS-Abfrage (name/description/organizer/location/city...)
     const ftsSql = `SELECT 
         *,
         (search::score(0)*3     -- name

@@ -94,15 +94,13 @@ export class KategorieComponent implements OnInit {
     if (this.searchDebounce) {
       window.clearTimeout(this.searchDebounce)
     }
-    // Spinner sofort anzeigen und Change Detection triggern
-    this.searching = true
-    this.markForCheck()
+
     this.searchDebounce = window.setTimeout(() => {
       void this.performSearch(this.searchTerm)
     }, 300)
   }
 
-  private async performSearch(q: string) {
+  private async performSearch(searchTerm: string) {
     this.searching = true
     // Sofort rendern, damit der Spinner zuverlässig sichtbar ist
     this.markForCheck()
@@ -117,8 +115,8 @@ export class KategorieComponent implements OnInit {
       }
 
       let resultEvents: AppEvent[]
-      if (q) {
-        const searchResults = await this.surreal.fulltextSearchEvents(q)
+      if (searchTerm) {
+        const searchResults = await this.surreal.fulltextSearchEvents(searchTerm)
         resultEvents = categoryId
           ? searchResults.filter(
               (event) => event.topic?.some((topic) => topic.id === categoryId) || event.event_type?.id === categoryId,
