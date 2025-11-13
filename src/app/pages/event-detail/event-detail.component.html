@@ -21,7 +21,10 @@
             <h1 class="my-1 text-2xl">
               {{ event.name }}
             </h1>
-            <app-event-pills class="text-xs" [event]="event"></app-event-pills>
+            <div class="flex flex-wrap gap-2">
+              <app-event-type-pill class="text-xs" [event]="event"></app-event-type-pill>
+              <app-event-topic-pill-list class="text-xs" [event]="event"></app-event-topic-pill-list>
+            </div>
             <div class="flex justify-end">
               <div class="mb-1 flex items-center justify-center gap-2">
                 <app-favorite-button [eventId]="event.id" class="p-1"></app-favorite-button>
@@ -42,7 +45,10 @@
             </div>
           </div>
           <div class="flex w-full items-center justify-between px-4">
-            <app-event-pills class="text-xs" [event]="event"></app-event-pills>
+            <div class="flex flex-wrap gap-2">
+              <app-event-type-pill class="text-xs" [event]="event"></app-event-type-pill>
+              <app-event-topic-pill-list class="text-xs" [event]="event"></app-event-topic-pill-list>
+            </div>
           </div>
         }
         <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
