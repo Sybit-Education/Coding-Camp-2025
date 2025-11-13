@@ -20,32 +20,18 @@ export class SurrealdbService extends Surreal {
     super()
   }
 
-  // Helper to stringify RecordId reliably
-  private recordIdToString(id: RecordId<string> | StringRecordId): string {
-    try {
-      if (typeof id === 'string') return id
-      // Surreal's RecordId may implement toString()
-      return (id as any).toString?.() ?? `${(id as any).tb}:${(id as any).id}`
-    } catch {
-      return String(id)
-    }
-  }
 
-  private tableFromRecordId(id: RecordId<string> | StringRecordId): string | undefined {
-    try {
-      if (typeof id === 'string') return id.split(':')[0]
-      return (id as any).tb ?? undefined
-    } catch {
-      return undefined
-    }
+
+  private tableFromRecordId(recordId: RecordId<string> | StringRecordId): string | undefined {
+      return (recordId as any).tb ?? undefined
   }
 
   private tableKey(table: string): string {
     return `table:${table}`
   }
 
-  private recordKey(id: RecordId<string> | StringRecordId): string {
-    return `record:${this.recordIdToString(id)}`
+  private recordKey(recordId: RecordId<string> | StringRecordId): string {
+    return `record:${recordId}`
   }
 
   private stableStringify(obj: unknown): string {
