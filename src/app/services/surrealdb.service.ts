@@ -20,10 +20,30 @@ export class SurrealdbService extends Surreal {
     super()
   }
 
-
+  // Nutze eine robuste String-Repräsentation für Record-IDs
+  private recordIdToString(recordId: RecordId<string> | StringRecordId): string {
+    try {
+      const s = (recordId as any)?.toString?.()
+      if (typeof s === 'string') return s
+      const tb = (recordId as any)?.tb
+      const id = (recordId as any)?.id
+      if (tb && id) return `${tb}:${id}`
+      return String(recordId)
+    } catch {
+      return String(recordId)
+    }
+  }
 
   private tableFromRecordId(recordId: RecordId<string> | StringRecordId): string | undefined {
-      return (recordId as any).tb ?? undefined
+    try {
+      const tb = (recordId as any)?.tb
+      if (tb) return tb as string
+      const s = (recordId as any)?.toString?.() ?? String(recordId)
+      const idx = s.indexOf(':')
+      return idx > -1 ? s.slice(0, idx) : undefined
+    } catch {
+      return undefined
+    }
   }
 
   private tableKey(table: string): string {
@@ -31,7 +51,7 @@ export class SurrealdbService extends Surreal {
   }
 
   private recordKey(recordId: RecordId<string> | StringRecordId): string {
-    return `record:${recordId}`
+    return `record:${this.recordIdToString(recordId)}`
   }
 
   private stableStringify(obj: unknown): string {
@@ -91,6 +111,8 @@ export class SurrealdbService extends Surreal {
         password: password,
       },
     })
+    // User-Kontext kann sich ändern -> Cache leeren, um falsche Daten zu vermeiden
+    this.cache.clear()
     return jwtToken
   }
 
