@@ -70,7 +70,7 @@ export class EventCreateComponent implements OnInit {
   eventId: RecordId<'event'> | undefined = undefined
   eventName = ''
   description = ''
-  moreInfoLink: string | null = null
+  moreInfosLink: string | null = null
   price: string | null = null
   dateStart = ''
   timeStart = ''
@@ -142,7 +142,7 @@ export class EventCreateComponent implements OnInit {
       this.eventId = event.id!
       this.eventName = event.name
       this.description = event.description ?? ''
-      this.moreInfoLink = event.more_info_link ?? null
+      this.moreInfosLink = event.more_infos_link ?? null
       this.price = event.price?.toString() ?? null
       this.age = event.age ?? null
       this.restriction = event.restriction ?? null
@@ -292,7 +292,7 @@ export class EventCreateComponent implements OnInit {
         date_start: start,
         date_end: end,
         description: sanitizeQuillContent(this.description),
-        more_info_link: this.moreInfoLink || undefined,
+        more_infos_link: this.moreInfosLink || undefined,
         price: priceDec,
         draft: this.draft,
         organizer: this.selectedOrganizer?.id ?? undefined,
