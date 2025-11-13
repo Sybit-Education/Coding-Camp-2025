@@ -20,7 +20,7 @@ export interface Event extends Record<string, unknown> {
   date_end?: Date
   date_start: Date
   description?: string
-  more_info_link?: string
+  more_infos_link?: string
   price?: Decimal
   age?: number
   restriction?: string
