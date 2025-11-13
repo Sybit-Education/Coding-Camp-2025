@@ -17,6 +17,7 @@ interface Pill {
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './event-topic-pill-list.component.html',
+  styleUrls: ['./event-topic-pill-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventTopicPillListComponent implements OnChanges {
