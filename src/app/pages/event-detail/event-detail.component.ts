@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnDestroy,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { Subscription } from 'rxjs'
 import { MapComponent } from '../../component/map/map.component'
@@ -24,8 +18,14 @@ import { TranslateModule } from '@ngx-translate/core'
 import { FavoriteButtonComponent } from '../../component/favorite-button/favorite-button.component'
 import { ShareComponent } from '../../component/share/share.component'
 import { MediaService } from '@app/services/media.service'
-import { ImageCarouselComponent } from '@app/component/image-carousel/image-carousel.component'
-import { CalendarExportComponent } from "@app/component/calendar-export/calendar-export.component";
+import { CalendarExportComponent } from '@app/component/calendar-export/calendar-export.component'
+import { ScreenSize } from '@app/models/screenSize.enum'
+import { SharedStateService } from '@app/services/shared-state.service'
+import { EventImageComponent } from '@app/component/event-image/event-image.component'
+import { MatIconModule } from '@angular/material/icon'
+import { IconComponent } from '@app/icons/icon.component'
+import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
+import { EventPillsComponent } from '@app/component/event-pills/event-pills.component'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -37,9 +37,14 @@ import { CalendarExportComponent } from "@app/component/calendar-export/calendar
     DateTimeRangePipe,
     FavoriteButtonComponent,
     ShareComponent,
-    ImageCarouselComponent,
-    CalendarExportComponent
-],
+    EventImageComponent,
+    CalendarExportComponent,
+    MatIconModule,
+    IconComponent,
+    EventPillsComponent,
+
+    GoBackComponent,
+  ],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,11 +57,13 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   type: TypeDB | null = null
   error: string | null = null
   eventId = ''
+  goBackSite: string | string[] = '/'
+  goBackParams?: Record<string, string | number | boolean | null | undefined>
 
-  mediaUrl: (string | null)[] = []
+  mediaList: { url: string; copyright: string; creator: string }[] = []
 
   protected isLoggedIn = false
-  private fromCategory = ''
+  screenSize = ScreenSize
 
   private readonly eventService = inject(EventService)
   private readonly locationService = inject(LocationService)
@@ -66,13 +73,9 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   private readonly loginservice = inject(LoginService)
   private readonly mediaService = inject(MediaService)
   private readonly markForCheck = injectMarkForCheck()
+  readonly sharedStateService = inject(SharedStateService)
 
   ngOnInit(): void {
-    this.route.queryParamMap.subscribe((params) => {
-      this.fromCategory = params.get('fromCategory') || ''
-      console.log('fromCategory:', this.fromCategory)
-    })
-
     this.route.paramMap.subscribe((params) => {
       this.eventId = params.get('id') || ''
     })
@@ -106,9 +109,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     console.error(`Fehler: ${message}`)
   }
 
-  async loadType(
-    typeId: RecordId<'event_type'> | undefined,
-  ): Promise<TypeDB | null> {
+  async loadType(typeId: RecordId<'event_type'> | undefined): Promise<TypeDB | null> {
     if (typeId) {
       try {
         const type = await this.eventService.getEventTypeByID(typeId)
@@ -128,12 +129,9 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  async loadLocation(
-    locationId: RecordId<'location'>,
-  ): Promise<Location | null> {
+  async loadLocation(locationId: RecordId<'location'>): Promise<Location | null> {
     try {
-      const foundLocation =
-        await this.locationService.getLocationByID(locationId)
+      const foundLocation = await this.locationService.getLocationByID(locationId)
 
       if (foundLocation) {
         return foundLocation
@@ -147,12 +145,9 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  async loadOrganizer(
-    organizerId: RecordId<'organizer'>,
-  ): Promise<Organizer | null> {
+  async loadOrganizer(organizerId: RecordId<'organizer'>): Promise<Organizer | null> {
     try {
-      const foundOrganizer =
-        await this.organizerService.getOrganizerByID(organizerId)
+      const foundOrganizer = await this.organizerService.getOrganizerByID(organizerId)
 
       if (foundOrganizer) {
         return foundOrganizer
@@ -183,14 +178,21 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       const promises: Promise<unknown>[] = []
 
       // Media-URL laden
-      let mediaUrlPromise: Promise<(string | null)[]> = Promise.resolve([null])
+      let mediaPromise: Promise<{ url: string; copyright: string; creator: string }[]> = Promise.resolve([])
+
       if (foundEvent.media?.length > 0) {
-        mediaUrlPromise = Promise.all(
-          foundEvent.media.map((mediaId) =>
-            this.mediaService.getMediaUrl(mediaId),
-          ),
+        mediaPromise = Promise.all(
+          foundEvent.media.map(async (mediaId) => {
+            const media = await this.mediaService.getMediaById(mediaId)
+            const url = this.mediaService.getMediaUrl(media.id)
+            return {
+              url: url || '',
+              copyright: media.copyright || '',
+              creator: media.creator || '',
+            }
+          }),
         )
-        promises.push(mediaUrlPromise)
+        promises.push(mediaPromise)
       }
 
       // Extrahiere IDs für parallele Ladung
@@ -199,12 +201,8 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       const typeId = this.event?.['event_type']
 
       // Lade alle abhängigen Daten parallel
-      const locationPromise = locationId
-        ? this.loadLocation(locationId)
-        : Promise.resolve(null)
-      const organizerPromise = organizerId
-        ? this.loadOrganizer(organizerId)
-        : Promise.resolve(null)
+      const locationPromise = locationId ? this.loadLocation(locationId) : Promise.resolve(null)
+      const organizerPromise = organizerId ? this.loadOrganizer(organizerId) : Promise.resolve(null)
       const typePromise = typeId ? this.loadType(typeId) : Promise.resolve(null)
 
       promises.push(locationPromise, organizerPromise, typePromise)
@@ -213,11 +211,14 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       await Promise.all(promises)
 
       // Batch-Update für weniger Change Detection Zyklen
-      requestAnimationFrame(() => {
-        if (foundEvent.media?.length > 0) {
-          mediaUrlPromise.then((url) => {
-            this.mediaUrl = url
-          })
+      requestAnimationFrame(async () => {
+        const mediaResults = await mediaPromise
+        if (mediaResults.length > 0) {
+          this.mediaList = mediaResults.map((m) => ({
+            url: m.url,
+            copyright: m.copyright,
+            creator: m.creator,
+          }))
         }
 
         locationPromise.then((location) => (this.location = location))
@@ -230,21 +231,6 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     } catch (err) {
       this.error = `Fehler beim Laden: ${err}`
       this.announceError(`Fehler beim Laden: ${err}`)
-    }
-  }
-
-  goBack() {
-    if (!this.fromCategory) {
-      this.router.navigate(['/'])
-    } else if (this.fromCategory.includes('keine')) {
-      this.router.navigate(['/kategorie'])
-    } else {
-      this.router.navigate(['/kategorie'], {
-        queryParams: {
-          id: this.fromCategory.split(',')[0],
-          name: this.fromCategory.split(',')[1] || '',
-        },
-      })
     }
   }
 
@@ -266,7 +252,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
    * Wird für die Meta-Tags verwendet
    */
   getEventUrl(): string {
-    if (!this.event || !this.event.id) return window.location.href
+    if (!this.event?.id) return window.location.href
 
     const id = this.event.id.id || ''
     const baseUrl = window.location.origin

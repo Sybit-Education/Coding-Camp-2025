@@ -14,16 +14,10 @@ export class UpdateService {
   constructor() {
     if (this.swUpdate.isEnabled) {
       // Abonniere Update-Events
-      this.swUpdate.versionUpdates
-        .pipe(
-          filter(
-            (evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY',
-          ),
-        )
-        .subscribe(() => {
-          console.log('Neue Version verfügbar')
-          this.updateAvailableSubject.next(true)
-        })
+      this.swUpdate.versionUpdates.pipe(filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY')).subscribe(() => {
+        console.info('Neue Version verfügbar')
+        this.updateAvailableSubject.next(true)
+      })
     }
   }
 

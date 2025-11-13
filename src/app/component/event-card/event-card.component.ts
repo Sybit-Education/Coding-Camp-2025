@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnInit,
-  OnDestroy,
-  inject,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input, OnInit, OnDestroy, inject } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { Subscription } from 'rxjs'
@@ -18,11 +11,13 @@ import { LocalStorageService } from '../../services/local-storage.service'
 import { MediaService } from '../../services/media.service'
 import { TranslateModule } from '@ngx-translate/core'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
+import { MatIconModule } from '@angular/material/icon'
+import { IconComponent } from '@app/icons/icon.component'
 
 @Component({
   selector: 'app-event-card',
   standalone: true,
-  imports: [CommonModule, DateTimeRangePipe, TranslateModule, RouterModule],
+  imports: [CommonModule, DateTimeRangePipe, TranslateModule, RouterModule, MatIconModule, IconComponent],
   templateUrl: './event-card.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -30,8 +25,6 @@ export class EventCardComponent implements OnInit, OnDestroy {
   @Input() event: Event | null = null
 
   @Input() isMoreCard = false
-
-  @Input() fromCategory = ''
 
   location: Location | null = null
   eventType: EventType | null = null
@@ -72,11 +65,7 @@ export class EventCardComponent implements OnInit, OnDestroy {
 
     try {
       // Verwende Promise.all für parallele Ausführung
-      const [location, eventType, mediaUrl] = await Promise.all([
-        this.loadLocation(),
-        this.loadEventType(),
-        this.loadMedia(),
-      ])
+      const [location, eventType, mediaUrl] = await Promise.all([this.loadLocation(), this.loadEventType(), this.loadMedia()])
 
       // Batch-Update der Komponenten-Properties für weniger Change Detection Zyklen
       setTimeout(() => {
@@ -86,13 +75,6 @@ export class EventCardComponent implements OnInit, OnDestroy {
 
         // Change Detection auslösen, da wir OnPush verwenden
         this.markForCheck()
-
-        console.log(
-          'Event-Card geladen:',
-          this.event?.name,
-          'Media URL:',
-          this.mediaUrl,
-        )
       }, 0)
     } catch (error) {
       console.error('Fehler beim Laden der Event-Details:', error)

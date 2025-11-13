@@ -15,14 +15,17 @@ import { CommonModule } from '@angular/common'
 import { RecordId, StringRecordId } from 'surrealdb'
 import { MediaService } from '../../services/media.service'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
-import { Media } from '../../models/media.interface'
+import { Media, UploadMedia } from '../../models/media.interface'
 import { SnackBarService } from '../../services/snack-bar.service'
 import { TranslateModule } from '@ngx-translate/core'
+import { FormsModule } from '@angular/forms'
+import imageCompression from 'browser-image-compression'
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component'
 
 @Component({
   selector: 'app-image-upload',
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './image-upload.component.html',
   styleUrl: './image-upload.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,12 +35,18 @@ export class ImageUploadComponent implements OnInit, OnChanges {
 
   @Input() previews: string[] = []
   @Input() eventName = ''
-  @Input() existingImages: RecordId<'media'>[] = []
+  @Input() existingImages: Media[] = []
 
   @Output() previewsChange = new EventEmitter<string[]>()
-  @Output() mediaIdsChange = new EventEmitter<RecordId<'media'>[]>()
+  @Output() mediaChange = new EventEmitter<Media[]>()
 
   isDragging = false
+
+  openSettingsIndex: number | null = null
+  pictureInfos: { copyright: string; creator: string }[] = []
+  deletedImages: Media[] = []
+
+  isUploading = false
 
   private readonly mediaService = inject(MediaService)
   private readonly markForCheck = injectMarkForCheck()
@@ -50,21 +59,31 @@ export class ImageUploadComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     // Wenn sich existingImages ändert und Werte enthält, lade die Bilder
-    if (
-      changes['existingImages'] &&
-      changes['existingImages'].currentValue &&
-      changes['existingImages'].currentValue.length > 0
-    ) {
+    if (changes['existingImages']?.currentValue.length > 0) {
       this.loadExistingImagesIfPresent()
     }
   }
 
-  private loadExistingImagesIfPresent(): void {
-    if (this.existingImages && this.existingImages.length > 0) {
-      // Nur laden, wenn die Vorschau noch leer ist, um Duplikate zu vermeiden
-      if (this.previews.length === 0) {
-        this.loadExistingImages()
+  async loadExistingImagesIfPresent(): Promise<void> {
+    if (this.existingImages.length === 0) return
+
+    if (this.previews.length === 0) {
+      for (const existing of this.existingImages) {
+        try {
+          const url = await this.mediaService.getMediaUrl(existing.id)
+          if (url && !this.previews.includes(url)) {
+            this.previews.push(url)
+            this.pictureInfos.push({
+              copyright: existing.copyright || '',
+              creator: existing.creator || '',
+            })
+          }
+        } catch (e) {
+          console.error('Fehler beim holen media url', e)
+        }
       }
+      this.previewsChange.emit([...this.previews])
+      this.markForCheck()
     }
   }
 
@@ -98,59 +117,74 @@ export class ImageUploadComponent implements OnInit, OnChanges {
   }
 
   private handleFiles(selected: File[]) {
+    this.isUploading = true
     for (const file of selected) {
       if (!RegExp(/image\/(png|jpeg)/).exec(file.type)) {
         this.snackBarService.showError(`Dateityp nicht erlaubt: ${file.name}`)
         continue
       }
       const maxFileSize = 5 * 1024 * 1024
+      console.log('File size before compress', file.size / 1024 / 1024)
       if (file.size > maxFileSize) {
-        this.snackBarService.showError(
-          `Datei zu groß (max. 5 MB): ${file.name}`,
-        )
+        this.snackBarService.showError(`Datei zu groß (max. 5 MB): ${file.name}`)
         continue
       }
       this.createPreview(file)
+        .finally(() => {
+          this.isUploading = false
+        })
     }
   }
 
-  private createPreview(file?: File | null) {
-    if (file) {
+  private async createPreview(file?: File | null) {
+    if (!file) return
+
+    try {
+      const options = {
+        maxSizeMB: 3.2,
+        maxWidthOrHeight: 1920, // skaliert große Bilder etwas runter
+        useWebWorker: true,
+        initialQuality: 0.8,
+        // fileType wird automatisch aus dem erzeugten Blob gesetzt (webp/jpg fallback)
+      }
+
+      const compressedBlob = await imageCompression(file, options)
+
+      console.log('File size after compress', compressedBlob.size / 1024 / 1024)
       const reader = new FileReader()
       reader.onload = () => {
         if (typeof reader.result === 'string') {
-          // Speichere den Dateinamen und MIME-Type als Metadaten
+          const dataWithMetadata = {
+            dataUrl: reader.result,
+            fileName: file.name,
+            mimeType: (compressedBlob as Blob).type || file.type,
+          }
+          this.previews.push(JSON.stringify(dataWithMetadata))
+          this.pictureInfos.push({ copyright: '', creator: '' })
+          this.previewsChange.emit([...this.previews])
+          this.markForCheck()
+        }
+      }
+      reader.readAsDataURL(compressedBlob as Blob)
+    } catch (err) {
+      console.warn('Bildkompression fehlgeschlagen, Fallback auf original:', err)
+      // Fallback
+      const reader = new FileReader()
+      reader.onload = () => {
+        if (typeof reader.result === 'string') {
           const dataWithMetadata = {
             dataUrl: reader.result,
             fileName: file.name,
             mimeType: file.type,
           }
-          // Speichere das Objekt als JSON-String
           this.previews.push(JSON.stringify(dataWithMetadata))
-          this.previewsChange.emit(this.previews)
+          this.pictureInfos.push({ copyright: '', creator: '' })
+          this.previewsChange.emit([...this.previews])
           this.markForCheck()
         }
       }
       reader.readAsDataURL(file)
     }
-  }
-
-  private loadExistingImages() {
-    console.log('Lade existierende Bilder:', this.existingImages)
-    this.existingImages.forEach((image) => {
-      const url = this.mediaService.getMediaUrl(image)
-
-      if (url) {
-        // Prüfen, ob das Bild bereits in den Vorschauen vorhanden ist
-        if (!this.previews.includes(url)) {
-          this.previews.push(url)
-          this.previewsChange.emit(this.previews)
-          this.markForCheck()
-        }
-      } else {
-        console.warn('Konnte Bild-URL nicht laden für Media-ID:', image)
-      }
-    })
   }
 
   async removeImage(index: number) {
@@ -159,32 +193,23 @@ export class ImageUploadComponent implements OnInit, OnChanges {
 
     // Entferne das Bild aus der Vorschau
     this.previews.splice(index, 1)
-    this.previewsChange.emit(this.previews)
+    this.pictureInfos.splice(index, 1)
+    this.previewsChange.emit([...this.previews])
 
     try {
-      // Wenn es ein HTTP-Bild ist (existierendes Bild), finde die Media-ID und lösche es
+      // Wenn es ein HTTP-Bild ist (existierendes Bild), finde die Media-ID und merke es zum löschen vor
       if (imageToRemove.startsWith('http')) {
-        const existingMedia =
-          await this.mediaService.getMediaByUrl(imageToRemove)
-        if (existingMedia && existingMedia.id) {
-          console.log(
-            'Lösche existierendes Bild aus der Datenbank:',
-            existingMedia.id,
-          )
-          const deleted = await this.mediaService.deleteMedia(existingMedia.id)
-          if (deleted) {
-            console.log(`Bild mit ID ${existingMedia.id} erfolgreich gelöscht`)
-          } else {
-            console.warn(
-              `Bild mit ID ${existingMedia.id} konnte nicht gelöscht werden`,
-            )
-          }
+        const existingMedia = await this.mediaService.getMediaByUrl(imageToRemove)
+        if (existingMedia?.id) {
+          this.deletedImages.push(existingMedia)
         }
+        const media = await this.uploadImages()
+        this.mediaChange.emit([...media])
       }
 
       // Aktualisiere die Media-IDs und informiere die Eltern-Komponente
-      const mediaIds = await this.uploadImages()
-      this.mediaIdsChange.emit(mediaIds)
+      const media = await this.uploadImages()
+      this.mediaChange.emit([...media])
     } catch (error) {
       console.error('Fehler beim Löschen des Bildes:', error)
       this.snackBarService.showError(
@@ -214,124 +239,202 @@ export class ImageUploadComponent implements OnInit, OnChanges {
     return src
   }
 
-  async uploadImages(): Promise<RecordId<'media'>[]> {
-    const result: RecordId<'media'>[] = []
+  idToString(id: unknown): string {
+    if (!id && id !== 0) return ''
+    if (typeof id === 'string') return id
+    try {
+      const s = (id as unknown)?.toString?.()
+      if (typeof s === 'string' && s.length) return s
+      // eslint-disable-next-line no-empty
+    } catch {}
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const anyId = id as any
+    if (anyId?.tb && anyId?.id) return `${anyId.tb}:${anyId.id}`
+    if (anyId?.id) return `media:${anyId.id}`
+    try {
+      return JSON.stringify(id)
+    } catch {
+      return String(id)
+    }
+  }
+
+  async uploadImages(): Promise<Media[]> {
+    const collected: Media[] = []
+
+    console.log('Preview Länge:', this.previews.length)
 
     try {
-      // Wenn keine Vorschaubilder vorhanden sind, aber existierende Bilder übergeben wurden,
-      // geben wir die existierenden Bilder zurück
+      // 1) Früher Exit: keine Previews, aber vorhandene Bilder
       if (this.previews.length === 0 && this.existingImages.length > 0) {
-        console.log(
-          'Keine neuen Bilder, behalte existierende:',
-          this.existingImages,
-        )
-        return [...this.existingImages]
+        const copy = [...this.existingImages]
+        this.mediaChange.emit(copy)
+        return copy
       }
 
-      // Zuerst existierende Medien sammeln
-      for (const image of this.previews) {
-        if (image.startsWith('http')) {
-          try {
-            const existingMedia = await this.mediaService.getMediaByUrl(image)
-            if (existingMedia && existingMedia.id) {
-              result.push(existingMedia.id as RecordId<'media'>)
-            } else {
-              // Wenn wir keine Media-ID für die URL finden können,
-              // versuchen wir, die ID aus den existingImages zu finden
-              const matchingExistingImage = this.existingImages.find(
-                async (mediaId) => {
-                  const url = await this.mediaService.getMediaUrl(mediaId)
-                  return url === image
-                },
-              )
+      // 2) Existierende Medien aus Preview-URLs einsammeln
+      for (const preview of this.previews) {
+        if (!preview.startsWith('http')) continue
 
-              if (matchingExistingImage) {
-                result.push(matchingExistingImage)
-              }
+        try {
+          const existingViaUrl = await this.mediaService.getMediaByUrl(preview)
+          if (existingViaUrl?.id) {
+            // Duplikate vermeiden (nach String-ID)
+            const existingIdStr = this.idToString(existingViaUrl.id)
+            if (!collected.some((m) => this.idToString(m.id) === existingIdStr)) {
+              collected.push(existingViaUrl)
             }
-          } catch (error) {
-            console.error(
-              'Fehler beim Abrufen des existierenden Mediums:',
-              error,
-            )
+            continue
           }
+
+          // Fallback: in existingImages passende URL suchen
+          for (const existing of this.existingImages) {
+            const url = await this.mediaService.getMediaUrl(existing.id)
+            if (url === preview) {
+              const existingIdStr = this.idToString(existing.id)
+              if (!collected.some((media) => this.idToString(media.id) === existingIdStr)) {
+                collected.push(existing)
+              }
+              break
+            }
+          }
+        } catch (error) {
+          console.error('Fehler beim Auflösen existierender Media-URL:', error)
         }
       }
 
-      // Dann neue Bilder hochladen
-      const newImages = this.previews.filter((img) => !img.startsWith('http'))
+      // 3) Neue Bilder (Base64/JSON) hochladen
+      const newImageEntries = this.previews.map((p, i) => ({ p, i })).filter((e) => !e.p.startsWith('http'))
 
-      const resultMedias: Media[] = (
-        await Promise.all(
-          newImages.map(async (image: string, i: number) => {
-            try {
-              let file: string
-              let fileName: string
-              let fileType: string
+      for (const { p: raw, i: originalIndex } of newImageEntries) {
+        try {
+          // --- a) Datei + Metadaten extrahieren ---
+          let base64Payload: string
+          let originalFileName: string
+          let fileType: string
 
-              // Prüfen, ob es sich um ein JSON-Objekt mit Metadaten handelt
-              if (image.startsWith('{') && image.endsWith('}')) {
-                try {
-                  const imageData = JSON.parse(image)
-                  file = imageData.dataUrl.split(',')[1]
-                  fileName = imageData.fileName
-                  // Extrahiere den MIME-Type aus dem vollständigen Type
-                  fileType = imageData.mimeType.split('/')[1]
-                  // oxlint-disable-next-line no-unused-vars
-                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                } catch (e) {
-                  // Fallback, falls JSON-Parsing fehlschlägt
-                  file = image.split(',')[1]
-                  fileName = `${this.eventName.replace(/[^a-zA-Z0-9]/g, '_')}_${i}`
-                  fileType = image.split(';')[0].split('/')[1]
-                }
-              } else {
-                // Fallback für ältere Daten ohne Metadaten
-                file = image.split(',')[1]
-                fileName = `${this.eventName.replace(/[^a-zA-Z0-9]/g, '_')}_${i}`
-                fileType = image.split(';')[0].split('/')[1]
-              }
-
-              // Eindeutige ID generieren
-              const uniqueId = new StringRecordId(
-                `media:${fileName.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}`,
-              )
-              console.log('uniqueID: ' + uniqueId)
-
-              const newMedia: Media = {
-                id: uniqueId as unknown as RecordId<'media'>,
-                file: file,
-                fileName: fileName,
-                fileType: fileType,
-              }
-              return await this.mediaService.postMedia(newMedia)
-            } catch (error) {
-              console.error(`Fehler beim Verarbeiten des Bildes ${i}:`, error)
-              this.snackBarService.showError(
-                `Fehler beim Hochladen des Bildes ${i + 1}: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
-              )
-              this.markForCheck()
-              return null
+          if (raw.startsWith('{') && raw.endsWith('}')) {
+            const imageData = JSON.parse(raw) as {
+              dataUrl: string
+              fileName: string
+              mimeType: string
+              copyright?: string
+              creator?: string
             }
-          }),
-        )
-      ).filter((media): media is Media => media !== null)
+            base64Payload = imageData.dataUrl.split(',')[1]
+            originalFileName = imageData.fileName
+            fileType = imageData.mimeType.split('/')[1]
+          } else {
+            base64Payload = raw.split(',')[1]
+            fileType = raw.split(';')[0].split('/')[1]
+            originalFileName = `${this.eventName.replace(/[^a-zA-Z0-9]/g, '_')}_${originalIndex}_${Date.now()}`
+          }
 
-      // Neue Media-IDs hinzufügen
-      result.push(...resultMedias.map((media) => media.id as RecordId<'media'>))
+          const info = this.pictureInfos[originalIndex] ?? {
+            copyright: '',
+            creator: '',
+          }
 
-      // Event emittieren mit allen Media-IDs
-      this.mediaIdsChange.emit(result)
+          // b) generiere id
+          const sanitizedEventName = this.eventName.replace(/[^A-Za-z0-9_]/g, '_')
 
-      console.log('Hochgeladene und existierende Medien:', result)
-      return result
+          const safeOriginalFileName = originalFileName.replace(/\.[^/.]+$/, '').replace(/[^A-Za-z0-9_-]/g, '_')
+
+          const timestamp = Date.now()
+
+          const uniqueIdStr = `media:${sanitizedEventName}_${safeOriginalFileName}_${timestamp}_${fileType}`
+
+          const uniqueId = uniqueIdStr as unknown as RecordId<'media'>
+
+          // --- c) Media-Objekt für Upload ---
+          const mediaToUpload: UploadMedia = {
+            id: uniqueId,
+            file: `data:image/${fileType};base64,${base64Payload}`,
+            fileName: originalFileName,
+            fileType: fileType,
+            copyright: info.copyright,
+            creator: info.creator,
+          }
+
+          // --- d) Upload → erhält ID (RecordId<'media'> | string)
+          const uploadedId = await this.mediaService.postMediaToGoService(mediaToUpload)
+
+          // In String normalisieren
+          const uploadedIdStr = this.idToString(uploadedId as unknown as RecordId<'media'> | string)
+
+          // RecordId für getMediaById bauen
+          const uploadedRecordId =
+            typeof uploadedId === 'string'
+              ? (new StringRecordId(uploadedIdStr) as unknown as RecordId<'media'>)
+              : (uploadedId as RecordId<'media'>)
+
+          // Details laden (falls Service kein vollständiges Media zurückgibt)
+          const uploadedMedia = await this.mediaService.getMediaById(uploadedRecordId)
+
+          // Duplikate vermeiden
+          if (!collected.some((m) => this.idToString(m.id) === uploadedIdStr)) {
+            collected.push(uploadedMedia)
+          }
+        } catch (error) {
+          console.error(`Fehler beim Upload des Bildes #${originalIndex + 1}:`, error)
+          this.snackBarService.showError(
+            `Fehler beim Hochladen des Bildes ${originalIndex + 1}: ${
+              error instanceof Error ? error.message : 'Unbekannter Fehler'
+            }`,
+          )
+        }
+      }
+
+      // 4) Einmalig emittieren & zurückgeben
+      this.mediaChange.emit(collected)
+      console.log('Hochgeladene und existierende Medien:', collected)
+      return collected
     } catch (error) {
       console.error('Fehler beim Hochladen der Bilder:', error)
       this.snackBarService.showError(
         `Fehler beim Hochladen der Bilder: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
       )
+      this.mediaChange.emit(collected)
+      return collected
+    }
+  }
+
+  openPictureSettings(index: number) {
+    if (!this.pictureInfos[index]) {
+      this.pictureInfos[index] = { copyright: '', creator: '' }
+    }
+    this.openSettingsIndex = index
+  }
+
+  closePictureSettings() {
+    this.openSettingsIndex = null
+  }
+
+  async saveSettings(index: number) {
+    const info = this.pictureInfos[index]
+    if (!info) return
+
+    try {
+      const previewData = this.previews[index]
+
+      if (previewData.startsWith('{') && previewData.endsWith('}')) {
+        const parsed = JSON.parse(previewData)
+        parsed.copyright = info.copyright || ''
+        parsed.creator = info.creator || ''
+        this.previews[index] = JSON.stringify(parsed)
+      } else if (previewData.startsWith('http')) {
+        const media = await this.mediaService.getMediaByUrl(previewData)
+        media!.copyright = info.copyright
+        media!.creator = info.creator
+        this.mediaService.updateMedia(media!.id!, media!)
+      }
+
+      this.previewsChange.emit([...this.previews])
       this.markForCheck()
-      return result
+      this.closePictureSettings()
+      this.snackBarService.showSuccess(`Bild erfolgreich aktualisiert!`)
+    } catch (error) {
+      console.error('Fehler beim Aktualisieren der Bilddaten:', error)
+      this.snackBarService.showError(`Fehler beim Aktualisieren der Bilddaten: ${error}`)
     }
   }
 }

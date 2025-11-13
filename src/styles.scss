@@ -67,6 +67,14 @@
   select::placeholder {
     @apply text-gray-400;
   }
+
+  .card {
+    @apply flex h-full w-full cursor-pointer flex-col items-center overflow-hidden rounded-2xl border-1 border-gray-300 text-center shadow-lg transition-transform duration-300 hover:scale-102 hover:border-gray-400 hover:shadow-xl focus:ring-2 focus:ring-yellow-400;
+  }
+
+  .action-button {
+    @apply h-12 w-12 cursor-pointer rounded-full bg-white/80 p-2 opacity-80 shadow-md transition hover:bg-gray-200 hover:text-[#3b4ea3] focus:ring-2 focus:ring-blue-500 focus:outline-none;
+  }
 }
 
 @font-face {
@@ -173,6 +181,20 @@
   li {
     @apply mb-1 text-base;
   }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 1.3s ease-out;
+  opacity: 1;
 }
 
 /* Custom SVG-Background Utilities */

@@ -1,23 +1,10 @@
-import {
-  Component,
-  inject,
-  signal,
-  OnInit,
-  ViewEncapsulation,
-  ChangeDetectionStrategy,
-  DestroyRef,
-} from '@angular/core'
+import { Component, inject, signal, OnInit, ViewEncapsulation, ChangeDetectionStrategy, DestroyRef } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule, Router, NavigationEnd } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 import { Location } from '../../models/location.interface'
 import { LocationService } from '../../services/location.service'
-import {
-  NgxDatatableModule,
-  TableColumn,
-  SortEvent,
-  SortDirection,
-} from '@swimlane/ngx-datatable'
+import { NgxDatatableModule, TableColumn, SortEvent, SortDirection } from '@swimlane/ngx-datatable'
 import { FormsModule } from '@angular/forms'
 import { RecordId } from 'surrealdb'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
@@ -26,13 +13,7 @@ import { filter } from 'rxjs/operators'
 @Component({
   selector: 'app-admin-location-overview',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    TranslateModule,
-    NgxDatatableModule,
-    FormsModule,
-  ],
+  imports: [CommonModule, RouterModule, TranslateModule, NgxDatatableModule, FormsModule],
   templateUrl: './admin-location-overview.component.html',
   styleUrl: './admin-location-overview.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -141,7 +122,6 @@ export class AdminLocationOverviewComponent implements OnInit {
     }
   }
 
-
   // Navigate to edit location page
   editLocation(locationId: RecordId): void {
     this.router.navigate(['/admin/location', String(locationId)])
@@ -160,15 +140,11 @@ export class AdminLocationOverviewComponent implements OnInit {
   }
 
   // Sortiere Daten basierend auf Sortierkriterien
-  private sortData(
-    data: Record<string, unknown>[],
-    sorts: { prop: string; dir: SortDirection }[],
-  ): Record<string, unknown>[] {
+  private sortData(data: Record<string, unknown>[], sorts: { prop: string; dir: SortDirection }[]): Record<string, unknown>[] {
     if (sorts.length === 0) return data
 
     const sort = sorts[0] // Wir verwenden nur die erste Sortierung
-    const dir =
-      sort.dir === SortDirection.asc || sort.dir === SortDirection.desc ? 1 : -1
+    const dir = sort.dir === SortDirection.asc || sort.dir === SortDirection.desc ? 1 : -1
 
     return [...data].sort((a, b) => {
       // Für alle Spalten: String-Vergleich
@@ -205,7 +181,6 @@ export class AdminLocationOverviewComponent implements OnInit {
       try {
         // Verwende direkt den Location-Service zum Löschen
         await this.locationService.delete(locationId as RecordId<'location'>)
-        console.log('Location erfolgreich gelöscht')
       } catch (deleteError) {
         console.error('Fehler beim Löschen:', deleteError)
       }

@@ -1,33 +1,17 @@
+<app-go-back-button class="mb-4 flex px-6"></app-go-back-button>
+<div class="flex px-6">
+  <span class="ml-2 text-left text-2xl font-bold text-gray-800">
+    {{ isEditMode() ? 'Ort bearbeiten' : 'Ort erstellen' }}
+  </span>
+</div>
 <div class="container mx-auto px-4 py-6">
-  <div class="mb-6 flex items-center">
-    <button
-      (click)="cancel()"
-      class="mr-4 inline-flex items-center rounded-lg bg-gray-200 px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-300 focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:outline-none"
-    >
-      <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19-7-7 7-7"/>
-      </svg>
-
-      {{ 'COMMON.BACK' | translate }}
-    </button>
-    <h1 class="text-2xl font-bold text-gray-800">
-      {{
-        isEditMode()
-          ? ('ADMIN.LOCATIONS.FORM.TITLE_EDIT' | translate)
-          : ('ADMIN.LOCATIONS.FORM.TITLE_CREATE' | translate)
-      }}
-    </h1>
-  </div>
-
   @if (isLoading()) {
     <div class="flex items-center justify-center py-12">
-      <div
-        class="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"
-      ></div>
+      <div class="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"></div>
       <span class="ml-3">{{ 'COMMON.LOADING' | translate }}</span>
     </div>
   } @else {
-    <div class="rounded-lg bg-white p-6 shadow-md">
+    <div class="rounded-lg bg-white p-6 shadow-2xl">
       @if (errorMessage()) {
         <div class="mb-4 rounded-lg bg-red-100 p-4 text-red-700">
           {{ errorMessage() }}
@@ -47,15 +31,9 @@
               id="name"
               formControlName="name"
               class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-              [class.border-red-500]="
-                locationForm.get('name')?.invalid &&
-                locationForm.get('name')?.touched
-              "
+              [class.border-red-500]="locationForm.get('name')?.invalid && locationForm.get('name')?.touched"
             />
-            @if (
-              locationForm.get('name')?.invalid &&
-              locationForm.get('name')?.touched
-            ) {
+            @if (locationForm.get('name')?.invalid && locationForm.get('name')?.touched) {
               <p class="mt-1 text-sm text-red-500">
                 {{ 'ADMIN.LOCATIONS.FORM.NAME_REQUIRED' | translate }}
               </p>
@@ -104,35 +82,39 @@
 
         <!-- Karte für Standort -->
         <div class="mb-6">
-          <label for="map" class="mb-2 block font-medium text-gray-700"
-            >Standort auf der Karte</label
-          >
-          <p class="mb-2 text-sm text-gray-600">
-            Klicken Sie auf die Karte, um den Standort zu setzen.
-          </p>
+          <label for="map" class="mb-2 block font-medium text-gray-700">Standort auf der Karte</label>
+          <p class="mb-2 text-sm text-gray-600">Klicken Sie auf die Karte, um den Standort zu setzen.</p>
 
-          <div
-            class="h-96 w-full overflow-hidden rounded-lg border border-gray-300"
-            style="position: relative;"
-          >
+          <div class="h-96 w-full overflow-hidden rounded-lg border border-gray-300" style="position: relative">
             <app-map
               id="map"
               [coordinates]="coordinates()"
               [addLocation]="true"
               (coordinatesChange)="updateCoordinates($event)"
-              style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+              style="position: absolute; top: 0; left: 0; width: 100%; height: 100%"
             ></app-map>
           </div>
 
           <div class="mt-2 flex items-center text-sm text-gray-600">
-            <svg class="w-3 h-3 mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+            <svg
+              class="mr-1 h-3 w-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
             </svg>
 
-            <span
-              >Koordinaten: {{ coordinates()[0].toFixed(6) }},
-              {{ coordinates()[1].toFixed(6) }}</span
-            >
+            <span>Koordinaten: {{ coordinates()[0].toFixed(6) }}, {{ coordinates()[1].toFixed(6) }}</span>
             <span class="ml-2 text-xs text-blue-600">
               (Klicken Sie auf die Karte oder ziehen Sie den Marker, um die Position zu ändern)
             </span>
@@ -155,9 +137,7 @@
               class="rounded-lg bg-blue-600 px-6 py-2 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:opacity-50"
             >
               @if (isSubmitting()) {
-                <span
-                  class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
-                ></span>
+                <span class="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
                 <span class="ml-2">Speichern...</span>
               } @else {
                 {{ 'COMMON.SAVE' | translate }}

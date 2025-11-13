@@ -1,0 +1,19 @@
+import { Location } from '@angular/common'
+import { Component, inject } from '@angular/core'
+import { RouterModule } from '@angular/router'
+import { IconComponent } from '@app/icons/icon.component'
+import { TranslateModule } from '@ngx-translate/core'
+
+@Component({
+  selector: 'app-go-back-button',
+  standalone: true,
+  imports: [TranslateModule, RouterModule, IconComponent],
+  templateUrl: './go-back-button.component.html',
+})
+export class GoBackComponent {
+  private readonly location = inject(Location)
+
+  goBack(): void {
+    this.location.back()
+  }
+}

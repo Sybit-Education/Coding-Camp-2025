@@ -39,7 +39,7 @@
   "bottom-nav": {
     "home": "Home",
     "favorites": "Favorites",
-    "search": "Search",
+    "all-events": "All Events",
     "more": "More"
   },
   "MORE": {
@@ -210,5 +210,10 @@
       "CREATE_NEW": "New Location ..."
     },
     "TITLE": "Administration"
+  },
+  "SEARCH": {
+    "LABEL": "Search",
+    "PLACEHOLDER": "Search ...",
+    "SEARCHING": "Searching..."
   }
 }

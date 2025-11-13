@@ -11,16 +11,13 @@ export class EventService {
   private readonly surrealdb: SurrealdbService = inject(SurrealdbService)
 
   // Signals für häufig verwendete Daten
-  private readonly allEvents = signal<Event[]>([])
-  private readonly allEventTypes = signal<TypeDB[]>([])
+  readonly allEvents = signal<Event[]>([])
+  readonly allEventTypes = signal<TypeDB[]>([])
 
   async initializeData(): Promise<void> {
     try {
       // Lade Daten parallel und aktualisiere Signals
-      const [events, types] = await Promise.all([
-        this.fetchAllEvents(),
-        this.fetchAllEventTypes(),
-      ])
+      const [events, types] = await Promise.all([this.fetchAllEvents(), this.fetchAllEventTypes()])
 
       this.allEvents.set(events)
       this.allEventTypes.set(types)
@@ -32,9 +29,7 @@ export class EventService {
   private async fetchAllEvents(): Promise<Event[]> {
     try {
       const result = await this.surrealdb.getAll<Event>('event')
-      return (result || []).map(
-        (item: Record<string, unknown>) => ({ ...item }) as Event,
-      )
+      return (result || []).map((item: Record<string, unknown>) => ({ ...item }) as Event)
     } catch (error) {
       console.error('Fehler beim Laden der Events:', error)
       return []
@@ -65,10 +60,7 @@ export class EventService {
     const cachedEvents = this.allEvents()
     const now = Date.now()
 
-    if (
-      cachedEvents.length > 0 &&
-      now - this.lastEventsFetch < this.CACHE_TTL
-    ) {
+    if (cachedEvents.length > 0 && now - this.lastEventsFetch < this.CACHE_TTL) {
       return cachedEvents
     }
 
@@ -92,9 +84,7 @@ export class EventService {
     return types
   }
 
-  async getEventTypeByID(
-    id: RecordId<'event_type'> | StringRecordId,
-  ): Promise<EventType> {
+  async getEventTypeByID(id: RecordId<'event_type'> | StringRecordId): Promise<EventType> {
     const result = await this.surrealdb.getByRecordId<TypeDB>(id)
     const eventType = result.name as unknown as EventType
     return /^[A-Z_]+$/.test(eventType) ? eventType : EventType.UNKNOWN
@@ -102,14 +92,10 @@ export class EventService {
 
   async getEventsWithLocation(): Promise<Event[]> {
     try {
-      const result = await this.surrealdb.query(
-        surql`select *,location.* FROM event;`,
-      )
+      const result = await this.surrealdb.query(surql`select *,location.* FROM event;`)
       return Array.isArray(result?.[0]) ? result[0] : []
     } catch (error) {
-      throw new Error(
-        `Fehler beim Laden der Events mit Standortdetails: ${error}`,
-      )
+      throw new Error(`Fehler beim Laden der Events mit Standortdetails: ${error}`)
     }
   }
 

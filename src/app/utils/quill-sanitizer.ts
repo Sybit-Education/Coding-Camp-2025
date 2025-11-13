@@ -9,9 +9,7 @@
  * @param htmlContent The HTML content from the Quill editor
  * @returns Sanitized content
  */
-export function sanitizeQuillContent(
-  htmlContent: string | null | undefined,
-): string {
+export function sanitizeQuillContent(htmlContent: string | null | undefined): string {
   if (!htmlContent) return ''
 
   // Replace &nbsp; with regular spaces

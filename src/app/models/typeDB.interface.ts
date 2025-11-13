@@ -4,4 +4,5 @@ export interface TypeDB extends Record<string, unknown> {
   name: string
   color: string
   description?: string
+  slug: string
 }

@@ -31,15 +31,12 @@ export class FavoriteService {
   })
 
   async initializeData(): Promise<void> {
-    console.log('FavoriteService initialized')
-
     // Initialisiere den Service mit einem leeren Array
     this.favoriteEventsSubject.next([])
 
     // Effekt für Änderungen an gespeicherten Events
     // In einer vollständigen Implementierung würde hier effect() verwendet werden
     this.localStorageService.savedEvents$.subscribe(() => {
-      console.log('Saved events changed, reloading favorites')
       this.loadFavoriteEvents()
     })
 
@@ -74,16 +71,14 @@ export class FavoriteService {
       for (const id of savedEventIds) {
         try {
           // Prüfe, ob die ID bereits das "event:"-Präfix hat
-          const recordId = id.startsWith('event:')
-            ? new StringRecordId(id)
-            : new StringRecordId(`event:${id}`)
+          const recordId = id.startsWith('event:') ? new StringRecordId(id) : new StringRecordId(`event:${id}`)
 
           const event = await this.eventService.getEventByID(recordId)
 
           if (event) {
             events.push(event)
           } else {
-            console.log(`Event with ID ${id} not found`)
+            console.info(`Event with ID ${id} not found`)
           }
         } catch (err) {
           console.error(`Error loading event with ID ${id}:`, err)
@@ -92,10 +87,8 @@ export class FavoriteService {
 
       // Sortiere Events nach Startdatum (aufsteigend)
       const sortedEvents = events.toSorted((a, b) => {
-        const dateA =
-          a.date_start instanceof Date ? a.date_start : new Date(a.date_start)
-        const dateB =
-          b.date_start instanceof Date ? b.date_start : new Date(b.date_start)
+        const dateA = a.date_start instanceof Date ? a.date_start : new Date(a.date_start)
+        const dateB = b.date_start instanceof Date ? b.date_start : new Date(b.date_start)
         return dateA.getTime() - dateB.getTime()
       })
 

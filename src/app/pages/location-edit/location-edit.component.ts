@@ -1,18 +1,7 @@
-import {
-  Component,
-  OnInit,
-  inject,
-  signal,
-  ChangeDetectionStrategy,
-} from '@angular/core'
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms'
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { Location } from '../../models/location.interface'
 import { LocationService } from '../../services/location.service'
@@ -21,17 +10,11 @@ import { GeometryPoint, StringRecordId } from 'surrealdb'
 import { SnackBarService } from '../../services/snack-bar.service'
 import { injectMarkForCheck } from '../../utils/zoneless-helpers'
 import { MapComponent } from '../../component/map/map.component'
+import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
 @Component({
   selector: 'app-location-edit',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    TranslateModule,
-    RouterModule,
-    MatIconModule,
-    MapComponent,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, RouterModule, MatIconModule, MapComponent, GoBackComponent],
   templateUrl: './location-edit.component.html',
   styleUrl: './location-edit.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -89,9 +72,7 @@ export class LocationEditComponent implements OnInit {
         await this.loadLocation(locationId)
       } catch (error) {
         console.error('Fehler beim Laden des Ortes:', error)
-        this.errorMessage.set(
-          this.translate.instant('ADMIN.LOCATIONS.FORM.LOAD_ERROR'),
-        )
+        this.errorMessage.set(this.translate.instant('ADMIN.LOCATIONS.FORM.LOAD_ERROR'))
       }
     } else {
       // Im Erstellungsmodus leeres Formular initialisieren
@@ -114,7 +95,6 @@ export class LocationEditComponent implements OnInit {
       const location = await this.locationService.getLocationByID(id)
 
       if (location) {
-
         // Formular mit den Daten des Ortes befüllen
         this.locationForm.patchValue({
           name: location.name,
@@ -126,14 +106,10 @@ export class LocationEditComponent implements OnInit {
 
         // Geo-Koordinaten setzen, falls vorhanden
         if (location.geo_point && location.geo_point.coordinates) {
-          this.coordinates.set(
-            location.geo_point.coordinates as [number, number],
-          )
+          this.coordinates.set(location.geo_point.coordinates as [number, number])
         }
       } else {
-        this.errorMessage.set(
-          this.translate.instant('ADMIN.LOCATIONS.FORM.LOAD_ERROR'),
-        )
+        this.errorMessage.set(this.translate.instant('ADMIN.LOCATIONS.FORM.LOAD_ERROR'))
       }
     } catch (error) {
       console.error('Fehler beim Laden des Ortes:', error)
@@ -156,7 +132,6 @@ export class LocationEditComponent implements OnInit {
       // Aktuelle Koordinaten in das Formular übernehmen
       formData.geo_point = new GeometryPoint(this.coordinates())
 
-
       // Bilder hinzufügen
       const locationData: Location = {
         ...formData,
@@ -176,9 +151,7 @@ export class LocationEditComponent implements OnInit {
       this.router.navigate(['/admin/locations'])
     } catch (error) {
       console.error('Fehler beim Speichern des Ortes:', error)
-      this.errorMessage.set(
-        this.translate.instant('ADMIN.LOCATIONS.FORM.SAVE_ERROR'),
-      )
+      this.errorMessage.set(this.translate.instant('ADMIN.LOCATIONS.FORM.SAVE_ERROR'))
     } finally {
       this.isSubmitting.set(false)
     }
@@ -195,24 +168,21 @@ export class LocationEditComponent implements OnInit {
     })
   }
 
-
-
-
   // Karten-Funktionen
   updateCoordinates(newCoordinates: [number, number]): void {
     this.coordinates.set(newCoordinates)
 
     // Aktualisiere auch das Formular
-    const geoPointControl = this.locationForm.get('geo_point');
+    const geoPointControl = this.locationForm.get('geo_point')
     if (geoPointControl) {
       geoPointControl.patchValue({
         type: 'Point',
-        longLat: newCoordinates
-      });
+        longLat: newCoordinates,
+      })
     }
 
     // Markiere das Formular als "berührt", damit Validierungen ausgelöst werden
-    this.markForCheck();
+    this.markForCheck()
   }
 
   // Navigation
@@ -223,17 +193,13 @@ export class LocationEditComponent implements OnInit {
   async deleteLocation(): Promise<void> {
     if (!this.isEditMode() || !this.locationId()) return
 
-    if (
-      confirm(this.translate.instant('ADMIN.LOCATIONS.FORM.DELETE_CONFIRM'))
-    ) {
+    if (confirm(this.translate.instant('ADMIN.LOCATIONS.FORM.DELETE_CONFIRM'))) {
       try {
         await this.locationService.delete(this.locationId()!)
         this.router.navigate(['/admin/locations'])
       } catch (error) {
         console.error('Fehler beim Löschen des Ortes:', error)
-        this.errorMessage.set(
-          this.translate.instant('ADMIN.LOCATIONS.FORM.DELETE_ERROR'),
-        )
+        this.errorMessage.set(this.translate.instant('ADMIN.LOCATIONS.FORM.DELETE_ERROR'))
       }
     }
   }

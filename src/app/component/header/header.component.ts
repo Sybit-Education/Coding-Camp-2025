@@ -1,15 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  HostListener,
-  inject,
-  Input,
-  OnInit,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, HostListener, inject, Input, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { I18nService } from '../../services/translate.service'
-import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component'
+// import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component'
 
 // -----------------------------------------------------------------------------
 // HeaderComponent
@@ -52,7 +45,9 @@ interface LogoSet {
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule, LanguageSwitcherComponent],
+  imports: [CommonModule, RouterModule, 
+    // LanguageSwitcherComponent
+  ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -153,10 +148,7 @@ export class HeaderComponent implements OnInit {
    * Information wird für die Auswahl der passenden Logovariante benötigt.
    */
   private isDarkMode(): boolean {
-    return (
-      window.matchMedia &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches
-    )
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
   }
 
   /**
@@ -172,8 +164,7 @@ export class HeaderComponent implements OnInit {
     const dark = this.isDarkMode()
     const w = window.innerWidth
 
-    const choose = (src?: ThemeSrc) =>
-      src ? (dark ? src.dark : src.light) : ''
+    const choose = (src?: ThemeSrc) => (src ? (dark ? src.dark : src.light) : '')
 
     // Groß: immer Vollversion
     if (!this.isShrunk) {
@@ -181,10 +172,7 @@ export class HeaderComponent implements OnInit {
     }
 
     // Klein: wähle zuerst die markOnly‑Variante, dann reduced2, reduced1
-    if (
-      this.logo.markOnly &&
-      (w < 340 || (!this.logo.reduced1 && !this.logo.reduced2))
-    ) {
+    if (this.logo.markOnly && (w < 340 || (!this.logo.reduced1 && !this.logo.reduced2))) {
       const candidate = choose(this.logo.markOnly)
       if (candidate) return candidate
     }
@@ -198,10 +186,6 @@ export class HeaderComponent implements OnInit {
     }
 
     // Fallback: reduziertes Set oder Vollversion, falls keine Reduktion vorhanden
-    return (
-      choose(this.logo.reduced2) ||
-      choose(this.logo.reduced1) ||
-      choose(this.logo.full)
-    )
+    return choose(this.logo.reduced2) || choose(this.logo.reduced1) || choose(this.logo.full)
   }
 }

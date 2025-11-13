@@ -38,7 +38,7 @@
   "bottom-nav": {
     "home": "Home",
     "favorites": "Favoriten",
-    "search": "Suche",
+    "all-events": "Alle Events",
     "more": "Mehr"
   },
   "MORE": {
@@ -224,5 +224,10 @@
       }
     },
     "TITLE": "Administration"
+  },
+  "SEARCH": {
+    "LABEL": "Suche",
+    "PLACEHOLDER": "Suchen ...",
+    "SEARCHING": "Es wird gesucht ..."
   }
 }

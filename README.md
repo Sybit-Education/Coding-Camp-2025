@@ -103,7 +103,7 @@ DEFINE TABLE OVERWRITE organizer TYPE NORMAL SCHEMAFULL
 DEFINE FIELD OVERWRITE id ON organizer;
 DEFINE FIELD OVERWRITE name ON organizer TYPE string;
 DEFINE FIELD OVERWRITE email ON organizer TYPE option<string>;
-DEFINE FIELD OVERWRITE phonenumber ON organizer TYPE option<number>;
+DEFINE FIELD OVERWRITE phonenumber ON organizer TYPE option<string>;
 
 
 
@@ -115,6 +115,7 @@ DEFINE TABLE OVERWRITE event_type TYPE NORMAL SCHEMAFULL
         FOR update, delete WHERE $auth != NONE;
 DEFINE FIELD OVERWRITE id ON event_type;
 DEFINE FIELD OVERWRITE name ON event_type TYPE string;
+DEFINE FIELD OVERWRITE description ON event_type TYPE option<string>;
 
 
 

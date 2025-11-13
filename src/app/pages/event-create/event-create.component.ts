@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  inject,
-  OnInit,
-  ViewChild,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core'
 import { SnackBarService } from '../../services/snack-bar.service'
 import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
@@ -31,6 +24,10 @@ import { TopicService } from '../../services/topic.service'
 import { CommonModule } from '@angular/common'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { sanitizeQuillContent } from '../../utils/quill-sanitizer'
+import { Media } from '@app/models/media.interface'
+import { MediaService } from '@app/services/media.service'
+import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
+import { LoadingSpinnerComponent } from '@app/component/loading-spinner/loading-spinner.component'
 
 @Component({
   selector: 'app-event-create',
@@ -43,6 +40,8 @@ import { sanitizeQuillContent } from '../../utils/quill-sanitizer'
     LocationInputComponent,
     OrganizerInputComponent,
     ImageUploadComponent,
+    GoBackComponent,
+    LoadingSpinnerComponent,
   ],
   templateUrl: './event-create.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -55,6 +54,7 @@ export class EventCreateComponent implements OnInit {
 
   // ===== Services =====
   private readonly eventService = inject(EventService)
+  private readonly mediaService = inject(MediaService)
   private readonly locationService = inject(LocationService)
   private readonly organizerService = inject(OrganizerService)
   private readonly topicService = inject(TopicService)
@@ -62,6 +62,8 @@ export class EventCreateComponent implements OnInit {
   private readonly markForCheck = injectMarkForCheck()
   private readonly router = inject(Router)
   private readonly snackBarService = inject(SnackBarService)
+
+  isEditMode = signal(false)
 
   // ===== State & Formfelder =====
   event: AppEvent | null = null
@@ -105,7 +107,9 @@ export class EventCreateComponent implements OnInit {
 
   // Images & Upload
   previews: string[] = []
-  images: RecordId<'media'>[] = []
+  images: Media[] = []
+
+  isSaving = false
 
   // ===== Lifecycle =====
   ngOnInit() {
@@ -128,6 +132,7 @@ export class EventCreateComponent implements OnInit {
   }
 
   private async loadEvent(eventId: RecordId<'event'> | StringRecordId) {
+    this.isEditMode.set(true)
     await this.initializeData()
     try {
       const event = await this.eventService.getEventByID(eventId)
@@ -142,7 +147,6 @@ export class EventCreateComponent implements OnInit {
       this.age = event.age ?? null
       this.restriction = event.restriction ?? null
       this.draft = event.draft ?? false
-      this.images = event.media ?? []
 
       // Sicherstellen, dass images ein Array ist
       if (!Array.isArray(this.images)) {
@@ -165,33 +169,30 @@ export class EventCreateComponent implements OnInit {
       // Organizer
       if (event.organizer) {
         const organizerId = event.organizer.id
-        this.selectedOrganizer =
-          this.organizers.find((o) => o.id?.id === organizerId) || null
+        this.selectedOrganizer = this.organizers.find((o) => o.id?.id === organizerId) || null
         this.setOrganizer(this.selectedOrganizer)
       }
 
       // Location
       if (event.location) {
         const locationId = event.location.id
-        this.selectedLocation =
-          this.locations.find((l) => l.id?.id === locationId) || null
+        this.selectedLocation = this.locations.find((l) => l.id?.id === locationId) || null
         this.setLocation(this.selectedLocation)
       }
 
       // Event Type
       const eventTypeId = event.event_type?.id
-      this.selectedEventType =
-        this.eventTypes.find((e) => e.id?.id === eventTypeId) || null
+      this.selectedEventType = this.eventTypes.find((e) => e.id?.id === eventTypeId) || null
       this.setSelectedEventType(this.selectedEventType)
 
       // Topics
       const topicIds = event.topic || []
       for (const topicId of topicIds) {
-        const topic = this.topics.find(
-          (t) => t.id?.id === (topicId?.id ?? topicId),
-        )
+        const topic = this.topics.find((t) => t.id?.id === (topicId?.id ?? topicId))
         if (topic) this.selectedTopics.push(topic)
       }
+
+      this.images = await this.mediaService.getMediasByIdList(event.media)
 
       // Images werden in der ImageUploadComponent geladen
       console.log('Existierende Bilder für ImageUploadComponent:', this.images)
@@ -225,15 +226,12 @@ export class EventCreateComponent implements OnInit {
   // ===== Speichern =====
 
   async saveEvent() {
+    this.isSaving = true
     try {
       // Location ist kein Pflichtfeld mehr
       // Organisator ist kein Pflichtfeld mehr
 
-      if (
-        this.eventName === '' ||
-        this.dateStart === '' ||
-        this.timeStart === ''
-      ) {
+      if (this.eventName === '' || this.dateStart === '' || this.timeStart === '') {
         if (this.eventName === '') {
           this.errorName = true
         } else {
@@ -250,9 +248,7 @@ export class EventCreateComponent implements OnInit {
           this.errorTime = false
         }
 
-        this.snackBarService.showError(
-          'Bitte füllen Sie alle Pflichtfelder aus (Name, Datum, Uhrzeit).',
-        )
+        this.snackBarService.showError('Bitte füllen Sie alle Pflichtfelder aus (Name, Datum, Uhrzeit).')
 
         // Fokus auf das erste Feld mit Fehler setzen
         setTimeout(() => this.focusFirstErrorField(), 100)
@@ -273,20 +269,23 @@ export class EventCreateComponent implements OnInit {
       const priceDec = this.price ? new Decimal(this.price) : undefined
 
       // Medien verarbeiten
-      let mediaIds = await this.imageUploadComponent.uploadImages()
+      const medias = await this.imageUploadComponent.uploadImages()
+
+      const finalMediaIds = medias.map((media) => new StringRecordId(media.id!) as unknown as RecordId<'media'>)
+      const finalMedia = medias.map((media) => media)
 
       // Wenn keine Bilder hochgeladen wurden, aber existierende Bilder vorhanden sind,
       // behalten wir die existierenden Bilder bei
-      if (mediaIds.length === 0 && this.images.length > 0) {
-        console.log(
-          'Keine neuen Bilder hochgeladen, behalte existierende:',
-          this.images,
-        )
-        mediaIds = [...this.images]
+      if (medias.length === 0 && this.images.length > 0) {
+        console.log('Keine neuen Bilder hochgeladen, behalte existierende:', this.images)
+        for (const media of this.images) {
+          finalMedia.push(media)
+          finalMediaIds.push(media.id!)
+        }
       }
 
       // Sicherstellen, dass wir die aktualisierten Media-IDs verwenden
-      this.images = mediaIds
+      this.images = finalMedia
 
       const payload: AppEvent = {
         name: this.eventName,
@@ -300,39 +299,43 @@ export class EventCreateComponent implements OnInit {
         event_type: this.selectedEventType?.id ?? undefined,
         location: this.selectedLocation?.id ?? undefined,
         topic: this.selectedTopics.map((t) => t.id!),
-        media: mediaIds,
+        media: finalMediaIds,
         age: this.age ?? undefined,
         restriction: this.restriction || undefined,
       }
 
       // Event speichern (Update oder Create)
-      if (this.eventId !== undefined) {
-        const updated = await this.eventService.updateEvent(
-          this.eventId,
-          payload,
-        )
-        if (!updated) {
-          this.snackBarService.showError('Update hat keine Daten zurückgegeben')
-          this.markForCheck()
-          return
-        } else {
-          console.log('Event erfolgreich aktualisiert:', updated)
-          this.snackBarService.showSuccess('Event erfolgreich aktualisiert')
-          // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
-          this.router.navigate(['/admin'])
-        }
-      } else {
+      if (this.eventId === undefined) {
         const created = await this.eventService.postEvent(payload)
         if (created && created.length > 0) {
           this.eventId = created[0].id
-          console.log('Event erfolgreich erstellt:', created[0])
           this.snackBarService.showSuccess('Event erfolgreich erstellt')
           // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
           this.router.navigate(['/admin'])
         } else {
-          this.snackBarService.showError(
-            'Erstellen des Events fehlgeschlagen, keine Daten zurückgegeben',
-          )
+          this.snackBarService.showError('Erstellen des Events fehlgeschlagen, keine Daten zurückgegeben')
+          this.markForCheck()
+          return
+        }
+      } else {
+        const updated = await this.eventService.updateEvent(this.eventId, payload)
+        if (updated) {
+          console.log('Event erfolgreich aktualisiert:', updated)
+          this.snackBarService.showSuccess('Event erfolgreich aktualisiert')
+
+          for (const media of this.imageUploadComponent.deletedImages) {
+            try {
+              console.log('Lösche existierendes Bild aus der Datenbank:', media.id)
+              await this.mediaService.deleteMedia(media.id!)
+            } catch (err) {
+              console.error('Fehler beim endgültigen Löschen:', err)
+            }
+          }
+
+          // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
+          this.router.navigate(['/admin'])
+        } else {
+          this.snackBarService.showError('Update hat keine Daten zurückgegeben')
           this.markForCheck()
           return
         }
@@ -344,6 +347,7 @@ export class EventCreateComponent implements OnInit {
       )
       this.markForCheck()
     }
+    this.isSaving = false
   }
 
   // ===== Media Handling =====
@@ -375,11 +379,7 @@ export class EventCreateComponent implements OnInit {
       return // Nichts zu löschen, wenn es ein neues Event ist
     }
 
-    if (
-      confirm(
-        'Sind Sie sicher, dass Sie dieses Event löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.',
-      )
-    ) {
+    if (confirm('Sind Sie sicher, dass Sie dieses Event löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.')) {
       try {
         this.eventService.delete(this.eventId)
         this.snackBarService.showSuccess('Event erfolgreich gelöscht')

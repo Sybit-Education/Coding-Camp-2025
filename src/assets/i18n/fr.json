@@ -38,7 +38,7 @@
   "bottom-nav": {
     "home": "Accueil",
     "favorites": "Favoris",
-    "search": "Recherche",
+    "all-events": "Tous les événements",
     "more": "Plus"
   },
   "MORE": {
@@ -200,5 +200,10 @@
       "TITLE": "Locations"
     },
     "TITLE": "Administration"
+  },
+  "SEARCH": {
+    "PLACEHOLDER": "Rechercher...",
+    "LABEL": "Rechercher",
+    "SEARCHING": "Recherche en cours..."
   }
 }
