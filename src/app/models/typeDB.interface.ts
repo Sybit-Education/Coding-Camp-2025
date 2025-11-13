@@ -5,4 +5,5 @@ export interface TypeDB extends Record<string, unknown> {
   color: string
   description?: string
   slug: string
+  media?: RecordId<'media'>
 }

@@ -3,9 +3,12 @@
   <h1>
     {{ this.name }}
   </h1>
-  <p class="mb-6 text-lg text-gray-600">
-    {{ this.description }}
-  </p>
+  
+  @if(this.description) {
+    <p [innerHTML]="this.description" class="lg:text-lg text-sm text-gray-600 hyphens-auto">
+      {{ this.description }}
+    </p>
+  }
 
   <!-- Search input -->
   <div class="mb-4">

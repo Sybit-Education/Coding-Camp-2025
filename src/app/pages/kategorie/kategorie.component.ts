@@ -17,6 +17,7 @@ import { TypeDB } from '@app/models/typeDB.interface'
 import { SurrealdbService } from '../../services/surrealdb.service'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
 import { LoadingSpinnerComponent } from '@app/component/loading-spinner/loading-spinner.component'
+import { Media } from '@app/models/media.interface'
 
 interface EventWithResolvedLocation extends AppEvent {
   locationName: string
@@ -34,7 +35,6 @@ export class KategorieComponent implements OnInit {
   private readonly route = inject(ActivatedRoute)
   private readonly router = inject(Router)
   private readonly markForCheck = injectMarkForCheck()
-  currentTopic: Promise<Topic> | null = null
 
   private readonly eventService: EventService = inject(EventService)
   private readonly locationService: LocationService = inject(LocationService)
@@ -45,9 +45,13 @@ export class KategorieComponent implements OnInit {
   events: EventWithResolvedLocation[] = []
   topics: Topic[] = []
   eventTypes: TypeDB[] = []
-  id: RecordIdValue | null = null
+  
+  categoryId: RecordIdValue | null = null
   name: string | null = null
   slug: string | null = null
+  description: string | null = null
+  media: RecordIdValue | null = null
+
   loading = true
   searchTerm = ''
   searching = false
@@ -68,7 +72,6 @@ export class KategorieComponent implements OnInit {
   async initilizeData() {
     this.loading = true
     try {
-      this.currentTopic = this.id ? this.topicService.getTopicByID(this.id) : null
       // Lade Topics und Events parallel
       const [topics, allEvents, typeDB] = await Promise.all([
         this.topicService.getAllTopics(),
@@ -80,7 +83,7 @@ export class KategorieComponent implements OnInit {
       this.eventTypes = typeDB
       this.allEvents = allEvents
 
-      this.id = this.getEventIdFromSlug(topics, typeDB)
+      this.categoryId = this.getCategoryIdFromSlug(topics, typeDB)
       // Anzeigename aus slug auflösen (Thema oder Typ)
       if (this.slug) {
         const matchedTopic = topics.find((t) => t.slug === this.slug)
@@ -91,6 +94,7 @@ export class KategorieComponent implements OnInit {
           return
         }
         this.name = matchedTopic?.name || matchedType?.name || null
+        this.description = matchedTopic?.description || matchedType?.description || null
       } else {
         this.name = this.translate.instant('bottom-nav.all-events')
       }
@@ -104,7 +108,7 @@ export class KategorieComponent implements OnInit {
       this.markForCheck()
     }
   }
-  private getEventIdFromSlug(topics: Topic[], typeDB: TypeDB[]): RecordIdValue | null {
+  private getCategoryIdFromSlug(topics: Topic[], typeDB: TypeDB[]): RecordIdValue | null {
     if (!this.slug) return null
     const topic = topics.find((t) => t.slug === this.slug)
     const type = typeDB.find((t) => t.slug === this.slug)
@@ -129,7 +133,7 @@ export class KategorieComponent implements OnInit {
     this.markForCheck()
     try {
       // Basisliste ggf. nach Kategorie einschränken
-      const categoryId = this.id
+      const categoryId = this.categoryId
       let baseList = this.allEvents
       if (categoryId) {
         baseList = baseList.filter(
