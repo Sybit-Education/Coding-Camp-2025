@@ -17,17 +17,17 @@
           ></app-event-image>
         </div>
         @if ((this.sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL) {
-          <h1 class="my-1 px-2 text-2xl">
-            {{ event.name }}
-          </h1>
-          <div class="px-2 text-xs">
+          <div class="px-2">
+            <h1 class="my-1 text-2xl">
+              {{ event.name }}
+            </h1>
             <app-event-pills class="text-xs" [event]="event"></app-event-pills>
-          </div>
-          <div class="flex justify-end px-2">
-            <div class="mb-1 flex items-center justify-center gap-2">
-              <app-favorite-button [eventId]="event.id" class="p-1"></app-favorite-button>
-              <app-calendar-export [event]="event" [location]="location" class="p-1"></app-calendar-export>
-              <app-share [event]="event" [location]="location" class="p-1"></app-share>
+            <div class="flex justify-end">
+              <div class="mb-1 flex items-center justify-center gap-2">
+                <app-favorite-button [eventId]="event.id" class="p-1"></app-favorite-button>
+                <app-calendar-export [event]="event" [location]="location" class="p-1"></app-calendar-export>
+                <app-share [event]="event" [location]="location" class="p-1"></app-share>
+              </div>
             </div>
           </div>
         } @else {
@@ -35,14 +35,13 @@
             <h1 class="text-2xl">
               {{ event.name }}
             </h1>
-
             <div class="flex items-center justify-center gap-2">
               <app-favorite-button [eventId]="event.id" class="p-1"></app-favorite-button>
               <app-calendar-export [event]="event" [location]="location" class="p-1"></app-calendar-export>
               <app-share [event]="event" [location]="location" class="p-1"></app-share>
             </div>
           </div>
-          <div class="px-4 text-xs">
+          <div class="flex w-full items-center justify-between px-4">
             <app-event-pills class="text-xs" [event]="event"></app-event-pills>
           </div>
         }

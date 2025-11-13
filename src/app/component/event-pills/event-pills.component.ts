@@ -23,6 +23,7 @@ interface Pill {
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './event-pills.component.html',
+  styleUrls: ['./event-pills.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventPillsComponent implements OnChanges {
