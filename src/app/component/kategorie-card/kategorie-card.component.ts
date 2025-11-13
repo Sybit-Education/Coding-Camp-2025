@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router'
 })
 export class KategorieCardComponent {
   @Input() text!: string
+  @Input() slug?: string
   @Input() set color(value: string) {
     this.categoryColor.set(value || '#ffffff')
   }

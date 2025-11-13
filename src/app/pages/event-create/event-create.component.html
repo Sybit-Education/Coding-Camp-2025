@@ -78,12 +78,12 @@
       @if (timePeriode) {
         <div class="grid grid-cols-2 gap-[1rem]">
           <div class="my-4">
-            <label for="date">{{ 'create-event.enddate' | translate }}</label>
-            <input id="date" type="date" [(ngModel)]="dateEnd" name="dateEnd" class="w-full" />
+            <label for="dateEnd">{{ 'create-event.enddate' | translate }}</label>
+            <input id="dateEnd" type="date" [(ngModel)]="dateEnd" name="dateEnd" class="w-full" />
           </div>
           <div class="my-4">
-            <label for="time">{{ 'create-event.endtime' | translate }}</label>
-            <input id="time" type="time" [(ngModel)]="timeEnd" name="timeEnd" class="w-full" />
+            <label for="timeEnd">{{ 'create-event.endtime' | translate }}</label>
+            <input id="timeEnd" type="time" [(ngModel)]="timeEnd" name="timeEnd" class="w-full" />
           </div>
         </div>
       }
@@ -260,4 +260,9 @@
       }
     </div>
   </form>
+  @if (isSaving) {
+    <div class="absolute inset-0 flex items-center justify-center bg-gray-200/60">
+      <app-loading-spinner />
+    </div>
+  }
 </div>

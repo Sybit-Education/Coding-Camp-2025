@@ -27,6 +27,7 @@ import { sanitizeQuillContent } from '../../utils/quill-sanitizer'
 import { Media } from '@app/models/media.interface'
 import { MediaService } from '@app/services/media.service'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
+import { LoadingSpinnerComponent } from '@app/component/loading-spinner/loading-spinner.component'
 
 @Component({
   selector: 'app-event-create',
@@ -40,6 +41,7 @@ import { GoBackComponent } from '@app/component/go-back-button/go-back-button.co
     OrganizerInputComponent,
     ImageUploadComponent,
     GoBackComponent,
+    LoadingSpinnerComponent,
   ],
   templateUrl: './event-create.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -106,6 +108,8 @@ export class EventCreateComponent implements OnInit {
   // Images & Upload
   previews: string[] = []
   images: Media[] = []
+
+  isSaving = false
 
   // ===== Lifecycle =====
   ngOnInit() {
@@ -222,6 +226,7 @@ export class EventCreateComponent implements OnInit {
   // ===== Speichern =====
 
   async saveEvent() {
+    this.isSaving = true
     try {
       // Location ist kein Pflichtfeld mehr
       // Organisator ist kein Pflichtfeld mehr
@@ -266,12 +271,8 @@ export class EventCreateComponent implements OnInit {
       // Medien verarbeiten
       const medias = await this.imageUploadComponent.uploadImages()
 
-      const finalMediaIds: RecordId<'media'>[] = []
-      const finalMedia: Media[] = []
-      for (const media of medias) {
-        finalMediaIds.push(media.id!)
-        finalMedia.push(media)
-      }
+      const finalMediaIds = medias.map((media) => new StringRecordId(media.id!) as unknown as RecordId<'media'>)
+      const finalMedia = medias.map((media) => media)
 
       // Wenn keine Bilder hochgeladen wurden, aber existierende Bilder vorhanden sind,
       // behalten wir die existierenden Bilder bei
@@ -304,13 +305,21 @@ export class EventCreateComponent implements OnInit {
       }
 
       // Event speichern (Update oder Create)
-      if (this.eventId !== undefined) {
-        const updated = await this.eventService.updateEvent(this.eventId, payload)
-        if (!updated) {
-          this.snackBarService.showError('Update hat keine Daten zurückgegeben')
+      if (this.eventId === undefined) {
+        const created = await this.eventService.postEvent(payload)
+        if (created && created.length > 0) {
+          this.eventId = created[0].id
+          this.snackBarService.showSuccess('Event erfolgreich erstellt')
+          // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
+          this.router.navigate(['/admin'])
+        } else {
+          this.snackBarService.showError('Erstellen des Events fehlgeschlagen, keine Daten zurückgegeben')
           this.markForCheck()
           return
-        } else {
+        }
+      } else {
+        const updated = await this.eventService.updateEvent(this.eventId, payload)
+        if (updated) {
           console.log('Event erfolgreich aktualisiert:', updated)
           this.snackBarService.showSuccess('Event erfolgreich aktualisiert')
 
@@ -325,16 +334,8 @@ export class EventCreateComponent implements OnInit {
 
           // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
           this.router.navigate(['/admin'])
-        }
-      } else {
-        const created = await this.eventService.postEvent(payload)
-        if (created && created.length > 0) {
-          this.eventId = created[0].id
-          this.snackBarService.showSuccess('Event erfolgreich erstellt')
-          // Nach erfolgreichem Speichern zur Admin-Übersicht navigieren
-          this.router.navigate(['/admin'])
         } else {
-          this.snackBarService.showError('Erstellen des Events fehlgeschlagen, keine Daten zurückgegeben')
+          this.snackBarService.showError('Update hat keine Daten zurückgegeben')
           this.markForCheck()
           return
         }
@@ -346,6 +347,7 @@ export class EventCreateComponent implements OnInit {
       )
       this.markForCheck()
     }
+    this.isSaving = false
   }
 
   // ===== Media Handling =====

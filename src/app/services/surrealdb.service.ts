@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import Surreal, { RecordId, StringRecordId, Token } from 'surrealdb'
 import { environment } from '../../environments/environment'
+import { Event as AppEvent } from '../models/event.interface'
 
 @Injectable({
   providedIn: 'root',
@@ -101,5 +102,51 @@ export class SurrealdbService extends Surreal {
     // Stelle sicher, dass die Verbindung initialisiert ist
     await this.initialize()
     await super.delete(recordId)
+  }
+
+  async fulltextSearchEvents(searchTerm: string): Promise<AppEvent[]> {
+    await this.initialize()
+
+    const q = (searchTerm ?? '').trim()
+    if (!q) {
+      console.debug('[SurrealdbService] FTS skipped: empty searchTerm')
+      return []
+    }
+
+    // Gewichtete FTS-Abfrage (name/description/organizer/location/city...)
+    const ftsSql = `SELECT 
+        *,
+        (search::score(0)*3     -- name
+          + search::score(1)*2  -- description
+          + search::score(2)    -- restriction
+          + search::score(3)*2  -- organizer
+          + search::score(4)*2  -- location name
+          + search::score(5)    -- city
+          + search::score(6)    -- event type
+          + search::score(7)    -- topic
+        ) AS relevance
+      FROM event
+      WHERE
+        name @0@ $q
+        OR description @1@ $q
+        OR restriction @2@ $q
+        OR organizer.name @3@ $q
+        OR location.name @4@ $q
+        OR location.city @5@ $q
+        OR event_type.name @6@ $q
+        OR topic.name @7@ $q
+      ORDER BY relevance DESC
+      LIMIT 30;`
+
+    try {
+      const result = (await super.query(ftsSql, { 'q': q }))[0] as AppEvent[] // Index 0, da nur eine, erste Query im Batch
+
+      if (result.length > 0) {
+        return result
+      }
+    } catch (err) {
+      console.warn('[SurrealdbService] FTS query failed, will fallback', err)
+    }
+    return []
   }
 }

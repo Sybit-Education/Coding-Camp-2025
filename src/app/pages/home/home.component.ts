@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit {
       this.events = this.getUpcomingEvents(events)
       this.displayEvents = this.events.slice(0, 6)
 
-      this.topicsOrTypes.push(...topics, ...eventTypes)
+      this.topicsOrTypes.push(...eventTypes, ...topics)
     } catch (error) {
       console.error('Fehler beim Laden der Daten:', error)
     }
