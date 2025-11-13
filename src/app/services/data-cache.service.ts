@@ -21,7 +21,7 @@ export class DataCacheService {
 
   get<T>(key: string): T | undefined {
     const entry = this.getFromMemory<T>(key)
-    return entry ?? undefined
+    return entry ? entry.value : undefined
   }
 
   set<T>(key: string, value: T, ttlMs: number): void {
