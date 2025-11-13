@@ -31,33 +31,11 @@ interface EventWithResolvedLocation extends AppEvent {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KategorieComponent implements OnInit {
-  events: EventWithResolvedLocation[] = []
-
-  topics: Topic[] = []
-  id: RecordIdValue | null = null
-  name: string | null = null
-  description: string | null = null
-  loading = true
-
   private readonly route = inject(ActivatedRoute)
   private readonly router = inject(Router)
   private readonly markForCheck = injectMarkForCheck()
-  fromCategory = ''
   currentTopic: Promise<Topic> | null = null
 
-  ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
-      this.id = params['id'] as RecordIdValue | null
-
-      this.name = params['name'] || null
-
-      // Daten neu laden, wenn sich die Parameter ändern
-      this.initilizeData().then(() => this.markForCheck())
-
-      this.fromCategory =
-        (this.id?.toString() || 'keineID') + ',' + (this.name || 'keinName')
-    })
-  }
   private readonly eventService: EventService = inject(EventService)
   private readonly locationService: LocationService = inject(LocationService)
   private readonly topicService: TopicService = inject(TopicService)
@@ -90,7 +68,7 @@ export class KategorieComponent implements OnInit {
   async initilizeData() {
     this.loading = true
     try {
-      this.currentTopic = this.topicService.getTopicByID(this.id)
+      this.currentTopic = this.id ? this.topicService.getTopicByID(this.id) : null
       // Lade Topics und Events parallel
       const [topics, allEvents, typeDB] = await Promise.all([
         this.topicService.getAllTopics(),
