@@ -1,12 +1,13 @@
 <div class="bg-kultur flex min-h-[80px] w-full flex-col items-center justify-between px-6 pb-[80px] md:flex-row md:items-end">
   <div class="flex gap-5 py-4">
-    <div>
-      <a href="https://www.radolfzell.de/impressum" class="hover:underline">{{ 'footer.impressum' | translate }}</a>
-    </div>
+    <a href="https://www.radolfzell.de/impressum" class="hover:underline">{{ 'footer.impressum' | translate }}</a>
     <span class="text-gray-400">|</span>
-    <div>
-      <a href="https://www.radolfzell.de/datenschutz" class="hover:underline">{{ 'footer.datenschutz' | translate }}</a>
-    </div>
+    <a href="https://www.radolfzell.de/datenschutz" class="hover:underline">{{ 'footer.datenschutz' | translate }}</a>
+    <span class="text-gray-400">|</span>
+    <a href="https://www.instagram.com/Radolfzell1200" class="hover:underline">
+      <app-icon name="instagram" class="h-[1rem]" aria-hidden="true"></app-icon> 
+      {{ 'footer.instagram' | translate }}
+    </a>   
   </div>
 
   <a [routerLink]="['/team']" routerLinkActive="router-link-active">
