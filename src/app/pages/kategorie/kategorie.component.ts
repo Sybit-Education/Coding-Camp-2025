@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
-import { TranslateModule } from '@ngx-translate/core'
+import { ActivatedRoute, Router } from '@angular/router'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { EventCardComponent } from '../../component/event-card/event-card.component'
 
 import { EventService } from '../../services/event.service'
@@ -16,6 +16,7 @@ import { CommonModule } from '@angular/common'
 import { TypeDB } from '@app/models/typeDB.interface'
 import { SurrealdbService } from '../../services/surrealdb.service'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
+import { LoadingSpinnerComponent } from '@app/component/loading-spinner/loading-spinner.component'
 
 interface EventWithResolvedLocation extends AppEvent {
   locationName: string
@@ -25,26 +26,28 @@ interface EventWithResolvedLocation extends AppEvent {
 @Component({
   selector: 'app-kategorie',
   standalone: true,
-  imports: [TranslateModule, EventCardComponent, CommonModule, GoBackComponent],
+  imports: [TranslateModule, EventCardComponent, CommonModule, GoBackComponent, LoadingSpinnerComponent],
   templateUrl: './kategorie.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KategorieComponent implements OnInit {
   private readonly route = inject(ActivatedRoute)
+  private readonly router = inject(Router)
   private readonly markForCheck = injectMarkForCheck()
 
   private readonly eventService: EventService = inject(EventService)
   private readonly locationService: LocationService = inject(LocationService)
   private readonly topicService: TopicService = inject(TopicService)
   private readonly surreal: SurrealdbService = inject(SurrealdbService)
+  private readonly translate: TranslateService = inject(TranslateService)
 
   events: EventWithResolvedLocation[] = []
   topics: Topic[] = []
   eventTypes: TypeDB[] = []
   id: RecordIdValue | null = null
   name: string | null = null
+  slug: string | null = null
   loading = true
-  returnLink = ''
   searchTerm = ''
   searching = false
   private allEvents: AppEvent[] = []
@@ -54,13 +57,10 @@ export class KategorieComponent implements OnInit {
   private readonly locationCache = new Map<string, Promise<AppLocation>>()
 
   ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
-      this.name = params['name'] || null
-
+    this.route.paramMap.subscribe((params) => {
+      this.slug = params.get('slug')
       // Daten neu laden, wenn sich die Parameter ändern
       this.initilizeData().then(() => this.markForCheck())
-
-      this.returnLink = this.name ? this.name : 'kategorie'
     })
   }
 
@@ -76,9 +76,22 @@ export class KategorieComponent implements OnInit {
 
       this.topics = topics
       this.eventTypes = typeDB
-
-      this.id = this.getEventIdFromName(topics, typeDB)
       this.allEvents = allEvents
+
+      this.id = this.getEventIdFromSlug(topics, typeDB)
+      // Anzeigename aus slug auflösen (Thema oder Typ)
+      if (this.slug) {
+        const matchedTopic = topics.find((t) => t.slug === this.slug)
+        const matchedType = typeDB.find((t) => t.slug === this.slug)
+        if (!matchedTopic && !matchedType) {
+          // 404-Fallback, wenn Slug weder Topic noch Event-Typ entspricht
+          this.router.navigate(['/404'])
+          return
+        }
+        this.name = matchedTopic?.name || matchedType?.name || null
+      } else {
+        this.name = this.translate.instant('bottom-nav.all-events')
+      }
 
       await this.performSearch(this.searchTerm)
     } catch (error) {
@@ -89,6 +102,14 @@ export class KategorieComponent implements OnInit {
       this.markForCheck()
     }
   }
+  private getEventIdFromSlug(topics: Topic[], typeDB: TypeDB[]): RecordIdValue | null {
+    if (!this.slug) return null
+    const topic = topics.find((t) => t.slug === this.slug)
+    const type = typeDB.find((t) => t.slug === this.slug)
+
+    return type?.id?.id || topic?.id?.id || null
+  }
+
   onSearchChange(term: string) {
     this.searchTerm = (term ?? '').trim()
     if (this.searchDebounce) {
@@ -165,12 +186,5 @@ export class KategorieComponent implements OnInit {
       this.searching = false
       this.markForCheck()
     }
-  }
-
-  private getEventIdFromName(topics: Topic[], typeDB: TypeDB[]): RecordIdValue | null {
-    const topic = topics.find((t) => t.name === this.name)
-    const type = typeDB.find((t) => t.name === this.name)
-
-    return topic?.id?.id || type?.id?.id || null
   }
 }

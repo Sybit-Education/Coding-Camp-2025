@@ -27,9 +27,23 @@
 
   <!-- Ladeanzeige (nur für Initial-Load, nicht während der Suche) -->
   @if (loading && !searchTerm) {
-    <div class="flex items-center justify-center p-8">
-      <div class="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-[#c70d56]"></div>
-    </div>
+    <app-loading-spinner />
+    <div class="mr-2 ml-2 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      @for (item of [].constructor(3); track $index) {
+        <div class="mx-auto w-full rounded rounded-2xl bg-white shadow-lg">
+          <div class="h-48 animate-pulse overflow-hidden bg-gray-200 p-3"></div>
+          <div class="h- p-3">
+            <div class="mt-2 grid grid-cols-2 gap-4">
+              <div class="col-span-2 h-8 animate-pulse rounded bg-gray-200"></div>
+              <div class="h-4 animate-pulse rounded bg-gray-200"></div>
+              <div class="h-4 animate-pulse rounded bg-gray-200"></div>
+              <div class="h-4 animate-pulse rounded bg-gray-200"></div>
+              <div class="h-4 animate-pulse rounded bg-gray-200"></div>
+            </div>
+          </div>
+        </div>
+      }
+      </div>
   }
 
   <!-- Keine Events Meldung -->
@@ -49,7 +63,7 @@
             {{ 'EVENTS.PAST_EVENT' | translate }}
           </div>
         }
-        <app-event-card [event]="event" [class.opacity-70]="event.isPast" [returnLink]="returnLink"> </app-event-card>
+        <app-event-card [event]="event" [class.opacity-70]="event.isPast"> </app-event-card>
       </div>
     }
   </div>

@@ -3,4 +3,5 @@ export interface TypeDB extends Record<string, unknown> {
   id: RecordId<'event_type'>
   name: string
   color: string
+  slug: string
 }
