@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import Surreal, { RecordId, StringRecordId, Token } from 'surrealdb'
 import { environment } from '../../environments/environment'
 import { Event as AppEvent } from '../models/event.interface'
+import { DataCacheService } from './data-cache.service'
 
 @Injectable({
   providedIn: 'root',
@@ -10,8 +11,57 @@ export class SurrealdbService extends Surreal {
   private connectionInitialized = false
   private connectionPromise: Promise<void> | null = null
 
+  // Lightweight in-memory cache to reduce duplicate DB requests
+  private readonly cache = inject(DataCacheService)
+  private readonly defaultTtlMs = 60_000 // 60s default cache for read operations
+  private readonly searchTtlMs = 10_000 // short cache for search results
+
   constructor() {
     super()
+  }
+
+  // Helper to stringify RecordId reliably
+  private recordIdToString(id: RecordId<string> | StringRecordId): string {
+    try {
+      if (typeof id === 'string') return id
+      // Surreal's RecordId may implement toString()
+      return (id as any).toString?.() ?? `${(id as any).tb}:${(id as any).id}`
+    } catch {
+      return String(id)
+    }
+  }
+
+  private tableFromRecordId(id: RecordId<string> | StringRecordId): string | undefined {
+    try {
+      if (typeof id === 'string') return id.split(':')[0]
+      return (id as any).tb ?? undefined
+    } catch {
+      return undefined
+    }
+  }
+
+  private tableKey(table: string): string {
+    return `table:${table}`
+  }
+
+  private recordKey(id: RecordId<string> | StringRecordId): string {
+    return `record:${this.recordIdToString(id)}`
+  }
+
+  private stableStringify(obj: unknown): string {
+    if (obj == null || typeof obj !== 'object') return JSON.stringify(obj)
+    const keys = new Set<string>()
+    JSON.stringify(obj as any, (k, v) => {
+      keys.add(k)
+      return v
+    })
+    const sorted = Array.from(keys).sort()
+    return JSON.stringify(obj as any, sorted)
+  }
+
+  private queryKey(sql: string, params?: unknown): string {
+    const p = params === undefined ? '' : `:${this.stableStringify(params)}`
+    return `query:${sql}${p}`
   }
 
   async initialize() {
@@ -67,22 +117,40 @@ export class SurrealdbService extends Surreal {
   async getByRecordId<T extends Record<string, unknown>>(recordId: RecordId<string> | StringRecordId): Promise<T> {
     // Stelle sicher, dass die Verbindung initialisiert ist
     await this.initialize()
-    const result = await super.select<T>(recordId)
-    return result as T
+    const key = this.recordKey(recordId)
+    return await this.cache.getOrFetch<T>(
+      key,
+      async () => {
+        const result = await super.select<T>(recordId)
+        return result as T
+      },
+      this.defaultTtlMs,
+    )
   }
 
   // 2) Alle Einträge einer Tabelle holen
   async getAll<T extends Record<string, unknown>>(table: string): Promise<T[]> {
     // Stelle sicher, dass die Verbindung initialisiert ist
     await this.initialize()
-    return await super.select<T>(table)
+    const key = this.tableKey(table)
+    return await this.cache.getOrFetch<T[]>(
+      key,
+      async () => {
+        return await super.select<T>(table)
+      },
+      this.defaultTtlMs,
+    )
   }
 
   // 3) Einfügen und die neuen Datensätze zurückbekommen
   async post<T extends Record<string, unknown>>(table: string, payload?: T | T[]): Promise<T[]> {
     // Stelle sicher, dass die Verbindung initialisiert ist
     await this.initialize()
-    return await super.insert<T>(table, payload)
+    const res = await super.insert<T>(table, payload)
+    // Invalidate caches related to this table and generic queries
+    this.cache.invalidate(this.tableKey(table))
+    this.cache.invalidatePrefix('query:')
+    return res
   }
 
   async postUpdate<T extends Record<string, unknown>>(id: RecordId<string> | StringRecordId, payload?: T): Promise<T> {
@@ -90,6 +158,12 @@ export class SurrealdbService extends Surreal {
       // Stelle sicher, dass die Verbindung initialisiert ist
       await this.initialize()
       const updatedRecord = await super.update<T>(id, payload)
+
+      // Invalidate caches for this record and its table
+      const table = this.tableFromRecordId(id)
+      this.cache.invalidate(this.recordKey(id))
+      if (table) this.cache.invalidate(this.tableKey(table))
+      this.cache.invalidatePrefix('query:')
 
       return updatedRecord
     } catch (error) {
@@ -99,7 +173,15 @@ export class SurrealdbService extends Surreal {
   }
 
   async deleteRow(recordId: RecordId<string> | StringRecordId) {
+    // Stelle sicher, dass die Verbindung initialisiert ist
+    await this.initialize()
     await super.delete(recordId)
+
+    // Invalidate caches for this record and its table
+    const table = this.tableFromRecordId(recordId)
+    this.cache.invalidate(this.recordKey(recordId))
+    if (table) this.cache.invalidate(this.tableKey(table))
+    this.cache.invalidatePrefix('query:')
   }
 
   async fulltextSearchEvents(searchTerm: string): Promise<AppEvent[]> {
@@ -136,15 +218,22 @@ export class SurrealdbService extends Surreal {
       ORDER BY relevance DESC
       LIMIT 30;`
 
-    try {
-      const result = (await super.query(ftsSql, { 'q': q }))[0] as AppEvent[] // Index 0, da nur eine, erste Query im Batch
+    const key = this.queryKey(ftsSql, { q })
 
-      if (result.length > 0) {
-        return result
-      }
+    try {
+      const result = await this.cache.getOrFetch<AppEvent[]>(
+        key,
+        async () => {
+          const res = (await super.query(ftsSql, { 'q': q }))[0] as AppEvent[]
+          return Array.isArray(res) ? res : []
+        },
+        this.searchTtlMs,
+        this.searchTtlMs, // allow brief SWR window to throttle rapid typing
+      )
+      return result
     } catch (err) {
       console.warn('[SurrealdbService] FTS query failed, will fallback', err)
+      return []
     }
-    return []
   }
 }
