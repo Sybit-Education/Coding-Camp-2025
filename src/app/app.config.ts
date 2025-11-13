@@ -16,7 +16,7 @@ class CustomTranslateLoader implements TranslateLoader {
   ) {}
 
   getTranslation(lang: string): Observable<Translation> {
-    return this.http.get(`${this.prefix}${lang}${this.suffix}`)
+    return this.http.get<Translation>(`${this.prefix}${lang}${this.suffix}`)
   }
 }
 
