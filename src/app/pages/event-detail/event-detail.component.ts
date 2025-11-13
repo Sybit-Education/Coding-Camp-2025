@@ -25,6 +25,7 @@ import { EventImageComponent } from '@app/component/event-image/event-image.comp
 import { MatIconModule } from '@angular/material/icon'
 import { IconComponent } from '@app/icons/icon.component'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
+import { EventPillsComponent } from '@app/component/event-pills/event-pills.component'
 import { SeoService } from '@app/services/seo.service'
 
 @Component({
@@ -41,6 +42,7 @@ import { SeoService } from '@app/services/seo.service'
     CalendarExportComponent,
     MatIconModule,
     IconComponent,
+    EventPillsComponent,
 
     GoBackComponent,
   ],
@@ -62,7 +64,6 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   mediaList: { url: string; copyright: string; creator: string }[] = []
 
   protected isLoggedIn = false
-  private returnLink = ''
   screenSize = ScreenSize
 
   private readonly eventService = inject(EventService)
@@ -78,10 +79,6 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   readonly sharedStateService = inject(SharedStateService)
 
   ngOnInit(): void {
-    this.route.queryParamMap.subscribe((params) => {
-      this.returnLink = params.get('returnLink') || ''
-    })
-
     this.route.paramMap.subscribe((params) => {
       this.eventId = params.get('id') || ''
       if (this.eventId) {
@@ -99,16 +96,6 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
         this.isLoggedIn = isLoggedIn
       }),
     )
-    if (this.returnLink) {
-      if (this.returnLink === 'kategorie') {
-        this.goBackSite = ['/kategorie']
-      } else {
-        this.goBackSite = ['/kategorie']
-        this.goBackParams = { name: this.returnLink }
-      }
-    } else {
-      this.goBackSite = ['/']
-    }
   }
 
   ngOnDestroy(): void {

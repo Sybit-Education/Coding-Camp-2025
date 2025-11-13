@@ -200,5 +200,10 @@
       "TITLE": "Locations"
     },
     "TITLE": "Administration"
+  },
+  "SEARCH": {
+    "PLACEHOLDER": "Rechercher...",
+    "LABEL": "Rechercher",
+    "SEARCHING": "Recherche en cours..."
   }
 }

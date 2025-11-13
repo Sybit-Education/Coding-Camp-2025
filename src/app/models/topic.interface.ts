@@ -4,4 +4,5 @@ export interface Topic extends Record<string, unknown> {
   id?: RecordId<'topic'>
   name: string
   color: string
+  slug: string
 }

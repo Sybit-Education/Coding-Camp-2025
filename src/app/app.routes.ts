@@ -51,11 +51,16 @@ export const routes: Routes = [
     canActivate: [metaGuard],
   },
   {
-    path: 'kategorie',
+    path: 'kategorie/:slug',
     loadComponent: () => import('./pages/kategorie/kategorie.component').then((m) => m.KategorieComponent),
     title: 'Kategorie',
     data: { meta: { title: 'Kategorien', description: 'Entdecke Veranstaltungen nach Kategorien.' } },
     canActivate: [metaGuard],
+  },
+  {
+    path: 'event',
+    loadComponent: () => import('./pages/kategorie/kategorie.component').then((m) => m.KategorieComponent),
+    title: 'Alle Events',
   },
   {
     path: 'admin',
@@ -124,7 +129,12 @@ export const routes: Routes = [
     data: { meta: { title: 'Veranstaltung erstellen', description: 'Neue oder bestehende Veranstaltung bearbeiten.' } },
   },
   {
+    path: '404',
+    loadComponent: () => import('./pages/placeholder/placeholder.component').then((m) => m.PlaceholderComponent),
+    title: '404 - Seite nicht gefunden',
+  },
+  {
     path: '**',
-    redirectTo: '',
+    redirectTo: '404',
   },
 ]
