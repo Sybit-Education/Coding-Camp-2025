@@ -4,6 +4,7 @@ import { provideHttpClient, HttpClient, withInterceptorsFromDi } from '@angular/
 import { TranslateLoader, TranslateModule, Translation } from '@ngx-translate/core'
 import { Observable } from 'rxjs'
 import { provideAnimations } from '@angular/platform-browser/animations'
+import { A11yModule } from '@angular/cdk/a11y'
 
 import { routes } from './app.routes'
 import { provideAppIcons } from './icons/icons.provider'
@@ -33,6 +34,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideAppIcons(),
     importProvidersFrom(
+      A11yModule,
       TranslateModule.forRoot({
         loader: {
           provide: TranslateLoader,
