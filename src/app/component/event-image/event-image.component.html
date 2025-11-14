@@ -1,110 +1,203 @@
-<ng-template #imageTemplate>
-  @if (images.length !== 0) {
-    <div class="relative h-full max-h-[90vh] rounded-t-2xl" [class.w-[90vw]]="isFullscreen" [class.w-full]="!isFullscreen">
-      <!-- Bilder -->
-      @for (item of images; track $index) {
-        @if ($index === selectedImageIndex) {
-          <div class="flex h-full w-full items-center justify-center rounded-t-2xl">
-            <img
-              class="animate-fadeIn w-full rounded-t-2xl object-cover opacity-0"
-              [class.h-[650px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.XLARGE && !isFullscreen"
-              [class.h-[500px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.LARGE && !isFullscreen"
-              [class.h-[350px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL && !isFullscreen"
-              [class.h-auto]="isFullscreen"
-              [class.max-h-[80vh]]="isFullscreen"
-              [class.rounded-b-2xl]="isFullscreen"
-              [src]="item.url"
-              [alt]="eventName ? 'Bild der Veranstaltung: ' + eventName : 'Veranstaltungsbild'"
-            />
-            @if (item.copyright || item.creator) {
-              <div class="absolute bottom-0 left-0 rounded-tr-xl bg-black px-3 py-1 opacity-75">
-                <div class="text-sm text-white">
-                  {{ item.copyright }}
-                  @if (item.copyright && item.creator) {
-                    –
-                  }
-                  {{ item.creator }}
-                </div>
+@if (images.length !== 0) {
+  <div class="relative h-full max-h-[90vh] rounded-t-2xl" [class.w-full]="!isFullscreen">
+    <!-- Bilder -->
+    @for (item of images; track $index) {
+      @if ($index === selectedImageIndex) {
+        <div class="flex h-full w-full items-center justify-center rounded-t-2xl">
+          <img
+            class="animate-fadeIn w-full rounded-t-2xl object-cover opacity-0"
+            [class.h-[650px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.XLARGE"
+            [class.h-[500px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.LARGE"
+            [class.h-[350px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL"
+            [src]="item.url"
+            [alt]="eventName ? 'Bild der Veranstaltung: ' + eventName : 'Veranstaltungsbild'"
+          />
+          @if (item.copyright || item.creator) {
+            <div class="absolute bottom-0 left-0 rounded-tr-xl bg-black px-3 py-1 opacity-75">
+              <div class="text-sm text-white">
+                {{ item.copyright }}
+                @if (item.copyright && item.creator) {
+                  –
+                }
+                {{ item.creator }}
               </div>
-            }
-            @if (!isFullscreen) {
-              <button
-                (click)="openFullscreen()"
-                class="pointer-events-auto absolute right-0 bottom-0 z-10 m-4 flex cursor-pointer items-center justify-center rounded-full bg-black/50 p-2 text-white hover:scale-125"
-                aria-label="Bild im Vollbild anzeigen"
-              >
-                <app-icon name="pan_zoom" class="h-6 w-6" aria-hidden="true"></app-icon>
-              </button>
-            }
-          </div>
-        }
-      }
-
-      @if (images.length > 1) {
-        <!-- Buttons über dem Bild -->
-        <div class="pointer-events-none absolute inset-0 grid grid-cols-2 items-center p-4">
-          <div class="flex items-center justify-start">
+            </div>
+          }
+          @if (!isFullscreen) {
             <button
-              class="pointer-events-auto cursor-pointer rounded-full bg-black/50 p-2 text-5xl text-white hover:scale-125"
-              (click)="selectedImageIndex = (selectedImageIndex - 1 + images.length) % images.length"
-              aria-label="Vorheriges Bild"
+              (click)="openFullscreen()"
+              class="pointer-events-auto absolute right-0 bottom-0 z-10 m-4 flex cursor-pointer items-center justify-center rounded-full bg-black/50 p-2 text-white hover:scale-125"
+              aria-label="Bild im Vollbild anzeigen"
             >
-              <svg
-                class="h-6 w-6"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19-7-7 7-7" />
-              </svg>
+              <app-icon name="pan_zoom" class="h-6 w-6" aria-hidden="true"></app-icon>
             </button>
-          </div>
-          <div class="flex items-center justify-end">
-            <button
-              class="pointer-events-auto cursor-pointer rounded-full bg-black/50 p-2 text-5xl text-white hover:scale-125"
-              (click)="selectedImageIndex = (selectedImageIndex + 1) % images.length"
-              aria-label="Nächstes Bild"
-            >
-              <svg
-                class="h-6 w-6"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7" />
-              </svg>
-            </button>
-          </div>
+          }
         </div>
       }
-    </div>
-  } @else {
-    <div
-      class="flex w-full justify-center py-2"
-      [class.h-[650px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.XLARGE && !isFullscreen"
-      [class.h-[500px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.LARGE && !isFullscreen"
-      [class.h-[350px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL && !isFullscreen"
-    >
-      <img
-        class="w-full rounded-t-2xl object-contain opacity-30"
-        src="/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg"
-        alt="1200 Jahre Radolfzell Logo"
-      />
-    </div>
-  }
-</ng-template>
+    }
 
-<ng-container *ngTemplateOutlet="imageTemplate"></ng-container>
+    @if (images.length > 1) {
+      <!-- Buttons über dem Bild -->
+      <div class="pointer-events-none absolute inset-0 grid grid-cols-2 items-center p-4">
+        <div class="flex items-center justify-start">
+          <button
+            class="pointer-events-auto cursor-pointer rounded-full bg-black/50 p-2 text-5xl text-white hover:scale-125"
+            (click)="selectedImageIndex = (selectedImageIndex - 1 + images.length) % images.length"
+            aria-label="Vorheriges Bild"
+          >
+            <svg
+              class="h-6 w-6"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19-7-7 7-7" />
+            </svg>
+          </button>
+        </div>
+        <div class="flex items-center justify-end">
+          <button
+            class="pointer-events-auto cursor-pointer rounded-full bg-black/50 p-2 text-5xl text-white hover:scale-125"
+            (click)="selectedImageIndex = (selectedImageIndex + 1) % images.length"
+            aria-label="Nächstes Bild"
+          >
+            <svg
+              class="h-6 w-6"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+} @else {
+  <div
+    class="flex w-full justify-center py-2"
+    [class.h-[650px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.XLARGE && !isFullscreen"
+    [class.h-[500px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.LARGE && !isFullscreen"
+    [class.h-[350px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL && !isFullscreen"
+  >
+    <img
+      class="w-full rounded-t-2xl object-contain opacity-30"
+      src="/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg"
+      alt="1200 Jahre Radolfzell Logo"
+    />
+  </div>
+}
 
 @if (isFullscreen) {
   <div class="fixed inset-0 z-550 flex items-center justify-center bg-black/90">
-    <ng-container *ngTemplateOutlet="imageTemplate"></ng-container>
+    @if (images.length !== 0) {
+      <div class="relative h-full max-h-[90vh] w-[90vw]">
+        <!-- Bilder -->
+        @for (item of images; track $index) {
+          @if ($index === selectedImageIndex) {
+            <div class="flex h-full w-full items-center justify-center">
+              <div class="rounded-2xl">
+                <img
+                  class="animate-fadeIn rounded-2xl object-contain opacity-0"
+                  [src]="item.url"
+                  [alt]="eventName ? 'Bild der Veranstaltung: ' + eventName : 'Veranstaltungsbild'"
+                />
+                @if (item.copyright || item.creator) {
+                  <div class="absolute flex h-8 -translate-y-8 items-center rounded-md bg-black px-2 opacity-75">
+                    <div class="text-sm text-white">
+                      {{ item.copyright }}
+                      @if (item.copyright && item.creator) {
+                        –
+                      }
+                      {{ item.creator }}
+                    </div>
+                  </div>
+                }
+              </div>
+              @if (!isFullscreen) {
+                <button
+                  (click)="openFullscreen()"
+                  class="pointer-events-auto absolute right-0 bottom-0 z-10 m-4 flex cursor-pointer items-center justify-center rounded-full bg-black/50 p-2 text-white hover:scale-125"
+                  aria-label="Bild im Vollbild anzeigen"
+                >
+                  <app-icon name="pan_zoom" class="h-6 w-6" aria-hidden="true"></app-icon>
+                </button>
+              }
+            </div>
+          }
+        }
+
+        @if (images.length > 1) {
+          <!-- Buttons über dem Bild -->
+          <div class="pointer-events-none absolute inset-0 grid grid-cols-2 items-center p-4">
+            <div class="flex items-center justify-start">
+              <button
+                class="pointer-events-auto cursor-pointer rounded-full bg-black/50 p-2 text-5xl text-white hover:scale-125"
+                (click)="selectedImageIndex = (selectedImageIndex - 1 + images.length) % images.length"
+                aria-label="Vorheriges Bild"
+              >
+                <svg
+                  class="h-6 w-6"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m15 19-7-7 7-7"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div class="flex items-center justify-end">
+              <button
+                class="pointer-events-auto cursor-pointer rounded-full bg-black/50 p-2 text-5xl text-white hover:scale-125"
+                (click)="selectedImageIndex = (selectedImageIndex + 1) % images.length"
+                aria-label="Nächstes Bild"
+              >
+                <svg
+                  class="h-6 w-6"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <div
+        class="flex w-full justify-center py-2"
+        [class.h-[650px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.XLARGE && !isFullscreen"
+        [class.h-[500px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.LARGE && !isFullscreen"
+        [class.h-[350px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL && !isFullscreen"
+      >
+        <img
+          class="w-full rounded-t-2xl object-contain opacity-30"
+          src="/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg"
+          alt="1200 Jahre Radolfzell Logo"
+        />
+      </div>
+    }
     <button
       class="absolute top-4 right-4 cursor-pointer text-2xl text-white hover:scale-125"
       (click)="closeFullscreen()"
