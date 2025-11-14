@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, OnDestroy, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input, OnInit, OnDestroy, OnChanges, SimpleChanges, inject } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { Subscription } from 'rxjs'
@@ -21,7 +21,7 @@ import { IconComponent } from '@app/icons/icon.component'
   templateUrl: './event-card.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EventCardComponent implements OnInit, OnDestroy {
+export class EventCardComponent implements OnInit, OnDestroy, OnChanges {
   @Input() event: Event | null = null
 
   @Input() isMoreCard = false
@@ -45,16 +45,37 @@ export class EventCardComponent implements OnInit, OnDestroy {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if ('event' in changes) {
+      // Vorherige aufgelöste Daten leeren, um "altes Bild" zu vermeiden
+      this.resetResolved()
+
+      if (this.event?.id) {
+        const id = this.event.id as unknown as string
+        this.isSaved = this.localStorageService.isEventSaved(id)
+        void this.initializeEventDetails()
+      } else {
+        this.isSaved = false
+      }
+    }
+  }
+
+  private resetResolved(): void {
+    this.location = null
+    this.eventType = null
+    this.mediaUrl = null
+    this.markForCheck()
+  }
+
   private initializeSavedState(): void {
-    if (!this.event?.id) return
+    const currentId = (this.event?.id as unknown as string) ?? null
+    this.isSaved = currentId ? this.localStorageService.isEventSaved(currentId) : false
 
-    const eventId = this.event.id as unknown as string
-    this.isSaved = this.localStorageService.isEventSaved(eventId)
-
-    // Subscription nur hinzufügen, wenn wir sie wirklich brauchen (für ältere Komponenten)
+    // Subscription auf Saved-Events; nutzt jeweils den aktuellen this.event-Wert
     this.subscriptions.add(
       this.localStorageService.savedEvents$.subscribe(() => {
-        this.isSaved = this.localStorageService.isEventSaved(eventId)
+        const id = (this.event?.id as unknown as string) ?? null
+        this.isSaved = id ? this.localStorageService.isEventSaved(id) : false
         this.markForCheck()
       }),
     )

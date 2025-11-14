@@ -39,7 +39,7 @@
       </div>
     } @else {
       <div class="mb-10 flex flex-wrap justify-center gap-4">
-        @for (event of displayEvents; track $index) {
+        @for (event of displayEvents; track trackByEvent) {
           <app-event-card
             class="w-full max-w-sm flex-shrink-0 sm:w-1/2 lg:w-1/3"
             [event]="event.isMore ? null : event"
