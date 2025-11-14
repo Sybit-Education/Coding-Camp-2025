@@ -4,7 +4,7 @@
     <span class="text-gray-400">|</span>
     <a href="https://www.radolfzell.de/datenschutz" class="hover:underline">{{ 'footer.datenschutz' | translate }}</a>
     <span class="text-gray-400">|</span>
-    <a [routerLink]="['/barrierefreiheit']" class="hover:underline">{{ 'footer.accessibility' | translate }}</a>
+    <a [routerLink]="['/barrierefreiheit']" routerLinkActive="router-link-active" ariaCurrentWhenActive="page" class="hover:underline">{{ 'footer.accessibility' | translate }}</a>
     <span class="text-gray-400">|</span>
     <a href="https://www.instagram.com/Radolfzell1200" class="hover:underline flex items-center gap-1">
       <app-icon name="instagram" class="h-[1rem]" aria-hidden="true"></app-icon> 
@@ -12,7 +12,7 @@
     </a>   
   </nav>
 
-  <a [routerLink]="['/team']">
+  <a [routerLink]="['/team']" routerLinkActive="router-link-active" ariaCurrentWhenActive="page">
     <div id="sponsor" class="m-1 flex flex-col items-end rounded-lg bg-white/10 p-3 shadow-sm">
       <span class="mb-1 text-center text-sm text-gray-600">{{ 'footer.sponsoring' | translate }}</span>
       <img src="sybit-logo.svg" alt="SYBIT Sponsoring Logo" class="h-6 max-w-[120px] object-contain" />

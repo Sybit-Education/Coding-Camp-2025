@@ -13,7 +13,7 @@
 
 3. ARIA-Attribute
    - [x] Erste ARIA-Labels ergänzt (KategorieCard: aria-label; Live-Regionen/role für Updates/Spinner)
-   - [ ] aria-current für aktive Navigationslinks einsetzen (z. B. ariaCurrentWhenActive="page" bei Routerlinks)
+   - [x] aria-current für aktive Navigationslinks einsetzen (z. B. ariaCurrentWhenActive="page" bei Routerlinks)
    - [ ] aria-expanded/-controls für aufklappbare Bereiche ergänzen (falls vorhanden)
 
 4. Alt-Texte für Bilder
@@ -37,7 +37,7 @@
    - [ ] Fokus-Management bei Validierungsfehlern (zum ersten fehlerhaften Feld springen)
 
 8. Navigation & Routing
-   - [ ] Titelverwaltung: TitleService/TitleStrategy nutzen, Titel pro Route pflegen
+   - [x] Titelverwaltung: TitleService/TitleStrategy nutzen, Titel pro Route pflegen
    - [x] LiveAnnouncer für Seitenwechsel (polite) integriert
    - [ ] routerLinkActive + ariaCurrentWhenActive flächendeckend einsetzen (Header/Footer/BottomNav)
 
