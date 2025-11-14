@@ -32,6 +32,12 @@
     @apply transition-colors duration-200;
   }
 
+  /* Skip link (visible on focus) */
+  .skip-link {
+    @apply fixed left-2 top-2 -translate-y-full transform rounded bg-white px-3 py-2 text-sm text-blue-800 shadow focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-blue-500;
+    z-index: 50;
+  }
+
   /* List styles */
   ul {
     @apply mb-4 list-disc pl-5;

@@ -7,6 +7,10 @@
     <div>
       <a href="https://www.radolfzell.de/datenschutz" class="hover:underline">{{ 'footer.datenschutz' | translate }}</a>
     </div>
+    <span class="text-gray-400">|</span>
+    <div>
+      <a [routerLink]="['/barrierefreiheit']" class="hover:underline">{{ 'footer.accessibility' | translate }}</a>
+    </div>
   </div>
 
   <a [routerLink]="['/team']" routerLinkActive="router-link-active">

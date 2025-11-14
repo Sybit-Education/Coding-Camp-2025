@@ -5,7 +5,9 @@
     "BACK": "Zurück",
     "NEXT": "Weiter",
     "SKIP_TO_MAIN": "Zum Hauptinhalt springen",
-    "LOADING": "Laden ..."
+    "LOADING": "Laden ...",
+    "MAIN_CONTENT": "Hauptinhalt",
+    "PAGE_UPDATED": "Seite aktualisiert"
   },
   "HEADER": {
     "TITLE": "1200 Jahre Radolfzell",
@@ -76,7 +78,8 @@
   "footer": {
     "datenschutz": "Datenschutz",
     "impressum": "Impressum",
-    "sponsoring": "Developed & sponsored by"
+    "sponsoring": "Developed & sponsored by",
+    "accessibility": "Barrierefreiheit"
   },
   "create-event": {
     "eventname": "Name",
@@ -224,6 +227,12 @@
       }
     },
     "TITLE": "Administration"
+  },
+  "ACCESSIBILITY": {
+    "TITLE": "Barrierefreiheit",
+    "INTRO": "Wir bemühen uns, die App für alle Menschen zugänglich zu machen.",
+    "CONTACT": "Barrieren melden",
+    "CONTACT_TEXT": "Wenn Sie eine Barriere gefunden haben, schreiben Sie uns bitte eine Nachricht."
   },
   "SEARCH": {
     "LABEL": "Suche",

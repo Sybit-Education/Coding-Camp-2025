@@ -4,7 +4,9 @@
     "CANCEL": "Annuler",
     "BACK": "Retour",
     "NEXT": "Suivant",
-    "SKIP_TO_MAIN": "Passer au contenu principal"
+    "SKIP_TO_MAIN": "Passer au contenu principal",
+    "MAIN_CONTENT": "Contenu principal",
+    "PAGE_UPDATED": "Page mise à jour"
   },
   "HEADER": {
     "TITLE": "1200 Ans de Radolfzell",
@@ -76,7 +78,8 @@
   "footer": {
     "datenschutz": "Mentions légales",
     "impressum": "Politique de confidentialité",
-    "sponsoring": "Développé"
+    "sponsoring": "Développé",
+    "accessibility": "Accessibilité"
   },
   "create-event": {
     "eventname": "Nom",
@@ -200,6 +203,12 @@
       "TITLE": "Locations"
     },
     "TITLE": "Administration"
+  },
+  "ACCESSIBILITY": {
+    "TITLE": "Accessibilité",
+    "INTRO": "Nous nous efforçons de rendre l'application accessible à toutes et tous.",
+    "CONTACT": "Signaler des problèmes d'accessibilité",
+    "CONTACT_TEXT": "Si vous avez trouvé un obstacle, merci de nous en informer."
   },
   "SEARCH": {
     "PLACEHOLDER": "Rechercher...",

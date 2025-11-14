@@ -5,7 +5,9 @@
     "BACK": "Back",
     "NEXT": "Next",
     "SKIP_TO_MAIN": "Skip to main content",
-    "LOADING": "Loading ..."
+    "LOADING": "Loading ...",
+    "MAIN_CONTENT": "Main content",
+    "PAGE_UPDATED": "Page updated"
   },
   "HEADER": {
     "TITLE": "1200 Years Radolfzell",
@@ -80,7 +82,8 @@
   "footer": {
     "datenschutz": "Privacy Policy",
     "impressum": "Imprint",
-    "sponsoring": "Developed & sponsored by"
+    "sponsoring": "Developed & sponsored by",
+    "accessibility": "Accessibility"
   },
   "create-event": {
     "eventname": "Name",
@@ -210,6 +213,12 @@
       "CREATE_NEW": "New Location ..."
     },
     "TITLE": "Administration"
+  },
+  "ACCESSIBILITY": {
+    "TITLE": "Accessibility",
+    "INTRO": "We strive to make the app accessible to everyone.",
+    "CONTACT": "Report accessibility issues",
+    "CONTACT_TEXT": "If you found a barrier, please let us know."
   },
   "SEARCH": {
     "LABEL": "Search",

@@ -28,6 +28,14 @@ export const routes: Routes = [
     title: 'Team',
   },
   {
+    path: 'barrierefreiheit',
+    loadComponent: () =>
+      import('./pages/accessibility-statement/accessibility-statement.component').then(
+        (m) => m.AccessibilityStatementComponent
+      ),
+    title: 'Barrierefreiheit',
+  },
+  {
     path: 'event/:id',
     loadComponent: () => import('./pages/event-detail/event-detail.component').then((m) => m.EventDetailPageComponent),
     title: 'Veranstaltungsdetails',
