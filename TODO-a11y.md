@@ -1,7 +1,5 @@
 # Barrierefreiheit (a11y) – Konsolidierte TODO-Liste
 
-Konsolidiert aus docs/Barrierefreiheit-analysis.md und aktuellen Projektänderungen. Erledigte Punkte sind abgehakt.
-
 ## Hohe Priorität
 
 1. Semantische Struktur (Landmarks)
