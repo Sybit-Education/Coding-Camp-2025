@@ -170,7 +170,8 @@
       "description-heading": "description-heading",
       "directions-heading": "directions-heading",
       "contact-heading": "contact-heading"
-    }
+    },
+    "more_information": "Informations complémentaires"
   },
   "login": {
     "username": "Nom d'utilisateur / E-mail",
