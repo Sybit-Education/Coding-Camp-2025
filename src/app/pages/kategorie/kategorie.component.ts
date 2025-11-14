@@ -17,7 +17,6 @@ import { TypeDB } from '@app/models/typeDB.interface'
 import { SurrealdbService } from '../../services/surrealdb.service'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
 import { LoadingSpinnerComponent } from '@app/component/loading-spinner/loading-spinner.component'
-import { Media } from '@app/models/media.interface'
 
 interface EventWithResolvedLocation extends AppEvent {
   locationName: string
