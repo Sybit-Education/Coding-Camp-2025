@@ -1,85 +1,100 @@
-# Barrierefreiheit (a11y) TODO-Liste
+# Barrierefreiheit (a11y) – Konsolidierte TODO-Liste
 
-Diese Liste enthält Aufgaben zur Verbesserung der Barrierefreiheit der 1200-Jahre-Radolfzell App, sortiert nach Priorität.
+Konsolidiert aus docs/Barrierefreiheit-analysis.md und aktuellen Projektänderungen. Erledigte Punkte sind abgehakt.
 
 ## Hohe Priorität
 
-1. **Semantische HTML-Struktur überprüfen**
-   - Sicherstellen, dass alle Komponenten semantisch korrektes HTML verwenden (header, nav, main, section, article, footer)
-   - Besonders wichtig für: HeaderComponent, FooterComponent, BottomNavComponent
+1. Semantische Struktur (Landmarks)
+   - [x] App-Shell nutzt semantische Landmarks: <header>, <main id="main-content" role="main" tabindex="-1">, <footer> (app.component.html)
+   - [ ] Komponenten prüfen und ggf. ergänzen (section/article/nav): HeaderComponent, FooterComponent (innerer Inhalt), BottomNavComponent, EventCardComponent
 
-2. **Tastaturnavigation implementieren**
-   - Sicherstellen, dass alle interaktiven Elemente mit der Tastatur bedienbar sind
-   - Fokus-Styles für alle interaktiven Elemente hinzufügen
-   - Tab-Reihenfolge logisch gestalten
-   - Besonders wichtig für: EventCardComponent, KategorieCardComponent, BottomNavComponent
+2. Tastaturnavigation
+   - [x] Fokus-Styles vorhanden (Tailwind focus:ring auf .card, Buttons, Links)
+   - [ ] Interaktive Karten/Slider/Carousels per Tastatur bedienbar machen (EventCarouselComponent, MapComponent)
+   - [ ] Tab-Reihenfolge prüfen/optimieren, insbesondere BottomNavComponent
 
-3. **ARIA-Attribute hinzufügen**
-   - Fehlende aria-label für Icons und Buttons ohne Text hinzufügen
-   - aria-expanded für aufklappbare Elemente implementieren
-   - aria-current für aktuelle Navigation hinzufügen
+3. ARIA-Attribute
+   - [x] Erste ARIA-Labels ergänzt (KategorieCard: aria-label; Live-Regionen/role für Updates/Spinner)
+   - [ ] aria-current für aktive Navigationslinks einsetzen (z. B. ariaCurrentWhenActive="page" bei Routerlinks)
+   - [ ] aria-expanded/-controls für aufklappbare Bereiche ergänzen (falls vorhanden)
 
-4. **Alt-Texte für Bilder**
-   - Sicherstellen, dass alle Bilder aussagekräftige Alt-Texte haben
-   - Besonders wichtig für: EventCardComponent, HeaderComponent (Logo)
+4. Alt-Texte für Bilder
+   - [ ] Aussagekräftige alt-Texte für alle Bilder, speziell EventCard, Header-Logo, Detailseitenbilder
+   - [ ] Falls rein dekorativ: alt="" setzen
 
-5. **Farbkontraste überprüfen**
-   - Alle Text/Hintergrund-Kombinationen auf ausreichenden Kontrast prüfen (WCAG AA: 4.5:1 für normalen Text, 3:1 für großen Text)
-   - Besonders wichtig für: EventCardComponent, KategorieCardComponent
+5. Farbkontraste
+   - [ ] Kontraste (Text/Icons vs. Hintergrund) nach WCAG AA prüfen (4.5:1 normal, 3:1 groß)
+   - [ ] Bei Bedarf Farbwerte/Schriftstärken anpassen
 
 ## Mittlere Priorität
 
-6. **Skip-Links implementieren**
-   - Link zum Überspringen der Navigation zum Hauptinhalt hinzufügen
-   - Besonders wichtig für Screenreader-Nutzer
+6. Skip-Link
+   - [x] Skip-Link implementiert und sichtbar bei Fokus (styles.scss .skip-link)
+   - [x] Fokus bei Navigation auf Hauptinhalt setzen (AppComponent → main.focus())
 
-7. **Formularelemente verbessern**
-   - Labels für alle Formularelemente hinzufügen
-   - Fehlermeldungen für Screenreader zugänglich machen
-   - Autocomplete-Attribute verwenden, wo sinnvoll
+7. Formulare zugänglich machen
+   - [ ] Labels jedem Input zuordnen (for/id oder aria-labelledby)
+   - [ ] Fehlerzustände über aria-live/aria-invalid/aria-describedby ansagen
+   - [ ] Autocomplete-Attribute setzen (z. B. email, name, tel)
+   - [ ] Fokus-Management bei Validierungsfehlern (zum ersten fehlerhaften Feld springen)
 
-8. **Responsive Design für Zoom**
-   - Sicherstellen, dass die Anwendung bei 200% Zoom benutzbar bleibt
-   - Text-Größen in relativen Einheiten (rem, em) definieren
+8. Navigation & Routing
+   - [ ] Titelverwaltung: TitleService/TitleStrategy nutzen, Titel pro Route pflegen
+   - [x] LiveAnnouncer für Seitenwechsel (polite) integriert
+   - [ ] routerLinkActive + ariaCurrentWhenActive flächendeckend einsetzen (Header/Footer/BottomNav)
 
-9. **Screenreader-Tests durchführen**
-   - Mit NVDA, JAWS oder VoiceOver die Anwendung testen
-   - Besonders wichtig für: EventCarouselComponent, MapComponent
+9. Dynamische Inhalte
+   - [x] Ladeindikator mit aria-live="polite" und verstecktem Text (COMMON.LOADING)
+   - [x] Update-Benachrichtigung als role="status" (polite)
+   - [ ] Weitere dynamische Statusmeldungen (Filterwechsel, Suchtrefferzahl) über LiveRegion announcen
 
-10. **Dynamische Inhalte zugänglich machen**
-    - Live-Regions für dynamisch aktualisierte Inhalte verwenden
-    - Statusänderungen für Screenreader ankündigen
+10. Responsive/Zoom
+   - [ ] Nutzbarkeit bei 200% Zoom testen und sicherstellen (Layout bricht nicht, keine Overlays blockieren)
 
 ## Niedrigere Priorität
 
-11. **Dokumentation der Barrierefreiheit**
-    - Barrierefreiheitserklärung erstellen
-    - Bekannte Probleme dokumentieren
+11. Barrierefreiheitserklärung
+   - [x] Seite /barrierefreiheit vorhanden inkl. Grundinhalte (ACCESSIBILITY.*)
+   - [ ] Feedback-Kanal/Formular einbauen (Kontakt-Link oder simples Formular mit Beschreibungen)
 
-12. **Animationen und Bewegungen**
-    - Möglichkeit zum Deaktivieren von Animationen anbieten (prefers-reduced-motion)
-    - Besonders wichtig für: EventCarouselComponent
+12. Animationen/Bewegungen
+   - [ ] prefers-reduced-motion berücksichtigen (z. B. Spinner/Transitions reduzieren/deaktivieren)
 
-13. **Sprachattribute**
-    - lang-Attribute für die Hauptsprache und abweichende Sprachinhalte setzen
+13. Sprachattribute
+   - [ ] lang-Attribut auf <html> dynamisch zur aktuellen Sprache setzen (I18nService/APP_INITIALIZER)
 
-14. **Barrierefreiheit der Karte verbessern**
-    - Alternative Darstellung oder Textbeschreibung für die MapComponent anbieten
-    - Tastaturzugänglichkeit für Karteninteraktionen implementieren
+14. Karte/Map
+   - [ ] Alternative Textbeschreibung der Location und Tastatur-Navigation für interaktive Karte
+   - [ ] Adresse als Standardtext zugänglich machen (bereits teils vorhanden, prüfen)
 
-15. **Automatisierte Tests**
-    - a11y-Tests in die CI/CD-Pipeline integrieren
-    - axe-core oder ähnliche Tools einbinden
+15. Automatisierte A11y-Tests
+   - [ ] Lint-Regeln für Templates: angular-eslint template/accessibility aktivieren
+   - [ ] CI-Audits mit axe-core/Lighthouse
+   - [ ] Manuelle Screenreader-Tests (NVDA/JAWS/VoiceOver) dokumentieren
 
-## Technische Implementierungshinweise
+## Technische Umsetzung (Status)
 
-- Angular CDK a11y-Module für verbesserte Tastaturunterstützung verwenden
-- @angular/cdk/a11y für FocusMonitor und LiveAnnouncer nutzen
-- Erwägen Sie die Verwendung von ngAria
-- Lighthouse oder axe DevTools für regelmäßige Tests verwenden
+- Angular CDK a11y
+  - [x] @angular/cdk installiert
+  - [x] A11yModule global importiert (app.config.ts → importProvidersFrom)
+  - [x] LiveAnnouncer in AppComponent im Einsatz (Seitenwechsel)
+  - [ ] FocusTrap/FocusMonitor für Dialoge/Overlays einsetzen (falls vorhanden)
 
-## Ressourcen
+- I18n & Live-Region
+  - [x] ngx-translate konfiguriert, TranslateModule eingebunden
+  - [x] Texte ergänzt: COMMON.SKIP_TO_MAIN, COMMON.MAIN_CONTENT, COMMON.PAGE_UPDATED, etc.
+  - [x] LiveAnnouncer-Elemente visuell versteckt (styles.scss: .cdk-visually-hidden, .cdk-live-announcer-element)
 
-- [Web Content Accessibility Guidelines (WCAG) 2.1](https://www.w3.org/TR/WCAG21/)
-- [Angular Accessibility Guide](https://angular.io/guide/accessibility)
-- [MDN Web Docs: Accessibility](https://developer.mozilla.org/en-US/docs/Web/Accessibility)
+## Nächste Quick Wins
+
+- [ ] ariaCurrentWhenActive="page" und routerLinkActive in Header/Footer/BottomNav ergänzen
+- [ ] TitleService/TitleStrategy einführen, Route-Titel konsequent setzen/übersetzen
+- [ ] Alt-Texte auf EventCard/Detailseiten ergänzen
+- [ ] Form-Labels/Fehlermeldungen mit aria-Attributen verdrahten (Create/Edit-Formulare)
+- [ ] prefers-reduced-motion in styles.scss berücksichtigen
+
+## Referenzen
+
+- Angular Accessibility Guide: https://angular.dev/guide/accessibility
+- WCAG 2.1 Checkliste: https://www.w3.org/TR/WCAG21/
+- SurrealDB Docs (Datenquelle, nicht a11y-spezifisch): https://surrealdb.com/docs
