@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core'
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router'
 import { LiveAnnouncer } from '@angular/cdk/a11y'
-import { TranslateService } from '@ngx-translate/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 import { HeaderComponent } from './component/header/header.component'
 import { FooterComponent } from './component/footer/footer.component'
@@ -12,7 +12,7 @@ import { SnackBarComponent } from './component/snack-bar/snack-bar.component'
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent, FooterComponent, BottomNavComponent, SnackBarComponent],
+  imports: [TranslateModule, RouterOutlet, HeaderComponent, FooterComponent, BottomNavComponent, SnackBarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
