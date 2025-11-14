@@ -106,7 +106,6 @@ export class EventCreateComponent implements OnInit {
   topics: Topic[] = []
 
   // Images & Upload
-  previews: string[] = []
   images: Media[] = []
 
   isSaving = false
