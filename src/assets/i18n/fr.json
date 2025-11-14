@@ -81,6 +81,9 @@
     "sponsoring": "Développé",
     "accessibility": "Accessibilité"
   },
+  "NAV": {
+    "FOOTER": "Navigation du pied de page"
+  },
   "create-event": {
     "eventname": "Nom",
     "organizer": "Choisir l'organisateur...",

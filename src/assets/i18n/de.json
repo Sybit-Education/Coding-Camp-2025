@@ -81,6 +81,9 @@
     "sponsoring": "Developed & sponsored by",
     "accessibility": "Barrierefreiheit"
   },
+  "NAV": {
+    "FOOTER": "Fußnavigation"
+  },
   "create-event": {
     "eventname": "Name",
     "organizer": "Veranstalter wählen...",
