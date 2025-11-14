@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges, inject } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input, OnChanges, SimpleChanges, inject } from '@angular/core'
 import { SafeHtml } from '@angular/platform-browser'
 import { IconRegistryService } from '../services/icon-registry.service'
+import { take } from 'rxjs'
 
 @Component({
   selector: 'app-icon',
@@ -28,6 +29,18 @@ import { IconRegistryService } from '../services/icon-registry.service'
 })
 export class IconComponent implements OnChanges {
   @Input() name!: string
+  @Input() ariaLabel?: string
+  @Input() decorative = true
+
+  @HostBinding('attr.role') get hostRole() {
+    return this.decorative ? null : 'img'
+  }
+  @HostBinding('attr.aria-hidden') get hostAriaHidden() {
+    return this.decorative && !this.ariaLabel ? 'true' : null
+  }
+  @HostBinding('attr.aria-label') get hostAriaLabel() {
+    return this.decorative ? null : this.ariaLabel ?? null
+  }
 
   safeSvg: SafeHtml | null = null
 
@@ -36,7 +49,7 @@ export class IconComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['name']?.currentValue) {
-      this.registry.get(this.name).subscribe({
+      this.registry.get(this.name).pipe(take(1)).subscribe({
         next: (svg) => {
           this.safeSvg = svg
           this.cdr.markForCheck()

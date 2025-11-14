@@ -3,6 +3,7 @@ import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-devs',
+  standalone: true,
   imports: [TranslateModule],
   templateUrl: './devs.component.html',
   styleUrl: './devs.component.scss',

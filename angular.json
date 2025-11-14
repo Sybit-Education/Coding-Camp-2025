@@ -41,7 +41,8 @@
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [
-              "leaflet"
+              "leaflet",
+              "quill-delta"
             ],
             "optimization": {
               "scripts": true,
@@ -54,8 +55,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "600kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "550kB",
+                  "maximumError": "900kB"
                 },
                 {
                   "type": "anyComponentStyle",

@@ -24,6 +24,7 @@ import { MediaService } from './app/services/media.service'
 import { environment } from './environments/environment'
 import { FavoriteService } from '@app/services/favorite.service'
 import { LoginService } from '@app/services/login.service'
+import { NetworkService } from '@app/services/network.service'
 
 console.log(`App is running in ${environment.configName || 'development'} mode.`)
 
@@ -71,6 +72,7 @@ const bootstrapConfig: ApplicationConfig = {
       inject(LocationService)
       inject(OrganizerService)
       inject(MediaService)
+      inject(NetworkService)
 
       await eventService.initializeData()
       await topicService.initializeData()
