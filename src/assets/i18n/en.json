@@ -83,6 +83,7 @@
     "datenschutz": "Privacy Policy",
     "impressum": "Imprint",
     "sponsoring": "Developed & sponsored by",
+    "instagram": "Instagram",
     "accessibility": "Accessibility"
   },
   "NAV": {
@@ -180,7 +181,8 @@
       "description-heading": "description-heading",
       "directions-heading": "directions-heading",
       "contact-heading": "contact-heading"
-    }
+    },
+    "more_information": "Further information"
   },
   "login": {
     "username": "Username / E-Mail",

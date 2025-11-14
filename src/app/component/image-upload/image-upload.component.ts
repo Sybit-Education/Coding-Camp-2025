@@ -337,7 +337,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
           // b) generiere id
           const sanitizedEventName = this.eventName.replace(/[^A-Za-z0-9_]/g, '_')
 
-          const safeOriginalFileName = originalFileName.replace(/\.[^/.]+$/, '').replace(/[^A-Za-z0-9_-]/g, '_')
+          const safeOriginalFileName = originalFileName.replace(/\.[^/.]+$/, '').replace(/[^A-Za-z0-9_]/g, '_')
 
           const timestamp = Date.now()
 
