@@ -1,0 +1,16 @@
+<ul class="pill-list">
+  @if (pill) {
+    <li
+      [routerLink]="['/kategorie', pill.slug]"
+      [title]="pill.label"
+      [attr.aria-label]="'Kategorie: ' + pill.label"
+      [ngStyle]="{
+        'background-color': pill.color || '#F3F4F6',
+        'color': pill.textColor,
+        'border-color': pill.color ? 'transparent' : '#E5E7EB'
+      }"
+    >
+      <span class="max-w-[12rem] truncate">{{ pill.label }}</span>
+    </li>
+  }
+</ul>
