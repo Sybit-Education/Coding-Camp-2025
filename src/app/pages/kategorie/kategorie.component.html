@@ -3,6 +3,12 @@
   <h1>
     {{ this.name }}
   </h1>
+  
+  @if(this.description) {
+    <p [innerHTML]="this.description" class="lg:text-lg text-sm text-gray-600 hyphens-auto">
+      {{ this.description }}
+    </p>
+  }
 
   <!-- Search input -->
   <div class="mb-4">
@@ -55,7 +61,7 @@
     </div>
   }
 
-  <div class="mr-2 ml-2 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
     @for (event of events; track trackByEvent($index, event)) {
       <div class="relative">
         @if (event.isPast) {

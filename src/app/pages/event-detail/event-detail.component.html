@@ -130,7 +130,7 @@
             {{ 'event-detail.description' | translate }}
           </h2>
           <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
-          <p [innerHTML]="event.description">
+          <p [innerHTML]="event.description" class="hyphens-auto">
             {{ event.description }}
           </p>
           @if(event.more_infos_link) {
