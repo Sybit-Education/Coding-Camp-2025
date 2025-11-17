@@ -187,4 +187,8 @@ export class KategorieComponent implements OnInit {
       this.markForCheck()
     }
   }
+
+  trackByEvent(index: number, item: EventWithResolvedLocation) {
+    return item.id?.id ?? index
+  }
 }

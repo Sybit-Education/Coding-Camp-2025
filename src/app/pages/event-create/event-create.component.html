@@ -184,7 +184,7 @@
             name="moreInfoLink"
             type="url"
             placeholder="{{ 'create-event.moreinfoexample' | translate }}"
-            [(ngModel)]="moreInfoLink"
+            [(ngModel)]="moreInfosLink"
             class="w-full"
           />
         </div>
@@ -220,7 +220,7 @@
 
     <div>
       <!-- Bild-Upload -->
-      <app-image-upload [(previews)]="previews" [eventName]="eventName" [existingImages]="images"> </app-image-upload>
+      <app-image-upload [eventName]="eventName" [existingImages]="images"> </app-image-upload>
 
       <!-- Button: Event erstellen -->
       @if (this.errorDate || this.errorName || this.errorTime) {
