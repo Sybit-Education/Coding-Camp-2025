@@ -17,6 +17,7 @@ import { TypeDB } from '@app/models/typeDB.interface'
 import { SurrealdbService } from '../../services/surrealdb.service'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
 import { LoadingSpinnerComponent } from '@app/component/loading-spinner/loading-spinner.component'
+import { FormsModule } from '@angular/forms'
 
 interface EventWithResolvedLocation extends AppEvent {
   locationName: string
@@ -26,7 +27,7 @@ interface EventWithResolvedLocation extends AppEvent {
 @Component({
   selector: 'app-kategorie',
   standalone: true,
-  imports: [TranslateModule, EventCardComponent, CommonModule, GoBackComponent, LoadingSpinnerComponent],
+  imports: [TranslateModule, EventCardComponent, CommonModule, GoBackComponent, LoadingSpinnerComponent, FormsModule],
   templateUrl: './kategorie.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -42,10 +43,10 @@ export class KategorieComponent implements OnInit {
   private readonly translate: TranslateService = inject(TranslateService)
 
   events: EventWithResolvedLocation[] = []
-  topics: Topic[] = []
-  eventTypes: TypeDB[] = []
-  
+  categories: (Topic | TypeDB)[] = []
+
   categoryId: RecordIdValue | null = null
+  selectedLocationId: RecordIdValue | null = null
   name: string | null = null
   slug: string | null = null
   description: string | null = null
@@ -58,7 +59,7 @@ export class KategorieComponent implements OnInit {
   private searchDebounce: number | null = null
 
   // Cache für Locations, um wiederholte Anfragen zu vermeiden
-  private readonly locationCache = new Map<string, Promise<AppLocation>>()
+  readonly locationCache = new Map<string, Promise<AppLocation>>()
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
@@ -78,8 +79,7 @@ export class KategorieComponent implements OnInit {
         this.eventService.getAllEventTypes(),
       ])
 
-      this.topics = topics
-      this.eventTypes = typeDB
+      this.categories = [...topics, ...typeDB]
       this.allEvents = allEvents
 
       this.categoryId = this.getCategoryIdFromSlug(topics, typeDB)
@@ -133,11 +133,15 @@ export class KategorieComponent implements OnInit {
     try {
       // Basisliste ggf. nach Kategorie einschränken
       const categoryId = this.categoryId
+      const locationId = this.selectedLocationId
       let baseList = this.allEvents
       if (categoryId) {
         baseList = baseList.filter(
           (event) => event.topic?.some((topic) => topic.id === categoryId) || event.event_type?.id === categoryId,
         )
+      }
+      if (locationId) {
+        baseList = baseList.filter((event) => event.location?.id === locationId)
       }
 
       let resultEvents: AppEvent[]
@@ -148,6 +152,10 @@ export class KategorieComponent implements OnInit {
               (event) => event.topic?.some((topic) => topic.id === categoryId) || event.event_type?.id === categoryId,
             )
           : searchResults
+          
+        resultEvents = locationId
+          ? resultEvents.filter((event) => event.location?.id === locationId)
+          : resultEvents
       } else {
         resultEvents = baseList
       }

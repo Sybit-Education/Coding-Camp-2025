@@ -70,6 +70,11 @@
     },
     "title": "1200 Jahre Radolfzell"
   },
+  "all-categories": {
+    "all-locations": "Alle Orte",
+    "all-categories": "Alle Kategorien",
+    "all-events": "Alle Veranstaltungen"
+  },
   "i18y": {
     "to-main-content": "Zum Hauptinhalt springen"
   },

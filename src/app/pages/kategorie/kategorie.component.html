@@ -3,9 +3,9 @@
   <h1>
     {{ this.name }}
   </h1>
-  
-  @if(this.description) {
-    <p [innerHTML]="this.description" class="lg:text-lg text-sm text-gray-600 hyphens-auto">
+
+  @if (this.description) {
+    <p [innerHTML]="this.description" class="text-sm hyphens-auto text-gray-600 lg:text-lg">
       {{ this.description }}
     </p>
   }
@@ -18,17 +18,41 @@
       type="search"
       class="w-full rounded-2xl border border-gray-300 p-2"
       [value]="searchTerm"
-      (input)="onSearchChange(($any($event.target)).value)"
+      (input)="onSearchChange($any($event.target).value)"
       [attr.aria-label]="'SEARCH.LABEL' | translate"
       [placeholder]="'SEARCH.PLACEHOLDER' | translate"
       [attr.aria-busy]="searching"
     />
     @if (searching) {
       <div class="mt-2 flex items-center text-sm text-gray-500" aria-live="polite" aria-busy="true">
-        <span class="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-t-transparent border-[#c70d56]"></span>
+        <span class="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-[#c70d56] border-t-transparent"></span>
         {{ 'SEARCH.SEARCHING' | translate }}
       </div>
     }
+  </div>
+
+  <div class="mb-4 flex justify-between gap-4">
+    <select name="categories" id="categories" class="space-x-2">
+      <option [ngValue]="null">
+        {{ 'all-categories.all-categories' | translate }}
+      </option>
+      @for (category of categories; track category) {
+        <option [value]="category.id">
+          {{ category.name }}
+        </option>
+      }
+    </select>
+
+    <select name="locations" id="locations" class="flex space-x-2">
+      <option [ngValue]="null">
+        {{ 'all-categories.all-locations' | translate }}
+      </option>
+      @for (location of this.locationCache.values(); track location) {
+        <option [value]="(location | async)!.id">
+          {{ (location | async)!.name }}
+        </option>
+      }
+    </select>
   </div>
 
   <!-- Ladeanzeige (nur für Initial-Load, nicht während der Suche) -->
@@ -49,7 +73,7 @@
           </div>
         </div>
       }
-      </div>
+    </div>
   }
 
   <!-- Keine Events Meldung -->
