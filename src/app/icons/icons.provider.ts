@@ -23,6 +23,7 @@ function registerIcons(registry: IconRegistryService) {
   register('pan_zoom', '/svg/pan_zoom.svg')
   register('arrow_back', '/svg/arrow_back.svg')
   register('arrow_forward', '/svg/arrow_forward.svg')
+  register('instagram', '/svg/instagram.svg')
 
   // Navigation Bar
   register('home', '/svg/home.svg')

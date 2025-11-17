@@ -2,11 +2,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  EventEmitter,
   Input,
   OnChanges,
   OnInit,
-  Output,
   SimpleChanges,
   ViewChild,
   inject,
@@ -21,11 +19,22 @@ import { TranslateModule } from '@ngx-translate/core'
 import { FormsModule } from '@angular/forms'
 import imageCompression from 'browser-image-compression'
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component'
+import { DragDropModule, moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop'
+
+export interface PictureInfo {
+  copyright: string | null
+  creator: string | null
+}
+
+export interface CombinetPicture {
+  pictureInfo: PictureInfo
+  previews: string
+}
 
 @Component({
   selector: 'app-image-upload',
   standalone: true,
-  imports: [CommonModule, TranslateModule, FormsModule, LoadingSpinnerComponent],
+  imports: [CommonModule, TranslateModule, FormsModule, LoadingSpinnerComponent, DragDropModule],
   templateUrl: './image-upload.component.html',
   styleUrl: './image-upload.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,13 +46,10 @@ export class ImageUploadComponent implements OnInit, OnChanges {
   @Input() eventName = ''
   @Input() existingImages: Media[] = []
 
-  @Output() previewsChange = new EventEmitter<string[]>()
-  @Output() mediaChange = new EventEmitter<Media[]>()
-
   isDragging = false
 
   openSettingsIndex: number | null = null
-  pictureInfos: { copyright: string; creator: string }[] = []
+  pictureInfos: PictureInfo[] = []
   deletedImages: Media[] = []
 
   isUploading = false
@@ -82,7 +88,6 @@ export class ImageUploadComponent implements OnInit, OnChanges {
           console.error('Fehler beim holen media url', e)
         }
       }
-      this.previewsChange.emit([...this.previews])
       this.markForCheck()
     }
   }
@@ -129,10 +134,9 @@ export class ImageUploadComponent implements OnInit, OnChanges {
         this.snackBarService.showError(`Datei zu groß (max. 5 MB): ${file.name}`)
         continue
       }
-      this.createPreview(file)
-        .finally(() => {
-          this.isUploading = false
-        })
+      this.createPreview(file).finally(() => {
+        this.isUploading = false
+      })
     }
   }
 
@@ -161,7 +165,6 @@ export class ImageUploadComponent implements OnInit, OnChanges {
           }
           this.previews.push(JSON.stringify(dataWithMetadata))
           this.pictureInfos.push({ copyright: '', creator: '' })
-          this.previewsChange.emit([...this.previews])
           this.markForCheck()
         }
       }
@@ -179,7 +182,6 @@ export class ImageUploadComponent implements OnInit, OnChanges {
           }
           this.previews.push(JSON.stringify(dataWithMetadata))
           this.pictureInfos.push({ copyright: '', creator: '' })
-          this.previewsChange.emit([...this.previews])
           this.markForCheck()
         }
       }
@@ -194,7 +196,6 @@ export class ImageUploadComponent implements OnInit, OnChanges {
     // Entferne das Bild aus der Vorschau
     this.previews.splice(index, 1)
     this.pictureInfos.splice(index, 1)
-    this.previewsChange.emit([...this.previews])
 
     try {
       // Wenn es ein HTTP-Bild ist (existierendes Bild), finde die Media-ID und merke es zum löschen vor
@@ -203,13 +204,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
         if (existingMedia?.id) {
           this.deletedImages.push(existingMedia)
         }
-        const media = await this.uploadImages()
-        this.mediaChange.emit([...media])
       }
-
-      // Aktualisiere die Media-IDs und informiere die Eltern-Komponente
-      const media = await this.uploadImages()
-      this.mediaChange.emit([...media])
     } catch (error) {
       console.error('Fehler beim Löschen des Bildes:', error)
       this.snackBarService.showError(
@@ -267,7 +262,6 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       // 1) Früher Exit: keine Previews, aber vorhandene Bilder
       if (this.previews.length === 0 && this.existingImages.length > 0) {
         const copy = [...this.existingImages]
-        this.mediaChange.emit(copy)
         return copy
       }
 
@@ -337,7 +331,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
           // b) generiere id
           const sanitizedEventName = this.eventName.replace(/[^A-Za-z0-9_]/g, '_')
 
-          const safeOriginalFileName = originalFileName.replace(/\.[^/.]+$/, '').replace(/[^A-Za-z0-9_-]/g, '_')
+          const safeOriginalFileName = originalFileName.replace(/\.[^/.]+$/, '').replace(/[^A-Za-z0-9_]/g, '_')
 
           const timestamp = Date.now()
 
@@ -351,8 +345,8 @@ export class ImageUploadComponent implements OnInit, OnChanges {
             file: `data:image/${fileType};base64,${base64Payload}`,
             fileName: originalFileName,
             fileType: fileType,
-            copyright: info.copyright,
-            creator: info.creator,
+            copyright: info.copyright ?? '',
+            creator: info.creator ?? '',
           }
 
           // --- d) Upload → erhält ID (RecordId<'media'> | string)
@@ -363,9 +357,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
 
           // RecordId für getMediaById bauen
           const uploadedRecordId =
-            typeof uploadedId === 'string'
-              ? (new StringRecordId(uploadedIdStr) as unknown as RecordId<'media'>)
-              : (uploadedId as RecordId<'media'>)
+            typeof uploadedId === 'string' ? (new StringRecordId(uploadedIdStr) as unknown as RecordId<'media'>) : uploadedId
 
           // Details laden (falls Service kein vollständiges Media zurückgibt)
           const uploadedMedia = await this.mediaService.getMediaById(uploadedRecordId)
@@ -384,8 +376,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
         }
       }
 
-      // 4) Einmalig emittieren & zurückgeben
-      this.mediaChange.emit(collected)
+      // 4) Einmalig zurückgeben
       console.log('Hochgeladene und existierende Medien:', collected)
       return collected
     } catch (error) {
@@ -393,7 +384,6 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       this.snackBarService.showError(
         `Fehler beim Hochladen der Bilder: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
       )
-      this.mediaChange.emit(collected)
       return collected
     }
   }
@@ -423,12 +413,11 @@ export class ImageUploadComponent implements OnInit, OnChanges {
         this.previews[index] = JSON.stringify(parsed)
       } else if (previewData.startsWith('http')) {
         const media = await this.mediaService.getMediaByUrl(previewData)
-        media!.copyright = info.copyright
-        media!.creator = info.creator
+        media!.copyright = info.copyright ?? ''
+        media!.creator = info.creator ?? ''
         this.mediaService.updateMedia(media!.id!, media!)
       }
 
-      this.previewsChange.emit([...this.previews])
       this.markForCheck()
       this.closePictureSettings()
       this.snackBarService.showSuccess(`Bild erfolgreich aktualisiert!`)
@@ -436,5 +425,15 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       console.error('Fehler beim Aktualisieren der Bilddaten:', error)
       this.snackBarService.showError(`Fehler beim Aktualisieren der Bilddaten: ${error}`)
     }
+  }
+
+  dropPreview(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.previews, event.previousIndex, event.currentIndex)
+    moveItemInArray(this.pictureInfos, event.previousIndex, event.currentIndex)
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  trackByFn(index: number, item: any) {
+    return item.id
   }
 }
