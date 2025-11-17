@@ -33,6 +33,11 @@
                 <app-favorite-button [eventId]="event.id" class="p-1"></app-favorite-button>
                 <app-calendar-export [event]="event" [location]="location" class="p-1"></app-calendar-export>
                 <app-share [event]="event" [location]="location" class="p-1"></app-share>
+                            @if (isLoggedIn) {
+                  <button class="cursor-pointer hover*:bg-blue-600 rounded-full bg-blue-500 px-4 py-2 font-bold text-white" (click)="editEvent()">
+                    {{ 'event-detail.edit' | translate }}
+                  </button>
+                }                
               </div>
             </div>
           </div>
@@ -52,6 +57,11 @@
               <app-event-type-pill class="text-xs" [event]="event"></app-event-type-pill>
               <app-event-topic-pill-list class="text-xs" [event]="event"></app-event-topic-pill-list>
             </div>
+            @if (isLoggedIn) {
+              <button class="cursor-pointer hover*:bg-blue-600 rounded-full bg-blue-500 px-4 py-2 font-bold text-white" (click)="editEvent()">
+                {{ 'event-detail.edit' | translate }}
+              </button>
+            }
           </div>
         }
         <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
@@ -129,9 +139,15 @@
             {{ 'event-detail.description' | translate }}
           </h2>
           <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
-          <p [innerHTML]="event.description">
+          <p [innerHTML]="event.description" class="hyphens-auto">
             {{ event.description }}
           </p>
+          @if(event.more_infos_link) {
+            <h3>{{ 'event-detail.more_information' | translate }}</h3>
+            <p>
+              <a class="link" [href]="event.more_infos_link">{{ event.more_infos_link }}</a>
+            </p>
+          }
         </section>
       }
       @if (location?.geo_point) {
@@ -194,10 +210,7 @@
                       {{ 'event-detail.email' | translate }}
                     </h3>
                     <p>
-                      <a
-                        href="mailto:{{ organizer.email }}"
-                        class="text-blue-700 underline hover:text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                      >
+                      <a href="mailto:{{ organizer.email }}" class="link">
                         {{ organizer.email }}
                       </a>
                     </p>
@@ -216,10 +229,7 @@
                       {{ 'event-detail.phone' | translate }}
                     </h3>
                     <p>
-                      <a
-                        href="tel:{{ organizer.phonenumber }}"
-                        class="text-blue-700 underline hover:text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                      >
+                      <a href="tel:{{ organizer.phonenumber }}" class="link">
                         {{ organizer.phonenumber }}
                       </a>
                     </p>
@@ -234,10 +244,6 @@
   }
 
   <div class="edit mb-20 flex items-center justify-center">
-    @if (isLoggedIn) {
-      <button class="hover*:bg-blue-600 rounded-full bg-blue-500 px-4 py-2 font-bold text-white" (click)="editEvent()">
-        {{ 'event-detail.edit' | translate }}
-      </button>
-    }
+
   </div>
 </div>

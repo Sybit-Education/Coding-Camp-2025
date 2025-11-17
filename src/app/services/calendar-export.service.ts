@@ -62,7 +62,7 @@ export class CalendarExportService {
       location: locationStr,
       startDate: new Date(event.date_start),
       endDate: endDate ? new Date(endDate) : undefined,
-      url: eventUrl || event.more_info_link,
+      url: eventUrl || event.more_infos_link,
     }
   }
 
