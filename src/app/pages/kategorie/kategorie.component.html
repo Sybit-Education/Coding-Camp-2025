@@ -64,9 +64,9 @@
   <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
     @for (event of events; track trackByEvent($index, event)) {
       @if ($index === 0 || (event.date_start | date:'yyyyMM') !== (events[$index - 1].date_start | date:'yyyyMM')) {
-        <h2 class="col-span-full mb-2 mt-6 border-b-4 border-blue-500 pb-1 text-2xl font-bold">
+        <h2 class="col-span-full mb-2 mt-6 border-b border-blue-900 pb-1 text-2xl font-bold">
           {{ event.date_start | date:'MMMM yyyy' }}
-        </h2>
+        </h2>      
       }
       <div class="relative">
         @if (event.isPast) {
