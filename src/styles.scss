@@ -162,7 +162,7 @@
 */
 
 .link {
-  @apply text-[#3b4ea3] underline hover:text-blue-900 focus:ring-2 focus:ring-blue-500 focus:outline-none;
+  @apply transition-colors duration-200 text-[#3b4ea3] hover:text-[#c70d56] hover:underline focus:ring-2 focus:ring-blue-500 focus:outline-none;
 }
 
 .ql-editor {

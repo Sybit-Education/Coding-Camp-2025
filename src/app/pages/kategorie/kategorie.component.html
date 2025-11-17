@@ -62,7 +62,7 @@
   }
 
   <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-    @for (event of events; track $index) {
+    @for (event of events; track trackByEvent($index, event)) {
       <div class="relative">
         @if (event.isPast) {
           <div class="absolute top-0 left-0 z-10 m-2 rounded bg-gray-700 px-2 py-1 text-xs text-white opacity-80">
