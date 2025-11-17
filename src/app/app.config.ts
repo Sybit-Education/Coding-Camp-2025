@@ -4,7 +4,6 @@ import { provideHttpClient, HttpClient, withInterceptorsFromDi } from '@angular/
 import { TranslateLoader, TranslateModule, Translation } from '@ngx-translate/core'
 import { Observable } from 'rxjs'
 import { provideAnimations } from '@angular/platform-browser/animations'
-import { provideTitle } from '@angular/platform-browser'
 import { A11yModule } from '@angular/cdk/a11y'
 
 import { routes } from './app.routes'
@@ -33,7 +32,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withComponentInputBinding(), withViewTransitions(), withPreloading(PreloadAllModules)),
     provideHttpClient(withInterceptorsFromDi()),
     provideAnimations(),
-    provideTitle(),
     provideAppIcons(),
     importProvidersFrom(
       A11yModule,
