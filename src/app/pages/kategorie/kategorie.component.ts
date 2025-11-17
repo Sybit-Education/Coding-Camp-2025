@@ -45,8 +45,8 @@ export class KategorieComponent implements OnInit {
   events: EventWithResolvedLocation[] = []
   categories: (Topic | TypeDB)[] = []
 
-  categoryId: RecordIdValue | null = null
-  selectedLocationId: RecordIdValue | null = null
+  categoryIds: RecordIdValue[] = []
+  selectedLocationIds: RecordIdValue[] = []
   name: string | null = null
   slug: string | null = null
   description: string | null = null
@@ -82,7 +82,7 @@ export class KategorieComponent implements OnInit {
       this.categories = [...topics, ...typeDB]
       this.allEvents = allEvents
 
-      this.categoryId = this.getCategoryIdFromSlug(topics, typeDB)
+      this.categoryIds.push(this.getCategoryIdFromSlug(topics, typeDB) ? this.getCategoryIdFromSlug(topics, typeDB)! : [])
       // Anzeigename aus slug auflösen (Thema oder Typ)
       if (this.slug) {
         const matchedTopic = topics.find((t) => t.slug === this.slug)
@@ -132,30 +132,33 @@ export class KategorieComponent implements OnInit {
     this.markForCheck()
     try {
       // Basisliste ggf. nach Kategorie einschränken
-      const categoryId = this.categoryId
-      const locationId = this.selectedLocationId
+      const categoryId = this.categoryIds
+      const locationId = this.selectedLocationIds
       let baseList = this.allEvents
-      if (categoryId) {
+      console.log('baseList', baseList)
+      console.log('categoryId', categoryId)
+      console.log('locationId', locationId)
+      if (categoryId.length > 0) {
         baseList = baseList.filter(
-          (event) => event.topic?.some((topic) => topic.id === categoryId) || event.event_type?.id === categoryId,
+          (event) => event.topic?.some((topic) => categoryId.includes(topic.id)) || (event.event_type && categoryId.includes(event.event_type.id)),
         )
       }
-      if (locationId) {
-        baseList = baseList.filter((event) => event.location?.id === locationId)
+      console.log('after category filter', baseList)
+      if (locationId.length > 0) {
+        baseList = baseList.filter((event) => (event.location && locationId.includes(event.location.id)))
       }
+      console.log('after location filter', baseList)
 
       let resultEvents: AppEvent[]
       if (searchTerm) {
         const searchResults = await this.surreal.fulltextSearchEvents(searchTerm)
         resultEvents = categoryId
           ? searchResults.filter(
-              (event) => event.topic?.some((topic) => topic.id === categoryId) || event.event_type?.id === categoryId,
+              (event) => event.topic?.some((topic) => categoryId.includes(topic.id)) || (event.event_type && categoryId.includes(event.event_type.id)),
             )
           : searchResults
-          
-        resultEvents = locationId
-          ? resultEvents.filter((event) => event.location?.id === locationId)
-          : resultEvents
+
+        resultEvents = locationId ? resultEvents.filter((event) => locationId.includes(event.location!.id)) : resultEvents
       } else {
         resultEvents = baseList
       }
@@ -203,5 +206,25 @@ export class KategorieComponent implements OnInit {
 
   trackByEvent(index: number, item: EventWithResolvedLocation) {
     return item.id?.id ?? index
+  }
+
+  trackById(index: number, c: Topic | TypeDB | AppLocation) { return c?.id?.id ?? index; }
+
+  setSelectedCategory(category: Topic | TypeDB) {
+    console.log('setSelectedCategory called with', category, ' type: ', typeof category)
+    if (category?.id) {
+      console.log('Selected category:', category)
+      this.categoryIds.push(category.id.id)
+      void this.performSearch(this.searchTerm)
+    }
+  }
+
+  setSelectedLocation(location: AppLocation) {
+    console.log('setSelectedLocation called with: ', location, ' type: ', typeof location)
+    if (location?.id) {
+      console.log('Selected location:', location)
+      this.selectedLocationIds.push(location.id.id)
+      this.performSearch(this.searchTerm)
+    }
   }
 }
