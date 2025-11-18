@@ -33,7 +33,7 @@ export class OrganizerEditComponent implements OnInit {
     const idParam = this.route.snapshot.paramMap.get('id')
     if (idParam) {
       // Accept either pure id or full "organizer:<id>" format
-      this.organizerId = (idParam.includes(':') ? idParam : `organizer:${idParam}`) as StringRecordId
+      this.organizerId = (idParam.includes(':') ? idParam : `organizer:${idParam}`) as unknown as StringRecordId
       this.isEditMode.set(true)
       await this.loadOrganizer()
     }

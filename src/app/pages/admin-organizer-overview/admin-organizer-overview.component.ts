@@ -57,7 +57,7 @@ export class AdminOrganizerOverviewComponent implements OnInit {
     if (!confirm(`Veranstalter wirklich löschen?\n\n${org.name}`)) return
 
     try {
-      await this.db.deleteRow(idStr as StringRecordId)
+      await this.db.deleteRow(idStr as unknown as StringRecordId)
       await this.refresh()
     } catch (err) {
       console.error('[OrganizerOverview] Delete failed:', err)
