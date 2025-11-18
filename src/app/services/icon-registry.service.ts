@@ -26,6 +26,7 @@ export class IconRegistryService {
 
     const url = this.urls.get(name)
     if (!url) {
+      console.warn(`[IconRegistry] Icon "${name}" ist nicht registriert.`)
       return of('')
     }
 
