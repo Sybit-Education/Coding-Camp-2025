@@ -35,12 +35,51 @@ export class IconRegistryService {
     }
 
     const stream = this.http.get(url, { responseType: 'text' }).pipe(
-      map((svg) => this.sanitizer.bypassSecurityTrustHtml(svg)),
+      map((svg) => this.sanitizer.bypassSecurityTrustHtml(this.transformSvg(svg))),
       shareReplay(1),
     )
 
     this.cache.set(name, stream)
     return stream
   }
+private transformSvg(svg: string): string {
+    // Grundlegende Sanitization: entferne <script>, Inline-Event-Handler, javascript:-Links, foreignObject
+    svg = svg
+      .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '')
+    // Remove all inline event handler attributes (on...) repeatedly until none remain
+    let prevSvg;
+    do {
+      prevSvg = svg;
+      svg = svg.replace(/\son\w+="[^"]*"/gi, '');
+    } while (svg !== prevSvg);
+    svg = svg
+      .replace(/\s(?:xlink:)?href="javascript:[^"]*"/gi, '')
+      .replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi, '')
 
+    // Stelle sicher, dass root <svg> width/height auf 100% gesetzt ist, damit Host-Größe greift
+    // und nutze ein vernünftiges preserveAspectRatio.
+    if (svg.includes('<svg')) {
+      // Füge fehlende Attribute hinzu oder überschreibe existierende width/height/preserveAspectRatio
+      svg = svg
+        .replace(/<svg([^>]*)>/, (_match, attrs) => {
+          let newAttrs = attrs
+
+          // Entferne existierende width/height/preserveAspectRatio, damit wir sie konsistent setzen
+          newAttrs = newAttrs.replace(/\s(width|height|preserveAspectRatio)="[^"]*"/g, '')
+
+          return `<svg${newAttrs} width="100%" height="100%" preserveAspectRatio="xMidYMid meet">`
+        })
+        // Sorge dafür, dass currentColor durchgreift (falls fill auf root gesetzt ist, lassen wir es)
+        .replace(/<path([^>]*)>/g, (match, attrs) => {
+          // Wenn weder stroke noch fill gesetzt ist, setze fill="currentColor"
+          const hasFill = /\sfill="/.test(attrs)
+          const hasStroke = /\sstroke="/.test(attrs)
+          if (!hasFill && !hasStroke) {
+            return `<path${attrs} fill="currentColor">`
+          }
+          return match
+        })
+    }
+    return svg
+  }
 }
