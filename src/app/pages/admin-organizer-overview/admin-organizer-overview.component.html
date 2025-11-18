@@ -77,12 +77,12 @@
         [scrollbarV]="false"
         [reorderable]="false"
         [sorts]="currentSorts()"
-        (sort)="onSort($organizer)"
+        (sort)="onSort($event)"
       >
         <!-- Name Column Template -->
         <ngx-datatable-column name="Name" prop="name" [flexGrow]="3">
           <ng-template let-row="row" ngx-datatable-cell-template>
-            <a href="javascript:void(0)" (click)="editOrganizer(org)" class="text-blue-600 hover:text-blue-800 hover:underline">
+            <a href="javascript:void(0)" (click)="editOrganizer(row.originalId)" class="text-blue-600 hover:text-blue-800 hover:underline">
               {{ row.name }}
             </a>
           </ng-template>

@@ -6,7 +6,7 @@ import { Router, RouterModule } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 import { SurrealdbService } from '../../services/surrealdb.service'
 import type { Organizer } from '../../models/organizer.interface'
-import type { StringRecordId } from 'surrealdb'
+import type { RecordId, StringRecordId } from 'surrealdb'
 
 @Component({
   selector: 'app-admin-organizer-overview',
@@ -23,6 +23,13 @@ export class AdminOrganizerOverviewComponent implements OnInit {
   protected readonly organizers = signal<Organizer[]>([])
   protected readonly hasData = computed(() => (this.organizers()?.length ?? 0) > 0)
 
+  // Table settings for ngx-datatable
+  protected readonly rows = signal<Record<string, unknown>[]>([])
+  protected readonly temp = signal<Record<string, unknown>[]>([])
+  protected readonly currentSorts = signal<{ prop: string; dir: SortDirection }[]>([
+    { prop: 'name', dir: SortDirection.asc },
+  ])
+
   ngOnInit() {
     this.refresh()
   }
@@ -31,7 +38,22 @@ export class AdminOrganizerOverviewComponent implements OnInit {
     this.isLoading.set(true)
     try {
       const list = await this.db.getAll<Organizer>('organizer')
-      this.organizers.set(list ?? [])
+
+      // Sort organizers by name (ascending)
+      const sorted = [...(list ?? [])].sort((a, b) => (a.name || '').localeCompare(b.name || '', 'de'))
+
+      // Transform data for the table
+      const tableData = sorted.map((o) => ({
+        ...o,
+        originalId: o.id, // Keep original ID for actions/navigation
+      }))
+
+      this.organizers.set(sorted)
+      this.rows.set(tableData)
+      this.temp.set([...tableData])
+
+      // Apply default sorting
+      this.rows.set(this.sortData(tableData, this.currentSorts()))
     } catch (err) {
       console.error('[OrganizerOverview] Failed to load organizers:', err)
       this.organizers.set([])
@@ -44,28 +66,46 @@ export class AdminOrganizerOverviewComponent implements OnInit {
     this.router.navigate(['/admin/organizer/create'])
   }
 
-  private toStringId(id: Organizer['id']): string | null {
-    return id ? String(id) : null
+
+  protected editOrganizer(organizerId: RecordId) {
+    this.router.navigate(['/admin/organizer', String(organizerId)])
   }
 
-  protected editOrganizer(org: Organizer) {
-    const idStr = this.toStringId(org.id)
-    if (!idStr) return
-    this.router.navigate(['/admin/organizer', idStr])
-  }
-
-  protected async deleteOrganizer(org: Organizer) {
-    const idStr = this.toStringId(org.id)
-    if (!idStr) return
-    if (!confirm(`Veranstalter wirklich löschen?\n\n${org.name}`)) return
+  protected async deleteOrganizer(organizerId: RecordId) {
+    if (!confirm('Veranstalter wirklich löschen?')) return
 
     try {
-      await this.db.deleteRow(idStr as unknown as StringRecordId)
+      await this.db.deleteRow(String(organizerId) as unknown as StringRecordId)
       await this.refresh()
     } catch (err) {
       console.error('[OrganizerOverview] Delete failed:', err)
       alert('Löschen ist fehlgeschlagen.')
     }
+  }
+
+  // Sort handler for ngx-datatable
+  protected onSort(event: SortEvent): void {
+    this.currentSorts.set(event.sorts as { prop: string; dir: SortDirection }[])
+    const data = [...this.temp()]
+    const typedSorts = event.sorts as { prop: string; dir: SortDirection }[]
+    this.rows.set(this.sortData(data, typedSorts))
+  }
+
+  // Sort helper
+  private sortData(
+    data: Record<string, unknown>[],
+    sorts: { prop: string; dir: SortDirection }[],
+  ): Record<string, unknown>[] {
+    if (sorts.length === 0) return data
+
+    const sort = sorts[0]
+    const dir = sort.dir === SortDirection.asc || sort.dir === SortDirection.desc ? 1 : -1
+
+    return [...data].sort((a, b) => {
+      const propA = String(a[sort.prop] ?? '')
+      const propB = String(b[sort.prop] ?? '')
+      return dir * propA.localeCompare(propB, 'de')
+    })
   }
 
   protected trackById(_index: number, item: Organizer) {
