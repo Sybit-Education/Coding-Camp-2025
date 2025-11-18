@@ -30,8 +30,6 @@ export class IconRegistryService {
     }
 
     const stream = this.http.get(url, { responseType: 'text' }).pipe(
-      map((svg) => this.transformSvg(svg)),
-      map((svg) => this.sanitizer.bypassSecurityTrustHtml(svg)),
       shareReplay(1),
     )
 
