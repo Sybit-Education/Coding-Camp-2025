@@ -86,11 +86,6 @@
         </p>
       }
       <div class="relative">
-        @if (event.isPast) {
-          <div class="absolute top-0 left-0 z-10 m-2 rounded bg-gray-700 px-2 py-1 text-xs text-white opacity-80">
-            {{ 'EVENTS.PAST_EVENT' | translate }}
-          </div>
-        }
         <app-event-card [event]="event" [class.opacity-70]="event.isPast"> </app-event-card>
       </div>
     }
