@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, Component, computed, inject, signal, OnInit } from '@angular/core'
+
+import { NgxDatatableModule, TableColumn, SortEvent, SortDirection } from '@swimlane/ngx-datatable'
 import { Router, RouterModule } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 import { SurrealdbService } from '../../services/surrealdb.service'
@@ -9,7 +11,7 @@ import type { StringRecordId } from 'surrealdb'
 @Component({
   selector: 'app-admin-organizer-overview',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule],
+  imports: [CommonModule, RouterModule, TranslateModule, NgxDatatableModule],
   templateUrl: './admin-organizer-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
