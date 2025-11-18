@@ -1,34 +1,91 @@
-<div class="p-4">
-  <div class="mb-4 flex items-center justify-between">
-    <h1 class="text-xl font-semibold">Veranstalter</h1>
-    <button class="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700" (click)="createOrganizer()">
-      Neuen Veranstalter anlegen
-    </button>
+<div class="container mx-auto px-4 py-6">
+  <div class="mb-6 flex flex-col items-center justify-between md:flex-row">
+    <h1 class="mb-4 text-2xl font-bold text-gray-800 md:mb-0">
+      {{ 'ADMIN.TITLE' | translate }}
+    </h1>
+    <div>
+      <button
+        type="button"
+        (click)="createOrganizer()"
+        class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+        aria-label="Neuen Veranstalter anlegen"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        Veranstalter anlegen
+      </button>
+    </div>
   </div>
 
-  <div *ngIf="isLoading(); else content" aria-busy="true">Lade Veranstalter...</div>
+  <div class="mb-4 border-b border-gray-200">
+    <nav class="-mb-px flex space-x-6" aria-label="Admin Navigation">
+      <a
+        [routerLink]="['/admin/']"
+        routerLinkActive="border-blue-600 text-blue-600"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="border-b-2 border-transparent px-1 py-2 text-xl font-medium whitespace-nowrap text-gray-600 hover:border-gray-300 hover:text-blue-800"
+      >
+        {{ 'ADMIN.EVENTS.TITLE' | translate }}
+      </a>
+      <a
+        [routerLink]="['/admin/locations']"
+        routerLinkActive="border-blue-600 text-blue-600"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="border-b-2 border-transparent px-1 py-2 text-xl font-medium whitespace-nowrap text-gray-600 hover:border-gray-300 hover:text-blue-800"
+      >
+        {{ 'ADMIN.LOCATIONS.TITLE' | translate }}
+      </a>
+      <a
+        [routerLink]="['/admin/organizers']"
+        routerLinkActive="border-blue-600 text-blue-600"
+        [routerLinkActiveOptions]="{ exact: true }"
+        aria-current="page"
+        class="border-b-2 border-blue-600 px-1 py-2 text-xl font-bold whitespace-nowrap text-blue-600"
+      >
+        Veranstalter
+      </a>
+    </nav>
+  </div>
+
+  <div *ngIf="isLoading(); else content" class="flex items-center justify-center py-12" aria-busy="true">
+    <div class="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"></div>
+    <span class="ml-3">{{ 'COMMON.LOADING' | translate }}</span>
+  </div>
 
   <ng-template #content>
-    <div *ngIf="hasData(); else empty">
-      <table class="min-w-full border border-gray-200">
+    <div *ngIf="hasData(); else empty" class="overflow-hidden rounded-lg bg-white shadow">
+      <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
           <tr>
-            <th class="px-3 py-2 text-left">Name</th>
-            <th class="px-3 py-2 text-left">E-Mail</th>
-            <th class="px-3 py-2 text-left">Telefon</th>
-            <th class="px-3 py-2 text-right">Aktionen</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Name</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">E-Mail</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Telefon</th>
+            <th scope="col" class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">Aktionen</th>
           </tr>
         </thead>
-        <tbody>
-          <tr *ngFor="let org of organizers(); trackBy: trackById" class="border-t">
-            <td class="px-3 py-2">{{ org.name }}</td>
-            <td class="px-3 py-2">{{ org.email || '—' }}</td>
-            <td class="px-3 py-2">{{ org.phonenumber || '—' }}</td>
-            <td class="px-3 py-2 text-right">
-              <button class="rounded bg-gray-200 px-3 py-1 hover:bg-gray-300" (click)="editOrganizer(org)">
+        <tbody class="divide-y divide-gray-200 bg-white">
+          <tr *ngFor="let org of organizers(); trackBy: trackById" class="hover:bg-gray-50">
+            <td class="px-6 py-4 text-sm font-medium text-gray-900">
+              <a href="javascript:void(0)" (click)="editOrganizer(org)" class="text-blue-600 hover:text-blue-800 hover:underline">
+                {{ org.name }}
+              </a>
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-500">{{ org.email || '—' }}</td>
+            <td class="px-6 py-4 text-sm text-gray-500">{{ org.phonenumber || '—' }}</td>
+            <td class="px-6 py-4 text-right">
+              <button
+                class="rounded bg-gray-100 px-3 py-1 text-sm text-gray-800 hover:bg-gray-200"
+                (click)="editOrganizer(org)"
+                aria-label="Veranstalter bearbeiten"
+              >
                 Bearbeiten
               </button>
-              <button class="ml-2 rounded bg-red-600 px-3 py-1 text-white hover:bg-red-700" (click)="deleteOrganizer(org)">
+              <button
+                class="ml-2 rounded bg-red-600 px-3 py-1 text-sm text-white hover:bg-red-700"
+                (click)="deleteOrganizer(org)"
+                aria-label="Veranstalter löschen"
+              >
                 Löschen
               </button>
             </td>
@@ -38,8 +95,15 @@
     </div>
 
     <ng-template #empty>
-      <div class="rounded border border-gray-200 p-6 text-gray-600">
-        Noch keine Veranstalter angelegt.
+      <div class="rounded-lg bg-white py-8 text-center shadow">
+        <p class="mb-4 text-gray-500">Noch keine Veranstalter angelegt.</p>
+        <button
+          type="button"
+          (click)="createOrganizer()"
+          class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+        >
+          Veranstalter anlegen
+        </button>
       </div>
     </ng-template>
   </ng-template>

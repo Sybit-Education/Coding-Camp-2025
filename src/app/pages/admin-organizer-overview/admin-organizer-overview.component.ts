@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, Component, computed, inject, signal, OnInit } from '@angular/core'
 import { Router, RouterModule } from '@angular/router'
+import { TranslateModule } from '@ngx-translate/core'
 import { SurrealdbService } from '../../services/surrealdb.service'
 import type { Organizer } from '../../models/organizer.interface'
 import type { StringRecordId } from 'surrealdb'
@@ -8,7 +9,7 @@ import type { StringRecordId } from 'surrealdb'
 @Component({
   selector: 'app-admin-organizer-overview',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './admin-organizer-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
