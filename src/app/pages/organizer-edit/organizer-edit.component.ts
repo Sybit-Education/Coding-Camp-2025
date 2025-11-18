@@ -30,9 +30,10 @@ export class OrganizerEditComponent implements OnInit {
   })
 
   async ngOnInit() {
-    const idParam = this.route.snapshot.paramMap.get('id')
+    const rawId = this.route.snapshot.paramMap.get('id')
+    const idParam = rawId ? decodeURIComponent(rawId) : null
     if (idParam) {
-      // Accept either pure id or full "organizer:<id>" format
+      // Accept either URL-encoded, pure id or full "organizer:<id>" format
       this.organizerId = (idParam.includes(':') ? idParam : `organizer:${idParam}`) as unknown as StringRecordId
       this.isEditMode.set(true)
       await this.loadOrganizer()
