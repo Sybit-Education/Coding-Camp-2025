@@ -1,0 +1,46 @@
+<div class="p-4">
+  <div class="mb-4 flex items-center justify-between">
+    <h1 class="text-xl font-semibold">Veranstalter</h1>
+    <button class="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700" (click)="createOrganizer()">
+      Neuen Veranstalter anlegen
+    </button>
+  </div>
+
+  <div *ngIf="isLoading(); else content" aria-busy="true">Lade Veranstalter...</div>
+
+  <ng-template #content>
+    <div *ngIf="hasData(); else empty">
+      <table class="min-w-full border border-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-3 py-2 text-left">Name</th>
+            <th class="px-3 py-2 text-left">E-Mail</th>
+            <th class="px-3 py-2 text-left">Telefon</th>
+            <th class="px-3 py-2 text-right">Aktionen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let org of organizers(); trackBy: trackById" class="border-t">
+            <td class="px-3 py-2">{{ org.name }}</td>
+            <td class="px-3 py-2">{{ org.email || '—' }}</td>
+            <td class="px-3 py-2">{{ org.phonenumber || '—' }}</td>
+            <td class="px-3 py-2 text-right">
+              <button class="rounded bg-gray-200 px-3 py-1 hover:bg-gray-300" (click)="editOrganizer(org)">
+                Bearbeiten
+              </button>
+              <button class="ml-2 rounded bg-red-600 px-3 py-1 text-white hover:bg-red-700" (click)="deleteOrganizer(org)">
+                Löschen
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #empty>
+      <div class="rounded border border-gray-200 p-6 text-gray-600">
+        Noch keine Veranstalter angelegt.
+      </div>
+    </ng-template>
+  </ng-template>
+</div>
