@@ -6,7 +6,7 @@
 </div>
 <div class="container mx-auto px-4 py-6">
   @if (isLoading()) {
-    <div class="flex items-center justify-center py-12">
+    <div class="flex items-center justify-center py-12" role="status" aria-live="polite" aria-busy="true">
       <div class="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"></div>
       <span class="ml-3">{{ 'COMMON.LOADING' | translate }}</span>
     </div>

@@ -151,7 +151,7 @@ import { ReactiveFormsModule } from '@angular/forms'
         </button>
       </div>
     } @else if (isLoading()) {
-      <div class="animate-pulse rounded-lg bg-gray-200 p-4" aria-busy="true">
+      <div class="animate-pulse rounded-lg bg-gray-200 p-4" role="status" aria-live="polite" aria-busy="true">
         Loading...
       </div>
     } @else {
