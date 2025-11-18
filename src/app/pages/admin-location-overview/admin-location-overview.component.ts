@@ -15,7 +15,6 @@ import { filter } from 'rxjs/operators'
   standalone: true,
   imports: [CommonModule, RouterModule, TranslateModule, NgxDatatableModule, FormsModule],
   templateUrl: './admin-location-overview.component.html',
-  styleUrl: './admin-location-overview.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
