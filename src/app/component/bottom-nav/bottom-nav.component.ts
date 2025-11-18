@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core'
 
 import { RouterModule } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
-import { IconComponent } from '../../icons/icon.component'
+import { IconComponent } from '@app/component/icon/icon.component'
 
 /**
  * Interface zur Definition der Navigationspunkte.

@@ -12,7 +12,7 @@ import { MediaService } from '../../services/media.service'
 import { TranslateModule } from '@ngx-translate/core'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { MatIconModule } from '@angular/material/icon'
-import { IconComponent } from '@app/icons/icon.component'
+import { IconComponent } from '@app/component/icon/icon.component'
 import { EventTypePillComponent } from '@app/component/event-type-pill/event-type-pill.component'
 
 @Component({

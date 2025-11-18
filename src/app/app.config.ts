@@ -5,7 +5,7 @@ import { TranslateLoader, TranslateModule, Translation } from '@ngx-translate/co
 import { Observable } from 'rxjs'
 
 import { routes } from './app.routes'
-import { provideAppIcons } from './icons/icons.provider'
+import { provideAppIcons } from './component/icon/icons.provider'
 
 // Eigener TranslateLoader, der keine speziellen Tokens benötigt
 class CustomTranslateLoader implements TranslateLoader {
