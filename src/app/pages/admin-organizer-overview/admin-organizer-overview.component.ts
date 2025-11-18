@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core'
+import { ChangeDetectionStrategy, Component, computed, inject, signal, OnInit } from '@angular/core'
 import { Router, RouterModule } from '@angular/router'
 import { SurrealdbService } from '../../services/surrealdb.service'
 import type { Organizer } from '../../models/organizer.interface'
+import type { StringRecordId } from 'surrealdb'
 
 @Component({
   selector: 'app-admin-organizer-overview',
@@ -11,7 +12,7 @@ import type { Organizer } from '../../models/organizer.interface'
   templateUrl: './admin-organizer-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AdminOrganizerOverviewComponent {
+export class AdminOrganizerOverviewComponent implements OnInit {
   private readonly db = inject(SurrealdbService)
   private readonly router = inject(Router)
 
@@ -40,19 +41,23 @@ export class AdminOrganizerOverviewComponent {
     this.router.navigate(['/admin/organizer/create'])
   }
 
+  private toStringId(id: Organizer['id']): string | null {
+    return id ? String(id) : null
+  }
+
   protected editOrganizer(org: Organizer) {
-    // id is typically "organizer:<id>" already; ensure string
-    const id = (org as any).id?.toString?.() ?? org['id']
-    this.router.navigate(['/admin/organizer', id])
+    const idStr = this.toStringId(org.id)
+    if (!idStr) return
+    this.router.navigate(['/admin/organizer', idStr])
   }
 
   protected async deleteOrganizer(org: Organizer) {
-    const id = (org as any).id?.toString?.()
-    if (!id) return
+    const idStr = this.toStringId(org.id)
+    if (!idStr) return
     if (!confirm(`Veranstalter wirklich löschen?\n\n${org.name}`)) return
 
     try {
-      await this.db.deleteRow(id)
+      await this.db.deleteRow(idStr as StringRecordId)
       await this.refresh()
     } catch (err) {
       console.error('[OrganizerOverview] Delete failed:', err)
@@ -61,6 +66,6 @@ export class AdminOrganizerOverviewComponent {
   }
 
   protected trackById(_index: number, item: Organizer) {
-    return (item as any).id ?? item.name
+    return String(item.id ?? item.name)
   }
 }

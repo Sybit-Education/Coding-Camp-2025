@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import { SurrealdbService } from '../../services/surrealdb.service'
 import type { Organizer } from '../../models/organizer.interface'
+import type { StringRecordId } from 'surrealdb'
 
 @Component({
   selector: 'app-organizer-edit',
@@ -12,7 +13,7 @@ import type { Organizer } from '../../models/organizer.interface'
   templateUrl: './organizer-edit.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OrganizerEditComponent {
+export class OrganizerEditComponent implements OnInit {
   private readonly db = inject(SurrealdbService)
   private readonly route = inject(ActivatedRoute)
   private readonly router = inject(Router)
@@ -20,7 +21,7 @@ export class OrganizerEditComponent {
   protected readonly isEditMode = signal<boolean>(false)
   protected readonly loading = signal<boolean>(true)
   protected readonly saving = signal<boolean>(false)
-  protected organizerId: string | null = null
+  protected organizerId: StringRecordId | null = null
 
   protected readonly form = new FormGroup({
     name: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
@@ -32,7 +33,7 @@ export class OrganizerEditComponent {
     const idParam = this.route.snapshot.paramMap.get('id')
     if (idParam) {
       // Accept either pure id or full "organizer:<id>" format
-      this.organizerId = idParam.includes(':') ? idParam : `organizer:${idParam}`
+      this.organizerId = (idParam.includes(':') ? idParam : `organizer:${idParam}`) as StringRecordId
       this.isEditMode.set(true)
       await this.loadOrganizer()
     }
@@ -45,8 +46,8 @@ export class OrganizerEditComponent {
       const data = await this.db.getByRecordId<Organizer>(this.organizerId)
       this.form.patchValue({
         name: data.name ?? '',
-        email: (data as any).email ?? null,
-        phonenumber: (data as any).phonenumber ?? null,
+        email: data.email ?? null,
+        phonenumber: data.phonenumber ?? null,
       })
     } catch (err) {
       console.error('[OrganizerEdit] Failed to load organizer:', err)
