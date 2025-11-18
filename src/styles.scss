@@ -75,6 +75,15 @@
   .action-button {
     @apply h-12 w-12 cursor-pointer rounded-full bg-white/80 p-2 opacity-80 shadow-md transition hover:bg-gray-200 hover:text-[#3b4ea3] focus:ring-2 focus:ring-blue-500 focus:outline-none;
   }
+
+  .pill-list {
+    @apply flex flex-wrap gap-2 list-none;
+    list-style-type: none;
+    padding-left: 0;
+    li {
+      @apply inline-flex cursor-pointer items-center rounded-full border px-3 py-1 transition-colors hover:opacity-80 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c70d56] focus-visible:ring-offset-2;
+    }
+  }
 }
 
 @font-face {

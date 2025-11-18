@@ -25,7 +25,8 @@ import { EventImageComponent } from '@app/component/event-image/event-image.comp
 import { MatIconModule } from '@angular/material/icon'
 import { IconComponent } from '@app/icons/icon.component'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
-import { EventPillsComponent } from '@app/component/event-pills/event-pills.component'
+import { EventTypePillComponent } from '@app/component/event-type-pill/event-type-pill.component'
+import { EventTopicPillListComponent } from '@app/component/event-topic-pill-list/event-topic-pill-list.component'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -41,7 +42,8 @@ import { EventPillsComponent } from '@app/component/event-pills/event-pills.comp
     CalendarExportComponent,
     MatIconModule,
     IconComponent,
-    EventPillsComponent,
+    EventTypePillComponent,
+    EventTopicPillListComponent,
 
     GoBackComponent,
   ],
