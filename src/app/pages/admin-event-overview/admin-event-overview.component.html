@@ -52,6 +52,14 @@
       >
         {{ 'ADMIN.LOCATIONS.TITLE' | translate }}
       </a>
+      <a
+        [routerLink]="['/admin/organizers']"
+        routerLinkActive="border-blue-600 text-blue-600"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="border-b-2 border-transparent px-1 py-2 text-xl font-medium whitespace-nowrap text-gray-600 hover:border-gray-300 hover:text-blue-800"
+      >
+        Veranstalter
+      </a>
     </nav>
   </div>
 
