@@ -2,9 +2,10 @@ import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
-import { SurrealdbService } from '../../services/surrealdb.service'
 import type { Organizer } from '../../models/organizer.interface'
-import type { StringRecordId } from 'surrealdb'
+import { RecordId, StringRecordId } from 'surrealdb'
+import { OrganizerService } from '@app/services/organizer.service'
+import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 
 @Component({
   selector: 'app-organizer-edit',
@@ -14,14 +15,15 @@ import type { StringRecordId } from 'surrealdb'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrganizerEditComponent implements OnInit {
-  private readonly db = inject(SurrealdbService)
+  private readonly organizerService = inject(OrganizerService)
   private readonly route = inject(ActivatedRoute)
   private readonly router = inject(Router)
+    private readonly markForCheck = injectMarkForCheck()
 
   protected readonly isEditMode = signal<boolean>(false)
   protected readonly loading = signal<boolean>(true)
   protected readonly saving = signal<boolean>(false)
-  protected organizerId: StringRecordId | null = null
+  protected organizerId: RecordId<'organizer'> | undefined = undefined
 
   protected readonly form = new FormGroup({
     name: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
@@ -31,20 +33,21 @@ export class OrganizerEditComponent implements OnInit {
 
   async ngOnInit() {
     const rawId = this.route.snapshot.paramMap.get('id')
-    const idParam = rawId ? decodeURIComponent(rawId) : null
-    if (idParam) {
-      // Accept either URL-encoded, pure id or full "organizer:<id>" format
-      this.organizerId = (idParam.includes(':') ? idParam : `organizer:${idParam}`) as unknown as StringRecordId
+    console.log("OrganizerID", rawId)
+    if (rawId) {
+      const organizerId= new StringRecordId(rawId)
       this.isEditMode.set(true)
-      await this.loadOrganizer()
+      await this.loadOrganizer(organizerId).then(() => this.markForCheck())
     }
     this.loading.set(false)
   }
 
-  private async loadOrganizer() {
-    if (!this.organizerId) return
+  private async loadOrganizer(organizerId: RecordId<'organizer'>|StringRecordId) {
+    
     try {
-      const data = await this.db.getByRecordId<Organizer>(this.organizerId)
+      const data = await this.organizerService.getOrganizerByID(organizerId) as Organizer
+      console.log(data)
+      this.organizerId = data.id!
       this.form.patchValue({
         name: data.name ?? '',
         email: data.email ?? null,
@@ -64,17 +67,17 @@ export class OrganizerEditComponent implements OnInit {
     }
 
     this.saving.set(true)
-    const payload: Partial<Organizer> = {
+    const payload: Organizer = {
       name: this.form.controls.name.value!,
       email: this.form.controls.email.value ?? undefined,
       phonenumber: this.form.controls.phonenumber.value ?? undefined,
     }
 
     try {
-      if (this.isEditMode()) {
-        await this.db.postUpdate<Organizer>(this.organizerId!, payload as Organizer)
+      if (this.organizerId) {
+        await this.organizerService.update(this.organizerId, payload)
       } else {
-        await this.db.post<Organizer>('organizer', payload as Organizer)
+        await this.organizerService.create(payload)
       }
       await this.router.navigate(['/admin/organizers'])
     } catch (err) {
@@ -82,6 +85,7 @@ export class OrganizerEditComponent implements OnInit {
       alert('Speichern ist fehlgeschlagen.')
     } finally {
       this.saving.set(false)
+      this.markForCheck()
     }
   }
 
@@ -90,7 +94,7 @@ export class OrganizerEditComponent implements OnInit {
     if (!confirm('Diesen Veranstalter wirklich löschen?')) return
 
     try {
-      await this.db.deleteRow(this.organizerId)
+      await this.organizerService.delete(this.organizerId)
       await this.router.navigate(['/admin/organizers'])
     } catch (err) {
       console.error('[OrganizerEdit] Delete failed:', err)
