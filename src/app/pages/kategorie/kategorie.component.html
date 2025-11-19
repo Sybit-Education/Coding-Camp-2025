@@ -44,7 +44,7 @@
       <app-icon [name]="filterOpen ? 'filter-off' : 'filter'" class="mr-1 h-6 w-6" aria-hidden="true" />
     </button>
     @if (filterOpen) {
-      <div class="flex w-full justify-between gap-4 px-4">
+      <div class="grid lg:grid-cols-2 w-full justify-around gap-4 px-4">
         <div>
           <h3>{{ 'event-detail.eventlocation' | translate }}</h3>
           <app-custom-dropdown
