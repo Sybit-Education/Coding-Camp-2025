@@ -18,7 +18,6 @@ import { MediaService } from '@app/services/media.service'
   standalone: true,
   imports: [CommonModule, RouterModule, TranslateModule, NgxDatatableModule, FormsModule],
   templateUrl: './admin-event-overview.component.html',
-  styleUrl: './admin-event-overview.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })

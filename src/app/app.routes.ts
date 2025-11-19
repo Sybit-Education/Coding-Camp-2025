@@ -105,6 +105,29 @@ export const routes: Routes = [
     title: 'Veranstaltung erstellen',
   },
   {
+    path: 'admin/organizers',
+    loadComponent: () =>
+      import('./pages/admin-organizer-overview/admin-organizer-overview.component').then(
+        (m) => m.AdminOrganizerOverviewComponent,
+      ),
+    canActivate: [LoginService],
+    title: 'Admin: Veranstalter',
+  },
+  {
+    path: 'admin/organizer/create',
+    loadComponent: () =>
+      import('./pages/organizer-edit/organizer-edit.component').then((m) => m.OrganizerEditComponent),
+    canActivate: [LoginService],
+    title: 'Veranstalter erstellen',
+  },
+  {
+    path: 'admin/organizer/:id',
+    loadComponent: () =>
+      import('./pages/organizer-edit/organizer-edit.component').then((m) => m.OrganizerEditComponent),
+    canActivate: [LoginService],
+    title: 'Veranstalter bearbeiten',
+  },
+  {
     path: '404',
     loadComponent: () => import('./pages/placeholder/placeholder.component').then((m) => m.PlaceholderComponent),
     title: '404 - Seite nicht gefunden',
