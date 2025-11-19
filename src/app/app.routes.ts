@@ -45,7 +45,7 @@ export const routes: Routes = [
   {
     path: 'event',
     loadComponent: () => import('./pages/kategorie/kategorie.component').then((m) => m.KategorieComponent),
-    title: 'Alle Events',
+    title: 'Alle Veranstaltungen',
   },
   {
     path: 'admin',
@@ -103,6 +103,29 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/event-create/event-create.component').then((m) => m.EventCreateComponent),
     canActivate: [LoginService],
     title: 'Veranstaltung erstellen',
+  },
+  {
+    path: 'admin/organizers',
+    loadComponent: () =>
+      import('./pages/admin-organizer-overview/admin-organizer-overview.component').then(
+        (m) => m.AdminOrganizerOverviewComponent,
+      ),
+    canActivate: [LoginService],
+    title: 'Admin: Veranstalter',
+  },
+  {
+    path: 'admin/organizer/create',
+    loadComponent: () =>
+      import('./pages/organizer-edit/organizer-edit.component').then((m) => m.OrganizerEditComponent),
+    canActivate: [LoginService],
+    title: 'Veranstalter erstellen',
+  },
+  {
+    path: 'admin/organizer/:id',
+    loadComponent: () =>
+      import('./pages/organizer-edit/organizer-edit.component').then((m) => m.OrganizerEditComponent),
+    canActivate: [LoginService],
+    title: 'Veranstalter bearbeiten',
   },
   {
     path: '404',
