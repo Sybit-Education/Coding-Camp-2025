@@ -7,7 +7,9 @@
     "SKIP_TO_MAIN": "Skip to main content",
     "LOADING": "Loading ...",
     "MAIN_CONTENT": "Main content",
-    "PAGE_UPDATED": "Page updated"
+    "PAGE_UPDATED": "Page updated",
+    "DELETE": "Delete",
+    "CONFIRM": "Confirm"
   },
   "HEADER": {
     "TITLE": "1200 Years Radolfzell",
@@ -129,7 +131,13 @@
       "general": "Please fill in all mandatory fields."
     },
     "cancel": "Cancel",
-    "delete": "Delete ..."
+    "delete": "Delete",
+    "delete_confirm": "Are you sure you want to delete this event? This cannot be undone.",
+    "deleteConfirmTitle": "Delete event",
+    "deleteConfirmMessage": "Do you really want to delete \"{{name}}\"?",
+    "deleteConfirmFallback": "this event",
+    "deleteSuccess": "Event deleted.",
+    "deleteError": "Event could not be deleted."
   },
   "dev": {
     "text1": "This website was developed as part of the SYBIT Coding Camp 2025 ",
@@ -210,12 +218,63 @@
       "EDIT": "Edit ...",
       "DELETE": "Delete",
       "SEARCH": "Search ...",
-      "CREATE_NEW": "New Event ..."
+      "CREATE_NEW": "New Event ...",
+      "CONFIRM_DELETE": "Delete event \"{{name}}\"?",
+      "DELETE_SUCCESS": "Event {{name}} has been deleted.",
+      "EDIT_LINK_ARIA": "Edit event {{name}}",
+      "EDIT_BUTTON_ARIA": "Edit event {{name}}",
+      "PREVIEW_ARIA": "Open preview for event {{name}}",
+      "DELETE_BUTTON_ARIA": "Delete event {{name}}",
+      "DELETE_CONFIRM_TITLE": "Delete event",
+      "DELETE_CONFIRM_MESSAGE": "Do you really want to delete \"{{name}}\"?",
+      "DELETE_CONFIRM_MESSAGE_DEFAULT": "Do you really want to delete this event?",
+      "DELETE_ERROR": "Event {{name}} could not be deleted."
     },
     "LOCATIONS": {
-      "DELETE": "Delete",
       "TITLE": "Locations",
-      "CREATE_NEW": "New Location ..."
+      "CREATE_NEW": "New location ...",
+      "SEARCH": "Search locations...",
+      "NO_LOCATIONS": "No locations found",
+      "PREVIEW": "Preview",
+      "EDIT": "Edit",
+      "DELETE": "Delete",
+      "CONFIRM_DELETE": "Delete location \"{{name}}\"?",
+      "DELETE_SUCCESS": "Location {{name}} has been deleted.",
+      "DELETE_FORBIDDEN": "Locations linked to events cannot be deleted.",
+      "EDIT_LINK_ARIA": "Edit location {{name}}",
+      "EDIT_BUTTON_ARIA": "Edit location {{name}}",
+      "DELETE_BUTTON_ARIA": "Delete location {{name}}",
+      "DELETE_CONFIRM_TITLE": "Delete location",
+      "DELETE_CONFIRM_MESSAGE": "Do you really want to delete \"{{name}}\"?",
+      "DELETE_CONFIRM_MESSAGE_DEFAULT": "Do you really want to delete this location?",
+      "DELETE_ERROR": "Location {{name}} could not be deleted.",
+      "DELETE_FALLBACK": "this location",
+      "FORM": {
+        "TITLE_CREATE": "Create location",
+        "TITLE_EDIT": "Edit location",
+        "NAME": "Name",
+        "STREET": "Street",
+        "ZIP": "ZIP",
+        "CITY": "City",
+        "IMAGES": "Images",
+        "NAME_REQUIRED": "Please enter a name.",
+        "SAVE_ERROR": "The location could not be saved.",
+        "LOAD_ERROR": "The location could not be loaded.",
+        "DELETE_ERROR": "The location could not be deleted.",
+        "DELETE_CONFIRM": "Do you really want to delete this location?",
+        "LINKED_WARNING": "This location is linked to {{count}} event(s) and cannot be deleted."
+      }
+    },
+    "ORGANIZERS": {
+      "TITLE": "Organizers",
+      "DELETE": "Delete",
+      "CONFIRM_DELETE": "Delete organizer \"{{name}}\"?",
+      "DELETE_SUCCESS": "The organizer has been deleted.",
+      "DELETE_FORBIDDEN": "Organizers linked to events cannot be deleted.",
+      "LINKED_WARNING": "This organizer is linked to {{count}} event(s) and cannot be deleted.",
+      "EDIT_LINK_ARIA": "Edit organizer {{name}}",
+      "EDIT_BUTTON_ARIA": "Edit organizer {{name}}",
+      "DELETE_BUTTON_ARIA": "Delete organizer {{name}}"
     },
     "TITLE": "Administration"
   },

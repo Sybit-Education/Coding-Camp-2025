@@ -253,7 +253,8 @@
         <button
           type="button"
           class="w-full cursor-pointer rounded-2xl bg-red-500 p-5 text-white hover:bg-red-600"
-          (click)="deleteEvent()"
+          (click)="openDeleteDialog()"
+          [attr.aria-label]="('create-event.delete' | translate)"
         >
           {{ 'create-event.delete' | translate }}
         </button>
@@ -265,4 +266,15 @@
       <app-loading-spinner />
     </div>
   }
+
+  <app-confirm-dialog
+    [opened]="deleteDialogOpen()"
+    (openedChange)="deleteDialogOpen.set($event)"
+    [title]="deleteDialogTitle()"
+    [message]="deleteDialogMessage()"
+    [confirmLabel]="deleteConfirmLabel()"
+    [cancelLabel]="deleteCancelLabel()"
+    (confirmed)="confirmDeleteEvent()"
+    (cancelled)="cancelDeleteDialog()"
+  />
 </div>

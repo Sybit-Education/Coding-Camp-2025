@@ -194,10 +194,10 @@ export class AdminLocationOverviewComponent implements OnInit {
 
   // Delete location
   protected requestLocationDeletion(row: Record<string, unknown>) {
-    if (!row?.originalId) return
+    if (!row?.['originalId']) return
     this.deleteContext.set({
-      id: row.originalId as RecordId<'location'>,
-      name: String(row.name ?? ''),
+      id: row['originalId'] as RecordId<'location'>,
+      name: String(row['name'] ?? ''),
     })
     this.deleteDialogOpen.set(true)
   }

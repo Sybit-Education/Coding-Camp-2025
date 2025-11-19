@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core'
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy, computed } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
@@ -11,10 +11,21 @@ import { SnackBarService } from '../../services/snack-bar.service'
 import { injectMarkForCheck } from '../../utils/zoneless-helpers'
 import { MapComponent } from '../../component/map/map.component'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
+import { ConfirmDialogComponent } from '@app/component/confirm-dialog/confirm-dialog.component'
+import { LiveAnnouncer } from '@angular/cdk/a11y'
+
 @Component({
   selector: 'app-location-edit',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, RouterModule, MatIconModule, MapComponent, GoBackComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslateModule,
+    RouterModule,
+    MatIconModule,
+    MapComponent,
+    GoBackComponent,
+    ConfirmDialogComponent,
+  ],
   templateUrl: './location-edit.component.html',
   styleUrl: './location-edit.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,6 +38,7 @@ export class LocationEditComponent implements OnInit {
   private readonly translate = inject(TranslateService)
   private readonly snackBarService = inject(SnackBarService)
   private readonly markForCheck = injectMarkForCheck()
+  private readonly liveAnnouncer = inject(LiveAnnouncer)
 
   // Reactive Form
   locationForm!: FormGroup
@@ -37,6 +49,13 @@ export class LocationEditComponent implements OnInit {
   isEditMode = signal(false)
   locationId = signal<StringRecordId | null>(null)
   errorMessage = signal<string | null>(null)
+  protected readonly deleteDialogOpen = signal(false)
+  protected readonly deleteDialogTitle = computed(() => this.translate.instant('ADMIN.LOCATIONS.DELETE_CONFIRM_TITLE'))
+  protected readonly deleteDialogMessage = computed(() =>
+    this.translate.instant('ADMIN.LOCATIONS.DELETE_CONFIRM_MESSAGE_DEFAULT'),
+  )
+  protected readonly deleteConfirmLabel = computed(() => this.translate.instant('COMMON.DELETE'))
+  protected readonly deleteCancelLabel = computed(() => this.translate.instant('COMMON.CANCEL'))
 
   // Karten-Koordinaten
   coordinates = signal<[number, number]>([9.1732, 47.7331]) // Default: Radolfzell
@@ -190,17 +209,38 @@ export class LocationEditComponent implements OnInit {
     this.router.navigate(['/admin/locations'])
   }
 
-  async deleteLocation(): Promise<void> {
+  protected openDeleteDialog(): void {
     if (!this.isEditMode() || !this.locationId()) return
+    this.deleteDialogOpen.set(true)
+  }
 
-    if (confirm(this.translate.instant('ADMIN.LOCATIONS.FORM.DELETE_CONFIRM'))) {
-      try {
-        await this.locationService.delete(this.locationId()!)
-        this.router.navigate(['/admin/locations'])
-      } catch (error) {
-        console.error('Fehler beim Löschen des Ortes:', error)
-        this.errorMessage.set(this.translate.instant('ADMIN.LOCATIONS.FORM.DELETE_ERROR'))
-      }
+  protected cancelDeleteDialog(): void {
+    this.deleteDialogOpen.set(false)
+  }
+
+  protected async confirmDeleteLocation(): Promise<void> {
+    if (!this.locationId()) return
+    try {
+      const locationName = this.locationForm.get('name')?.value ?? ''
+      await this.locationService.delete(this.locationId()!)
+      this.liveAnnouncer.announce(
+        this.translate.instant('ADMIN.LOCATIONS.DELETE_SUCCESS', {
+          name: locationName || this.translate.instant('ADMIN.LOCATIONS.DELETE_FALLBACK'),
+        }),
+        'assertive',
+      )
+      this.router.navigate(['/admin/locations'])
+    } catch (error) {
+      console.error('Fehler beim Löschen des Ortes:', error)
+      this.errorMessage.set(this.translate.instant('ADMIN.LOCATIONS.FORM.DELETE_ERROR'))
+      this.liveAnnouncer.announce(
+        this.translate.instant('ADMIN.LOCATIONS.DELETE_ERROR', {
+          name: this.locationForm.get('name')?.value ?? this.translate.instant('ADMIN.LOCATIONS.DELETE_FALLBACK'),
+        }),
+        'assertive',
+      )
+    } finally {
+      this.cancelDeleteDialog()
     }
   }
 }

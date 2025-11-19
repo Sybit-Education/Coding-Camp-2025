@@ -7,7 +7,9 @@
     "SKIP_TO_MAIN": "Zum Hauptinhalt springen",
     "LOADING": "Laden ...",
     "MAIN_CONTENT": "Hauptinhalt",
-    "PAGE_UPDATED": "Seite aktualisiert"
+    "PAGE_UPDATED": "Seite aktualisiert",
+    "DELETE": "Löschen",
+    "CONFIRM": "Bestätigen"
   },
   "HEADER": {
     "TITLE": "1200 Jahre Radolfzell",
@@ -125,7 +127,13 @@
       "general": "Bitte füllen Sie alle Pflichtfelder aus."
     },
     "cancel": "Abbrechen",
-    "delete": "Löschen ..."
+    "delete": "Event löschen",
+    "delete_confirm": "Soll dieses Event wirklich gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "deleteConfirmTitle": "Event löschen",
+    "deleteConfirmMessage": "Soll das Event \"{{name}}\" wirklich gelöscht werden?",
+    "deleteConfirmFallback": "dieses Event",
+    "deleteSuccess": "Event wurde gelöscht.",
+    "deleteError": "Event konnte nicht gelöscht werden."
   },
   "dev": {
     "text1": "Diese Website wurde im Rahmen des SYBIT Coding Camps 2025 entwickelt ",
@@ -206,7 +214,17 @@
       "NO_EVENTS": "Keine Events gefunden",
       "EDIT": "Bearbeiten ...",
       "DELETE": "Löschen",
-      "SEARCH": "Suchen ..."
+      "SEARCH": "Suchen ...",
+      "CONFIRM_DELETE": "Soll das Event \"{{name}}\" wirklich gelöscht werden?",
+      "DELETE_SUCCESS": "Das Event {{name}} wurde gelöscht.",
+      "EDIT_LINK_ARIA": "Veranstaltung {{name}} bearbeiten",
+      "EDIT_BUTTON_ARIA": "Veranstaltung {{name}} bearbeiten",
+      "PREVIEW_ARIA": "Vorschau für Veranstaltung {{name}} öffnen",
+      "DELETE_BUTTON_ARIA": "Veranstaltung {{name}} löschen",
+      "DELETE_CONFIRM_TITLE": "Event löschen",
+      "DELETE_CONFIRM_MESSAGE": "Soll das Event \"{{name}}\" wirklich gelöscht werden?",
+      "DELETE_CONFIRM_MESSAGE_DEFAULT": "Soll dieses Event wirklich gelöscht werden?",
+      "DELETE_ERROR": "Das Event {{name}} konnte nicht gelöscht werden."
     },
     "LOCATIONS": {
       "TITLE": "Orte",
@@ -216,6 +234,17 @@
       "PREVIEW": "Vorschau",
       "EDIT": "Bearbeiten",
       "DELETE": "Löschen",
+      "CONFIRM_DELETE": "Soll der Ort \"{{name}}\" wirklich gelöscht werden?",
+      "DELETE_SUCCESS": "Der Ort {{name}} wurde gelöscht.",
+      "DELETE_FORBIDDEN": "Orte mit zugeordneten Events können nicht gelöscht werden.",
+      "EDIT_LINK_ARIA": "Ort {{name}} bearbeiten",
+      "EDIT_BUTTON_ARIA": "Ort {{name}} bearbeiten",
+      "DELETE_BUTTON_ARIA": "Ort {{name}} löschen",
+      "DELETE_CONFIRM_TITLE": "Ort löschen",
+      "DELETE_CONFIRM_MESSAGE": "Soll der Ort \"{{name}}\" wirklich gelöscht werden?",
+      "DELETE_CONFIRM_MESSAGE_DEFAULT": "Soll dieser Ort wirklich gelöscht werden?",
+      "DELETE_ERROR": "Der Ort {{name}} konnte nicht gelöscht werden.",
+      "DELETE_FALLBACK": "dieser Ort",
       "FORM": {
         "TITLE_CREATE": "Neuen Ort erstellen",
         "TITLE_EDIT": "Ort bearbeiten",
@@ -228,8 +257,20 @@
         "SAVE_ERROR": "Der Ort konnte nicht gespeichert werden.",
         "LOAD_ERROR": "Der Ort konnte nicht geladen werden.",
         "DELETE_ERROR": "Der Ort konnte nicht gelöscht werden.",
-        "DELETE_CONFIRM": "Möchten Sie diesen Ort wirklich löschen?"
+        "DELETE_CONFIRM": "Möchten Sie diesen Ort wirklich löschen?",
+        "LINKED_WARNING": "Dieser Ort ist derzeit {{count}} Event(s) zugeordnet und kann nicht gelöscht werden."
       }
+    },
+    "ORGANIZERS": {
+      "TITLE": "Veranstalter",
+      "DELETE": "Löschen",
+      "CONFIRM_DELETE": "Soll der Veranstalter \"{{name}}\" wirklich gelöscht werden?",
+      "DELETE_SUCCESS": "Der Veranstalter wurde gelöscht.",
+      "DELETE_FORBIDDEN": "Veranstalter mit zugeordneten Events können nicht gelöscht werden.",
+      "LINKED_WARNING": "Dieser Veranstalter ist derzeit {{count}} Event(s) zugeordnet und kann nicht gelöscht werden.",
+      "EDIT_LINK_ARIA": "Veranstalter {{name}} bearbeiten",
+      "EDIT_BUTTON_ARIA": "Veranstalter {{name}} bearbeiten",
+      "DELETE_BUTTON_ARIA": "Veranstalter {{name}} löschen"
     },
     "TITLE": "Administration"
   },

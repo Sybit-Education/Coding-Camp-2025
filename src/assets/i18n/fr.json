@@ -6,7 +6,9 @@
     "NEXT": "Suivant",
     "SKIP_TO_MAIN": "Passer au contenu principal",
     "MAIN_CONTENT": "Contenu principal",
-    "PAGE_UPDATED": "Page mise à jour"
+    "PAGE_UPDATED": "Page mise à jour",
+    "DELETE": "Supprimer",
+    "CONFIRM": "Confirmer"
   },
   "HEADER": {
     "TITLE": "1200 Ans de Radolfzell",
@@ -125,7 +127,13 @@
       "general": "Veuillez remplir tous les champs obligatoires."
     },
     "cancel": "Annuler",
-    "delete": "Supprimer ..."
+    "delete": "Supprimer",
+    "delete_confirm": "Voulez-vous vraiment supprimer cet événement ? Cette action est irréversible.",
+    "deleteConfirmTitle": "Supprimer l'événement",
+    "deleteConfirmMessage": "Voulez-vous vraiment supprimer \"{{name}}\" ?",
+    "deleteConfirmFallback": "cet événement",
+    "deleteSuccess": "Événement supprimé.",
+    "deleteError": "L'événement n'a pas pu être supprimé."
   },
   "dev": {
     "text1": "Ce site web a été développé dans le cadre du SYBIT Coding Camp 2025 ",
@@ -196,16 +204,69 @@
   },
   "ADMIN": {
     "EVENTS": {
-      "TITLE": "Events",
-      "SEARCH": "Recherche ...",
-      "CREATE_NEW": "Créer un nouveau ...",
+      "TITLE": "Événements",
+      "SEARCH": "Rechercher ...",
+      "CREATE_NEW": "Nouvel événement ...",
       "NO_EVENTS": "Aucun événement trouvé",
       "DELETE": "Supprimer",
       "EDIT": "Modifier ...",
-      "PREVIEW": "Preview"
+      "PREVIEW": "Aperçu",
+      "CONFIRM_DELETE": "Supprimer l'événement \"{{name}}\" ?",
+      "DELETE_SUCCESS": "L'événement {{name}} a été supprimé.",
+      "EDIT_LINK_ARIA": "Modifier l'événement {{name}}",
+      "EDIT_BUTTON_ARIA": "Modifier l'événement {{name}}",
+      "PREVIEW_ARIA": "Ouvrir l'aperçu pour l'événement {{name}}",
+      "DELETE_BUTTON_ARIA": "Supprimer l'événement {{name}}",
+      "DELETE_CONFIRM_TITLE": "Supprimer l'événement",
+      "DELETE_CONFIRM_MESSAGE": "Voulez-vous vraiment supprimer \"{{name}}\" ?",
+      "DELETE_CONFIRM_MESSAGE_DEFAULT": "Voulez-vous vraiment supprimer cet événement ?",
+      "DELETE_ERROR": "L'événement {{name}} n'a pas pu être supprimé."
     },
     "LOCATIONS": {
-      "TITLE": "Locations"
+      "TITLE": "Lieux",
+      "CREATE_NEW": "Nouveau lieu ...",
+      "SEARCH": "Rechercher des lieux...",
+      "NO_LOCATIONS": "Aucun lieu trouvé",
+      "PREVIEW": "Aperçu",
+      "EDIT": "Modifier",
+      "DELETE": "Supprimer",
+      "CONFIRM_DELETE": "Supprimer le lieu \"{{name}}\" ?",
+      "DELETE_SUCCESS": "Le lieu {{name}} a été supprimé.",
+      "DELETE_FORBIDDEN": "Les lieux associés à des événements ne peuvent pas être supprimés.",
+      "EDIT_LINK_ARIA": "Modifier le lieu {{name}}",
+      "EDIT_BUTTON_ARIA": "Modifier le lieu {{name}}",
+      "DELETE_BUTTON_ARIA": "Supprimer le lieu {{name}}",
+      "DELETE_CONFIRM_TITLE": "Supprimer le lieu",
+      "DELETE_CONFIRM_MESSAGE": "Voulez-vous vraiment supprimer \"{{name}}\" ?",
+      "DELETE_CONFIRM_MESSAGE_DEFAULT": "Voulez-vous vraiment supprimer ce lieu ?",
+      "DELETE_ERROR": "Le lieu {{name}} n'a pas pu être supprimé.",
+      "DELETE_FALLBACK": "ce lieu",
+      "FORM": {
+        "TITLE_CREATE": "Créer un lieu",
+        "TITLE_EDIT": "Modifier le lieu",
+        "NAME": "Nom",
+        "STREET": "Rue",
+        "ZIP": "Code postal",
+        "CITY": "Ville",
+        "IMAGES": "Images",
+        "NAME_REQUIRED": "Veuillez saisir un nom.",
+        "SAVE_ERROR": "Le lieu n'a pas pu être enregistré.",
+        "LOAD_ERROR": "Le lieu n'a pas pu être chargé.",
+        "DELETE_ERROR": "Le lieu n'a pas pu être supprimé.",
+        "DELETE_CONFIRM": "Voulez-vous vraiment supprimer ce lieu ?",
+        "LINKED_WARNING": "Ce lieu est associé à {{count}} événement(s) et ne peut pas être supprimé."
+      }
+    },
+    "ORGANIZERS": {
+      "TITLE": "Organisateurs",
+      "DELETE": "Supprimer",
+      "CONFIRM_DELETE": "Supprimer l'organisateur \"{{name}}\" ?",
+      "DELETE_SUCCESS": "L'organisateur a été supprimé.",
+      "DELETE_FORBIDDEN": "Les organisateurs associés à des événements ne peuvent pas être supprimés.",
+      "LINKED_WARNING": "Cet organisateur est associé à {{count}} événement(s) et ne peut pas être supprimé.",
+      "EDIT_LINK_ARIA": "Modifier l'organisateur {{name}}",
+      "EDIT_BUTTON_ARIA": "Modifier l'organisateur {{name}}",
+      "DELETE_BUTTON_ARIA": "Supprimer l'organisateur {{name}}"
     },
     "TITLE": "Administration"
   },

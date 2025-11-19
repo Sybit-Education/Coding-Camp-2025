@@ -148,8 +148,9 @@
           @if (isEditMode()) {
             <button
               type="button"
-              (click)="deleteLocation()"
+              (click)="openDeleteDialog()"
               class="rounded-lg bg-red-600 px-6 py-2 font-medium text-white transition-colors hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none"
+              [attr.aria-label]="('ADMIN.LOCATIONS.DELETE' | translate)"
             >
               {{ 'ADMIN.LOCATIONS.DELETE' | translate }}
             </button>
@@ -159,3 +160,14 @@
     </div>
   }
 </div>
+
+<app-confirm-dialog
+  [opened]="deleteDialogOpen()"
+  (openedChange)="deleteDialogOpen.set($event)"
+  [title]="deleteDialogTitle()"
+  [message]="deleteDialogMessage()"
+  [confirmLabel]="deleteConfirmLabel()"
+  [cancelLabel]="deleteCancelLabel()"
+  (confirmed)="confirmDeleteLocation()"
+  (cancelled)="cancelDeleteDialog()"
+/>

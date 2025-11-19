@@ -113,13 +113,14 @@
         <!-- Name Column Template -->
         <ngx-datatable-column name="Name" prop="name" [flexGrow]="3">
           <ng-template let-row="row" ngx-datatable-cell-template>
-            <a
-              href="javascript:void(0)"
+            <button
+              type="button"
+              class="text-left font-medium text-blue-600 hover:text-blue-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
               (click)="editLocation(row.originalId)"
-              class="text-blue-600 hover:text-blue-800 hover:underline"
+              [attr.aria-label]="('ADMIN.LOCATIONS.EDIT_LINK_ARIA' | translate : { name: row.name })"
             >
               {{ row.name }}
-            </a>
+            </button>
           </ng-template>
         </ngx-datatable-column>
 
@@ -143,7 +144,8 @@
             <div class="flex space-x-2">
               <button
                 (click)="editLocation(row.originalId)"
-                class="p-1 text-blue-600 hover:text-blue-800 focus:outline-none"
+                class="p-1 text-blue-600 hover:text-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                [attr.aria-label]="('ADMIN.LOCATIONS.EDIT_BUTTON_ARIA' | translate : { name: row.name })"
                 title="{{ 'ADMIN.LOCATIONS.EDIT' | translate }}"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -156,8 +158,10 @@
                 </svg>
               </button>
               <button
-                (click)="deleteLocation(row.originalId)"
-                class="p-1 text-red-600 hover:text-red-800 focus:outline-none"
+                type="button"
+                (click)="requestLocationDeletion(row)"
+                class="p-1 text-red-600 hover:text-red-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                [attr.aria-label]="('ADMIN.LOCATIONS.DELETE_BUTTON_ARIA' | translate : { name: row.name })"
                 title="{{ 'ADMIN.LOCATIONS.DELETE' | translate }}"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -175,4 +179,15 @@
       </ngx-datatable>
     </div>
   }
+
+  <app-confirm-dialog
+    [opened]="deleteDialogOpen()"
+    (openedChange)="deleteDialogOpen.set($event)"
+    [title]="deleteDialogTitle()"
+    [message]="deleteDialogMessage()"
+    [confirmLabel]="deleteConfirmLabel()"
+    [cancelLabel]="deleteCancelLabel()"
+    (confirmed)="confirmLocationDeletion()"
+    (cancelled)="cancelLocationDeletion()"
+  />
 </div>
