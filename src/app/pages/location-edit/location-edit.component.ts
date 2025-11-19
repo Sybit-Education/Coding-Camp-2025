@@ -4,7 +4,9 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { Location } from '../../models/location.interface'
+import type { Event } from '../../models/event.interface'
 import { LocationService } from '../../services/location.service'
+import { EventService } from '../../services/event.service'
 import { MatIconModule } from '@angular/material/icon'
 import { GeometryPoint, StringRecordId } from 'surrealdb'
 import { SnackBarService } from '../../services/snack-bar.service'
@@ -13,7 +15,6 @@ import { MapComponent } from '../../component/map/map.component'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
 @Component({
   selector: 'app-location-edit',
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, TranslateModule, RouterModule, MatIconModule, MapComponent, GoBackComponent],
   templateUrl: './location-edit.component.html',
   styleUrl: './location-edit.component.scss',
@@ -24,6 +25,7 @@ export class LocationEditComponent implements OnInit {
   private readonly router = inject(Router)
   private readonly fb = inject(FormBuilder)
   private readonly locationService = inject(LocationService)
+  private readonly eventService = inject(EventService)
   private readonly translate = inject(TranslateService)
   private readonly snackBarService = inject(SnackBarService)
   private readonly markForCheck = injectMarkForCheck()
@@ -37,6 +39,7 @@ export class LocationEditComponent implements OnInit {
   isEditMode = signal(false)
   locationId = signal<StringRecordId | null>(null)
   errorMessage = signal<string | null>(null)
+  linkedEventsCount = signal(0)
 
   // Karten-Koordinaten
   coordinates = signal<[number, number]>([9.1732, 47.7331]) // Default: Radolfzell
@@ -108,6 +111,8 @@ export class LocationEditComponent implements OnInit {
         if (location.geo_point && location.geo_point.coordinates) {
           this.coordinates.set(location.geo_point.coordinates as [number, number])
         }
+
+        await this.updateLinkedEventsCount(id)
       } else {
         this.errorMessage.set(this.translate.instant('ADMIN.LOCATIONS.FORM.LOAD_ERROR'))
       }
@@ -193,6 +198,11 @@ export class LocationEditComponent implements OnInit {
   async deleteLocation(): Promise<void> {
     if (!this.isEditMode() || !this.locationId()) return
 
+    if (this.linkedEventsCount() > 0) {
+      alert('Ort kann nicht gelöscht werden, solange Events zugeordnet sind.')
+      return
+    }
+
     if (confirm(this.translate.instant('ADMIN.LOCATIONS.FORM.DELETE_CONFIRM'))) {
       try {
         await this.locationService.delete(this.locationId()!)
@@ -202,5 +212,25 @@ export class LocationEditComponent implements OnInit {
         this.errorMessage.set(this.translate.instant('ADMIN.LOCATIONS.FORM.DELETE_ERROR'))
       }
     }
+  }
+
+  private async updateLinkedEventsCount(locationId: StringRecordId): Promise<void> {
+    try {
+      const events = await this.eventService.getAllEvents()
+      const count = this.countEventsForLocation(events ?? [], locationId)
+      this.linkedEventsCount.set(count)
+    } catch (error) {
+      console.error('Fehler beim Prüfen der Event-Zuordnungen:', error)
+      this.linkedEventsCount.set(0)
+    }
+  }
+
+  private countEventsForLocation(events: Event[], locationId: StringRecordId): number {
+    return events.reduce((acc, event) => {
+      if (!event.location) {
+        return acc
+      }
+      return String(event.location) === String(locationId) ? acc + 1 : acc
+    }, 0)
   }
 }

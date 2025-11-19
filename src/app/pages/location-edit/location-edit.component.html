@@ -18,6 +18,16 @@
         </div>
       }
 
+      @if (isEditMode() && linkedEventsCount() > 0) {
+        <div
+          class="mb-4 rounded-lg border border-yellow-300 bg-yellow-50 px-4 py-3 text-sm text-yellow-900"
+          role="status"
+          aria-live="polite"
+        >
+          Dieser Ort ist derzeit <strong>{{ linkedEventsCount() }}</strong> Event(s) zugeordnet und kann nicht gelöscht werden.
+        </div>
+      }
+
       <form [formGroup]="locationForm" (ngSubmit)="onSubmit()">
         <div class="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
           <!-- Name -->
@@ -149,7 +159,10 @@
             <button
               type="button"
               (click)="deleteLocation()"
-              class="rounded-lg bg-red-600 px-6 py-2 font-medium text-white transition-colors hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none"
+              class="rounded-lg bg-red-600 px-6 py-2 font-medium text-white transition-colors hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:bg-red-300"
+              [disabled]="linkedEventsCount() > 0"
+              [attr.aria-disabled]="linkedEventsCount() > 0"
+              title="{{ linkedEventsCount() > 0 ? 'Verknüpfte Events verhindern das Löschen' : null }}"
             >
               {{ 'ADMIN.LOCATIONS.DELETE' | translate }}
             </button>

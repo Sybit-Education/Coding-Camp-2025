@@ -131,6 +131,12 @@
           </ng-template>
         </ngx-datatable-column>
 
+        <ngx-datatable-column name="Events" prop="eventCount" [width]="10" [flexGrow]="0" [sortable]="false">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <span class="font-semibold text-gray-700">{{ row.eventCount }}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
         <!-- City Column Template -->
         <ngx-datatable-column name="Stadt" prop="city" [flexGrow]="1">
           <ng-template let-value="value" ngx-datatable-cell-template>
@@ -165,8 +171,10 @@
               </button>
               <button
                 (click)="deleteLocation(row.originalId)"
-                class="p-1 text-red-600 hover:text-red-800 focus:outline-none"
-                title="{{ 'ADMIN.LOCATIONS.DELETE' | translate }}"
+                class="p-1 text-red-600 hover:text-red-800 focus:outline-none disabled:cursor-not-allowed disabled:text-red-300"
+                [disabled]="row.eventCount > 0"
+                [attr.aria-disabled]="row.eventCount > 0"
+                title="{{ row.eventCount > 0 ? 'Verknüpfte Events verhindern das Löschen' : ('ADMIN.LOCATIONS.DELETE' | translate) }}"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path

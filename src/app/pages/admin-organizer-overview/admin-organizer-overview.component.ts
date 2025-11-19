@@ -12,7 +12,6 @@ import type { RecordId, StringRecordId } from 'surrealdb'
 
 @Component({
   selector: 'app-admin-organizer-overview',
-  standalone: true,
   imports: [CommonModule, RouterModule, TranslateModule, NgxDatatableModule],
   templateUrl: './admin-organizer-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
