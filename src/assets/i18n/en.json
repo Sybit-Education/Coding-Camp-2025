@@ -29,6 +29,7 @@
     "SAVE_EVENT": "Save event",
     "REMOVE_EVENT": "Remove event",
     "PAST_EVENT": "Past event",
+    "PAST_PREFIX": "Past: ",
     "NO_EVENTS_FOUND_IN_CATEGORY": "No events found in this category."
   },
   "ABOUT": {

@@ -19,7 +19,6 @@ import { LiveAnnouncer } from '@angular/cdk/a11y'
   selector: 'app-admin-event-overview',
   imports: [CommonModule, RouterModule, TranslateModule, NgxDatatableModule, FormsModule, ConfirmDialogComponent],
   templateUrl: './admin-event-overview.component.html',
-  styleUrl: './admin-event-overview.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })

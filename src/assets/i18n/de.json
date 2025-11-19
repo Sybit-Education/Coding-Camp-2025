@@ -28,6 +28,7 @@
     "DATE": "Datum",
     "SAVE_EVENT": "Veranstaltung speichern",
     "PAST_EVENT": "Vergangene Veranstaltung",
+    "PAST_PREFIX": "Vergangen: ",
     "NO_EVENTS_FOUND_IN_CATEGORY": "Keine Veranstaltungen in dieser Kategorie gefunden."
   },
   "ABOUT": {
@@ -42,7 +43,7 @@
   "bottom-nav": {
     "home": "Home",
     "favorites": "Favoriten",
-    "all-events": "Alle Events",
+    "all-events": "Alle Veranstaltungen",
     "more": "Mehr"
   },
   "MORE": {
@@ -65,7 +66,7 @@
     "ARIA-LABLE": "Weitere Optionen"
   },
   "home": {
-    "current": "Aktuelles",
+    "current": "Aktuelle Veranstaltungen",
     "categories": "Kategorien",
     "main-content": "Zum Hauptinhalt springen",
     "tags": {

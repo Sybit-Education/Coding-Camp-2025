@@ -1,0 +1,78 @@
+<div class="mx-auto max-w-2xl p-4">
+  <h1 class="mb-4 text-xl font-semibold">
+    {{ isEditMode() ? 'Veranstalter bearbeiten' : 'Veranstalter erstellen' }}
+  </h1>
+
+  @if (linkedEventsCount() > 0) {
+    <div
+      class="mb-4 rounded-lg border border-yellow-300 bg-yellow-50 px-4 py-3 text-sm text-yellow-900"
+      role="status"
+      aria-live="polite"
+    >
+      Dieser Veranstalter ist derzeit <strong>{{ linkedEventsCount() }}</strong> Event(s) zugeordnet und kann nicht gelöscht werden.
+    </div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="space-y-4">
+    <div>
+      <label for="name" class="mb-1 block font-medium">Name</label>
+      <input
+        id="name"
+        type="text"
+        class="w-full rounded border border-gray-300 px-3 py-2"
+        formControlName="name"
+        required
+        [attr.aria-invalid]="form.controls.name.invalid && form.controls.name.touched ? 'true' : 'false'"
+      />
+      @if (form.controls.name.invalid && form.controls.name.touched) {
+        <p class="mt-1 text-sm text-red-600" role="alert">
+          Name ist erforderlich.
+        </p>
+      }
+    </div>
+
+    <div>
+      <label for="email" class="mb-1 block font-medium">E-Mail</label>
+      <input id="email" type="email" class="w-full rounded border border-gray-300 px-3 py-2" formControlName="email" />
+      @if (form.controls.email.invalid && form.controls.email.touched) {
+        <p class="mt-1 text-sm text-red-600" role="alert">
+          Ungültige E-Mail-Adresse.
+        </p>
+      }
+    </div>
+
+    <div>
+      <label for="phonenumber" class="mb-1 block font-medium">Telefon</label>
+      <input id="phonenumber" type="tel" class="w-full rounded border border-gray-300 px-3 py-2" formControlName="phonenumber" />
+    </div>
+
+    <div class="flex items-center gap-2 pt-2">
+      <button
+        type="submit"
+        class="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
+        [disabled]="saving() || loading()"
+        aria-label="Speichern"
+      >
+        {{ saving() ? 'Speichert...' : 'Speichern' }}
+      </button>
+
+      <button type="button" class="rounded bg-gray-200 px-4 py-2 hover:bg-gray-300" (click)="cancel()">
+        Abbrechen
+      </button>
+
+      @if (isEditMode()) {
+        <button
+          type="button"
+          class="ml-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:bg-red-300"
+          (click)="delete()"
+          [disabled]="linkedEventsCount() > 0"
+          [attr.aria-disabled]="linkedEventsCount() > 0"
+          aria-label="Veranstalter löschen"
+          title="{{ linkedEventsCount() > 0 ? 'Verknüpfte Events verhindern das Löschen' : null }}"
+        >
+          Löschen
+        </button>
+      }
+    </div>
+  </form>
+</div>

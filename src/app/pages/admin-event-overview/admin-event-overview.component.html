@@ -1,11 +1,13 @@
 <div class="container mx-auto px-4 py-6">
   <div class="mb-6 flex flex-col items-center justify-between md:flex-row">
-    <h1 class="mb-4 text-2xl font-bold text-gray-800 md:mb-0">
+    <h1>
       {{ 'ADMIN.TITLE' | translate }}
     </h1>
     <div class="flex space-x-4">
       <div class="relative">
+        <label class="sr-only" for="event-search">{{ 'SEARCH.LABEL' | translate }}</label>
         <input
+          id="event-search"
           type="text"
           [(ngModel)]="filterValue"
           (keyup)="updateFilter()"
@@ -51,6 +53,14 @@
         class="border-b-2 border-transparent px-1 py-2 text-xl font-medium whitespace-nowrap text-gray-600 hover:border-gray-300 hover:text-blue-800"
       >
         {{ 'ADMIN.LOCATIONS.TITLE' | translate }}
+      </a>
+      <a
+        [routerLink]="['/admin/organizers']"
+        routerLinkActive="border-blue-600 text-blue-600"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="border-b-2 border-transparent px-1 py-2 text-xl font-medium whitespace-nowrap text-gray-600 hover:border-gray-300 hover:text-blue-800"
+      >
+        Veranstalter
       </a>
     </nav>
   </div>
