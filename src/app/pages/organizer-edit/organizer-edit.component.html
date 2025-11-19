@@ -1,6 +1,6 @@
 <div class="mx-auto max-w-2xl p-4">
   <h1 class="mb-4 text-xl font-semibold">
-    {{ isEditMode() ? 'Veranstalter bearbeiten' : 'Veranstalter erstellen' }}
+    {{ isEditMode() ? ('ADMIN.ORGANIZERS.EDIT_TITLE' | translate) : ('ADMIN.ORGANIZERS.CREATE_TITLE' | translate) }}
   </h1>
 
   @if (linkedEventsCount() > 0) {
@@ -9,7 +9,7 @@
       role="status"
       aria-live="polite"
     >
-      Dieser Veranstalter ist derzeit <strong>{{ linkedEventsCount() }}</strong> Event(s) zugeordnet und kann nicht gelöscht werden.
+      {{ 'ADMIN.ORGANIZERS.LINKED_WARNING' | translate : { count: linkedEventsCount() } }}
     </div>
   }
 
@@ -51,28 +51,39 @@
         type="submit"
         class="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
         [disabled]="saving() || loading()"
-        aria-label="Speichern"
+        aria-label="{{ 'COMMON.SAVE' | translate }}"
       >
-        {{ saving() ? 'Speichert...' : 'Speichern' }}
+        {{ saving() ? ('COMMON.LOADING' | translate) : ('COMMON.SAVE' | translate) }}
       </button>
 
       <button type="button" class="rounded bg-gray-200 px-4 py-2 hover:bg-gray-300" (click)="cancel()">
-        Abbrechen
+        {{ 'COMMON.CANCEL' | translate }}
       </button>
 
       @if (isEditMode()) {
         <button
           type="button"
           class="ml-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:bg-red-300"
-          (click)="delete()"
+          (click)="openDeleteDialog()"
           [disabled]="linkedEventsCount() > 0"
           [attr.aria-disabled]="linkedEventsCount() > 0"
-          aria-label="Veranstalter löschen"
-          title="{{ linkedEventsCount() > 0 ? 'Verknüpfte Events verhindern das Löschen' : null }}"
+          [attr.aria-label]="('ADMIN.ORGANIZERS.DELETE_BUTTON_ARIA' | translate : { name: form.controls.name.value })"
+          title="{{ linkedEventsCount() > 0 ? ('ADMIN.ORGANIZERS.DELETE_FORBIDDEN' | translate) : null }}"
         >
-          Löschen
+          {{ 'ADMIN.ORGANIZERS.DELETE' | translate }}
         </button>
       }
     </div>
   </form>
+
+  <app-confirm-dialog
+    [opened]="deleteDialogOpen()"
+    (openedChange)="deleteDialogOpen.set($event)"
+    [title]="deleteDialogTitle()"
+    [message]="deleteDialogMessage()"
+    [confirmLabel]="deleteConfirmLabel()"
+    [cancelLabel]="deleteCancelLabel()"
+    (confirmed)="confirmDelete()"
+    (cancelled)="cancelDeleteDialog()"
+  />
 </div>

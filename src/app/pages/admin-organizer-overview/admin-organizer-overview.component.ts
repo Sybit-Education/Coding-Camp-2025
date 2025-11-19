@@ -1,26 +1,29 @@
 import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, Component, computed, inject, signal, OnInit } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-
 import { NgxDatatableModule, SortEvent, SortDirection } from '@swimlane/ngx-datatable'
 import { Router, RouterModule } from '@angular/router'
-import { TranslateModule } from '@ngx-translate/core'
-import { SurrealdbService } from '../../services/surrealdb.service'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { OrganizerService } from '../../services/organizer.service'
 import { EventService } from '../../services/event.service'
 import type { Organizer } from '../../models/organizer.interface'
 import type { Event } from '../../models/event.interface'
-import type { RecordId, StringRecordId } from 'surrealdb'
+import type { RecordId } from 'surrealdb'
+import { ConfirmDialogComponent } from '@app/component/confirm-dialog/confirm-dialog.component'
+import { LiveAnnouncer } from '@angular/cdk/a11y'
 
 @Component({
   selector: 'app-admin-organizer-overview',
-  imports: [CommonModule, RouterModule, TranslateModule, NgxDatatableModule, FormsModule],
+  imports: [CommonModule, RouterModule, TranslateModule, NgxDatatableModule, FormsModule, ConfirmDialogComponent],
   templateUrl: './admin-organizer-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminOrganizerOverviewComponent implements OnInit {
-  private readonly db = inject(SurrealdbService)
+  private readonly organizerService = inject(OrganizerService)
   private readonly router = inject(Router)
   private readonly eventService = inject(EventService)
+  private readonly translate = inject(TranslateService)
+  private readonly liveAnnouncer = inject(LiveAnnouncer)
 
   protected readonly isLoading = signal<boolean>(true)
   protected readonly organizers = signal<Organizer[]>([])
@@ -34,6 +37,18 @@ export class AdminOrganizerOverviewComponent implements OnInit {
     { prop: 'name', dir: SortDirection.asc },
   ])
   protected filterValue = ''
+  private readonly deleteContext = signal<{ id: RecordId<'organizer'>; name: string } | null>(null)
+  protected readonly deleteDialogOpen = signal(false)
+  protected readonly deleteDialogTitle = computed(() => this.translate.instant('ADMIN.ORGANIZERS.DELETE_CONFIRM_TITLE'))
+  protected readonly deleteDialogMessage = computed(() => {
+    const context = this.deleteContext()
+    if (!context) {
+      return this.translate.instant('ADMIN.ORGANIZERS.DELETE_CONFIRM_MESSAGE_DEFAULT')
+    }
+    return this.translate.instant('ADMIN.ORGANIZERS.DELETE_CONFIRM_MESSAGE', { name: context.name })
+  })
+  protected readonly deleteConfirmLabel = computed(() => this.translate.instant('COMMON.DELETE'))
+  protected readonly deleteCancelLabel = computed(() => this.translate.instant('COMMON.CANCEL'))
 
   ngOnInit() {
     this.refresh()
@@ -43,7 +58,7 @@ export class AdminOrganizerOverviewComponent implements OnInit {
     this.isLoading.set(true)
     try {
       const [list, events] = await Promise.all([
-        this.db.getAll<Organizer>('organizer'),
+        this.organizerService.getAllOrganizers(),
         this.eventService.getAllEvents(),
       ])
 
@@ -86,23 +101,47 @@ export class AdminOrganizerOverviewComponent implements OnInit {
     this.router.navigate(['/admin/organizer', String(organizerId)])
   }
 
-  protected async deleteOrganizer(organizerId: RecordId) {
-    const organizerKey = String(organizerId)
-    const relatedEvents = this.organizerEventCounts().get(organizerKey) ?? 0
+  protected requestOrganizerDeletion(row: Record<string, unknown>) {
+    const organizerId = row?.['originalId'] as RecordId<'organizer'> | undefined
+    if (!organizerId) return
+    const relatedEvents = this.organizerEventCounts().get(String(organizerId)) ?? 0
     if (relatedEvents > 0) {
-      alert('Veranstalter kann nicht gelöscht werden, solange Events zugeordnet sind.')
+      this.liveAnnouncer.announce(this.translate.instant('ADMIN.ORGANIZERS.DELETE_FORBIDDEN'), 'assertive')
       return
     }
 
-    if (!confirm('Veranstalter wirklich löschen?')) return
+    this.deleteContext.set({
+      id: organizerId,
+      name: String(row?.['name'] ?? ''),
+    })
+    this.deleteDialogOpen.set(true)
+  }
+
+  protected async confirmOrganizerDeletion() {
+    const context = this.deleteContext()
+    if (!context) return
 
     try {
-      await this.db.deleteRow(String(organizerId) as unknown as StringRecordId)
+      await this.organizerService.delete(context.id)
+      this.liveAnnouncer.announce(
+        this.translate.instant('ADMIN.ORGANIZERS.DELETE_SUCCESS', { name: context.name }),
+        'assertive',
+      )
       await this.refresh()
     } catch (err) {
       console.error('[OrganizerOverview] Delete failed:', err)
-      alert('Löschen ist fehlgeschlagen.')
+      this.liveAnnouncer.announce(
+        this.translate.instant('ADMIN.ORGANIZERS.DELETE_ERROR', { name: context.name }),
+        'assertive',
+      )
+    } finally {
+      this.cancelOrganizerDeletion()
     }
+  }
+
+  protected cancelOrganizerDeletion() {
+    this.deleteDialogOpen.set(false)
+    this.deleteContext.set(null)
   }
 
   // Sort handler for ngx-datatable
