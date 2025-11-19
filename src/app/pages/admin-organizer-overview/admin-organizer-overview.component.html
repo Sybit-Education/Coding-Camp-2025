@@ -79,6 +79,29 @@
         [sorts]="currentSorts()"
         (sort)="onSort($event)"
       >
+        <!-- Icon Column Template -->
+        <ngx-datatable-column name="Symbol" [sortable]="false" [width]="10" [flexGrow]="0">
+          <ng-template ngx-datatable-cell-template>
+            <div class="location-thumbnail-placeholder" aria-hidden="true">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                focusable="false"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M5.121 17.804A9 9 0 0112 15a9 9 0 016.879 2.804M15 10a3 3 0 10-6 0 3 3 0 006 0z"
+                />
+              </svg>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
         <!-- Name Column Template -->
         <ngx-datatable-column name="Name" prop="name" [flexGrow]="3">
           <ng-template let-row="row" ngx-datatable-cell-template>

@@ -133,6 +133,10 @@
   .event-thumbnail-placeholder {
     @apply flex h-[50px] w-[50px] items-center justify-center rounded bg-gray-100 text-gray-500;
   }
+
+  .location-thumbnail-placeholder {
+    @apply flex h-[50px] w-[50px] items-center justify-center rounded bg-gray-100 text-gray-500;
+  }
 }
 
 @font-face {
