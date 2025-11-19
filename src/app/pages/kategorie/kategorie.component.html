@@ -104,6 +104,28 @@
 
   <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
     @for (event of events; track trackByEvent($index, event)) {
+      @if ($index === 0 || (event.date_start | date:'yyyyMM') !== (events[$index - 1].date_start | date:'yyyyMM')) {
+        <nav class="col-span-full sr-only" aria-label="Monatsnavigation">
+          @if ($index > 0) {
+            <a [attr.href]="'#month-' + (events[$index - 1].date_start | date:'yyyy-MM')">
+              Zum vorherigen Monat springen
+            </a>
+          }
+        </nav>
+        <h2
+          class="col-span-full mb-2 mt-6 border-b border-blue-900 pb-1 text-2xl font-bold"
+          [attr.id]="'month-' + (event.date_start | date:'yyyy-MM')"
+          [attr.aria-describedby]="'month-' + (event.date_start | date:'yyyy-MM') + '-desc'">
+          @if (event.isPast) {
+            {{ 'EVENTS.PAST_PREFIX' | translate }} {{ event.date_start | date:'MMMM yyyy' }}
+          } @else {
+            {{ event.date_start | date:'MMMM yyyy' }}
+          }
+        </h2>
+        <p class="col-span-full sr-only" [attr.id]="'month-' + (event.date_start | date:'yyyy-MM') + '-desc'">
+          Abschnitt: @if (event.isPast) { {{ 'EVENTS.PAST_PREFIX' | translate }} } {{ event.date_start | date:'MMMM yyyy' }}. Verwenden Sie die Überschriftennavigation Ihres Screenreaders, um zum nächsten Monat zu springen.
+        </p>
+      }
       <div class="relative">
         <app-event-card [event]="event" [class.opacity-70]="event.isPast"> </app-event-card>
       </div>

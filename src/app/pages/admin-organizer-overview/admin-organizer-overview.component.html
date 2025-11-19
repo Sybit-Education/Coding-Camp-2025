@@ -5,14 +5,15 @@
     </h1>
     <div class="flex space-x-4">
       <div class="relative">
-        <label class="sr-only" for="event-search">{{ 'SEARCH.LABEL' | translate }}</label>
+        <label class="sr-only" for="organizer-search">{{ 'SEARCH.LABEL' | translate }}</label>
         <input
-          id="event-search"
+          id="organizer-search"
           type="text"
           [(ngModel)]="filterValue"
           (keyup)="updateFilter()"
-          placeholder="{{ 'ADMIN.EVENTS.SEARCH' | translate }}"
-          class="rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          placeholder="{{ 'SEARCH.PLACEHOLDER' | translate }}"
+          class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          [attr.aria-label]="'Organizers ' + ('SEARCH.LABEL' | translate)"
         />
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -20,19 +21,24 @@
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
+          aria-hidden="true"
         >
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
       </div>
-      <a
-        [routerLink]="['/admin/create']"
-        class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-        </svg>
-        {{ 'ADMIN.EVENTS.CREATE_NEW' | translate }}
-      </a>
+      <div class="flex justify-end">
+        <button
+          type="button"
+          (click)="createOrganizer()"
+          class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+          aria-label="Neuen Veranstalter anlegen"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          Veranstalter anlegen
+        </button>
+      </div>
     </div>
   </div>
 
@@ -42,7 +48,7 @@
         [routerLink]="['/admin/']"
         routerLinkActive="border-blue-600 text-blue-600"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="border-b-2 border-transparent px-1 py-2 text-xl font-bold whitespace-nowrap text-blue-600 hover:border-gray-300 hover:text-blue-800"
+        class="border-b-2 border-transparent px-1 py-2 text-xl font-medium whitespace-nowrap text-gray-600 hover:border-gray-300 hover:text-blue-800"
       >
         {{ 'ADMIN.EVENTS.TITLE' | translate }}
       </a>
@@ -58,7 +64,8 @@
         [routerLink]="['/admin/organizers']"
         routerLinkActive="border-blue-600 text-blue-600"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="border-b-2 border-transparent px-1 py-2 text-xl font-medium whitespace-nowrap text-gray-600 hover:border-gray-300 hover:text-blue-800"
+        aria-current="page"
+        class="border-b-2 border-blue-600 px-1 py-2 text-xl font-bold whitespace-nowrap text-blue-600"
       >
         Veranstalter
       </a>
@@ -66,21 +73,20 @@
   </div>
 
   @if (isLoading()) {
-    <div class="flex items-center justify-center py-12">
+    <div class="flex items-center justify-center py-12" aria-busy="true">
       <div class="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"></div>
       <span class="ml-3">{{ 'COMMON.LOADING' | translate }}</span>
     </div>
-  } @else if (events().length === 0) {
+  } @else if(organizers().length === 0) {
     <div class="rounded-lg bg-white py-8 text-center shadow">
-      <p class="mb-4 text-gray-500">
-        {{ 'ADMIN.EVENTS.NO_EVENTS' | translate }}
-      </p>
-      <a
-        [routerLink]="['/admin/create']"
+      <p class="mb-4 text-gray-500">Noch keine Veranstalter angelegt.</p>
+      <button
+        type="button"
+        (click)="createOrganizer()"
         class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
       >
-        {{ 'ADMIN.EVENTS.CREATE_NEW' | translate }}
-      </a>
+        Veranstalter anlegen
+      </button>
     </div>
   } @else {
     <div class="overflow-hidden rounded-lg bg-white shadow">
@@ -97,80 +103,63 @@
         [sorts]="currentSorts()"
         (sort)="onSort($event)"
       >
-        <!-- Thumbnail Column Template -->
-        <ngx-datatable-column name="Bild" prop="thumbnail" [width]="10" [flexGrow]="0" [sortable]="false">
-          <ng-template let-row="row" ngx-datatable-cell-template>
-            @if (row.thumbnail) {
-              <img [src]="row.thumbnail" alt="Thumbnail" class="event-thumbnail" />
-            } @else {
-              <div class="event-thumbnail-placeholder">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
-                </svg>
-              </div>
-            }
-          </ng-template>
-        </ngx-datatable-column>
-
-        <!-- Date Column Template -->
-        <ngx-datatable-column name="Datum" prop="date_start" [width]="10" [flexGrow]="0">
-          <ng-template let-row="row" ngx-datatable-cell-template>
-            <span class="text-gray-700">{{ row.date_display }}</span>
+        <!-- Icon Column Template -->
+        <ngx-datatable-column name="Symbol" [sortable]="false" [width]="10" [flexGrow]="0">
+          <ng-template ngx-datatable-cell-template>
+            <div class="location-thumbnail-placeholder" aria-hidden="true">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                focusable="false"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M5.121 17.804A9 9 0 0112 15a9 9 0 016.879 2.804M15 10a3 3 0 10-6 0 3 3 0 006 0z"
+                />
+              </svg>
+            </div>
           </ng-template>
         </ngx-datatable-column>
 
         <!-- Name Column Template -->
         <ngx-datatable-column name="Name" prop="name" [flexGrow]="3">
           <ng-template let-row="row" ngx-datatable-cell-template>
-            <a
-              href="javascript:void(0)"
-              (click)="editEvent(row.originalId)"
-              class="text-blue-600 hover:text-blue-800 hover:underline"
-            >
+            <a href="javascript:void(0)" (click)="editOrganizer(row.originalId)" class="text-blue-600 hover:text-blue-800 hover:underline">
               {{ row.name }}
             </a>
           </ng-template>
         </ngx-datatable-column>
 
-        <!-- Organizer Column Template -->
-        <ngx-datatable-column name="Veranstalter" prop="organizer" [flexGrow]="1">
+        <!-- Event Count Column -->
+        <ngx-datatable-column name="Events" prop="eventCount" [width]="10" [flexGrow]="0" [sortable]="false">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <span class="font-semibold text-gray-700">{{ row.eventCount }}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="E-Mail" prop="email" [flexGrow]="1">
           <ng-template let-value="value" ngx-datatable-cell-template>
             <span class="text-gray-600">{{ value }}</span>
           </ng-template>
         </ngx-datatable-column>
 
+        <ngx-datatable-column name="Telefon" prop="phonenumber" [flexGrow]="1">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <span class="text-gray-600">{{ value }}</span>
+          </ng-template>
+        </ngx-datatable-column>
+        
         <!-- Actions Column Template -->
         <ngx-datatable-column name="Aktionen" [sortable]="false" [width]="10">
           <ng-template let-row="row" ngx-datatable-cell-template>
             <div class="flex space-x-2">
               <button
-                (click)="previewEvent(row.originalId)"
-                class="p-1 text-green-600 hover:text-green-800 focus:outline-none"
-                title="{{ 'ADMIN.EVENTS.PREVIEW' | translate }}"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                  />
-                </svg>
-              </button>
-              <button
-                (click)="editEvent(row.originalId)"
+                (click)="editOrganizer(row.originalId)"
                 class="p-1 text-blue-600 hover:text-blue-800 focus:outline-none"
                 title="{{ 'ADMIN.EVENTS.EDIT' | translate }}"
               >
@@ -184,9 +173,11 @@
                 </svg>
               </button>
               <button
-                (click)="deleteEvent(row.originalId)"
-                class="p-1 text-red-600 hover:text-red-800 focus:outline-none"
-                title="{{ 'ADMIN.EVENTS.DELETE' | translate }}"
+                (click)="deleteOrganizer(row.originalId)"
+                class="p-1 text-red-600 hover:text-red-800 focus:outline-none disabled:cursor-not-allowed disabled:text-red-300"
+                [disabled]="row.eventCount > 0"
+                [attr.aria-disabled]="row.eventCount > 0"
+                title="{{ row.eventCount > 0 ? 'Verknüpfte Events verhindern das Löschen' : ('ADMIN.EVENTS.DELETE' | translate) }}"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path

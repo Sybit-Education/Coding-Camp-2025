@@ -1,5 +1,5 @@
 import { APP_INITIALIZER, EnvironmentProviders, makeEnvironmentProviders } from '@angular/core'
-import { IconRegistryService } from '../services/icon-registry.service'
+import { IconRegistryService } from '../../services/icon-registry.service'
 
 function registerIcons(registry: IconRegistryService) {
   const register = (name: string, url: string) => {

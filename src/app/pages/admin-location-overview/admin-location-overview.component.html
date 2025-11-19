@@ -1,11 +1,13 @@
 <div class="container mx-auto px-4 py-6">
   <div class="mb-6 flex flex-col items-center justify-between md:flex-row">
-    <h1 class="mb-4 text-2xl font-bold text-gray-800 md:mb-0">
+    <h1>
       {{ 'ADMIN.TITLE' | translate }}
     </h1>
     <div class="flex space-x-4">
       <div class="relative">
+        <label class="sr-only" for="location-search">{{ 'SEARCH.LABEL' | translate }}</label>
         <input
+          id="location-search"
           type="text"
           [(ngModel)]="filterValue"
           (keyup)="updateFilter()"
@@ -51,6 +53,14 @@
         class="border-b-2 border-transparent px-1 py-2 text-xl font-bold whitespace-nowrap text-blue-600 hover:border-gray-300 hover:text-blue-800"
       >
         {{ 'ADMIN.LOCATIONS.TITLE' | translate }}
+      </a>
+      <a
+        [routerLink]="['/admin/organizers']"
+        routerLinkActive="border-blue-600 text-blue-600"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="border-b-2 border-transparent px-1 py-2 text-xl font-medium whitespace-nowrap text-gray-600 hover:border-gray-300 hover:text-blue-800"
+      >
+        Veranstalter
       </a>
     </nav>
   </div>
@@ -123,6 +133,12 @@
           </ng-template>
         </ngx-datatable-column>
 
+        <ngx-datatable-column name="Events" prop="eventCount" [width]="10" [flexGrow]="0" [sortable]="false">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <span class="font-semibold text-gray-700">{{ row.eventCount }}</span>
+          </ng-template>
+        </ngx-datatable-column>
+
         <!-- City Column Template -->
         <ngx-datatable-column name="Stadt" prop="city" [flexGrow]="1">
           <ng-template let-value="value" ngx-datatable-cell-template>
@@ -157,8 +173,10 @@
               </button>
               <button
                 (click)="deleteLocation(row.originalId)"
-                class="p-1 text-red-600 hover:text-red-800 focus:outline-none"
-                title="{{ 'ADMIN.LOCATIONS.DELETE' | translate }}"
+                class="p-1 text-red-600 hover:text-red-800 focus:outline-none disabled:cursor-not-allowed disabled:text-red-300"
+                [disabled]="row.eventCount > 0"
+                [attr.aria-disabled]="row.eventCount > 0"
+                title="{{ row.eventCount > 0 ? 'Verknüpfte Events verhindern das Löschen' : ('ADMIN.LOCATIONS.DELETE' | translate) }}"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path

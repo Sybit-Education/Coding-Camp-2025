@@ -24,6 +24,7 @@
     "SAVE_EVENT": "Enregistrer l'événement",
     "REMOVE_EVENT": "Supprimer l'événement",
     "PAST_EVENT": "Événement passé",
+    "PAST_PREFIX": "Passé : ",
     "NO_EVENTS_FOUND_IN_CATEGORY": "Aucun événement trouvé dans cette catégorie."
   },
   "ABOUT": {

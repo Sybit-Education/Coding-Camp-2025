@@ -9,7 +9,6 @@ import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 
 @Component({
   selector: 'app-organizer-input',
-  standalone: true,
   imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './organizer-input.component.html',
   styleUrls: ['./organizer-input.component.scss'],
@@ -78,7 +77,7 @@ export class OrganizerInputComponent {
     }
 
     try {
-      const savedOrganizer = await this.organizerService.postOrganizer(organizer)
+      const savedOrganizer = await this.organizerService.create(organizer)
       this.selectedOrganizer = savedOrganizer
       this.newOrganizer = false // Formular schließen
       this.snackBarService.showSuccess('Veranstalter erfolgreich gespeichert')
