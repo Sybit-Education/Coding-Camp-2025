@@ -5,7 +5,6 @@ import { Meta, Title } from '@angular/platform-browser'
 
 @Component({
   selector: 'app-placeholder',
-  standalone: true,
   imports: [CommonModule, RouterModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './placeholder.component.html',
