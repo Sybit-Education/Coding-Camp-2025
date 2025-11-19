@@ -33,7 +33,6 @@ export interface CombinetPicture {
 
 @Component({
   selector: 'app-image-upload',
-  standalone: true,
   imports: [CommonModule, TranslateModule, FormsModule, LoadingSpinnerComponent, DragDropModule],
   templateUrl: './image-upload.component.html',
   styleUrl: './image-upload.component.scss',

@@ -11,7 +11,6 @@ import { MapComponent } from '../map/map.component'
 
 @Component({
   selector: 'app-location-input',
-  standalone: true,
   imports: [CommonModule, FormsModule, TranslateModule, MapComponent],
   templateUrl: './location-input.component.html',
   styleUrls: ['./location-input.component.scss'],

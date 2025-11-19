@@ -14,7 +14,6 @@ interface Pill {
 
 @Component({
   selector: 'app-event-topic-pill-list',
-  standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './event-topic-pill-list.component.html',
   styleUrls: ['./event-topic-pill-list.component.scss'],

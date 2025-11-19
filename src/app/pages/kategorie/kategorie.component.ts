@@ -25,7 +25,6 @@ interface EventWithResolvedLocation extends AppEvent {
 
 @Component({
   selector: 'app-kategorie',
-  standalone: true,
   imports: [TranslateModule, EventCardComponent, CommonModule, GoBackComponent, LoadingSpinnerComponent],
   templateUrl: './kategorie.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

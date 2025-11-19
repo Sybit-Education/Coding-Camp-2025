@@ -44,7 +44,6 @@ interface LogoSet {
 
 @Component({
   selector: 'app-header',
-  standalone: true,
   imports: [CommonModule, RouterModule, 
     // LanguageSwitcherComponent
   ],
