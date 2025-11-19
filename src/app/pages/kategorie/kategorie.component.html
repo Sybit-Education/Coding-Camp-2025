@@ -24,7 +24,7 @@
       [attr.aria-busy]="searching"
     />
     @if (searching) {
-      <div class="mt-2 flex items-center text-sm text-gray-500" aria-live="polite" role="status" aria-live="polite" aria-busy="true">
+      <div class="mt-2 flex items-center text-sm text-gray-500" role="status" aria-live="polite" aria-busy="true">
         <span class="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-t-transparent border-[#c70d56]"></span>
         {{ 'SEARCH.SEARCHING' | translate }}
       </div>
