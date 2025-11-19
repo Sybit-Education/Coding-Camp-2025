@@ -18,7 +18,12 @@ export class OrganizerService {
   async getAllOrganizers(): Promise<Organizer[]> {
     try {
       const result = await this.surrealdb.getAll<Organizer>('organizer')
-      return Array.isArray(result?.[0]) ? result[0] : []
+      return (result || []).map(
+        (item: Record<string, unknown>) =>
+          ({
+            ...item,
+          }) as Organizer,
+      )
     } catch (error) {
       throw new Error(`Fehler beim Laden der Organizer: ${error}`)
     }
