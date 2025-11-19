@@ -14,6 +14,7 @@ export class KategorieCardComponent {
   @Input() set color(value: string) {
     this.categoryColor.set(value || '#ffffff')
   }
+  @Input() filterOption = true
 
   // Signals für reaktive Verarbeitung
   protected readonly categoryColor = signal<string>('#ffffff')

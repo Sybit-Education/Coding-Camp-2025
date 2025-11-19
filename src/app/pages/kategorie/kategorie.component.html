@@ -56,9 +56,9 @@
 
         <div>
           <h3>{{ 'home.categories' | translate }}</h3>
-          <div class="mr-2 ml-2 grid gap-4 grid-cols-3 lg:grid-cols-4">
+          <div class="mr-2 ml-2 grid gap-4 grid-cols-2">
             @for (categorie of categories; track categorie.id) {
-              <app-kategorie-card [color]="categorie.color" [text]="categorie.name" [slug]="categorie.slug" />
+              <app-kategorie-card [color]="categorie.color" [text]="categorie.name" />
             }
           </div>
         </div>

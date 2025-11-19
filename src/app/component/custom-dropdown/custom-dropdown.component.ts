@@ -1,11 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { IconComponent } from "@app/icons/icon.component";
 import { CommonModule, NgClass } from '@angular/common';
-
-export interface DropdownItem {
-  id: string;
-  name: string;
-}
+import { FilterItem } from '@app/models/filterItem.interface';
 
 @Component({
   selector: 'app-custom-dropdown',
@@ -13,13 +9,13 @@ export interface DropdownItem {
   templateUrl: './custom-dropdown.component.html'
 })
 export class CustomDropdownComponent implements OnInit {
-  @Input() items: DropdownItem[] = [];
+  @Input() items: FilterItem[] = [];
   @Input() placeholder = 'Select items';
-  @Input() defaultItems: DropdownItem[] = []; // Optional: immer ausgewählte Items
+  @Input() defaultItems: FilterItem[] = []; // Optional: immer ausgewählte Items
 
-  @Output() selectionChange = new EventEmitter<DropdownItem[]>();
+  @Output() selectionChange = new EventEmitter<FilterItem[]>();
 
-  selectedItems: DropdownItem[] = [];
+  selectedItems: FilterItem[] = [];
   dropdownOpen = false;
 
   ngOnInit() {
@@ -33,14 +29,14 @@ export class CustomDropdownComponent implements OnInit {
     this.dropdownOpen = !this.dropdownOpen;
   }
 
-  addItem(item: DropdownItem) {
+  addItem(item: FilterItem) {
     if (!this.selectedItems.some(i => i.id === item.id)) {
       this.selectedItems.push(item);
       this.emitSelection();
     }
   }
 
-  removeItem(item: DropdownItem) {
+  removeItem(item: FilterItem) {
     if (this.defaultItems.some(d => d.id === item.id)) {
       return; // Default-Item darf nicht entfernt werden
     }
@@ -48,7 +44,7 @@ export class CustomDropdownComponent implements OnInit {
     this.emitSelection();
   }
 
-  isSelected(item: DropdownItem): boolean {
+  isSelected(item: FilterItem): boolean {
     return !!this.selectedItems.some(i => i.id === item.id);
   }
 
