@@ -32,27 +32,36 @@
   </div>
 
   <div class="mb-4 flex justify-between gap-4">
-    <select name="categories" id="categories" class="space-x-2" (change)="setSelectedCategory($any($event.target).value)">
+    <select
+      name="categories"
+      id="categories"
+      class="space-x-2"
+      [(ngModel)]="selectedCategory"
+      (ngModelChange)="setSelectedCategory($event)"
+    >
       <option [ngValue]="null">
         {{ 'all-categories.all-categories' | translate }}
       </option>
-      <option *ngFor="let category of categories; trackBy: trackById" [ngValue]="category">
-        {{ category.name }}
-      </option>
+      @for (category of categories; track $index) {
+        <option [ngValue]="category">
+          {{ category.name }}
+        </option>
+      }
     </select>
 
     <select
       name="locations"
       id="locations"
       class="flex space-x-2"
-      (ngModelChange)="setSelectedLocation($any($event.target).value)"
+      [(ngModel)]="selectedLocation"
+      (ngModelChange)="setSelectedLocation($event)"
     >
       <option [ngValue]="null">
         {{ 'all-categories.all-locations' | translate }}
       </option>
-      @for (location of this.locationCache.values(); track location) {
-        <option [ngValue]="location | async">
-          {{ (location | async)!.name }}
+      @for (location of locations; track $index) {
+        <option [ngValue]="location">
+          {{ location!.name }}
         </option>
       }
     </select>
