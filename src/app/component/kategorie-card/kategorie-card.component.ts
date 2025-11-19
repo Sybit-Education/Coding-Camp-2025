@@ -4,7 +4,6 @@ import { RouterModule } from '@angular/router'
 
 @Component({
   selector: 'app-kategorie-card',
-  standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './kategorie-card.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

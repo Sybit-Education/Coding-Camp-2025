@@ -14,7 +14,6 @@ interface MoreMenuItem {
 
 @Component({
   selector: 'app-more',
-  standalone: true,
   imports: [RouterModule, TranslateModule, CommonModule, IconComponent],
   templateUrl: './more.component.html',
   styles: [

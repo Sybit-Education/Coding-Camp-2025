@@ -13,7 +13,6 @@ import { MapComponent } from '../../component/map/map.component'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
 @Component({
   selector: 'app-location-edit',
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, TranslateModule, RouterModule, MatIconModule, MapComponent, GoBackComponent],
   templateUrl: './location-edit.component.html',
   styleUrl: './location-edit.component.scss',

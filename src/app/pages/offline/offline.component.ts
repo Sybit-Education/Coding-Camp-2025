@@ -4,7 +4,6 @@ import { RouterModule } from '@angular/router'
 
 @Component({
   selector: 'app-offline',
-  standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
     <div class="min-h-[60vh] grid place-items-center p-6">

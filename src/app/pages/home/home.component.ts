@@ -23,7 +23,6 @@ type EventOrMore = Event & { isMore?: boolean }
 
 @Component({
   selector: 'app-home',
-  standalone: true,
   imports: [CommonModule, TranslateModule, RouterModule, EventCardComponent, KategorieCardComponent, AllEventButtonComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',

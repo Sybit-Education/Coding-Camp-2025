@@ -30,7 +30,6 @@ import { EventTopicPillListComponent } from '@app/component/event-topic-pill-lis
 
 @Component({
   selector: 'app-event-detail-page',
-  standalone: true,
   imports: [
     CommonModule,
     TranslateModule,

@@ -5,7 +5,6 @@ import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-footer',
-  standalone: true,
   imports: [TranslateModule, RouterModule, IconComponent],
   templateUrl: './footer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

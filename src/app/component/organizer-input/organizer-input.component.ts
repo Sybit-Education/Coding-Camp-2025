@@ -9,7 +9,6 @@ import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 
 @Component({
   selector: 'app-organizer-input',
-  standalone: true,
   imports: [CommonModule, FormsModule, TranslateModule],
   templateUrl: './organizer-input.component.html',
   styleUrls: ['./organizer-input.component.scss'],

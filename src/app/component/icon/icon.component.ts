@@ -5,7 +5,6 @@ import { take } from 'rxjs'
 
 @Component({
   selector: 'app-icon',
-  standalone: true,
   templateUrl: './icon.component.html',
   styleUrl: './icon.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

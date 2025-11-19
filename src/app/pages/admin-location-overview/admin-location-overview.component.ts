@@ -12,7 +12,6 @@ import { filter } from 'rxjs/operators'
 
 @Component({
   selector: 'app-admin-location-overview',
-  standalone: true,
   imports: [CommonModule, RouterModule, TranslateModule, NgxDatatableModule, FormsModule],
   templateUrl: './admin-location-overview.component.html',
   styleUrl: './admin-location-overview.component.scss',

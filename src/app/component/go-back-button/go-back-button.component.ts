@@ -6,7 +6,6 @@ import { TranslateModule } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-go-back-button',
-  standalone: true,
   imports: [TranslateModule, RouterModule, IconComponent],
   templateUrl: './go-back-button.component.html',
 })

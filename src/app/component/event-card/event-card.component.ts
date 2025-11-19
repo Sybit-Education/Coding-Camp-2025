@@ -17,7 +17,6 @@ import { EventTypePillComponent } from '@app/component/event-type-pill/event-typ
 
 @Component({
   selector: 'app-event-card',
-  standalone: true,
   imports: [CommonModule, DateTimeRangePipe, TranslateModule, RouterModule, MatIconModule, IconComponent, EventTypePillComponent],
   templateUrl: './event-card.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

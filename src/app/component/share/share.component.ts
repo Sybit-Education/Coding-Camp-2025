@@ -8,7 +8,6 @@ import { IconComponent } from '@app/component/icon/icon.component'
   selector: 'app-share',
   imports: [TranslateModule, IconComponent],
   templateUrl: './share.component.html',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShareComponent {

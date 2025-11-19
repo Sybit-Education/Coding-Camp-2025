@@ -6,7 +6,6 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 
 @Component({
   selector: 'app-snack-bar',
-  standalone: true,
   imports: [CommonModule, TranslateModule],
   templateUrl: './snack-bar.component.html',
   styleUrls: ['./snack-bar.component.scss'],

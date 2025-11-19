@@ -6,7 +6,6 @@ import { Subscription } from 'rxjs'
 
 @Pipe({
   name: 'dateTimeRange',
-  standalone: true,
   pure: false, // Impure pipe, um auf Sprachänderungen zu reagieren
 })
 export class DateTimeRangePipe implements PipeTransform, OnDestroy {

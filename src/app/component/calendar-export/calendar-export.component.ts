@@ -7,7 +7,6 @@ import { IconComponent } from '@app/component/icon/icon.component'
 
 @Component({
   selector: 'app-calendar-export',
-  standalone: true,
   imports: [TranslateModule, IconComponent],
   templateUrl: './calendar-export.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
