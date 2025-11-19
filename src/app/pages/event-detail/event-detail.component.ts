@@ -27,6 +27,7 @@ import { IconComponent } from '@app/icons/icon.component'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
 import { EventTypePillComponent } from '@app/component/event-type-pill/event-type-pill.component'
 import { EventTopicPillListComponent } from '@app/component/event-topic-pill-list/event-topic-pill-list.component'
+import { EventCardListComponent } from '@app/component/event-card-list/event-card-list.component'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -44,8 +45,8 @@ import { EventTopicPillListComponent } from '@app/component/event-topic-pill-lis
     IconComponent,
     EventTypePillComponent,
     EventTopicPillListComponent,
-
     GoBackComponent,
+    EventCardListComponent,
   ],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
