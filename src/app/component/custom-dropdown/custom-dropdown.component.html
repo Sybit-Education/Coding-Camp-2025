@@ -1,0 +1,58 @@
+<div class="relative w-72">
+  <!-- Dropdown-Feld -->
+  <button
+    class="flex cursor-pointer flex-wrap items-center gap-1 rounded border px-3 py-2 w-full"
+    (click)="toggleDropdown()"
+    (keydown.enter)="toggleDropdown()"
+    tabindex="0"
+    aria-haspopup="listbox"
+    [attr.aria-expanded]="dropdownOpen"
+  >
+    <!-- Chips / Placeholder -->
+    @if (selectedItems.length > 0) {
+      @for (item of selectedItems; track item.id) {
+        <span class="flex items-center gap-1 rounded bg-blue-200 px-2 py-0.5 text-blue-800">
+          {{ item.name }}
+          <button
+            type="button"
+            (click)="removeItem(item); $event.stopPropagation()"
+            aria-label="Remove {{ item.name }}"
+            class="ml-2 text-sm"
+          >
+            ✕
+          </button>
+        </span>
+      }
+    } @else {
+      <span class="text-gray-400">
+        {{ placeholder }}
+      </span>
+    }
+
+    <!-- Pfeil -->
+    <svg class="ml-auto h-4 w-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+
+  <!-- Dropdown-Liste -->
+  @if (dropdownOpen) {
+    <div
+      class="absolute right-0 left-0 z-50 mt-1 max-h-60 overflow-auto rounded border bg-white shadow"
+      tabindex="-1"
+      aria-label="Options"
+    >
+      @for (item of items; track item.id) {
+        <option
+          class="flex cursor-pointer items-center justify-between px-3 py-2 hover:bg-gray-100"
+          (click)="addItem(item)"
+          (keydown.enter)="toggleDropdown()"
+          tabindex="0"
+          [attr.aria-selected]="isSelected(item)"
+        >
+          <span>{{ item.name }}</span>
+        </option>
+      }
+    </div>
+  }
+</div>

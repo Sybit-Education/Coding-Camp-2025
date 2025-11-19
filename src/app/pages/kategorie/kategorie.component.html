@@ -32,40 +32,17 @@
   </div>
 
   <div class="mb-4 flex justify-between gap-4">
-    <select
-      name="categories"
-      id="categories"
-      class="space-x-2"
-      [(ngModel)]="selectedCategory"
-      (ngModelChange)="setSelectedCategory($event)"
-    >
-      <option [ngValue]="null">
-        {{ 'all-categories.all-categories' | translate }}
-      </option>
-      @for (category of categories; track $index) {
-        <option [ngValue]="category">
-          {{ category.name }}
-        </option>
-      }
-    </select>
+    <app-custom-dropdown
+      [items]="getCategories()"
+      [placeholder]="'all-categories.all-categories' | translate"
+      (selectionChange)="setSelectedCategories($event)"
+    />
 
-    <select
-      name="locations"
-      id="locations"
-      class="flex space-x-2"
-      [(ngModel)]="selectedLocation"
-      (ngModelChange)="setSelectedLocation($event)"
-    >
-    
-      <option [ngValue]="null">
-        {{ 'all-categories.all-locations' | translate }}
-      </option>
-      @for (location of locations; track $index) {
-        <option [ngValue]="location">
-          {{ location!.name }}
-        </option>
-      }
-    </select>
+    <app-custom-dropdown
+      [items]="getLocations()"
+      [placeholder]="'all-categories.all-locations' | translate"
+      (selectionChange)="setSelectedLocations($event)"
+    />
   </div>
 
   <!-- Ladeanzeige (nur für Initial-Load, nicht während der Suche) -->

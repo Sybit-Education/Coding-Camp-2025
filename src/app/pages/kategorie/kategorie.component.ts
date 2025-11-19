@@ -18,6 +18,7 @@ import { SurrealdbService } from '../../services/surrealdb.service'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
 import { LoadingSpinnerComponent } from '@app/component/loading-spinner/loading-spinner.component'
 import { FormsModule } from '@angular/forms'
+import { CustomDropdownComponent } from '@app/component/custom-dropdown/custom-dropdown.component'
 
 interface EventWithResolvedLocation extends AppEvent {
   locationName: string
@@ -27,7 +28,15 @@ interface EventWithResolvedLocation extends AppEvent {
 @Component({
   selector: 'app-kategorie',
   standalone: true,
-  imports: [TranslateModule, EventCardComponent, CommonModule, GoBackComponent, LoadingSpinnerComponent, FormsModule],
+  imports: [
+    TranslateModule,
+    EventCardComponent,
+    CommonModule,
+    GoBackComponent,
+    LoadingSpinnerComponent,
+    FormsModule,
+    CustomDropdownComponent,
+  ],
   templateUrl: './kategorie.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -221,20 +230,27 @@ export class KategorieComponent implements OnInit {
     return item.id?.id ?? index
   }
 
-  setSelectedCategory(category: Topic | TypeDB) {
-    console.log('setSelectedCategory called with', category, ' type: ', typeof category)
-    if (category?.id) {
-      console.log('Selected category:', category)
-      this.categoryIds.push(category.id.id)
-      void this.performSearch(this.searchTerm)
-    }
+  getCategories(): { id: string; name: string }[] {
+    return this.categories.map((cat) => ({
+      id: cat.id!.id as string,
+      name: cat.name,
+    }))
   }
 
-  setSelectedLocation(location: AppLocation) {
-    console.log('setSelectedLocation called with: ', location, ' type: ', typeof location)
-    if (location?.id) {
-      this.selectedLocationIds.push(location.id.id)
-      void this.performSearch(this.searchTerm)
-    }
+  getLocations(): { id: string; name: string }[] {
+    return this.locations.map((loc) => ({
+      id: loc.id!.id as string,
+      name: loc.name,
+    }))
+  }
+
+  setSelectedCategories(category: { id: string; name: string }[]) {
+    this.categoryIds = category.map((cat) => cat.id as RecordIdValue)
+    void this.performSearch(this.searchTerm)
+  }
+
+  setSelectedLocations(location: { id: string; name: string }[]) {
+    this.selectedLocationIds = location.map((loc) => loc.id as RecordIdValue)
+    void this.performSearch(this.searchTerm)
   }
 }
