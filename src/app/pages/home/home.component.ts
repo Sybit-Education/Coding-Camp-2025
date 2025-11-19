@@ -136,6 +136,6 @@ export class HomeComponent implements OnInit {
   }
 
   trackByEvent(index: number, item: EventOrMore) {
-    return item.isMore ? `more-${index}` : item.id?.id ?? index
+    return item.isMore ? `more-${index}` : (item.id?.id ?? index)
   }
 }
