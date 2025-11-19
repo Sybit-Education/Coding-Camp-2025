@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core'
-import { IconComponent } from '@app/icons/icon.component'
 import { CommonModule, NgClass } from '@angular/common'
 import { FilterItem } from '@app/models/filterItem.interface'
+import { IconComponent } from '../icon/icon.component'
 
 @Component({
   selector: 'app-custom-dropdown',
