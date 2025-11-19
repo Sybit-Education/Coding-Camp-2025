@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, Component, computed, inject, signal, OnInit } from '@angular/core'
 
-import { NgxDatatableModule, TableColumn, SortEvent, SortDirection } from '@swimlane/ngx-datatable'
+import { NgxDatatableModule, SortEvent, SortDirection } from '@swimlane/ngx-datatable'
 import { Router, RouterModule } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 import { SurrealdbService } from '../../services/surrealdb.service'
+import { EventService } from '../../services/event.service'
 import type { Organizer } from '../../models/organizer.interface'
+import type { Event } from '../../models/event.interface'
 import type { RecordId, StringRecordId } from 'surrealdb'
 
 @Component({
@@ -18,10 +20,12 @@ import type { RecordId, StringRecordId } from 'surrealdb'
 export class AdminOrganizerOverviewComponent implements OnInit {
   private readonly db = inject(SurrealdbService)
   private readonly router = inject(Router)
+  private readonly eventService = inject(EventService)
 
   protected readonly isLoading = signal<boolean>(true)
   protected readonly organizers = signal<Organizer[]>([])
   protected readonly hasData = computed(() => (this.organizers()?.length ?? 0) > 0)
+  protected readonly organizerEventCounts = signal<Map<string, number>>(new Map())
 
   // Table settings for ngx-datatable
   protected readonly rows = signal<Record<string, unknown>[]>([])
@@ -37,7 +41,13 @@ export class AdminOrganizerOverviewComponent implements OnInit {
   protected async refresh() {
     this.isLoading.set(true)
     try {
-      const list = await this.db.getAll<Organizer>('organizer')
+      const [list, events] = await Promise.all([
+        this.db.getAll<Organizer>('organizer'),
+        this.eventService.getAllEvents(),
+      ])
+
+      const eventCounts = this.buildOrganizerEventCounts(events ?? [])
+      this.organizerEventCounts.set(eventCounts)
 
       // Sort organizers by name (ascending)
       const sorted = [...(list ?? [])].sort((a, b) => (a.name || '').localeCompare(b.name || '', 'de'))
@@ -46,6 +56,7 @@ export class AdminOrganizerOverviewComponent implements OnInit {
       const tableData = sorted.map((o) => ({
         ...o,
         originalId: o.id, // Keep original ID for actions/navigation
+        eventCount: o.id ? eventCounts.get(String(o.id)) ?? 0 : 0,
       }))
 
       this.organizers.set(sorted)
@@ -72,6 +83,13 @@ export class AdminOrganizerOverviewComponent implements OnInit {
   }
 
   protected async deleteOrganizer(organizerId: RecordId) {
+    const organizerKey = String(organizerId)
+    const relatedEvents = this.organizerEventCounts().get(organizerKey) ?? 0
+    if (relatedEvents > 0) {
+      alert('Veranstalter kann nicht gelöscht werden, solange Events zugeordnet sind.')
+      return
+    }
+
     if (!confirm('Veranstalter wirklich löschen?')) return
 
     try {
@@ -110,5 +128,17 @@ export class AdminOrganizerOverviewComponent implements OnInit {
 
   protected trackById(_index: number, item: Organizer) {
     return String(item.id ?? item.name)
+  }
+
+  private buildOrganizerEventCounts(events: Event[]): Map<string, number> {
+    const counts = new Map<string, number>()
+
+    for (const event of events ?? []) {
+      if (!event?.organizer) continue
+      const organizerKey = String(event.organizer)
+      counts.set(organizerKey, (counts.get(organizerKey) ?? 0) + 1)
+    }
+
+    return counts
   }
 }
