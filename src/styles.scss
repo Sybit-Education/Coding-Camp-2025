@@ -67,84 +67,72 @@
   select::placeholder {
     @apply text-gray-400;
   }
+}
 
+@layer components {
   .card {
-    @apply flex h-full w-full cursor-pointer flex-col items-center overflow-hidden rounded-2xl border-1 border-gray-300 text-center shadow-lg transition-transform duration-300 hover:scale-102 hover:border-gray-400 hover:shadow-xl focus:ring-2 focus:ring-yellow-400;
+    @apply flex h-full w-full cursor-pointer flex-col items-center overflow-hidden rounded-2xl border border-gray-300 text-center shadow-lg transition-transform duration-300 hover:scale-105 hover:border-gray-400 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400;
   }
 
   .action-button {
-    @apply h-12 w-12 cursor-pointer rounded-full bg-white/80 p-2 opacity-80 shadow-md transition hover:bg-gray-200 hover:text-[#3b4ea3] focus:ring-2 focus:ring-blue-500 focus:outline-none;
+    @apply h-12 w-12 cursor-pointer rounded-full bg-white/80 p-2 opacity-80 shadow-md transition hover:bg-gray-200 hover:text-[#3b4ea3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500;
   }
 
   .pill-list {
-    @apply flex flex-wrap gap-2 list-none;
-    list-style-type: none;
-    padding-left: 0;
+    @apply flex list-none flex-wrap gap-2 p-0;
+
     li {
-      @apply inline-flex cursor-pointer items-center rounded-full border px-3 py-1 transition-colors hover:opacity-80 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c70d56] focus-visible:ring-offset-2;
+      @apply inline-flex cursor-pointer items-center rounded-full border border-gray-300 px-3 py-1 transition-colors hover:opacity-80 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c70d56] focus-visible:ring-offset-2;
     }
   }
 
-  
-.tailwind-table {
-  @apply border-none shadow-none;
-}
+  .tailwind-table {
+    @apply border-0 shadow-none;
+  }
 
-.tailwind-table .datatable-header {
-  @apply border-b border-gray-300 bg-gray-100;
-}
+  .tailwind-table .datatable-header {
+    @apply border-b border-gray-300 bg-gray-100;
+  }
 
-.tailwind-table .datatable-header-cell {
-  @apply bg-gray-100 p-4 font-bold;
-}
+  .tailwind-table .datatable-header-cell {
+    @apply bg-gray-100 p-4 font-bold;
+  }
 
-/* Sortier-Indikatoren */
-.tailwind-table .datatable-header-cell.sortable.sort-active {
-  @apply text-blue-600;
-}
+  .tailwind-table .datatable-header-cell.sortable.sort-active {
+    @apply text-blue-600;
+  }
 
-.tailwind-table .datatable-header-cell.sortable.sort-active.sort-asc .datatable-header-cell-wrapper:after {
-  content: '↑';
-}
+  .tailwind-table .datatable-header-cell.sortable.sort-active.sort-asc .datatable-header-cell-wrapper::after {
+    content: '↑';
+  }
 
-.tailwind-table .datatable-header-cell.sortable.sort-active.sort-desc .datatable-header-cell-wrapper:after {
-  content: '↓';
-}
+  .tailwind-table .datatable-header-cell.sortable.sort-active.sort-desc .datatable-header-cell-wrapper::after {
+    content: '↓';
+  }
 
-.tailwind-table .datatable-body-row {
-  @apply border-b border-gray-300;
-}
+  .tailwind-table .datatable-body-row {
+    @apply border-b border-gray-300;
+  }
 
-.tailwind-table .datatable-body-row:hover {
-  @apply bg-gray-100;
-}
+  .tailwind-table .datatable-body-row:hover {
+    @apply bg-gray-100;
+  }
 
-.tailwind-table .datatable-body-cell {
-  @apply p-4 text-gray-700;
-}
+  .tailwind-table .datatable-body-cell {
+    @apply p-4 text-gray-700;
+  }
 
-/* Thumbnail styles */
-.event-thumbnail {
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-  border-radius: 4px;
-}
+  .tailwind-table .datatable-footer {
+    @apply hidden;
+  }
 
-.event-thumbnail-placeholder {
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f3f4f6;
-  border-radius: 4px;
-}
+  .event-thumbnail {
+    @apply h-[50px] w-[50px] rounded border border-gray-200 object-cover;
+  }
 
-.tailwind-table .datatable-footer {
-  display: none;
-}
-
+  .event-thumbnail-placeholder {
+    @apply flex h-[50px] w-[50px] items-center justify-center rounded bg-gray-100 text-gray-500;
+  }
 }
 
 @font-face {
