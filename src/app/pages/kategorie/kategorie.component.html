@@ -56,9 +56,15 @@
 
         <div>
           <h3>{{ 'home.categories' | translate }}</h3>
-          <div class="mr-2 ml-2 grid gap-4 grid-cols-2">
+          <div class="mr-2 ml-2 grid grid-cols-2 gap-4">
             @for (categorie of categories; track categorie.id) {
-              <app-kategorie-card [color]="categorie.color" [text]="categorie.name" />
+              <app-kategorie-card
+                [color]="categorie.color"
+                [text]="categorie.name"
+                [id]="categorie.id?.id?.toString()"
+                [filterOption]="true"
+                (categoryAdded)="setSelectedCategories($event)"
+                />
             }
           </div>
         </div>

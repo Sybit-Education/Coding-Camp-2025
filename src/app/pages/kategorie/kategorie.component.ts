@@ -253,8 +253,12 @@ export class KategorieComponent implements OnInit {
     }))
   }
 
-  setSelectedCategories(category: { id: string; name: string }[]) {
-    this.categoryIds = category.map((cat) => cat.id as RecordIdValue)
+  setSelectedCategories(category: { id: string; name: string }) {
+    if (this.categoryIds.includes(category.id as RecordIdValue)) {
+      this.categoryIds = this.categoryIds.filter(id => id !== category.id)
+    } else {
+      this.categoryIds.push(category.id as RecordIdValue)
+    }
     void this.performSearch(this.searchTerm)
   }
 
