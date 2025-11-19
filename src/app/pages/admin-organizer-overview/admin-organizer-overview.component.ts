@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, Component, computed, inject, signal, OnInit } from '@angular/core'
+import { FormsModule } from '@angular/forms'
 
 import { NgxDatatableModule, SortEvent, SortDirection } from '@swimlane/ngx-datatable'
 import { Router, RouterModule } from '@angular/router'
@@ -12,7 +13,7 @@ import type { RecordId, StringRecordId } from 'surrealdb'
 
 @Component({
   selector: 'app-admin-organizer-overview',
-  imports: [CommonModule, RouterModule, TranslateModule, NgxDatatableModule],
+  imports: [CommonModule, RouterModule, TranslateModule, NgxDatatableModule, FormsModule],
   templateUrl: './admin-organizer-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -32,6 +33,7 @@ export class AdminOrganizerOverviewComponent implements OnInit {
   protected readonly currentSorts = signal<{ prop: string; dir: SortDirection }[]>([
     { prop: 'name', dir: SortDirection.asc },
   ])
+  protected filterValue = ''
 
   ngOnInit() {
     this.refresh()
@@ -64,6 +66,9 @@ export class AdminOrganizerOverviewComponent implements OnInit {
 
       // Apply default sorting
       this.rows.set(this.sortData(tableData, this.currentSorts()))
+      if (this.filterValue.trim()) {
+        this.updateFilter()
+      }
     } catch (err) {
       console.error('[OrganizerOverview] Failed to load organizers:', err)
       this.organizers.set([])
@@ -106,6 +111,19 @@ export class AdminOrganizerOverviewComponent implements OnInit {
     const data = [...this.temp()]
     const typedSorts = event.sorts as { prop: string; dir: SortDirection }[]
     this.rows.set(this.sortData(data, typedSorts))
+  }
+
+  protected updateFilter(): void {
+    const val = this.filterValue.trim().toLowerCase()
+    const filtered = this.temp().filter((row) => {
+      if (!val) return true
+      const name = row['name']?.toString().toLowerCase() ?? ''
+      const email = row['email']?.toString().toLowerCase() ?? ''
+      const phone = row['phonenumber']?.toString().toLowerCase() ?? ''
+      return name.includes(val) || email.includes(val) || phone.includes(val)
+    })
+
+    this.rows.set(this.sortData(filtered, this.currentSorts()))
   }
 
   // Sort helper
