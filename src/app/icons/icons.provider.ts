@@ -43,7 +43,6 @@ function registerIcons(registry: IconRegistryService) {
   // Filter Icons
   register('filter', '/svg/filter.svg')
   register('filter-off', '/svg/filter-off.svg')
-  
 }
 
 export function provideAppIcons(): EnvironmentProviders {

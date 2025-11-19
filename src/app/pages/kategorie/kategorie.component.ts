@@ -19,8 +19,8 @@ import { GoBackComponent } from '@app/component/go-back-button/go-back-button.co
 import { LoadingSpinnerComponent } from '@app/component/loading-spinner/loading-spinner.component'
 import { FormsModule } from '@angular/forms'
 import { CustomDropdownComponent } from '@app/component/custom-dropdown/custom-dropdown.component'
-import { IconComponent } from "@app/icons/icon.component";
-import { KategorieCardComponent } from "@app/component/kategorie-card/kategorie-card.component";
+import { IconComponent } from '@app/icons/icon.component'
+import { KategorieCardComponent } from '@app/component/kategorie-card/kategorie-card.component'
 
 interface EventWithResolvedLocation extends AppEvent {
   locationName: string
@@ -39,8 +39,8 @@ interface EventWithResolvedLocation extends AppEvent {
     FormsModule,
     CustomDropdownComponent,
     IconComponent,
-    KategorieCardComponent
-],
+    KategorieCardComponent,
+  ],
   templateUrl: './kategorie.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -255,7 +255,7 @@ export class KategorieComponent implements OnInit {
 
   setSelectedCategories(category: { id: string; name: string }) {
     if (this.categoryIds.includes(category.id as RecordIdValue)) {
-      this.categoryIds = this.categoryIds.filter(id => id !== category.id)
+      this.categoryIds = this.categoryIds.filter((id) => id !== category.id)
     } else {
       this.categoryIds.push(category.id as RecordIdValue)
     }

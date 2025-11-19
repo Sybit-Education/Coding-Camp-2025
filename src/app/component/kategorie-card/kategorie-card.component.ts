@@ -26,7 +26,7 @@ export class KategorieCardComponent {
   protected readonly categoryColor = signal<string>('#ffffff')
 
   addCategoryToFilter() {
-    if(this.filterOption) {
+    if (this.filterOption) {
       this.categoryAdded.emit({ id: this.id || '', name: this.text })
       this.selected = !this.selected
     }
