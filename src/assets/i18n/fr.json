@@ -73,7 +73,8 @@
   "all-categories": {
     "all-locations": "Tous les lieux",
     "all-categories": "Toutes les catégories",
-    "all-events": "Tous les événements"
+    "all-events": "Tous les événements",
+    "filter": "Filtrer"
   },
   "i18y": {
     "to-main-content": "Accéder au contenu principal"

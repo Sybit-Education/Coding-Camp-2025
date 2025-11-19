@@ -19,6 +19,8 @@ import { GoBackComponent } from '@app/component/go-back-button/go-back-button.co
 import { LoadingSpinnerComponent } from '@app/component/loading-spinner/loading-spinner.component'
 import { FormsModule } from '@angular/forms'
 import { CustomDropdownComponent } from '@app/component/custom-dropdown/custom-dropdown.component'
+import { IconComponent } from "@app/icons/icon.component";
+import { KategorieCardComponent } from "@app/component/kategorie-card/kategorie-card.component";
 
 interface EventWithResolvedLocation extends AppEvent {
   locationName: string
@@ -36,7 +38,9 @@ interface EventWithResolvedLocation extends AppEvent {
     LoadingSpinnerComponent,
     FormsModule,
     CustomDropdownComponent,
-  ],
+    IconComponent,
+    KategorieCardComponent
+],
   templateUrl: './kategorie.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -67,6 +71,7 @@ export class KategorieComponent implements OnInit {
   loading = true
   searchTerm = ''
   searching = false
+  filterOpen = false
   private allEvents: AppEvent[] = []
   private searchDebounce: number | null = null
 
@@ -228,6 +233,10 @@ export class KategorieComponent implements OnInit {
 
   trackByEvent(index: number, item: EventWithResolvedLocation) {
     return item.id?.id ?? index
+  }
+
+  toggleFilter() {
+    this.filterOpen = !this.filterOpen
   }
 
   getCategories(): { id: string; name: string }[] {

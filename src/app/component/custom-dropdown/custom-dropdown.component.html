@@ -1,7 +1,7 @@
-<div class="relative w-72">
+<div class="relative mb-4 w-72" [ngClass]="dropdownOpen ? 'h-80' : ''">
   <!-- Dropdown-Feld -->
   <button
-    class="flex cursor-pointer flex-wrap items-center gap-1 rounded border px-3 py-2 w-full"
+    class="flex w-full cursor-pointer flex-wrap items-center gap-1 rounded border px-3 py-2"
     (click)="toggleDropdown()"
     (keydown.enter)="toggleDropdown()"
     tabindex="0"
@@ -17,9 +17,9 @@
             type="button"
             (click)="removeItem(item); $event.stopPropagation()"
             aria-label="Remove {{ item.name }}"
-            class="ml-2 text-sm"
+            class="ml-2 flex items-center justify-center cursor-pointer"
           >
-            ✕
+            <app-icon name="close" class="h-6 w-6" aria-hidden="true" />
           </button>
         </span>
       }

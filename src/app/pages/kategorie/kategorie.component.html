@@ -11,12 +11,12 @@
   }
 
   <!-- Search input -->
-  <div class="mb-4">
+  <div class="mb-4 inline-flex w-full items-center justify-between rounded-2xl border border-gray-300">
     <label class="sr-only" for="category-search">{{ 'SEARCH.LABEL' | translate }}</label>
     <input
       id="category-search"
       type="search"
-      class="w-full rounded-2xl border border-gray-300 p-2"
+      class="w-full border-none p-2"
       [value]="searchTerm"
       (input)="onSearchChange($any($event.target).value)"
       [attr.aria-label]="'SEARCH.LABEL' | translate"
@@ -29,20 +29,41 @@
         {{ 'SEARCH.SEARCHING' | translate }}
       </div>
     }
+    <app-icon name="search" class="mr-3 h-6 w-6" aria-hidden="true" />
   </div>
 
-  <div class="mb-4 flex justify-between gap-4">
-    <app-custom-dropdown
-      [items]="getCategories()"
-      [placeholder]="'all-categories.all-categories' | translate"
-      (selectionChange)="setSelectedCategories($event)"
-    />
+  <div class="mb-4" [ngClass]="filterOpen ? 'filter-option flex-col' : ''">
+    <button
+      class="filter-option cursor-pointer"
+      [ngClass]="filterOpen ? '' : 'hover:scale-102'"
+      (click)="toggleFilter()"
+      (keypress)="toggleFilter()"
+      tabindex="0"
+    >
+      <span>{{ 'all-categories.filter' | translate }}</span>
+      <app-icon [name]="filterOpen ? 'filter-off' : 'filter'" class="mr-1 h-6 w-6" aria-hidden="true" />
+    </button>
+    @if (filterOpen) {
+      <div class="flex w-full justify-between gap-4 px-4">
+        <div>
+          <h3>{{ 'event-detail.eventlocation' | translate }}</h3>
+          <app-custom-dropdown
+            [items]="getLocations()"
+            [placeholder]="'all-categories.all-locations' | translate"
+            (selectionChange)="setSelectedLocations($event)"
+          />
+        </div>
 
-    <app-custom-dropdown
-      [items]="getLocations()"
-      [placeholder]="'all-categories.all-locations' | translate"
-      (selectionChange)="setSelectedLocations($event)"
-    />
+        <div>
+          <h3>{{ 'home.categories' | translate }}</h3>
+          <div class="mr-2 ml-2 grid gap-4 grid-cols-3 lg:grid-cols-4">
+            @for (categorie of categories; track categorie.id) {
+              <app-kategorie-card [color]="categorie.color" [text]="categorie.name" [slug]="categorie.slug" />
+            }
+          </div>
+        </div>
+      </div>
+    }
   </div>
 
   <!-- Ladeanzeige (nur für Initial-Load, nicht während der Suche) -->

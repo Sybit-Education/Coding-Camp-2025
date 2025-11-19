@@ -62,7 +62,7 @@
   },
   "home": {
     "current": "Aktuelles",
-    "categories": "Kategorien",
+    "categories": "Themen Kategorien",
     "main-content": "Zum Hauptinhalt springen",
     "tags": {
       "aria-lable-event-heading": "events-heading",
@@ -73,7 +73,8 @@
   "all-categories": {
     "all-locations": "Alle Orte",
     "all-categories": "Alle Kategorien",
-    "all-events": "Alle Veranstaltungen"
+    "all-events": "Alle Veranstaltungen",
+    "filter": "Filter"
   },
   "i18y": {
     "to-main-content": "Zum Hauptinhalt springen"

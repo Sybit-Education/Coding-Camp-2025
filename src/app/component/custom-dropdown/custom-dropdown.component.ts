@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { IconComponent } from "@app/icons/icon.component";
+import { CommonModule, NgClass } from '@angular/common';
 
 export interface DropdownItem {
   id: string;
@@ -7,7 +9,7 @@ export interface DropdownItem {
 
 @Component({
   selector: 'app-custom-dropdown',
-  imports: [],
+  imports: [IconComponent, NgClass, CommonModule],
   templateUrl: './custom-dropdown.component.html'
 })
 export class CustomDropdownComponent implements OnInit {

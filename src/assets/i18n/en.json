@@ -74,7 +74,8 @@
   "all-categories": {
     "all-locations": "All Locations",
     "all-categories": "All Categories",
-    "all-events": "All Events"
+    "all-events": "All Events",
+    "filter": "Filter"
   },
   "category": {
     "title": "Kategorie"

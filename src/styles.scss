@@ -84,6 +84,10 @@
       @apply inline-flex cursor-pointer items-center rounded-full border px-3 py-1 transition-colors hover:opacity-80 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c70d56] focus-visible:ring-offset-2;
     }
   }
+
+  .filter-option {
+    @apply mb-5 flex inline-flex w-full items-center justify-between overflow-hidden rounded-2xl border-1 border-gray-300 p-2 text-center shadow-lg shadow-xl transition-transform duration-300 focus:ring-2 focus:ring-yellow-400;
+  }
 }
 
 @font-face {
