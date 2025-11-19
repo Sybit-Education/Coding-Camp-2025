@@ -26,6 +26,7 @@ import { FavoriteService } from '@app/services/favorite.service'
 import { LoginService } from '@app/services/login.service'
 import { provideRouter, withInMemoryScrolling } from '@angular/router'
 import { routes } from '@app/app.routes'
+import { NetworkService } from '@app/services/network.service'
 
 console.log(`App is running in ${environment.configName || 'development'} mode.`)
 
@@ -73,6 +74,7 @@ const bootstrapConfig: ApplicationConfig = {
       inject(LocationService)
       inject(OrganizerService)
       inject(MediaService)
+      inject(NetworkService)
 
       await eventService.initializeData()
       await topicService.initializeData()
