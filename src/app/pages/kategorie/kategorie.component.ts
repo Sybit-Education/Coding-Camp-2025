@@ -64,6 +64,10 @@ export class KategorieComponent implements OnInit {
   locations: AppLocation[] = []
   selectedLocation: AppLocation | null = null
   selectedLocationIds: RecordIdValue[] = []
+  selectedPrices: number[] = []
+selectedDateStart: Date | null = null
+selectedDateEnd: Date | null = null
+
   name: string | null = null
   slug: string | null = null
   description: string | null = null
@@ -122,7 +126,6 @@ export class KategorieComponent implements OnInit {
       await this.performSearch(this.searchTerm)
 
       this.locations = await Promise.all(this.locationCache.values())
-      console.log('Loaded locations:', this.locations)
     } catch (error) {
       console.error('Fehler beim Laden der Events:', error)
     } finally {
@@ -151,7 +154,6 @@ export class KategorieComponent implements OnInit {
   }
 
   private async performSearch(searchTerm: string) {
-    console.log('Performing search with term:', searchTerm)
 
     this.searching = true
     // Sofort rendern, damit der Spinner zuverlässig sichtbar ist
@@ -161,9 +163,6 @@ export class KategorieComponent implements OnInit {
       const categoryId = this.categoryIds
       const locationId = this.selectedLocationIds
       let baseList = this.allEvents
-      console.log('baseList', baseList)
-      console.log('categoryId', categoryId)
-      console.log('locationId', locationId)
       if (categoryId.length > 0) {
         baseList = baseList.filter(
           (event) =>
@@ -171,16 +170,45 @@ export class KategorieComponent implements OnInit {
             (event.event_type && categoryId.includes(event.event_type.id)),
         )
       }
-      console.log('after category filter', baseList)
+
       if (locationId.length > 0) {
         baseList = baseList.filter((event) => event.location && locationId.includes(event.location.id))
       }
-      console.log('after location filter', baseList)
 
+      if (this.selectedPrices.length > 0) {
+        baseList = baseList.filter((event) => {
+          const price = event.price as unknown as number ?? 0
+          return this.selectedPrices.some((selectedPrice) => {
+            if (selectedPrice === 0) {
+              return price === 0
+            } else if (selectedPrice === 20) {
+              return price > 15
+            } else {
+              const [min, max] = [(selectedPrice - 5), selectedPrice]
+              return price > min && price <= max
+            }
+          })
+        })
+      }
+
+      if (this.selectedDateStart) {
+        baseList = baseList.filter((event) => {
+          const eventStartDate = new Date(event.date_start)
+          return eventStartDate >= this.selectedDateStart!
+        })
+      }
+
+      if (this.selectedDateEnd) {
+        baseList = baseList.filter((event) => {
+          const eventEndDate = event.date_end ? new Date(event.date_end) : new Date(event.date_start)
+          return eventEndDate <= this.selectedDateEnd!
+        })
+      }
+
+      // Suche anwenden
       let resultEvents: AppEvent[]
       if (searchTerm) {
         const searchResults = await this.surreal.fulltextSearchEvents(searchTerm)
-        console.log('searchResults from fulltext search:', searchResults)
         resultEvents = categoryId
           ? searchResults.filter(
               (event) =>
@@ -188,8 +216,6 @@ export class KategorieComponent implements OnInit {
                 (event.event_type && categoryId.includes(event.event_type.id)),
             )
           : searchResults
-
-        console.log('after category filter on search results', resultEvents)
 
         resultEvents = locationId ? resultEvents.filter((event) => !locationId.includes(event.location!.id)) : resultEvents
       } else {
@@ -259,6 +285,16 @@ export class KategorieComponent implements OnInit {
     }))
   }
 
+  getPrices(): { id: string; name: string }[] {
+    return [
+      { id: '0', name: this.translate.instant('all-categories.eventprices.free') },
+      { id: '0-5', name: this.translate.instant('all-categories.eventprices.firststage') },
+      { id: '5-10', name: this.translate.instant('all-categories.eventprices.secondstage') },
+      { id: '10-15', name: this.translate.instant('all-categories.eventprices.thirdstage') },
+      { id: '15+', name: this.translate.instant('all-categories.eventprices.fourthstage') },
+    ]
+  }
+
   setSelectedCategories(category: { id: string; name: string }) {
     if (this.categoryIds.includes(category.id as RecordIdValue)) {
       this.categoryIds = this.categoryIds.filter((id) => id !== category.id)
@@ -270,6 +306,30 @@ export class KategorieComponent implements OnInit {
 
   setSelectedLocations(location: { id: string; name: string }[]) {
     this.selectedLocationIds = location.map((loc) => loc.id as RecordIdValue)
+    void this.performSearch(this.searchTerm)
+  }
+
+  setSelectedPrices(prices: { id: string; name: string }[]) {
+    this.selectedPrices = prices.map((price) => {
+      const id = price.id
+      if (id === '0') return 0
+      if (id === '0-5') return 5
+      if (id === '5-10') return 10
+      if (id === '10-15') return 15
+      if (id === '15+') return 20
+      return 0
+    })
+    console.log('Selected prices:', this.selectedPrices)
+    void this.performSearch(this.searchTerm)
+  }
+
+  setSelectedDateStart(date: Date | null) {
+    this.selectedDateStart = date
+    void this.performSearch(this.searchTerm)
+  }
+
+  setSelectedDateEnd(date: Date | null) {
+    this.selectedDateEnd = date
     void this.performSearch(this.searchTerm)
   }
 }

@@ -3,6 +3,7 @@
   class="card justify-center"
   [ngClass]="filterOption ? 'border-gray-400 aspect-[11/4]' : 'aspect-[4/3]'"
   [class.bg-gray-200]="selected"
+  [class.bg-white]="!selected"
   (click)="filterOption ? addCategoryToFilter() : null"
 >
   <div class="align-middle">
