@@ -11,8 +11,8 @@
   }
 
   <!-- Search input -->
-  <div class="items-top flex flex-row justify-between">
-    <div class="inline-flex max-h-10 w-[calc(100%-120px)] items-center justify-between rounded-2xl border border-gray-300">
+  <div class="mb-4 flex flex-row justify-between">
+    <div class="inline-flex max-h-10 w-[calc(100%-125px)] items-center justify-between rounded-2xl border border-gray-300">
       <label class="sr-only" for="category-search">{{ 'SEARCH.LABEL' | translate }}</label>
       <input
         id="category-search"
@@ -24,29 +24,34 @@
         [placeholder]="'SEARCH.PLACEHOLDER' | translate"
         [attr.aria-busy]="searching"
       />
-      @if (searching) {
-        <div class="mt-2 flex items-center text-sm text-gray-500" aria-live="polite" aria-busy="true">
-          <span class="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-[#c70d56] border-t-transparent"></span>
-          {{ 'SEARCH.SEARCHING' | translate }}
-        </div>
-      }
-      <app-icon name="search" class="mr-3 h-6 w-6" aria-hidden="true" />
+      <app-icon name="search" class="mr-3 ml-2 h-6 w-6" aria-hidden="true" />
     </div>
     <button
-      class="filter-option mb-0 flex w-[110px] cursor-pointer flex-row justify-around rounded-t-2xl"
-      [ngClass]="filterOpen ? 'items-top h-14 bg-gray-100' : 'h-10 items-center rounded-2xl hover:scale-102 border-1 border-gray-300'"
+      class="filter-option mb-0 flex w-[110px] cursor-pointer items-start justify-around rounded-t-2xl"
+      [ngClass]="
+        filterOpen ? 'h-14 items-start bg-gray-100' : 'h-10 items-center rounded-2xl border-1 border-gray-300 hover:scale-102'
+      "
       (click)="toggleFilter()"
       (keypress)="toggleFilter()"
       tabindex="0"
     >
-      <span>{{ 'all-categories.filter' | translate }}</span>
-      <app-icon [name]="filterOpen ? 'filter-off' : 'filter'" class="mr-1 h-6 w-6" aria-hidden="true" />
+      <div class="flex h-10 items-center">
+        <span>{{ 'all-categories.filter' | translate }}</span>
+        <app-icon [name]="filterOpen ? 'filter-off' : 'filter'" class="mr-1 h-6 w-6" aria-hidden="true" />
+      </div>
     </button>
   </div>
 
+  @if (searching) {
+    <div class="mt-2 flex items-center text-sm text-gray-500" aria-live="polite" aria-busy="true">
+      <span class="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-[#c70d56] border-t-transparent"></span>
+      {{ 'SEARCH.SEARCHING' | translate }}
+    </div>
+  }
+
   <!-- Filter Optionen -->
   @if (filterOpen) {
-    <div class="filter-option slide-down mb-4 w-full overflow-hidden rounded-tl-2xl rounded-b-2xl bg-gray-100">
+    <div class="filter-option slide-down w-full overflow-hidden rounded-tl-2xl rounded-b-2xl bg-gray-100 pb-4">
       <div class="grid w-full justify-around gap-4 px-4 lg:grid-cols-2">
         <div>
           <h3>{{ 'event-detail.eventlocation' | translate }}</h3>
@@ -99,7 +104,7 @@
 
   <!-- Keine Events Meldung -->
   @if (!loading && events.length === 0) {
-    <div class="rounded-lg bg-gray-100 p-4 text-center">
+    <div class="rounded-2xl bg-gray-100 p-4 text-center">
       <p>
         {{ 'EVENTS.NO_EVENTS_FOUND_IN_CATEGORY' | translate }}
       </p>

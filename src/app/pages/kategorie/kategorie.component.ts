@@ -40,7 +40,7 @@ interface EventWithResolvedLocation extends AppEvent {
     CustomDropdownComponent,
     IconComponent,
     KategorieCardComponent,
-    FormsModule
+    FormsModule,
   ],
   templateUrl: './kategorie.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -71,7 +71,7 @@ export class KategorieComponent implements OnInit {
 
   loading = true
   searchTerm = ''
-  searching = false
+  searching = true
   filterOpen = false
   private allEvents: AppEvent[] = []
   private searchDebounce: number | null = null
@@ -151,6 +151,8 @@ export class KategorieComponent implements OnInit {
   }
 
   private async performSearch(searchTerm: string) {
+    console.log('Performing search with term:', searchTerm)
+
     this.searching = true
     // Sofort rendern, damit der Spinner zuverlässig sichtbar ist
     this.markForCheck()
@@ -178,15 +180,18 @@ export class KategorieComponent implements OnInit {
       let resultEvents: AppEvent[]
       if (searchTerm) {
         const searchResults = await this.surreal.fulltextSearchEvents(searchTerm)
+        console.log('searchResults from fulltext search:', searchResults)
         resultEvents = categoryId
           ? searchResults.filter(
               (event) =>
-                event.topic?.some((topic) => categoryId.includes(topic.id)) ||
+                event.topic?.some((topic) => !categoryId.includes(topic.id)) ||
                 (event.event_type && categoryId.includes(event.event_type.id)),
             )
           : searchResults
 
-        resultEvents = locationId ? resultEvents.filter((event) => locationId.includes(event.location!.id)) : resultEvents
+        console.log('after category filter on search results', resultEvents)
+
+        resultEvents = locationId ? resultEvents.filter((event) => !locationId.includes(event.location!.id)) : resultEvents
       } else {
         resultEvents = baseList
       }
