@@ -12,7 +12,6 @@ import { GoBackComponent } from '@app/component/go-back-button/go-back-button.co
 
 @Component({
   selector: 'app-favourites',
-  standalone: true,
   imports: [EventCardComponent, TranslateModule, GoBackComponent],
   templateUrl: './favourites.component.html',
   styles: [

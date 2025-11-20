@@ -23,7 +23,7 @@ import { ScreenSize } from '@app/models/screenSize.enum'
 import { SharedStateService } from '@app/services/shared-state.service'
 import { EventImageComponent } from '@app/component/event-image/event-image.component'
 import { MatIconModule } from '@angular/material/icon'
-import { IconComponent } from '@app/icons/icon.component'
+import { IconComponent } from '@app/component/icon/icon.component'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
 import { EventTypePillComponent } from '@app/component/event-type-pill/event-type-pill.component'
 import { EventTopicPillListComponent } from '@app/component/event-topic-pill-list/event-topic-pill-list.component'
@@ -31,7 +31,6 @@ import { EventCardListComponent } from '@app/component/event-card-list/event-car
 
 @Component({
   selector: 'app-event-detail-page',
-  standalone: true,
   imports: [
     CommonModule,
     TranslateModule,

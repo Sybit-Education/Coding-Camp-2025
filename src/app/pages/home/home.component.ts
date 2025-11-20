@@ -21,7 +21,6 @@ import { EventCardListComponent } from '@app/component/event-card-list/event-car
 
 @Component({
   selector: 'app-home',
-  standalone: true,
   imports: [CommonModule, TranslateModule, RouterModule, KategorieCardComponent, AllEventButtonComponent, EventCardListComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',

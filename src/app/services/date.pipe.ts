@@ -1,23 +1,25 @@
 // date-time-range.pipe.ts
-import { Pipe, PipeTransform, inject, OnDestroy } from '@angular/core'
+import { Pipe, PipeTransform, inject, OnDestroy, ChangeDetectorRef } from '@angular/core'
 import { formatDate } from '@angular/common'
 import { I18nService } from './translate.service'
 import { Subscription } from 'rxjs'
 
 @Pipe({
   name: 'dateTimeRange',
-  standalone: true,
   pure: false, // Impure pipe, um auf Sprachänderungen zu reagieren
 })
 export class DateTimeRangePipe implements PipeTransform, OnDestroy {
   private readonly i18nService = inject(I18nService)
+  private readonly cdr = inject(ChangeDetectorRef)
   private readonly langChangeSub: Subscription
   // Entferne ungenutzte Variablen
 
   constructor() {
     // Abonniere Sprachänderungen
     this.langChangeSub = this.i18nService.currentLang$.subscribe(() => {
-      // Die Pipe wird automatisch neu ausgewertet, wenn sich die Sprache ändert
+      // Cache leeren und CD anstoßen, damit sofort neu formatiert wird
+      this.dateCache.clear()
+      this.cdr.markForCheck()
     })
   }
 
