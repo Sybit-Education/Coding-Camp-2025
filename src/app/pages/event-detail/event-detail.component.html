@@ -183,6 +183,13 @@
           </div>
         </section>
       }
+      @if (location?.id) {
+        <section>
+          <h2>{{ 'event-detail.next-events' | translate }}</h2>
+          <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
+          <app-event-card-list [location]="location!" [currentEventId]="event.id"></app-event-card-list>
+        </section>
+      }
       @if (organizer) {
         <section class="contact mt-10 mb-18 rounded-2xl bg-gray-100 shadow-2xl" [attr.aria-labelledby]="'contact-heading'">
           <h2 id="contact-heading" class="ml-10">
@@ -248,6 +255,4 @@
       }
     </article>
   }
-
-  <div class="edit mb-20 flex items-center justify-center"></div>
 </div>
