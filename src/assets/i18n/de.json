@@ -62,8 +62,8 @@
     "ARIA-LABLE": "Weitere Optionen"
   },
   "home": {
-    "current": "Aktuelles",
-    "categories": "Themen Kategorien",
+    "current": "Aktuelle Veranstaltungen",
+    "categories": "Kategorien",
     "main-content": "Zum Hauptinhalt springen",
     "tags": {
       "aria-lable-event-heading": "events-heading",
