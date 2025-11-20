@@ -10,15 +10,6 @@
   align-items: center;
 }
 
-.scrollbar-hide {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
 .card-snap {
   scroll-snap-type: x mandatory;
   scroll-snap-align: start;

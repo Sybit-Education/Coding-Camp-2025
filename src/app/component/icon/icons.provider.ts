@@ -24,6 +24,7 @@ function registerIcons(registry: IconRegistryService) {
   register('arrow_back', '/svg/arrow_back.svg')
   register('arrow_forward', '/svg/arrow_forward.svg')
   register('instagram', '/svg/instagram.svg')
+  register('close', '/svg/close.svg')
 
   // Navigation Bar
   register('home', '/svg/home.svg')
@@ -38,6 +39,10 @@ function registerIcons(registry: IconRegistryService) {
   register('info-circle', '/svg/info-circle.svg')
   register('shield-check', '/svg/shield-check.svg')
   register('key', '/svg/key.svg')
+
+  // Filter Icons
+  register('filter', '/svg/filter.svg')
+  register('filter-off', '/svg/filter-off.svg')
 }
 
 export function provideAppIcons(): EnvironmentProviders {

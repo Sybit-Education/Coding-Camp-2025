@@ -17,6 +17,10 @@ import { TypeDB } from '@app/models/typeDB.interface'
 import { SurrealdbService } from '../../services/surrealdb.service'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
 import { LoadingSpinnerComponent } from '@app/component/loading-spinner/loading-spinner.component'
+import { FormsModule } from '@angular/forms'
+import { CustomDropdownComponent } from '@app/component/custom-dropdown/custom-dropdown.component'
+import { KategorieCardComponent } from '@app/component/kategorie-card/kategorie-card.component'
+import { IconComponent } from '@app/component/icon/icon.component'
 
 interface EventWithResolvedLocation extends AppEvent {
   locationName: string
@@ -25,7 +29,19 @@ interface EventWithResolvedLocation extends AppEvent {
 
 @Component({
   selector: 'app-kategorie',
-  imports: [TranslateModule, EventCardComponent, CommonModule, GoBackComponent, LoadingSpinnerComponent],
+  standalone: true,
+  imports: [
+    TranslateModule,
+    EventCardComponent,
+    CommonModule,
+    GoBackComponent,
+    LoadingSpinnerComponent,
+    FormsModule,
+    CustomDropdownComponent,
+    IconComponent,
+    KategorieCardComponent,
+    FormsModule,
+  ],
   templateUrl: './kategorie.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -41,10 +57,13 @@ export class KategorieComponent implements OnInit {
   private readonly translate: TranslateService = inject(TranslateService)
 
   events: EventWithResolvedLocation[] = []
-  topics: Topic[] = []
-  eventTypes: TypeDB[] = []
-  
-  categoryId: RecordIdValue | null = null
+  categories: (Topic | TypeDB)[] = []
+
+  selectedCategory: Topic | TypeDB | null = null
+  categoryIds: RecordIdValue[] = []
+  locations: AppLocation[] = []
+  selectedLocation: AppLocation | null = null
+  selectedLocationIds: RecordIdValue[] = []
   name: string | null = null
   slug: string | null = null
   description: string | null = null
@@ -52,12 +71,13 @@ export class KategorieComponent implements OnInit {
 
   loading = true
   searchTerm = ''
-  searching = false
+  searching = true
+  filterOpen = false
   private allEvents: AppEvent[] = []
   private searchDebounce: number | null = null
 
   // Cache für Locations, um wiederholte Anfragen zu vermeiden
-  private readonly locationCache = new Map<string, Promise<AppLocation>>()
+  readonly locationCache = new Map<string, Promise<AppLocation>>()
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
@@ -77,11 +97,13 @@ export class KategorieComponent implements OnInit {
         this.eventService.getAllEventTypes(),
       ])
 
-      this.topics = topics
-      this.eventTypes = typeDB
+      this.categories = [...topics, ...typeDB]
       this.allEvents = allEvents
 
-      this.categoryId = this.getCategoryIdFromSlug(topics, typeDB)
+      const categoryId = this.getCategoryIdFromSlug(topics, typeDB)
+      if (categoryId) {
+        this.categoryIds.push(categoryId)
+      }
       // Anzeigename aus slug auflösen (Thema oder Typ)
       if (this.slug) {
         const matchedTopic = topics.find((t) => t.slug === this.slug)
@@ -98,6 +120,9 @@ export class KategorieComponent implements OnInit {
       }
 
       await this.performSearch(this.searchTerm)
+
+      this.locations = await Promise.all(this.locationCache.values())
+      console.log('Loaded locations:', this.locations)
     } catch (error) {
       console.error('Fehler beim Laden der Events:', error)
     } finally {
@@ -126,27 +151,47 @@ export class KategorieComponent implements OnInit {
   }
 
   private async performSearch(searchTerm: string) {
+    console.log('Performing search with term:', searchTerm)
+
     this.searching = true
     // Sofort rendern, damit der Spinner zuverlässig sichtbar ist
     this.markForCheck()
     try {
       // Basisliste ggf. nach Kategorie einschränken
-      const categoryId = this.categoryId
+      const categoryId = this.categoryIds
+      const locationId = this.selectedLocationIds
       let baseList = this.allEvents
-      if (categoryId) {
+      console.log('baseList', baseList)
+      console.log('categoryId', categoryId)
+      console.log('locationId', locationId)
+      if (categoryId.length > 0) {
         baseList = baseList.filter(
-          (event) => event.topic?.some((topic) => topic.id === categoryId) || event.event_type?.id === categoryId,
+          (event) =>
+            event.topic?.some((topic) => categoryId.includes(topic.id)) ||
+            (event.event_type && categoryId.includes(event.event_type.id)),
         )
       }
+      console.log('after category filter', baseList)
+      if (locationId.length > 0) {
+        baseList = baseList.filter((event) => event.location && locationId.includes(event.location.id))
+      }
+      console.log('after location filter', baseList)
 
       let resultEvents: AppEvent[]
       if (searchTerm) {
         const searchResults = await this.surreal.fulltextSearchEvents(searchTerm)
+        console.log('searchResults from fulltext search:', searchResults)
         resultEvents = categoryId
           ? searchResults.filter(
-              (event) => event.topic?.some((topic) => topic.id === categoryId) || event.event_type?.id === categoryId,
+              (event) =>
+                event.topic?.some((topic) => !categoryId.includes(topic.id)) ||
+                (event.event_type && categoryId.includes(event.event_type.id)),
             )
           : searchResults
+
+        console.log('after category filter on search results', resultEvents)
+
+        resultEvents = locationId ? resultEvents.filter((event) => !locationId.includes(event.location!.id)) : resultEvents
       } else {
         resultEvents = baseList
       }
@@ -194,5 +239,37 @@ export class KategorieComponent implements OnInit {
 
   trackByEvent(index: number, item: EventWithResolvedLocation) {
     return item.id?.id ?? index
+  }
+
+  toggleFilter() {
+    this.filterOpen = !this.filterOpen
+  }
+
+  getCategories(): { id: string; name: string }[] {
+    return this.categories.map((cat) => ({
+      id: cat.id!.id as string,
+      name: cat.name,
+    }))
+  }
+
+  getLocations(): { id: string; name: string }[] {
+    return this.locations.map((loc) => ({
+      id: loc.id!.id as string,
+      name: loc.name,
+    }))
+  }
+
+  setSelectedCategories(category: { id: string; name: string }) {
+    if (this.categoryIds.includes(category.id as RecordIdValue)) {
+      this.categoryIds = this.categoryIds.filter((id) => id !== category.id)
+    } else {
+      this.categoryIds.push(category.id as RecordIdValue)
+    }
+    void this.performSearch(this.searchTerm)
+  }
+
+  setSelectedLocations(location: { id: string; name: string }[]) {
+    this.selectedLocationIds = location.map((loc) => loc.id as RecordIdValue)
+    void this.performSearch(this.searchTerm)
   }
 }

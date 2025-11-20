@@ -1,10 +1,20 @@
-<a [routerLink]="['/kategorie', slug]" class="card aspect-[4/3] justify-center">
+<a
+  [routerLink]="filterOption ? null : ['/kategorie', slug]"
+  class="card justify-center"
+  [ngClass]="filterOption ? 'border-gray-400 aspect-[11/4]' : 'aspect-[4/3]'"
+  [class.bg-gray-200]="selected"
+  (click)="filterOption ? addCategoryToFilter() : null"
+>
   <div class="align-middle">
-    <p class="items-center justify-center text-center font-semibold transition-transform duration-300">
+    <p
+      class="items-center justify-center text-center transition-transform duration-300"
+      [ngClass]="filterOption ? 'm-0 text-sm' : 'font-semibold'"
+    >
       {{ text }}
     </p>
     <div
-      class="h-1 w-auto max-w-full scale-x-150 rounded transition-transform duration-300"
+      class="h-1 w-auto max-w-full rounded transition-transform duration-300"
+      [ngClass]="filterOption ? 'scale-x-110' : 'scale-x-150'"
       [ngStyle]="{ 'background-color': categoryColor() }"
     ></div>
   </div>
