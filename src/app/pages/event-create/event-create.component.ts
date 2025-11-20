@@ -31,7 +31,6 @@ import { LoadingSpinnerComponent } from '@app/component/loading-spinner/loading-
 
 @Component({
   selector: 'app-event-create',
-  standalone: true,
   imports: [
     FormsModule,
     TranslateModule,

@@ -10,6 +10,9 @@
       <section id="event-content" class="info-card rounded-2xl bg-gray-100 shadow-2xl">
         <!-- Back-Button in der oberen linken Ecke -->
         <div class="relative">
+          <div class="absolute left-2 top-2 z-10 pointer-events-none">
+            <app-event-type-pill class="text-xs" [event]="event"></app-event-type-pill>
+          </div>
           <app-event-image
             [images]="mediaList"
             [eventName]="event.name"
@@ -21,7 +24,10 @@
             <h1 class="my-1 text-2xl">
               {{ event.name }}
             </h1>
-            <app-event-pills class="text-xs" [event]="event"></app-event-pills>
+            <div class="flex flex-wrap gap-2">
+              <app-event-type-pill class="text-xs" [event]="event"></app-event-type-pill>
+              <app-event-topic-pill-list class="text-xs" [event]="event"></app-event-topic-pill-list>
+            </div>
             <div class="flex justify-end">
               <div class="mb-1 flex items-center justify-center gap-2">
                 <app-favorite-button [eventId]="event.id" class="p-1"></app-favorite-button>
@@ -47,12 +53,15 @@
             </div>
           </div>
           <div class="flex w-full items-center justify-between px-4">
-            <app-event-pills class="text-xs" [event]="event"></app-event-pills>
-                        @if (isLoggedIn) {
-                  <button class="cursor-pointer hover*:bg-blue-600 rounded-full bg-blue-500 px-4 py-2 font-bold text-white" (click)="editEvent()">
-                    {{ 'event-detail.edit' | translate }}
-                  </button>
-                }
+            <div class="flex flex-wrap gap-2">
+              <app-event-type-pill class="text-xs" [event]="event"></app-event-type-pill>
+              <app-event-topic-pill-list class="text-xs" [event]="event"></app-event-topic-pill-list>
+            </div>
+            @if (isLoggedIn) {
+              <button class="cursor-pointer hover*:bg-blue-600 rounded-full bg-blue-500 px-4 py-2 font-bold text-white" (click)="editEvent()">
+                {{ 'event-detail.edit' | translate }}
+              </button>
+            }
           </div>
         }
         <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
@@ -130,7 +139,7 @@
             {{ 'event-detail.description' | translate }}
           </h2>
           <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
-          <p [innerHTML]="event.description">
+          <p [innerHTML]="event.description" class="hyphens-auto">
             {{ event.description }}
           </p>
           @if(event.more_infos_link) {

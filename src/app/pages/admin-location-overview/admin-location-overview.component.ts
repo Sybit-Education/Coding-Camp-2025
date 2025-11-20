@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common'
 import { RouterModule, Router, NavigationEnd } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 import { Location } from '../../models/location.interface'
+import type { Event } from '../../models/event.interface'
 import { LocationService } from '../../services/location.service'
+import { EventService } from '../../services/event.service'
 import { NgxDatatableModule, TableColumn, SortEvent, SortDirection } from '@swimlane/ngx-datatable'
 import { FormsModule } from '@angular/forms'
 import { RecordId } from 'surrealdb'
@@ -12,10 +14,8 @@ import { filter } from 'rxjs/operators'
 
 @Component({
   selector: 'app-admin-location-overview',
-  standalone: true,
   imports: [CommonModule, RouterModule, TranslateModule, NgxDatatableModule, FormsModule],
   templateUrl: './admin-location-overview.component.html',
-  styleUrl: './admin-location-overview.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
@@ -23,12 +23,14 @@ export class AdminLocationOverviewComponent implements OnInit {
   private readonly locationService = inject(LocationService)
   private readonly router = inject(Router)
   private readonly destroyRef = inject(DestroyRef)
+  private readonly eventService = inject(EventService)
 
   // Loading state
   isLoading = signal(true)
 
   // Locations list
   locations = signal<Location[]>([])
+  locationEventCounts = signal<Map<string, number>>(new Map())
 
   // Table settings
   rows = signal<Record<string, unknown>[]>([])
@@ -66,6 +68,14 @@ export class AdminLocationOverviewComponent implements OnInit {
       flexGrow: 1,
       resizeable: true,
     },
+    {
+      prop: 'eventCount',
+      name: 'Events',
+      sortable: false,
+      flexGrow: 0,
+      width: 10,
+      resizeable: false,
+    },
     { name: 'Aktionen', sortable: false, width: 10, resizeable: false },
   ]
 
@@ -92,7 +102,12 @@ export class AdminLocationOverviewComponent implements OnInit {
   // Lade alle Locations
   private async loadLocations(): Promise<void> {
     try {
-      const locationsList = await this.locationService.getAllLocations()
+      const [locationsList, events] = await Promise.all([
+        this.locationService.getAllLocations(),
+        this.eventService.getAllEvents(),
+      ])
+      const eventCounts = this.buildLocationEventCounts(events ?? [])
+      this.locationEventCounts.set(eventCounts)
 
       // Sort locations by name (ascending)
       const sortedLocations = [...locationsList].sort((a, b) => {
@@ -106,6 +121,7 @@ export class AdminLocationOverviewComponent implements OnInit {
           originalId: location.id, // Keep original ID for actions
           city: location.city || 'Radolfzell', // Default city
           street: location.street || '',
+          eventCount: location.id ? eventCounts.get(String(location.id)) ?? 0 : 0,
         }
       })
 
@@ -177,16 +193,33 @@ export class AdminLocationOverviewComponent implements OnInit {
 
   // Delete location
   async deleteLocation(locationId: RecordId) {
-    if (confirm('Möchten Sie diesen Ort wirklich löschen?')) {
-      try {
-        // Verwende direkt den Location-Service zum Löschen
-        await this.locationService.delete(locationId as RecordId<'location'>)
-      } catch (deleteError) {
-        console.error('Fehler beim Löschen:', deleteError)
-      }
-
-      // Refresh the locations list
-      await this.loadLocations()
+    const locationKey = String(locationId)
+    const relatedEvents = this.locationEventCounts().get(locationKey) ?? 0
+    if (relatedEvents > 0) {
+      alert('Ort kann nicht gelöscht werden, solange Events zugeordnet sind.')
+      return
     }
+
+    if (!confirm('Möchten Sie diesen Ort wirklich löschen?')) {
+      return
+    }
+
+    try {
+      await this.locationService.delete(locationId as RecordId<'location'>)
+    } catch (deleteError) {
+      console.error('Fehler beim Löschen:', deleteError)
+    }
+
+    await this.loadLocations()
+  }
+
+  private buildLocationEventCounts(events: Event[]): Map<string, number> {
+    const counts = new Map<string, number>()
+    for (const event of events ?? []) {
+      if (!event?.location) continue
+      const locationKey = String(event.location)
+      counts.set(locationKey, (counts.get(locationKey) ?? 0) + 1)
+    }
+    return counts
   }
 }

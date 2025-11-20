@@ -1,6 +1,16 @@
 @if (!isMoreCard) {
   <a [routerLink]="['/event', event?.id?.id]" class="justify-top card mt-2 aspect-[1/1]">
     <div class="relative h-[50%] w-full overflow-hidden bg-gray-100">
+      <div class="absolute left-2 top-2 z-10 pointer-events-none">
+        <app-event-type-pill class="text-xs" [event]="event"></app-event-type-pill>
+      </div>
+      @if (event?.['isPast']) {
+        <ul class="absolute right-2 top-2 z-10 pill-list pointer-events-none">
+          <li class="bg-gray-700 text-xs text-white border-0">
+            {{ 'EVENTS.PAST_EVENT' | translate }}
+          </li>
+        </ul>
+      }      
       @if (mediaUrl) {
         <img [src]="mediaUrl" [alt]="event?.name || 'Event Bild'" class="h-full w-full object-cover" [attr.loading]="'lazy'" />
       } @else {

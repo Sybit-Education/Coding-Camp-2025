@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core'
+import { inject, Injectable, OnDestroy } from '@angular/core'
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout'
 import { map, Observable, Subject, takeUntil } from 'rxjs'
 import { ScreenSize } from '@app/models/screenSize.enum'
@@ -6,7 +6,7 @@ import { ScreenSize } from '@app/models/screenSize.enum'
 @Injectable({
   providedIn: 'root',
 })
-export class SharedStateService {
+export class SharedStateService implements OnDestroy {
   private readonly destroy$ = new Subject<void>()
 
   private readonly breakpointObserver = inject(BreakpointObserver)
@@ -34,5 +34,10 @@ export class SharedStateService {
           }
         }),
       )
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 }

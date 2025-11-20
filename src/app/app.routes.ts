@@ -45,7 +45,7 @@ export const routes: Routes = [
   {
     path: 'event',
     loadComponent: () => import('./pages/kategorie/kategorie.component').then((m) => m.KategorieComponent),
-    title: 'Alle Events',
+    title: 'Alle Veranstaltungen',
   },
   {
     path: 'admin',
@@ -83,26 +83,35 @@ export const routes: Routes = [
     path: 'admin/event/:id',
     loadComponent: () => import('./pages/event-create/event-create.component').then((m) => m.EventCreateComponent),
     canActivate: [LoginService],
-    title: 'Veranstaltung erstellen',
+    title: 'Veranstaltung bearbeiten',
   },
   {
-    path: 'admin',
+    path: 'offline',
+    loadComponent: () => import('./pages/offline/offline.component').then((m) => m.OfflineComponent),
+    title: 'Offline',
+  },
+  {
+    path: 'admin/organizers',
     loadComponent: () =>
-      import('./pages/admin-event-overview/admin-event-overview.component').then((m) => m.AdminEventOverviewComponent),
+      import('./pages/admin-organizer-overview/admin-organizer-overview.component').then(
+        (m) => m.AdminOrganizerOverviewComponent,
+      ),
     canActivate: [LoginService],
-    title: 'Admin: Veranstaltungen',
+    title: 'Admin: Veranstalter',
   },
   {
-    path: 'admin/create',
-    loadComponent: () => import('./pages/event-create/event-create.component').then((m) => m.EventCreateComponent),
+    path: 'admin/organizer/create',
+    loadComponent: () =>
+      import('./pages/organizer-edit/organizer-edit.component').then((m) => m.OrganizerEditComponent),
     canActivate: [LoginService],
-    title: 'Veranstaltung erstellen',
+    title: 'Veranstalter erstellen',
   },
   {
-    path: 'admin/event/:id',
-    loadComponent: () => import('./pages/event-create/event-create.component').then((m) => m.EventCreateComponent),
+    path: 'admin/organizer/:id',
+    loadComponent: () =>
+      import('./pages/organizer-edit/organizer-edit.component').then((m) => m.OrganizerEditComponent),
     canActivate: [LoginService],
-    title: 'Veranstaltung erstellen',
+    title: 'Veranstalter bearbeiten',
   },
   {
     path: '404',

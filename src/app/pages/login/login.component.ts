@@ -9,7 +9,6 @@ import { SnackBarService } from '../../services/snack-bar.service'
 @Component({
   selector: 'app-page-login',
   templateUrl: './login.component.html',
-  standalone: true,
   imports: [FormsModule, TranslateModule],
 })
 export class LoginPageComponent implements OnInit {
