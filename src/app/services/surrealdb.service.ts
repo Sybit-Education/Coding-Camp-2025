@@ -1,8 +1,13 @@
 import { Injectable, inject } from '@angular/core'
+import { Router } from '@angular/router'
 import Surreal, { RecordId, StringRecordId, Token } from 'surrealdb'
 import { environment } from '../../environments/environment'
 import { Event as AppEvent } from '../models/event.interface'
 import { DataCacheService } from './data-cache.service'
+
+type CacheOptions = {
+  bypassCache?: boolean
+}
 
 @Injectable({
   providedIn: 'root',
@@ -10,40 +15,26 @@ import { DataCacheService } from './data-cache.service'
 export class SurrealdbService extends Surreal {
   private connectionInitialized = false
   private connectionPromise: Promise<void> | null = null
-
-  // Lightweight in-memory cache to reduce duplicate DB requests
   private readonly cache = inject(DataCacheService)
-  private readonly defaultTtlMs = 60_000 // 60s default cache for read operations
-  private readonly searchTtlMs = 10_000 // short cache for search results
+  private readonly router = inject(Router, { optional: true })
+  private readonly defaultTtlMs = 60_000
+  private readonly searchTtlMs = 10_000
 
   constructor() {
     super()
   }
 
-  // Nutze eine robuste String-Repräsentation für Record-IDs
   private recordIdToString(recordId: RecordId<string> | StringRecordId): string {
-    try {
-      const s = (recordId as any)?.toString?.()
-      if (typeof s === 'string') return s
-      const tb = (recordId as any)?.tb
-      const id = (recordId as any)?.id
-      if (tb && id) return `${tb}:${id}`
-      return String(recordId)
-    } catch {
-      return String(recordId)
+    const asString = (recordId as unknown as { toString?: () => string })?.toString?.()
+    if (typeof asString === 'string') {
+      return asString
     }
-  }
-
-  private tableFromRecordId(recordId: RecordId<string> | StringRecordId): string | undefined {
-    try {
-      const tb = (recordId as any)?.tb
-      if (tb) return tb as string
-      const s = (recordId as any)?.toString?.() ?? String(recordId)
-      const idx = s.indexOf(':')
-      return idx > -1 ? s.slice(0, idx) : undefined
-    } catch {
-      return undefined
+    const tb = (recordId as { tb?: string })?.tb
+    const id = (recordId as { id?: unknown })?.id
+    if (tb && id !== undefined) {
+      return `${tb}:${id}`
     }
+    return String(recordId)
   }
 
   private tableKey(table: string): string {
@@ -54,20 +45,19 @@ export class SurrealdbService extends Surreal {
     return `record:${this.recordIdToString(recordId)}`
   }
 
-  private stableStringify(obj: unknown): string {
-    if (obj == null || typeof obj !== 'object') return JSON.stringify(obj)
-    const keys = new Set<string>()
-    JSON.stringify(obj as any, (k, v) => {
-      keys.add(k)
-      return v
-    })
-    const sorted = Array.from(keys).sort()
-    return JSON.stringify(obj as any, sorted)
-  }
-
-  private queryKey(sql: string, params?: unknown): string {
-    const p = params === undefined ? '' : `:${this.stableStringify(params)}`
-    return `query:${sql}${p}`
+  private queryKey(sql: string, params?: Record<string, unknown>): string {
+    const serialized =
+      params === undefined
+        ? ''
+        : `:${JSON.stringify(
+            Object.keys(params)
+              .sort()
+              .reduce<Record<string, unknown>>((acc, key) => {
+                acc[key] = params[key]
+                return acc
+              }, {}),
+          )}`
+    return `query:${sql}${serialized}`
   }
 
   async initialize() {
@@ -111,7 +101,6 @@ export class SurrealdbService extends Surreal {
         password: password,
       },
     })
-    // User-Kontext kann sich ändern -> Cache leeren, um falsche Daten zu vermeiden
     this.cache.clear()
     return jwtToken
   }
@@ -122,31 +111,29 @@ export class SurrealdbService extends Surreal {
     return await super.authenticate(token)
   }
 
-  async getByRecordId<T extends Record<string, unknown>>(recordId: RecordId<string> | StringRecordId): Promise<T> {
+  async getByRecordId<T extends Record<string, unknown>>(
+    recordId: RecordId<string> | StringRecordId,
+    options?: CacheOptions,
+  ): Promise<T> {
     // Stelle sicher, dass die Verbindung initialisiert ist
     await this.initialize()
-    const key = this.recordKey(recordId)
-    return await this.cache.getOrFetch<T>(
-      key,
-      async () => {
-        const result = await super.select<T>(recordId)
-        return result as T
-      },
+    return await this.fetchCached(
+      this.recordKey(recordId),
       this.defaultTtlMs,
+      async () => (await super.select<T>(recordId)) as T,
+      options,
     )
   }
 
   // 2) Alle Einträge einer Tabelle holen
-  async getAll<T extends Record<string, unknown>>(table: string): Promise<T[]> {
+  async getAll<T extends Record<string, unknown>>(table: string, options?: CacheOptions): Promise<T[]> {
     // Stelle sicher, dass die Verbindung initialisiert ist
     await this.initialize()
-    const key = this.tableKey(table)
-    return await this.cache.getOrFetch<T[]>(
-      key,
-      async () => {
-        return await super.select<T>(table)
-      },
+    return await this.fetchCached(
+      this.tableKey(table),
       this.defaultTtlMs,
+      async () => await super.select<T>(table),
+      options,
     )
   }
 
@@ -154,11 +141,10 @@ export class SurrealdbService extends Surreal {
   async post<T extends Record<string, unknown>>(table: string, payload?: T | T[]): Promise<T[]> {
     // Stelle sicher, dass die Verbindung initialisiert ist
     await this.initialize()
-    const res = await super.insert<T>(table, payload)
-    // Invalidate caches related to this table and generic queries
+    const result = await super.insert<T>(table, payload)
     this.cache.invalidate(this.tableKey(table))
     this.cache.invalidatePrefix('query:')
-    return res
+    return result
   }
 
   async postUpdate<T extends Record<string, unknown>>(id: RecordId<string> | StringRecordId, payload?: T): Promise<T> {
@@ -167,10 +153,11 @@ export class SurrealdbService extends Surreal {
       await this.initialize()
       const updatedRecord = await super.update<T>(id, payload)
 
-      // Invalidate caches for this record and its table
-      const table = this.tableFromRecordId(id)
+      const table = (id as { tb?: string })?.tb
       this.cache.invalidate(this.recordKey(id))
-      if (table) this.cache.invalidate(this.tableKey(table))
+      if (table) {
+        this.cache.invalidate(this.tableKey(table))
+      }
       this.cache.invalidatePrefix('query:')
 
       return updatedRecord
@@ -185,10 +172,11 @@ export class SurrealdbService extends Surreal {
     await this.initialize()
     await super.delete(recordId)
 
-    // Invalidate caches for this record and its table
-    const table = this.tableFromRecordId(recordId)
+    const table = (recordId as { tb?: string })?.tb
     this.cache.invalidate(this.recordKey(recordId))
-    if (table) this.cache.invalidate(this.tableKey(table))
+    if (table) {
+      this.cache.invalidate(this.tableKey(table))
+    }
     this.cache.invalidatePrefix('query:')
   }
 
@@ -226,22 +214,46 @@ export class SurrealdbService extends Surreal {
       ORDER BY relevance DESC
       LIMIT 30;`
 
-    const key = this.queryKey(ftsSql, { q })
-
     try {
-      const result = await this.cache.getOrFetch<AppEvent[]>(
-        key,
-        async () => {
-          const res = (await super.query(ftsSql, { 'q': q }))[0] as AppEvent[]
-          return Array.isArray(res) ? res : []
-        },
+      const result = await this.fetchCached(
+        this.queryKey(ftsSql, { q }),
         this.searchTtlMs,
-        this.searchTtlMs, // allow brief SWR window to throttle rapid typing
+        async () => {
+          const queryResult = (await super.query(ftsSql, { 'q': q }))[0] as AppEvent[]
+          return Array.isArray(queryResult) ? queryResult : []
+        },
       )
       return result
     } catch (err) {
       console.warn('[SurrealdbService] FTS query failed, will fallback', err)
       return []
     }
+    return []
+  }
+
+  private async fetchCached<T>(
+    key: string,
+    ttlMs: number,
+    fetcher: () => Promise<T>,
+    options?: CacheOptions,
+  ): Promise<T> {
+    if (this.shouldBypassCache(options)) {
+      return await fetcher()
+    }
+    return await this.cache.getOrFetch<T>(key, fetcher, ttlMs)
+  }
+
+  private shouldBypassCache(options?: CacheOptions): boolean {
+    if (options?.bypassCache) {
+      return true
+    }
+    const url = this.router?.url
+    if (typeof url === 'string' && url.startsWith('/admin')) {
+      return true
+    }
+    if (typeof window !== 'undefined' && typeof window.location?.pathname === 'string') {
+      return window.location.pathname.startsWith('/admin')
+    }
+    return false
   }
 }

@@ -7,239 +7,110 @@ type CacheEntry<T> = {
 
 @Injectable({ providedIn: 'root' })
 export class DataCacheService {
-  // In-memory store + in-flight dedup
+/**
+ * Lightweight in-memory TTL cache used by {@link SurrealdbService}.
+ *
+ * Warum existiert dieser Service?
+ * - Der SurrealDB-Service braucht ein kleines Cache-Overlay, um doppelte SELECT/QUERY-Requests
+ *   im öffentlichen Bereich zu reduzieren (Kategorie-/Detailseiten, Volltextsuche).
+ * - Für Admin-/Schreiboperationen wird der Cache entweder komplett invalidiert (Login, Mutationen)
+ *   oder bewusst umgangen (SurrealdbService prüft die aktuelle Route). Dadurch sehen Admins immer
+ *   Live-Daten.
+ * - Der Cache bleibt bewusst in einem eigenen Service, damit:
+ *   1. die Logik testbar und wiederverwendbar bleibt,
+ *   2. keine Angular-spezifischen Abhängigkeiten (Router, environment) in diesen Store wandern,
+ *   3. wir bei Bedarf eine andere Persistenzstrategie hinterlegen könnten, ohne den Surreal-Service
+ *      anzupassen.
+ *
+ * Architektur:
+ * - `store`: Map-Key → { value, expiresAt } für schnelle TTL-Lookups.
+ * - `inFlight`: Promise-Dedupe, damit parallele `getOrFetch`-Aufrufe dieselbe Anfrage teilen.
+ * - Keine Persistenz (IndexedDB/localStorage), damit Logout/Sitzungswechsel garantiert frische Daten
+ *   liefert und der Service SSR-/Node-Tests nicht blockiert.
+ */
   private readonly store = new Map<string, CacheEntry<unknown>>()
   private readonly inFlight = new Map<string, Promise<unknown>>()
 
-  // Optional persistence
-  private readonly usePersistence = typeof indexedDB !== 'undefined'
-  private dbPromise: Promise<IDBDatabase> | null = null
-  private readonly dbName = 'app-cache'
-  private readonly storeName = 'kv'
-
-  // ---- Public API ----
-
+  /**
+   * Returns the cached value if present and still valid.
+   * Expired entries are evicted eagerly.
+   */
   get<T>(key: string): T | undefined {
-    const entry = this.getFromMemory<T>(key)
-    return entry ? entry.value : undefined
-  }
-
-  set<T>(key: string, value: T, ttlMs: number): void {
-    const expiresAt = Date.now() + ttlMs
-    this.setInMemory(key, { value, expiresAt })
-    void this.setInIdb<T>(key, { value, expiresAt })
-  }
-
-  async getOrFetch<T>(key: string, fetcher: () => Promise<T>, ttlMs: number, swrMs = 0): Promise<T> {
-    const now = Date.now()
-
-    // 1) In-Memory (fresh)
-    const mem = this.getFromMemory<T>(key)
-    if (mem && mem.expiresAt > now) {
-      return mem.value
-    }
-
-    // 2) IndexedDB (fresh)
-    const disk = await this.getFromIdb<T>(key)
-    if (disk && disk.expiresAt > now) {
-      this.setInMemory(key, disk)
-      return disk.value
-    }
-
-    // 3) SWR (stale but within window) from memory or disk
-    const stale = mem ?? disk
-    if (stale && swrMs > 0 && stale.expiresAt <= now && stale.expiresAt + swrMs > now) {
-      // Background refresh if not already running
-      if (!this.inFlight.has(key)) {
-        const bg = fetcher()
-          .then((value) => {
-            const entry: CacheEntry<T> = { value, expiresAt: Date.now() + ttlMs }
-            this.setInMemory(key, entry)
-            return this.setInIdb<T>(key, entry).finally(() => {
-              this.inFlight.delete(key)
-            })
-          })
-          .catch(() => {
-            this.inFlight.delete(key)
-          }) as unknown as Promise<unknown>
-
-        this.inFlight.set(key, bg)
-      }
-      return stale.value
-    }
-
-    // 4) Deduplicate concurrent fetches
-    if (this.inFlight.has(key)) {
-      return (this.inFlight.get(key) as Promise<T>)!
-    }
-
-    // 5) Fetch and persist
-    const p = fetcher()
-      .then((value) => {
-        const entry: CacheEntry<T> = { value, expiresAt: Date.now() + ttlMs }
-        this.setInMemory(key, entry)
-        return this.setInIdb<T>(key, entry).then(() => value)
-      })
-      .catch((err) => {
-        throw err
-      })
-      .finally(() => {
-        this.inFlight.delete(key)
-      })
-
-    this.inFlight.set(key, p as unknown as Promise<unknown>)
-    return p
-  }
-
-  invalidate(key: string): void {
-    this.store.delete(key)
-    this.inFlight.delete(key)
-    void this.deleteFromIdb(key)
-  }
-
-  invalidatePrefix(prefix: string): void {
-    // Memory
-    for (const key of Array.from(this.store.keys())) {
-      if (key.startsWith(prefix)) {
-        this.store.delete(key)
-      }
-    }
-    for (const key of Array.from(this.inFlight.keys())) {
-      if (key.startsWith(prefix)) {
-        this.inFlight.delete(key)
-      }
-    }
-    // Disk
-    void this.deletePrefixFromIdb(prefix)
-  }
-
-  clear(): void {
-    this.store.clear()
-    this.inFlight.clear()
-    void this.clearIdb()
-  }
-
-  // ---- Memory helpers ----
-
-  private getFromMemory<T>(key: string): CacheEntry<T> | undefined {
     const entry = this.store.get(key) as CacheEntry<T> | undefined
     if (!entry) return undefined
     if (entry.expiresAt <= Date.now()) {
       this.store.delete(key)
       return undefined
     }
-    return entry
+    return entry.value
   }
 
-  private setInMemory<T>(key: string, entry: CacheEntry<T>): void {
-    this.store.set(key, entry as CacheEntry<unknown>)
+  set<T>(key: string, value: T, ttlMs: number): void {
+    if (value === undefined || value === null) {
+      this.store.delete(key)
+      return
+    }
+    const expiresAt = Date.now() + ttlMs
+    this.store.set(key, { value, expiresAt })
   }
 
-  // ---- IndexedDB helpers ----
+  /**
+   * Returns cached data or executes the provided fetcher while deduplicating concurrent calls.
+   * The result is stored for the specified TTL unless the fetcher resolves to null/undefined.
+   */
+  async getOrFetch<T>(key: string, fetcher: () => Promise<T>, ttlMs: number): Promise<T> {
+    const cached = this.get<T>(key)
+    if (cached !== undefined) {
+      return cached
+    }
 
-  private async openDb(): Promise<IDBDatabase | null> {
-    if (!this.usePersistence) return null
-    if (this.dbPromise) {
-      try {
-        return await this.dbPromise
-      } catch {
-        this.dbPromise = null
+    if (this.inFlight.has(key)) {
+      return (this.inFlight.get(key) as Promise<T>)!
+    }
+
+    const request = fetcher()
+      .then((result) => {
+        this.set(key, result, ttlMs)
+        return result
+      })
+      .finally(() => {
+        this.inFlight.delete(key)
+      })
+
+    this.inFlight.set(key, request as unknown as Promise<unknown>)
+    return request
+  }
+
+  /**
+   * Alias that keeps older call sites readable until they are updated to `getOrFetch`.
+   */
+  async remember<T>(key: string, ttlMs: number, fetcher: () => Promise<T>): Promise<T> {
+    return await this.getOrFetch(key, fetcher, ttlMs)
+  }
+
+  /** Removes a single cache entry plus any inflight request for the same key. */
+  invalidate(key: string): void {
+    this.store.delete(key)
+    this.inFlight.delete(key)
+  }
+
+  /** Bulk invalidation helper used when tables or generic queries change. */
+  invalidatePrefix(prefix: string): void {
+    for (const key of this.store.keys()) {
+      if (key.startsWith(prefix)) {
+        this.store.delete(key)
       }
     }
-    this.dbPromise = new Promise<IDBDatabase>((resolve, reject) => {
-      const req = indexedDB.open(this.dbName, 1)
-      req.onupgradeneeded = () => {
-        const db = req.result
-        if (!db.objectStoreNames.contains(this.storeName)) {
-          db.createObjectStore(this.storeName)
-        }
+    for (const key of this.inFlight.keys()) {
+      if (key.startsWith(prefix)) {
+        this.inFlight.delete(key)
       }
-      req.onsuccess = () => resolve(req.result)
-      req.onerror = () => reject(req.error)
-    })
-    try {
-      return await this.dbPromise
-    } catch {
-      this.dbPromise = null
-      return null
     }
   }
 
-  private async getFromIdb<T>(key: string): Promise<CacheEntry<T> | undefined> {
-    const db = await this.openDb()
-    if (!db) return undefined
-    return await new Promise<CacheEntry<T> | undefined>((resolve) => {
-      const tx = db.transaction(this.storeName, 'readonly')
-      const store = tx.objectStore(this.storeName)
-      const req = store.get(key)
-      req.onsuccess = () => {
-        const entry = req.result as CacheEntry<T> | undefined
-        if (!entry) return resolve(undefined)
-        if (entry.expiresAt <= Date.now()) {
-          // Delete stale on read
-          const dtx = db.transaction(this.storeName, 'readwrite')
-          dtx.objectStore(this.storeName).delete(key)
-          resolve(undefined)
-        } else {
-          resolve(entry)
-        }
-      }
-      req.onerror = () => resolve(undefined)
-    })
-  }
-
-  private async setInIdb<T>(key: string, entry: CacheEntry<T>): Promise<void> {
-    const db = await this.openDb()
-    if (!db) return
-    await new Promise<void>((resolve) => {
-      const tx = db.transaction(this.storeName, 'readwrite')
-      tx.objectStore(this.storeName).put(entry, key)
-      tx.oncomplete = () => resolve()
-      tx.onerror = () => resolve()
-    })
-  }
-
-  private async deleteFromIdb(key: string): Promise<void> {
-    const db = await this.openDb()
-    if (!db) return
-    await new Promise<void>((resolve) => {
-      const tx = db.transaction(this.storeName, 'readwrite')
-      tx.objectStore(this.storeName).delete(key)
-      tx.oncomplete = () => resolve()
-      tx.onerror = () => resolve()
-    })
-  }
-
-  private async deletePrefixFromIdb(prefix: string): Promise<void> {
-    const db = await this.openDb()
-    if (!db) return
-    await new Promise<void>((resolve) => {
-      const tx = db.transaction(this.storeName, 'readwrite')
-      const store = tx.objectStore(this.storeName)
-      const req = store.openCursor()
-      req.onsuccess = () => {
-        const cursor = req.result
-        if (cursor) {
-          const key = String(cursor.key)
-          if (key.startsWith(prefix)) {
-            cursor.delete()
-          }
-          cursor.continue()
-        }
-      }
-      tx.oncomplete = () => resolve()
-      tx.onerror = () => resolve()
-    })
-  }
-
-  private async clearIdb(): Promise<void> {
-    const db = await this.openDb()
-    if (!db) return
-    await new Promise<void>((resolve) => {
-      const tx = db.transaction(this.storeName, 'readwrite')
-      tx.objectStore(this.storeName).clear()
-      tx.oncomplete = () => resolve()
-      tx.onerror = () => resolve()
-    })
+  /** Clears the entire cache – typically used during logout. */
+  clear(): void {
+    this.store.clear()
+    this.inFlight.clear()
   }
 }
