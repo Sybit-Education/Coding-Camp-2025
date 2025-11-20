@@ -1,7 +1,8 @@
 <div class="relative mb-4 w-72" [ngClass]="dropdownOpen ? 'h-80' : ''">
   <!-- Dropdown-Feld -->
   <button
-    class="flex w-full cursor-pointer flex-wrap items-center gap-1 rounded border px-3 py-2"
+    class="flex w-full cursor-pointer flex-wrap items-center gap-1 border-1 border-gray-400 bg-white px-3 py-2"
+    [ngClass]="dropdownOpen ? 'rounded-t-2xl' : 'rounded-2xl'"
     (click)="toggleDropdown()"
     (keydown.enter)="toggleDropdown()"
     tabindex="0"
@@ -38,7 +39,7 @@
   <!-- Dropdown-Liste -->
   @if (dropdownOpen) {
     <div
-      class="absolute right-0 left-0 z-50 mt-1 max-h-60 overflow-auto rounded border bg-white shadow"
+      class="scrollbar-hide overflow-y-auto absolute right-0 left-0 z-50 mt-0 max-h-60 rounded-b-2xl border-1 border-gray-400 bg-white"
       tabindex="-1"
       aria-label="Options"
     >
@@ -50,7 +51,7 @@
           tabindex="0"
           [attr.aria-selected]="isSelected(item)"
         >
-          <span>{{ item.name }}</span>
+          {{ item.name }}
         </option>
       }
     </div>

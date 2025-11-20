@@ -1,7 +1,7 @@
 <a
   [routerLink]="filterOption ? null : ['/kategorie', slug]"
   class="card justify-center"
-  [ngClass]="filterOption ? 'mx-2 aspect-[11/4]' : 'aspect-[4/3]'"
+  [ngClass]="filterOption ? 'border-gray-400 aspect-[11/4]' : 'aspect-[4/3]'"
   [class.bg-gray-200]="selected"
   (click)="filterOption ? addCategoryToFilter() : null"
 >

@@ -22,7 +22,7 @@
     <!-- Horizontaler Scroll-Container für Events -->
     @if ((sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL) {
       <div class="scrollbar-hide card-snap mb-5 w-full snap-x snap-mandatory overflow-x-auto scroll-smooth">
-        <div class="event-row flex min-w-max gap-4 px-2">
+        <div class="event-row flex min-w-max gap-4">
           @for (event of displayEvents; track trackByEvent($index, event)) {
             <app-event-card
               class="h-full w-[calc(100vw-6rem)] snap-center"
@@ -65,7 +65,7 @@
       {{ 'home.categories' | translate }}
     </h2>
 
-    <div class="mr-2 ml-2 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
       @for (kategorie of topicsOrTypes; track kategorie.id) {
         <app-kategorie-card [color]="kategorie.color" [text]="kategorie.name" [slug]="kategorie.slug" />
       }

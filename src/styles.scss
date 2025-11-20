@@ -87,8 +87,9 @@
   }
 
   .filter-option {
-    @apply mb-5 flex inline-flex w-full items-center justify-between overflow-hidden rounded-2xl border-1 border-gray-300 p-2 text-center shadow-lg shadow-xl transition-transform duration-300 focus:ring-2 focus:ring-yellow-400;
+    @apply mb-5 items-center justify-between overflow-hidden p-2 text-center transition-transform duration-300 focus:ring-2 focus:ring-yellow-400;
   }
+  
   .tailwind-table {
     @apply border-0 shadow-none;
   }
@@ -260,6 +261,15 @@
 .animate-fadeIn {
   animation: fadeIn 1.3s ease-out;
   opacity: 1;
+}
+
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 
 /* Custom SVG-Background Utilities */

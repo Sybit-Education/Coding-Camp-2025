@@ -40,6 +40,7 @@ interface EventWithResolvedLocation extends AppEvent {
     CustomDropdownComponent,
     IconComponent,
     KategorieCardComponent,
+    FormsModule
   ],
   templateUrl: './kategorie.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

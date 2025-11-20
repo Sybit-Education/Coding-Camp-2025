@@ -17,10 +17,11 @@ export class KategorieCardComponent {
   }
   @Input() id?: string
   @Input() filterOption = false
+  @Input() selected? = false
 
   @Output() categoryAdded = new EventEmitter<FilterItem>()
 
-  selected = false
+  
 
   // Signals für reaktive Verarbeitung
   protected readonly categoryColor = signal<string>('#ffffff')
