@@ -185,7 +185,7 @@
       }
       @if (location?.id) {
         <section [attr.aria-labelledby]="'home.tags.aria-lable-event-heading' | translate">
-          <h2>Nächste Events an diesem Ort</h2>
+          <h2>Weitere Veranstaltungen an diesem Ort</h2>
           <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
           <app-event-card-list [location]="location!" [currentEventId]="event.id"></app-event-card-list>
         </section>
@@ -255,6 +255,4 @@
       }
     </article>
   }
-
-  <div class="edit mb-20 flex items-center justify-center"></div>
 </div>

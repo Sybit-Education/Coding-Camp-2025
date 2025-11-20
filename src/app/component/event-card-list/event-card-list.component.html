@@ -3,15 +3,6 @@
 } @else if (this.events.length > 0) {
   <!-- Horizontaler Scroll-Container für Events -->
   @if ((sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL) {
-    <style>
-      .scrollbar-hide::-webkit-scrollbar {
-        display: none;
-      }
-      .scrollbar-hide {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-    </style>
     <div class="scrollbar-hide card-snap mb-5 w-full snap-x snap-mandatory overflow-x-scroll scroll-smooth">
       <div class="event-row flex min-w-max gap-4 px-2">
         @for (event of events; track event.id?.id) {

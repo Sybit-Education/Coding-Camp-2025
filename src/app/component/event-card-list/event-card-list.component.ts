@@ -15,6 +15,7 @@ import { RecordId } from 'surrealdb'
   selector: 'app-event-card-list',
   imports: [CommonModule, TranslateModule, RouterModule, EventCardComponent],
   templateUrl: './event-card-list.component.html',
+  styleUrl: './event-card-list.component.scss',
 })
 export class EventCardListComponent implements OnInit {
   @Input() location?: Location
