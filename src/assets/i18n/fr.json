@@ -123,6 +123,8 @@
       "name": "Veuillez entrer un nom d'événement.",
       "date": "Veuillez entrer une date de début.",
       "time": "Veuillez entrer une heure de début.",
+      "location": "Veuillez sélectionner un lieu.",
+      "theme": "Veuillez sélectionner un type d'événement.",
       "general": "Veuillez remplir tous les champs obligatoires."
     },
     "cancel": "Annuler",
