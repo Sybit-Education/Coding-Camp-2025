@@ -44,9 +44,14 @@ export class IconRegistryService {
   }
   private transformSvg(svg: string): string {
     // Grundlegende Sanitization: entferne <script>, Inline-Event-Handler, javascript:-Links, foreignObject
-    svg = svg.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '')
-    // Remove all inline event handler attributes (on...) repeatedly until none remain
+    // Remove all <script>...</script> tags repeatedly until none remain
     let prevSvg
+    do {
+      prevSvg = svg
+      svg = svg.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '')
+    } while (svg !== prevSvg)
+    // Remove all inline event handler attributes (on...) repeatedly until none remain
+    prevSvg = undefined
     do {
       prevSvg = svg
       svg = svg.replace(/\son\w+="[^"]*"/gi, '')
