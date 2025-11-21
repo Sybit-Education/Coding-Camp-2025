@@ -65,8 +65,8 @@ export class KategorieComponent implements OnInit {
   selectedLocation: AppLocation | null = null
   selectedLocationIds: RecordIdValue[] = []
   selectedPrices: number[] = []
-selectedDateStart: Date | null = null
-selectedDateEnd: Date | null = null
+  selectedDateStart: Date | null = null
+  selectedDateEnd: Date | null = null
 
   name: string | null = null
   slug: string | null = null
@@ -83,6 +83,7 @@ selectedDateEnd: Date | null = null
   // Cache für Locations, um wiederholte Anfragen zu vermeiden
   readonly locationCache = new Map<string, Promise<AppLocation>>()
 
+  // --------------------------------- Initialization ---------------------------------
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
       this.slug = params.get('slug')
@@ -134,6 +135,7 @@ selectedDateEnd: Date | null = null
       this.markForCheck()
     }
   }
+
   private getCategoryIdFromSlug(topics: Topic[], typeDB: TypeDB[]): RecordIdValue | null {
     if (!this.slug) return null
     const topic = topics.find((t) => t.slug === this.slug)
@@ -142,6 +144,7 @@ selectedDateEnd: Date | null = null
     return type?.id?.id || topic?.id?.id || null
   }
 
+  // --------------------------------- Search & Filtering ---------------------------------
   onSearchChange(term: string) {
     this.searchTerm = (term ?? '').trim()
     if (this.searchDebounce) {
@@ -153,109 +156,30 @@ selectedDateEnd: Date | null = null
     }, 300)
   }
 
+  /**
+   * Performs the search and filtering of events based on the search term and selected filters.
+   * @param searchTerm The term to search for.
+   */
   private async performSearch(searchTerm: string) {
-
     this.searching = true
     // Sofort rendern, damit der Spinner zuverlässig sichtbar ist
     this.markForCheck()
     try {
-      // Basisliste ggf. nach Kategorie einschränken
-      const categoryId = this.categoryIds
-      const locationId = this.selectedLocationIds
-      let baseList = this.allEvents
-      if (categoryId.length > 0) {
-        baseList = baseList.filter(
-          (event) =>
-            event.topic?.some((topic) => categoryId.includes(topic.id)) ||
-            (event.event_type && categoryId.includes(event.event_type.id)),
-        )
-      }
+      let candidateEvents: AppEvent[]
 
-      if (locationId.length > 0) {
-        baseList = baseList.filter((event) => event.location && locationId.includes(event.location.id))
-      }
-
-      if (this.selectedPrices.length > 0) {
-        baseList = baseList.filter((event) => {
-          const price = event.price as unknown as number ?? 0
-          return this.selectedPrices.some((selectedPrice) => {
-            if (selectedPrice === 0) {
-              return price === 0
-            } else if (selectedPrice === 20) {
-              return price > 15
-            } else {
-              const [min, max] = [(selectedPrice - 5), selectedPrice]
-              return price > min && price <= max
-            }
-          })
-        })
-      }
-
-      if (this.selectedDateStart) {
-        baseList = baseList.filter((event) => {
-          const eventStartDate = new Date(event.date_start)
-          return eventStartDate >= this.selectedDateStart!
-        })
-      }
-
-      if (this.selectedDateEnd) {
-        baseList = baseList.filter((event) => {
-          const eventEndDate = event.date_end ? new Date(event.date_end) : new Date(event.date_start)
-          return eventEndDate <= this.selectedDateEnd!
-        })
-      }
-
-      // Suche anwenden
-      let resultEvents: AppEvent[]
       if (searchTerm) {
+        // Get search results from the fulltext index and apply the same base filters
         const searchResults = await this.surreal.fulltextSearchEvents(searchTerm)
-        resultEvents = categoryId
-          ? searchResults.filter(
-              (event) =>
-                event.topic?.some((topic) => !categoryId.includes(topic.id)) ||
-                (event.event_type && categoryId.includes(event.event_type.id)),
-            )
-          : searchResults
-
-        resultEvents = locationId ? resultEvents.filter((event) => !locationId.includes(event.location!.id)) : resultEvents
+        candidateEvents = this.applyBaseFilters(searchResults)
       } else {
-        resultEvents = baseList
+        // Use the in-memory list (allEvents) and apply base filters
+        candidateEvents = this.applyBaseFilters(this.allEvents)
       }
 
-      // Locations auflösen (mit Cache) + isPast markieren
-      const mapped = await Promise.all(
-        resultEvents.map(async (event) => {
-          let locationData: AppLocation | undefined
-
-          if (event.location) {
-            const locationId = String(event.location)
-            if (!this.locationCache.has(locationId)) {
-              this.locationCache.set(locationId, this.locationService.getLocationByID(event.location))
-            }
-            locationData = await this.locationCache.get(locationId)
-          }
-
-          const endDate = event.date_end ? new Date(event.date_end) : new Date(event.date_start)
-          return {
-            ...event,
-            locationName: locationData?.name ?? 'Unbekannter Ort',
-            isPast: endDate < new Date(),
-          } as EventWithResolvedLocation
-        }),
-      )
-
-      // Sortierung: aktuelle vor vergangenen, dann nach Startdatum
-      mapped.sort((a, b) => {
-        if (a.isPast && !b.isPast) return 1
-        if (!a.isPast && b.isPast) return -1
-        const dateA = new Date(a.date_start).getTime()
-        const dateB = new Date(b.date_start).getTime()
-        return dateA - dateB
-      })
-
+      const mapped = await this.mapEventsWithLocation(candidateEvents)
       this.events = mapped
     } catch (error) {
-      console.error('[KategorieComponent] performSearch:error', error)
+      console.error('[EventSearcher] performSearch:error', error)
       this.events = []
     } finally {
       this.searching = false
@@ -263,6 +187,134 @@ selectedDateEnd: Date | null = null
     }
   }
 
+  /**
+   * Applies the base filters (category, location, price, date range) to the given events.
+   * @param events The events to filter.
+   * @returns The filtered events.
+   */
+  private applyBaseFilters(events: AppEvent[]): AppEvent[] {
+    let out = events
+    out = this.filterByCategory(out, this.categoryIds)
+    out = this.filterByLocation(out, this.selectedLocationIds)
+    out = this.filterByPrice(out, this.selectedPrices)
+    out = this.filterByDateRange(out, this.selectedDateStart ?? null, this.selectedDateEnd ?? null)
+    return out
+  }
+
+  // ------- Filter functions -------
+  /**
+   * Filters events by the given category IDs.
+   * @param events The events to filter.
+   * @param categoryIds The category IDs to filter by.
+   * @returns The filtered events.
+   */
+  private filterByCategory(events: AppEvent[], categoryIds: RecordIdValue[]): AppEvent[] {
+  if (!categoryIds || categoryIds.length === 0) return events
+
+  return events.filter((event) => {
+    // Alle Category-IDs müssen abgedeckt sein
+    const eventCategoryIds = [
+      ...(event.topic?.map((t) => t.id) ?? []),
+      event.event_type?.id,
+    ].filter(Boolean) as RecordIdValue[]
+
+    return categoryIds.every((id) => eventCategoryIds.includes(id))
+  })
+  }
+
+  /**
+   * Filters events by the given location IDs.
+   * @param events The events to filter.
+   * @param locationIds The location IDs to filter by.
+   * @returns The filtered events.
+   */
+  private filterByLocation(events: AppEvent[], locationIds: RecordIdValue[]): AppEvent[] {
+    if (!locationIds || locationIds.length === 0) return events
+
+    return events.filter((event) => {
+      if (!event.location) return false
+
+      const id = event.location.id
+      return locationIds.includes(id)
+    })
+  }
+
+  /**
+   * Filters events by the given price ranges.
+   * @param events The events to filter.
+   * @param selectedPrices The selected price ranges to filter by.
+   * @returns The filtered events.
+   */
+  private filterByPrice(events: AppEvent[], selectedPrices: number[]): AppEvent[] {
+    if (!selectedPrices || selectedPrices.length === 0) return events
+    return events.filter((event) => {
+      const price = Number(event.price)
+      return selectedPrices.some((selected) => {
+        if (selected === 0) return price === 0
+        if (selected === 20) return price > 15
+        const min = selected - 5
+        const max = selected
+        return price > min && price <= max
+      })
+    })
+  }
+
+  /**
+   * Filters events by the given date range.
+   * @param events The events to filter.
+   * @param start The start date of the range.
+   * @param end The end date of the range.
+   * @returns The filtered events.
+   */
+  private filterByDateRange(events: AppEvent[], start?: Date | null, end?: Date | null): AppEvent[] {
+    let out = events
+    if (start) {
+      out = out.filter((event) => new Date(event.date_start) >= start)
+    }
+    if (end) {
+      out = out.filter((event) => {
+        const eventEnd = event.date_end ? new Date(event.date_end) : new Date(event.date_start)
+        return eventEnd <= end
+      })
+    }
+    return out
+  }
+
+  // -------------------------------- Event Location Resolution ---------------------------------
+  private async resolveLocationForEvent(event: AppEvent): Promise<AppLocation | undefined> {
+    if (!event.location) return undefined
+    const id = event.location.id.toString() 
+    if (!this.locationCache.has(id)) {
+      // store promise so concurrent lookups don't trigger multiple network calls
+      this.locationCache.set(id, this.locationService.getLocationByID(event.location))
+    }
+    return this.locationCache.get(id)
+  }
+
+  private async mapEventsWithLocation(events: AppEvent[]): Promise<EventWithResolvedLocation[]> {
+    const now = new Date()
+    const mapped = await Promise.all(
+      events.map(async (event) => {
+        const location = await this.resolveLocationForEvent(event)
+        const endDate = event.date_end ? new Date(event.date_end) : new Date(event.date_start)
+        return {
+          ...event,
+          locationName: location?.name ?? 'Unbekannter Ort',
+          isPast: endDate < now,
+        } as EventWithResolvedLocation
+      }),
+    )
+
+    mapped.sort((a, b) => {
+      if (a.isPast && !b.isPast) return 1
+      if (!a.isPast && b.isPast) return -1
+      return new Date(a.date_start).getTime() - new Date(b.date_start).getTime()
+    })
+
+    return mapped
+  }
+
+  // --------------------------------- UI Tracking Handlers ---------------------------------
   trackByEvent(index: number, item: EventWithResolvedLocation) {
     return item.id?.id ?? index
   }
@@ -295,6 +347,7 @@ selectedDateEnd: Date | null = null
     ]
   }
 
+  // --------------------------------- UI Selection Handlers ---------------------------------
   setSelectedCategories(category: { id: string; name: string }) {
     if (this.categoryIds.includes(category.id as RecordIdValue)) {
       this.categoryIds = this.categoryIds.filter((id) => id !== category.id)
