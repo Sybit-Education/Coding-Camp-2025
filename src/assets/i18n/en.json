@@ -127,6 +127,8 @@
       "name": "Please enter an event name.",
       "date": "Please enter a start date.",
       "time": "Please enter a start time.",
+      "location": "Please select a location.",
+      "theme": "Please select a type of event.",
       "general": "Please fill in all mandatory fields."
     },
     "cancel": "Cancel",
