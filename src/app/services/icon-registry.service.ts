@@ -45,7 +45,7 @@ export class IconRegistryService {
   }
   private transformSvg(svg: string): string {
     // Grundlegende Sanitization: benutze DOMPurify um gefährliche Elemente und Attribute zu entfernen
-    svg = DOMPurify.sanitize(svg, { SAFE_FOR_SVG: true, USE_PROFILES: { svg: true } });
+    svg = DOMPurify.sanitize(svg, { USE_PROFILES: { svg: true } });
 
     // Stelle sicher, dass root <svg> width/height auf 100% gesetzt ist, damit Host-Größe greift
     // und nutze ein vernünftiges preserveAspectRatio.
