@@ -30,9 +30,7 @@ export class AdminOrganizerOverviewComponent implements OnInit {
   // Table settings for ngx-datatable
   protected readonly rows = signal<Record<string, unknown>[]>([])
   protected readonly temp = signal<Record<string, unknown>[]>([])
-  protected readonly currentSorts = signal<{ prop: string; dir: SortDirection }[]>([
-    { prop: 'name', dir: SortDirection.asc },
-  ])
+  protected readonly currentSorts = signal<{ prop: string; dir: SortDirection }[]>([{ prop: 'name', dir: SortDirection.asc }])
   protected filterValue = ''
 
   ngOnInit() {
@@ -42,10 +40,7 @@ export class AdminOrganizerOverviewComponent implements OnInit {
   protected async refresh() {
     this.isLoading.set(true)
     try {
-      const [list, events] = await Promise.all([
-        this.db.getAll<Organizer>('organizer'),
-        this.eventService.getAllEvents(),
-      ])
+      const [list, events] = await Promise.all([this.db.getAll<Organizer>('organizer'), this.eventService.getAllEvents()])
 
       const eventCounts = this.buildOrganizerEventCounts(events ?? [])
       this.organizerEventCounts.set(eventCounts)
@@ -57,7 +52,7 @@ export class AdminOrganizerOverviewComponent implements OnInit {
       const tableData = sorted.map((o) => ({
         ...o,
         originalId: o.id, // Keep original ID for actions/navigation
-        eventCount: o.id ? eventCounts.get(String(o.id)) ?? 0 : 0,
+        eventCount: o.id ? (eventCounts.get(String(o.id)) ?? 0) : 0,
       }))
 
       this.organizers.set(sorted)
@@ -80,7 +75,6 @@ export class AdminOrganizerOverviewComponent implements OnInit {
   protected createOrganizer() {
     this.router.navigate(['/admin/organizer/create'])
   }
-
 
   protected editOrganizer(organizerId: RecordId) {
     this.router.navigate(['/admin/organizer', String(organizerId)])
@@ -127,10 +121,7 @@ export class AdminOrganizerOverviewComponent implements OnInit {
   }
 
   // Sort helper
-  private sortData(
-    data: Record<string, unknown>[],
-    sorts: { prop: string; dir: SortDirection }[],
-  ): Record<string, unknown>[] {
+  private sortData(data: Record<string, unknown>[], sorts: { prop: string; dir: SortDirection }[]): Record<string, unknown>[] {
     if (sorts.length === 0) return data
 
     const sort = sorts[0]

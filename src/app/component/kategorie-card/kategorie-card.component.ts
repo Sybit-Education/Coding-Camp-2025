@@ -21,8 +21,6 @@ export class KategorieCardComponent {
 
   @Output() categoryAdded = new EventEmitter<FilterItem>()
 
-  
-
   // Signals für reaktive Verarbeitung
   protected readonly categoryColor = signal<string>('#ffffff')
 

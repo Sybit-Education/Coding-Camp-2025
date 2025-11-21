@@ -77,7 +77,7 @@
       <div class="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"></div>
       <span class="ml-3">{{ 'COMMON.LOADING' | translate }}</span>
     </div>
-  } @else if(organizers().length === 0) {
+  } @else if (organizers().length === 0) {
     <div class="rounded-lg bg-white py-8 text-center shadow">
       <p class="mb-4 text-gray-500">Noch keine Veranstalter angelegt.</p>
       <button
@@ -129,7 +129,11 @@
         <!-- Name Column Template -->
         <ngx-datatable-column name="Name" prop="name" [flexGrow]="3">
           <ng-template let-row="row" ngx-datatable-cell-template>
-            <a href="javascript:void(0)" (click)="editOrganizer(row.originalId)" class="text-blue-600 hover:text-blue-800 hover:underline">
+            <a
+              href="javascript:void(0)"
+              (click)="editOrganizer(row.originalId)"
+              class="text-blue-600 hover:text-blue-800 hover:underline"
+            >
               {{ row.name }}
             </a>
           </ng-template>
@@ -153,7 +157,7 @@
             <span class="text-gray-600">{{ value }}</span>
           </ng-template>
         </ngx-datatable-column>
-        
+
         <!-- Actions Column Template -->
         <ngx-datatable-column name="Aktionen" [sortable]="false" [width]="10">
           <ng-template let-row="row" ngx-datatable-cell-template>
@@ -177,7 +181,9 @@
                 class="p-1 text-red-600 hover:text-red-800 focus:outline-none disabled:cursor-not-allowed disabled:text-red-300"
                 [disabled]="row.eventCount > 0"
                 [attr.aria-disabled]="row.eventCount > 0"
-                title="{{ row.eventCount > 0 ? 'Verknüpfte Events verhindern das Löschen' : ('ADMIN.EVENTS.DELETE' | translate) }}"
+                title="{{
+                  row.eventCount > 0 ? 'Verknüpfte Events verhindern das Löschen' : ('ADMIN.EVENTS.DELETE' | translate)
+                }}"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path

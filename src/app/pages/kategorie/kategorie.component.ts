@@ -209,17 +209,14 @@ export class KategorieComponent implements OnInit {
    * @returns The filtered events.
    */
   private filterByCategory(events: AppEvent[], categoryIds: RecordIdValue[]): AppEvent[] {
-  if (!categoryIds || categoryIds.length === 0) return events
+    if (!categoryIds || categoryIds.length === 0) return events
 
-  return events.filter((event) => {
-    // Alle Category-IDs müssen abgedeckt sein
-    const eventCategoryIds = [
-      ...(event.topic?.map((t) => t.id) ?? []),
-      event.event_type?.id,
-    ].filter(Boolean) as RecordIdValue[]
+    return events.filter((event) => {
+      // Alle Category-IDs müssen abgedeckt sein
+      const eventCategoryIds = [...(event.topic?.map((t) => t.id) ?? []), event.event_type?.id].filter(Boolean) as RecordIdValue[]
 
-    return categoryIds.every((id) => eventCategoryIds.includes(id))
-  })
+      return categoryIds.every((id) => eventCategoryIds.includes(id))
+    })
   }
 
   /**
@@ -283,7 +280,7 @@ export class KategorieComponent implements OnInit {
   // -------------------------------- Event Location Resolution ---------------------------------
   private async resolveLocationForEvent(event: AppEvent): Promise<AppLocation | undefined> {
     if (!event.location) return undefined
-    const id = event.location.id.toString() 
+    const id = event.location.id.toString()
     if (!this.locationCache.has(id)) {
       // store promise so concurrent lookups don't trigger multiple network calls
       this.locationCache.set(id, this.locationService.getLocationByID(event.location))

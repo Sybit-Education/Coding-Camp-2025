@@ -56,11 +56,23 @@
         <div class="flex flex-col">
           <div>
             <h3>{{ 'all-categories.date-from' | translate }}</h3>
-            <input type="date" name="date-from" id="date-from" class="w-full bg-white" (change)="setSelectedDateStart($any($event.target).valueAsDate)" />
+            <input
+              type="date"
+              name="date-from"
+              id="date-from"
+              class="w-full bg-white"
+              (change)="setSelectedDateStart($any($event.target).valueAsDate)"
+            />
           </div>
           <div>
             <h3>{{ 'all-categories.date-to' | translate }}</h3>
-            <input type="date" name="date-to" id="date-to" class="w-full bg-white" (change)="setSelectedDateEnd($any($event.target).valueAsDate)" />
+            <input
+              type="date"
+              name="date-to"
+              id="date-to"
+              class="w-full bg-white"
+              (change)="setSelectedDateEnd($any($event.target).valueAsDate)"
+            />
           </div>
         </div>
 
