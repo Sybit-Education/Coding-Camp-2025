@@ -7,7 +7,12 @@
 
   @if (event) {
     <article class="flex flex-col p-2">
-      <section id="event-content" class="info-card rounded-2xl bg-gray-100 shadow-2xl">
+      <section
+        id="event-content"
+        class="info-card rounded-2xl bg-gray-100 shadow-2xl"
+        role="region"
+        [attr.aria-label]="'event-detail.main-info' | translate"
+      >
         <!-- Back-Button in der oberen linken Ecke -->
         <div class="relative">
           <div class="pointer-events-none absolute top-2 left-2 z-10">
@@ -177,7 +182,11 @@
             </div>
           </div>
           <div class="flex w-full justify-center py-8">
-            <button class="h-12 cursor-pointer rounded-md bg-green-400 px-4 shadow hover:opacity-90" (click)="startRoute()">
+            <button
+              class="h-12 cursor-pointer rounded-md bg-green-400 px-4 shadow hover:opacity-90 focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
+              (click)="startRoute()"
+              [attr.aria-label]="'event-detail.start-route' | translate"
+            >
               <app-icon name="location" class="h-4 w-4" aria-hidden="true"></app-icon> Route starten
             </button>
           </div>
@@ -197,8 +206,8 @@
           </h2>
           <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
           <div class="flex justify-between">
-            <div class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl">
-              <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+            <div class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl" role="list">
+              <div class="ml-6 grid grid-cols-[auto_3fr] gap-12" role="listitem">
                 <div class="flex items-center justify-center">
                   <div class="flex items-center justify-center" aria-hidden="true">
                     <app-icon name="person" class="h-8 w-8" aria-hidden="true"></app-icon>
@@ -212,7 +221,7 @@
                 </div>
               </div>
               @if (organizer.email) {
-                <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+                <div class="ml-6 grid grid-cols-[auto_3fr] gap-12" role="listitem">
                   <div class="flex items-center justify-center">
                     <div class="flex items-center justify-center" aria-hidden="true">
                       <app-icon name="mail" class="h-8 w-8" aria-hidden="true"></app-icon>
@@ -231,7 +240,7 @@
                 </div>
               }
               @if (organizer.phonenumber) {
-                <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+                <div class="ml-6 grid grid-cols-[auto_3fr] gap-12" role="listitem">
                   <div class="flex items-center justify-center">
                     <div class="flex items-center justify-center" aria-hidden="true">
                       <app-icon name="call" class="h-8 w-8" aria-hidden="true"></app-icon>
