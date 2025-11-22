@@ -1,17 +1,26 @@
-<a [routerLink]="['/event', event?.id?.id]" class="justify-top card aspect-[1/1]">
+<a
+  [routerLink]="['/event', event?.id?.id]"
+  class="justify-top card aspect-[1/1] focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
+  [attr.aria-label]="ariaLabel"
+>
   <div class="relative h-[50%] w-full overflow-hidden bg-gray-100">
     <div class="pointer-events-none absolute top-2 left-2 z-10">
-      <app-event-type-pill class="text-xs" [event]="event"></app-event-type-pill>
+      <app-event-type-pill aria-hidden="true" class="text-xs" [event]="event"></app-event-type-pill>
     </div>
     @if (event?.['isPast']) {
-      <ul class="pill-list pointer-events-none absolute top-2 right-2 z-10">
+      <ul aria-hidden="true" class="pill-list pointer-events-none absolute top-2 right-2 z-10">
         <li class="border-0 bg-gray-700 text-xs text-white">
           {{ 'EVENTS.PAST_EVENT' | translate }}
         </li>
       </ul>
     }
     @if (mediaUrl) {
-      <img [src]="mediaUrl" [alt]="event?.name || 'Event Bild'" class="h-full w-full object-cover" [attr.loading]="'lazy'" />
+      <img
+        [src]="mediaUrl"
+        [alt]="event?.name ? 'Bild: ' + (event?.name || '') : 'Platzhalterbild Veranstaltung'"
+        class="h-full w-full object-cover"
+        [attr.loading]="'lazy'"
+      />
     } @else {
       <div class="flex h-full w-full items-center justify-center bg-gray-100">
         <img
