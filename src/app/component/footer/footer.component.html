@@ -1,15 +1,29 @@
 <div class="bg-kultur flex min-h-[80px] w-full flex-col items-center justify-between px-6 pb-[80px] md:flex-row md:items-end">
   <nav class="flex gap-5 py-4" aria-label="{{ 'NAV.FOOTER' | translate }}">
-    <a href="https://www.radolfzell.de/impressum" class="hover:underline">{{ 'footer.impressum' | translate }}</a>
+    <a
+      href="https://www.radolfzell.de/impressum"
+      class="hover:underline focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
+      >{{ 'footer.impressum' | translate }}</a
+    >
     <span class="text-gray-400">|</span>
-    <a href="https://www.radolfzell.de/datenschutz" class="hover:underline">{{ 'footer.datenschutz' | translate }}</a>
+    <a
+      href="https://www.radolfzell.de/datenschutz"
+      class="hover:underline focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
+      >{{ 'footer.datenschutz' | translate }}</a
+    >
     <span class="text-gray-400">|</span>
-    <a [routerLink]="['/barrierefreiheit']" routerLinkActive="router-link-active" ariaCurrentWhenActive="page" class="hover:underline">{{ 'footer.accessibility' | translate }}</a>
+    <a
+      [routerLink]="['/barrierefreiheit']"
+      routerLinkActive="router-link-active"
+      ariaCurrentWhenActive="page"
+      class="hover:underline focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
+      >{{ 'footer.accessibility' | translate }}</a
+    >
     <span class="text-gray-400">|</span>
-    <a href="https://www.instagram.com/Radolfzell1200" class="hover:underline flex items-center gap-1">
-      <app-icon name="instagram" class="h-[1rem]" aria-hidden="true"></app-icon> 
+    <a href="https://www.instagram.com/Radolfzell1200" class="flex items-center gap-1 hover:underline">
+      <app-icon name="instagram" class="h-[1rem]" aria-hidden="true"></app-icon>
       {{ 'footer.instagram' | translate }}
-    </a>   
+    </a>
   </nav>
 
   <a [routerLink]="['/team']" routerLinkActive="router-link-active" ariaCurrentWhenActive="page">
