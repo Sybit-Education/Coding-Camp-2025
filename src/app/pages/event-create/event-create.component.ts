@@ -52,6 +52,8 @@ export class EventCreateComponent implements OnInit {
   @ViewChild('eventNameInput') eventNameInput!: ElementRef<HTMLInputElement>
   @ViewChild('dateStartInput') dateStartInput!: ElementRef<HTMLInputElement>
   @ViewChild('timeStartInput') timeStartInput!: ElementRef<HTMLInputElement>
+  @ViewChild('locationInput') locationInput!: ElementRef<HTMLInputElement>
+  @ViewChild('themeInput') themeInput!: ElementRef<HTMLInputElement>
   @ViewChild(ImageUploadComponent) imageUploadComponent!: ImageUploadComponent
 
   // ===== Services =====
@@ -89,6 +91,8 @@ export class EventCreateComponent implements OnInit {
   errorName = false
   errorDate = false
   errorTime = false
+  errorLocation = false
+  errorTheme = false
 
   // Location
   placename: string | null = null
@@ -245,7 +249,7 @@ export class EventCreateComponent implements OnInit {
       // Location ist kein Pflichtfeld mehr
       // Organisator ist kein Pflichtfeld mehr
 
-      if (this.eventName === '' || this.dateStart === '' || this.timeStart === '') {
+      if (this.eventName === '' || this.dateStart === '' || this.timeStart === '' || this.selectedLocation === null || this.selectedEventType === null) {
         if (this.eventName === '') {
           this.errorName = true
         } else {
@@ -261,16 +265,30 @@ export class EventCreateComponent implements OnInit {
         } else {
           this.errorTime = false
         }
+        if (this.selectedLocation === null) {
+          this.errorLocation = true
+        } else {
+          this.errorLocation = false
+        }
+        if (this.selectedEventType === null) {
+          this.errorTheme = true
+        } else {
+          this.errorTheme = false
+        }
 
         this.snackBarService.showError('Bitte füllen Sie alle Pflichtfelder aus (Name, Datum, Uhrzeit).')
 
         // Fokus auf das erste Feld mit Fehler setzen
         setTimeout(() => this.focusFirstErrorField(), 100)
+        this.isSaving = false
+        this.markForCheck()
         return
       }
       this.errorName = false
       this.errorDate = false
       this.errorTime = false
+      this.errorLocation = false
+      this.errorTheme = false
 
       // Datum und Zeit verarbeiten
       const start = new Date(`${this.dateStart}T${this.timeStart}`)
@@ -375,6 +393,10 @@ export class EventCreateComponent implements OnInit {
       this.dateStartInput.nativeElement.focus()
     } else if (this.errorTime && this.timeStartInput) {
       this.timeStartInput.nativeElement.focus()
+    } else if (this.errorLocation && this.locationInput) {
+      this.locationInput.nativeElement.focus()
+    } else if (this.errorTheme && this.themeInput) {
+      this.themeInput.nativeElement.focus()
     }
   }
 

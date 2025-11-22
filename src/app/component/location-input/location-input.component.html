@@ -5,6 +5,7 @@
     [(ngModel)]="selectedLocation"
     (ngModelChange)="setLocation($event)"
     class="p-[0.75rem 1rem] w-full cursor-pointer"
+    [class]="errorLocation ? 'error' : ''"
   >
     <option [ngValue]="null">
       {{ 'create-event.location' | translate }}
@@ -22,6 +23,12 @@
   >
     {{ 'create-event.newlocation' | translate }}
   </button>
+
+  @if (errorLocation) {
+    <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+      {{ 'create-event.error.location' | translate }}
+    </p>
+  }
 </div>
 
 <!-- Neue Location -->

@@ -1,0 +1,59 @@
+<div class="relative mb-4 w-72" [ngClass]="dropdownOpen ? 'h-80' : ''">
+  <!-- Dropdown-Feld -->
+  <button
+    class="flex w-full cursor-pointer flex-wrap items-center gap-1 border-1 border-gray-400 bg-white px-3 py-2"
+    [ngClass]="dropdownOpen ? 'rounded-t-2xl' : 'rounded-2xl'"
+    (click)="toggleDropdown()"
+    (keydown.enter)="toggleDropdown()"
+    tabindex="0"
+    aria-haspopup="listbox"
+    [attr.aria-expanded]="dropdownOpen"
+  >
+    <!-- Chips / Placeholder -->
+    @if (selectedItems.length > 0) {
+      @for (item of selectedItems; track item.id) {
+        <span class="flex items-center gap-1 rounded bg-gray-200 px-2 py-0.5">
+          {{ item.name }}
+          <button
+            type="button"
+            (click)="removeItem(item); $event.stopPropagation()"
+            aria-label="Remove {{ item.name }}"
+            class="ml-2 flex cursor-pointer items-center justify-center"
+          >
+            <app-icon name="close" class="h-6 w-6" aria-hidden="true" />
+          </button>
+        </span>
+      }
+    } @else {
+      <span class="text-gray-400">
+        {{ placeholder }}
+      </span>
+    }
+
+    <!-- Pfeil -->
+    <svg class="ml-auto h-4 w-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+
+  <!-- Dropdown-Liste -->
+  @if (dropdownOpen) {
+    <div
+      class="scrollbar-hide overflow-y-auto absolute right-0 left-0 z-50 mt-0 max-h-60 rounded-b-2xl border-1 border-gray-400 bg-white"
+      tabindex="-1"
+      aria-label="Options"
+    >
+      @for (item of items; track item.id) {
+        <option
+          class="flex cursor-pointer items-center justify-between px-3 py-2 hover:bg-gray-100"
+          (click)="addItem(item)"
+          (keydown.enter)="toggleDropdown()"
+          tabindex="0"
+          [attr.aria-selected]="isSelected(item)"
+        >
+          {{ item.name }}
+        </option>
+      }
+    </div>
+  }
+</div>

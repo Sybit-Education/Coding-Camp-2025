@@ -45,7 +45,8 @@
     "home": "Home",
     "favorites": "Favorites",
     "all-events": "All Events",
-    "more": "More"
+    "more": "More",
+    "create-event": "Create Event"
   },
   "MORE": {
     "TEAM": {
@@ -75,6 +76,12 @@
       "aria-lable-catagories-heading": "categories-heading"
     },
     "title": "1200 Years Radolfzell"
+  },
+  "all-categories": {
+    "all-locations": "All Locations",
+    "all-categories": "All Categories",
+    "all-events": "All Events",
+    "filter": "Filter"
   },
   "category": {
     "title": "Kategorie"
@@ -129,6 +136,8 @@
       "name": "Please enter an event name.",
       "date": "Please enter a start date.",
       "time": "Please enter a start time.",
+      "location": "Please select a location.",
+      "theme": "Please select a type of event.",
       "general": "Please fill in all mandatory fields."
     },
     "cancel": "Cancel",

@@ -70,7 +70,7 @@
   input,
   select,
   textarea {
-    @apply rounded rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-[#6d7cbc] focus:outline-none;
+    @apply rounded rounded-2xl border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-[#6d7cbc] focus:outline-none;
   }
 
   input.error,
@@ -105,6 +105,10 @@
     li {
       @apply inline-flex cursor-pointer items-center rounded-full border border-gray-300 px-3 py-1 transition-colors hover:opacity-80 hover:shadow-xl focus-visible:ring-2 focus-visible:ring-[#c70d56] focus-visible:ring-offset-2 focus-visible:outline-none;
     }
+  }
+
+  .filter-option {
+    @apply mb-5 items-center justify-between overflow-hidden text-center transition-transform duration-300 focus:ring-2 focus:ring-yellow-400;
   }
 
   .tailwind-table {
@@ -246,7 +250,8 @@
 
 .link {
   @apply focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none;
-  @apply text-[#3b4ea3] transition-colors duration-200 hover:text-[#c70d56] hover:underline focus:ring-2 focus:ring-blue-500 focus:outline-none;
+  @apply focus:ring-2 focus:ring-[#3b4ea3] focus:outline-none;
+  @apply text-[#3b4ea3] transition-colors duration-200 hover:text-[#c70d56] hover:underline 
 }
 
 .ql-editor {
@@ -279,6 +284,15 @@
 .animate-fadeIn {
   animation: fadeIn 1.3s ease-out;
   opacity: 1;
+}
+
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 
 /* Custom SVG-Background Utilities */

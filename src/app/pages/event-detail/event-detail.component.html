@@ -103,7 +103,11 @@
                 <h3>
                   {{ 'event-detail.where' | translate }}
                 </h3>
-                <p>{{ location?.name || 'Ort wird bekannt gegeben' }}</p>
+                <p class="mb-0">{{ location?.name || 'Ort wird bekannt gegeben' }}</p>
+                @if (location?.street) {
+                  <p class="mb-0">{{ location?.street }}</p>
+                  <p class="mb-0">{{ location?.zip_code }} {{ location?.city }}</p>
+                }
               </div>
             </div>
             <div class="ml-6 grid grid-cols-[auto_3fr] gap-12" role="listitem">

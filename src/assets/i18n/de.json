@@ -44,7 +44,8 @@
     "home": "Home",
     "favorites": "Favoriten",
     "all-events": "Alle Events",
-    "more": "Mehr"
+    "more": "Mehr",
+    "create-event": "Event erstellen"
   },
   "MORE": {
     "TEAM": {
@@ -74,6 +75,12 @@
       "aria-lable-catagories-heading": "categories-heading"
     },
     "title": "1200 Jahre Radolfzell"
+  },
+  "all-categories": {
+    "all-locations": "Alle Orte",
+    "all-categories": "Alle Kategorien",
+    "all-events": "Alle Veranstaltungen",
+    "filter": "Filter"
   },
   "i18y": {
     "to-main-content": "Zum Hauptinhalt springen"
@@ -125,6 +132,8 @@
       "name": "Bitte geben Sie einen Eventnamen ein.",
       "date": "Bitte geben Sie ein Startdatum ein.",
       "time": "Bitte geben Sie eine Startzeit ein.",
+      "location": "Bitte wählen Sie einen Ort aus.",
+      "theme": "Bitte wählen Sie eine Art des Events aus.",
       "general": "Bitte füllen Sie alle Pflichtfelder aus."
     },
     "cancel": "Abbrechen",
