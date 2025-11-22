@@ -35,7 +35,7 @@
                 <app-share [event]="event" [location]="location" class="p-1"></app-share>
                 @if (isLoggedIn) {
                   <button
-                    class="hover*:bg-blue-600 cursor-pointer rounded-full bg-blue-500 px-4 py-2 font-bold text-white"
+                    class="hover*:bg-blue-600 cursor-pointer rounded-full bg-blue-500 px-4 py-2 font-bold text-white focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
                     (click)="editEvent()"
                   >
                     {{ 'event-detail.edit' | translate }}
@@ -62,7 +62,7 @@
             </div>
             @if (isLoggedIn) {
               <button
-                class="hover*:bg-blue-600 cursor-pointer rounded-full bg-blue-500 px-4 py-2 font-bold text-white"
+                class="hover*:bg-blue-600 cursor-pointer rounded-full bg-blue-500 px-4 py-2 font-bold text-white focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
                 (click)="editEvent()"
               >
                 {{ 'event-detail.edit' | translate }}
@@ -73,7 +73,7 @@
         <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
         <div class="flex justify-between">
           <div class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl">
-            <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+            <div class="ml-6 grid grid-cols-[auto_3fr] gap-12" role="listitem">
               <div class="flex items-center justify-center">
                 <div class="flex items-center justify-center" aria-hidden="true">
                   <app-icon name="calendar" class="h-8 w-8" aria-hidden="true"></app-icon>
@@ -88,7 +88,7 @@
                 </p>
               </div>
             </div>
-            <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+            <div class="ml-6 grid grid-cols-[auto_3fr] gap-12" role="listitem">
               <div class="flex items-center justify-center">
                 <div class="flex items-center justify-center" aria-hidden="true">
                   <app-icon name="location" class="h-8 w-8" aria-hidden="true"></app-icon>
@@ -101,7 +101,7 @@
                 <p>{{ location?.name || 'Ort wird bekannt gegeben' }}</p>
               </div>
             </div>
-            <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+            <div class="ml-6 grid grid-cols-[auto_3fr] gap-12" role="listitem">
               <div class="flex items-center justify-center">
                 <div class="flex items-center justify-center" aria-hidden="true">
                   <app-icon name="money_bag" class="h-8 w-8" aria-hidden="true"></app-icon>
@@ -121,7 +121,7 @@
               </div>
             </div>
             @if (organizer) {
-              <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+              <div class="ml-6 grid grid-cols-[auto_3fr] gap-12" role="listitem">
                 <div class="flex items-center justify-center">
                   <div class="flex items-center justify-center" aria-hidden="true">
                     <app-icon name="person" class="h-8 w-8" aria-hidden="true"></app-icon>
@@ -140,7 +140,7 @@
       </section>
 
       @if (event.description) {
-        <section class="desc mt-10 rounded-2xl" aria-labelledby="description-heading">
+        <section class="desc mt-10 rounded-2xl" aria-labelledby="description-heading" role="region">
           <h2 id="description-heading">
             {{ 'event-detail.description' | translate }}
           </h2>
@@ -184,7 +184,7 @@
         </section>
       }
       @if (location?.id) {
-        <section>
+        <section role="region" [attr.aria-label]="'event-detail.next-events' | translate">
           <h2>{{ 'event-detail.next-events' | translate }}</h2>
           <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
           <app-event-card-list [location]="location!" [currentEventId]="event.id"></app-event-card-list>
