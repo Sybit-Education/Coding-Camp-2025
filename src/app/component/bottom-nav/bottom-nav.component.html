@@ -18,9 +18,10 @@
       <span class="flex-1">
         <a
           routerLink="/"
+          ariaCurrentWhenActive="page"
           [routerLinkActiveOptions]="{ exact: true }"
           routerLinkActive="text-[#c70d56] bg-[#ffffff40] rounded-xl scale-110"
-          class="relative flex transform flex-col items-center justify-center p-0.5 p-1 pt-2 text-[#3b4ea3] transition hover:text-[#c70d56]"
+          class="relative flex transform flex-col items-center justify-center p-0.5 p-1 pt-2 text-[#3b4ea3] transition hover:text-[#c70d56] focus-visible:ring-2 focus-visible:ring-[#c70d56] focus-visible:outline-none"
         >
           <app-icon name="home" class="h-6 w-6" aria-hidden="true"></app-icon>
           <span class="m-1 text-xs font-medium tracking-wide">{{ 'bottom-nav.home' | translate }}</span>
@@ -30,8 +31,9 @@
       <span class="flex-1">
         <a
           routerLink="/favourites"
+          ariaCurrentWhenActive="page"
           routerLinkActive="text-[#c70d56] bg-[#ffffff40] rounded-xl scale-110"
-          class="relative flex transform flex-col items-center justify-center p-0.5 p-1 pt-2 text-[#3b4ea3] transition hover:text-[#c70d56]"
+          class="relative flex transform flex-col items-center justify-center p-0.5 p-1 pt-2 text-[#3b4ea3] transition hover:text-[#c70d56] focus-visible:ring-2 focus-visible:ring-[#c70d56] focus-visible:outline-none"
         >
           <app-icon name="favourites" class="h-6 w-6" aria-hidden="true"></app-icon>
           <span class="m-1 text-xs font-medium tracking-wide">{{ 'bottom-nav.favorites' | translate }}</span>
@@ -41,8 +43,9 @@
       <span class="flex-1">
         <a
           routerLink="/event"
+          ariaCurrentWhenActive="page"
           routerLinkActive="text-[#c70d56] bg-[#ffffff40] rounded-xl scale-110"
-          class="relative flex transform flex-col items-center justify-center p-0.5 p-1 pt-2 text-[#3b4ea3] transition hover:text-[#c70d56]"
+          class="relative flex transform flex-col items-center justify-center p-0.5 p-1 pt-2 text-[#3b4ea3] transition hover:text-[#c70d56] focus-visible:ring-2 focus-visible:ring-[#c70d56] focus-visible:outline-none"
         >
           <app-icon name="view_cozy" class="h-6 w-6" aria-hidden="true"></app-icon>
           <span class="m-1 text-xs font-medium tracking-wide">{{ 'bottom-nav.all-events' | translate }}</span>
@@ -52,8 +55,9 @@
       <span class="flex-1">
         <a
           routerLink="/more"
+          ariaCurrentWhenActive="page"
           routerLinkActive="text-[#c70d56] bg-[#ffffff40] rounded-xl scale-110"
-          class="relative flex transform flex-col items-center justify-center p-0.5 p-1 pt-2 text-[#3b4ea3] transition hover:text-[#c70d56]"
+          class="relative flex transform flex-col items-center justify-center p-0.5 p-1 pt-2 text-[#3b4ea3] transition hover:text-[#c70d56] focus-visible:ring-2 focus-visible:ring-[#c70d56] focus-visible:outline-none"
         >
           <app-icon name="more" class="h-6 w-6" aria-hidden="true"></app-icon>
 
