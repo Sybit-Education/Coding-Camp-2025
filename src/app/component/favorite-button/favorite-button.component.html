@@ -3,6 +3,7 @@
     <button
       (click)="toggleFavorite($event)"
       class="action-button"
+      [attr.aria-label]="(isFavorite ? 'FAVORITES.REMOVE' : 'FAVORITES.ADD') | translate"
       [title]="(isFavorite ? 'FAVORITES.REMOVE' : 'FAVORITES.ADD') | translate"
     >
       <!-- Solid star when favorited -->
