@@ -34,7 +34,7 @@
 
   /* Skip link (visible on focus) */
   .skip-link {
-    @apply fixed left-2 top-2 -translate-y-full transform rounded bg-white px-3 py-2 text-sm text-blue-800 shadow focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-blue-500;
+    @apply fixed top-2 left-2 -translate-y-full transform rounded bg-white px-3 py-2 text-sm text-blue-800 shadow focus:translate-y-0 focus:ring-2 focus:ring-blue-500 focus:outline-none;
     z-index: 50;
   }
 
@@ -52,7 +52,6 @@
     clip: rect(0, 0, 0, 0) !important;
     clip-path: inset(50%) !important;
   }
-
 
   /* List styles */
   ul {
@@ -93,18 +92,18 @@
 
 @layer components {
   .card {
-    @apply flex h-full w-full cursor-pointer flex-col items-center overflow-hidden rounded-2xl border border-gray-300 text-center shadow-lg transition-transform duration-300 hover:scale-105 hover:border-gray-400 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400;
+    @apply flex h-full w-full cursor-pointer flex-col items-center overflow-hidden rounded-2xl border border-gray-300 text-center shadow-lg transition-transform duration-300 hover:scale-105 hover:border-gray-400 hover:shadow-xl focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:outline-none;
   }
 
   .action-button {
-    @apply h-12 w-12 cursor-pointer rounded-full bg-white/80 p-2 opacity-80 shadow-md transition hover:bg-gray-200 hover:text-[#3b4ea3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500;
+    @apply h-12 w-12 cursor-pointer rounded-full bg-white/80 p-2 opacity-80 shadow-md transition hover:bg-gray-200 hover:text-[#3b4ea3] focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none;
   }
 
   .pill-list {
     @apply flex list-none flex-wrap gap-2 p-0;
 
     li {
-      @apply inline-flex cursor-pointer items-center rounded-full border border-gray-300 px-3 py-1 transition-colors hover:opacity-80 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c70d56] focus-visible:ring-offset-2;
+      @apply inline-flex cursor-pointer items-center rounded-full border border-gray-300 px-3 py-1 transition-colors hover:opacity-80 hover:shadow-xl focus-visible:ring-2 focus-visible:ring-[#c70d56] focus-visible:ring-offset-2 focus-visible:outline-none;
     }
   }
 
@@ -246,7 +245,8 @@
 */
 
 .link {
-  @apply transition-colors duration-200 text-[#3b4ea3] hover:text-[#c70d56] hover:underline focus:ring-2 focus:ring-blue-500 focus:outline-none;
+  @apply focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none;
+  @apply text-[#3b4ea3] transition-colors duration-200 hover:text-[#c70d56] hover:underline focus:ring-2 focus:ring-blue-500 focus:outline-none;
 }
 
 .ql-editor {
