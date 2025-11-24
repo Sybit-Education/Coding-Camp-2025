@@ -56,6 +56,7 @@
         <div class="flex flex-col">
           <div>
             <h3>{{ 'all-categories.date-from' | translate }}</h3>
+            <label class="sr-only" for="date-from">{{ 'all-categories.date-from' | translate }}</label>
             <input
               type="date"
               name="date-from"
@@ -66,6 +67,7 @@
           </div>
           <div>
             <h3>{{ 'all-categories.date-to' | translate }}</h3>
+            <label class="sr-only" for="date-to">{{ 'all-categories.date-to' | translate }}</label> 
             <input
               type="date"
               name="date-to"
@@ -78,8 +80,10 @@
 
         <div>
           <h3>{{ 'event-detail.eventlocation' | translate }}</h3>
+          <label class="sr-only" for="location-dropdown">{{ 'event-detail.eventlocation' | translate }}</label>
           <app-custom-dropdown
-            [items]="getLocations()"
+            id="location-dropdown"
+            [items]="locationsForFilter"
             [placeholder]="'all-categories.all-locations' | translate"
             (selectionChange)="setSelectedLocations($event)"
           />
@@ -87,8 +91,10 @@
 
         <div>
           <h3>{{ 'all-categories.prices' | translate }}</h3>
+          <label class="sr-only" for="price-dropdown">{{ 'all-categories.prices' | translate }}</label>
           <app-custom-dropdown
-            [items]="getPrices()"
+            id="price-dropdown"
+            [items]="pricesForFilter"
             [placeholder]="'all-categories.all-prices' | translate"
             (selectionChange)="setSelectedPrices($event)"
           />
@@ -96,7 +102,8 @@
 
         <div>
           <h3>{{ 'home.categories' | translate }}</h3>
-          <div class="grid grid-cols-2 gap-4">
+          <label class="sr-only" for="category-grid">{{ 'home.categories' | translate }}</label>
+          <div id="category-grid" class="grid grid-cols-2 gap-4">
             @for (categorie of categories; track categorie.id) {
               <app-kategorie-card
                 [color]="categorie.color"

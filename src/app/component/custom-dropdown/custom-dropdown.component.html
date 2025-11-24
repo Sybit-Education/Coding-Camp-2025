@@ -4,7 +4,7 @@
     class="flex w-full cursor-pointer flex-wrap items-center gap-1 border-1 border-gray-400 bg-white px-3 py-2"
     [ngClass]="dropdownOpen ? 'rounded-t-2xl' : 'rounded-2xl'"
     (click)="toggleDropdown()"
-    (keydown.enter)="toggleDropdown()"
+    (keydown.enter)="toggleDropdown()"    
     tabindex="0"
     aria-haspopup="listbox"
     [attr.aria-expanded]="dropdownOpen"
@@ -17,6 +17,7 @@
           <button
             type="button"
             (click)="removeItem(item); $event.stopPropagation()"
+            (keydown.enter)="removeItem(item); $event.stopPropagation()"
             aria-label="Remove {{ item.name }}"
             class="ml-2 flex cursor-pointer items-center justify-center"
           >
@@ -47,7 +48,7 @@
         <option
           class="flex cursor-pointer items-center justify-between px-3 py-2 hover:bg-gray-100"
           (click)="addItem(item)"
-          (keydown.enter)="toggleDropdown()"
+          (keydown.enter)="addItem(item)"
           tabindex="0"
           [attr.aria-selected]="isSelected(item)"
         >

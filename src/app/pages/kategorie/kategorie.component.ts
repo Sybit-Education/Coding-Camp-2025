@@ -73,6 +73,9 @@ export class KategorieComponent implements OnInit {
   description: string | null = null
   media: RecordIdValue | null = null
 
+  locationsForFilter: { id: string; name: string }[] = []
+  pricesForFilter: { id: string; name: string }[] = []
+
   loading = true
   searchTerm = ''
   searching = true
@@ -127,6 +130,9 @@ export class KategorieComponent implements OnInit {
       await this.performSearch(this.searchTerm)
 
       this.locations = await Promise.all(this.locationCache.values())
+
+      this.locationsForFilter = this.getLocations()
+      this.pricesForFilter = this.getPrices()
     } catch (error) {
       console.error('Fehler beim Laden der Events:', error)
     } finally {
@@ -318,13 +324,6 @@ export class KategorieComponent implements OnInit {
 
   toggleFilter() {
     this.filterOpen = !this.filterOpen
-  }
-
-  getCategories(): { id: string; name: string }[] {
-    return this.categories.map((cat) => ({
-      id: cat.id!.id as string,
-      name: cat.name,
-    }))
   }
 
   getLocations(): { id: string; name: string }[] {
