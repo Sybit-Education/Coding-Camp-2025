@@ -84,6 +84,7 @@
           <app-custom-dropdown
             id="location-dropdown"
             [items]="locationsForFilter"
+            [preselectedItems]="preselectedLocations"
             [placeholder]="'all-categories.all-locations' | translate"
             (selectionChange)="setSelectedLocations($event)"
           />
@@ -95,6 +96,7 @@
           <app-custom-dropdown
             id="price-dropdown"
             [items]="pricesForFilter"
+            [preselectedItems]="preselectedPrices"
             [placeholder]="'all-categories.all-prices' | translate"
             (selectionChange)="setSelectedPrices($event)"
           />
@@ -179,7 +181,7 @@
         </p>
       }
       <div class="relative">
-        <app-event-card [event]="event" [class.opacity-70]="event.isPast"> </app-event-card>
+        <app-event-card [event]="event" [class.opacity-70]="event.isPast" [filterQuery]="filterQuery"> </app-event-card>
       </div>
     }
   </div>

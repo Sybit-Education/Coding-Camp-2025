@@ -23,6 +23,7 @@ import { EventTypePillComponent } from '@app/component/event-type-pill/event-typ
 })
 export class EventCardComponent implements OnInit, OnDestroy, OnChanges {
   @Input() event: Event | null = null
+  @Input() filterQuery?: string | null = null
 
   location: Location | null = null
   eventType: EventType | null = null

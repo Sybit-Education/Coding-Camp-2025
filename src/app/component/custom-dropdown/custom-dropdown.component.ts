@@ -11,6 +11,7 @@ import { IconComponent } from '../icon/icon.component'
 export class CustomDropdownComponent implements OnInit {
   @Input() items: FilterItem[] = []
   @Input() placeholder = 'Select items'
+  @Input() preselectedItems: FilterItem[] = [] // Optional: vorselektierte Items
   @Input() defaultItems: FilterItem[] = [] // Optional: immer ausgewählte Items
 
   @Output() selectionChange = new EventEmitter<FilterItem[]>()
@@ -21,6 +22,12 @@ export class CustomDropdownComponent implements OnInit {
   ngOnInit() {
     if (this.defaultItems?.length) {
       this.selectedItems = [...this.defaultItems]
+      this.emitSelection()
+    }
+    console.log('Preselected Items:', this.preselectedItems)
+    if (this.preselectedItems?.length) {
+      
+      this.selectedItems = [...this.selectedItems, ...this.preselectedItems.filter(item => !this.defaultItems.some(d => d.id === item.id))]
       this.emitSelection()
     }
   }

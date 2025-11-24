@@ -21,6 +21,7 @@ import { FormsModule } from '@angular/forms'
 import { CustomDropdownComponent } from '@app/component/custom-dropdown/custom-dropdown.component'
 import { KategorieCardComponent } from '@app/component/kategorie-card/kategorie-card.component'
 import { IconComponent } from '@app/component/icon/icon.component'
+import { FilterItem } from '@app/models/filterItem.interface'
 
 interface EventWithResolvedLocation extends AppEvent {
   locationName: string
@@ -73,8 +74,11 @@ export class KategorieComponent implements OnInit {
   description: string | null = null
   media: RecordIdValue | null = null
 
-  locationsForFilter: { id: string; name: string }[] = []
-  pricesForFilter: { id: string; name: string }[] = []
+  locationsForFilter: FilterItem[] = []
+  preselectedLocations: FilterItem[] = [] //Nur für vorselektierte Locations
+  pricesForFilter: FilterItem[] = []
+  preselectedPrices: FilterItem[] = [] //Nur für vorselektierte Preise
+  filterQuery: string | null = null
 
   loading = true
   searchTerm = ''
@@ -82,6 +86,7 @@ export class KategorieComponent implements OnInit {
   filterOpen = false
   private allEvents: AppEvent[] = []
   private searchDebounce: number | null = null
+  private receivedFilters: URLSearchParams | null = null
 
   // Cache für Locations, um wiederholte Anfragen zu vermeiden
   readonly locationCache = new Map<string, Promise<AppLocation>>()
@@ -90,9 +95,15 @@ export class KategorieComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
       this.slug = params.get('slug')
-      // Daten neu laden, wenn sich die Parameter ändern
-      this.initilizeData().then(() => this.markForCheck())
     })
+    this.route.queryParamMap.subscribe((params) => {
+      const filterQueryParam = params.get('filterQuery')
+      if (filterQueryParam) {
+        console.log('Found filterQuery param:', filterQueryParam)
+        this.receivedFilters = new URLSearchParams(decodeURIComponent(filterQueryParam))
+      }
+    })
+    this.initilizeData().then(() => this.markForCheck())
   }
 
   async initilizeData() {
@@ -133,6 +144,10 @@ export class KategorieComponent implements OnInit {
 
       this.locationsForFilter = this.getLocations()
       this.pricesForFilter = this.getPrices()
+
+      if (this.receivedFilters) {
+        this.resolveFilterQuery(this.receivedFilters)
+      }
     } catch (error) {
       console.error('Fehler beim Laden der Events:', error)
     } finally {
@@ -170,6 +185,9 @@ export class KategorieComponent implements OnInit {
     this.searching = true
     // Sofort rendern, damit der Spinner zuverlässig sichtbar ist
     this.markForCheck()
+
+    this.buildFilterQuery()
+
     try {
       let candidateEvents: AppEvent[]
 
@@ -251,7 +269,7 @@ export class KategorieComponent implements OnInit {
   private filterByPrice(events: AppEvent[], selectedPrices: number[]): AppEvent[] {
     if (!selectedPrices || selectedPrices.length === 0) return events
     return events.filter((event) => {
-      const price = Number(event.price)
+      const price = Number(event.price) ? Number(event.price) : 0
       return selectedPrices.some((selected) => {
         if (selected === 0) return price === 0
         if (selected === 20) return price > 15
@@ -380,5 +398,79 @@ export class KategorieComponent implements OnInit {
   setSelectedDateEnd(date: Date | null) {
     this.selectedDateEnd = date
     void this.performSearch(this.searchTerm)
+  }
+
+  // --------------------------------- Filter Query ---------------------------------
+  private async buildFilterQuery() {
+    const params: Record<string, string> = {}
+
+    if (this.searchTerm) {
+      params['search'] = this.searchTerm
+    }
+    if (this.categoryIds.length > 0) {
+      params['categories'] = this.categoryIds.map((id) => id.toString()).join(',')
+    }
+    if (this.selectedLocationIds.length > 0) {
+      params['locations'] = this.selectedLocationIds.map((id) => id.toString()).join(',')
+    }
+    if (this.selectedPrices.length > 0) {
+      params['prices'] = this.selectedPrices.join(',')
+    }
+    if (this.selectedDateStart) {
+      params['dateStart'] = this.selectedDateStart.toISOString().split('T')[0]
+    }
+    if (this.selectedDateEnd) {
+      params['dateEnd'] = this.selectedDateEnd.toISOString().split('T')[0]
+    }
+
+    const queryString = new URLSearchParams(params).toString()
+    this.filterQuery = queryString ? `${queryString}` : null
+  }
+
+  private resolveFilterQuery(queryParams: URLSearchParams) {
+    this.filterOpen = true
+    const search = queryParams.get('search')
+    if (search) {
+      this.searchTerm = search
+    }
+
+    const categories = queryParams.get('categories')
+    if (categories) {
+      this.categoryIds = categories.split(',').map((id) => id as RecordIdValue)
+      console.log('Resolved category IDs from filter query:', this.categoryIds)
+    }
+
+    const locations = queryParams.get('locations')
+    if (locations) {
+      this.selectedLocationIds = locations.split(',').map((id) => id as RecordIdValue)
+      this.preselectedLocations = this.locationsForFilter.filter((loc) =>
+        this.selectedLocationIds.includes(loc.id as RecordIdValue),
+      )
+      console.log('Locations for Filter:', this.locationsForFilter)
+      console.log('Selected Locations:', this.selectedLocationIds)
+      console.log('preselectedLocations:', this.preselectedLocations)
+    }
+
+    const prices = queryParams.get('prices')
+    if (prices) {
+      this.selectedPrices = prices.split(',').map(Number)
+      this.preselectedPrices = this.pricesForFilter.filter((price) =>
+        this.selectedPrices.includes(
+          Number(price.id === '0' ? 0 : price.id === '0-5' ? 5 : price.id === '5-10' ? 10 : price.id === '10-15' ? 15 : 20),
+        ),
+      )
+      console.log('Selected Prices:', this.selectedPrices)
+      console.log('preselectedPrices:', this.preselectedPrices)
+    }
+
+    const dateStart = queryParams.get('dateStart')
+    if (dateStart) {
+      this.selectedDateStart = new Date(dateStart)
+    }
+
+    const dateEnd = queryParams.get('dateEnd')
+    if (dateEnd) {
+      this.selectedDateEnd = new Date(dateEnd)
+    }
   }
 }
