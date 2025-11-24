@@ -26,8 +26,10 @@ export class CustomDropdownComponent implements OnInit {
     }
     console.log('Preselected Items:', this.preselectedItems)
     if (this.preselectedItems?.length) {
-      
-      this.selectedItems = [...this.selectedItems, ...this.preselectedItems.filter(item => !this.defaultItems.some(d => d.id === item.id))]
+      this.selectedItems = [
+        ...this.selectedItems,
+        ...this.preselectedItems.filter((item) => !this.defaultItems.some((d) => d.id === item.id)),
+      ]
       this.emitSelection()
     }
   }

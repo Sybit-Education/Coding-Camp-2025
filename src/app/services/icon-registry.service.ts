@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { Observable, of } from 'rxjs'
 import { map, shareReplay } from 'rxjs/operators'
-import DOMPurify from 'dompurify';
+import DOMPurify from 'dompurify'
 
 @Injectable({ providedIn: 'root' })
 /**
@@ -45,7 +45,7 @@ export class IconRegistryService {
   }
   private transformSvg(svg: string): string {
     // Grundlegende Sanitization: benutze DOMPurify um gefährliche Elemente und Attribute zu entfernen
-    svg = DOMPurify.sanitize(svg, { USE_PROFILES: { svg: true } });
+    svg = DOMPurify.sanitize(svg, { USE_PROFILES: { svg: true } })
 
     // Stelle sicher, dass root <svg> width/height auf 100% gesetzt ist, damit Host-Größe greift
     // und nutze ein vernünftiges preserveAspectRatio.
