@@ -48,6 +48,7 @@
         [routerLink]="['/admin/']"
         routerLinkActive="border-blue-600 text-blue-600"
         [routerLinkActiveOptions]="{ exact: true }"
+        ariaCurrentWhenActive="page"
         class="border-b-2 border-transparent px-1 py-2 text-xl font-medium whitespace-nowrap text-gray-600 hover:border-gray-300 hover:text-blue-800"
       >
         {{ 'ADMIN.EVENTS.TITLE' | translate }}
@@ -56,6 +57,7 @@
         [routerLink]="['/admin/locations']"
         routerLinkActive="border-blue-600 text-blue-600"
         [routerLinkActiveOptions]="{ exact: true }"
+        ariaCurrentWhenActive="page"
         class="border-b-2 border-transparent px-1 py-2 text-xl font-medium whitespace-nowrap text-gray-600 hover:border-gray-300 hover:text-blue-800"
       >
         {{ 'ADMIN.LOCATIONS.TITLE' | translate }}
@@ -64,8 +66,8 @@
         [routerLink]="['/admin/organizers']"
         routerLinkActive="border-blue-600 text-blue-600"
         [routerLinkActiveOptions]="{ exact: true }"
-        aria-current="page"
-        class="border-b-2 border-blue-600 px-1 py-2 text-xl font-bold whitespace-nowrap text-blue-600"
+        ariaCurrentWhenActive="page"
+        class="border-b-2 border-transparent px-1 py-2 text-xl font-medium whitespace-nowrap text-gray-600 hover:border-gray-300 hover:text-blue-800"
       >
         Veranstalter
       </a>
