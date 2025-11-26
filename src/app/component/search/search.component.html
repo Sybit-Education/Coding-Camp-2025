@@ -1,4 +1,4 @@
-<div class="inline-flex max-h-10 w-full items-center justify-between rounded-2xl border border-gray-300">
+<div class="inline-flex max-h-10 items-center justify-between rounded-2xl border border-gray-300 w-full">
   <label class="sr-only" for="category-search">{{ 'SEARCH.LABEL' | translate }}</label>
   <input
     id="category-search"
@@ -10,5 +10,7 @@
     [placeholder]="'SEARCH.PLACEHOLDER' | translate"
     [attr.aria-busy]="searching"
   />
+  @if (hasIcon) {
   <app-icon name="search" class="mr-3 ml-2 h-6 w-6" aria-hidden="true" />
+  }
 </div>

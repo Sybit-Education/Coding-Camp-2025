@@ -80,6 +80,7 @@ export class CustomDropdownComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   onSearchChange(searchInput: string) {
+    this.dropdownOpen = true
     this.searchTerm = (searchInput ?? '').trim()
 
     if (this.searchTerm.length) {

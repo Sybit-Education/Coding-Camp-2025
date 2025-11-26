@@ -1,4 +1,4 @@
-<div class="relative mb-4 w-full" [ngClass]="dropdownOpen ? 'h-120' : ''">
+<div class="relative mb-4 w-full" [ngClass]="dropdownOpen ? 'h-auto' : ''">
   <!-- Dropdown-Feld -->
   <button
     class="flex w-full cursor-pointer flex-wrap items-center gap-1 border-1 border-gray-400 bg-white px-3 py-2"
@@ -17,6 +17,8 @@
       (searchTermChange)="onSearchChange($event)"
       [class.w-full]="selectedItems.length"
       [class.flex-grow]="!selectedItems.length"
+      (click)="$event.stopPropagation()"
+      (keydown.enter)="$event.stopPropagation()"
       class="min-w-0"
     />
     <!-- Chips / Placeholder -->

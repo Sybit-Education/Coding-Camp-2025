@@ -10,6 +10,7 @@ import { TranslateModule } from '@ngx-translate/core'
 export class SearchComponent {
   @Input() searchTerm = ''
   @Input() searching = false
+  @Input() hasIcon = false
   @Output() searchTermChange = new EventEmitter<string>()
 
   onSearchChange(value: string) {

@@ -145,7 +145,6 @@ export class KategorieComponent implements OnInit {
       this.locations = await Promise.all(this.locationCache.values())
 
       this.locationsForFilter = this.getLocations()
-      this.pricesForFilter = this.getPrices()
 
       if (this.receivedFilters) {
         this.resolveFilterQuery(this.receivedFilters)
@@ -223,8 +222,6 @@ export class KategorieComponent implements OnInit {
     let out = events
     out = this.filterByCategory(out, this.categoryIds)
     out = this.filterByLocation(out, this.selectedLocationIds)
-    out = this.filterByPrice(out, this.selectedPrices)
-    out = this.filterByDateRange(out, this.selectedDateStart ?? null, this.selectedDateEnd ?? null)
     return out
   }
 
@@ -261,47 +258,6 @@ export class KategorieComponent implements OnInit {
       const id = event.location.id
       return locationIds.includes(id)
     })
-  }
-
-  /**
-   * Filters events by the given price ranges.
-   * @param events The events to filter.
-   * @param selectedPrices The selected price ranges to filter by.
-   * @returns The filtered events.
-   */
-  private filterByPrice(events: AppEvent[], selectedPrices: number[]): AppEvent[] {
-    if (!selectedPrices || selectedPrices.length === 0) return events
-    return events.filter((event) => {
-      const price = Number(event.price) ? Number(event.price) : 0
-      return selectedPrices.some((selected) => {
-        if (selected === 0) return price === 0
-        if (selected === 20) return price > 15
-        const min = selected - 5
-        const max = selected
-        return price > min && price <= max
-      })
-    })
-  }
-
-  /**
-   * Filters events by the given date range.
-   * @param events The events to filter.
-   * @param start The start date of the range.
-   * @param end The end date of the range.
-   * @returns The filtered events.
-   */
-  private filterByDateRange(events: AppEvent[], start?: Date | null, end?: Date | null): AppEvent[] {
-    let out = events
-    if (start) {
-      out = out.filter((event) => new Date(event.date_start) >= start)
-    }
-    if (end) {
-      out = out.filter((event) => {
-        const eventEnd = event.date_end ? new Date(event.date_end) : new Date(event.date_start)
-        return eventEnd <= end
-      })
-    }
-    return out
   }
 
   // -------------------------------- Event Location Resolution ---------------------------------
@@ -354,16 +310,6 @@ export class KategorieComponent implements OnInit {
     }))
   }
 
-  getPrices(): { id: string; name: string }[] {
-    return [
-      { id: '0', name: this.translate.instant('all-categories.eventprices.free') },
-      { id: '0-5', name: this.translate.instant('all-categories.eventprices.firststage') },
-      { id: '5-10', name: this.translate.instant('all-categories.eventprices.secondstage') },
-      { id: '10-15', name: this.translate.instant('all-categories.eventprices.thirdstage') },
-      { id: '15+', name: this.translate.instant('all-categories.eventprices.fourthstage') },
-    ]
-  }
-
   // --------------------------------- UI Selection Handlers ---------------------------------
   setSelectedCategories(category: { id: string; name: string }) {
     if (this.categoryIds.includes(category.id as RecordIdValue)) {
@@ -379,30 +325,6 @@ export class KategorieComponent implements OnInit {
     void this.performSearch(this.searchTerm)
   }
 
-  setSelectedPrices(prices: { id: string; name: string }[]) {
-    this.selectedPrices = prices.map((price) => {
-      const id = price.id
-      if (id === '0') return 0
-      if (id === '0-5') return 5
-      if (id === '5-10') return 10
-      if (id === '10-15') return 15
-      if (id === '15+') return 20
-      return 0
-    })
-    console.log('Selected prices:', this.selectedPrices)
-    void this.performSearch(this.searchTerm)
-  }
-
-  setSelectedDateStart(date: Date | null) {
-    this.selectedDateStart = date
-    void this.performSearch(this.searchTerm)
-  }
-
-  setSelectedDateEnd(date: Date | null) {
-    this.selectedDateEnd = date
-    void this.performSearch(this.searchTerm)
-  }
-
   // --------------------------------- Filter Query ---------------------------------
   private async buildFilterQuery() {
     const params: Record<string, string> = {}
@@ -415,15 +337,6 @@ export class KategorieComponent implements OnInit {
     }
     if (this.selectedLocationIds.length > 0) {
       params['locations'] = this.selectedLocationIds.map((id) => id.toString()).join(',')
-    }
-    if (this.selectedPrices.length > 0) {
-      params['prices'] = this.selectedPrices.join(',')
-    }
-    if (this.selectedDateStart) {
-      params['dateStart'] = this.selectedDateStart.toISOString().split('T')[0]
-    }
-    if (this.selectedDateEnd) {
-      params['dateEnd'] = this.selectedDateEnd.toISOString().split('T')[0]
     }
 
     const queryString = new URLSearchParams(params).toString()
@@ -452,28 +365,6 @@ export class KategorieComponent implements OnInit {
       console.log('Locations for Filter:', this.locationsForFilter)
       console.log('Selected Locations:', this.selectedLocationIds)
       console.log('preselectedLocations:', this.preselectedLocations)
-    }
-
-    const prices = queryParams.get('prices')
-    if (prices) {
-      this.selectedPrices = prices.split(',').map(Number)
-      this.preselectedPrices = this.pricesForFilter.filter((price) =>
-        this.selectedPrices.includes(
-          Number(price.id === '0' ? 0 : price.id === '0-5' ? 5 : price.id === '5-10' ? 10 : price.id === '10-15' ? 15 : 20),
-        ),
-      )
-      console.log('Selected Prices:', this.selectedPrices)
-      console.log('preselectedPrices:', this.preselectedPrices)
-    }
-
-    const dateStart = queryParams.get('dateStart')
-    if (dateStart) {
-      this.selectedDateStart = new Date(dateStart)
-    }
-
-    const dateEnd = queryParams.get('dateEnd')
-    if (dateEnd) {
-      this.selectedDateEnd = new Date(dateEnd)
     }
   }
 }
