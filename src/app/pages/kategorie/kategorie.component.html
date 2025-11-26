@@ -10,22 +10,13 @@
     </p>
   }
 
-  <!-- Search input -->
   <div class="flex flex-row justify-between">
-    <div class="inline-flex max-h-10 w-[calc(100%-125px)] items-center justify-between rounded-2xl border border-gray-300">
-      <label class="sr-only" for="category-search">{{ 'SEARCH.LABEL' | translate }}</label>
-      <input
-        id="category-search"
-        type="search"
-        class="w-full border-none p-2"
-        [value]="searchTerm"
-        (input)="onSearchChange($any($event.target).value)"
-        [attr.aria-label]="'SEARCH.LABEL' | translate"
-        [placeholder]="'SEARCH.PLACEHOLDER' | translate"
-        [attr.aria-busy]="searching"
-      />
-      <app-icon name="search" class="mr-3 ml-2 h-6 w-6" aria-hidden="true" />
+    <!-- Search input -->
+    <div class="w-[calc(100%-125px)]">
+      <app-search [(searchTerm)]="searchTerm" (searchTermChange)="onSearchChange($event)" />
     </div>
+
+    <!-- Filter Button -->
     <button
       class="filter-option mb-0 flex w-[110px] cursor-pointer items-start justify-around rounded-t-2xl"
       [ngClass]="
@@ -51,33 +42,8 @@
 
   <!-- Filter Optionen -->
   @if (filterOpen) {
-    <div class="filter-option slide-down mt-0 w-full overflow-hidden rounded-tl-2xl rounded-b-2xl bg-gray-100 pb-4">
-      <div class="grid w-full justify-around gap-4 px-4 lg:grid-cols-[2fr_3fr_3fr_5fr]">
-        <div class="flex flex-col">
-          <div>
-            <h3>{{ 'all-categories.date-from' | translate }}</h3>
-            <label class="sr-only" for="date-from">{{ 'all-categories.date-from' | translate }}</label>
-            <input
-              type="date"
-              name="date-from"
-              id="date-from"
-              class="w-full bg-white"
-              (change)="setSelectedDateStart($any($event.target).valueAsDate)"
-            />
-          </div>
-          <div>
-            <h3>{{ 'all-categories.date-to' | translate }}</h3>
-            <label class="sr-only" for="date-to">{{ 'all-categories.date-to' | translate }}</label>
-            <input
-              type="date"
-              name="date-to"
-              id="date-to"
-              class="w-full bg-white"
-              (change)="setSelectedDateEnd($any($event.target).valueAsDate)"
-            />
-          </div>
-        </div>
-
+    <div class="filter-option mt-0 w-full overflow-hidden rounded-tl-2xl rounded-b-2xl bg-gray-100 pb-4">
+      <div class="grid w-full justify-around gap-4 px-4 lg:grid-cols-2">
         <div>
           <h3>{{ 'event-detail.eventlocation' | translate }}</h3>
           <label class="sr-only" for="location-dropdown">{{ 'event-detail.eventlocation' | translate }}</label>
@@ -87,18 +53,6 @@
             [preselectedItems]="preselectedLocations"
             [placeholder]="'all-categories.all-locations' | translate"
             (selectionChange)="setSelectedLocations($event)"
-          />
-        </div>
-
-        <div>
-          <h3>{{ 'all-categories.prices' | translate }}</h3>
-          <label class="sr-only" for="price-dropdown">{{ 'all-categories.prices' | translate }}</label>
-          <app-custom-dropdown
-            id="price-dropdown"
-            [items]="pricesForFilter"
-            [preselectedItems]="preselectedPrices"
-            [placeholder]="'all-categories.all-prices' | translate"
-            (selectionChange)="setSelectedPrices($event)"
           />
         </div>
 

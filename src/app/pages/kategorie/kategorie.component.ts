@@ -22,6 +22,7 @@ import { CustomDropdownComponent } from '@app/component/custom-dropdown/custom-d
 import { KategorieCardComponent } from '@app/component/kategorie-card/kategorie-card.component'
 import { IconComponent } from '@app/component/icon/icon.component'
 import { FilterItem } from '@app/models/filterItem.interface'
+import { SearchComponent } from '@app/component/search/search.component'
 
 interface EventWithResolvedLocation extends AppEvent {
   locationName: string
@@ -42,6 +43,7 @@ interface EventWithResolvedLocation extends AppEvent {
     IconComponent,
     KategorieCardComponent,
     FormsModule,
+    SearchComponent,
   ],
   templateUrl: './kategorie.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -167,6 +169,7 @@ export class KategorieComponent implements OnInit {
 
   // --------------------------------- Search & Filtering ---------------------------------
   onSearchChange(term: string) {
+    console.log('Received search term:', term)
     this.searchTerm = (term ?? '').trim()
     if (this.searchDebounce) {
       window.clearTimeout(this.searchDebounce)

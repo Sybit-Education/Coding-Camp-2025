@@ -1,14 +1,15 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core'
-import { CommonModule, NgClass } from '@angular/common'
+import { Component, EventEmitter, Input, Output, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core'
+import { CommonModule } from '@angular/common'
 import { FilterItem } from '@app/models/filterItem.interface'
 import { IconComponent } from '../icon/icon.component'
+import { SearchComponent } from '../search/search.component'
 
 @Component({
   selector: 'app-custom-dropdown',
-  imports: [IconComponent, NgClass, CommonModule],
+  imports: [IconComponent, CommonModule, SearchComponent],
   templateUrl: './custom-dropdown.component.html',
 })
-export class CustomDropdownComponent implements OnInit {
+export class CustomDropdownComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() items: FilterItem[] = []
   @Input() placeholder = 'Select items'
   @Input() preselectedItems: FilterItem[] = [] // Optional: vorselektierte Items
@@ -16,8 +17,15 @@ export class CustomDropdownComponent implements OnInit {
 
   @Output() selectionChange = new EventEmitter<FilterItem[]>()
 
+  @ViewChild('selectButton', { static: false }) selectButton!: ElementRef<HTMLElement>
+  dropdownHeight = 0
+  private resizeObserver!: ResizeObserver
+
   selectedItems: FilterItem[] = []
   dropdownOpen = false
+
+  searchTerm = ''
+  filteredItems: FilterItem[] = []
 
   ngOnInit() {
     if (this.defaultItems?.length) {
@@ -34,14 +42,24 @@ export class CustomDropdownComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit() {
+    this.resizeObserver = new ResizeObserver((entries) => {
+      const h = entries[0].contentRect.height
+      this.dropdownHeight = h
+    })
+
+    this.resizeObserver.observe(this.selectButton.nativeElement)
+  }
+
   toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen
   }
 
   addItem(item: FilterItem) {
-    if (!this.selectedItems.some((i) => i.id === item.id)) {
+    if (!this.selectedItems.some((i) => i.id === item.id) && this.selectedItems.length < 5) {
       this.selectedItems.push(item)
       this.emitSelection()
+      this.searchTerm = ''
     }
   }
 
@@ -59,5 +77,19 @@ export class CustomDropdownComponent implements OnInit {
 
   private emitSelection() {
     this.selectionChange.emit([...this.selectedItems])
+  }
+
+  onSearchChange(searchInput: string) {
+    this.searchTerm = (searchInput ?? '').trim()
+
+    if (this.searchTerm.length) {
+      this.filteredItems = this.items.filter((item) =>
+        item.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+      )
+    }
+  }
+
+  ngOnDestroy() {
+    this.resizeObserver.disconnect()
   }
 }
