@@ -5,10 +5,17 @@
     "BACK": "Retour",
     "NEXT": "Suivant",
     "SKIP_TO_MAIN": "Passer au contenu principal",
+    "LOADING": "Chargement ...",
     "MAIN_CONTENT": "Contenu principal",
+    "EXTERNAL_LINK": "Lien externe, s'ouvre dans un nouvel onglet",
     "PAGE_UPDATED": "Page mise à jour",
     "DELETE": "Supprimer",
     "CONFIRM": "Confirmer"
+  },
+  "UPDATE": {
+    "AVAILABLE_MESSAGE": "Une nouvelle version est disponible",
+    "ACTION": "Mettre à jour",
+    "ACTION_ARIA": "Mettre à jour l'application"
   },
   "HEADER": {
     "TITLE": "1200 Ans de Radolfzell",
@@ -93,6 +100,7 @@
   },
   "NAV": {
     "FOOTER": "Navigation du pied de page",
+    "BOTTOM": "Navigation inférieure",
     "instagram": "Instagram"
   },
   "create-event": {

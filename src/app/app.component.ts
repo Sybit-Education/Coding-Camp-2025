@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit } from '@angular/core'
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router'
 import { LiveAnnouncer } from '@angular/cdk/a11y'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
@@ -6,6 +6,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { HeaderComponent } from './component/header/header.component'
 import { FooterComponent } from './component/footer/footer.component'
 import { filter } from 'rxjs/operators'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { BottomNavComponent } from './component/bottom-nav/bottom-nav.component'
 import { UpdateService } from './pwa/update.service'
 import { SnackBarComponent } from './component/snack-bar/snack-bar.component'
@@ -26,26 +27,31 @@ export class AppComponent implements OnInit {
   private readonly router = inject(Router)
   private readonly liveAnnouncer = inject(LiveAnnouncer)
   private readonly translate = inject(TranslateService)
+  private readonly destroyRef = inject(DestroyRef)
 
   constructor() {
-    this.updateService.updateAvailable$.subscribe((available) => {
+    this.updateService.updateAvailable$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((available) => {
       this.updateAvailable = available
     })
   }
 
   ngOnInit() {
     this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
+      .pipe(filter((event) => event instanceof NavigationEnd), takeUntilDestroyed(this.destroyRef))
       .subscribe((event: NavigationEnd) => {
         this.isCarouselPage = event.urlAfterRedirects === '/'
 
-        // Fokus auf den Hauptinhalt setzen
-        setTimeout(() => {
-          const main = document.getElementById('main-content')
-          if (main) {
-            main.focus()
+        // Fokus auf den Hauptinhalt setzen, ohne bestehende Fokusquelle zu verdrängen
+        requestAnimationFrame(() => {
+          const activeElement = document.activeElement
+          const shouldMoveFocus = !activeElement || activeElement === document.body || activeElement === document.documentElement
+          if (!shouldMoveFocus) {
+            return
           }
-        }, 0)
+
+          const main = document.getElementById('main-content')
+          main?.focus()
+        })
 
         // Screenreader informieren
         this.liveAnnouncer.clear()

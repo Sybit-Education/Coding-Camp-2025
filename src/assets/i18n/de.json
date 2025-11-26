@@ -7,9 +7,15 @@
     "SKIP_TO_MAIN": "Zum Hauptinhalt springen",
     "LOADING": "Laden ...",
     "MAIN_CONTENT": "Hauptinhalt",
+    "EXTERNAL_LINK": "Externer Link, öffnet in einem neuen Tab",
     "PAGE_UPDATED": "Seite aktualisiert",
     "DELETE": "Löschen",
     "CONFIRM": "Bestätigen"
+  },
+  "UPDATE": {
+    "AVAILABLE_MESSAGE": "Eine neue Version ist verfügbar",
+    "ACTION": "Aktualisieren",
+    "ACTION_ARIA": "App aktualisieren"
   },
   "HEADER": {
     "TITLE": "1200 Jahre Radolfzell",
@@ -93,7 +99,8 @@
     "accessibility": "Barrierefreiheit"
   },
   "NAV": {
-    "FOOTER": "Fußnavigation"
+    "FOOTER": "Fußnavigation",
+    "BOTTOM": "Untere Navigation"
   },
   "create-event": {
     "eventname": "Name",

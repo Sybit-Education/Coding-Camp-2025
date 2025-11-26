@@ -7,9 +7,15 @@
     "SKIP_TO_MAIN": "Skip to main content",
     "LOADING": "Loading ...",
     "MAIN_CONTENT": "Main content",
+    "EXTERNAL_LINK": "External link, opens in a new tab",
     "PAGE_UPDATED": "Page updated",
     "DELETE": "Delete",
     "CONFIRM": "Confirm"
+  },
+  "UPDATE": {
+    "AVAILABLE_MESSAGE": "A new version is available",
+    "ACTION": "Refresh",
+    "ACTION_ARIA": "Refresh the app"
   },
   "HEADER": {
     "TITLE": "1200 Years Radolfzell",
@@ -97,7 +103,8 @@
     "accessibility": "Accessibility"
   },
   "NAV": {
-    "FOOTER": "Footer navigation"
+    "FOOTER": "Footer navigation",
+    "BOTTOM": "Bottom navigation"
   },
   "create-event": {
     "eventname": "Name",
