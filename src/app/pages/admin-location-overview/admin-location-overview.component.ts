@@ -190,7 +190,7 @@ export class AdminLocationOverviewComponent implements OnInit {
 
   // Filter function
   updateFilter(): void {
-    const val = this.filterValue.toLowerCase()
+    const val = this.filterValue.trim().toLowerCase()
 
     // Filter data
     const temp = this.temp().filter(function (d) {
@@ -207,6 +207,14 @@ export class AdminLocationOverviewComponent implements OnInit {
 
     // Update rows
     this.rows.set(sortedTemp)
+
+    const query = this.filterValue.trim()
+    const announceKey = query ? 'ADMIN.LOCATIONS.SEARCH_STATUS_FILTERED' : 'ADMIN.LOCATIONS.SEARCH_STATUS_ALL'
+    const message = this.translate.instant(announceKey, {
+      count: sortedTemp.length,
+      query,
+    })
+    this.liveAnnouncer.announce(message, 'polite')
   }
 
   // Delete location

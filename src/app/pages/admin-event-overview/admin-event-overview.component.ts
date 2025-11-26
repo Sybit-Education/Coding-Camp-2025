@@ -272,6 +272,14 @@ export class AdminEventOverviewComponent implements OnInit {
 
     // Update rows
     this.rows.set(sortedTemp)
+
+    const query = this.filterValue.trim()
+    const announceKey = query ? 'ADMIN.EVENTS.SEARCH_STATUS_FILTERED' : 'ADMIN.EVENTS.SEARCH_STATUS_ALL'
+    const message = this.translate.instant(announceKey, {
+      count: sortedTemp.length,
+      query,
+    })
+    this.liveAnnouncer.announce(message, 'polite')
   }
 
   // Get the first image URL from an event

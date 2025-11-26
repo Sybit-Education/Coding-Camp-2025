@@ -162,7 +162,16 @@ export class AdminOrganizerOverviewComponent implements OnInit {
       return name.includes(val) || email.includes(val) || phone.includes(val)
     })
 
-    this.rows.set(this.sortData(filtered, this.currentSorts()))
+    const sortedRows = this.sortData(filtered, this.currentSorts())
+    this.rows.set(sortedRows)
+
+    const query = this.filterValue.trim()
+    const announceKey = query ? 'ADMIN.ORGANIZERS.SEARCH_STATUS_FILTERED' : 'ADMIN.ORGANIZERS.SEARCH_STATUS_ALL'
+    const message = this.translate.instant(announceKey, {
+      count: sortedRows.length,
+      query,
+    })
+    this.liveAnnouncer.announce(message, 'polite')
   }
 
   // Sort helper
