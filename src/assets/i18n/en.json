@@ -296,10 +296,69 @@
     "TITLE": "Administration"
   },
   "ACCESSIBILITY": {
-    "TITLE": "Accessibility",
-    "INTRO": "We strive to make the app accessible to everyone.",
-    "CONTACT": "Report accessibility issues",
-    "CONTACT_TEXT": "If you found a barrier, please let us know."
+    "TITLE": "Accessibility statement",
+    "INTRO": "We aim to meet WCAG 2.1 AA / WCAG 2.2 AA, BITV 2.0 and § 10(1) L-BGG (Baden-Württemberg).",
+    "STATEMENT_SCOPE": "This statement applies to the Coding Camp 2025 web application.",
+    "LEGAL_BASIS": {
+      "TITLE": "Legal basis",
+      "TEXT": "The following standards and regulations apply:",
+      "POINTS": {
+        "EU_DIRECTIVE": "Directive (EU) 2016/2102 on the accessibility of the websites and mobile applications of public sector bodies",
+        "WCAG": "Web Content Accessibility Guidelines (WCAG) 2.1 and 2.2, conformance level AA",
+        "LBGG": "Section 10 (1) of the State Equal Opportunities Act (L-BGG) Baden-Württemberg and the German Barrier-free Information Technology Ordinance (BITV 2.0)"
+      }
+    },
+    "STATUS": {
+      "TITLE": "Compliance status",
+      "TEXT": "This web application is partially compliant with the requirements listed above.",
+      "POINTS": {
+        "SELF_ASSESSMENT": "Assessment: self-evaluation using internal WCAG checklists (status: 26/11/2025).",
+        "CONTINUOUS_IMPROVEMENT": "Ongoing remediation and prioritisation of reported and identified issues in the product backlog."
+      }
+    },
+    "NON_ACCESSIBLE": {
+      "TITLE": "Non-accessible content",
+      "INTRO": "The following content is not yet fully accessible:",
+      "ITEMS": {
+        "ALT_TEXTS": "Some images, graphics and icons still lack meaningful alternative text.",
+        "MAPS": "Interactive maps and geodata are currently not fully accessible.",
+        "IFRAMES": "Embedded external services (iFrames/links) may not be fully accessible beyond our control."
+      }
+    },
+    "STATEMENT": {
+      "TITLE": "Creation of this statement",
+      "CREATED": "Created on: 26/11/2025",
+      "METHOD": "Method: self-assessment based on WCAG 2.1/2.2 AA, BITV 2.0 and L-BGG, complemented by manual reviews."
+    },
+    "CONTACT": {
+      "TITLE": "Feedback and contact",
+      "INTRO": "Report barriers or request accessible information. We respond within the deadline set out in § 8 sentence 1 L-BGG-DVO.",
+      "ORGANISATION": "City of Radolfzell am Bodensee",
+      "DEPARTMENT": "Press office and public relations",
+      "ADDRESS": "Marktplatz 2, 78315 Radolfzell, Germany",
+      "EMAIL_LABEL": "Email",
+      "EMAIL": "pressestelle@radolfzell.de",
+      "EMAIL_ARIA": "Send an email to the press office of the City of Radolfzell",
+      "PHONE_LABEL": "Phone",
+      "PHONE_PRIMARY": "+49 7732 81-110",
+      "TEL_PRIMARY": "+49773281110",
+      "PHONE_SECONDARY": "+49 7732 81-109",
+      "TEL_SECONDARY": "+49773281109"
+    },
+    "ENFORCEMENT": {
+      "TITLE": "Enforcement procedure",
+      "INTRO": "If you do not receive a reply or are not satisfied, you may contact the following ombuds office:",
+      "BODY": "State Commissioner for People with Disabilities",
+      "ORG": "Ministry of Social Affairs, Health and Integration Baden-Württemberg",
+      "ADDRESS": "Else-Josenhans-Straße 6, 70173 Stuttgart, Germany",
+      "EMAIL_LABEL": "Email",
+      "EMAIL": "poststelle@bfbmb.bwl.de",
+      "EMAIL_ARIA": "Send an email to the State Commissioner for People with Disabilities",
+      "PHONE_LABEL": "Phone",
+      "PHONE": "+49 711 279-3360",
+      "TEL": "+497112793360",
+      "NOTE": "Notice: There is a right of class action under § 12 (1) sentence 1 no. 4 L-BGG."
+    }
   },
   "SEARCH": {
     "LABEL": "Search",

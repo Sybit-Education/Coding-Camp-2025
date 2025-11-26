@@ -288,10 +288,69 @@
     "TITLE": "Administration"
   },
   "ACCESSIBILITY": {
-    "TITLE": "Accessibilité",
-    "INTRO": "Nous nous efforçons de rendre l'application accessible à toutes et tous.",
-    "CONTACT": "Signaler des problèmes d'accessibilité",
-    "CONTACT_TEXT": "Si vous avez trouvé un obstacle, merci de nous en informer."
+    "TITLE": "Déclaration d’accessibilité",
+    "INTRO": "Nous concevons cette application conformément aux WCAG 2.1 AA / WCAG 2.2 AA, à la BITV 2.0 et à l’article 10, paragraphe 1, L-BGG (Bade-Wurtemberg).",
+    "STATEMENT_SCOPE": "Cette déclaration s’applique à l’application web Coding Camp 2025.",
+    "LEGAL_BASIS": {
+      "TITLE": "Base légale",
+      "TEXT": "Les normes et réglementations suivantes s’appliquent :",
+      "POINTS": {
+        "EU_DIRECTIVE": "Directive (UE) 2016/2102 relative à l’accessibilité des sites internet et des applications mobiles des organismes du secteur public",
+        "WCAG": "Web Content Accessibility Guidelines (WCAG) 2.1 et 2.2, niveau de conformité AA",
+        "LBGG": "Article 10, paragraphe 1, de la loi d’égalité des chances du Land (L-BGG) Bade-Wurtemberg et ordonnance allemande sur l’accessibilité des technologies de l’information (BITV 2.0)"
+      }
+    },
+    "STATUS": {
+      "TITLE": "État de conformité",
+      "TEXT": "Cette application web est partiellement conforme aux exigences susmentionnées.",
+      "POINTS": {
+        "SELF_ASSESSMENT": "Évaluation : auto-évaluation à partir de listes de contrôle WCAG internes (état : 26/11/2025).",
+        "CONTINUOUS_IMPROVEMENT": "Correction continue et priorisation des barrières signalées ou identifiées dans le backlog produit."
+      }
+    },
+    "NON_ACCESSIBLE": {
+      "TITLE": "Contenus non accessibles",
+      "INTRO": "Les contenus suivants ne sont pas encore entièrement accessibles :",
+      "ITEMS": {
+        "ALT_TEXTS": "Quelques images, graphiques et icônes manquent encore d’alternatives textuelles pertinentes.",
+        "MAPS": "Les cartes interactives et les géodonnées ne sont pas encore pleinement accessibles.",
+        "IFRAMES": "Les services externes intégrés (iFrames/liens) peuvent ne pas être entièrement accessibles et sont hors de notre contrôle."
+      }
+    },
+    "STATEMENT": {
+      "TITLE": "Élaboration de cette déclaration",
+      "CREATED": "Créée le : 26/11/2025",
+      "METHOD": "Méthode : auto-évaluation selon WCAG 2.1/2.2 AA, BITV 2.0 et L-BGG, complétée par des vérifications manuelles."
+    },
+    "CONTACT": {
+      "TITLE": "Retour d’information et contact",
+      "INTRO": "Signalez-nous des barrières ou demandez des informations accessibles. Nous répondons dans le délai prévu par l’article 8, phrase 1, L-BGG-DVO.",
+      "ORGANISATION": "Ville de Radolfzell am Bodensee",
+      "DEPARTMENT": "Service de presse et relations publiques",
+      "ADDRESS": "Marktplatz 2, 78315 Radolfzell, Allemagne",
+      "EMAIL_LABEL": "E-mail",
+      "EMAIL": "pressestelle@radolfzell.de",
+      "EMAIL_ARIA": "Envoyer un e-mail au service de presse de la ville de Radolfzell",
+      "PHONE_LABEL": "Téléphone",
+      "PHONE_PRIMARY": "+49 7732 81-110",
+      "TEL_PRIMARY": "+49773281110",
+      "PHONE_SECONDARY": "+49 7732 81-109",
+      "TEL_SECONDARY": "+49773281109"
+    },
+    "ENFORCEMENT": {
+      "TITLE": "Procédure de recours",
+      "INTRO": "Si vous ne recevez pas de réponse ou si celle-ci ne vous satisfait pas, vous pouvez contacter l’instance suivante :",
+      "BODY": "Commissaire du Land pour les personnes handicapées",
+      "ORG": "Ministère des Affaires sociales, de la Santé et de l’Intégration du Bade-Wurtemberg",
+      "ADDRESS": "Else-Josenhans-Straße 6, 70173 Stuttgart, Allemagne",
+      "EMAIL_LABEL": "E-mail",
+      "EMAIL": "poststelle@bfbmb.bwl.de",
+      "EMAIL_ARIA": "Envoyer un e-mail au Commissaire du Land pour les personnes handicapées",
+      "PHONE_LABEL": "Téléphone",
+      "PHONE": "+49 711 279-3360",
+      "TEL": "+497112793360",
+      "NOTE": "Remarque : un droit d’action collective existe conformément à l’article 12, paragraphe 1, phrase 1, point 4, L-BGG."
+    }
   },
   "SEARCH": {
     "PLACEHOLDER": "Rechercher...",

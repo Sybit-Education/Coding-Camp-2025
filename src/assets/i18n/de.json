@@ -292,10 +292,69 @@
     "TITLE": "Administration"
   },
   "ACCESSIBILITY": {
-    "TITLE": "Barrierefreiheit",
-    "INTRO": "Wir bemühen uns, die App für alle Menschen zugänglich zu machen.",
-    "CONTACT": "Barrieren melden",
-    "CONTACT_TEXT": "Wenn Sie eine Barriere gefunden haben, schreiben Sie uns bitte eine Nachricht."
+    "TITLE": "Erklärung zur Barrierefreiheit",
+    "INTRO": "Wir gestalten diese Anwendung entsprechend WCAG 2.1 AA / WCAG 2.2 AA, BITV 2.0 und § 10 Absatz 1 L-BGG.",
+    "STATEMENT_SCOPE": "Diese Erklärung gilt für die Webanwendung Coding Camp 2025.",
+    "LEGAL_BASIS": {
+      "TITLE": "Rechtsgrundlage",
+      "TEXT": "Grundlage sind folgende Normen und Richtlinien:",
+      "POINTS": {
+        "EU_DIRECTIVE": "Richtlinie (EU) 2016/2102 über die Barrierefreiheit der Websites und mobilen Anwendungen öffentlicher Stellen",
+        "WCAG": "Web Content Accessibility Guidelines (WCAG) 2.1 und 2.2, Konformitätsstufe AA",
+        "LBGG": "§ 10 Absatz 1 Landes-Behindertengleichstellungsgesetz (L-BGG) Baden-Württemberg sowie Barrierefreie-Informationstechnik-Verordnung (BITV 2.0)"
+      }
+    },
+    "STATUS": {
+      "TITLE": "Stand der Vereinbarkeit",
+      "TEXT": "Diese Webanwendung ist teilweise konform mit den oben genannten Anforderungen.",
+      "POINTS": {
+        "SELF_ASSESSMENT": "Bewertung: Selbstbewertung auf Basis interner WCAG-Prüflisten (Stand: 26.11.2025).",
+        "CONTINUOUS_IMPROVEMENT": "Fortlaufende Bearbeitung gemeldeter und intern identifizierter Barrieren im Produkt-Backlog."
+      }
+    },
+    "NON_ACCESSIBLE": {
+      "TITLE": "Nicht barrierefreie Inhalte",
+      "INTRO": "Folgende Inhalte sind derzeit noch nicht vollständig barrierefrei:",
+      "ITEMS": {
+        "ALT_TEXTS": "Bei vereinzelten Bildern, Grafiken und Icons fehlen aussagekräftige Alternativtexte.",
+        "MAPS": "Interaktive Karten und Geodaten sind aktuell nicht vollständig barrierefrei nutzbar.",
+        "IFRAMES": "Eingebettete externe Dienste (iFrames/Verlinkungen) können außerhalb unseres Einflussbereichs nicht barrierefrei bereitgestellt werden."
+      }
+    },
+    "STATEMENT": {
+      "TITLE": "Erstellung dieser Erklärung",
+      "CREATED": "Erstellt am: 26.11.2025",
+      "METHOD": "Methodik: Selbstbewertung gemäß WCAG 2.1/2.2 AA, BITV 2.0 und L-BGG, ergänzt durch manuelle Prüfungen."
+    },
+    "CONTACT": {
+      "TITLE": "Feedback und Kontakt",
+      "INTRO": "Melden Sie uns Barrieren oder fordern Sie barrierefreie Informationen an. Wir beantworten Ihre Anfrage innerhalb der Frist nach § 8 Satz 1 L-BGG-DVO.",
+      "ORGANISATION": "Stadt Radolfzell am Bodensee",
+      "DEPARTMENT": "Pressestelle und Öffentlichkeitsarbeit",
+      "ADDRESS": "Marktplatz 2, 78315 Radolfzell",
+      "EMAIL_LABEL": "E-Mail",
+      "EMAIL": "pressestelle@radolfzell.de",
+      "EMAIL_ARIA": "E-Mail an die Pressestelle der Stadt Radolfzell senden",
+      "PHONE_LABEL": "Telefon",
+      "PHONE_PRIMARY": "0 77 32 / 81-110",
+      "TEL_PRIMARY": "0773281110",
+      "PHONE_SECONDARY": "0 77 32 / 81-109",
+      "TEL_SECONDARY": "0773281109"
+    },
+    "ENFORCEMENT": {
+      "TITLE": "Durchsetzungsverfahren",
+      "INTRO": "Wenn Ihre Anfrage unbeantwortet bleibt oder Sie nicht zufrieden sind, können Sie sich an folgende Ombudsstelle wenden:",
+      "BODY": "Beauftragte der Landesregierung für die Belange von Menschen mit Behinderung",
+      "ORG": "Ministerium für Soziales, Gesundheit und Integration Baden-Württemberg",
+      "ADDRESS": "Else-Josenhans-Straße 6, 70173 Stuttgart",
+      "EMAIL_LABEL": "E-Mail",
+      "EMAIL": "poststelle@bfbmb.bwl.de",
+      "EMAIL_ARIA": "E-Mail an die Landesbeauftragte für die Belange von Menschen mit Behinderung senden",
+      "PHONE_LABEL": "Telefon",
+      "PHONE": "07 11 / 279-3360",
+      "TEL": "07112793360",
+      "NOTE": "Hinweis: Es besteht ein Verbandsklagerecht nach § 12 Absatz 1 Satz 1 Nummer 4 L-BGG."
+    }
   },
   "SEARCH": {
     "LABEL": "Suche",
