@@ -22,7 +22,15 @@ let dialogIdCounter = 0
   template: `
     @if (opened()) {
       <div class="fixed inset-0 z-30 bg-black/50" aria-hidden="true"></div>
-      <div class="fixed inset-0 z-40 flex items-center justify-center px-4">
+      <div
+        class="fixed inset-0 z-40 flex items-center justify-center px-4"
+        (click)="handleCancel()"
+        (keydown.enter)="handleCancel()"
+        (keydown.space)="handleCancel()"
+        tabindex="0"
+        [attr.aria-label]="cancelLabel()"
+        role="presentation"
+      >
         <section
           cdkTrapFocus
           role="dialog"
@@ -30,6 +38,8 @@ let dialogIdCounter = 0
           [attr.aria-modal]="true"
           [attr.aria-labelledby]="titleId"
           [attr.aria-describedby]="descriptionId"
+          (click)="$event.stopPropagation()"
+          (keydown.escape)="handleCancel()"
         >
           <header class="border-b border-gray-100 px-6 py-4">
             <h2 class="text-lg font-semibold text-gray-900" [id]="titleId">
@@ -45,14 +55,14 @@ let dialogIdCounter = 0
             <button
               #cancelButton
               type="button"
-              class="rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 transition hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              class="rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 transition hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
               (click)="handleCancel()"
             >
               {{ cancelLabel() }}
             </button>
             <button
               type="button"
-              class="rounded-lg bg-red-600 px-4 py-2 font-semibold text-white transition hover:bg-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
+              class="rounded-lg bg-red-600 px-4 py-2 font-semibold text-white transition hover:bg-red-700 focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:outline-none"
               (click)="handleConfirm()"
             >
               {{ confirmLabel() }}
