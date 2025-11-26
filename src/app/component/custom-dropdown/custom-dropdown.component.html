@@ -12,7 +12,8 @@
     aria-haspopup="listbox"
     [attr.aria-expanded]="dropdownOpen"
   >
-    <app-search [(searchTerm)]="searchTerm"
+    <app-search
+      [(searchTerm)]="searchTerm"
       (searchTermChange)="onSearchChange($event)"
       [class.w-full]="selectedItems.length"
       [class.flex-grow]="!selectedItems.length"

@@ -83,9 +83,7 @@ export class CustomDropdownComponent implements OnInit, AfterViewInit, OnDestroy
     this.searchTerm = (searchInput ?? '').trim()
 
     if (this.searchTerm.length) {
-      this.filteredItems = this.items.filter((item) =>
-        item.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-      )
+      this.filteredItems = this.items.filter((item) => item.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
     }
   }
 
