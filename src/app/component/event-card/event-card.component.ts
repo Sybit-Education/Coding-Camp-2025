@@ -29,6 +29,11 @@ export class EventCardComponent implements OnInit, OnDestroy, OnChanges {
   isSaved = false
   mediaUrl: string | null = null
 
+  get titleId(): string {
+    const id = this.event?.id?.id ?? this.event?.id ?? 'event'
+    return `event-card-title-${id}`
+  }
+
   get ariaLabel(): string {
     const name = this.event?.name || ''
     const loc = this.location?.name ? ', ' + this.location.name : ''

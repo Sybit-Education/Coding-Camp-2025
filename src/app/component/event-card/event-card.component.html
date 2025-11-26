@@ -2,6 +2,8 @@
   [routerLink]="['/event', event?.id?.id]"
   class="justify-top card aspect-[1/1] focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
   [attr.aria-label]="ariaLabel"
+  role="article"
+  [attr.aria-labelledby]="titleId"
 >
   <div class="relative h-[50%] w-full overflow-hidden bg-gray-100">
     <div class="pointer-events-none absolute top-2 left-2 z-10">
@@ -33,7 +35,7 @@
   </div>
   <div class="h-[50%] w-full pr-4 pl-4 text-left">
     <div class="h-[40%] pt-1">
-      <h3 class="line-clamp-2 truncate text-base leading-tight font-semibold text-gray-800">
+      <h3 class="line-clamp-2 truncate text-base leading-tight font-semibold text-gray-800" [id]="titleId">
         {{ event?.name || 'Event Name' }}
       </h3>
     </div>
