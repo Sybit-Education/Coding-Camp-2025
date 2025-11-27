@@ -1,13 +1,14 @@
 import { Component, inject, Input } from '@angular/core'
-import { MatIconModule } from '@angular/material/icon'
 import { ScreenSize } from '@app/models/screenSize.enum'
 import { SharedStateService } from '@app/services/shared-state.service'
 import { AsyncPipe } from '@angular/common'
 import { IconComponent } from '@app/component/icon/icon.component'
+import { TranslateModule } from '@ngx-translate/core'
+import { MatIconModule } from '@angular/material/icon'
 
 @Component({
   selector: 'app-event-image',
-  imports: [MatIconModule, AsyncPipe, IconComponent],
+  imports: [MatIconModule, AsyncPipe, IconComponent, TranslateModule],
   templateUrl: './event-image.component.html',
 })
 export class EventImageComponent {

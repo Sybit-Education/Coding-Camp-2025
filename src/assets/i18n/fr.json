@@ -314,7 +314,10 @@
     "text3": "Nous tenons à remercier tout particulièrement tous les participants qui ont travaillé sur ce projet avec passion, esprit d'équipe et persévérance. Chaque composant, chaque ligne de code et chaque décision prise derrière reflète le processus d'apprentissage et l'engagement de tous les participants."
   },
   "event-card": {
-    "show-more": "Afficher plus d'événements"
+    "show-more": "Afficher plus d'événements",
+    "image-alt": "Image : {{name}}",
+    "placeholder-alt": "Image de remplacement pour l’événement",
+    "logo-alt": "Logo Radolfzell 1200 ans"
   },
   "event-detail": {
     "adress": "Adresse",
@@ -339,7 +342,10 @@
       "directions-heading": "directions-heading"
     },
     "when": "Quand ?",
-    "where": "Où ?"
+    "where": "Où ?",
+    "image-alt": "Image de l’événement : {{name}}",
+    "placeholder-alt": "Image de l’événement",
+    "logo-alt": "Logo Radolfzell 1200 ans"
   },
   "footer": {
     "accessibility": "Accessibilité",

@@ -316,7 +316,10 @@
     "text3": "Ein besonderer Dank gilt allen Teilnehmern, die mit Leidenschaft, Teamgeist und Ausdauer an diesem Projekt gearbeitet haben. Jede Komponente, jede Zeile Code und jede Entscheidung dahinter spiegelt den Lernprozess und das Engagement aller Beteiligten wider."
   },
   "event-card": {
-    "show-more": "Weitere Veranstaltungen ..."
+    "show-more": "Weitere Veranstaltungen ...",
+    "image-alt": "Bild: {{name}}",
+    "placeholder-alt": "Platzhalterbild für Veranstaltung",
+    "logo-alt": "1200 Jahre Radolfzell Logo"
   },
   "event-detail": {
     "adress": "Adresse",
@@ -341,7 +344,10 @@
       "directions-heading": "directions-heading"
     },
     "when": "Wann?",
-    "where": "Wo?"
+    "where": "Wo?",
+    "image-alt": "Bild der Veranstaltung: {{name}}",
+    "placeholder-alt": "Veranstaltungsbild",
+    "logo-alt": "1200 Jahre Radolfzell Logo"
   },
   "footer": {
     "accessibility": "Barrierefreiheit",

@@ -19,7 +19,7 @@
     @if (mediaUrl) {
       <img
         [src]="mediaUrl"
-        [alt]="event?.name ? 'Bild: ' + (event?.name || '') : 'Platzhalterbild Veranstaltung'"
+        [alt]="event?.name ? ('event-card.image-alt' | translate: { name: event?.name }) : ('event-card.placeholder-alt' | translate)"
         class="h-full w-full object-cover"
         [attr.loading]="'lazy'"
       />
@@ -27,7 +27,7 @@
       <div class="flex h-full w-full items-center justify-center bg-gray-100">
         <img
           src="/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg"
-          alt="1200 Jahre Radolfzell Logo"
+          [alt]="'event-card.logo-alt' | translate"
           class="h-3/4 w-3/4 object-contain opacity-30"
         />
       </div>

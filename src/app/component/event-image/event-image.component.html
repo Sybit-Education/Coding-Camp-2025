@@ -10,7 +10,7 @@
             [class.h-[500px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.LARGE"
             [class.h-[350px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL"
             [src]="item.url"
-            [alt]="eventName ? 'Bild der Veranstaltung: ' + eventName : 'Veranstaltungsbild'"
+            [alt]="eventName ? ('event-detail.image-alt' | translate: { name: eventName }) : ('event-detail.placeholder-alt' | translate)"
           />
           @if (item.copyright || item.creator) {
             <div class="absolute bottom-0 left-0 rounded-tr-xl bg-black px-3 py-1 opacity-75">
@@ -107,7 +107,7 @@
                 <img
                   class="animate-fadeIn rounded-2xl object-contain opacity-0"
                   [src]="item.url"
-                  [alt]="eventName ? 'Bild der Veranstaltung: ' + eventName : 'Veranstaltungsbild'"
+                  [alt]="eventName ? ('event-detail.image-alt' | translate: { name: eventName }) : ('event-detail.placeholder-alt' | translate)"
                 />
                 @if (item.copyright || item.creator) {
                   <div class="absolute flex h-8 -translate-y-8 items-center rounded-md bg-black px-2 opacity-75">
@@ -195,7 +195,7 @@
         <img
           class="w-full rounded-t-2xl object-contain opacity-30"
           src="/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg"
-          alt="1200 Jahre Radolfzell Logo"
+          [alt]="'event-detail.logo-alt' | translate"
         />
       </div>
     }

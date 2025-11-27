@@ -320,7 +320,10 @@
     "text3": "Special thanks go to all participants who worked on this project with passion, team spirit and perseverance. Every component, every line of code and every decision behind it reflects the learning process and the commitment of everyone involved."
   },
   "event-card": {
-    "show-more": "Show more events"
+    "show-more": "Show more events",
+    "image-alt": "Image: {{name}}",
+    "placeholder-alt": "Placeholder image for event",
+    "logo-alt": "1200 years Radolfzell logo"
   },
   "event-detail": {
     "adress": "Address",
@@ -345,7 +348,10 @@
       "directions-heading": "directions-heading"
     },
     "when": "When?",
-    "where": "Where?"
+    "where": "Where?",
+    "image-alt": "Event image: {{name}}",
+    "placeholder-alt": "Event image",
+    "logo-alt": "1200 years Radolfzell logo"
   },
   "footer": {
     "accessibility": "Accessibility",
