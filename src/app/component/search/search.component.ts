@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { IconComponent } from '../icon/icon.component'
 import { TranslateModule } from '@ngx-translate/core'
+import { CommonModule } from '@angular/common'
 
 @Component({
   selector: 'app-search',
-  imports: [IconComponent, TranslateModule],
+  imports: [IconComponent, TranslateModule, CommonModule],
   templateUrl: './search.component.html',
 })
 export class SearchComponent {

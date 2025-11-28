@@ -1,4 +1,7 @@
-<div class="inline-flex max-h-10 items-center justify-between rounded-2xl border border-gray-300 w-full">
+<div
+  class="inline-flex max-h-10 w-full items-center justify-between rounded-2xl"
+  [ngClass]="hasIcon ? 'border-1 border-gray-300 bg-white hover:shadow-md' : ''"
+>
   <label class="sr-only" for="category-search">{{ 'SEARCH.LABEL' | translate }}</label>
   <input
     id="category-search"
@@ -11,6 +14,6 @@
     [attr.aria-busy]="searching"
   />
   @if (hasIcon) {
-  <app-icon name="search" class="mr-3 ml-2 h-6 w-6" aria-hidden="true" />
+    <app-icon name="search" class="mr-3 ml-2 h-6 w-6" aria-hidden="true" />
   }
 </div>

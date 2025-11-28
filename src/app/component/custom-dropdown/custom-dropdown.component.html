@@ -1,4 +1,4 @@
-<div class="relative mb-4 w-full" [ngClass]="dropdownOpen ? 'h-auto' : ''">
+<div class="relative mb-4 w-full" [ngClass]="dropdownOpen ? 'h-10' : ''">
   <!-- Dropdown-Feld -->
   <button
     class="flex w-full cursor-pointer flex-wrap items-center gap-1 border-1 border-gray-400 bg-white px-3 py-2"
@@ -50,7 +50,7 @@
   <!-- Dropdown-Liste -->
   @if (dropdownOpen) {
     <div
-      class="absolute right-0 left-0 z-50 mt-0 max-h-60 overflow-x-hidden overflow-y-auto rounded-b-2xl border-1 border-gray-400 bg-white"
+      class="absolute right-0 left-0 z-50 mt-0 max-h-40 overflow-x-hidden overflow-y-auto rounded-b-2xl border-1 border-gray-400 bg-white"
       tabindex="-1"
       aria-label="Options"
     >
