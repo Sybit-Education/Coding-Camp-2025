@@ -59,6 +59,7 @@ export class CustomDropdownComponent implements OnInit, AfterViewInit, OnDestroy
     if (!this.selectedItems.some((i) => i.id === item.id) && this.selectedItems.length < 5) {
       this.selectedItems.push(item)
       this.emitSelection()
+      this.items = this.items.filter((i) => i.id !== item.id)
       this.searchTerm = ''
     }
   }
@@ -68,6 +69,7 @@ export class CustomDropdownComponent implements OnInit, AfterViewInit, OnDestroy
       return // Default-Item darf nicht entfernt werden
     }
     this.selectedItems = this.selectedItems.filter((i) => i.id !== item.id)
+    this.items.push(item)
     this.emitSelection()
   }
 
