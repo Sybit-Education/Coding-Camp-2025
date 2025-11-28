@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input, OnChanges, SimpleChanges, inject } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  HostBinding,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  inject,
+} from '@angular/core'
 import { SafeHtml } from '@angular/platform-browser'
 import { IconRegistryService } from '../../services/icon-registry.service'
 import { take } from 'rxjs'
@@ -21,7 +30,7 @@ export class IconComponent implements OnChanges {
     return this.decorative && !this.ariaLabel ? 'true' : null
   }
   @HostBinding('attr.aria-label') get hostAriaLabel() {
-    return this.decorative ? null : this.ariaLabel ?? null
+    return this.decorative ? null : (this.ariaLabel ?? null)
   }
 
   safeSvg: SafeHtml | null = null
@@ -31,16 +40,19 @@ export class IconComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['name']?.currentValue) {
-      this.registry.get(this.name).pipe(take(1)).subscribe({
-        next: (svg) => {
-          this.safeSvg = svg
-          this.cdr.markForCheck()
-        },
-        error: () => {
-          this.safeSvg = null
-          this.cdr.markForCheck()
-        },
-      })
+      this.registry
+        .get(this.name)
+        .pipe(take(1))
+        .subscribe({
+          next: (svg) => {
+            this.safeSvg = svg
+            this.cdr.markForCheck()
+          },
+          error: () => {
+            this.safeSvg = null
+            this.cdr.markForCheck()
+          },
+        })
     }
   }
 }

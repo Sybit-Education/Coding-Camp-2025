@@ -121,7 +121,7 @@ export class AdminLocationOverviewComponent implements OnInit {
           originalId: location.id, // Keep original ID for actions
           city: location.city || 'Radolfzell', // Default city
           street: location.street || '',
-          eventCount: location.id ? eventCounts.get(String(location.id)) ?? 0 : 0,
+          eventCount: location.id ? (eventCounts.get(String(location.id)) ?? 0) : 0,
         }
       })
 

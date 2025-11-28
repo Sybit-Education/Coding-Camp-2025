@@ -43,7 +43,7 @@ export const routes: Routes = [
     title: 'Kategorie',
   },
   {
-    path: 'event',
+    path: 'all-events',
     loadComponent: () => import('./pages/kategorie/kategorie.component').then((m) => m.KategorieComponent),
     title: 'Alle Veranstaltungen',
   },
@@ -101,15 +101,13 @@ export const routes: Routes = [
   },
   {
     path: 'admin/organizer/create',
-    loadComponent: () =>
-      import('./pages/organizer-edit/organizer-edit.component').then((m) => m.OrganizerEditComponent),
+    loadComponent: () => import('./pages/organizer-edit/organizer-edit.component').then((m) => m.OrganizerEditComponent),
     canActivate: [LoginService],
     title: 'Veranstalter erstellen',
   },
   {
     path: 'admin/organizer/:id',
-    loadComponent: () =>
-      import('./pages/organizer-edit/organizer-edit.component').then((m) => m.OrganizerEditComponent),
+    loadComponent: () => import('./pages/organizer-edit/organizer-edit.component').then((m) => m.OrganizerEditComponent),
     canActivate: [LoginService],
     title: 'Veranstalter bearbeiten',
   },

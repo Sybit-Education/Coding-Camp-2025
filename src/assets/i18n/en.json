@@ -77,10 +77,21 @@
     "all-locations": "All Locations",
     "all-categories": "All Categories",
     "all-events": "All Events",
-    "filter": "Filter"
+    "filter": "Filter",
+    "prices": "Event Prices",
+    "all-prices": "All Event Prices",
+    "eventprices": {
+      "free": "Free",
+      "firststage": "0 - 5 €",
+      "secondstage": "5 - 10 €",
+      "thirdstage": "10 - 15 €",
+      "fourthstage": "15 € and more"
+    },
+    "date-from": "Date from",
+    "date-to": "Date to"
   },
   "category": {
-    "title": "Kategorie"
+    "title": "Category"
   },
   "i18y": {
     "to-main-content": "Skip to main content"

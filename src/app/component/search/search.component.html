@@ -1,0 +1,19 @@
+<div
+  class="inline-flex max-h-10 w-full items-center justify-between rounded-2xl"
+  [ngClass]="hasIcon ? 'border-1 border-gray-300 bg-white hover:shadow-md' : ''"
+>
+  <label class="sr-only" for="category-search">{{ 'SEARCH.LABEL' | translate }}</label>
+  <input
+    id="category-search"
+    type="search"
+    class="w-full border-none p-2"
+    [value]="searchTerm"
+    (input)="onSearchChange($any($event.target).value)"
+    [attr.aria-label]="'SEARCH.LABEL' | translate"
+    [placeholder]="'SEARCH.PLACEHOLDER' | translate"
+    [attr.aria-busy]="searching"
+  />
+  @if (hasIcon) {
+    <app-icon name="search" class="mr-3 ml-2 h-6 w-6" aria-hidden="true" />
+  }
+</div>
