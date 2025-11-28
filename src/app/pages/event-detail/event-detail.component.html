@@ -149,9 +149,15 @@
             {{ 'event-detail.description' | translate }}
           </h2>
           <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
-          <p [innerHTML]="event.description" class="hyphens-auto">
-            {{ event.description }}
-          </p>
+          @if ((this.sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL) {
+            <p [innerHTML]="event.description" class="text-base hyphens-auto">
+              {{ event.description }}
+            </p>
+          } @else {
+            <p [innerHTML]="event.description" class="text-lg hyphens-auto">
+              {{ event.description }}
+            </p>
+          }
           @if (event.more_infos_link) {
             <h3>{{ 'event-detail.more_information' | translate }}</h3>
             <p>
