@@ -8,7 +8,7 @@
 >
   <div class="relative h-[50%] w-full overflow-hidden bg-gray-100">
     <div class="pointer-events-none absolute top-2 left-2 z-10">
-      <app-event-type-pill aria-hidden="true" class="text-xs" [event]="event"></app-event-type-pill>
+      <app-event-type-pill aria-hidden="true" class="text-xs" [event]="event" [disabled]="true"></app-event-type-pill>
     </div>
     @if (event?.['isPast']) {
       <ul aria-hidden="true" class="pill-list pointer-events-none absolute top-2 right-2 z-10">
