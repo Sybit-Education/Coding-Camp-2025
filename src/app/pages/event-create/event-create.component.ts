@@ -352,7 +352,19 @@ export class EventCreateComponent implements OnInit {
       // Sicherstellen, dass wir die aktualisierten Media-IDs verwenden
       this.images = finalMedia
 
-      console.log('selectedAccessibiltiys beim Speichern:', this.selectedAccessibiltiys)
+      // check auf gesetzte Barrierefreiheiten im Topics array
+      if (this.selectedAccessibiltiys.length > 0) {
+        const hasAccessibilityTopic = this.selectedTopics.some((t) => t.name === 'Barrierefrei')
+        if (!hasAccessibilityTopic) {
+          const accessibilityTopic = this.topics.find((t) => t.name === 'Barrierefrei')
+          if (accessibilityTopic) {
+            this.selectedTopics.push(accessibilityTopic)
+          }
+        }
+      } else {
+        // Wenn keine Barrierefreiheiten ausgewählt sind, entfernen wir das Topic "Barrierefrei"
+        this.selectedTopics = this.selectedTopics.filter((t) => t.name !== 'Barrierefrei')
+      }
 
       const payload: AppEvent = {
         name: this.eventName,
