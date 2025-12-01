@@ -187,11 +187,11 @@
           </div>
         </section>
       }
-      @if (location?.id) {
+      @if (location?.id && eventsFound) {
         <section>
           <h2>{{ 'event-detail.next-events' | translate }}</h2>
           <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
-          <app-event-card-list [location]="location!" [currentEventId]="event.id"></app-event-card-list>
+          <app-event-card-list [location]="location!" [currentEventId]="event.id" (eventsFound)="eventsFound = $event" />
         </section>
       }
       @if (organizer) {
