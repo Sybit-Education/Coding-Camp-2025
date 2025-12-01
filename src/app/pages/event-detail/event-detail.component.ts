@@ -60,12 +60,14 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   error: string | null = null
   eventId = ''
   goBackSite: string | string[] = '/'
-  goBackParams?: Record<string, string | number | boolean | null | undefined>
+  goBackParams?: string | null = null
 
   mediaList: { url: string; copyright: string; creator: string }[] = []
 
   protected isLoggedIn = false
   screenSize = ScreenSize
+
+  eventsFound = true
 
   private readonly eventService = inject(EventService)
   private readonly locationService = inject(LocationService)
@@ -81,6 +83,13 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     this.route.paramMap.subscribe((params) => {
       this.eventId = params.get('id') || ''
     })
+
+    this.route.queryParamMap.subscribe((params) => {
+      const filterQueryParam = params.get('filterQuery')
+      this.goBackParams = filterQueryParam || null
+
+      console.log('Query Params:', filterQueryParam)
+    })
     if (this.eventId) {
       const recordID = new StringRecordId('event:' + this.eventId)
       this.loadEvent(recordID)
@@ -89,6 +98,7 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       this.announceError('Event ID nicht gefunden')
     }
 
+    console.log('Go back params:', this.goBackParams)
     // Subscription für Login-Status
     this.subscriptions.add(
       this.loginservice.isLoggedIn$.subscribe((isLoggedIn) => {

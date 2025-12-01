@@ -25,9 +25,7 @@
         [attr.aria-invalid]="form.controls.name.invalid && form.controls.name.touched ? 'true' : 'false'"
       />
       @if (form.controls.name.invalid && form.controls.name.touched) {
-        <p class="mt-1 text-sm text-red-600" role="alert">
-          Name ist erforderlich.
-        </p>
+        <p class="mt-1 text-sm text-red-600" role="alert">Name ist erforderlich.</p>
       }
     </div>
 
@@ -35,9 +33,7 @@
       <label for="email" class="mb-1 block font-medium">E-Mail</label>
       <input id="email" type="email" class="w-full rounded border border-gray-300 px-3 py-2" formControlName="email" />
       @if (form.controls.email.invalid && form.controls.email.touched) {
-        <p class="mt-1 text-sm text-red-600" role="alert">
-          Ungültige E-Mail-Adresse.
-        </p>
+        <p class="mt-1 text-sm text-red-600" role="alert">Ungültige E-Mail-Adresse.</p>
       }
     </div>
 

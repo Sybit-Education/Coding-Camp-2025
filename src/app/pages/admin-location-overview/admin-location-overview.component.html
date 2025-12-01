@@ -183,7 +183,9 @@
                 [attr.aria-label]="('ADMIN.LOCATIONS.DELETE_BUTTON_ARIA' | translate : { name: row.name })"
                 [disabled]="row.eventCount > 0"
                 [attr.aria-disabled]="row.eventCount > 0"
-                title="{{ row.eventCount > 0 ? 'Verknüpfte Events verhindern das Löschen' : ('ADMIN.LOCATIONS.DELETE' | translate) }}"
+                title="{{
+                  row.eventCount > 0 ? 'Verknüpfte Events verhindern das Löschen' : ('ADMIN.LOCATIONS.DELETE' | translate)
+                }}"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path

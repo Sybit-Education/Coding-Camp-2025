@@ -243,7 +243,18 @@
     "all-categories": "All Categories",
     "all-events": "All Events",
     "all-locations": "All Locations",
-    "filter": "Filter"
+    "filter": "Filter",
+    "prices": "Event Prices",
+    "all-prices": "All Event Prices",
+    "eventprices": {
+      "free": "Free",
+      "firststage": "0 - 5 €",
+      "secondstage": "5 - 10 €",
+      "thirdstage": "10 - 15 €",
+      "fourthstage": "15 € and more"
+    },
+    "date-from": "Date from",
+    "date-to": "Date to"
   },
   "bottom-nav": {
     "all-events": "All Events",
@@ -254,6 +265,15 @@
   },
   "category": {
     "title": "Kategorie"
+  },
+  "i18y": {
+    "to-main-content": "Skip to main content"
+  },
+  "footer": {
+    "datenschutz": "Privacy Policy",
+    "impressum": "Imprint",
+    "sponsoring": "Developed & sponsored by",
+    "instagram": "Instagram"
   },
   "create-event": {
     "age": "Minimum age",

@@ -242,7 +242,18 @@
     "all-categories": "Alle Kategorien",
     "all-events": "Alle Veranstaltungen",
     "all-locations": "Alle Orte",
-    "filter": "Filter"
+    "filter": "Filter",
+    "prices": "Veranstaltungspreise",
+    "all-prices": "Alle Preise",
+    "eventprices": {
+      "free": "Kostenlos",
+      "firststage": "0 - 5 €",
+      "secondstage": "5 - 10 €",
+      "thirdstage": "10 - 15 €",
+      "fourthstage": "15 € und mehr"
+    },
+    "date-from": "Zeitraum von",
+    "date-to": "Zeitraum bis"
   },
   "bottom-nav": {
     "all-events": "Alle Events",

@@ -1,5 +1,6 @@
 <a
   [routerLink]="['/event', event?.id?.id]"
+  [queryParams]="{ filterQuery: filterQuery ? filterQuery : null }"
   class="justify-top card aspect-[1/1] focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
   [attr.aria-label]="ariaLabel"
   role="article"

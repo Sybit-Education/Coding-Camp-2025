@@ -249,7 +249,13 @@ export class EventCreateComponent implements OnInit {
       // Location ist kein Pflichtfeld mehr
       // Organisator ist kein Pflichtfeld mehr
 
-      if (this.eventName === '' || this.dateStart === '' || this.timeStart === '' || this.selectedLocation === null || this.selectedEventType === null) {
+      if (
+        this.eventName === '' ||
+        this.dateStart === '' ||
+        this.timeStart === '' ||
+        this.selectedLocation === null ||
+        this.selectedEventType === null
+      ) {
         if (this.eventName === '') {
           this.errorName = true
         } else {
