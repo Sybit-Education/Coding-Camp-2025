@@ -176,9 +176,33 @@
                     (change)="toggleTopicSelection($event, topic)"
                     class="h-4 w-4 cursor-pointer"
                   />
+
                   <label for="checkbox{{ topic.id }}" class="ms-2 w-full cursor-pointer text-gray-900 dark:text-gray-700">
                     {{ topic.name }}
                   </label>
+                  @if (accessibility && topic.name === 'Barrierefrei') {
+                    <div>
+                      @for (accessibility of allAccessibiltiys; track accessibility) {
+                        <div class="ml-6">
+                          <input
+                            id="accessibilityCheckbox{{ accessibility.accessibilityName }}"
+                            name="accessibilitysCheckbox{{ accessibility.accessibilityName }}"
+                            type="checkbox"
+                            [value]="accessibility.accessibilityName"
+                            [checked]="selectedAccessibiltiys.includes(accessibility)"
+                            (change)="toggleAccessibilitySelection($event, accessibility)"
+                            class="h-4 w-4 cursor-pointer"
+                          />
+                          <label
+                            for="accessibilityCheckbox{{ accessibility.accessibilityName }}"
+                            class="ms-2 w-full cursor-pointer text-gray-900 dark:text-gray-700"
+                          >
+                            {{ accessibility.accessibilityName }}
+                          </label>
+                        </div>
+                      }
+                    </div>
+                  }
                 </div>
               </li>
             }
