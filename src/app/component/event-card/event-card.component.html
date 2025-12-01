@@ -45,17 +45,6 @@
       </div>
     </div>
   </div>
-  <!-- <button
-    (click)="toggleFavourite($event, event!)"
-    class="absolute top-2 right-2 rounded-full bg-white p-1 text-yellow-500 shadow-md transition-colors hover:text-yellow-700"
-    [title]="'FAVORITES.REMOVE' | translate"
-  >
-    @if (isFavorite) {
-      <app-icon name="favourite_filled" class="h-6 w-6" aria-hidden="true"></app-icon>
-    } @else {
-      <app-icon name="favourites" class="h-6 w-6" aria-hidden="true"></app-icon>
-    }
-  </button> -->
   <app-favorite-button
     [eventId]="event?.id"
     [isSmall]="true"

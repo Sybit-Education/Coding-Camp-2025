@@ -17,6 +17,5 @@ export class SearchComponent {
   onSearchChange(value: string) {
     this.searchTerm = value
     this.searchTermChange.emit(this.searchTerm)
-    console.log('Emitted Search Term:', this.searchTerm)
   }
 }

@@ -99,12 +99,9 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       this.route.queryParamMap.subscribe((params) => {
         const filterQueryParam = params.get('filterQuery')
         this.goBackParams = filterQueryParam || null
-
-        console.log('Query Params:', filterQueryParam)
       }),
     )
 
-    console.log('Go back params:', this.goBackParams)
     // Subscription für Login-Status
     this.subscriptions.add(
       this.loginservice.isLoggedIn$.subscribe((isLoggedIn) => {

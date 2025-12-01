@@ -39,7 +39,6 @@ export class EventCardComponent implements OnInit, OnDestroy, OnChanges {
   eventType: EventType | null = null
   isSaved = false
   mediaUrl: string | null = null
-  // isFavorite: boolean | null = null
 
   private readonly subscriptions = new Subscription()
   private readonly surrealDBService = inject(SurrealdbService)
@@ -47,7 +46,6 @@ export class EventCardComponent implements OnInit, OnDestroy, OnChanges {
   private readonly localStorageService = inject(LocalStorageService)
   private readonly mediaService = inject(MediaService)
   private readonly markForCheck = injectMarkForCheck()
-  // private readonly favoriteService = inject(FavoriteService)
 
   ngOnInit() {
     if (this.event?.id) {
@@ -99,7 +97,6 @@ export class EventCardComponent implements OnInit, OnDestroy, OnChanges {
       // Verwende Promise.all für parallele Ausführung
       const [location, eventType, mediaUrl] = await Promise.all([this.loadLocation(), this.loadEventType(), this.loadMedia()])
 
-      // this.loadFavoriteStatus()
       // Batch-Update der Komponenten-Properties für weniger Change Detection Zyklen
       setTimeout(() => {
         this.location = location

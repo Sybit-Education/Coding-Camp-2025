@@ -45,10 +45,11 @@ export class MoreComponent {
   private announceNavigation(route: string): void {
     const menuItem = this.menuItems.find((item) => item.route === route)
     if (menuItem) {
-      // In einer vollständigen Implementierung würde hier LiveAnnouncer verwendet werden
+      // Todo:? In einer vollständigen Implementierung würde hier LiveAnnouncer verwendet werden
       console.log(`Navigiere zu: ${menuItem.title}`)
     }
   }
+
   menuItems: MoreMenuItem[] = [
     {
       title: 'Das Team',
