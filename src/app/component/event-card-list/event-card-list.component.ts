@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, Input, OnInit, ChangeDetectorRef } from '@angular/core'
+import { Component, inject, Input, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { ScreenSize } from '@app/models/screenSize.enum'
 
@@ -20,6 +20,8 @@ export class EventCardListComponent implements OnInit {
   @Input() location?: Location
   @Input() currentEventId?: RecordId<'event'>
   @Input() limit?: number = 3
+
+  @Output() eventsFound = new EventEmitter<boolean>(false)
 
   events: Event[] = []
   error = false
@@ -51,6 +53,8 @@ export class EventCardListComponent implements OnInit {
       .filter((e) => e.id?.id !== this.currentEventId!.id)
       .sort((a, b) => new Date(a.date_start).getTime() - new Date(b.date_start).getTime())
       .slice(0, this.limit)
+
+    this.eventsFound.emit(this.events.length > 0)
 
     this.cdRef.markForCheck()
   }
