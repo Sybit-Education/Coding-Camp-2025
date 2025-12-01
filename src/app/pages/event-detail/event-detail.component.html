@@ -72,10 +72,10 @@
         }
         <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
         <div class="flex justify-between">
-          <div class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl">
+          <div class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl lg:grid-cols-2">
             <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
-              <div class="flex items-center justify-center">
-                <div class="flex items-center justify-center" aria-hidden="true">
+              <div class="mt-3 flex items-start justify-center">
+                <div class="flex items-start justify-center" aria-hidden="true">
                   <app-icon name="calendar" class="h-8 w-8" aria-hidden="true"></app-icon>
                 </div>
               </div>
@@ -89,7 +89,7 @@
               </div>
             </div>
             <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
-              <div class="flex items-center justify-center">
+              <div class="mt-3 flex items-start justify-center">
                 <div class="flex items-center justify-center" aria-hidden="true">
                   <app-icon name="location" class="h-8 w-8" aria-hidden="true"></app-icon>
                 </div>
@@ -100,13 +100,12 @@
                 </h3>
                 <p class="mb-0">{{ location?.name || 'Ort wird bekannt gegeben' }}</p>
                 @if (location?.street) {
-                  <p class="mb-0">{{ location?.street }}</p>
-                  <p class="mb-0">{{ location?.zip_code }} {{ location?.city }}</p>
+                  <p class="mb-0">{{ location?.street }}, {{ location?.zip_code }} {{ location?.city }}</p>
                 }
               </div>
             </div>
             <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
-              <div class="flex items-center justify-center">
+              <div class="mt-3 flex items-start justify-center">
                 <div class="flex items-center justify-center" aria-hidden="true">
                   <app-icon name="money_bag" class="h-8 w-8" aria-hidden="true"></app-icon>
                 </div>
@@ -126,7 +125,7 @@
             </div>
             @if (organizer) {
               <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
-                <div class="flex items-center justify-center">
+                <div class="mt-3 flex items-start justify-center">
                   <div class="flex items-center justify-center" aria-hidden="true">
                     <app-icon name="person" class="h-8 w-8" aria-hidden="true"></app-icon>
                   </div>
@@ -149,9 +148,15 @@
             {{ 'event-detail.description' | translate }}
           </h2>
           <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
-          <p [innerHTML]="event.description" class="hyphens-auto">
-            {{ event.description }}
-          </p>
+          @if ((this.sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL) {
+            <p [innerHTML]="event.description" class="text-base hyphens-auto">
+              {{ event.description }}
+            </p>
+          } @else {
+            <p [innerHTML]="event.description" class="text-lg hyphens-auto">
+              {{ event.description }}
+            </p>
+          }
           @if (event.more_infos_link) {
             <h3>{{ 'event-detail.more_information' | translate }}</h3>
             <p>
@@ -187,11 +192,11 @@
           </div>
         </section>
       }
-      @if (location?.id) {
+      @if (location?.id && eventsFound) {
         <section>
           <h2>{{ 'event-detail.next-events' | translate }}</h2>
           <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
-          <app-event-card-list [location]="location!" [currentEventId]="event.id"></app-event-card-list>
+          <app-event-card-list [location]="location!" [currentEventId]="event.id" (eventsFound)="eventsFound = $event" />
         </section>
       }
       @if (organizer) {
