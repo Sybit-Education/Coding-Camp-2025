@@ -195,9 +195,6 @@ export class EventCreateComponent implements OnInit {
       }
 
       this.images = await this.mediaService.getMediasByIdList(event.media)
-
-      // Images werden in der ImageUploadComponent geladen
-      console.log('Existierende Bilder für ImageUploadComponent:', this.images)
     } catch (err) {
       console.error('Fehler beim Laden des Events:', err)
     }
@@ -299,7 +296,6 @@ export class EventCreateComponent implements OnInit {
       // Wenn keine Bilder hochgeladen wurden, aber existierende Bilder vorhanden sind,
       // behalten wir die existierenden Bilder bei
       if (medias.length === 0 && this.images.length > 0) {
-        console.log('Keine neuen Bilder hochgeladen, behalte existierende:', this.images)
         for (const media of this.images) {
           finalMedia.push(media)
           finalMediaIds.push(media.id!)
@@ -342,12 +338,10 @@ export class EventCreateComponent implements OnInit {
       } else {
         const updated = await this.eventService.updateEvent(this.eventId, payload)
         if (updated) {
-          console.log('Event erfolgreich aktualisiert:', updated)
           this.snackBarService.showSuccess('Event erfolgreich aktualisiert')
 
           for (const media of this.imageUploadComponent.deletedImages) {
             try {
-              console.log('Lösche existierendes Bild aus der Datenbank:', media.id)
               await this.mediaService.deleteMedia(media.id!)
             } catch (err) {
               console.error('Fehler beim endgültigen Löschen:', err)
