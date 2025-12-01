@@ -75,7 +75,9 @@ DEFINE FIELD OVERWRITE price ON event TYPE option<decimal>;
 DEFINE FIELD OVERWRITE age ON event TYPE option<int>;
 DEFINE FIELD OVERWRITE restriction ON event TYPE option<string>;
 DEFINE FIELD OVERWRITE draft ON event TYPE option<bool>;
-
+DEFINE FIELD OVERWRITE weehlchair ON event TYPE option<bool> DEFAULT false;
+DEFINE FIELD OVERWRITE seeing ON event TYPE option<bool> DEFAULT false;
+DEFINE FIELD OVERWRITE hearing ON event TYPE option<bool> DEFAULT false;
 
 
 DEFINE FIELD OVERWRITE organizer ON event TYPE record<organizer>;
