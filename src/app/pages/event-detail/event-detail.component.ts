@@ -6,7 +6,7 @@ import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
 import { ActivatedRoute, Router } from '@angular/router'
 import { EventService } from '../../services/event.service'
-import { CommonModule } from '@angular/common'
+import { CommonModule, DOCUMENT } from '@angular/common'
 import { Organizer } from '../../models/organizer.interface'
 import { LocationService } from '../../services/location.service'
 import { OrganizerService } from '../../services/organizer.service'
@@ -28,6 +28,7 @@ import { GoBackComponent } from '@app/component/go-back-button/go-back-button.co
 import { EventTypePillComponent } from '@app/component/event-type-pill/event-type-pill.component'
 import { EventTopicPillListComponent } from '@app/component/event-topic-pill-list/event-topic-pill-list.component'
 import { EventCardListComponent } from '@app/component/event-card-list/event-card-list.component'
+import { SeoService } from '@app/services/seo.service'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -77,6 +78,8 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   private readonly loginservice = inject(LoginService)
   private readonly mediaService = inject(MediaService)
   private readonly markForCheck = injectMarkForCheck()
+  private readonly seo = inject(SeoService)
+  private readonly document = inject(DOCUMENT)
   readonly sharedStateService = inject(SharedStateService)
 
   ngOnInit(): void {
@@ -224,7 +227,13 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
 
       // Batch-Update für weniger Change Detection Zyklen
       requestAnimationFrame(async () => {
-        const mediaResults = await mediaPromise
+        const [mediaResults, location, organizer, type] = await Promise.all([
+          mediaPromise,
+          locationPromise,
+          organizerPromise,
+          typePromise,
+        ])
+
         if (mediaResults.length > 0) {
           this.mediaList = mediaResults.map((m) => ({
             url: m.url,
@@ -233,11 +242,31 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
           }))
         }
 
-        locationPromise.then((location) => (this.location = location))
-        organizerPromise.then((organizer) => (this.organizer = organizer))
-        typePromise.then((type) => (this.type = type))
+        this.location = location
+        this.organizer = organizer
+        this.type = type
 
-        document.title = `${this.event!.name} - 1200 Jahre Radolfzell`
+        const url = this.getEventUrl()
+        const toDate = (d?: Date) => (d ? new Date(d) : null)
+        const startDate = toDate(this.event!.date_start)
+        const endDate = toDate(this.event!.date_end)
+        const locale = navigator.language || 'de-DE'
+        let dateText = ''
+        if (startDate) {
+          const opts: Intl.DateTimeFormatOptions = { dateStyle: 'full', timeStyle: 'short' }
+          dateText = new Intl.DateTimeFormat(locale, opts).format(startDate)
+          if (endDate && endDate.getTime() !== startDate.getTime()) {
+            const endText = new Intl.DateTimeFormat(locale, opts).format(endDate)
+            dateText = `${dateText} – ${endText}`
+          }
+        }
+        const descriptionParts: string[] = []
+        if (dateText) descriptionParts.push(dateText)
+        if (this.location?.name) descriptionParts.push(this.location.name)
+        const description = descriptionParts.join(' • ') || this.event!.description || this.event!.name
+
+        this.seo.setSocialMeta(this.event!.name, description, url, this.mediaList[0]?.url, 'website')
+        this.setStructuredData(this.event!, this.mediaList[0]?.url)
         this.markForCheck()
       })
     } catch (err) {
@@ -269,5 +298,122 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     const id = this.event.id.id || ''
     const baseUrl = window.location.origin
     return `${baseUrl}/event/${id}`
+  }
+
+
+  /**
+   * Fügt strukturierte Daten (Schema.org/JSON-LD) für Events hinzu,
+   * damit Suchmaschinen und Social Crawler die Veranstaltung besser verstehen.
+   */
+  private setStructuredData(event: Event, imageUrl?: string): void {
+    const scriptId = 'ld-json-event'
+    const existing = this.document.getElementById(scriptId)
+    if (existing?.parentNode) {
+      existing.parentNode.removeChild(existing)
+    }
+
+    const url = this.getEventUrl()
+    const startDate = event.date_start ? new Date(event.date_start) : null
+    const endDate = event.date_end ? new Date(event.date_end) : null
+
+    const data: {
+      '@context': 'https://schema.org'
+      '@type': 'Event'
+      name: string
+      url: string
+      eventStatus: string
+      eventAttendanceMode: string
+      description?: string
+      startDate?: string
+      endDate?: string
+      image?: string[]
+      location?: {
+        '@type': 'Place'
+        name: string
+        address: {
+          '@type': 'PostalAddress'
+          streetAddress?: string
+          postalCode?: string
+          addressLocality: string
+          addressCountry: string
+        }
+        geo?: {
+          '@type': 'GeoCoordinates'
+          latitude: number
+          longitude: number
+        }
+      }
+      organizer?: {
+        '@type': 'Organization'
+        name: string
+        email?: string
+        telephone?: string
+      }
+      offers?: {
+        '@type': 'Offer'
+        price: string
+        priceCurrency: string
+        availability: string
+      }
+    } = {
+      '@context': 'https://schema.org',
+      '@type': 'Event',
+      name: event.name,
+      url,
+      eventStatus: 'https://schema.org/EventScheduled',
+      eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    }
+
+    if (event.description) data.description = event.description
+    if (startDate) data.startDate = startDate.toISOString()
+    if (endDate) data.endDate = endDate.toISOString()
+    if (imageUrl) data.image = [imageUrl]
+
+    if (this.location) {
+      const latitude = this.location.geo_point?.coordinates?.[1]
+      const longitude = this.location.geo_point?.coordinates?.[0]
+      data.location = {
+        '@type': 'Place',
+        name: this.location.name,
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: this.location.street || undefined,
+          postalCode: this.location.zip_code || undefined,
+          addressLocality: this.location.city || 'Radolfzell',
+          addressCountry: 'DE',
+        },
+      }
+      if (latitude != null && longitude != null) {
+        data.location.geo = {
+          '@type': 'GeoCoordinates',
+          latitude,
+          longitude,
+        }
+      }
+    }
+
+    if (this.organizer) {
+      data.organizer = {
+        '@type': 'Organization',
+        name: this.organizer.name,
+        email: this.organizer.email || undefined,
+        telephone: this.organizer.phonenumber || undefined,
+      }
+    }
+
+    if (event.price != null) {
+      data.offers = {
+        '@type': 'Offer',
+        price: String(event.price),
+        priceCurrency: 'EUR',
+        availability: 'https://schema.org/InStock',
+      }
+    }
+
+    const script = this.document.createElement('script')
+    script.type = 'application/ld+json'
+    script.id = scriptId
+    script.text = JSON.stringify(data)
+    this.document.head.appendChild(script)
   }
 }
