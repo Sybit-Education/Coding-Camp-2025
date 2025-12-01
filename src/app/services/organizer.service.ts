@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
 import { Organizer } from '../models/organizer.interface'
-import { RecordId } from 'surrealdb'
+import { RecordId, StringRecordId } from 'surrealdb'
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +11,7 @@ export class OrganizerService {
 
   //************** GET **************
 
-  async getOrganizerByID(id: RecordId<'organizer'>): Promise<Organizer> {
+  async getOrganizerByID(id: RecordId<'organizer'> | StringRecordId): Promise<Organizer> {
     return await this.surrealdb.getByRecordId<Organizer>(id)
   }
 
@@ -22,7 +22,7 @@ export class OrganizerService {
         (item: Record<string, unknown>) =>
           ({
             ...item,
-          }) as unknown as Organizer,
+          }) as Organizer,
       )
     } catch (error) {
       throw new Error(`Fehler beim Laden der Organizer: ${error}`)
@@ -30,9 +30,17 @@ export class OrganizerService {
   }
 
   //************** POST **************
-
-  async postOrganizer(organizer: Organizer): Promise<Organizer> {
+  async create(organizer: Organizer): Promise<Organizer> {
     const result: Organizer[] = await this.surrealdb.post<Organizer>('organizer', organizer)
     return result[0]
+  }
+
+  async update(id: RecordId<'organizer'> | StringRecordId, organizer: Organizer): Promise<Organizer> {
+    const result = await this.surrealdb.postUpdate<Organizer>(id, organizer)
+    return result
+  }
+
+  async delete(organizerId: RecordId<'organizer'> | StringRecordId) {
+    await this.surrealdb.deleteRow(organizerId)
   }
 }

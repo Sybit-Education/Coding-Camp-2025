@@ -44,8 +44,9 @@ interface LogoSet {
 
 @Component({
   selector: 'app-header',
-  standalone: true,
-  imports: [CommonModule, RouterModule, 
+  imports: [
+    CommonModule,
+    RouterModule,
     // LanguageSwitcherComponent
   ],
   templateUrl: './header.component.html',

@@ -1,0 +1,30 @@
+@if (this.events.length === 0) {
+  <div class="mb-4 rounded bg-yellow-100 p-4">Lade Events... ({{ events.length }} Events verfügbar)</div>
+} @else if (this.events.length > 0) {
+  <!-- Horizontaler Scroll-Container für Events -->
+  @if ((sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL) {
+    <div class="scrollbar-hide card-snap mb-5 w-full snap-x snap-mandatory overflow-x-scroll scroll-smooth">
+      <div class="event-row flex min-w-max gap-4 px-2">
+        @for (event of events; track event.id?.id) {
+          <app-event-card
+            class="w-[calc(100vw-6rem)] max-w-[320px] snap-center"
+            [event]="event"
+            [attr.aria-label]="
+              event.name
+                ? 'Veranstaltung: ' + event.name + ' am ' + (event.date_start | date: 'dd.MM.yyyy')
+                : 'Mehr Veranstaltungen anzeigen'
+            "
+          ></app-event-card>
+        }
+      </div>
+    </div>
+  } @else {
+    <div class="mb-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      @for (event of events; track event.id?.id) {
+        <div class="relative">
+          <app-event-card [event]="event"></app-event-card>
+        </div>
+      }
+    </div>
+  }
+}

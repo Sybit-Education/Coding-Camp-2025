@@ -49,7 +49,7 @@
   input,
   select,
   textarea {
-    @apply rounded rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-[#6d7cbc] focus:outline-none;
+    @apply rounded rounded-2xl border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-[#6d7cbc] focus:outline-none;
   }
 
   input.error,
@@ -67,13 +67,79 @@
   select::placeholder {
     @apply text-gray-400;
   }
+}
 
+@layer components {
   .card {
-    @apply flex h-full w-full cursor-pointer flex-col items-center overflow-hidden rounded-2xl border-1 border-gray-300 text-center shadow-lg transition-transform duration-300 hover:scale-102 hover:border-gray-400 hover:shadow-xl focus:ring-2 focus:ring-yellow-400;
+    @apply flex h-full w-full cursor-pointer flex-col items-center overflow-hidden rounded-2xl border border-gray-300 text-center shadow-lg transition-transform duration-300 hover:scale-105 hover:border-gray-400 hover:shadow-xl focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:outline-none;
   }
 
   .action-button {
-    @apply h-12 w-12 cursor-pointer rounded-full bg-white/80 p-2 opacity-80 shadow-md transition hover:bg-gray-200 hover:text-[#3b4ea3] focus:ring-2 focus:ring-blue-500 focus:outline-none;
+    @apply h-12 w-12 cursor-pointer rounded-full bg-white/80 p-2 opacity-80 shadow-md transition hover:bg-gray-200 hover:text-[#3b4ea3] focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none;
+  }
+
+  .pill-list {
+    @apply flex list-none flex-wrap gap-2 p-0;
+
+    li {
+      @apply inline-flex cursor-pointer items-center rounded-full border border-gray-300 px-3 py-1 transition-colors hover:opacity-80 hover:shadow-xl focus-visible:ring-2 focus-visible:ring-[#c70d56] focus-visible:ring-offset-2 focus-visible:outline-none;
+    }
+  }
+
+  .filter-option {
+    @apply mb-5 items-center justify-between overflow-hidden text-center transition-transform duration-300 focus:ring-2 focus:ring-yellow-400;
+  }
+
+  .tailwind-table {
+    @apply border-0 shadow-none;
+  }
+
+  .tailwind-table .datatable-header {
+    @apply border-b border-gray-300 bg-gray-100;
+  }
+
+  .tailwind-table .datatable-header-cell {
+    @apply bg-gray-100 p-4 font-bold;
+  }
+
+  .tailwind-table .datatable-header-cell.sortable.sort-active {
+    @apply text-blue-600;
+  }
+
+  .tailwind-table .datatable-header-cell.sortable.sort-active.sort-asc .datatable-header-cell-wrapper::after {
+    content: '↑';
+  }
+
+  .tailwind-table .datatable-header-cell.sortable.sort-active.sort-desc .datatable-header-cell-wrapper::after {
+    content: '↓';
+  }
+
+  .tailwind-table .datatable-body-row {
+    @apply border-b border-gray-300;
+  }
+
+  .tailwind-table .datatable-body-row:hover {
+    @apply bg-gray-100;
+  }
+
+  .tailwind-table .datatable-body-cell {
+    @apply p-4 text-gray-700;
+  }
+
+  .tailwind-table .datatable-footer {
+    @apply hidden;
+  }
+
+  .event-thumbnail {
+    @apply h-[50px] w-[50px] rounded border border-gray-200 object-cover;
+  }
+
+  .event-thumbnail-placeholder {
+    @apply flex h-[50px] w-[50px] items-center justify-center rounded bg-gray-100 text-gray-500;
+  }
+
+  .location-thumbnail-placeholder {
+    @apply flex h-[50px] w-[50px] items-center justify-center rounded bg-gray-100 text-gray-500;
   }
 }
 
@@ -162,7 +228,7 @@
 */
 
 .link {
-  @apply transition-colors duration-200 text-[#3b4ea3] hover:text-[#c70d56] hover:underline focus:ring-2 focus:ring-blue-500 focus:outline-none;
+  @apply text-[#3b4ea3] transition-colors duration-200 hover:text-[#c70d56] hover:underline focus:ring-2 focus:ring-blue-500 focus:outline-none;
 }
 
 .ql-editor {
@@ -195,6 +261,15 @@
 .animate-fadeIn {
   animation: fadeIn 1.3s ease-out;
   opacity: 1;
+}
+
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 
 /* Custom SVG-Background Utilities */

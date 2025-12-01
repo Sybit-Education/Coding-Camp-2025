@@ -24,6 +24,7 @@
     "SAVE_EVENT": "Enregistrer l'événement",
     "REMOVE_EVENT": "Supprimer l'événement",
     "PAST_EVENT": "Événement passé",
+    "PAST_PREFIX": "Passé : ",
     "NO_EVENTS_FOUND_IN_CATEGORY": "Aucun événement trouvé dans cette catégorie."
   },
   "ABOUT": {
@@ -39,7 +40,8 @@
     "home": "Accueil",
     "favorites": "Favoris",
     "all-events": "Tous les événements",
-    "more": "Plus"
+    "more": "Plus",
+    "create-event": "Créer un événement"
   },
   "MORE": {
     "TEAM": {
@@ -69,6 +71,23 @@
       "aria-lable-catagories-heading": "categories-heading"
     },
     "title": "1200 ans de Radolfzell"
+  },
+  "all-categories": {
+    "all-locations": "Tous les lieux",
+    "all-categories": "Toutes les catégories",
+    "all-events": "Tous les événements",
+    "filter": "Filtrer",
+    "prices": "Prix des événements",
+    "all-prices": "Tous les prix des événements",
+    "eventprices": {
+      "free": "Gratuit",
+      "firststage": "0 - 5 €",
+      "secondstage": "5 - 10 €",
+      "thirdstage": "10 - 15 €",
+      "fourthstage": "15 € et plus"
+    },
+    "date-from": "Période de",
+    "date-to": "Période jusqu'à"
   },
   "i18y": {
     "to-main-content": "Accéder au contenu principal"
@@ -116,6 +135,8 @@
       "name": "Veuillez entrer un nom d'événement.",
       "date": "Veuillez entrer une date de début.",
       "time": "Veuillez entrer une heure de début.",
+      "location": "Veuillez sélectionner un lieu.",
+      "theme": "Veuillez sélectionner un type d'événement.",
       "general": "Veuillez remplir tous les champs obligatoires."
     },
     "cancel": "Annuler",
@@ -167,6 +188,7 @@
     "phone": "Téléphone",
     "back": "Retour",
     "edit": "Modifier",
+    "next-events": "Autres événements à cet endroit",
     "tags": {
       "description-heading": "description-heading",
       "directions-heading": "directions-heading",

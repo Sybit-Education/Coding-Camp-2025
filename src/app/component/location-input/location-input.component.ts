@@ -11,7 +11,6 @@ import { MapComponent } from '../map/map.component'
 
 @Component({
   selector: 'app-location-input',
-  standalone: true,
   imports: [CommonModule, FormsModule, TranslateModule, MapComponent],
   templateUrl: './location-input.component.html',
   styleUrls: ['./location-input.component.scss'],
@@ -19,6 +18,7 @@ import { MapComponent } from '../map/map.component'
 export class LocationInputComponent {
   @Input() locations: Location[] = []
   @Input() selectedLocation: Location | null = null
+  @Input() errorLocation = false
   @Output() locationSelected = new EventEmitter<Location | null>()
 
   // Form fields

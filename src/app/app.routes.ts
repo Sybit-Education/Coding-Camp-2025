@@ -60,7 +60,7 @@ export const routes: Routes = [
   {
     path: 'event',
     loadComponent: () => import('./pages/kategorie/kategorie.component').then((m) => m.KategorieComponent),
-    title: 'Alle Events',
+    title: 'Alle Veranstaltungen',
   },
   {
     path: 'admin',
@@ -103,29 +103,36 @@ export const routes: Routes = [
     path: 'admin/event/:id',
     loadComponent: () => import('./pages/event-create/event-create.component').then((m) => m.EventCreateComponent),
     canActivate: [LoginService, metaGuard],
-    title: 'Veranstaltung erstellen',
+    title: 'Veranstaltung bearbeiten',
     data: { meta: { title: 'Veranstaltung erstellen', description: 'Neue oder bestehende Veranstaltung bearbeiten.' } },
   },
   {
-    path: 'admin',
+    path: 'offline',
+    loadComponent: () => import('./pages/offline/offline.component').then((m) => m.OfflineComponent),
+    title: 'Offline',
+  },
+  {
+    path: 'admin/organizers',
     loadComponent: () =>
-      import('./pages/admin-event-overview/admin-event-overview.component').then((m) => m.AdminEventOverviewComponent),
+      import('./pages/admin-organizer-overview/admin-organizer-overview.component').then(
+        (m) => m.AdminOrganizerOverviewComponent,
+      ),
     canActivate: [LoginService, metaGuard],
-    title: 'Admin: Veranstaltungen',
+    title: 'Admin: Veranstalter',
     data: { meta: { title: 'Admin: Veranstaltungen', description: 'Veranstaltungen verwalten.' } },
   },
   {
-    path: 'admin/create',
-    loadComponent: () => import('./pages/event-create/event-create.component').then((m) => m.EventCreateComponent),
+    path: 'admin/organizer/create',
+    loadComponent: () => import('./pages/organizer-edit/organizer-edit.component').then((m) => m.OrganizerEditComponent),
     canActivate: [LoginService, metaGuard],
-    title: 'Veranstaltung erstellen',
+    title: 'Veranstalter erstellen',
     data: { meta: { title: 'Veranstaltung erstellen', description: 'Neue Veranstaltung anlegen.' } },
   },
   {
-    path: 'admin/event/:id',
-    loadComponent: () => import('./pages/event-create/event-create.component').then((m) => m.EventCreateComponent),
+    path: 'admin/organizer/:id',
+    loadComponent: () => import('./pages/organizer-edit/organizer-edit.component').then((m) => m.OrganizerEditComponent),
     canActivate: [LoginService, metaGuard],
-    title: 'Veranstaltung erstellen',
+    title: 'Veranstalter bearbeiten',
     data: { meta: { title: 'Veranstaltung erstellen', description: 'Neue oder bestehende Veranstaltung bearbeiten.' } },
   },
   {

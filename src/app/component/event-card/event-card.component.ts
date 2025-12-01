@@ -12,19 +12,18 @@ import { MediaService } from '../../services/media.service'
 import { TranslateModule } from '@ngx-translate/core'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { MatIconModule } from '@angular/material/icon'
-import { IconComponent } from '@app/icons/icon.component'
+import { IconComponent } from '@app/component/icon/icon.component'
+import { EventTypePillComponent } from '@app/component/event-type-pill/event-type-pill.component'
 
 @Component({
   selector: 'app-event-card',
-  standalone: true,
-  imports: [CommonModule, DateTimeRangePipe, TranslateModule, RouterModule, MatIconModule, IconComponent],
+  imports: [CommonModule, DateTimeRangePipe, TranslateModule, RouterModule, MatIconModule, IconComponent, EventTypePillComponent],
   templateUrl: './event-card.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventCardComponent implements OnInit, OnDestroy, OnChanges {
   @Input() event: Event | null = null
-
-  @Input() isMoreCard = false
+  @Input() filterQuery?: string | null = null
 
   location: Location | null = null
   eventType: EventType | null = null

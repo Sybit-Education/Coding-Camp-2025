@@ -1,5 +1,5 @@
 import { APP_INITIALIZER, EnvironmentProviders, makeEnvironmentProviders } from '@angular/core'
-import { IconRegistryService } from '../services/icon-registry.service'
+import { IconRegistryService } from '../../services/icon-registry.service'
 
 function registerIcons(registry: IconRegistryService) {
   const register = (name: string, url: string) => {
@@ -24,6 +24,7 @@ function registerIcons(registry: IconRegistryService) {
   register('arrow_back', '/svg/arrow_back.svg')
   register('arrow_forward', '/svg/arrow_forward.svg')
   register('instagram', '/svg/instagram.svg')
+  register('close', '/svg/close.svg')
 
   // Navigation Bar
   register('home', '/svg/home.svg')
@@ -32,12 +33,17 @@ function registerIcons(registry: IconRegistryService) {
   register('search', '/svg/search.svg')
   register('view_cozy', '/svg/view_cozy.svg')
   register('more', '/svg/more.svg')
+  register('create_event', '/svg/add.svg')
 
   // More-Menü Icons
   register('users', '/svg/users.svg')
   register('info-circle', '/svg/info-circle.svg')
   register('shield-check', '/svg/shield-check.svg')
   register('key', '/svg/key.svg')
+
+  // Filter Icons
+  register('filter', '/svg/filter.svg')
+  register('filter-off', '/svg/filter-off.svg')
 }
 
 export function provideAppIcons(): EnvironmentProviders {

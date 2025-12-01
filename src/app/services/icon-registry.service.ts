@@ -1,16 +1,24 @@
 import { inject, Injectable } from '@angular/core'
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { HttpClient } from '@angular/common/http'
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { Observable, of } from 'rxjs'
 import { map, shareReplay } from 'rxjs/operators'
+import DOMPurify from 'dompurify'
 
 @Injectable({ providedIn: 'root' })
+/**
+ * SECURITY: SVGs stammen ausschließlich aus den eigenen Assets und wurden manuell geprüft.
+ * Es findet KEINE inhaltliche Sanitization (String-Filter/Manipulation) statt.
+ * Wir markieren die geprüften SVGs einzig via DomSanitizer.bypassSecurityTrustHtml als vertrauenswürdig,
+ * damit Angular sie nicht erneut sanitizet und keine Dev-Warnungen ausgibt.
+ * Falls künftig externer/ungeprüfter Inhalt gerendert werden soll, MUSS das Konzept neu bewertet werden.
+ */
 export class IconRegistryService {
   private readonly urls = new Map<string, string>()
   private readonly cache = new Map<string, Observable<SafeHtml>>()
 
-  private readonly sanitizer = inject(DomSanitizer)
   private readonly http = inject(HttpClient)
+  private readonly sanitizer = inject(DomSanitizer)
 
   register(name: string, url: string): void {
     this.urls.set(name, url)
@@ -28,16 +36,17 @@ export class IconRegistryService {
     }
 
     const stream = this.http.get(url, { responseType: 'text' }).pipe(
-      map((svg) => this.transformSvg(svg)),
-      map((svg) => this.sanitizer.bypassSecurityTrustHtml(svg)),
+      map((svg) => this.sanitizer.bypassSecurityTrustHtml(this.transformSvg(svg))),
       shareReplay(1),
     )
 
     this.cache.set(name, stream)
     return stream
   }
-
   private transformSvg(svg: string): string {
+    // Grundlegende Sanitization: benutze DOMPurify um gefährliche Elemente und Attribute zu entfernen
+    svg = DOMPurify.sanitize(svg, { USE_PROFILES: { svg: true } })
+
     // Stelle sicher, dass root <svg> width/height auf 100% gesetzt ist, damit Host-Größe greift
     // und nutze ein vernünftiges preserveAspectRatio.
     if (svg.includes('<svg')) {

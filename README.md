@@ -90,10 +90,11 @@ DEFINE TABLE OVERWRITE topic TYPE NORMAL SCHEMAFULL
     PERMISSIONS
         FOR create, select FULL,
         FOR update, delete WHERE $auth != NONE;
-DEFINE FIELD OVERWRITE id ON organizer;
-DEFINE FIELD OVERWRITE name ON organizer TYPE string;
-DEFINE FIELD OVERWRITE color ON organizer TYPE string;
-
+DEFINE FIELD OVERWRITE id ON topic;
+DEFINE FIELD OVERWRITE name ON topic TYPE string;
+DEFINE FIELD OVERWRITE color ON topic TYPE string;
+DEFINE FIELD OVERWRITE description ON topic TYPE option<string>;
+DEFINE FIELD OVERWRITE media ON topic TYPE option<record<media>>;
 
 
 DEFINE TABLE OVERWRITE organizer TYPE NORMAL SCHEMAFULL
@@ -116,6 +117,7 @@ DEFINE TABLE OVERWRITE event_type TYPE NORMAL SCHEMAFULL
 DEFINE FIELD OVERWRITE id ON event_type;
 DEFINE FIELD OVERWRITE name ON event_type TYPE string;
 DEFINE FIELD OVERWRITE description ON event_type TYPE option<string>;
+DEFINE FIELD OVERWRITE media ON event_type TYPE option<record<media>>;
 
 
 

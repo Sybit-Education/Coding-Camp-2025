@@ -1,4 +1,4 @@
-<app-go-back-button> </app-go-back-button>
+<app-go-back-button [goBackParams]="goBackParams ? goBackParams : null"> </app-go-back-button>
 <div>
   <!-- Skip-Link für Screenreader -->
   <a href="#event-content" class="sr-only mt-2 focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2">
@@ -10,6 +10,9 @@
       <section id="event-content" class="info-card rounded-2xl bg-gray-100 shadow-2xl">
         <!-- Back-Button in der oberen linken Ecke -->
         <div class="relative">
+          <div class="pointer-events-none absolute top-2 left-2 z-10">
+            <app-event-type-pill class="text-xs" [event]="event"></app-event-type-pill>
+          </div>
           <app-event-image
             [images]="mediaList"
             [eventName]="event.name"
@@ -21,17 +24,23 @@
             <h1 class="my-1 text-2xl">
               {{ event.name }}
             </h1>
-            <app-event-pills class="text-xs" [event]="event"></app-event-pills>
+            <div class="flex flex-wrap gap-2">
+              <app-event-type-pill class="text-xs" [event]="event"></app-event-type-pill>
+              <app-event-topic-pill-list class="text-xs" [event]="event"></app-event-topic-pill-list>
+            </div>
             <div class="flex justify-end">
               <div class="mb-1 flex items-center justify-center gap-2">
                 <app-favorite-button [eventId]="event.id" class="p-1"></app-favorite-button>
                 <app-calendar-export [event]="event" [location]="location" class="p-1"></app-calendar-export>
                 <app-share [event]="event" [location]="location" class="p-1"></app-share>
-                            @if (isLoggedIn) {
-                  <button class="cursor-pointer hover*:bg-blue-600 rounded-full bg-blue-500 px-4 py-2 font-bold text-white" (click)="editEvent()">
+                @if (isLoggedIn) {
+                  <button
+                    class="hover*:bg-blue-600 cursor-pointer rounded-full bg-blue-500 px-4 py-2 font-bold text-white"
+                    (click)="editEvent()"
+                  >
                     {{ 'event-detail.edit' | translate }}
                   </button>
-                }                
+                }
               </div>
             </div>
           </div>
@@ -47,12 +56,18 @@
             </div>
           </div>
           <div class="flex w-full items-center justify-between px-4">
-            <app-event-pills class="text-xs" [event]="event"></app-event-pills>
-                        @if (isLoggedIn) {
-                  <button class="cursor-pointer hover*:bg-blue-600 rounded-full bg-blue-500 px-4 py-2 font-bold text-white" (click)="editEvent()">
-                    {{ 'event-detail.edit' | translate }}
-                  </button>
-                }
+            <div class="flex flex-wrap gap-2">
+              <app-event-type-pill class="text-xs" [event]="event"></app-event-type-pill>
+              <app-event-topic-pill-list class="text-xs" [event]="event"></app-event-topic-pill-list>
+            </div>
+            @if (isLoggedIn) {
+              <button
+                class="hover*:bg-blue-600 cursor-pointer rounded-full bg-blue-500 px-4 py-2 font-bold text-white"
+                (click)="editEvent()"
+              >
+                {{ 'event-detail.edit' | translate }}
+              </button>
+            }
           </div>
         }
         <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
@@ -83,7 +98,11 @@
                 <h3>
                   {{ 'event-detail.where' | translate }}
                 </h3>
-                <p>{{ location?.name || 'Ort wird bekannt gegeben' }}</p>
+                <p class="mb-0">{{ location?.name || 'Ort wird bekannt gegeben' }}</p>
+                @if (location?.street) {
+                  <p class="mb-0">{{ location?.street }}</p>
+                  <p class="mb-0">{{ location?.zip_code }} {{ location?.city }}</p>
+                }
               </div>
             </div>
             <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
@@ -130,10 +149,10 @@
             {{ 'event-detail.description' | translate }}
           </h2>
           <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
-          <p [innerHTML]="event.description">
+          <p [innerHTML]="event.description" class="hyphens-auto">
             {{ event.description }}
           </p>
-          @if(event.more_infos_link) {
+          @if (event.more_infos_link) {
             <h3>{{ 'event-detail.more_information' | translate }}</h3>
             <p>
               <a class="link" [href]="event.more_infos_link">{{ event.more_infos_link }}</a>
@@ -166,6 +185,13 @@
               <app-icon name="location" class="h-4 w-4" aria-hidden="true"></app-icon> Route starten
             </button>
           </div>
+        </section>
+      }
+      @if (location?.id && eventsFound) {
+        <section>
+          <h2>{{ 'event-detail.next-events' | translate }}</h2>
+          <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
+          <app-event-card-list [location]="location!" [currentEventId]="event.id" (eventsFound)="eventsFound = $event" />
         </section>
       }
       @if (organizer) {
@@ -233,8 +259,4 @@
       }
     </article>
   }
-
-  <div class="edit mb-20 flex items-center justify-center">
-
-  </div>
 </div>

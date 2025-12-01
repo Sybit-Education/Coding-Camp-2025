@@ -4,26 +4,77 @@
     {{ this.name }}
   </h1>
 
-  <!-- Search input -->
-  <div class="mb-4">
-    <label class="sr-only" for="category-search">{{ 'SEARCH.LABEL' | translate }}</label>
-    <input
-      id="category-search"
-      type="search"
-      class="w-full rounded-2xl border border-gray-300 p-2"
-      [value]="searchTerm"
-      (input)="onSearchChange(($any($event.target)).value)"
-      [attr.aria-label]="'SEARCH.LABEL' | translate"
-      [placeholder]="'SEARCH.PLACEHOLDER' | translate"
-      [attr.aria-busy]="searching"
-    />
-    @if (searching) {
-      <div class="mt-2 flex items-center text-sm text-gray-500" aria-live="polite" aria-busy="true">
-        <span class="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-t-transparent border-[#c70d56]"></span>
-        {{ 'SEARCH.SEARCHING' | translate }}
+  @if (this.description) {
+    <p [innerHTML]="this.description" class="text-sm hyphens-auto text-gray-600 lg:text-lg">
+      {{ this.description }}
+    </p>
+  }
+
+  <div class="flex flex-row justify-between">
+    <!-- Search input -->
+    <div class="w-[calc(100%-125px)]">
+      <app-search [(searchTerm)]="searchTerm" (searchTermChange)="onSearchChange($event)" [hasIcon]="true" />
+    </div>
+
+    <!-- Filter Button -->
+    <button
+      class="filter-option mb-0 flex w-[110px] cursor-pointer items-start justify-around rounded-t-2xl"
+      [ngClass]="
+        filterOpen ? 'h-14 items-start bg-gray-100' : 'h-10 items-center rounded-2xl border-1 border-gray-300 hover:scale-102'
+      "
+      (click)="toggleFilter()"
+      (keypress)="toggleFilter()"
+      tabindex="0"
+    >
+      <div class="flex h-10 items-center">
+        <span>{{ 'all-categories.filter' | translate }}</span>
+        <app-icon [name]="filterOpen ? 'filter-off' : 'filter'" class="mr-1 h-6 w-6" aria-hidden="true" />
       </div>
-    }
+    </button>
   </div>
+
+  @if (searching) {
+    <div class="mt-2 flex items-center text-sm text-gray-500" aria-live="polite" aria-busy="true">
+      <span class="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-[#c70d56] border-t-transparent"></span>
+      {{ 'SEARCH.SEARCHING' | translate }}
+    </div>
+  }
+
+  <!-- Filter Optionen -->
+  @if (filterOpen) {
+    <div class="filter-option mt-0 w-full rounded-tl-2xl rounded-b-2xl bg-gray-100 pb-4">
+      <div class="grid w-full gap-0 px-0 lg:grid-cols-2 lg:gap-10 lg:px-2">
+        <div>
+          <h3>{{ 'event-detail.eventlocation' | translate }}</h3>
+          <label class="sr-only" for="location-dropdown">{{ 'event-detail.eventlocation' | translate }}</label>
+          <app-custom-dropdown
+            id="location-dropdown"
+            [items]="locationsForFilter"
+            [preselectedItems]="preselectedLocations"
+            [placeholder]="'all-categories.all-locations' | translate"
+            (selectionChange)="setSelectedLocations($event)"
+          />
+        </div>
+
+        <div>
+          <h3>{{ 'home.categories' | translate }}</h3>
+          <label class="sr-only" for="category-grid">{{ 'home.categories' | translate }}</label>
+          <div id="category-grid" class="grid grid-cols-2 gap-4">
+            @for (categorie of categories; track categorie.id) {
+              <app-kategorie-card
+                [color]="categorie.color"
+                [text]="categorie.name"
+                [id]="categorie.id?.id?.toString()"
+                [filterOption]="true"
+                [selected]="categoryIds.includes(categorie.id!.id) ? true : false"
+                (categoryAdded)="setSelectedCategories($event)"
+              />
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  }
 
   <!-- Ladeanzeige (nur für Initial-Load, nicht während der Suche) -->
   @if (loading && !searchTerm) {
@@ -43,27 +94,48 @@
           </div>
         </div>
       }
-      </div>
+    </div>
   }
 
   <!-- Keine Events Meldung -->
   @if (!loading && events.length === 0) {
-    <div class="rounded-lg bg-gray-100 p-4 text-center">
+    <div class="rounded-2xl bg-gray-100 p-4 text-center">
       <p>
         {{ 'EVENTS.NO_EVENTS_FOUND_IN_CATEGORY' | translate }}
       </p>
     </div>
   }
 
-  <div class="mr-2 ml-2 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
     @for (event of events; track trackByEvent($index, event)) {
+      @if ($index === 0 || (event.date_start | date: 'yyyyMM') !== (events[$index - 1].date_start | date: 'yyyyMM')) {
+        <nav class="sr-only col-span-full" aria-label="Monatsnavigation">
+          @if ($index > 0) {
+            <a [attr.href]="'#month-' + (events[$index - 1].date_start | date: 'yyyy-MM')"> Zum vorherigen Monat springen </a>
+          }
+        </nav>
+        <h2
+          class="col-span-full mt-6 mb-2 border-b border-blue-900 pb-1 text-2xl font-bold"
+          [attr.id]="'month-' + (event.date_start | date: 'yyyy-MM')"
+          [attr.aria-describedby]="'month-' + (event.date_start | date: 'yyyy-MM') + '-desc'"
+        >
+          @if (event.isPast) {
+            {{ 'EVENTS.PAST_PREFIX' | translate }} {{ event.date_start | date: 'MMMM yyyy' }}
+          } @else {
+            {{ event.date_start | date: 'MMMM yyyy' }}
+          }
+        </h2>
+        <p class="sr-only col-span-full" [attr.id]="'month-' + (event.date_start | date: 'yyyy-MM') + '-desc'">
+          Abschnitt:
+          @if (event.isPast) {
+            {{ 'EVENTS.PAST_PREFIX' | translate }}
+          }
+          {{ event.date_start | date: 'MMMM yyyy' }}. Verwenden Sie die Überschriftennavigation Ihres Screenreaders, um zum
+          nächsten Monat zu springen.
+        </p>
+      }
       <div class="relative">
-        @if (event.isPast) {
-          <div class="absolute top-0 left-0 z-10 m-2 rounded bg-gray-700 px-2 py-1 text-xs text-white opacity-80">
-            {{ 'EVENTS.PAST_EVENT' | translate }}
-          </div>
-        }
-        <app-event-card [event]="event" [class.opacity-70]="event.isPast"> </app-event-card>
+        <app-event-card [event]="event" [class.opacity-70]="event.isPast" [filterQuery]="filterQuery"> </app-event-card>
       </div>
     }
   </div>

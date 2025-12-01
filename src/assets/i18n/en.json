@@ -25,6 +25,7 @@
     "SAVE_EVENT": "Save event",
     "REMOVE_EVENT": "Remove event",
     "PAST_EVENT": "Past event",
+    "PAST_PREFIX": "Past: ",
     "NO_EVENTS_FOUND_IN_CATEGORY": "No events found in this category."
   },
   "ABOUT": {
@@ -40,7 +41,8 @@
     "home": "Home",
     "favorites": "Favorites",
     "all-events": "All Events",
-    "more": "More"
+    "more": "More",
+    "create-event": "Create Event"
   },
   "MORE": {
     "TEAM": {
@@ -71,8 +73,25 @@
     },
     "title": "1200 Years Radolfzell"
   },
+  "all-categories": {
+    "all-locations": "All Locations",
+    "all-categories": "All Categories",
+    "all-events": "All Events",
+    "filter": "Filter",
+    "prices": "Event Prices",
+    "all-prices": "All Event Prices",
+    "eventprices": {
+      "free": "Free",
+      "firststage": "0 - 5 €",
+      "secondstage": "5 - 10 €",
+      "thirdstage": "10 - 15 €",
+      "fourthstage": "15 € and more"
+    },
+    "date-from": "Date from",
+    "date-to": "Date to"
+  },
   "category": {
-    "title": "Kategorie"
+    "title": "Category"
   },
   "i18y": {
     "to-main-content": "Skip to main content"
@@ -120,6 +139,8 @@
       "name": "Please enter an event name.",
       "date": "Please enter a start date.",
       "time": "Please enter a start time.",
+      "location": "Please select a location.",
+      "theme": "Please select a type of event.",
       "general": "Please fill in all mandatory fields."
     },
     "cancel": "Cancel",
@@ -171,6 +192,7 @@
     "phone": "Phone",
     "back": "Back",
     "edit": "Edit",
+    "next-events": "Further events at this location",
     "tags": {
       "description-heading": "description-heading",
       "directions-heading": "directions-heading",

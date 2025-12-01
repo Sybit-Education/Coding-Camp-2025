@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common'
 import { RouterModule, Router } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 
-import { EventCardComponent } from '../../component/event-card/event-card.component'
 import { KategorieCardComponent } from '../../component/kategorie-card/kategorie-card.component'
 
 import { EventService } from '../../services/event.service'
@@ -18,20 +17,18 @@ import { TypeDB } from '@app/models/typeDB.interface'
 import { AllEventButtonComponent } from '@app/component/all-event-button/all-event-button.component'
 import { SharedStateService } from '@app/services/shared-state.service'
 import { ScreenSize } from '@app/models/screenSize.enum'
-
-type EventOrMore = Event & { isMore?: boolean }
+import { EventCardListComponent } from '@app/component/event-card-list/event-card-list.component'
 
 @Component({
   selector: 'app-home',
-  standalone: true,
-  imports: [CommonModule, TranslateModule, RouterModule, EventCardComponent, KategorieCardComponent, AllEventButtonComponent],
+  imports: [CommonModule, TranslateModule, RouterModule, KategorieCardComponent, AllEventButtonComponent, EventCardListComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit {
   events: Event[] = []
-  displayEvents: EventOrMore[] = []
+  displayEvents: Event[] = []
   topics: Topic[] = []
   screenSize = ScreenSize
 
@@ -45,75 +42,17 @@ export class HomeComponent implements OnInit {
   private readonly markForCheck = injectMarkForCheck()
 
   ngOnInit() {
-    // Initialisiere Daten und stelle sicher, dass Change Detection ausgelöst wird
     this.initializeData().then(() => this.markForCheck())
   }
 
   async initializeData() {
     try {
-      const [events, topics, eventTypes] = await Promise.all([
-        this.eventService.getAllEvents(),
-        this.topicService.getAllTopics(),
-        this.eventService.getAllEventTypes(),
-      ])
-
-      this.events = this.getUpcomingEvents(events)
-      this.displayEvents = this.events.slice(0, 6)
+      const [topics, eventTypes] = await Promise.all([this.topicService.getAllTopics(), this.eventService.getAllEventTypes()])
 
       this.topicsOrTypes.push(...eventTypes, ...topics)
     } catch (error) {
       console.error('Fehler beim Laden der Daten:', error)
     }
-  }
-
-  // Cache für teure Berechnungen
-  private cachedEvents: {
-    input: Event[]
-    output: Event[]
-    timestamp: number
-  } | null = null
-
-  private getUpcomingEvents(events: Event[]): Event[] {
-    // Prüfe, ob wir ein gültiges Cache-Ergebnis haben (nicht älter als 5 Minuten)
-    if (this.cachedEvents?.input === events && Date.now() - this.cachedEvents.timestamp < 300000) {
-      return this.cachedEvents.output
-    }
-
-    const now = new Date()
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-
-    const result = events
-      .filter((event) => {
-        const eventStartDate = new Date(event.date_start)
-        const eventStartDay = new Date(eventStartDate.getFullYear(), eventStartDate.getMonth(), eventStartDate.getDate())
-
-        if (eventStartDay < today) {
-          return false
-        }
-
-        if (event.date_end) {
-          const eventEndDate = new Date(event.date_end)
-          return eventEndDate > now
-        } else {
-          const endOfStartDay = new Date(eventStartDate)
-          endOfStartDay.setHours(23, 59, 59, 999)
-          return endOfStartDay > now
-        }
-      })
-      .sort((a, b) => {
-        const dateA = new Date(a.date_start)
-        const dateB = new Date(b.date_start)
-        return dateA.getTime() - dateB.getTime()
-      })
-
-    // Ergebnis cachen
-    this.cachedEvents = {
-      input: events,
-      output: result,
-      timestamp: Date.now(),
-    }
-
-    return result
   }
 
   getTopics() {
@@ -133,9 +72,5 @@ export class HomeComponent implements OnInit {
         this.router.navigate(['/event', eventId.id])
       }
     }
-  }
-
-  trackByEvent(index: number, item: EventOrMore) {
-    return item.isMore ? `more-${index}` : item.id?.id ?? index
   }
 }
