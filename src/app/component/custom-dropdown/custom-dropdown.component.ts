@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core'
+import { Component, EventEmitter, Input, Output, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { FilterItem } from '@app/models/filterItem.interface'
 import { IconComponent } from '../icon/icon.component'
@@ -9,7 +9,7 @@ import { SearchComponent } from '../search/search.component'
   imports: [IconComponent, CommonModule, SearchComponent],
   templateUrl: './custom-dropdown.component.html',
 })
-export class CustomDropdownComponent implements OnInit, AfterViewInit, OnDestroy {
+export class CustomDropdownComponent implements OnInit {
   @Input() items: FilterItem[] = []
   @Input() placeholder = 'Select items'
   @Input() preselectedItems: FilterItem[] = [] // Optional: vorselektierte Items
@@ -18,8 +18,6 @@ export class CustomDropdownComponent implements OnInit, AfterViewInit, OnDestroy
   @Output() selectionChange = new EventEmitter<FilterItem[]>()
 
   @ViewChild('selectButton', { static: false }) selectButton!: ElementRef<HTMLElement>
-  dropdownHeight = 0
-  private resizeObserver!: ResizeObserver
 
   selectedItems: FilterItem[] = []
   dropdownOpen = false
@@ -40,15 +38,6 @@ export class CustomDropdownComponent implements OnInit, AfterViewInit, OnDestroy
       ]
       this.emitSelection()
     }
-  }
-
-  ngAfterViewInit() {
-    this.resizeObserver = new ResizeObserver((entries) => {
-      const h = entries[0].contentRect.height
-      this.dropdownHeight = h
-    })
-
-    this.resizeObserver.observe(this.selectButton.nativeElement)
   }
 
   toggleDropdown() {
@@ -88,9 +77,5 @@ export class CustomDropdownComponent implements OnInit, AfterViewInit, OnDestroy
     if (this.searchTerm.length) {
       this.filteredItems = this.items.filter((item) => item.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
     }
-  }
-
-  ngOnDestroy() {
-    this.resizeObserver.disconnect()
   }
 }

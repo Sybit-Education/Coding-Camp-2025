@@ -67,9 +67,6 @@ export class KategorieComponent implements OnInit {
   locations: AppLocation[] = []
   selectedLocation: AppLocation | null = null
   selectedLocationIds: RecordIdValue[] = []
-  selectedPrices: number[] = []
-  selectedDateStart: Date | null = null
-  selectedDateEnd: Date | null = null
 
   name: string | null = null
   slug: string | null = null
@@ -78,8 +75,6 @@ export class KategorieComponent implements OnInit {
 
   locationsForFilter: FilterItem[] = []
   preselectedLocations: FilterItem[] = [] //Nur für vorselektierte Locations
-  pricesForFilter: FilterItem[] = []
-  preselectedPrices: FilterItem[] = [] //Nur für vorselektierte Preise
   filterQuery: string | null = null
 
   loading = true
@@ -147,6 +142,7 @@ export class KategorieComponent implements OnInit {
       this.locationsForFilter = this.getLocations()
 
       if (this.receivedFilters) {
+        console.log('Resolving filter query from URL params:', this.receivedFilters.toString())
         this.resolveFilterQuery(this.receivedFilters)
       }
     } catch (error) {
@@ -366,5 +362,7 @@ export class KategorieComponent implements OnInit {
       console.log('Selected Locations:', this.selectedLocationIds)
       console.log('preselectedLocations:', this.preselectedLocations)
     }
+
+    void this.performSearch(this.searchTerm)
   }
 }
