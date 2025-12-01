@@ -1,7 +1,11 @@
 <app-go-back-button [goBackParams]="goBackParams ? goBackParams : null"> </app-go-back-button>
 <div>
   <!-- Skip-Link für Screenreader -->
-  <a href="#event-content" class="sr-only mt-2 focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2">
+  <a
+    [routerLink]="[]"
+    fragment="event-content"
+    class="sr-only mt-2 focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2"
+  >
     {{ 'event-detail.skip-to-content' | translate }}
   </a>
 

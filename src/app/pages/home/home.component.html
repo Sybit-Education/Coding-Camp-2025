@@ -3,12 +3,16 @@
     {{ 'home.title' | translate }}
   </h1>
   <!-- Skip-Link für Screenreader -->
-  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2"
+  <a
+    a
+    [routerLink]="[]"
+    fragment="main-content"
+    class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2"
     >{{ 'home.main-content' | translate }}
   </a>
 
   <!-- Aktuelle Events -->
-  <section [attr.aria-labelledby]="'home.tags.aria-lable-event-heading' | translate">
+  <section [attr.aria-labelledby]="'home.tags.aria-lable-event-heading' | translate" id="main-content">
     <h2 [id]="'home.tags.aria-lable-event-heading' | translate">
       {{ 'home.current' | translate }}
     </h2>

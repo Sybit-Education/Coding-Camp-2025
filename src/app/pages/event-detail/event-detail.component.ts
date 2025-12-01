@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs'
 import { MapComponent } from '../../component/map/map.component'
 import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { EventService } from '../../services/event.service'
 import { CommonModule } from '@angular/common'
 import { Organizer } from '../../models/organizer.interface'
@@ -46,6 +46,7 @@ import { EventCardListComponent } from '@app/component/event-card-list/event-car
     EventTopicPillListComponent,
     GoBackComponent,
     EventCardListComponent,
+    RouterLink,
   ],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
