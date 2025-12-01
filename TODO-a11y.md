@@ -4,7 +4,7 @@
 
 1. Semantische Struktur (Landmarks)
    - [x] App-Shell nutzt semantische Landmarks: <header>, <main id="main-content" role="main" tabindex="-1">, <footer> (app.component.html)
-   - [ ] Komponenten prüfen und ggf. ergänzen (section/article/nav): HeaderComponent, FooterComponent (innerer Inhalt), BottomNavComponent, EventCardComponent
+   - [x] Komponenten prüfen und ggf. ergänzen (section/article/nav): HeaderComponent, FooterComponent (innerer Inhalt), BottomNavComponent, EventCardComponent
 
 2. Tastaturnavigation
    - [x] Fokus-Styles vorhanden (Tailwind focus:ring auf .card, Buttons, Links)
@@ -17,12 +17,16 @@
    - [ ] aria-expanded/-controls für aufklappbare Bereiche ergänzen (falls vorhanden)
 
 4. Alt-Texte für Bilder
-   - [ ] Aussagekräftige alt-Texte für alle Bilder, speziell EventCard, Header-Logo, Detailseitenbilder
-   - [ ] Falls rein dekorativ: alt="" setzen
+  - [ ] Aussagekräftige alt-Texte für alle Bilder, speziell EventCard, Header-Logo, Detailseitenbilder
+  - [ ] Falls rein dekorativ: alt="" setzen
 
 5. Farbkontraste
    - [ ] Kontraste (Text/Icons vs. Hintergrund) nach WCAG AA prüfen (4.5:1 normal, 3:1 groß)
    - [ ] Bei Bedarf Farbwerte/Schriftstärken anpassen
+
+6. Live-Regionen & Provider
+   - [x] LiveAnnouncer wird injiziert, aber nirgends bereitgestellt (app.config.ts prüfen und provideLiveAnnouncer hinzufügen)
+   - [x] Update-Hinweis im Root-Template i18n-fähig machen und mit korrekter ARIA-Auszeichnung (role/status, aria-live) versehen
 
 ## Mittlere Priorität
 
@@ -37,14 +41,17 @@
    - [ ] Fokus-Management bei Validierungsfehlern (zum ersten fehlerhaften Feld springen)
 
 8. Navigation & Routing
-   - [x] Titelverwaltung: TitleService/TitleStrategy nutzen, Titel pro Route pflegen
-   - [x] LiveAnnouncer für Seitenwechsel (polite) integriert
-   - [ ] routerLinkActive + ariaCurrentWhenActive flächendeckend einsetzen (Header/Footer/BottomNav)
+  - [x] Titelverwaltung: TitleService/TitleStrategy nutzen, Titel pro Route pflegen
+  - [x] LiveAnnouncer für Seitenwechsel (polite) integriert
+  - [x] routerLinkActive + ariaCurrentWhenActive flächendeckend einsetzen (Header/Footer/BottomNav)
+  - [x] Fokus springt nach Navigation auf eine fixe Stelle; Routing-Subscription sauber beenden und Fokusquellen respektieren
+  - [x] Router-Subscription beendet sich nicht korrekt und verursacht wiederholte Fokusfehler (unsubscribe/DestroyRef)
 
 9. Dynamische Inhalte
-   - [x] Ladeindikator mit aria-live="polite" und verstecktem Text (COMMON.LOADING)
-   - [x] Update-Benachrichtigung als role="status" (polite)
-   - [ ] Weitere dynamische Statusmeldungen (Filterwechsel, Suchtrefferzahl) über LiveRegion announcen
+  - [x] Ladeindikator mit aria-live="polite" und verstecktem Text (COMMON.LOADING)
+  - [x] Update-Benachrichtigung als role="status" (polite)
+  - [x] Weitere dynamische Statusmeldungen (Filterwechsel, Suchtrefferzahl) über LiveRegion announcen
+  - [x] Loading-Spinner: sr-only Text ergänzen, damit versteckte Texte nicht visuell erscheinen und nicht doppelt angesagt werden
 
 10. Responsive/Zoom
    - [ ] Nutzbarkeit bei 200% Zoom testen und sicherstellen (Layout bricht nicht, keine Overlays blockieren)
@@ -53,7 +60,10 @@
 
 11. Barrierefreiheitserklärung
    - [x] Seite /barrierefreiheit vorhanden inkl. Grundinhalte (ACCESSIBILITY.*)
+   - [ ] Pflichtangaben ergänzen: Konformitätsstand, Prüfdaten, Prüfverfahren, bekannte Einschränkungen, Kontaktmöglichkeiten
    - [ ] Feedback-Kanal/Formular einbauen (Kontakt-Link oder simples Formular mit Beschreibungen)
+   - [ ] Barrieren-Meldung ermöglichen (E-Mail/Telefon/Ansprechstelle) und zuständige Stelle benennen
+   - [ ] Externe Links als solche kenntlich machen (Icon/Text + aria-label)
 
 12. Animationen/Bewegungen
    - [ ] prefers-reduced-motion berücksichtigen (z. B. Spinner/Transitions reduzieren/deaktivieren)
@@ -70,6 +80,9 @@
    - [ ] CI-Audits mit axe-core/Lighthouse
    - [ ] Manuelle Screenreader-Tests (NVDA/JAWS/VoiceOver) dokumentieren
 
+16. Dialoge
+    - [x] Confirm-Dialog (src/app/component/confirm-dialog/confirm-dialog.component.ts): Escape und Klick außerhalb zum Schließen ermöglichen; Fokus-Handling/Trap prüfen
+
 ## Technische Umsetzung (Status)
 
 - Angular CDK a11y
@@ -85,9 +98,9 @@
 
 ## Nächste Quick Wins
 
-- [ ] ariaCurrentWhenActive="page" und routerLinkActive in Header/Footer/BottomNav ergänzen
+- [x] ariaCurrentWhenActive="page" und routerLinkActive in Header/Footer/BottomNav ergänzen
 - [ ] TitleService/TitleStrategy einführen, Route-Titel konsequent setzen/übersetzen
-- [ ] Alt-Texte auf EventCard/Detailseiten ergänzen
+ - [x] Alt-Texte auf EventCard/Detailseiten ergänzen
 - [ ] Form-Labels/Fehlermeldungen mit aria-Attributen verdrahten (Create/Edit-Formulare)
 - [ ] prefers-reduced-motion in styles.scss berücksichtigen
 
