@@ -52,8 +52,8 @@
         {{ 'FAVORITES.EMPTY.DESCRIPTION' | translate }}
       </p>
       <button
-        (click)="navigateToHome()"
-        class="mt-4 rounded-md bg-[#3b4ea3] px-4 py-2 text-white transition-colors hover:bg-[#2c3a7a]"
+        routerLink="/"
+        class="mt-4 cursor-pointer rounded-md bg-[#3b4ea3] px-4 py-2 text-white transition-colors hover:bg-[#2c3a7a]"
       >
         {{ 'FAVORITES.EMPTY.BUTTON' | translate }}
       </button>
@@ -65,7 +65,7 @@
       @for (event of favouriteEvents; track event) {
         <div class="relative">
           <app-event-card [event]="event"></app-event-card>
-          <button
+          <!-- <button
             (click)="removeFavourite($event, event)"
             class="absolute top-2 right-2 rounded-full bg-white p-1 text-yellow-500 shadow-md transition-colors hover:text-yellow-700"
             [title]="'FAVORITES.REMOVE' | translate"
@@ -79,7 +79,7 @@
                 [attr.clip-rule]="'evenodd'"
               />
             </svg>
-          </button>
+          </button> -->
         </div>
       }
     </div>

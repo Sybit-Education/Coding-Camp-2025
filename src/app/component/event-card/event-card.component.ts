@@ -14,10 +14,20 @@ import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { MatIconModule } from '@angular/material/icon'
 import { IconComponent } from '@app/component/icon/icon.component'
 import { EventTypePillComponent } from '@app/component/event-type-pill/event-type-pill.component'
+import { FavoriteButtonComponent } from '../favorite-button/favorite-button.component'
 
 @Component({
   selector: 'app-event-card',
-  imports: [CommonModule, DateTimeRangePipe, TranslateModule, RouterModule, MatIconModule, IconComponent, EventTypePillComponent],
+  imports: [
+    CommonModule,
+    DateTimeRangePipe,
+    TranslateModule,
+    RouterModule,
+    MatIconModule,
+    IconComponent,
+    EventTypePillComponent,
+    FavoriteButtonComponent,
+  ],
   templateUrl: './event-card.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -28,6 +38,7 @@ export class EventCardComponent implements OnInit, OnDestroy, OnChanges {
   eventType: EventType | null = null
   isSaved = false
   mediaUrl: string | null = null
+  // isFavorite: boolean | null = null
 
   private readonly subscriptions = new Subscription()
   private readonly surrealDBService = inject(SurrealdbService)
@@ -35,6 +46,7 @@ export class EventCardComponent implements OnInit, OnDestroy, OnChanges {
   private readonly localStorageService = inject(LocalStorageService)
   private readonly mediaService = inject(MediaService)
   private readonly markForCheck = injectMarkForCheck()
+  // private readonly favoriteService = inject(FavoriteService)
 
   ngOnInit() {
     if (this.event?.id) {
@@ -86,6 +98,7 @@ export class EventCardComponent implements OnInit, OnDestroy, OnChanges {
       // Verwende Promise.all für parallele Ausführung
       const [location, eventType, mediaUrl] = await Promise.all([this.loadLocation(), this.loadEventType(), this.loadMedia()])
 
+      // this.loadFavoriteStatus()
       // Batch-Update der Komponenten-Properties für weniger Change Detection Zyklen
       setTimeout(() => {
         this.location = location
