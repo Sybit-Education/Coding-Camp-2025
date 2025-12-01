@@ -67,6 +67,8 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   protected isLoggedIn = false
   screenSize = ScreenSize
 
+  eventsFound = true
+
   private readonly eventService = inject(EventService)
   private readonly locationService = inject(LocationService)
   private readonly organizerService = inject(OrganizerService)
