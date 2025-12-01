@@ -11,7 +11,7 @@ export class OrganizerService {
 
   //************** GET **************
 
-  async getOrganizerByID(id: RecordId<'organizer'>|StringRecordId): Promise<Organizer> {
+  async getOrganizerByID(id: RecordId<'organizer'> | StringRecordId): Promise<Organizer> {
     return await this.surrealdb.getByRecordId<Organizer>(id)
   }
 
@@ -40,7 +40,7 @@ export class OrganizerService {
     return result
   }
 
-  async delete(organizerId: RecordId<'organizer'>|StringRecordId) {
+  async delete(organizerId: RecordId<'organizer'> | StringRecordId) {
     await this.surrealdb.deleteRow(organizerId)
   }
 }

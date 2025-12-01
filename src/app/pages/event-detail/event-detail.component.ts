@@ -60,12 +60,14 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   error: string | null = null
   eventId = ''
   goBackSite: string | string[] = '/'
-  goBackParams?: Record<string, string | number | boolean | null | undefined>
+  goBackParams?: string | null = null
 
   mediaList: { url: string; copyright: string; creator: string }[] = []
 
   protected isLoggedIn = false
   screenSize = ScreenSize
+
+  eventsFound = true
 
   private readonly eventService = inject(EventService)
   private readonly locationService = inject(LocationService)
@@ -93,6 +95,16 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       }),
     )
 
+    this.subscriptions.add(
+      this.route.queryParamMap.subscribe((params) => {
+        const filterQueryParam = params.get('filterQuery')
+        this.goBackParams = filterQueryParam || null
+
+        console.log('Query Params:', filterQueryParam)
+      }),
+    )
+
+    console.log('Go back params:', this.goBackParams)
     // Subscription für Login-Status
     this.subscriptions.add(
       this.loginservice.isLoggedIn$.subscribe((isLoggedIn) => {

@@ -1,4 +1,4 @@
-<app-go-back-button> </app-go-back-button>
+<app-go-back-button [goBackParams]="goBackParams ? goBackParams : null"> </app-go-back-button>
 <div>
   <!-- Skip-Link für Screenreader -->
   <a href="#event-content" class="sr-only mt-2 focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2">
@@ -192,11 +192,11 @@
           </div>
         </section>
       }
-      @if (location?.id) {
+      @if (location?.id && eventsFound) {
         <section>
           <h2>{{ 'event-detail.next-events' | translate }}</h2>
           <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
-          <app-event-card-list [location]="location!" [currentEventId]="event.id"></app-event-card-list>
+          <app-event-card-list [location]="location!" [currentEventId]="event.id" (eventsFound)="eventsFound = $event" />
         </section>
       }
       @if (organizer) {

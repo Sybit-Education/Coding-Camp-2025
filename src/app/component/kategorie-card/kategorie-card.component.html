@@ -1,8 +1,12 @@
 <a
   [routerLink]="filterOption ? null : ['/kategorie', slug]"
   class="card justify-center"
-  [ngClass]="filterOption ? 'border-gray-400 aspect-[11/4]' : 'aspect-[4/3]'"
-  [class.bg-gray-200]="selected"
+  [ngClass]="filterOption ? 'aspect-[11/3] border-gray-400' : 'aspect-[4/3]'"
+  [class.bg-white]="!selected"
+  [ngStyle]="{
+    'background-color': selected ? categoryColor() : '',
+    'color': selected ? getcomputeTextColor(categoryColor()) : 'black',
+  }"
   (click)="filterOption ? addCategoryToFilter() : null"
 >
   <div class="align-middle">

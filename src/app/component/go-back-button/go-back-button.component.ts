@@ -1,6 +1,6 @@
 import { Location } from '@angular/common'
-import { Component, inject } from '@angular/core'
-import { RouterModule } from '@angular/router'
+import { Component, inject, Input } from '@angular/core'
+import { Router, RouterModule } from '@angular/router'
 import { IconComponent } from '@app/component/icon/icon.component'
 import { TranslateModule } from '@ngx-translate/core'
 
@@ -11,8 +11,17 @@ import { TranslateModule } from '@ngx-translate/core'
 })
 export class GoBackComponent {
   private readonly location = inject(Location)
+  private readonly router = inject(Router)
+
+  @Input() goBackParams?: string | null = null
 
   goBack(): void {
+    if (this.goBackParams) {
+      console.log('Navigating back with filterQuery:', this.goBackParams)
+      this.router.navigate(['/all-events'], { queryParams: { filterQuery: this.goBackParams } })
+      return
+    }
+
     this.location.back()
   }
 }
