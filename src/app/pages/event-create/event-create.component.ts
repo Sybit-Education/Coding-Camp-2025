@@ -106,8 +106,8 @@ export class EventCreateComponent implements OnInit {
   selectedTopics: Topic[] = []
   selectedAccessibiltiys: AccessibilityType[] = []
   allAccessibiltiys: AccessibilityType[] = [
-    { accessibilityName: 'Seh- /Blindengerrecht', isAccessible: false },
     { accessibilityName: 'Rollstuhlgerecht', isAccessible: false },
+    { accessibilityName: 'Seh- /Blindengerrecht', isAccessible: false },
     { accessibilityName: 'Gehörgerecht', isAccessible: false },
   ]
   eventType: string | null = null
@@ -204,17 +204,21 @@ export class EventCreateComponent implements OnInit {
         const topic = this.topics.find((t) => t.id?.id === (topicId?.id ?? topicId))
         if (topic) this.selectedTopics.push(topic)
       }
+      if (this.selectedTopics.some((t) => t.name === 'Barrierefrei')) {
+        this.accessibility = true
+      }
 
       // Barrierefreiheiten
       if (event.weehlchair) {
-        this.selectedAccessibiltiys.push({ accessibilityName: 'Rollstuhlgerecht', isAccessible: true })
+        this.selectedAccessibiltiys.push(this.allAccessibiltiys[0]) // Rollstuhlgerecht
       }
       if (event.seeing) {
-        this.selectedAccessibiltiys.push({ accessibilityName: 'Seh- /Blindengerrecht', isAccessible: true })
+        this.selectedAccessibiltiys.push(this.allAccessibiltiys[1]) // Seh- /Blindengerrecht
       }
       if (event.hearing) {
-        this.selectedAccessibiltiys.push({ accessibilityName: 'Gehörgerecht', isAccessible: true })
+        this.selectedAccessibiltiys.push(this.allAccessibiltiys[2]) // Gehörgerecht
       }
+      console.log('Ausgewählte Barrierefreiheiten beim Laden des Events:', this.selectedAccessibiltiys)
 
       this.images = await this.mediaService.getMediasByIdList(event.media)
 
@@ -352,6 +356,8 @@ export class EventCreateComponent implements OnInit {
       // Sicherstellen, dass wir die aktualisierten Media-IDs verwenden
       this.images = finalMedia
 
+      console.log('selectedAccessibiltiys beim Speichern:', this.selectedAccessibiltiys)
+
       const payload: AppEvent = {
         name: this.eventName,
         date_start: start,
@@ -367,9 +373,9 @@ export class EventCreateComponent implements OnInit {
         media: finalMediaIds,
         age: this.age ?? undefined,
         restriction: this.restriction || undefined,
-        weehlchair: this.selectedAccessibiltiys.some((a) => a.accessibilityName === 'Rollstuhlgerecht'),
-        seeing: this.selectedAccessibiltiys.some((a) => a.accessibilityName === 'Seh- /Blindengerrecht'),
-        hearing: this.selectedAccessibiltiys.some((a) => a.accessibilityName === 'Gehörgerecht'),
+        weehlchair: this.selectedAccessibiltiys.some((a) => a.accessibilityName === 'Rollstuhlgerecht') || false,
+        seeing: this.selectedAccessibiltiys.some((a) => a.accessibilityName === 'Seh- /Blindengerrecht') || false,
+        hearing: this.selectedAccessibiltiys.some((a) => a.accessibilityName === 'Gehörgerecht') || false,
       }
 
       // Event speichern (Update oder Create)

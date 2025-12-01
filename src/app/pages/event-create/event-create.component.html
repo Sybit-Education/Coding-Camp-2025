@@ -182,11 +182,11 @@
                   </label>
                   @if (accessibility && topic.name === 'Barrierefrei') {
                     <div>
-                      @for (accessibility of allAccessibiltiys; track $index) {
+                      @for (accessibility of allAccessibiltiys; track accessibility) {
                         <div class="ml-6">
                           <input
-                            id="accessibilityCheckbox{{ $index }}"
-                            name="accessibilityCheckbox{{ $index }}"
+                            id="accessibilityCheckbox{{ accessibility.accessibilityName }}"
+                            name="accessibilitysCheckbox{{ accessibility.accessibilityName }}"
                             type="checkbox"
                             [value]="accessibility.accessibilityName"
                             [checked]="selectedAccessibiltiys.includes(accessibility)"
@@ -194,7 +194,7 @@
                             class="h-4 w-4 cursor-pointer"
                           />
                           <label
-                            for="accessibilityCheckbox{{ $index }}"
+                            for="accessibilityCheckbox{{ accessibility.accessibilityName }}"
                             class="ms-2 w-full cursor-pointer text-gray-900 dark:text-gray-700"
                           >
                             {{ accessibility.accessibilityName }}
