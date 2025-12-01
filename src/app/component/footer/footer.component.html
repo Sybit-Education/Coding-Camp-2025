@@ -2,15 +2,25 @@
   <nav class="flex gap-5 py-4" aria-label="{{ 'NAV.FOOTER' | translate }}">
     <a
       href="https://www.radolfzell.de/impressum"
+      rel="external noopener noreferrer"
+      target="_blank"
+      [attr.aria-label]="('footer.impressum' | translate) + ' (' + ('COMMON.EXTERNAL_LINK' | translate) + ')'"
       class="hover:underline focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
-      >{{ 'footer.impressum' | translate }}</a
     >
+      {{ 'footer.impressum' | translate }}
+      <span class="sr-only">({{ 'COMMON.EXTERNAL_LINK' | translate }})</span>
+    </a>
     <span class="text-gray-400">|</span>
     <a
       href="https://www.radolfzell.de/datenschutz"
+      rel="external noopener noreferrer"
+      target="_blank"
+      [attr.aria-label]="('footer.datenschutz' | translate) + ' (' + ('COMMON.EXTERNAL_LINK' | translate) + ')'"
       class="hover:underline focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
-      >{{ 'footer.datenschutz' | translate }}</a
     >
+      {{ 'footer.datenschutz' | translate }}
+      <span class="sr-only">({{ 'COMMON.EXTERNAL_LINK' | translate }})</span>
+    </a>
     <span class="text-gray-400">|</span>
     <a
       [routerLink]="['/barrierefreiheit']"
@@ -22,10 +32,14 @@
     <span class="text-gray-400">|</span>
     <a
       href="https://www.instagram.com/Radolfzell1200"
+      rel="external noopener noreferrer"
+      target="_blank"
+      [attr.aria-label]="('footer.instagram' | translate) + ' (' + ('COMMON.EXTERNAL_LINK' | translate) + ')'"
       class="flex items-center gap-1 hover:underline focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
     >
       <app-icon name="instagram" class="h-[1rem]" aria-hidden="true"></app-icon>
       {{ 'footer.instagram' | translate }}
+      <span class="sr-only">({{ 'COMMON.EXTERNAL_LINK' | translate }})</span>
     </a>
   </nav>
 
