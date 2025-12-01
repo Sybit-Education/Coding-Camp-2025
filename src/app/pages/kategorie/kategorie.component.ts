@@ -193,7 +193,7 @@ export class KategorieComponent implements OnInit {
     try {
       let candidateEvents: AppEvent[]
 
-      if (searchTerm) {
+      if (searchTerm.length > 1) {
         // Get search results from the fulltext index and apply the same base filters
         const searchResults = await this.surreal.fulltextSearchEvents(searchTerm)
         candidateEvents = this.applyBaseFilters(searchResults)
