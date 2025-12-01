@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core'
+import { Component, EventEmitter, Input, Output, OnInit, ViewChild, ElementRef } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { FilterItem } from '@app/models/filterItem.interface'
 import { IconComponent } from '../icon/icon.component'
