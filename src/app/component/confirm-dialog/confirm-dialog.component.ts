@@ -21,9 +21,9 @@ let dialogIdCounter = 0
   imports: [CommonModule, CdkTrapFocus],
   template: `
     @if (opened()) {
-      <div class="fixed inset-0 z-30 bg-black/50" aria-hidden="true"></div>
+      <div class="fixed inset-0 z-3000 bg-black/50" aria-hidden="true"></div>
       <div
-        class="fixed inset-0 z-40 flex items-center justify-center px-4"
+        class="fixed inset-0 z-4000 flex items-center justify-center px-4"
         (click)="handleCancel()"
         (keydown.enter)="handleCancel()"
         (keydown.space)="handleCancel()"
