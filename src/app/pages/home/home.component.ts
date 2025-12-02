@@ -49,7 +49,13 @@ export class HomeComponent implements OnInit {
     try {
       const [topics, eventTypes] = await Promise.all([this.topicService.getAllTopics(), this.eventService.getAllEventTypes()])
 
-      this.topicsOrTypes.push(...eventTypes, ...topics)
+      const higlghtTopic = topics.find(topic => topic.name === 'Highlights')
+      if (higlghtTopic) {
+        this.topics = [higlghtTopic, ...topics.filter(topic => topic.id !== higlghtTopic.id)]
+      } else {
+        this.topics = topics
+      }
+      this.topicsOrTypes.push(...eventTypes, ...this.topics)
     } catch (error) {
       console.error('Fehler beim Laden der Daten:', error)
     }
