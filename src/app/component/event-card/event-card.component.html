@@ -1,11 +1,12 @@
-<div
+<a   
   [routerLink]="['/event', event?.id?.id]"
   [queryParams]="{ filterQuery: filterQuery ? filterQuery : null }"
-  class="justify-top card aspect-[1/1] focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
+  class="card">
+<div
+  class="justify-top card aspect-[1/1]"
   [attr.aria-label]="ariaLabel"
   role="article"
-  [attr.aria-labelledby]="titleId"
->
+  [attr.aria-labelledby]="titleId"> 
   <div class="relative h-[50%] w-full overflow-hidden bg-gray-100">
     <div class="pointer-events-none absolute top-2 left-2 z-10">
       <app-event-type-pill aria-hidden="true" class="text-xs" [event]="event" [disabled]="true"></app-event-type-pill>
@@ -59,3 +60,4 @@
     class="absolute top-2 right-2 rounded-full bg-white shadow-md transition-colors"
   ></app-favorite-button>
 </div>
+</a>
