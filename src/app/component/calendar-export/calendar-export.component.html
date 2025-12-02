@@ -3,12 +3,12 @@
   <button
     type="button"
     (click)="toggleCalendarOptions()"
-    class="action-button focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
+    class="action-button h-12 w-12 focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
     aria-label="{{ 'SHARE.ADD_TO_CALENDAR' | translate }}"
     aria-expanded="{{ showCalendarOptions() }}"
     aria-haspopup="true"
   >
-    <app-icon name="event_upcoming" aria-hidden="true"></app-icon>
+    <app-icon name="event_upcoming" class="h-8 w-8" aria-hidden="true"></app-icon>
   </button>
 
   <!-- Calendar Options Dropdown -->

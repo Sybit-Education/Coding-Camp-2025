@@ -30,6 +30,9 @@ export interface Event extends Record<string, unknown> {
   location?: RecordId<'location'>
   topic?: RecordId<'topic'>[]
   media: RecordId<'media'>[]
+  weehlchair?: boolean
+  seeing?: boolean
+  hearing?: boolean
 }
 
 export interface GeoPoint {

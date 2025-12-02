@@ -14,10 +14,20 @@ import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { MatIconModule } from '@angular/material/icon'
 import { IconComponent } from '@app/component/icon/icon.component'
 import { EventTypePillComponent } from '@app/component/event-type-pill/event-type-pill.component'
+import { FavoriteButtonComponent } from '../favorite-button/favorite-button.component'
 
 @Component({
   selector: 'app-event-card',
-  imports: [CommonModule, DateTimeRangePipe, TranslateModule, RouterModule, MatIconModule, IconComponent, EventTypePillComponent],
+  imports: [
+    CommonModule,
+    DateTimeRangePipe,
+    TranslateModule,
+    RouterModule,
+    MatIconModule,
+    IconComponent,
+    EventTypePillComponent,
+    FavoriteButtonComponent,
+  ],
   templateUrl: './event-card.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
