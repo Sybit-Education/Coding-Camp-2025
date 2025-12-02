@@ -270,10 +270,11 @@
     "to-main-content": "Skip to main content"
   },
   "footer": {
+    "accessibility": "Accessibility",
     "datenschutz": "Privacy Policy",
     "impressum": "Imprint",
-    "sponsoring": "Developed & sponsored by",
-    "instagram": "Instagram"
+    "instagram": "Instagram",
+    "sponsoring": "Developed & sponsored by"
   },
   "create-event": {
     "age": "Minimum age",
@@ -355,7 +356,6 @@
     "email": "Email",
     "eventlocation": "Event location",
     "free": "free",
-    "more_information": "Further information",
     "name": "Name",
     "next-events": "Further events at this location",
     "no-image": "No image available",
@@ -363,22 +363,17 @@
     "phone": "Phone",
     "skip-to-content": "Skip to event content",
     "tags": {
-      "contact-heading": "contact-heading",
       "description-heading": "description-heading",
-      "directions-heading": "directions-heading"
+      "directions-heading": "directions-heading",
+      "contact-heading": "contact-heading"
     },
+    "more_information": "Further information",
     "when": "When?",
     "where": "Where?",
     "image-alt": "Event image: {{name}}",
     "placeholder-alt": "Event image",
-    "logo-alt": "1200 years Radolfzell logo"
-  },
-  "footer": {
-    "accessibility": "Accessibility",
-    "datenschutz": "Privacy Policy",
-    "impressum": "Imprint",
-    "instagram": "Instagram",
-    "sponsoring": "Developed & sponsored by"
+    "logo-alt": "1200 years Radolfzell logo",
+    "main-info": "key data"
   },
   "home": {
     "categories": "Categories",
@@ -389,9 +384,6 @@
       "aria-lable-event-heading": "events-heading"
     },
     "title": "1200 Years Radolfzell"
-  },
-  "i18y": {
-    "to-main-content": "Skip to main content"
   },
   "login": {
     "login": "Login",

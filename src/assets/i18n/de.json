@@ -350,15 +350,16 @@
     "phone": "Telefon",
     "skip-to-content": "Zum Veranstaltungsinhalt springen",
     "tags": {
-      "contact-heading": "contact-heading",
       "description-heading": "description-heading",
-      "directions-heading": "directions-heading"
+      "directions-heading": "directions-heading",
+      "contact-heading": "contact-heading"
     },
     "when": "Wann?",
     "where": "Wo?",
     "image-alt": "Bild der Veranstaltung: {{name}}",
     "placeholder-alt": "Veranstaltungsbild",
-    "logo-alt": "1200 Jahre Radolfzell Logo"
+    "logo-alt": "1200 Jahre Radolfzell Logo",
+    "main-info": "Rahmendaten"
   },
   "footer": {
     "accessibility": "Barrierefreiheit",

@@ -350,13 +350,16 @@
     "tags": {
       "contact-heading": "contact-heading",
       "description-heading": "description-heading",
-      "directions-heading": "directions-heading"
+      "directions-heading": "directions-heading",
+      "contact-heading": "contact-heading"
     },
+    "more_information": "Informations complémentaires",
     "when": "Quand ?",
     "where": "Où ?",
     "image-alt": "Image de l’événement : {{name}}",
     "placeholder-alt": "Image de l’événement",
-    "logo-alt": "Logo Radolfzell 1200 ans"
+    "logo-alt": "Logo Radolfzell 1200 ans",
+    "main-info": "données de référence"
   },
   "footer": {
     "accessibility": "Accessibilité",
