@@ -1,34 +1,51 @@
-<div
-  class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl"
-  role="alertdialog"
-  [attr.aria-labelledby]="titleId"
-  [attr.aria-describedby]="messageId"
-  aria-modal="true"
-  tabindex="-1"
-  (click)="$event.stopPropagation()"
-  (keydown.escape)="handleCancel()"
->
-  <h2 [id]="titleId" class="text-xl font-semibold text-gray-900">
-    {{ title() }}
-  </h2>
-  <p [id]="messageId" class="mt-3 text-base text-gray-700">
-    {{ message() }}
-  </p>
-  <div class="mt-6 flex justify-end gap-3">
-    <button
-      type="button"
-      class="rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none"
-      (click)="handleCancel()"
+@if (opened()) {
+  <div class="fixed inset-0 z-3000 bg-black/50" aria-hidden="true"></div>
+  <div
+    class="fixed inset-0 z-4000 flex items-center justify-center px-4"
+    (click)="handleCancel()"
+    (keydown.enter)="handleCancel()"
+    (keydown.space)="handleCancel()"
+    tabindex="0"
+    [attr.aria-label]="cancelLabel()"
+    role="presentation"
+  >
+    <section
+      cdkTrapFocus
+      role="dialog"
+      class="w-full max-w-md rounded-2xl bg-white shadow-2xl focus-visible:outline-none"
+      [attr.aria-modal]="true"
+      [attr.aria-labelledby]="titleId"
+      [attr.aria-describedby]="descriptionId"
+      (click)="$event.stopPropagation()"
+      (keydown.escape)="handleCancel()"
     >
-      {{ cancelText() }}
-    </button>
-    <button
-      #confirmButton
-      type="button"
-      class="rounded-lg bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none"
-      (click)="handleConfirm()"
-    >
-      {{ confirmText() }}
-    </button>
+      <header class="border-b border-gray-100 px-6 py-4">
+        <h2 class="text-lg font-semibold text-gray-900" [id]="titleId">
+          {{ title() }}
+        </h2>
+      </header>
+
+      <div class="px-6 py-5 text-gray-700" [id]="descriptionId">
+        <p>{{ message() }}</p>
+      </div>
+
+      <footer class="flex flex-col gap-3 border-t border-gray-100 px-6 py-4 sm:flex-row sm:justify-end">
+        <button
+          #cancelButton
+          type="button"
+          class="rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 transition hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+          (click)="handleCancel()"
+        >
+          {{ cancelLabel() }}
+        </button>
+        <button
+          type="button"
+          class="rounded-lg bg-red-600 px-4 py-2 font-semibold text-white transition hover:bg-red-700 focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:outline-none"
+          (click)="handleConfirm()"
+        >
+          {{ confirmLabel() }}
+        </button>
+      </footer>
+    </section>
   </div>
-</div>
+}
