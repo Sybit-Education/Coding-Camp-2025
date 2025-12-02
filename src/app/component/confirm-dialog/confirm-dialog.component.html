@@ -1,0 +1,34 @@
+<div
+  class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl"
+  role="alertdialog"
+  [attr.aria-labelledby]="titleId"
+  [attr.aria-describedby]="messageId"
+  aria-modal="true"
+  tabindex="-1"
+  (click)="$event.stopPropagation()"
+  (keydown.escape)="handleCancel()"
+>
+  <h2 [id]="titleId" class="text-xl font-semibold text-gray-900">
+    {{ title() }}
+  </h2>
+  <p [id]="messageId" class="mt-3 text-base text-gray-700">
+    {{ message() }}
+  </p>
+  <div class="mt-6 flex justify-end gap-3">
+    <button
+      type="button"
+      class="rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:outline-none"
+      (click)="handleCancel()"
+    >
+      {{ cancelText() }}
+    </button>
+    <button
+      #confirmButton
+      type="button"
+      class="rounded-lg bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none"
+      (click)="handleConfirm()"
+    >
+      {{ confirmText() }}
+    </button>
+  </div>
+</div>

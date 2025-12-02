@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, signal, ViewChild, computed } from '@angular/core'
 import { SnackBarService } from '../../services/snack-bar.service'
 import { FormsModule } from '@angular/forms'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { QuillEditorComponent } from 'ngx-quill'
 import { LocationInputComponent } from '../../component/location-input/location-input.component'
@@ -28,6 +28,8 @@ import { Media } from '@app/models/media.interface'
 import { MediaService } from '@app/services/media.service'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
 import { LoadingSpinnerComponent } from '@app/component/loading-spinner/loading-spinner.component'
+import { ConfirmDialogComponent } from '@app/component/confirm-dialog/confirm-dialog.component'
+import { LiveAnnouncer } from '@angular/cdk/a11y'
 
 interface AccessibilityType {
   accessibilityName: string
@@ -45,6 +47,7 @@ interface AccessibilityType {
     ImageUploadComponent,
     GoBackComponent,
     LoadingSpinnerComponent,
+    ConfirmDialogComponent,
   ],
   templateUrl: './event-create.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -67,6 +70,8 @@ export class EventCreateComponent implements OnInit {
   private readonly markForCheck = injectMarkForCheck()
   private readonly router = inject(Router)
   private readonly snackBarService = inject(SnackBarService)
+  private readonly liveAnnouncer = inject(LiveAnnouncer)
+  private readonly translate = inject(TranslateService)
 
   isEditMode = signal(false)
 
@@ -123,6 +128,17 @@ export class EventCreateComponent implements OnInit {
   images: Media[] = []
 
   isSaving = false
+  protected readonly deleteDialogOpen = signal(false)
+  protected readonly deleteDialogTitle = computed(() =>
+    this.translate.instant('create-event.deleteConfirmTitle'),
+  )
+  protected readonly deleteDialogMessage = computed(() =>
+    this.translate.instant('create-event.deleteConfirmMessage', {
+      name: this.eventName || this.translate.instant('create-event.deleteConfirmFallback'),
+    }),
+  )
+  protected readonly deleteConfirmLabel = computed(() => this.translate.instant('COMMON.DELETE'))
+  protected readonly deleteCancelLabel = computed(() => this.translate.instant('COMMON.CANCEL'))
 
   // ===== Lifecycle =====
   ngOnInit() {
@@ -455,30 +471,38 @@ export class EventCreateComponent implements OnInit {
     this.router.navigate(['/admin'])
   }
 
+  protected openDeleteDialog(): void {
+    if (!this.eventId) return
+    this.deleteDialogOpen.set(true)
+  }
+
+  protected cancelDeleteDialog(): void {
+    this.deleteDialogOpen.set(false)
+  }
+
   /**
    * Löscht das aktuelle Event nach Bestätigung
    */
-  async deleteEvent(): Promise<void> {
+  protected async confirmDeleteEvent(): Promise<void> {
     if (!this.eventId) {
-      return // Nichts zu löschen, wenn es ein neues Event ist
+      return
     }
 
-    if (confirm('Sind Sie sicher, dass Sie dieses Event löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.')) {
-      try {
-        this.eventService.delete(this.eventId)
-        this.snackBarService.showSuccess('Event erfolgreich gelöscht')
-
-        // Kurze Verzögerung, um sicherzustellen, dass die Löschung verarbeitet wurde
-        setTimeout(() => {
-          this.router.navigate(['/admin'])
-        }, 300)
-      } catch (error: unknown) {
-        console.error('Fehler beim Löschen des Events:', error)
-        this.snackBarService.showError(
-          `Fehler beim Löschen des Events: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
-        )
-        this.markForCheck()
-      }
+    try {
+      await this.eventService.delete(this.eventId)
+      this.snackBarService.showSuccess(this.translate.instant('create-event.deleteSuccess'))
+      this.liveAnnouncer.announce(this.translate.instant('create-event.deleteSuccess'), 'assertive')
+      setTimeout(() => {
+        this.router.navigate(['/admin'])
+      }, 300)
+    } catch (error: unknown) {
+      const message = `Fehler beim Löschen des Events: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`
+      console.error(message)
+      this.snackBarService.showError(message)
+      this.liveAnnouncer.announce(this.translate.instant('create-event.deleteError'), 'assertive')
+      this.markForCheck()
+    } finally {
+      this.cancelDeleteDialog()
     }
   }
 }
