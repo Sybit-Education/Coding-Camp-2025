@@ -13,4 +13,48 @@
       <span class="max-w-[12rem] truncate">{{ pill.label }}</span>
     </li>
   }
+  @if (accessibility) {
+    @if (event?.weehlchair) {
+      <li
+        [routerLink]="['/kategorie', accessibilitySlug]"
+        [title]="'Rollstuhl'"
+        [attr.aria-label]="'Kategorie: ' + 'Rollstuhl'"
+        [ngStyle]="{
+          'background-color': accessibilityColor || '#F3F4F6',
+          'color': accessibilityTextColor,
+          'border-color': accessibilityColor ? 'transparent' : '#E5E7EB',
+        }"
+      >
+        <span class="max-w-[12rem] truncate">Rollstuhl</span>
+      </li>
+    }
+    @if (event?.seeing) {
+      <li
+        [routerLink]="['/kategorie', accessibilitySlug]"
+        [title]="'Sehbehindertengerecht'"
+        [attr.aria-label]="'Kategorie: ' + 'Sehbehindertengerecht'"
+        [ngStyle]="{
+          'background-color': accessibilityColor || '#F3F4F6',
+          'color': accessibilityTextColor,
+          'border-color': accessibilityColor ? 'transparent' : '#E5E7EB',
+        }"
+      >
+        <span class="max-w-[12rem] truncate">Sehbehindertengerecht</span>
+      </li>
+    }
+    @if (event?.hearing) {
+      <li
+        [routerLink]="['/kategorie', accessibilitySlug]"
+        [title]="'Hörbehindertengerecht'"
+        [attr.aria-label]="'Kategorie: ' + 'Hörbehindertengerecht'"
+        [ngStyle]="{
+          'background-color': accessibilityColor || '#F3F4F6',
+          'color': accessibilityTextColor,
+          'border-color': accessibilityColor ? 'transparent' : '#E5E7EB',
+        }"
+      >
+        <span class="max-w-[12rem] truncate">Hörbehindertengerecht</span>
+      </li>
+    }
+  }
 </ul>

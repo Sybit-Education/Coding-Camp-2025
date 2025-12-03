@@ -107,8 +107,8 @@ export class EventCreateComponent implements OnInit {
   selectedAccessibiltiys: AccessibilityType[] = []
   allAccessibiltiys: AccessibilityType[] = [
     { accessibilityName: 'Rollstuhlgerecht', isAccessible: false },
-    { accessibilityName: 'Seh- /Blindengerrecht', isAccessible: false },
-    { accessibilityName: 'Gehörgerecht', isAccessible: false },
+    { accessibilityName: 'Sehbehindertengerecht', isAccessible: false },
+    { accessibilityName: 'Hörbehindertengerecht', isAccessible: false },
   ]
   eventType: string | null = null
   accessibility = false
