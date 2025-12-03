@@ -66,9 +66,11 @@
     "current": "Événements actuels",
     "categories": "Catégories",
     "main-content": "Aller au contenu principal",
+    "highlights": "Points forts actuels",
     "tags": {
       "aria-lable-event-heading": "events-heading",
-      "aria-lable-catagories-heading": "categories-heading"
+      "aria-lable-catagories-heading": "categories-heading",
+      "aria-lable-highlights-heading": "highlights-heading"
     },
     "title": "1200 ans de Radolfzell"
   },

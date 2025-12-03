@@ -13,12 +13,20 @@
       {{ 'home.current' | translate }}
     </h2>
 
-    <app-event-card-list [limit]="6"></app-event-card-list>
+    <app-event-card-list></app-event-card-list>
   </section>
 
   <div class="flex justify-center">
     <app-all-event-button />
   </div>
+
+  <section [attr.aria-labelledby]="'home.tags.aria-lable-highlights-heading' | translate" class="mt-12 mb-12">
+    <h2 [id]="'home.tags.aria-lable-highlights-heading' | translate">
+      {{ 'home.highlights' | translate }}
+    </h2>
+
+    <app-event-card-list [highlightEvents]="true"></app-event-card-list>
+  </section>
 
   <!-- Kategorien -->
   <section [attr.aria-labelledby]="'home.tags.aria-lable-catagories-heading' | translate" class="mt-12 mb-12">
