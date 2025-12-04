@@ -15,6 +15,7 @@ import { MatIconModule } from '@angular/material/icon'
 import { IconComponent } from '@app/component/icon/icon.component'
 import { EventTypePillComponent } from '@app/component/event-type-pill/event-type-pill.component'
 import { FavoriteButtonComponent } from '../favorite-button/favorite-button.component'
+import { EventTopicPillListComponent } from "../event-topic-pill-list/event-topic-pill-list.component";
 
 @Component({
   selector: 'app-event-card',
@@ -27,7 +28,8 @@ import { FavoriteButtonComponent } from '../favorite-button/favorite-button.comp
     IconComponent,
     EventTypePillComponent,
     FavoriteButtonComponent,
-  ],
+    EventTopicPillListComponent
+],
   templateUrl: './event-card.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
