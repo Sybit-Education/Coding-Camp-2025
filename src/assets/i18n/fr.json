@@ -4,7 +4,12 @@
     "CANCEL": "Annuler",
     "BACK": "Retour",
     "NEXT": "Suivant",
-    "SKIP_TO_MAIN": "Passer au contenu principal"
+    "SKIP_TO_MAIN": "Passer au contenu principal",
+    "ACCESSIBILITY": {
+      "WHEELCHAIR": "Accessible en fauteuil roulant",
+      "SEEING": "Accessible aux malvoyants",
+      "HEARING": "Accessible aux malentendants"
+    }
   },
   "HEADER": {
     "TITLE": "1200 Ans de Radolfzell",

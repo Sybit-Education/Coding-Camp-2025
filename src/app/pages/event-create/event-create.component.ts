@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core'
 import { SnackBarService } from '../../services/snack-bar.service'
 import { FormsModule } from '@angular/forms'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { QuillEditorComponent } from 'ngx-quill'
 import { LocationInputComponent } from '../../component/location-input/location-input.component'
@@ -62,11 +62,12 @@ export class EventCreateComponent implements OnInit {
   private readonly mediaService = inject(MediaService)
   private readonly locationService = inject(LocationService)
   private readonly organizerService = inject(OrganizerService)
-  private readonly topicService = inject(TopicService)
+  readonly topicService = inject(TopicService)
   private readonly route = inject(ActivatedRoute)
   private readonly markForCheck = injectMarkForCheck()
   private readonly router = inject(Router)
   private readonly snackBarService = inject(SnackBarService)
+  private readonly translate = inject(TranslateService)
 
   isEditMode = signal(false)
 
@@ -104,11 +105,14 @@ export class EventCreateComponent implements OnInit {
   // Event Type & Topics
   selectedEventType: TypeDB | null = null
   selectedTopics: Topic[] = []
+  accessibilityWheelchair = this.translate.instant('COMMON.ACCESSIBILITY.WHEELCHAIR')
+  accessibilitySeeing = this.translate.instant('COMMON.ACCESSIBILITY.SEEING')
+  accessibilityHearing = this.translate.instant('COMMON.ACCESSIBILITY.HEARING')
   selectedAccessibiltiys: AccessibilityType[] = []
-  allAccessibiltiys: AccessibilityType[] = [
-    { accessibilityName: 'Rollstuhlgerecht', isAccessible: false },
-    { accessibilityName: 'Sehbehindertengerecht', isAccessible: false },
-    { accessibilityName: 'Hörbehindertengerecht', isAccessible: false },
+  allAccessebiltiys: AccessibilityType[] = [
+    { accessibilityName: this.accessibilityWheelchair, isAccessible: false },
+    { accessibilityName: this.accessibilitySeeing, isAccessible: false },
+    { accessibilityName: this.accessibilityHearing, isAccessible: false },
   ]
   eventType: string | null = null
   accessibility = false
@@ -204,21 +208,20 @@ export class EventCreateComponent implements OnInit {
         const topic = this.topics.find((t) => t.id?.id === (topicId?.id ?? topicId))
         if (topic) this.selectedTopics.push(topic)
       }
-      if (this.selectedTopics.some((t) => t.name === 'Barrierefrei')) {
+      if (this.selectedTopics.some((t) => this.topicService.isTopicAccessibility(t))) {
         this.accessibility = true
       }
 
       // Barrierefreiheiten
       if (event.weehlchair) {
-        this.selectedAccessibiltiys.push(this.allAccessibiltiys[0]) // Rollstuhlgerecht
+        this.selectedAccessibiltiys.push(this.allAccessebiltiys[0]) // Rollstuhlgerecht
       }
       if (event.seeing) {
-        this.selectedAccessibiltiys.push(this.allAccessibiltiys[1]) // Seh- /Blindengerrecht
+        this.selectedAccessibiltiys.push(this.allAccessebiltiys[1]) // Seh- /Blindengerrecht
       }
       if (event.hearing) {
-        this.selectedAccessibiltiys.push(this.allAccessibiltiys[2]) // Gehörgerecht
+        this.selectedAccessibiltiys.push(this.allAccessebiltiys[2]) // Gehörgerecht
       }
-      console.log('Ausgewählte Barrierefreiheiten beim Laden des Events:', this.selectedAccessibiltiys)
 
       this.images = await this.mediaService.getMediasByIdList(event.media)
     } catch (err) {
@@ -243,17 +246,15 @@ export class EventCreateComponent implements OnInit {
     const checked = (event.target as HTMLInputElement).checked
     if (checked) {
       this.selectedTopics.push(topic)
-      if (topic.name === 'Barrierefrei') {
+      if (this.topicService.isTopicAccessibility(topic)) {
         this.accessibility = true
       }
     } else {
       this.selectedTopics = this.selectedTopics.filter((t) => t.id !== topic.id)
-      if (topic.name === 'Barrierefrei') {
+      if (this.topicService.isTopicAccessibility(topic)) {
         this.accessibility = false
       }
     }
-
-    console.log('Barrierefreiheit gesetzt auf:', this.accessibility)
   }
 
   toggleAccessibilitySelection(event: Event, accessibility: AccessibilityType) {
@@ -265,8 +266,6 @@ export class EventCreateComponent implements OnInit {
         (a) => a.accessibilityName !== accessibility.accessibilityName,
       )
     }
-
-    console.log('Ausgewählte Barrierefreiheiten:', this.selectedAccessibiltiys)
   }
 
   // ===== Speichern =====
@@ -354,9 +353,9 @@ export class EventCreateComponent implements OnInit {
 
       // check auf gesetzte Barrierefreiheiten im Topics array
       if (this.selectedAccessibiltiys.length > 0) {
-        const hasAccessibilityTopic = this.selectedTopics.some((t) => t.name === 'Barrierefrei')
+        const hasAccessibilityTopic = this.selectedTopics.some((t) => this.topicService.isTopicAccessibility(t))
         if (!hasAccessibilityTopic) {
-          const accessibilityTopic = this.topics.find((t) => t.name === 'Barrierefrei')
+          const accessibilityTopic = this.topics.find((t) => this.topicService.isTopicAccessibility(t))
           if (accessibilityTopic) {
             this.selectedTopics.push(accessibilityTopic)
           }
@@ -381,9 +380,9 @@ export class EventCreateComponent implements OnInit {
         media: finalMediaIds,
         age: this.age ?? undefined,
         restriction: this.restriction || undefined,
-        weehlchair: this.selectedAccessibiltiys.some((a) => a.accessibilityName === 'Rollstuhlgerecht') || false,
-        seeing: this.selectedAccessibiltiys.some((a) => a.accessibilityName === 'Seh- /Blindengerrecht') || false,
-        hearing: this.selectedAccessibiltiys.some((a) => a.accessibilityName === 'Gehörgerecht') || false,
+        weehlchair: this.selectedAccessibiltiys.some((a) => a.accessibilityName === this.accessibilityWheelchair) || false,
+        seeing: this.selectedAccessibiltiys.some((a) => a.accessibilityName === this.accessibilitySeeing) || false,
+        hearing: this.selectedAccessibiltiys.some((a) => a.accessibilityName === this.accessibilityHearing) || false,
       }
 
       // Event speichern (Update oder Create)

@@ -5,7 +5,12 @@
     "BACK": "Zurück",
     "NEXT": "Weiter",
     "SKIP_TO_MAIN": "Zum Hauptinhalt springen",
-    "LOADING": "Laden ..."
+    "LOADING": "Laden ...",
+    "ACCESSIBILITY": {
+      "WHEELCHAIR": "Rollstuhlgerecht",
+      "SEEING": "Sehbehindertengerecht",
+      "HEARING": "Hörbehindertengerecht"
+    }
   },
   "HEADER": {
     "TITLE": "1200 Jahre Radolfzell",

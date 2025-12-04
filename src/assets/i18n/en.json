@@ -5,7 +5,12 @@
     "BACK": "Back",
     "NEXT": "Next",
     "SKIP_TO_MAIN": "Skip to main content",
-    "LOADING": "Loading ..."
+    "LOADING": "Loading ...",
+    "ACCESSIBILITY": {
+      "WHEELCHAIR": "Wheelchair accessible",
+      "SEEING": "Visually impaired accessible",
+      "HEARING": "Hearing impaired accessible"
+    }
   },
   "HEADER": {
     "TITLE": "1200 Years Radolfzell",

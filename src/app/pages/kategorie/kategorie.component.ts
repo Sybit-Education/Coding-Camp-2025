@@ -113,7 +113,7 @@ export class KategorieComponent implements OnInit {
       ])
 
       let topicsSorted = topics
-      const highlightTopic = topics.find(topic => topic.name === 'Highlights')
+      const highlightTopic = topics.find(topic => this.topicService.isTopicHighlight(topic))
       if (highlightTopic) {
         topicsSorted = [highlightTopic, ...topics.filter(topic => topic.id !== highlightTopic.id)]
       }
