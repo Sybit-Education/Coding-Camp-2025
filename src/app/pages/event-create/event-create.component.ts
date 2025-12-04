@@ -382,8 +382,8 @@ export class EventCreateComponent implements OnInit {
         age: this.age ?? undefined,
         restriction: this.restriction || undefined,
         weehlchair: this.selectedAccessibiltiys.some((a) => a.accessibilityName === 'Rollstuhlgerecht') || false,
-        seeing: this.selectedAccessibiltiys.some((a) => a.accessibilityName === 'Seh- /Blindengerrecht') || false,
-        hearing: this.selectedAccessibiltiys.some((a) => a.accessibilityName === 'Gehörgerecht') || false,
+        seeing: this.selectedAccessibiltiys.some((a) => a.accessibilityName === 'Sehbehindertengerecht') || false,
+        hearing: this.selectedAccessibiltiys.some((a) => a.accessibilityName === 'Hörbehindertengerecht') || false,
       }
 
       // Event speichern (Update oder Create)
