@@ -1,5 +1,5 @@
-<div class="bg-kultur flex min-h-[80px] w-full flex-col items-center justify-between px-6 pb-[80px] md:flex-row md:items-end">
-  <nav class="flex gap-5 py-4" aria-label="{{ 'NAV.FOOTER' | translate }}">
+<div role="contentinfo" class="bg-kultur flex min-h-[80px] w-full flex-col items-center justify-between px-6 pb-[80px] md:flex-row md:items-end">
+  <nav class="flex flex-col gap-3 py-4 md:flex-row md:gap-5" aria-label="Fußnavigation – rechtliche Informationen">
     <a
       href="https://www.radolfzell.de/impressum"
       rel="external noopener noreferrer"
@@ -10,7 +10,7 @@
       {{ 'footer.impressum' | translate }}
       <span class="sr-only">({{ 'COMMON.EXTERNAL_LINK' | translate }})</span>
     </a>
-    <span class="text-gray-400">|</span>
+    <span class="hidden text-gray-400 md:inline">|</span>
     <a
       href="https://www.radolfzell.de/datenschutz"
       rel="external noopener noreferrer"
@@ -21,7 +21,7 @@
       {{ 'footer.datenschutz' | translate }}
       <span class="sr-only">({{ 'COMMON.EXTERNAL_LINK' | translate }})</span>
     </a>
-    <span class="text-gray-400">|</span>
+    <span class="hidden text-gray-400 md:inline">|</span>
     <a
       [routerLink]="['/barrierefreiheit']"
       routerLinkActive="router-link-active"
@@ -29,7 +29,7 @@
       class="hover:underline focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
       >{{ 'footer.accessibility' | translate }}</a
     >
-    <span class="text-gray-400">|</span>
+    <span class="hidden text-gray-400 md:inline">|</span>
     <a
       href="https://www.instagram.com/Radolfzell1200"
       rel="external noopener noreferrer"

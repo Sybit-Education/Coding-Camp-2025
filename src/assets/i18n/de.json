@@ -389,6 +389,16 @@
   "share": {
     "copy-notification": "Der Link wurde in die Zwischenablage kopiert."
   },
+  "PWA": {
+    "INSTALL": {
+      "IOS_TITLE": "App installieren",
+      "IOS_DESC": "Öffne das Teilen-Menü und wähle 'Zum Home-Bildschirm'.",
+      "ANDROID_TITLE": "Installiere die App",
+      "DESKTOP_TITLE": "Web App installieren",
+      "BUTTON": "Installieren",
+      "CLOSE": "Schließen"
+    }
+  },
   "upload-image": {
     "image-here": "Bild hierher ziehen"
   }
