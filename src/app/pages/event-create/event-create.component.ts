@@ -326,7 +326,7 @@ export class EventCreateComponent implements OnInit {
           this.errorTheme = false
         }
 
-        this.snackBarService.showError('Bitte füllen Sie alle Pflichtfelder aus (Name, Datum, Uhrzeit).')
+        this.snackBarService.showError('Bitte füllen Sie alle Pflichtfelder aus (Name, Datum, Uhrzeit, Ort, Themen).')
 
         // Fokus auf das erste Feld mit Fehler setzen
         setTimeout(() => this.focusFirstErrorField(), 100)
