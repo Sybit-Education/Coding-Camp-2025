@@ -7,7 +7,7 @@
       <div class="event-row flex min-w-max gap-4 px-2">
         @for (event of events; track event.id?.id) {
           <app-event-card
-            class="w-[calc(100vw-6rem)] max-w-[320px] snap-center"
+            class="relative w-[calc(100vw-6rem)] max-w-[320px] snap-center"
             [event]="event"
             [attr.aria-label]="
               event.name
