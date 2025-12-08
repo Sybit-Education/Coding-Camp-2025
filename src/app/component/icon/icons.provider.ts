@@ -34,6 +34,7 @@ function registerIcons(registry: IconRegistryService) {
   register('search', '/svg/search.svg')
   register('view_cozy', '/svg/view_cozy.svg')
   register('more', '/svg/more.svg')
+  register('add', '/svg/add.svg')
   register('create_event', '/svg/add.svg')
 
   // More-Menü Icons

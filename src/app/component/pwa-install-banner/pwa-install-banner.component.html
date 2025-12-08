@@ -1,0 +1,47 @@
+@if (show()) {
+  <div
+    class="fixed right-0 bottom-24 left-0 z-[9999] m-4 p-2 flex items-center justify-between rounded-2xl bg-[#3b4ea3]  text-white shadow-2xl backdrop-blur-xl transition-all duration-500 hover:opacity-100 md:top-4 md:mx-20 md:bottom-auto md:shadow-lg"
+    [class.opacity-0]="closing()"
+    [class.translate-y-6]="closing()"
+    [class.md\:-translate-y-6]="closing()"
+    [class.translate-y-4]="!closing()"
+    [class.md\:translate-y-\[-10px\]]="!closing()"
+  >
+    @switch (platform()) {
+      @case ('ios') {
+        <div class="flex items-center gap-3">
+          <app-icon name="share" class="h-6 w-6" />
+          <div>
+            <span class="text-lg font-semibold">{{ 'PWA.INSTALL.IOS_TITLE' | translate }}</span>
+            <p class="text-sm">{{ 'PWA.INSTALL.IOS_DESC' | translate }}</p>
+          </div>
+        </div>
+      }
+      @case ('android') {
+        <div class="flex items-center gap-3">
+          <app-icon name="add" class="h-6 w-6" />
+          <span class="text-lg font-semibold">{{ 'PWA.INSTALL.ANDROID_TITLE' | translate }}</span>
+        </div>
+        <button (click)="install()" class="mr-10 rounded-lg bg-white px-4 py-2 font-semibold text-blue-700 transition hover:bg-white/50">
+          {{ 'PWA.INSTALL.BUTTON' | translate }}
+        </button>
+      }
+      @default {
+        <div class="flex items-center gap-3">
+          <app-icon name="info-circle" class="h-6 w-6" />
+          <span class="text-lg font-semibold">{{ 'PWA.INSTALL.DESKTOP_TITLE' | translate }}</span>
+        </div>
+        <button (click)="install()" class="mr-10 rounded-lg bg-white px-4 py-2 font-semibold text-blue-700 transition hover:bg-white/50">
+          {{ 'PWA.INSTALL.BUTTON' | translate }}
+        </button>
+      }
+    }
+    <button
+      (click)="dismiss()"
+      aria-label="{{ 'PWA.INSTALL.CLOSE' | translate }}"
+      class="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/30 p-1 text-white shadow-md backdrop-blur-md transition hover:bg-white/50"
+    >
+      <app-icon name="close" class="h-4 w-4" />
+    </button>
+  </div>
+}
