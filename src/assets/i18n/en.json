@@ -156,9 +156,24 @@
     "LOADING": "Loading ...",
     "MAIN_CONTENT": "Main content",
     "NEXT": "Next",
+    "SKIP_TO_MAIN": "Skip to main content",
+    "ACCESSIBILITY": {
+      "WHEELCHAIR": "Wheelchair accessible",
+      "SEEING": "Visually impaired accessible",
+      "HEARING": "Hearing impaired accessible"
+    },
     "PAGE_UPDATED": "Page updated",
-    "SAVE": "Save",
-    "SKIP_TO_MAIN": "Skip to main content"
+    "SAVE": "Save"
+  },
+  "HEADER": {
+    "TITLE": "1200 Years Radolfzell",
+    "HOME": "Home",
+    "EVENTS": "Events",
+    "ABOUT": "About"
+  },
+  "HOME": {
+    "WELCOME": "Welcome to 1200 Years Radolfzell",
+    "INTRO": "Discover the history and events around the anniversary"
   },
   "EVENTS": {
     "DATE": "Date",
@@ -188,16 +203,6 @@
     "IMPRINT": "Imprint",
     "PRIVACY": "Privacy Policy"
   },
-  "HEADER": {
-    "ABOUT": "About",
-    "EVENTS": "Events",
-    "HOME": "Home",
-    "TITLE": "1200 Years Radolfzell"
-  },
-  "HOME": {
-    "INTRO": "Discover the history and events around the anniversary",
-    "WELCOME": "Welcome to 1200 Years Radolfzell"
-  },
   "MORE": {
     "ARIA-LABLE": "More options",
     "IMPRINT": {
@@ -217,9 +222,21 @@
       "TITLE": "The Team"
     }
   },
+  "home": {
+    "current": "Current Events",
+    "categories": "Categories",
+    "main-content": "Skip to main part",
+    "highlights": "Current Highlights",
+    "tags": {
+      "aria-lable-event-heading": "events-heading",
+      "aria-lable-catagories-heading": "categories-heading",
+      "aria-lable-highlights-heading": "highlights-heading"
+    },
+    "title": "1200 Years Radolfzell"
+  },
   "NAV": {
     "BOTTOM": "Bottom navigation",
-    "FOOTER": "Footer navigation"
+    "FOOTER": "Footer navigation - legal information"
   },
   "SEARCH": {
     "LABEL": "Search",
@@ -375,16 +392,6 @@
     "logo-alt": "1200 years Radolfzell logo",
     "main-info": "key data"
   },
-  "home": {
-    "categories": "Categories",
-    "current": "Current Events",
-    "main-content": "Skip to main part",
-    "tags": {
-      "aria-lable-catagories-heading": "categories-heading",
-      "aria-lable-event-heading": "events-heading"
-    },
-    "title": "1200 Years Radolfzell"
-  },
   "login": {
     "login": "Login",
     "password": "Password",
@@ -392,6 +399,16 @@
   },
   "share": {
     "copy-notification": "Link was copied into clipboard."
+  },
+  "PWA": {
+    "INSTALL": {
+      "IOS_TITLE": "Install App",
+      "IOS_DESC": "Open the share menu and select 'Add to Home Screen'.",
+      "ANDROID_TITLE": "Install the app",
+      "DESKTOP_TITLE": "Install Web App",
+      "BUTTON": "Install",
+      "CLOSE": "Close"
+    }
   },
   "upload-image": {
     "image-here": "Drag image here"

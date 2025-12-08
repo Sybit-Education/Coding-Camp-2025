@@ -112,7 +112,13 @@ export class KategorieComponent implements OnInit {
         this.eventService.getAllEventTypes(),
       ])
 
-      this.categories = [...topics, ...typeDB]
+      let topicsSorted = topics
+      const highlightTopic = topics.find(topic => this.topicService.isTopicHighlight(topic))
+      if (highlightTopic) {
+        topicsSorted = [highlightTopic, ...topics.filter(topic => topic.id !== highlightTopic.id)]
+      }
+
+      this.categories = [...typeDB, ...topicsSorted]
       this.allEvents = allEvents
 
       const categoryId = this.getCategoryIdFromSlug(topics, typeDB)

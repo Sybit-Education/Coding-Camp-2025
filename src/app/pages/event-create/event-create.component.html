@@ -180,9 +180,9 @@
                   <label for="checkbox{{ topic.id }}" class="ms-2 w-full cursor-pointer text-gray-900 dark:text-gray-700">
                     {{ topic.name }}
                   </label>
-                  @if (accessibility && topic.name === 'Barrierefrei') {
+                  @if (accessibility && topicService.isTopicAccessibility(topic)) {
                     <div>
-                      @for (accessibility of allAccessibiltiys; track accessibility) {
+                      @for (accessibility of allAccessebiltiys; track accessibility) {
                         <div class="ml-6">
                           <input
                             id="accessibilityCheckbox{{ accessibility.accessibilityName }}"

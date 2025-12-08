@@ -157,6 +157,11 @@
     "LOADING": "Chargement ...",
     "MAIN_CONTENT": "Contenu principal",
     "NEXT": "Suivant",
+    "ACCESSIBILITY": {
+      "WHEELCHAIR": "Accessible en fauteuil roulant",
+      "SEEING": "Accessible aux malvoyants",
+      "HEARING": "Accessible aux malentendants"
+    },
     "PAGE_UPDATED": "Page mise à jour",
     "SAVE": "Enregistrer",
     "SKIP_TO_MAIN": "Passer au contenu principal"
@@ -218,9 +223,21 @@
       "TITLE": "L'équipe"
     }
   },
+  "home": {
+    "current": "Événements actuels",
+    "categories": "Catégories",
+    "main-content": "Aller au contenu principal",
+    "highlights": "Points forts actuels",
+    "tags": {
+      "aria-lable-event-heading": "events-heading",
+      "aria-lable-catagories-heading": "categories-heading",
+      "aria-lable-highlights-heading": "highlights-heading"
+    },
+    "title": "1200 ans de Radolfzell"
+  },
   "NAV": {
     "BOTTOM": "Navigation inférieure",
-    "FOOTER": "Navigation du pied de page",
+    "FOOTER": "Navigation au pied de page - informations juridiques",
     "instagram": "Instagram"
   },
   "SEARCH": {
@@ -350,10 +367,8 @@
     "tags": {
       "contact-heading": "contact-heading",
       "description-heading": "description-heading",
-      "directions-heading": "directions-heading",
-      "contact-heading": "contact-heading"
+      "directions-heading": "directions-heading"
     },
-    "more_information": "Informations complémentaires",
     "when": "Quand ?",
     "where": "Où ?",
     "image-alt": "Image de l’événement : {{name}}",
@@ -367,16 +382,6 @@
     "impressum": "Politique de confidentialité",
     "sponsoring": "Développé"
   },
-  "home": {
-    "categories": "Catégories",
-    "current": "Événements actuels",
-    "main-content": "Aller au contenu principal",
-    "tags": {
-      "aria-lable-catagories-heading": "categories-heading",
-      "aria-lable-event-heading": "events-heading"
-    },
-    "title": "1200 ans de Radolfzell"
-  },
   "i18y": {
     "to-main-content": "Accéder au contenu principal"
   },
@@ -387,6 +392,16 @@
   },
   "share": {
     "copy-notification": "Le lien a été copié dans le presse-papiers."
+  },
+  "PWA": {
+    "INSTALL": {
+      "IOS_TITLE": "Installer l'application",
+      "IOS_DESC": "Ouvrez le menu de partage et sélectionnez 'Ajouter à l'écran d'accueil'.",
+      "ANDROID_TITLE": "Installer l'application",
+      "DESKTOP_TITLE": "Installer l'application Web",
+      "BUTTON": "Installer",
+      "CLOSE": "Fermer"
+    }
   },
   "upload-image": {
     "image-here": "Glisser l'image ici"

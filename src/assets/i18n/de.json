@@ -158,7 +158,12 @@
     "NEXT": "Weiter",
     "PAGE_UPDATED": "Seite aktualisiert",
     "SAVE": "Speichern",
-    "SKIP_TO_MAIN": "Zum Hauptinhalt springen"
+    "SKIP_TO_MAIN": "Zum Hauptinhalt springen",
+    "ACCESSIBILITY": {
+      "WHEELCHAIR": "Rollstuhlgerecht",
+      "SEEING": "Sehbehindertengerecht",
+      "HEARING": "Hörbehindertengerecht"
+    }
   },
   "EVENTS": {
     "DATE": "Datum",
@@ -216,9 +221,10 @@
       "TITLE": "Das Team"
     }
   },
+
   "NAV": {
     "BOTTOM": "Untere Navigation",
-    "FOOTER": "Fußnavigation"
+    "FOOTER": "Fußnavigation - rechtliche Informationen"
   },
   "SEARCH": {
     "LABEL": "Suche",
@@ -369,12 +375,14 @@
     "sponsoring": "Developed & sponsored by"
   },
   "home": {
-    "categories": "Kategorien",
     "current": "Aktuelle Veranstaltungen",
+    "categories": "Kategorien",
     "main-content": "Zum Hauptinhalt springen",
+    "highlights": "Aktuelle Highlights",
     "tags": {
+      "aria-lable-event-heading": "events-heading",
       "aria-lable-catagories-heading": "categories-heading",
-      "aria-lable-event-heading": "events-heading"
+      "aria-lable-highlights-heading": "highlights-heading"
     },
     "title": "1200 Jahre Radolfzell"
   },
@@ -388,6 +396,16 @@
   },
   "share": {
     "copy-notification": "Der Link wurde in die Zwischenablage kopiert."
+  },
+  "PWA": {
+    "INSTALL": {
+      "IOS_TITLE": "App installieren",
+      "IOS_DESC": "Öffne das Teilen-Menü und wähle 'Zum Home-Bildschirm'.",
+      "ANDROID_TITLE": "Installiere die App",
+      "DESKTOP_TITLE": "Web App installieren",
+      "BUTTON": "Installieren",
+      "CLOSE": "Schließen"
+    }
   },
   "upload-image": {
     "image-here": "Bild hierher ziehen"
