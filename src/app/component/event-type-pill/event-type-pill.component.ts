@@ -16,11 +16,11 @@ interface Pill {
   selector: 'app-event-type-pill',
   imports: [CommonModule, RouterModule],
   templateUrl: './event-type-pill.component.html',
-  styleUrls: ['./event-type-pill.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventTypePillComponent implements OnChanges {
   @Input() event: Event | null = null
+  @Input() disabled: boolean = false
 
   pill: Pill | null = null
 

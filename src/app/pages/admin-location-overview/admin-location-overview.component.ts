@@ -1,7 +1,7 @@
-import { Component, inject, signal, OnInit, ViewEncapsulation, ChangeDetectionStrategy, DestroyRef } from '@angular/core'
+import { Component, inject, signal, OnInit, ViewEncapsulation, ChangeDetectionStrategy, DestroyRef, computed } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule, Router, NavigationEnd } from '@angular/router'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { Location } from '../../models/location.interface'
 import type { Event } from '../../models/event.interface'
 import { LocationService } from '../../services/location.service'
@@ -11,10 +11,12 @@ import { FormsModule } from '@angular/forms'
 import { RecordId } from 'surrealdb'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { filter } from 'rxjs/operators'
+import { ConfirmDialogComponent } from '@app/component/confirm-dialog/confirm-dialog.component'
+import { LiveAnnouncer } from '@angular/cdk/a11y'
 
 @Component({
   selector: 'app-admin-location-overview',
-  imports: [CommonModule, RouterModule, TranslateModule, NgxDatatableModule, FormsModule],
+  imports: [CommonModule, RouterModule, TranslateModule, NgxDatatableModule, FormsModule, ConfirmDialogComponent],
   templateUrl: './admin-location-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -23,6 +25,8 @@ export class AdminLocationOverviewComponent implements OnInit {
   private readonly locationService = inject(LocationService)
   private readonly router = inject(Router)
   private readonly destroyRef = inject(DestroyRef)
+  private readonly translate = inject(TranslateService)
+  private readonly liveAnnouncer = inject(LiveAnnouncer)
   private readonly eventService = inject(EventService)
 
   // Loading state
@@ -31,6 +35,20 @@ export class AdminLocationOverviewComponent implements OnInit {
   // Locations list
   locations = signal<Location[]>([])
   locationEventCounts = signal<Map<string, number>>(new Map())
+
+  // Delete dialog
+  protected readonly deleteDialogOpen = signal(false)
+  private readonly deleteContext = signal<{ id: RecordId<'location'>; name: string } | null>(null)
+  protected readonly deleteDialogTitle = computed(() => this.translate.instant('ADMIN.LOCATIONS.DELETE_CONFIRM_TITLE'))
+  protected readonly deleteDialogMessage = computed(() => {
+    const context = this.deleteContext()
+    if (!context) {
+      return this.translate.instant('ADMIN.LOCATIONS.DELETE_CONFIRM_MESSAGE_DEFAULT')
+    }
+    return this.translate.instant('ADMIN.LOCATIONS.DELETE_CONFIRM_MESSAGE', { name: context.name })
+  })
+  protected readonly deleteConfirmLabel = computed(() => this.translate.instant('COMMON.DELETE'))
+  protected readonly deleteCancelLabel = computed(() => this.translate.instant('COMMON.CANCEL'))
 
   // Table settings
   rows = signal<Record<string, unknown>[]>([])
@@ -121,7 +139,7 @@ export class AdminLocationOverviewComponent implements OnInit {
           originalId: location.id, // Keep original ID for actions
           city: location.city || 'Radolfzell', // Default city
           street: location.street || '',
-          eventCount: location.id ? eventCounts.get(String(location.id)) ?? 0 : 0,
+          eventCount: location.id ? (eventCounts.get(String(location.id)) ?? 0) : 0,
         }
       })
 
@@ -172,7 +190,7 @@ export class AdminLocationOverviewComponent implements OnInit {
 
   // Filter function
   updateFilter(): void {
-    const val = this.filterValue.toLowerCase()
+    const val = this.filterValue.trim().toLowerCase()
 
     // Filter data
     const temp = this.temp().filter(function (d) {
@@ -189,30 +207,66 @@ export class AdminLocationOverviewComponent implements OnInit {
 
     // Update rows
     this.rows.set(sortedTemp)
+
+    const query = this.filterValue.trim()
+    const announceKey = query ? 'ADMIN.LOCATIONS.SEARCH_STATUS_FILTERED' : 'ADMIN.LOCATIONS.SEARCH_STATUS_ALL'
+    const message = this.translate.instant(announceKey, {
+      count: sortedTemp.length,
+      query,
+    })
+    this.liveAnnouncer.announce(message, 'polite')
   }
 
   // Delete location
-  async deleteLocation(locationId: RecordId) {
-    const locationKey = String(locationId)
-    const relatedEvents = this.locationEventCounts().get(locationKey) ?? 0
-    if (relatedEvents > 0) {
-      alert('Ort kann nicht gelöscht werden, solange Events zugeordnet sind.')
-      return
-    }
-
-    if (!confirm('Möchten Sie diesen Ort wirklich löschen?')) {
-      return
-    }
-
-    try {
-      await this.locationService.delete(locationId as RecordId<'location'>)
-    } catch (deleteError) {
-      console.error('Fehler beim Löschen:', deleteError)
-    }
-
-    await this.loadLocations()
+  protected requestLocationDeletion(row: Record<string, unknown>) {  
+    if (!row?.['originalId']) return
+    this.deleteContext.set({
+      id: row['originalId'] as RecordId<'location'>,
+      name: String(row['name'] ?? ''),
+    })
+    this.deleteDialogOpen.set(true)
   }
 
+  protected cancelLocationDeletion() {
+    this.deleteDialogOpen.set(false)
+    this.deleteContext.set(null)
+  }
+
+  protected async confirmLocationDeletion() {
+    const context = this.deleteContext()
+    if (!context) return
+
+    try {
+      await this.locationService.delete(context.id)
+      this.liveAnnouncer.announce(
+        this.translate.instant('ADMIN.LOCATIONS.DELETE_SUCCESS', { name: context.name }),
+        'assertive',
+      )
+      await this.loadLocations()
+    } catch (deleteError) {
+      console.error('Fehler beim Löschen:', deleteError)
+      this.liveAnnouncer.announce(
+        this.translate.instant('ADMIN.LOCATIONS.DELETE_ERROR', { name: context.name }),
+        'assertive',
+      )
+    } finally {
+      this.cancelLocationDeletion()
+    }
+  }
+  async deleteLocation(locationId: RecordId) {
+    if (confirm('Möchten Sie diesen Ort wirklich löschen?')) {
+      try {
+        // Verwende direkt den Location-Service zum Löschen
+        await this.locationService.delete(locationId as RecordId<'location'>)
+      } catch (deleteError) {
+        console.error('Fehler beim Löschen:', deleteError)
+      }
+
+      // Refresh the locations list
+      await this.loadLocations()
+    }
+  }
+  
   private buildLocationEventCounts(events: Event[]): Map<string, number> {
     const counts = new Map<string, number>()
     for (const event of events ?? []) {

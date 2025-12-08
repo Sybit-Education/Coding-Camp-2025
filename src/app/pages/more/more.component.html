@@ -9,7 +9,7 @@
   </h1>
 
   <nav class="grid gap-4" [attr.aria-label]="'MORE.ARIA-LABLE' | translate" role="navigation">
-    @for (item of menuItems; track item; let i = $index) {
+    @for (item of menuItems; track item.title; let i = $index) {
       <ng-template #linkContent>
         <div class="mr-4 flex h-full items-center justify-center text-[#3b4ea3]" aria-hidden="true">
           <app-icon [name]="item.icon" class="size-8" aria-hidden="true"></app-icon>
@@ -24,16 +24,18 @@
       </ng-template>
 
       <!-- Externer Link -->
-      @if (item.route.startsWith('http')) {
+      @if (isExternal(item)) {
         <a
           [href]="item.route"
+          rel="external noopener noreferrer"
+          target="_blank"
+          [attr.aria-label]="item.title + ' (' + ('COMMON.EXTERNAL_LINK' | translate) + ')'"
           class="focus:ring-opacity-50 flex items-center rounded-lg bg-white p-4 shadow-md transition-shadow hover:shadow-lg focus:ring-2 focus:ring-[#3b4ea3] focus:outline-none"
           [attr.aria-labelledby]="'menu-item-' + i"
           tabindex="0"
-          (keydown.enter)="navigateTo(item.route)"
-          (keydown.space)="$event.preventDefault(); navigateTo(item.route)"
         >
           <ng-container *ngTemplateOutlet="linkContent"></ng-container>
+          <span class="sr-only">({{ 'COMMON.EXTERNAL_LINK' | translate }})</span>
         </a>
       } @else {
         <!-- Interner Link -->
@@ -42,8 +44,6 @@
           class="focus:ring-opacity-50 flex items-center rounded-lg bg-white p-4 shadow-md transition-shadow hover:shadow-lg focus:ring-2 focus:ring-[#3b4ea3] focus:outline-none"
           [attr.aria-labelledby]="'menu-item-' + i"
           tabindex="0"
-          (keydown.enter)="navigateTo(item.route)"
-          (keydown.space)="$event.preventDefault(); navigateTo(item.route)"
         >
           <ng-container *ngTemplateOutlet="linkContent"></ng-container>
         </a>

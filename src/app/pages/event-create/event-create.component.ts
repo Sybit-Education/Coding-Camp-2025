@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, signal, ViewChild, computed } from '@angular/core'
 import { SnackBarService } from '../../services/snack-bar.service'
 import { FormsModule } from '@angular/forms'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { QuillEditorComponent } from 'ngx-quill'
 import { LocationInputComponent } from '../../component/location-input/location-input.component'
@@ -28,7 +28,13 @@ import { Media } from '@app/models/media.interface'
 import { MediaService } from '@app/services/media.service'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
 import { LoadingSpinnerComponent } from '@app/component/loading-spinner/loading-spinner.component'
+import { ConfirmDialogComponent } from '@app/component/confirm-dialog/confirm-dialog.component'
+import { LiveAnnouncer } from '@angular/cdk/a11y'
 
+interface AccessibilityType {
+  accessibilityName: string
+  isAccessible: boolean
+}
 @Component({
   selector: 'app-event-create',
   imports: [
@@ -41,6 +47,7 @@ import { LoadingSpinnerComponent } from '@app/component/loading-spinner/loading-
     ImageUploadComponent,
     GoBackComponent,
     LoadingSpinnerComponent,
+    ConfirmDialogComponent,
   ],
   templateUrl: './event-create.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,6 +56,8 @@ export class EventCreateComponent implements OnInit {
   @ViewChild('eventNameInput') eventNameInput!: ElementRef<HTMLInputElement>
   @ViewChild('dateStartInput') dateStartInput!: ElementRef<HTMLInputElement>
   @ViewChild('timeStartInput') timeStartInput!: ElementRef<HTMLInputElement>
+  @ViewChild('locationInput') locationInput!: ElementRef<HTMLInputElement>
+  @ViewChild('themeInput') themeInput!: ElementRef<HTMLInputElement>
   @ViewChild(ImageUploadComponent) imageUploadComponent!: ImageUploadComponent
 
   // ===== Services =====
@@ -56,11 +65,13 @@ export class EventCreateComponent implements OnInit {
   private readonly mediaService = inject(MediaService)
   private readonly locationService = inject(LocationService)
   private readonly organizerService = inject(OrganizerService)
-  private readonly topicService = inject(TopicService)
+  readonly topicService = inject(TopicService)
   private readonly route = inject(ActivatedRoute)
   private readonly markForCheck = injectMarkForCheck()
   private readonly router = inject(Router)
   private readonly snackBarService = inject(SnackBarService)
+  private readonly liveAnnouncer = inject(LiveAnnouncer)
+  private readonly translate = inject(TranslateService)
 
   isEditMode = signal(false)
 
@@ -84,6 +95,8 @@ export class EventCreateComponent implements OnInit {
   errorName = false
   errorDate = false
   errorTime = false
+  errorLocation = false
+  errorTheme = false
 
   // Location
   placename: string | null = null
@@ -96,7 +109,17 @@ export class EventCreateComponent implements OnInit {
   // Event Type & Topics
   selectedEventType: TypeDB | null = null
   selectedTopics: Topic[] = []
+  accessibilityWheelchair = this.translate.instant('COMMON.ACCESSIBILITY.WHEELCHAIR')
+  accessibilitySeeing = this.translate.instant('COMMON.ACCESSIBILITY.SEEING')
+  accessibilityHearing = this.translate.instant('COMMON.ACCESSIBILITY.HEARING')
+  selectedAccessibiltiys: AccessibilityType[] = []
+  allAccessebiltiys: AccessibilityType[] = [
+    { accessibilityName: this.accessibilityWheelchair, isAccessible: false },
+    { accessibilityName: this.accessibilitySeeing, isAccessible: false },
+    { accessibilityName: this.accessibilityHearing, isAccessible: false },
+  ]
   eventType: string | null = null
+  accessibility = false
 
   // Datenquellen
   locations: Location[] = []
@@ -108,6 +131,17 @@ export class EventCreateComponent implements OnInit {
   images: Media[] = []
 
   isSaving = false
+  protected readonly deleteDialogOpen = signal(false)
+  protected readonly deleteDialogTitle = computed(() =>
+    this.translate.instant('create-event.deleteConfirmTitle'),
+  )
+  protected readonly deleteDialogMessage = computed(() =>
+    this.translate.instant('create-event.deleteConfirmMessage', {
+      name: this.eventName || this.translate.instant('create-event.deleteConfirmFallback'),
+    }),
+  )
+  protected readonly deleteConfirmLabel = computed(() => this.translate.instant('COMMON.DELETE'))
+  protected readonly deleteCancelLabel = computed(() => this.translate.instant('COMMON.CANCEL'))
 
   // ===== Lifecycle =====
   ngOnInit() {
@@ -189,11 +223,22 @@ export class EventCreateComponent implements OnInit {
         const topic = this.topics.find((t) => t.id?.id === (topicId?.id ?? topicId))
         if (topic) this.selectedTopics.push(topic)
       }
+      if (this.selectedTopics.some((t) => this.topicService.isTopicAccessibility(t))) {
+        this.accessibility = true
+      }
+
+      // Barrierefreiheiten
+      if (event.weehlchair) {
+        this.selectedAccessibiltiys.push(this.allAccessebiltiys[0]) // Rollstuhlgerecht
+      }
+      if (event.seeing) {
+        this.selectedAccessibiltiys.push(this.allAccessebiltiys[1]) // Seh- /Blindengerrecht
+      }
+      if (event.hearing) {
+        this.selectedAccessibiltiys.push(this.allAccessebiltiys[2]) // Gehörgerecht
+      }
 
       this.images = await this.mediaService.getMediasByIdList(event.media)
-
-      // Images werden in der ImageUploadComponent geladen
-      console.log('Existierende Bilder für ImageUploadComponent:', this.images)
     } catch (err) {
       console.error('Fehler beim Laden des Events:', err)
     }
@@ -216,8 +261,25 @@ export class EventCreateComponent implements OnInit {
     const checked = (event.target as HTMLInputElement).checked
     if (checked) {
       this.selectedTopics.push(topic)
+      if (this.topicService.isTopicAccessibility(topic)) {
+        this.accessibility = true
+      }
     } else {
       this.selectedTopics = this.selectedTopics.filter((t) => t.id !== topic.id)
+      if (this.topicService.isTopicAccessibility(topic)) {
+        this.accessibility = false
+      }
+    }
+  }
+
+  toggleAccessibilitySelection(event: Event, accessibility: AccessibilityType) {
+    const checked = (event.target as HTMLInputElement).checked
+    if (checked) {
+      this.selectedAccessibiltiys.push(accessibility)
+    } else {
+      this.selectedAccessibiltiys = this.selectedAccessibiltiys.filter(
+        (a) => a.accessibilityName !== accessibility.accessibilityName,
+      )
     }
   }
 
@@ -229,7 +291,13 @@ export class EventCreateComponent implements OnInit {
       // Location ist kein Pflichtfeld mehr
       // Organisator ist kein Pflichtfeld mehr
 
-      if (this.eventName === '' || this.dateStart === '' || this.timeStart === '') {
+      if (
+        this.eventName === '' ||
+        this.dateStart === '' ||
+        this.timeStart === '' ||
+        this.selectedLocation === null ||
+        this.selectedEventType === null
+      ) {
         if (this.eventName === '') {
           this.errorName = true
         } else {
@@ -245,16 +313,30 @@ export class EventCreateComponent implements OnInit {
         } else {
           this.errorTime = false
         }
+        if (this.selectedLocation === null) {
+          this.errorLocation = true
+        } else {
+          this.errorLocation = false
+        }
+        if (this.selectedEventType === null) {
+          this.errorTheme = true
+        } else {
+          this.errorTheme = false
+        }
 
-        this.snackBarService.showError('Bitte füllen Sie alle Pflichtfelder aus (Name, Datum, Uhrzeit).')
+        this.snackBarService.showError('Bitte füllen Sie alle Pflichtfelder aus (Name, Datum, Uhrzeit, Ort, Themen).')
 
         // Fokus auf das erste Feld mit Fehler setzen
         setTimeout(() => this.focusFirstErrorField(), 100)
+        this.isSaving = false
+        this.markForCheck()
         return
       }
       this.errorName = false
       this.errorDate = false
       this.errorTime = false
+      this.errorLocation = false
+      this.errorTheme = false
 
       // Datum und Zeit verarbeiten
       const start = new Date(`${this.dateStart}T${this.timeStart}`)
@@ -275,7 +357,6 @@ export class EventCreateComponent implements OnInit {
       // Wenn keine Bilder hochgeladen wurden, aber existierende Bilder vorhanden sind,
       // behalten wir die existierenden Bilder bei
       if (medias.length === 0 && this.images.length > 0) {
-        console.log('Keine neuen Bilder hochgeladen, behalte existierende:', this.images)
         for (const media of this.images) {
           finalMedia.push(media)
           finalMediaIds.push(media.id!)
@@ -284,6 +365,20 @@ export class EventCreateComponent implements OnInit {
 
       // Sicherstellen, dass wir die aktualisierten Media-IDs verwenden
       this.images = finalMedia
+
+      // check auf gesetzte Barrierefreiheiten im Topics array
+      if (this.selectedAccessibiltiys.length > 0) {
+        const hasAccessibilityTopic = this.selectedTopics.some((t) => this.topicService.isTopicAccessibility(t))
+        if (!hasAccessibilityTopic) {
+          const accessibilityTopic = this.topics.find((t) => this.topicService.isTopicAccessibility(t))
+          if (accessibilityTopic) {
+            this.selectedTopics.push(accessibilityTopic)
+          }
+        }
+      } else {
+        // Wenn keine Barrierefreiheiten ausgewählt sind, entfernen wir das Topic "Barrierefrei"
+        this.selectedTopics = this.selectedTopics.filter((t) => t.name !== 'Barrierefrei')
+      }
 
       const payload: AppEvent = {
         name: this.eventName,
@@ -300,6 +395,9 @@ export class EventCreateComponent implements OnInit {
         media: finalMediaIds,
         age: this.age ?? undefined,
         restriction: this.restriction || undefined,
+        weehlchair: this.selectedAccessibiltiys.some((a) => a.accessibilityName === this.accessibilityWheelchair) || false,
+        seeing: this.selectedAccessibiltiys.some((a) => a.accessibilityName === this.accessibilitySeeing) || false,
+        hearing: this.selectedAccessibiltiys.some((a) => a.accessibilityName === this.accessibilityHearing) || false,
       }
 
       // Event speichern (Update oder Create)
@@ -318,12 +416,10 @@ export class EventCreateComponent implements OnInit {
       } else {
         const updated = await this.eventService.updateEvent(this.eventId, payload)
         if (updated) {
-          console.log('Event erfolgreich aktualisiert:', updated)
           this.snackBarService.showSuccess('Event erfolgreich aktualisiert')
 
           for (const media of this.imageUploadComponent.deletedImages) {
             try {
-              console.log('Lösche existierendes Bild aus der Datenbank:', media.id)
               await this.mediaService.deleteMedia(media.id!)
             } catch (err) {
               console.error('Fehler beim endgültigen Löschen:', err)
@@ -359,6 +455,10 @@ export class EventCreateComponent implements OnInit {
       this.dateStartInput.nativeElement.focus()
     } else if (this.errorTime && this.timeStartInput) {
       this.timeStartInput.nativeElement.focus()
+    } else if (this.errorLocation && this.locationInput) {
+      this.locationInput.nativeElement.focus()
+    } else if (this.errorTheme && this.themeInput) {
+      this.themeInput.nativeElement.focus()
     }
   }
 
@@ -369,30 +469,38 @@ export class EventCreateComponent implements OnInit {
     this.router.navigate(['/admin'])
   }
 
+  protected openDeleteDialog(): void {
+    if (!this.eventId) return
+    this.deleteDialogOpen.set(true)
+  }
+
+  protected cancelDeleteDialog(): void {
+    this.deleteDialogOpen.set(false)
+  }
+
   /**
    * Löscht das aktuelle Event nach Bestätigung
    */
-  async deleteEvent(): Promise<void> {
+  protected async confirmDeleteEvent(): Promise<void> {
     if (!this.eventId) {
-      return // Nichts zu löschen, wenn es ein neues Event ist
+      return
     }
 
-    if (confirm('Sind Sie sicher, dass Sie dieses Event löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.')) {
-      try {
-        this.eventService.delete(this.eventId)
-        this.snackBarService.showSuccess('Event erfolgreich gelöscht')
-
-        // Kurze Verzögerung, um sicherzustellen, dass die Löschung verarbeitet wurde
-        setTimeout(() => {
-          this.router.navigate(['/admin'])
-        }, 300)
-      } catch (error: unknown) {
-        console.error('Fehler beim Löschen des Events:', error)
-        this.snackBarService.showError(
-          `Fehler beim Löschen des Events: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
-        )
-        this.markForCheck()
-      }
+    try {
+      await this.eventService.delete(this.eventId)
+      this.snackBarService.showSuccess(this.translate.instant('create-event.deleteSuccess'))
+      this.liveAnnouncer.announce(this.translate.instant('create-event.deleteSuccess'), 'assertive')
+      setTimeout(() => {
+        this.router.navigate(['/admin'])
+      }, 300)
+    } catch (error: unknown) {
+      const message = `Fehler beim Löschen des Events: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`
+      console.error(message)
+      this.snackBarService.showError(message)
+      this.liveAnnouncer.announce(this.translate.instant('create-event.deleteError'), 'assertive')
+      this.markForCheck()
+    } finally {
+      this.cancelDeleteDialog()
     }
   }
 }

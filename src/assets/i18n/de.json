@@ -1,236 +1,413 @@
 {
+  "ABOUT": {
+    "CONTENT": "Die Stadt Radolfzell am Bodensee feiert ihr 1200-jähriges Jubiläum",
+    "TITLE": "Über uns"
+  },
+  "ACCESSIBILITY": {
+    "CONTACT": {
+      "ADDRESS": "Marktplatz 2, 78315 Radolfzell",
+      "DEPARTMENT": "Pressestelle und Öffentlichkeitsarbeit",
+      "EMAIL": "pressestelle@radolfzell.de",
+      "EMAIL_ARIA": "E-Mail an die Pressestelle der Stadt Radolfzell senden",
+      "EMAIL_LABEL": "E-Mail",
+      "INTRO": "Melden Sie uns Barrieren oder fordern Sie barrierefreie Informationen an. Wir beantworten Ihre Anfrage innerhalb der Frist nach § 8 Satz 1 L-BGG-DVO.",
+      "ORGANISATION": "Stadt Radolfzell am Bodensee",
+      "PHONE_LABEL": "Telefon",
+      "PHONE_PRIMARY": "0 77 32 / 81-110",
+      "PHONE_SECONDARY": "0 77 32 / 81-109",
+      "TEL_PRIMARY": "0773281110",
+      "TEL_SECONDARY": "0773281109",
+      "TITLE": "Feedback und Kontakt"
+    },
+    "ENFORCEMENT": {
+      "ADDRESS": "Else-Josenhans-Straße 6, 70173 Stuttgart",
+      "BODY": "Beauftragte der Landesregierung für die Belange von Menschen mit Behinderung",
+      "EMAIL": "poststelle@bfbmb.bwl.de",
+      "EMAIL_ARIA": "E-Mail an die Landesbeauftragte für die Belange von Menschen mit Behinderung senden",
+      "EMAIL_LABEL": "E-Mail",
+      "INTRO": "Wenn Ihre Anfrage unbeantwortet bleibt oder Sie nicht zufrieden sind, können Sie sich an folgende Ombudsstelle wenden:",
+      "NOTE": "Hinweis: Es besteht ein Verbandsklagerecht nach § 12 Absatz 1 Satz 1 Nummer 4 L-BGG.",
+      "ORG": "Ministerium für Soziales, Gesundheit und Integration Baden-Württemberg",
+      "PHONE": "07 11 / 279-3360",
+      "PHONE_LABEL": "Telefon",
+      "TEL": "07112793360",
+      "TITLE": "Durchsetzungsverfahren"
+    },
+    "INTRO": "Wir gestalten diese Anwendung entsprechend WCAG 2.1 AA / WCAG 2.2 AA, BITV 2.0 und § 10 Absatz 1 L-BGG.",
+    "LEGAL_BASIS": {
+      "POINTS": {
+        "EU_DIRECTIVE": "Richtlinie (EU) 2016/2102 über die Barrierefreiheit der Websites und mobilen Anwendungen öffentlicher Stellen",
+        "LBGG": "§ 10 Absatz 1 Landes-Behindertengleichstellungsgesetz (L-BGG) Baden-Württemberg sowie Barrierefreie-Informationstechnik-Verordnung (BITV 2.0)",
+        "WCAG": "Web Content Accessibility Guidelines (WCAG) 2.1 und 2.2, Konformitätsstufe AA"
+      },
+      "TEXT": "Grundlage sind folgende Normen und Richtlinien:",
+      "TITLE": "Rechtsgrundlage"
+    },
+    "NON_ACCESSIBLE": {
+      "INTRO": "Folgende Inhalte sind derzeit noch nicht vollständig barrierefrei:",
+      "ITEMS": {
+        "ALT_TEXTS": "Bei vereinzelten Bildern, Grafiken und Icons fehlen aussagekräftige Alternativtexte.",
+        "IFRAMES": "Eingebettete externe Dienste (iFrames/Verlinkungen) können außerhalb unseres Einflussbereichs nicht barrierefrei bereitgestellt werden.",
+        "MAPS": "Interaktive Karten und Geodaten sind aktuell nicht vollständig barrierefrei nutzbar."
+      },
+      "TITLE": "Nicht barrierefreie Inhalte"
+    },
+    "STATEMENT": {
+      "CREATED": "Erstellt am: 26.11.2025",
+      "METHOD": "Methodik: Selbstbewertung gemäß WCAG 2.1/2.2 AA, BITV 2.0 und L-BGG, ergänzt durch manuelle Prüfungen.",
+      "TITLE": "Erstellung dieser Erklärung"
+    },
+    "STATEMENT_SCOPE": "Diese Erklärung gilt für die Webanwendung Coding Camp 2025.",
+    "STATUS": {
+      "POINTS": {
+        "CONTINUOUS_IMPROVEMENT": "Fortlaufende Bearbeitung gemeldeter und intern identifizierter Barrieren im Produkt-Backlog.",
+        "SELF_ASSESSMENT": "Bewertung: Selbstbewertung auf Basis interner WCAG-Prüflisten (Stand: 26.11.2025)."
+      },
+      "TEXT": "Diese Webanwendung ist teilweise konform mit den oben genannten Anforderungen.",
+      "TITLE": "Stand der Vereinbarkeit"
+    },
+    "TITLE": "Erklärung zur Barrierefreiheit"
+  },
+  "ADMIN": {
+    "EVENTS": {
+      "CONFIRM_DELETE": "Soll das Event \"{{name}}\" wirklich gelöscht werden?",
+      "CREATE_NEW": "Neues Event ...",
+      "DELETE": "Löschen",
+      "DELETE_BUTTON_ARIA": "Veranstaltung {{name}} löschen",
+      "DELETE_CONFIRM_MESSAGE": "Soll das Event \"{{name}}\" wirklich gelöscht werden?",
+      "DELETE_CONFIRM_MESSAGE_DEFAULT": "Soll dieses Event wirklich gelöscht werden?",
+      "DELETE_CONFIRM_TITLE": "Event löschen",
+      "DELETE_ERROR": "Das Event {{name}} konnte nicht gelöscht werden.",
+      "DELETE_SUCCESS": "Das Event {{name}} wurde gelöscht.",
+      "EDIT": "Bearbeiten ...",
+      "EDIT_BUTTON_ARIA": "Veranstaltung {{name}} bearbeiten",
+      "EDIT_LINK_ARIA": "Veranstaltung {{name}} bearbeiten",
+      "NO_EVENTS": "Keine Events gefunden",
+      "PREVIEW_ARIA": "Vorschau für Veranstaltung {{name}} öffnen",
+      "SEARCH": "Suchen ...",
+      "SEARCH_STATUS_ALL": "{{count}} Veranstaltungen insgesamt",
+      "SEARCH_STATUS_FILTERED": "{{count}} Treffer für \"{{query}}\"",
+      "TITLE": "Events"
+    },
+    "LOCATIONS": {
+      "CONFIRM_DELETE": "Soll der Ort \"{{name}}\" wirklich gelöscht werden?",
+      "CREATE_NEW": "Neuer Ort ...",
+      "DELETE": "Löschen",
+      "DELETE_BUTTON_ARIA": "Ort {{name}} löschen",
+      "DELETE_CONFIRM_MESSAGE": "Soll der Ort \"{{name}}\" wirklich gelöscht werden?",
+      "DELETE_CONFIRM_MESSAGE_DEFAULT": "Soll dieser Ort wirklich gelöscht werden?",
+      "DELETE_CONFIRM_TITLE": "Ort löschen",
+      "DELETE_ERROR": "Der Ort {{name}} konnte nicht gelöscht werden.",
+      "DELETE_FALLBACK": "dieser Ort",
+      "DELETE_FORBIDDEN": "Orte mit zugeordneten Events können nicht gelöscht werden.",
+      "DELETE_SUCCESS": "Der Ort {{name}} wurde gelöscht.",
+      "EDIT": "Bearbeiten",
+      "EDIT_BUTTON_ARIA": "Ort {{name}} bearbeiten",
+      "EDIT_LINK_ARIA": "Ort {{name}} bearbeiten",
+      "FORM": {
+        "CITY": "Stadt",
+        "DELETE_CONFIRM": "Möchten Sie diesen Ort wirklich löschen?",
+        "DELETE_ERROR": "Der Ort konnte nicht gelöscht werden.",
+        "IMAGES": "Bilder",
+        "LINKED_WARNING": "Dieser Ort ist derzeit {{count}} Event(s) zugeordnet und kann nicht gelöscht werden.",
+        "LOAD_ERROR": "Der Ort konnte nicht geladen werden.",
+        "NAME": "Name",
+        "NAME_REQUIRED": "Bitte geben Sie einen Namen ein.",
+        "SAVE_ERROR": "Der Ort konnte nicht gespeichert werden.",
+        "STREET": "Straße",
+        "TITLE_CREATE": "Neuen Ort erstellen",
+        "TITLE_EDIT": "Ort bearbeiten",
+        "ZIP": "PLZ"
+      },
+      "NO_LOCATIONS": "Keine Orte gefunden",
+      "PREVIEW": "Vorschau",
+      "SEARCH": "Orte suchen...",
+      "SEARCH_STATUS_ALL": "Alle {count} Veranstaltungsorte werden angezeigt.",
+      "SEARCH_STATUS_FILTERED": "{count} Veranstaltungsorte für \"{query}\" gefiltert.",
+      "TITLE": "Orte"
+    },
+    "ORGANIZERS": {
+      "CONFIRM_DELETE": "Soll der Veranstalter \"{{name}}\" wirklich gelöscht werden?",
+      "CREATE_TITLE": "Veranstalter erstellen",
+      "DELETE": "Löschen",
+      "DELETE_BUTTON_ARIA": "Veranstalter {{name}} löschen",
+      "DELETE_CONFIRM_MESSAGE": "Soll der Veranstalter \"{{name}}\" wirklich gelöscht werden?",
+      "DELETE_CONFIRM_MESSAGE_DEFAULT": "Soll dieser Veranstalter wirklich gelöscht werden?",
+      "DELETE_CONFIRM_TITLE": "Veranstalter löschen",
+      "DELETE_ERROR": "Der Veranstalter {{name}} konnte nicht gelöscht werden.",
+      "DELETE_FORBIDDEN": "Veranstalter mit zugeordneten Events können nicht gelöscht werden.",
+      "DELETE_SUCCESS": "Der Veranstalter {{name}} wurde gelöscht.",
+      "EDIT_BUTTON_ARIA": "Veranstalter {{name}} bearbeiten",
+      "EDIT_LINK_ARIA": "Veranstalter {{name}} bearbeiten",
+      "EDIT_TITLE": "Veranstalter bearbeiten",
+      "LINKED_WARNING": "Dieser Veranstalter ist derzeit {{count}} Event(s) zugeordnet und kann nicht gelöscht werden.",
+      "SEARCH_STATUS_ALL": "Alle {count} Veranstaltenden werden angezeigt.",
+      "SEARCH_STATUS_FILTERED": "{count} Veranstaltende für \"{query}\" gefiltert.",
+      "TITLE": "Veranstalter"
+    },
+    "TITLE": "Administration"
+  },
   "COMMON": {
-    "SAVE": "Speichern",
-    "CANCEL": "Abbrechen",
     "BACK": "Zurück",
+    "CANCEL": "Abbrechen",
+    "CONFIRM": "Bestätigen",
+    "DELETE": "Löschen",
+    "EXTERNAL_LINK": "Externer Link, öffnet in einem neuen Tab",
+    "LOADING": "Laden ...",
+    "MAIN_CONTENT": "Hauptinhalt",
     "NEXT": "Weiter",
+    "PAGE_UPDATED": "Seite aktualisiert",
+    "SAVE": "Speichern",
     "SKIP_TO_MAIN": "Zum Hauptinhalt springen",
-    "LOADING": "Laden ..."
-  },
-  "HEADER": {
-    "TITLE": "1200 Jahre Radolfzell",
-    "HOME": "Startseite",
-    "EVENTS": "Veranstaltungen",
-    "ABOUT": "Über uns"
-  },
-  "HOME": {
-    "WELCOME": "Willkommen bei 1200 Jahre Radolfzell",
-    "INTRO": "Entdecken Sie die Geschichte und Veranstaltungen rund um das Jubiläum"
+    "ACCESSIBILITY": {
+      "WHEELCHAIR": "Rollstuhlgerecht",
+      "SEEING": "Sehbehindertengerecht",
+      "HEARING": "Hörbehindertengerecht"
+    }
   },
   "EVENTS": {
-    "TITLE": "Veranstaltungen",
-    "NO_EVENTS": "Keine Veranstaltungen gefunden",
-    "LOCATION": "Ort",
     "DATE": "Datum",
-    "SAVE_EVENT": "Veranstaltung speichern",
+    "LOCATION": "Ort",
+    "NO_EVENTS": "Keine Veranstaltungen gefunden",
+    "NO_EVENTS_FOUND_IN_CATEGORY": "Keine Veranstaltungen in dieser Kategorie gefunden.",
     "PAST_EVENT": "Vergangene Veranstaltung",
     "PAST_PREFIX": "Vergangen: ",
-    "NO_EVENTS_FOUND_IN_CATEGORY": "Keine Veranstaltungen in dieser Kategorie gefunden."
+    "SAVE_EVENT": "Veranstaltung speichern",
+    "TITLE": "Veranstaltungen"
   },
-  "ABOUT": {
-    "TITLE": "Über uns",
-    "CONTENT": "Die Stadt Radolfzell am Bodensee feiert ihr 1200-jähriges Jubiläum"
+  "FAVORITES": {
+    "ADD": "Zu Favoriten hinzufügen",
+    "EMPTY": {
+      "BUTTON": "Zur Übersicht",
+      "DESCRIPTION": "Füge Events zu deinen Favoriten hinzu, um sie hier zu sehen.",
+      "TITLE": "Du hast noch keine Favoriten gespeichert."
+    },
+    "LOADING": "Lade Favoriten...",
+    "LOCAL_STORAGE_NOTICE": "Hinweis: Favoriten werden nur lokal auf diesem Gerät gespeichert.",
+    "REMOVE": "Aus Favoriten entfernen",
+    "TITLE": "Meine Favoriten"
   },
   "FOOTER": {
     "COPYRIGHT": "© 2025 Stadt Radolfzell",
     "IMPRINT": "Impressum",
     "PRIVACY": "Datenschutz"
   },
-  "bottom-nav": {
-    "home": "Home",
-    "favorites": "Favoriten",
-    "all-events": "Alle Events",
-    "more": "Mehr"
+  "HEADER": {
+    "ABOUT": "Über uns",
+    "EVENTS": "Veranstaltungen",
+    "HOME": "Startseite",
+    "TITLE": "1200 Jahre Radolfzell"
+  },
+  "HOME": {
+    "INTRO": "Entdecken Sie die Geschichte und Veranstaltungen rund um das Jubiläum",
+    "WELCOME": "Willkommen bei 1200 Jahre Radolfzell"
   },
   "MORE": {
-    "TEAM": {
-      "TITLE": "Das Team",
-      "DESCRIPTION": "Lernen Sie das Team hinter der 1200-Jahre-Radolfzell App kennen."
-    },
+    "ARIA-LABLE": "Weitere Optionen",
     "IMPRINT": {
-      "TITLE": "Impressum",
-      "DESCRIPTION": "Rechtliche Informationen und Kontaktdaten."
-    },
-    "PRIVACY": {
-      "TITLE": "Datenschutz",
-      "DESCRIPTION": "Informationen zum Datenschutz und zur Datenverarbeitung."
+      "DESCRIPTION": "Rechtliche Informationen und Kontaktdaten.",
+      "TITLE": "Impressum"
     },
     "LOGIN": {
-      "TITLE": "Login",
-      "DESCRIPTION": "Interne Datenverwaltung der Einträge."
+      "DESCRIPTION": "Interne Datenverwaltung der Einträge.",
+      "TITLE": "Login"
     },
-    "ARIA-LABLE": "Weitere Optionen"
+    "PRIVACY": {
+      "DESCRIPTION": "Informationen zum Datenschutz und zur Datenverarbeitung.",
+      "TITLE": "Datenschutz"
+    },
+    "TEAM": {
+      "DESCRIPTION": "Lernen Sie das Team hinter der 1200-Jahre-Radolfzell App kennen.",
+      "TITLE": "Das Team"
+    }
+  },
+
+  "NAV": {
+    "BOTTOM": "Untere Navigation",
+    "FOOTER": "Fußnavigation - rechtliche Informationen"
+  },
+  "SEARCH": {
+    "LABEL": "Suche",
+    "PLACEHOLDER": "Suchen ...",
+    "SEARCHING": "Es wird gesucht ..."
+  },
+  "SHARE": {
+    "ADD_TO_CALENDAR": "Zum Kalender",
+    "APPLE_CALENDAR": "Apple Kalender",
+    "DOWNLOAD_ICAL": "Als iCal-Datei (.ics)",
+    "GOOGLE_CALENDAR": "Google Kalender",
+    "OUTLOOK_CALENDAR": "Outlook Kalender",
+    "SHARE": "Teilen"
+  },
+  "UPDATE": {
+    "ACTION": "Aktualisieren",
+    "ACTION_ARIA": "App aktualisieren",
+    "AVAILABLE_MESSAGE": "Eine neue Version ist verfügbar"
+  },
+  "all-categories": {
+    "all-categories": "Alle Kategorien",
+    "all-events": "Alle Veranstaltungen",
+    "all-locations": "Alle Orte",
+    "filter": "Filter",
+    "prices": "Veranstaltungspreise",
+    "all-prices": "Alle Preise",
+    "eventprices": {
+      "free": "Kostenlos",
+      "firststage": "0 - 5 €",
+      "secondstage": "5 - 10 €",
+      "thirdstage": "10 - 15 €",
+      "fourthstage": "15 € und mehr"
+    },
+    "date-from": "Zeitraum von",
+    "date-to": "Zeitraum bis"
+  },
+  "bottom-nav": {
+    "all-events": "Alle Events",
+    "create-event": "Event erstellen",
+    "favorites": "Favoriten",
+    "home": "Home",
+    "more": "Mehr"
+  },
+  "create-event": {
+    "age": "Mindestalter",
+    "ageexample": "z. B. 18",
+    "cancel": "Abbrechen",
+    "createevent": "Erstellen",
+    "delete": "Event löschen",
+    "deleteConfirmFallback": "dieses Event",
+    "deleteConfirmMessage": "Soll das Event \"{{name}}\" wirklich gelöscht werden?",
+    "deleteConfirmTitle": "Event löschen",
+    "deleteError": "Event konnte nicht gelöscht werden.",
+    "deleteSuccess": "Event wurde gelöscht.",
+    "delete_confirm": "Soll dieses Event wirklich gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "description": "Eventbeschreibung",
+    "enddate": "Enddatum",
+    "endtime": "Endzeit",
+    "error": {
+      "date": "Bitte geben Sie ein Startdatum ein.",
+      "general": "Bitte füllen Sie alle Pflichtfelder aus.",
+      "location": "Bitte wählen Sie einen Ort aus.",
+      "name": "Bitte geben Sie einen Eventnamen ein.",
+      "theme": "Bitte wählen Sie eine Art des Events aus.",
+      "time": "Bitte geben Sie eine Startzeit ein."
+    },
+    "eventname": "Name",
+    "eventtype": "Art des Events",
+    "hint": "Felder mit * sind Pflichtfelder.",
+    "location": "Ort wählen...",
+    "moreinfo": "Mehr Infos",
+    "moreinfoexample": "https://...",
+    "newlocation": "Neuen Ort erstellen",
+    "newlocationaddress": "Adresse",
+    "newlocationaddressexample": "Straße und Hausnummer",
+    "newlocationcity": "Stadt",
+    "newlocationname": "Ortsname",
+    "newlocationnameexample": "Name des Ortes",
+    "newlocationplz": "PLZ",
+    "neworganizer": "Neuen Veranstalter erstellen",
+    "neworganizermail": "E-Mail",
+    "neworganizername": "Name",
+    "neworganizerphone": "Telefonnummer",
+    "organizer": "Veranstalter wählen...",
+    "price": "Preis (€)",
+    "restrictions": "Einschränkungen",
+    "restrictionsexample": "z. B. Treppen",
+    "startdate": "Startdatum",
+    "starttime": "Startzeit",
+    "timespan": "Zeitspanne",
+    "topics": "Themen des Events",
+    "updateevent": "Aktualisieren"
+  },
+  "dev": {
+    "altpicture": "Gruppenfoto aller Teilnehmer des Coding Camps",
+    "coaches": "Coaches von SYBIT",
+    "coacheslist": "Felix Klein, Max Eichelmann, Yannik Deschler, Yannik Schwarz, Max Buhl, Elias Frank, Noel Wölfle und Stephan Strittmatter",
+    "coding-camp-text": "Das SYBIT Coding Camp findet seit 2015 jährlich in der ersten vollen Woche der Sommerferien im Rahmen des Ferienprogramms der Stadt Radolfzell statt. Viele ehemalige Teilnehmende sind heute fester Bestandteil des Unternehmens und besuchen das Coding Camp regelmäßig, um sich inspirieren zu lassen und den aktuellen Projekten zu folgen.",
+    "coding-camp-title": "Das SYBIT Coding Camp – Eine Erfolgsgeschichte",
+    "headline": "👨‍💻 Unsere Entwickler",
+    "patrticptants": "Teilnehmer:innen",
+    "patrticptantslist": "Kaan Gel, Luisa Karsniqi, Sebastian Keller, Tomash Fedak, Leonard Röpcke, Jamal Blank, Adriano Mestre und Sasha (Oleksandr) Pavchak",
+    "sybit": "SYBIT ist Europas führender Full-Service-Anbieter für Customer Experience (CX) mit umfassender Expertise in Business Consulting, Process Consulting und Solution Consulting. Als strategischer Partner begleitet SYBIT Unternehmen dabei, kundenzentrierte Prozesse zu gestalten und innovative Lösungen entlang der gesamten Customer Journey zu implementieren. Mit über 25 Jahren Erfahrung und als Teil der NTT Data Business Solutions treibt SYBIT die digitale Transformation nachhaltig voran. We create Customer Experience Champions!",
+    "text1": "Diese Website wurde im Rahmen des SYBIT Coding Camps 2025 entwickelt ",
+    "text2": " von jungen Talenten, die mit Neugier, Disziplin und Kreativität ihre ersten Schritte in der professionellen Softwareentwicklung gegangen sind. Unser Ziel war es, nicht nur Code zu schreiben, sondern etwas Sinnvolles zu erschaffen, das funktioniert, nützlich ist und unsere Ideen sichtbar macht.",
+    "text3": "Ein besonderer Dank gilt allen Teilnehmern, die mit Leidenschaft, Teamgeist und Ausdauer an diesem Projekt gearbeitet haben. Jede Komponente, jede Zeile Code und jede Entscheidung dahinter spiegelt den Lernprozess und das Engagement aller Beteiligten wider."
+  },
+  "event-card": {
+    "show-more": "Weitere Veranstaltungen ...",
+    "image-alt": "Bild: {{name}}",
+    "placeholder-alt": "Platzhalterbild für Veranstaltung",
+    "logo-alt": "1200 Jahre Radolfzell Logo"
+  },
+  "event-detail": {
+    "adress": "Adresse",
+    "arrival": "Anreise",
+    "back": "Zurück",
+    "costs": "Preis",
+    "description": "Beschreibung",
+    "edit": "Bearbeiten",
+    "email": "E-Mail",
+    "eventlocation": "Veranstaltungsort",
+    "free": "gratis",
+    "more_information": "Weitere Informationen",
+    "name": "Name",
+    "next-events": "Weitere Veranstaltungen an diesem Ort",
+    "no-image": "Kein Bild verfügbar",
+    "organizer": "Veranstalter",
+    "phone": "Telefon",
+    "skip-to-content": "Zum Veranstaltungsinhalt springen",
+    "tags": {
+      "description-heading": "description-heading",
+      "directions-heading": "directions-heading",
+      "contact-heading": "contact-heading"
+    },
+    "when": "Wann?",
+    "where": "Wo?",
+    "image-alt": "Bild der Veranstaltung: {{name}}",
+    "placeholder-alt": "Veranstaltungsbild",
+    "logo-alt": "1200 Jahre Radolfzell Logo",
+    "main-info": "Rahmendaten"
+  },
+  "footer": {
+    "accessibility": "Barrierefreiheit",
+    "datenschutz": "Datenschutz",
+    "impressum": "Impressum",
+    "instagram": "Instagram",
+    "sponsoring": "Developed & sponsored by"
   },
   "home": {
     "current": "Aktuelle Veranstaltungen",
     "categories": "Kategorien",
     "main-content": "Zum Hauptinhalt springen",
+    "highlights": "Aktuelle Highlights",
     "tags": {
       "aria-lable-event-heading": "events-heading",
-      "aria-lable-catagories-heading": "categories-heading"
+      "aria-lable-catagories-heading": "categories-heading",
+      "aria-lable-highlights-heading": "highlights-heading"
     },
     "title": "1200 Jahre Radolfzell"
   },
   "i18y": {
     "to-main-content": "Zum Hauptinhalt springen"
   },
-  "footer": {
-    "datenschutz": "Datenschutz",
-    "impressum": "Impressum",
-    "sponsoring": "Developed & sponsored by",
-    "instagram": "Instagram"
-  },
-  "create-event": {
-    "eventname": "Name",
-    "organizer": "Veranstalter wählen...",
-    "neworganizer": "Neuen Veranstalter erstellen",
-    "neworganizername": "Name",
-    "neworganizerphone": "Telefonnummer",
-    "neworganizermail": "E-Mail",
-    "startdate": "Startdatum",
-    "starttime": "Startzeit",
-    "enddate": "Enddatum",
-    "endtime": "Endzeit",
-    "timespan": "Zeitspanne",
-    "location": "Ort wählen...",
-    "newlocation": "Neuen Ort erstellen",
-    "newlocationname": "Ortsname",
-    "newlocationaddress": "Adresse",
-    "newlocationplz": "PLZ",
-    "newlocationcity": "Stadt",
-    "age": "Mindestalter",
-    "price": "Preis (€)",
-    "restrictions": "Einschränkungen",
-    "restrictionsexample": "z. B. Treppen",
-    "topics": "Themen des Events",
-    "eventtype": "Art des Events",
-    "moreinfo": "Mehr Infos",
-    "moreinfoexample": "https://...",
-    "createevent": "Erstellen",
-    "newlocationnameexample": "Name des Ortes",
-    "newlocationaddressexample": "Straße und Hausnummer",
-    "ageexample": "z. B. 18",
-    "description": "Eventbeschreibung",
-    "hint": "Felder mit * sind Pflichtfelder.",
-    "updateevent": "Aktualisieren",
-    "error": {
-      "name": "Bitte geben Sie einen Eventnamen ein.",
-      "date": "Bitte geben Sie ein Startdatum ein.",
-      "time": "Bitte geben Sie eine Startzeit ein.",
-      "general": "Bitte füllen Sie alle Pflichtfelder aus."
-    },
-    "cancel": "Abbrechen",
-    "delete": "Löschen ..."
-  },
-  "dev": {
-    "text1": "Diese Website wurde im Rahmen des SYBIT Coding Camps 2025 entwickelt ",
-    "text2": " von jungen Talenten, die mit Neugier, Disziplin und Kreativität ihre ersten Schritte in der professionellen Softwareentwicklung gegangen sind. Unser Ziel war es, nicht nur Code zu schreiben, sondern etwas Sinnvolles zu erschaffen, das funktioniert, nützlich ist und unsere Ideen sichtbar macht.",
-    "text3": "Ein besonderer Dank gilt allen Teilnehmern, die mit Leidenschaft, Teamgeist und Ausdauer an diesem Projekt gearbeitet haben. Jede Komponente, jede Zeile Code und jede Entscheidung dahinter spiegelt den Lernprozess und das Engagement aller Beteiligten wider.",
-    "patrticptants": "Teilnehmer:innen",
-    "patrticptantslist": "Kaan Gel, Luisa Karsniqi, Sebastian Keller, Tomash Fedak, Leonard Röpcke, Jamal Blank, Adriano Mestre und Sasha (Oleksandr) Pavchak",
-    "coaches": "Coaches von SYBIT",
-    "coacheslist": "Felix Klein, Max Eichelmann, Yannik Deschler, Yannik Schwarz, Max Buhl, Elias Frank, Noel Wölfle und Stephan Strittmatter",
-    "headline": "👨‍💻 Unsere Entwickler",
-    "altpicture": "Gruppenfoto aller Teilnehmer des Coding Camps",
-    "coding-camp-text": "Das SYBIT Coding Camp findet seit 2015 jährlich in der ersten vollen Woche der Sommerferien im Rahmen des Ferienprogramms der Stadt Radolfzell statt. Viele ehemalige Teilnehmende sind heute fester Bestandteil des Unternehmens und besuchen das Coding Camp regelmäßig, um sich inspirieren zu lassen und den aktuellen Projekten zu folgen.",
-    "sybit": "SYBIT ist Europas führender Full-Service-Anbieter für Customer Experience (CX) mit umfassender Expertise in Business Consulting, Process Consulting und Solution Consulting. Als strategischer Partner begleitet SYBIT Unternehmen dabei, kundenzentrierte Prozesse zu gestalten und innovative Lösungen entlang der gesamten Customer Journey zu implementieren. Mit über 25 Jahren Erfahrung und als Teil der NTT Data Business Solutions treibt SYBIT die digitale Transformation nachhaltig voran. We create Customer Experience Champions!",
-    "coding-camp-title": "Das SYBIT Coding Camp – Eine Erfolgsgeschichte"
-  },
-  "FAVORITES": {
-    "TITLE": "Meine Favoriten",
-    "LOADING": "Lade Favoriten...",
-    "EMPTY": {
-      "TITLE": "Du hast noch keine Favoriten gespeichert.",
-      "DESCRIPTION": "Füge Events zu deinen Favoriten hinzu, um sie hier zu sehen.",
-      "BUTTON": "Zur Übersicht"
-    },
-    "REMOVE": "Aus Favoriten entfernen",
-    "ADD": "Zu Favoriten hinzufügen",
-    "LOCAL_STORAGE_NOTICE": "Hinweis: Favoriten werden nur lokal auf diesem Gerät gespeichert."
-  },
-  "event-card": {
-    "show-more": "Weitere Veranstaltungen ..."
-  },
-  "event-detail": {
-    "skip-to-content": "Zum Veranstaltungsinhalt springen",
-    "no-image": "Kein Bild verfügbar",
-    "when": "Wann?",
-    "where": "Wo?",
-    "costs": "Preis",
-    "free": "gratis",
-    "organizer": "Veranstalter",
-    "description": "Beschreibung",
-    "arrival": "Anreise",
-    "adress": "Adresse",
-    "eventlocation": "Veranstaltungsort",
-    "name": "Name",
-    "email": "E-Mail",
-    "phone": "Telefon",
-    "back": "Zurück",
-    "edit": "Bearbeiten",
-    "tags": {
-      "description-heading": "description-heading",
-      "directions-heading": "directions-heading",
-      "contact-heading": "contact-heading"
-    },
-    "more_information": "Weitere Informationen"
-  },
   "login": {
-    "username": "Benutzername / E-Mail",
+    "login": "Anmelden",
     "password": "Passwort",
-    "login": "Anmelden"
-  },
-  "upload-image": {
-    "image-here": "Bild hierher ziehen"
-  },
-  "SHARE": {
-    "SHARE": "Teilen",
-    "ADD_TO_CALENDAR": "Zum Kalender",
-    "DOWNLOAD_ICAL": "Als iCal-Datei (.ics)",
-    "GOOGLE_CALENDAR": "Google Kalender",
-    "OUTLOOK_CALENDAR": "Outlook Kalender",
-    "APPLE_CALENDAR": "Apple Kalender"
+    "username": "Benutzername / E-Mail"
   },
   "share": {
     "copy-notification": "Der Link wurde in die Zwischenablage kopiert."
   },
-  "ADMIN": {
-    "EVENTS": {
-      "TITLE": "Events",
-      "CREATE_NEW": "Neues Event ...",
-      "NO_EVENTS": "Keine Events gefunden",
-      "EDIT": "Bearbeiten ...",
-      "DELETE": "Löschen",
-      "SEARCH": "Suchen ..."
-    },
-    "LOCATIONS": {
-      "TITLE": "Orte",
-      "CREATE_NEW": "Neuer Ort ...",
-      "SEARCH": "Orte suchen...",
-      "NO_LOCATIONS": "Keine Orte gefunden",
-      "PREVIEW": "Vorschau",
-      "EDIT": "Bearbeiten",
-      "DELETE": "Löschen",
-      "FORM": {
-        "TITLE_CREATE": "Neuen Ort erstellen",
-        "TITLE_EDIT": "Ort bearbeiten",
-        "NAME": "Name",
-        "STREET": "Straße",
-        "ZIP": "PLZ",
-        "CITY": "Stadt",
-        "IMAGES": "Bilder",
-        "NAME_REQUIRED": "Bitte geben Sie einen Namen ein.",
-        "SAVE_ERROR": "Der Ort konnte nicht gespeichert werden.",
-        "LOAD_ERROR": "Der Ort konnte nicht geladen werden.",
-        "DELETE_ERROR": "Der Ort konnte nicht gelöscht werden.",
-        "DELETE_CONFIRM": "Möchten Sie diesen Ort wirklich löschen?"
-      }
-    },
-    "TITLE": "Administration"
+  "PWA": {
+    "INSTALL": {
+      "IOS_TITLE": "App installieren",
+      "IOS_DESC": "Öffne das Teilen-Menü und wähle 'Zum Home-Bildschirm'.",
+      "ANDROID_TITLE": "Installiere die App",
+      "DESKTOP_TITLE": "Web App installieren",
+      "BUTTON": "Installieren",
+      "CLOSE": "Schließen"
+    }
   },
-  "SEARCH": {
-    "LABEL": "Suche",
-    "PLACEHOLDER": "Suchen ...",
-    "SEARCHING": "Es wird gesucht ..."
+  "upload-image": {
+    "image-here": "Bild hierher ziehen"
   }
 }

@@ -28,6 +28,12 @@ export const routes: Routes = [
     title: 'Team',
   },
   {
+    path: 'barrierefreiheit',
+    loadComponent: () =>
+      import('./pages/accessibility-statement/accessibility-statement.component').then((m) => m.AccessibilityStatementComponent),
+    title: 'Barrierefreiheit',
+  },
+  {
     path: 'event/:id',
     loadComponent: () => import('./pages/event-detail/event-detail.component').then((m) => m.EventDetailPageComponent),
     title: 'Veranstaltungsdetails',
@@ -101,15 +107,13 @@ export const routes: Routes = [
   },
   {
     path: 'admin/organizer/create',
-    loadComponent: () =>
-      import('./pages/organizer-edit/organizer-edit.component').then((m) => m.OrganizerEditComponent),
+    loadComponent: () => import('./pages/organizer-edit/organizer-edit.component').then((m) => m.OrganizerEditComponent),
     canActivate: [LoginService],
     title: 'Veranstalter erstellen',
   },
   {
     path: 'admin/organizer/:id',
-    loadComponent: () =>
-      import('./pages/organizer-edit/organizer-edit.component').then((m) => m.OrganizerEditComponent),
+    loadComponent: () => import('./pages/organizer-edit/organizer-edit.component').then((m) => m.OrganizerEditComponent),
     canActivate: [LoginService],
     title: 'Veranstalter bearbeiten',
   },

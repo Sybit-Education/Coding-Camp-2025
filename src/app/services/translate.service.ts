@@ -76,8 +76,8 @@ export class I18nService {
     }
 
     // Setze das Locale für die Anwendung
-    document.documentElement.lang = lang; // 'de' | 'en' | 'fr'
-    document.documentElement.setAttribute('data-locale', locale); // 'de-DE' | 'en-GB' | 'fr-FR'
+    document.documentElement.lang = lang // 'de' | 'en' | 'fr'
+    document.documentElement.setAttribute('data-locale', locale) // 'de-DE' | 'en-GB' | 'fr-FR'
   }
 
   /**

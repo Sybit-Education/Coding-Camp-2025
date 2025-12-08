@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs'
 import { MapComponent } from '../../component/map/map.component'
 import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { EventService } from '../../services/event.service'
 import { CommonModule } from '@angular/common'
 import { Organizer } from '../../models/organizer.interface'
@@ -27,6 +27,7 @@ import { IconComponent } from '@app/component/icon/icon.component'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
 import { EventTypePillComponent } from '@app/component/event-type-pill/event-type-pill.component'
 import { EventTopicPillListComponent } from '@app/component/event-topic-pill-list/event-topic-pill-list.component'
+import { EventCardListComponent } from '@app/component/event-card-list/event-card-list.component'
 
 @Component({
   selector: 'app-event-detail-page',
@@ -43,8 +44,9 @@ import { EventTopicPillListComponent } from '@app/component/event-topic-pill-lis
     IconComponent,
     EventTypePillComponent,
     EventTopicPillListComponent,
-
     GoBackComponent,
+    EventCardListComponent,
+    RouterLink,
   ],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
@@ -59,12 +61,14 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   error: string | null = null
   eventId = ''
   goBackSite: string | string[] = '/'
-  goBackParams?: Record<string, string | number | boolean | null | undefined>
+  goBackParams?: string | null = null
 
   mediaList: { url: string; copyright: string; creator: string }[] = []
 
   protected isLoggedIn = false
   screenSize = ScreenSize
+
+  eventsFound = true
 
   private readonly eventService = inject(EventService)
   private readonly locationService = inject(LocationService)
@@ -77,16 +81,27 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   readonly sharedStateService = inject(SharedStateService)
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      this.eventId = params.get('id') || ''
-    })
-    if (this.eventId) {
-      const recordID = new StringRecordId('event:' + this.eventId)
-      this.loadEvent(recordID)
-    } else {
-      this.error = 'Event ID nicht gefunden'
-      this.announceError('Event ID nicht gefunden')
-    }
+    this.subscriptions.add(
+      this.route.paramMap.subscribe((params) => {
+        this.eventId = params.get('id') || ''
+
+        if (!this.eventId) {
+          this.error = 'Event ID nicht gefunden'
+          this.announceError('Event ID nicht gefunden')
+          return
+        }
+
+        const recordID = new StringRecordId('event:' + this.eventId)
+        this.loadEvent(recordID)
+      }),
+    )
+
+    this.subscriptions.add(
+      this.route.queryParamMap.subscribe((params) => {
+        const filterQueryParam = params.get('filterQuery')
+        this.goBackParams = filterQueryParam || null
+      }),
+    )
 
     // Subscription für Login-Status
     this.subscriptions.add(

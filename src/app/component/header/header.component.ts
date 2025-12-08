@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, HostListener, inject, Input, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
+import { TranslateModule } from '@ngx-translate/core'
 import { I18nService } from '../../services/translate.service'
 // import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component'
 
@@ -44,7 +45,10 @@ interface LogoSet {
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, RouterModule, 
+  imports: [
+    CommonModule,
+    RouterModule,
+    TranslateModule,
     // LanguageSwitcherComponent
   ],
   templateUrl: './header.component.html',

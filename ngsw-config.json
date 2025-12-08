@@ -23,8 +23,23 @@
         "files": [
           "/assets/**",
           "/fonts/**",
-          "/*.(svg|cur|jpg|jpeg|png|webp|gif|otf|ttf|woff|woff2)"
+          "/*.(svg|cur|otf|ttf|woff|woff2)"
         ]
+      }
+    },
+    {
+      "name": "images",
+      "installMode": "lazy",
+      "updateMode": "lazy",
+      "resources": {
+        "files": ["/assets/images/**"],
+        "urls": ["/*.(png|jpg|jpeg|webp|gif)"]
+      },
+      "cacheConfig": {
+        "strategy": "performance",
+        "maxSize": 200,
+        "maxAge": "30d",
+        "timeout": "5s"
       }
     },
     {
