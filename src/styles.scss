@@ -36,6 +36,27 @@
     @apply transition-colors duration-200;
   }
 
+  /* Skip link (visible on focus) */
+  .skip-link {
+    @apply fixed top-2 left-2 -translate-y-full transform rounded bg-white px-3 py-2 text-sm text-blue-800 shadow focus:translate-y-0 focus:ring-2 focus:ring-blue-500 focus:outline-none;
+    z-index: 50;
+  }
+
+  /* Ensure LiveAnnouncer stays visually hidden but readable by screen readers */
+  .cdk-visually-hidden,
+  .cdk-live-announcer-element {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+    clip: rect(0, 0, 0, 0) !important;
+    clip-path: inset(50%) !important;
+  }
+
   /* List styles */
   ul {
     @apply mb-4 list-disc pl-5;
@@ -232,7 +253,9 @@
 */
 
 .link {
-  @apply text-[#3b4ea3] transition-colors duration-200 hover:text-[#c70d56] hover:underline focus:ring-2 focus:ring-blue-500 focus:outline-none;
+  @apply focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none;
+  @apply focus:ring-2 focus:ring-[#3b4ea3] focus:outline-none;
+  @apply text-[#3b4ea3] transition-colors duration-200 hover:text-[#c70d56] hover:underline;
 }
 
 .ql-editor {
@@ -311,5 +334,16 @@
     content: '*';
     color: red;
     margin-left: 0.25rem; /* Optional: adds some space between the label text and the asterisk */
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }

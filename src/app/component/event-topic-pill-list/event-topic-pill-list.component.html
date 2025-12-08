@@ -1,16 +1,16 @@
 <ul class="pill-list">
   @for (pill of pills; track pill.slug) {
     <li
-      [routerLink]="['/kategorie', pill.slug]"
       [title]="pill.label"
       [attr.aria-label]="'Kategorie: ' + pill.label"
+      class="focus-within:ring-2 focus-within:ring-sky-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-900"
       [ngStyle]="{
         'background-color': pill.color || '#F3F4F6',
         'color': pill.textColor,
         'border-color': pill.color ? 'transparent' : '#E5E7EB',
       }"
     >
-      <span class="max-w-[12rem] truncate">{{ pill.label }}</span>
+      <a [routerLink]="['/kategorie', pill.slug]" class="max-w-[12rem] truncate focus-visible:outline-none">{{ pill.label }}</a>
     </li>
   }
   @if (accessibility) {

@@ -1,7 +1,7 @@
 <button
   (click)="goBack()"
-  class="mb-4 ml-2 inline-flex cursor-pointer items-center text-[16px] text-[#3b4ea3]"
-  [attr.aria-label]="'Zurück'"
+  class="mb-4 ml-2 inline-flex cursor-pointer items-center rounded text-[16px] text-[#3b4ea3] focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
+  [attr.aria-label]="'COMMON.BACK' | translate"
 >
   <app-icon name="arrow_back" class="h-6 w-6" aria-hidden="true"></app-icon>
   <span

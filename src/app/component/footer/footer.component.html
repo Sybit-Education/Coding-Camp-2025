@@ -1,16 +1,49 @@
 <div class="bg-kultur flex min-h-[80px] w-full flex-col items-center justify-between px-6 pb-[80px] md:flex-row md:items-end">
-  <div class="flex gap-5 py-4">
-    <a href="https://www.radolfzell.de/impressum" class="hover:underline">{{ 'footer.impressum' | translate }}</a>
+  <nav class="flex gap-5 py-4" aria-label="{{ 'NAV.FOOTER' | translate }}">
+    <a
+      href="https://www.radolfzell.de/impressum"
+      rel="external noopener noreferrer"
+      target="_blank"
+      [attr.aria-label]="('footer.impressum' | translate) + ' (' + ('COMMON.EXTERNAL_LINK' | translate) + ')'"
+      class="hover:underline focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
+    >
+      {{ 'footer.impressum' | translate }}
+      <span class="sr-only">({{ 'COMMON.EXTERNAL_LINK' | translate }})</span>
+    </a>
     <span class="text-gray-400">|</span>
-    <a href="https://www.radolfzell.de/datenschutz" class="hover:underline">{{ 'footer.datenschutz' | translate }}</a>
+    <a
+      href="https://www.radolfzell.de/datenschutz"
+      rel="external noopener noreferrer"
+      target="_blank"
+      [attr.aria-label]="('footer.datenschutz' | translate) + ' (' + ('COMMON.EXTERNAL_LINK' | translate) + ')'"
+      class="hover:underline focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
+    >
+      {{ 'footer.datenschutz' | translate }}
+      <span class="sr-only">({{ 'COMMON.EXTERNAL_LINK' | translate }})</span>
+    </a>
     <span class="text-gray-400">|</span>
-    <a href="https://www.instagram.com/Radolfzell1200" class="flex items-center gap-1 hover:underline">
+    <a
+      [routerLink]="['/barrierefreiheit']"
+      routerLinkActive="router-link-active"
+      ariaCurrentWhenActive="page"
+      class="hover:underline focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
+      >{{ 'footer.accessibility' | translate }}</a
+    >
+    <span class="text-gray-400">|</span>
+    <a
+      href="https://www.instagram.com/Radolfzell1200"
+      rel="external noopener noreferrer"
+      target="_blank"
+      [attr.aria-label]="('footer.instagram' | translate) + ' (' + ('COMMON.EXTERNAL_LINK' | translate) + ')'"
+      class="flex items-center gap-1 hover:underline focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
+    >
       <app-icon name="instagram" class="h-[1rem]" aria-hidden="true"></app-icon>
       {{ 'footer.instagram' | translate }}
+      <span class="sr-only">({{ 'COMMON.EXTERNAL_LINK' | translate }})</span>
     </a>
-  </div>
+  </nav>
 
-  <a [routerLink]="['/team']" routerLinkActive="router-link-active">
+  <a [routerLink]="['/team']" routerLinkActive="router-link-active" ariaCurrentWhenActive="page">
     <div id="sponsor" class="m-1 flex flex-col items-end rounded-lg bg-white/10 p-3 shadow-sm">
       <span class="mb-1 text-center text-sm text-gray-600">{{ 'footer.sponsoring' | translate }}</span>
       <img src="sybit-logo.svg" alt="SYBIT Sponsoring Logo" class="h-6 max-w-[120px] object-contain" />

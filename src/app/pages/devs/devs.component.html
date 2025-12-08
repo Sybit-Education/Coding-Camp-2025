@@ -25,7 +25,16 @@
     {{ 'dev.coding-camp-text' | translate }}
   </p>
   <p>
-    <a href="https://www.sybit.education" target="_blank" class="link">Website Nachwuchskräfte SYBIT</a>
+    <a
+      href="https://www.sybit.education"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="link"
+      [attr.aria-label]="'Website Nachwuchskräfte SYBIT (' + ('COMMON.EXTERNAL_LINK' | translate) + ')'"
+    >
+      Website Nachwuchskräfte SYBIT
+      <span class="sr-only">({{ 'COMMON.EXTERNAL_LINK' | translate }})</span>
+    </a>
   </p>
 
   <h2>SYBIT GmbH</h2>
@@ -33,6 +42,15 @@
     {{ 'dev.sybit' | translate }}
   </p>
   <p>
-    <a href="https://www.sybit.com" target="_blank" rel="noopener noreferrer" class="link">SYBIT GmbH</a>
+    <a
+      href="https://www.sybit.com"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="link"
+      [attr.aria-label]="'SYBIT GmbH (' + ('COMMON.EXTERNAL_LINK' | translate) + ')'"
+    >
+      SYBIT GmbH
+      <span class="sr-only">({{ 'COMMON.EXTERNAL_LINK' | translate }})</span>
+    </a>
   </p>
 </article>

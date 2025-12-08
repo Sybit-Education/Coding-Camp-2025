@@ -48,6 +48,7 @@
         [routerLink]="['/admin/']"
         routerLinkActive="border-blue-600 text-blue-600"
         [routerLinkActiveOptions]="{ exact: true }"
+        ariaCurrentWhenActive="page"
         class="border-b-2 border-transparent px-1 py-2 text-xl font-medium whitespace-nowrap text-gray-600 hover:border-gray-300 hover:text-blue-800"
       >
         {{ 'ADMIN.EVENTS.TITLE' | translate }}
@@ -56,6 +57,7 @@
         [routerLink]="['/admin/locations']"
         routerLinkActive="border-blue-600 text-blue-600"
         [routerLinkActiveOptions]="{ exact: true }"
+        ariaCurrentWhenActive="page"
         class="border-b-2 border-transparent px-1 py-2 text-xl font-medium whitespace-nowrap text-gray-600 hover:border-gray-300 hover:text-blue-800"
       >
         {{ 'ADMIN.LOCATIONS.TITLE' | translate }}
@@ -64,8 +66,8 @@
         [routerLink]="['/admin/organizers']"
         routerLinkActive="border-blue-600 text-blue-600"
         [routerLinkActiveOptions]="{ exact: true }"
-        aria-current="page"
-        class="border-b-2 border-blue-600 px-1 py-2 text-xl font-bold whitespace-nowrap text-blue-600"
+        ariaCurrentWhenActive="page"
+        class="border-b-2 border-transparent px-1 py-2 text-xl font-medium whitespace-nowrap text-gray-600 hover:border-gray-300 hover:text-blue-800"
       >
         Veranstalter
       </a>
@@ -129,13 +131,14 @@
         <!-- Name Column Template -->
         <ngx-datatable-column name="Name" prop="name" [flexGrow]="3">
           <ng-template let-row="row" ngx-datatable-cell-template>
-            <a
-              href="javascript:void(0)"
+            <button
+              type="button"
+              class="text-left font-medium text-blue-600 hover:text-blue-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
               (click)="editOrganizer(row.originalId)"
-              class="text-blue-600 hover:text-blue-800 hover:underline"
+              [attr.aria-label]="('ADMIN.ORGANIZERS.EDIT_LINK_ARIA' | translate : { name: row.name })"
             >
               {{ row.name }}
-            </a>
+            </button>
           </ng-template>
         </ngx-datatable-column>
 
@@ -163,8 +166,10 @@
           <ng-template let-row="row" ngx-datatable-cell-template>
             <div class="flex space-x-2">
               <button
+                type="button"
                 (click)="editOrganizer(row.originalId)"
-                class="p-1 text-blue-600 hover:text-blue-800 focus:outline-none"
+                class="p-1 text-blue-600 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                [attr.aria-label]="('ADMIN.ORGANIZERS.EDIT_BUTTON_ARIA' | translate : { name: row.name })"
                 title="{{ 'ADMIN.EVENTS.EDIT' | translate }}"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -177,13 +182,13 @@
                 </svg>
               </button>
               <button
-                (click)="deleteOrganizer(row.originalId)"
-                class="p-1 text-red-600 hover:text-red-800 focus:outline-none disabled:cursor-not-allowed disabled:text-red-300"
+                type="button"
+                (click)="requestOrganizerDeletion(row)"
+                class="p-1 text-red-600 hover:text-red-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 disabled:cursor-not-allowed disabled:text-red-300"
                 [disabled]="row.eventCount > 0"
                 [attr.aria-disabled]="row.eventCount > 0"
-                title="{{
-                  row.eventCount > 0 ? 'Verknüpfte Events verhindern das Löschen' : ('ADMIN.EVENTS.DELETE' | translate)
-                }}"
+                [attr.aria-label]="('ADMIN.ORGANIZERS.DELETE_BUTTON_ARIA' | translate : { name: row.name })"
+                title="{{ row.eventCount > 0 ? ('ADMIN.ORGANIZERS.DELETE_FORBIDDEN' | translate) : ('ADMIN.EVENTS.DELETE' | translate) }}"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
@@ -200,4 +205,15 @@
       </ngx-datatable>
     </div>
   }
+
+  <app-confirm-dialog
+    [opened]="deleteDialogOpen()"
+    (openedChange)="deleteDialogOpen.set($event)"
+    [title]="deleteDialogTitle()"
+    [message]="deleteDialogMessage()"
+    [confirmLabel]="deleteConfirmLabel()"
+    [cancelLabel]="deleteCancelLabel()"
+    (confirmed)="confirmOrganizerDeletion()"
+    (cancelled)="cancelOrganizerDeletion()"
+  />
 </div>
