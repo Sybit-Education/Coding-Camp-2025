@@ -13,4 +13,48 @@
       <a [routerLink]="['/kategorie', pill.slug]" class="max-w-[12rem] truncate focus-visible:outline-none">{{ pill.label }}</a>
     </li>
   }
+  @if (accessibility) {
+    @if (event?.weehlchair) {
+      <li
+        [routerLink]="['/kategorie', accessibilitySlug]"
+        [title]="'COMMON.ACCESSIBILITY.WHEELCHAIR' | translate"
+        [attr.aria-label]="'Kategorie: ' + 'COMMON.ACCESSIBILITY.WHEELCHAIR' | translate"
+        [ngStyle]="{
+          'background-color': accessibilityColor || '#F3F4F6',
+          'color': accessibilityTextColor,
+          'border-color': accessibilityColor ? 'transparent' : '#E5E7EB',
+        }"
+      >
+        <span class="max-w-[12rem] truncate">{{'COMMON.ACCESSIBILITY.WHEELCHAIR' | translate}}</span>
+      </li>
+    }
+    @if (event?.seeing) {
+      <li
+        [routerLink]="['/kategorie', accessibilitySlug]"
+        [title]="'COMMON.ACCESSIBILITY.SEEING' | translate"
+        [attr.aria-label]="'Kategorie: ' + 'COMMON.ACCESSIBILITY.SEEING' | translate"
+        [ngStyle]="{
+          'background-color': accessibilityColor || '#F3F4F6',
+          'color': accessibilityTextColor,
+          'border-color': accessibilityColor ? 'transparent' : '#E5E7EB',
+        }"
+      >
+        <span class="max-w-[12rem] truncate">{{'COMMON.ACCESSIBILITY.SEEING' | translate}}</span>
+      </li>
+    }
+    @if (event?.hearing) {
+      <li
+        [routerLink]="['/kategorie', accessibilitySlug]"
+        [title]="'COMMON.ACCESSIBILITY.HEARING' | translate"
+        [attr.aria-label]="'Kategorie: ' + 'COMMON.ACCESSIBILITY.HEARING' | translate"
+        [ngStyle]="{
+          'background-color': accessibilityColor || '#F3F4F6',
+          'color': accessibilityTextColor,
+          'border-color': accessibilityColor ? 'transparent' : '#E5E7EB',
+        }"
+      >
+        <span class="max-w-[12rem] truncate">{{'COMMON.ACCESSIBILITY.HEARING' | translate}}</span>
+      </li>
+    }
+  }
 </ul>

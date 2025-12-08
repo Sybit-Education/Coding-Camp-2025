@@ -12,17 +12,51 @@
   </a>
 
   <!-- Aktuelle Events -->
-  <section [attr.aria-labelledby]="'home.tags.aria-lable-event-heading' | translate" id="main-content">
-    <h2 [id]="'home.tags.aria-lable-event-heading' | translate">
-      {{ 'home.current' | translate }}
-    </h2>
+  <section [attr.aria-labelledby]="'home.tags.aria-lable-event-heading' | translate">
+    <div class="grid grid-cols-2">
+      <h2 [id]="'home.tags.aria-lable-event-heading' | translate">
+        {{ 'home.current' | translate }}
+      </h2>
+      <div class="flex justify-end">
+        <button
+          routerLink="/all-events"
+          class="mt-8 mb-4 inline-flex cursor-pointer items-center text-[16px] text-[#3b4ea3]"
+          [attr.aria-label]="'Zurück'"
+        >
+          <span class="mr-2"
+            >Alle Veranstaltungen
+            <!--{{ label }}--></span
+          >
+          <app-icon name="arrow_forward" class="h-6 w-6" aria-hidden="true"></app-icon>
+        </button>
+      </div>
+    </div>
 
-    <app-event-card-list [limit]="6"></app-event-card-list>
+    <app-event-card-list></app-event-card-list>
   </section>
 
-  <div class="flex justify-center">
-    <app-all-event-button />
-  </div>
+  <section [attr.aria-labelledby]="'home.tags.aria-lable-highlights-heading' | translate" class="mt-12 mb-12">
+    <div class="grid grid-cols-2">
+      <h2 [id]="'home.tags.aria-lable-highlights-heading' | translate">
+        {{ 'home.highlights' | translate }}
+      </h2>
+      <div class="flex justify-end">
+        <button
+          routerLink="/kategorie/highlights"
+          class="mt-8 mb-4 inline-flex cursor-pointer items-center text-[16px] text-[#3b4ea3]"
+          [attr.aria-label]="'Zurück'"
+        >
+          <span class="mr-2"
+            >Alle Highlights
+            <!--{{ label }}--></span
+          >
+          <app-icon name="arrow_forward" class="h-6 w-6" aria-hidden="true"></app-icon>
+        </button>
+      </div>
+    </div>
+
+    <app-event-card-list [highlightEvents]="true"></app-event-card-list>
+  </section>
 
   <!-- Kategorien -->
   <section [attr.aria-labelledby]="'home.tags.aria-lable-catagories-heading' | translate" class="mt-12 mb-12">
