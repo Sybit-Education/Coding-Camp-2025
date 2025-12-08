@@ -220,7 +220,7 @@
   },
   "NAV": {
     "BOTTOM": "Navigation inférieure",
-    "FOOTER": "Navigation du pied de page",
+    "FOOTER": "Navigation au pied de page - informations juridiques",
     "instagram": "Instagram"
   },
   "SEARCH": {
@@ -350,10 +350,8 @@
     "tags": {
       "contact-heading": "contact-heading",
       "description-heading": "description-heading",
-      "directions-heading": "directions-heading",
-      "contact-heading": "contact-heading"
+      "directions-heading": "directions-heading"
     },
-    "more_information": "Informations complémentaires",
     "when": "Quand ?",
     "where": "Où ?",
     "image-alt": "Image de l’événement : {{name}}",
