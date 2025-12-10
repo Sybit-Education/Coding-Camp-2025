@@ -6,8 +6,9 @@
     <div class="scrollbar-hide card-snap mb-5 w-full snap-x snap-mandatory overflow-x-scroll scroll-smooth">
       <div class="event-row flex min-w-max items-stretch gap-4 px-2">
         @for (event of events; track event.id?.id) {
+          <!--sm:h-[380px] md:h-[420px] lg:h-[480px]-->
           <app-event-card
-            class="w-[calc(100vw-6rem)] max-w-[320px] snap-center sm:h-[380px] md:h-[420px] lg:h-[480px]"
+            class="relative w-[calc(100vw-6rem)] max-w-[320px] snap-center"
             [event]="event"
             [attr.aria-label]="
               event.name

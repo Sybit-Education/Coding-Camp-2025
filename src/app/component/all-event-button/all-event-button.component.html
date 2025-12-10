@@ -1,5 +1,9 @@
 <div class="h-18 w-90 md:w-3xl">
-  <a [routerLink]="['/all-events']" class="justify-top card" tabindex="0">
+  <a
+    [routerLink]="['/event']"
+    class="justify-top card focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
+    [attr.aria-label]="'event-card.show-more' | translate"
+  >
     <div class="flex h-full w-full flex-col items-center justify-center p-6">
       <span class="text-lg font-semibold text-gray-800"> {{ 'event-card.show-more' | translate }}</span>
     </div>

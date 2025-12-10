@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router'
 import type { Event } from '@app/models/event.interface'
 import { TopicService } from '@app/services/topic.service'
 import { computeTextColor } from '@app/utils/color.utils'
+import { TranslateModule } from '@ngx-translate/core'
 
 interface Pill {
   label: string
@@ -14,7 +15,7 @@ interface Pill {
 
 @Component({
   selector: 'app-event-topic-pill-list',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './event-topic-pill-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -54,7 +55,7 @@ export class EventTopicPillListComponent implements OnChanges {
     for (const t of this.event.topic) {
       const topic = allTopics.find((top) => top.id?.id === t.id)
       if (topic?.name) {
-        if ( topic.name === 'Barrierefrei') {
+        if (this.topicService.isTopicAccessibility(topic)) {
           this.accessibility = true
           this.accessibilityColor = topic.color
           this.accessibilitySlug = topic.slug

@@ -1,5 +1,6 @@
 <a
   [routerLink]="filterOption ? null : ['/kategorie', slug]"
+  [attr.aria-label]="text"
   class="card justify-center"
   [ngClass]="filterOption ? 'aspect-[11/3] border-gray-400' : 'aspect-[4/3]'"
   [class.bg-white]="!selected"
@@ -19,7 +20,7 @@
     <div
       class="h-1 w-auto max-w-full rounded transition-transform duration-300"
       [ngClass]="filterOption ? 'scale-x-110' : 'scale-x-150'"
-      [ngStyle]="{ 'background-color': categoryColor() }"
+      [style.background-color]="categoryColor()"
     ></div>
   </div>
 </a>

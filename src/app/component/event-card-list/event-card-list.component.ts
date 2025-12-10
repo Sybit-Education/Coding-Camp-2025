@@ -100,10 +100,9 @@ export class EventCardListComponent implements OnInit {
       .sort((a, b) => new Date(a.date_start).getTime() - new Date(b.date_start).getTime())
 
     if (this.highlightEvents) {
-      console.log('hieghlightEvents: ', this.highlightEvents)
 
       this.topics = await this.topicService.getAllTopics()
-      const highlightTopic = this.topics.find((topic) => topic.name === 'Highlights')
+      const highlightTopic = this.topics.find((topic) => this.topicService.isTopicHighlight(topic))
 
       result = result.filter((event) => {
         const highlightId = highlightTopic?.id?.id

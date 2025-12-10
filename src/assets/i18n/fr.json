@@ -1,66 +1,227 @@
 {
+  "ABOUT": {
+    "CONTENT": "La ville de Radolfzell sur le lac de Constance célèbre son 1200e anniversaire",
+    "TITLE": "À propos de nous"
+  },
+  "ACCESSIBILITY": {
+    "CONTACT": {
+      "ADDRESS": "Marktplatz 2, 78315 Radolfzell, Allemagne",
+      "DEPARTMENT": "Service de presse et relations publiques",
+      "EMAIL": "pressestelle@radolfzell.de",
+      "EMAIL_ARIA": "Envoyer un e-mail au service de presse de la ville de Radolfzell",
+      "EMAIL_LABEL": "E-mail",
+      "INTRO": "Signalez-nous des barrières ou demandez des informations accessibles. Nous répondons dans le délai prévu par l’article 8, phrase 1, L-BGG-DVO.",
+      "ORGANISATION": "Ville de Radolfzell am Bodensee",
+      "PHONE_LABEL": "Téléphone",
+      "PHONE_PRIMARY": "+49 7732 81-110",
+      "PHONE_SECONDARY": "+49 7732 81-109",
+      "TEL_PRIMARY": "+49773281110",
+      "TEL_SECONDARY": "+49773281109",
+      "TITLE": "Retour d’information et contact"
+    },
+    "ENFORCEMENT": {
+      "ADDRESS": "Else-Josenhans-Straße 6, 70173 Stuttgart, Allemagne",
+      "BODY": "Commissaire du Land pour les personnes handicapées",
+      "EMAIL": "poststelle@bfbmb.bwl.de",
+      "EMAIL_ARIA": "Envoyer un e-mail au Commissaire du Land pour les personnes handicapées",
+      "EMAIL_LABEL": "E-mail",
+      "INTRO": "Si vous ne recevez pas de réponse ou si celle-ci ne vous satisfait pas, vous pouvez contacter l’instance suivante :",
+      "NOTE": "Remarque : un droit d’action collective existe conformément à l’article 12, paragraphe 1, phrase 1, point 4, L-BGG.",
+      "ORG": "Ministère des Affaires sociales, de la Santé et de l’Intégration du Bade-Wurtemberg",
+      "PHONE": "+49 711 279-3360",
+      "PHONE_LABEL": "Téléphone",
+      "TEL": "+497112793360",
+      "TITLE": "Procédure de recours"
+    },
+    "INTRO": "Nous concevons cette application conformément aux WCAG 2.1 AA / WCAG 2.2 AA, à la BITV 2.0 et à l’article 10, paragraphe 1, L-BGG (Bade-Wurtemberg).",
+    "LEGAL_BASIS": {
+      "POINTS": {
+        "EU_DIRECTIVE": "Directive (UE) 2016/2102 relative à l’accessibilité des sites internet et des applications mobiles des organismes du secteur public",
+        "LBGG": "Article 10, paragraphe 1, de la loi d’égalité des chances du Land (L-BGG) Bade-Wurtemberg et ordonnance allemande sur l’accessibilité des technologies de l’information (BITV 2.0)",
+        "WCAG": "Web Content Accessibility Guidelines (WCAG) 2.1 et 2.2, niveau de conformité AA"
+      },
+      "TEXT": "Les normes et réglementations suivantes s’appliquent :",
+      "TITLE": "Base légale"
+    },
+    "NON_ACCESSIBLE": {
+      "INTRO": "Les contenus suivants ne sont pas encore entièrement accessibles :",
+      "ITEMS": {
+        "ALT_TEXTS": "Quelques images, graphiques et icônes manquent encore d’alternatives textuelles pertinentes.",
+        "IFRAMES": "Les services externes intégrés (iFrames/liens) peuvent ne pas être entièrement accessibles et sont hors de notre contrôle.",
+        "MAPS": "Les cartes interactives et les géodonnées ne sont pas encore pleinement accessibles."
+      },
+      "TITLE": "Contenus non accessibles"
+    },
+    "STATEMENT": {
+      "CREATED": "Créée le : 26/11/2025",
+      "METHOD": "Méthode : auto-évaluation selon WCAG 2.1/2.2 AA, BITV 2.0 et L-BGG, complétée par des vérifications manuelles.",
+      "TITLE": "Élaboration de cette déclaration"
+    },
+    "STATEMENT_SCOPE": "Cette déclaration s’applique à l’application web Coding Camp 2025.",
+    "STATUS": {
+      "POINTS": {
+        "CONTINUOUS_IMPROVEMENT": "Correction continue et priorisation des barrières signalées ou identifiées dans le backlog produit.",
+        "SELF_ASSESSMENT": "Évaluation : auto-évaluation à partir de listes de contrôle WCAG internes (état : 26/11/2025)."
+      },
+      "TEXT": "Cette application web est partiellement conforme aux exigences susmentionnées.",
+      "TITLE": "État de conformité"
+    },
+    "TITLE": "Déclaration d’accessibilité"
+  },
+  "ADMIN": {
+    "EVENTS": {
+      "CONFIRM_DELETE": "Supprimer l'événement \"{{name}}\" ?",
+      "CREATE_NEW": "Nouvel événement ...",
+      "DELETE": "Supprimer",
+      "DELETE_BUTTON_ARIA": "Supprimer l'événement {{name}}",
+      "DELETE_CONFIRM_MESSAGE": "Voulez-vous vraiment supprimer \"{{name}}\" ?",
+      "DELETE_CONFIRM_MESSAGE_DEFAULT": "Voulez-vous vraiment supprimer cet événement ?",
+      "DELETE_CONFIRM_TITLE": "Supprimer l'événement",
+      "DELETE_ERROR": "L'événement {{name}} n'a pas pu être supprimé.",
+      "DELETE_SUCCESS": "L'événement {{name}} a été supprimé.",
+      "EDIT": "Modifier ...",
+      "EDIT_BUTTON_ARIA": "Modifier l'événement {{name}}",
+      "EDIT_LINK_ARIA": "Modifier l'événement {{name}}",
+      "NO_EVENTS": "Aucun événement trouvé",
+      "PREVIEW": "Aperçu",
+      "PREVIEW_ARIA": "Ouvrir l'aperçu pour l'événement {{name}}",
+      "SEARCH": "Rechercher ...",
+      "SEARCH_STATUS_ALL": "{{count}} événements au total",
+      "SEARCH_STATUS_FILTERED": "{{count}} résultats pour « {{query}} »",
+      "TITLE": "Événements"
+    },
+    "LOCATIONS": {
+      "CONFIRM_DELETE": "Supprimer le lieu \"{{name}}\" ?",
+      "CREATE_NEW": "Nouveau lieu ...",
+      "DELETE": "Supprimer",
+      "DELETE_BUTTON_ARIA": "Supprimer le lieu {{name}}",
+      "DELETE_CONFIRM_MESSAGE": "Voulez-vous vraiment supprimer \"{{name}}\" ?",
+      "DELETE_CONFIRM_MESSAGE_DEFAULT": "Voulez-vous vraiment supprimer ce lieu ?",
+      "DELETE_CONFIRM_TITLE": "Supprimer le lieu",
+      "DELETE_ERROR": "Le lieu {{name}} n'a pas pu être supprimé.",
+      "DELETE_FALLBACK": "ce lieu",
+      "DELETE_FORBIDDEN": "Les lieux associés à des événements ne peuvent pas être supprimés.",
+      "DELETE_SUCCESS": "Le lieu {{name}} a été supprimé.",
+      "EDIT": "Modifier",
+      "EDIT_BUTTON_ARIA": "Modifier le lieu {{name}}",
+      "EDIT_LINK_ARIA": "Modifier le lieu {{name}}",
+      "FORM": {
+        "CITY": "Ville",
+        "DELETE_CONFIRM": "Voulez-vous vraiment supprimer ce lieu ?",
+        "DELETE_ERROR": "Le lieu n'a pas pu être supprimé.",
+        "IMAGES": "Images",
+        "LINKED_WARNING": "Ce lieu est associé à {{count}} événement(s) et ne peut pas être supprimé.",
+        "LOAD_ERROR": "Le lieu n'a pas pu être chargé.",
+        "NAME": "Nom",
+        "NAME_REQUIRED": "Veuillez saisir un nom.",
+        "SAVE_ERROR": "Le lieu n'a pas pu être enregistré.",
+        "STREET": "Rue",
+        "TITLE_CREATE": "Créer un lieu",
+        "TITLE_EDIT": "Modifier le lieu",
+        "ZIP": "Code postal"
+      },
+      "NO_LOCATIONS": "Aucun lieu trouvé",
+      "PREVIEW": "Aperçu",
+      "SEARCH": "Rechercher des lieux...",
+      "SEARCH_STATUS_ALL": "Affichage de {count} lieux.",
+      "SEARCH_STATUS_FILTERED": "Filtré {count} lieux pour « {query} ».",
+      "TITLE": "Lieux"
+    },
+    "ORGANIZERS": {
+      "CONFIRM_DELETE": "Supprimer l'organisateur \"{{name}}\" ?",
+      "CREATE_TITLE": "Créer un organisateur",
+      "DELETE": "Supprimer",
+      "DELETE_BUTTON_ARIA": "Supprimer l'organisateur {{name}}",
+      "DELETE_CONFIRM_MESSAGE": "Voulez-vous vraiment supprimer \"{{name}}\" ?",
+      "DELETE_CONFIRM_MESSAGE_DEFAULT": "Voulez-vous vraiment supprimer cet organisateur ?",
+      "DELETE_CONFIRM_TITLE": "Supprimer l'organisateur",
+      "DELETE_ERROR": "L'organisateur {{name}} n'a pas pu être supprimé.",
+      "DELETE_FORBIDDEN": "Les organisateurs associés à des événements ne peuvent pas être supprimés.",
+      "DELETE_SUCCESS": "L'organisateur {{name}} a été supprimé.",
+      "EDIT_BUTTON_ARIA": "Modifier l'organisateur {{name}}",
+      "EDIT_LINK_ARIA": "Modifier l'organisateur {{name}}",
+      "EDIT_TITLE": "Modifier l'organisateur",
+      "LINKED_WARNING": "Cet organisateur est associé à {{count}} événement(s) et ne peut pas être supprimé.",
+      "SEARCH_STATUS_ALL": "Affichage de {count} organisateurs.",
+      "SEARCH_STATUS_FILTERED": "Filtré {count} organisateurs pour « {query} ».",
+      "TITLE": "Organisateurs"
+    },
+    "TITLE": "Administration"
+  },
   "COMMON": {
-    "SAVE": "Enregistrer",
-    "CANCEL": "Annuler",
     "BACK": "Retour",
+    "CANCEL": "Annuler",
+    "CONFIRM": "Confirmer",
+    "DELETE": "Supprimer",
+    "EXTERNAL_LINK": "Lien externe, s'ouvre dans un nouvel onglet",
+    "LOADING": "Chargement ...",
+    "MAIN_CONTENT": "Contenu principal",
     "NEXT": "Suivant",
+    "ACCESSIBILITY": {
+      "WHEELCHAIR": "Accessible en fauteuil roulant",
+      "SEEING": "Accessible aux malvoyants",
+      "HEARING": "Accessible aux malentendants"
+    },
+    "PAGE_UPDATED": "Page mise à jour",
+    "SAVE": "Enregistrer",
     "SKIP_TO_MAIN": "Passer au contenu principal"
   },
-  "HEADER": {
-    "TITLE": "1200 Ans de Radolfzell",
-    "HOME": "Accueil",
-    "EVENTS": "Événements",
-    "ABOUT": "À propos"
-  },
-  "HOME": {
-    "WELCOME": "Bienvenue à 1200 Ans de Radolfzell",
-    "INTRO": "Découvrez l'histoire et les événements autour de l'anniversaire"
-  },
   "EVENTS": {
-    "TITLE": "Événements",
-    "NO_EVENTS": "Aucun événement trouvé",
-    "LOCATION": "Lieu",
     "DATE": "Date",
-    "SAVE_EVENT": "Enregistrer l'événement",
-    "REMOVE_EVENT": "Supprimer l'événement",
+    "LOCATION": "Lieu",
+    "NO_EVENTS": "Aucun événement trouvé",
+    "NO_EVENTS_FOUND_IN_CATEGORY": "Aucun événement trouvé dans cette catégorie.",
     "PAST_EVENT": "Événement passé",
     "PAST_PREFIX": "Passé : ",
-    "NO_EVENTS_FOUND_IN_CATEGORY": "Aucun événement trouvé dans cette catégorie."
+    "REMOVE_EVENT": "Supprimer l'événement",
+    "SAVE_EVENT": "Enregistrer l'événement",
+    "TITLE": "Événements"
   },
-  "ABOUT": {
-    "TITLE": "À propos de nous",
-    "CONTENT": "La ville de Radolfzell sur le lac de Constance célèbre son 1200e anniversaire"
+  "FAVORITES": {
+    "ADD": "Ajouter aux favoris",
+    "EMPTY": {
+      "BUTTON": "Aller à l'aperçu",
+      "DESCRIPTION": "Ajoutez des événements à vos favoris pour les voir ici.",
+      "TITLE": "Vous n'avez pas encore enregistré de favoris."
+    },
+    "LOADING": "Chargement des favoris...",
+    "LOCAL_STORAGE_NOTICE": "Remarque: Les favoris sont uniquement stockés localement sur cet appareil.",
+    "REMOVE": "Retirer des favoris",
+    "TITLE": "Mes Favoris"
   },
   "FOOTER": {
     "COPYRIGHT": "© 2025 Ville de Radolfzell",
     "IMPRINT": "Mentions légales",
     "PRIVACY": "Politique de confidentialité"
   },
-  "bottom-nav": {
-    "home": "Accueil",
-    "favorites": "Favoris",
-    "all-events": "Tous les événements",
-    "more": "Plus",
-    "create-event": "Créer un événement"
+  "HEADER": {
+    "ABOUT": "À propos",
+    "EVENTS": "Événements",
+    "HOME": "Accueil",
+    "TITLE": "1200 Ans de Radolfzell"
+  },
+  "HOME": {
+    "INTRO": "Découvrez l'histoire et les événements autour de l'anniversaire",
+    "WELCOME": "Bienvenue à 1200 Ans de Radolfzell"
   },
   "MORE": {
-    "TEAM": {
-      "TITLE": "L'équipe",
-      "DESCRIPTION": "Découvrez l'équipe derrière l'application 1200 Ans de Radolfzell."
-    },
+    "ARIA-LABLE": "Autres options",
     "IMPRINT": {
-      "TITLE": "Mentions légales",
-      "DESCRIPTION": "Informations légales et coordonnées."
-    },
-    "PRIVACY": {
-      "TITLE": "Politique de confidentialité",
-      "DESCRIPTION": "Informations sur la protection des données et le traitement des données."
+      "DESCRIPTION": "Informations légales et coordonnées.",
+      "TITLE": "Mentions légales"
     },
     "LOGIN": {
-      "TITLE": "Connexion",
-      "DESCRIPTION": "Gestion interne des données des entrées."
+      "DESCRIPTION": "Gestion interne des données des entrées.",
+      "TITLE": "Connexion"
     },
-    "ARIA-LABLE": "Autres options"
+    "PRIVACY": {
+      "DESCRIPTION": "Informations sur la protection des données et le traitement des données.",
+      "TITLE": "Politique de confidentialité"
+    },
+    "TEAM": {
+      "DESCRIPTION": "Découvrez l'équipe derrière l'application 1200 Ans de Radolfzell.",
+      "TITLE": "L'équipe"
+    }
   },
   "home": {
     "current": "Événements actuels",
@@ -74,10 +235,28 @@
     },
     "title": "1200 ans de Radolfzell"
   },
+  "NAV": {
+    "BOTTOM": "Navigation inférieure",
+    "FOOTER": "Navigation au pied de page - informations juridiques",
+    "instagram": "Instagram"
+  },
+  "SEARCH": {
+    "LABEL": "Rechercher",
+    "PLACEHOLDER": "Rechercher...",
+    "SEARCHING": "Recherche en cours..."
+  },
+  "SHARE": {
+    "SHARE": "Partager..."
+  },
+  "UPDATE": {
+    "ACTION": "Mettre à jour",
+    "ACTION_ARIA": "Mettre à jour l'application",
+    "AVAILABLE_MESSAGE": "Une nouvelle version est disponible"
+  },
   "all-categories": {
-    "all-locations": "Tous les lieux",
     "all-categories": "Toutes les catégories",
     "all-events": "Tous les événements",
+    "all-locations": "Tous les lieux",
     "filter": "Filtrer",
     "prices": "Prix des événements",
     "all-prices": "Tous les prix des événements",
@@ -91,145 +270,140 @@
     "date-from": "Période de",
     "date-to": "Période jusqu'à"
   },
-  "i18y": {
-    "to-main-content": "Accéder au contenu principal"
-  },
-  "footer": {
-    "datenschutz": "Mentions légales",
-    "impressum": "Politique de confidentialité",
-    "sponsoring": "Développé",
-    "instagram": "Instagram"
+  "bottom-nav": {
+    "all-events": "Tous les événements",
+    "create-event": "Créer un événement",
+    "favorites": "Favoris",
+    "home": "Accueil",
+    "more": "Plus"
   },
   "create-event": {
-    "eventname": "Nom",
-    "organizer": "Choisir l'organisateur...",
-    "neworganizer": "Créer un nouvel organisateur",
-    "neworganizername": "Nom",
-    "neworganizerphone": "Numéro de téléphone",
-    "neworganizermail": "Courrier électronique",
-    "startdate": "Date de début",
-    "starttime": "Heure de début",
+    "age": "Âge minimum",
+    "ageexample": "p. ex. 18",
+    "cancel": "Annuler",
+    "createevent": "Créer",
+    "delete": "Supprimer",
+    "deleteConfirmFallback": "cet événement",
+    "deleteConfirmMessage": "Voulez-vous vraiment supprimer \"{{name}}\" ?",
+    "deleteConfirmTitle": "Supprimer l'événement",
+    "deleteError": "L'événement n'a pas pu être supprimé.",
+    "deleteSuccess": "Événement supprimé.",
+    "delete_confirm": "Voulez-vous vraiment supprimer cet événement ? Cette action est irréversible.",
+    "description": "Description de l'événement",
     "enddate": "Date de fin",
     "endtime": "Heure de fin",
-    "timespan": "Période",
+    "error": {
+      "date": "Veuillez entrer une date de début.",
+      "general": "Veuillez remplir tous les champs obligatoires.",
+      "location": "Veuillez sélectionner un lieu.",
+      "name": "Veuillez entrer un nom d'événement.",
+      "theme": "Veuillez sélectionner un type d'événement.",
+      "time": "Veuillez entrer une heure de début."
+    },
+    "eventname": "Nom",
+    "eventtype": "Type d'événement",
+    "hint": "Les champs marqués d'un * sont obligatoires.",
     "location": "Choisir un lieu...",
+    "moreinfo": "Plus d'infos",
+    "moreinfoexample": "https://...",
     "newlocation": "Créer un nouveau lieu",
-    "newlocationname": "Nom de la localité",
     "newlocationaddress": "Adresse",
-    "newlocationplz": "Code postal",
+    "newlocationaddressexample": "Rue et numéro",
     "newlocationcity": "Ville",
-    "age": "Âge minimum",
+    "newlocationname": "Nom de la localité",
+    "newlocationnameexample": "Nom de la localité",
+    "newlocationplz": "Code postal",
+    "neworganizer": "Créer un nouvel organisateur",
+    "neworganizermail": "Courrier électronique",
+    "neworganizername": "Nom",
+    "neworganizerphone": "Numéro de téléphone",
+    "organizer": "Choisir l'organisateur...",
     "price": "Prix (€)",
     "restrictions": "Restrictions",
     "restrictionsexample": "p. ex. escaliers",
+    "startdate": "Date de début",
+    "starttime": "Heure de début",
+    "timespan": "Période",
     "topics": "Thèmes de l'événement",
-    "eventtype": "Type d'événement",
-    "moreinfo": "Plus d'infos",
-    "moreinfoexample": "https://...",
-    "createevent": "Créer",
-    "newlocationnameexample": "Nom de la localité",
-    "newlocationaddressexample": "Rue et numéro",
-    "ageexample": "p. ex. 18",
-    "description": "Description de l'événement",
-    "hint": "Les champs marqués d'un * sont obligatoires.",
-    "updateevent": "Actualiser",
-    "error": {
-      "name": "Veuillez entrer un nom d'événement.",
-      "date": "Veuillez entrer une date de début.",
-      "time": "Veuillez entrer une heure de début.",
-      "location": "Veuillez sélectionner un lieu.",
-      "theme": "Veuillez sélectionner un type d'événement.",
-      "general": "Veuillez remplir tous les champs obligatoires."
-    },
-    "cancel": "Annuler",
-    "delete": "Supprimer ..."
+    "updateevent": "Actualiser"
   },
   "dev": {
-    "text1": "Ce site web a été développé dans le cadre du SYBIT Coding Camp 2025 ",
-    "text2": "par de jeunes talents qui ont fait leurs premiers pas dans le développement professionnel de logiciels avec curiosité, discipline et créativité.Notre objectif n'était pas seulement d'écrire du code, mais de créer quelque chose d'utile, qui fonctionne, qui soit utile et qui rende nos idées visibles.",
-    "text3": "Nous tenons à remercier tout particulièrement tous les participants qui ont travaillé sur ce projet avec passion, esprit d'équipe et persévérance. Chaque composant, chaque ligne de code et chaque décision prise derrière reflète le processus d'apprentissage et l'engagement de tous les participants.",
-    "patrticptants": "Participant(e)s",
-    "patrticptantslist": "Kaan Gel, Luisa Karsniqi, Sebastian Keller, Tomash Fedak, Leonard Röpcke, Jamal Blank, Adriano Mestre et Sasha (Oleksandr) Pavchak",
+    "altpicture": "Photo de groupe de tous les participants au Coding Camp",
     "coaches": "Coachs de SYBIT",
     "coacheslist": "Felix Klein, Max Eichelmann, Yannik Deschler, Yannik Schwarz, Max Buhl, Elias Frank, Noel Wölfle et Stephan Strittmatter",
-    "headline": "👨‍💻 Nos développeurs",
-    "altpicture": "Photo de groupe de tous les participants au Coding Camp",
     "coding-camp-text": "Depuis 2015, le SYBIT Coding Camp a lieu chaque année pendant la première semaine complète des vacances d'été dans le cadre du programme de vacances de la ville de Radolfzell. De nombreux anciens participants font aujourd'hui partie intégrante de l'entreprise et se rendent régulièrement au Coding Camp pour s'inspirer et suivre les projets en cours.",
+    "coding-camp-title": "Le SYBIT Coding Camp – Une réussite exemplaire",
+    "headline": "👨‍💻 Nos développeurs",
+    "patrticptants": "Participant(e)s",
+    "patrticptantslist": "Kaan Gel, Luisa Karsniqi, Sebastian Keller, Tomash Fedak, Leonard Röpcke, Jamal Blank, Adriano Mestre et Sasha (Oleksandr) Pavchak",
     "sybit": "SYBIT est le premier prestataire européen de services complets dans le domaine de l'expérience client (CX) et dispose d'une expertise approfondie en matière de conseil aux entreprises, de conseil en processus et de conseil en solutions. En tant que partenaire stratégique, SYBIT accompagne les entreprises dans la conception de processus centrés sur le client et dans la mise en œuvre de solutions innovantes tout au long du parcours client. Fort de plus de 25 ans d'expérience et membre de NTT Data Business Solutions, SYBIT contribue durablement à la transformation numérique. Nous créons des champions de l'expérience client !",
-    "coding-camp-title": "Le SYBIT Coding Camp – Une réussite exemplaire"
-  },
-  "FAVORITES": {
-    "TITLE": "Mes Favoris",
-    "LOADING": "Chargement des favoris...",
-    "EMPTY": {
-      "TITLE": "Vous n'avez pas encore enregistré de favoris.",
-      "DESCRIPTION": "Ajoutez des événements à vos favoris pour les voir ici.",
-      "BUTTON": "Aller à l'aperçu"
-    },
-    "REMOVE": "Retirer des favoris",
-    "ADD": "Ajouter aux favoris",
-    "LOCAL_STORAGE_NOTICE": "Remarque: Les favoris sont uniquement stockés localement sur cet appareil."
+    "text1": "Ce site web a été développé dans le cadre du SYBIT Coding Camp 2025 ",
+    "text2": "par de jeunes talents qui ont fait leurs premiers pas dans le développement professionnel de logiciels avec curiosité, discipline et créativité.Notre objectif n'était pas seulement d'écrire du code, mais de créer quelque chose d'utile, qui fonctionne, qui soit utile et qui rende nos idées visibles.",
+    "text3": "Nous tenons à remercier tout particulièrement tous les participants qui ont travaillé sur ce projet avec passion, esprit d'équipe et persévérance. Chaque composant, chaque ligne de code et chaque décision prise derrière reflète le processus d'apprentissage et l'engagement de tous les participants."
   },
   "event-card": {
-    "show-more": "Afficher plus d'événements"
+    "show-more": "Afficher plus d'événements",
+    "image-alt": "Image : {{name}}",
+    "placeholder-alt": "Image de remplacement pour l’événement",
+    "logo-alt": "Logo Radolfzell 1200 ans"
   },
   "event-detail": {
-    "skip-to-content": "Aller au contenu de l'événement",
+    "adress": "Adresse",
+    "arrival": "Arrivée",
+    "back": "Retour",
+    "costs": "Prix",
+    "description": "Description",
+    "edit": "Modifier",
+    "email": "E-mail",
+    "eventlocation": "Lieu de l'événement",
+    "free": "gratuit",
+    "more_information": "Informations complémentaires",
+    "name": "Nom",
+    "next-events": "Autres événements à cet endroit",
     "no-image": "Aucune image disponible",
+    "organizer": "Organisateur",
+    "phone": "Téléphone",
+    "skip-to-content": "Aller au contenu de l'événement",
+    "tags": {
+      "contact-heading": "contact-heading",
+      "description-heading": "description-heading",
+      "directions-heading": "directions-heading"
+    },
     "when": "Quand ?",
     "where": "Où ?",
-    "costs": "Prix",
-    "free": "gratuit",
-    "organizer": "Organisateur",
-    "description": "Description",
-    "arrival": "Arrivée",
-    "adress": "Adresse",
-    "eventlocation": "Lieu de l'événement",
-    "name": "Nom",
-    "email": "E-mail",
-    "phone": "Téléphone",
-    "back": "Retour",
-    "edit": "Modifier",
-    "next-events": "Autres événements à cet endroit",
-    "tags": {
-      "description-heading": "description-heading",
-      "directions-heading": "directions-heading",
-      "contact-heading": "contact-heading"
-    },
-    "more_information": "Informations complémentaires"
+    "image-alt": "Image de l’événement : {{name}}",
+    "placeholder-alt": "Image de l’événement",
+    "logo-alt": "Logo Radolfzell 1200 ans",
+    "main-info": "données de référence"
+  },
+  "footer": {
+    "accessibility": "Accessibilité",
+    "datenschutz": "Mentions légales",
+    "impressum": "Politique de confidentialité",
+    "sponsoring": "Développé"
+  },
+  "i18y": {
+    "to-main-content": "Accéder au contenu principal"
   },
   "login": {
-    "username": "Nom d'utilisateur / E-mail",
+    "login": "Connexion",
     "password": "Mot de passe",
-    "login": "Connexion"
-  },
-  "upload-image": {
-    "image-here": "Glisser l'image ici"
-  },
-  "SHARE": {
-    "SHARE": "Partager..."
+    "username": "Nom d'utilisateur / E-mail"
   },
   "share": {
     "copy-notification": "Le lien a été copié dans le presse-papiers."
   },
-  "ADMIN": {
-    "EVENTS": {
-      "TITLE": "Events",
-      "SEARCH": "Recherche ...",
-      "CREATE_NEW": "Créer un nouveau ...",
-      "NO_EVENTS": "Aucun événement trouvé",
-      "DELETE": "Supprimer",
-      "EDIT": "Modifier ...",
-      "PREVIEW": "Preview"
-    },
-    "LOCATIONS": {
-      "TITLE": "Locations"
-    },
-    "TITLE": "Administration"
+  "PWA": {
+    "INSTALL": {
+      "IOS_TITLE": "Installer l'application",
+      "IOS_DESC": "Ouvrez le menu de partage et sélectionnez 'Ajouter à l'écran d'accueil'.",
+      "ANDROID_TITLE": "Installer l'application",
+      "DESKTOP_TITLE": "Installer l'application Web",
+      "BUTTON": "Installer",
+      "CLOSE": "Fermer"
+    }
   },
-  "SEARCH": {
-    "PLACEHOLDER": "Rechercher...",
-    "LABEL": "Rechercher",
-    "SEARCHING": "Recherche en cours..."
+  "upload-image": {
+    "image-here": "Glisser l'image ici"
   }
 }

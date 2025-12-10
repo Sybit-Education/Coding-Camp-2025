@@ -35,12 +35,22 @@ import { EventTopicPillListComponent } from "../event-topic-pill-list/event-topi
 })
 export class EventCardComponent implements OnInit, OnDestroy, OnChanges {
   @Input() event: Event | null = null
-  @Input() filterQuery?: string | null = null
 
   location: Location | null = null
   eventType: EventType | null = null
   isSaved = false
   mediaUrl: string | null = null
+
+  get titleId(): string {
+    const id = this.event?.id?.id ?? this.event?.id ?? 'event'
+    return `event-card-title-${id}`
+  }
+
+  get ariaLabel(): string {
+    const name = this.event?.name || ''
+    const loc = this.location?.name ? ', ' + this.location.name : ''
+    return name + loc
+  }
 
   private readonly subscriptions = new Subscription()
   private readonly surrealDBService = inject(SurrealdbService)

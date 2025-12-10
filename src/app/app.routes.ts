@@ -28,6 +28,12 @@ export const routes: Routes = [
     title: 'Team',
   },
   {
+    path: 'barrierefreiheit',
+    loadComponent: () =>
+      import('./pages/accessibility-statement/accessibility-statement.component').then((m) => m.AccessibilityStatementComponent),
+    title: 'Barrierefreiheit',
+  },
+  {
     path: 'event/:id',
     loadComponent: () => import('./pages/event-detail/event-detail.component').then((m) => m.EventDetailPageComponent),
     title: 'Veranstaltungsdetails',
@@ -43,7 +49,7 @@ export const routes: Routes = [
     title: 'Kategorie',
   },
   {
-    path: 'all-events',
+    path: 'event',
     loadComponent: () => import('./pages/kategorie/kategorie.component').then((m) => m.KategorieComponent),
     title: 'Alle Veranstaltungen',
   },

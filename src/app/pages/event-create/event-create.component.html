@@ -180,9 +180,9 @@
                   <label for="checkbox{{ topic.id }}" class="ms-2 w-full cursor-pointer text-gray-900 dark:text-gray-700">
                     {{ topic.name }}
                   </label>
-                  @if (accessibility && topic.name === 'Barrierefrei') {
+                  @if (accessibility && topicService.isTopicAccessibility(topic)) {
                     <div>
-                      @for (accessibility of allAccessibiltiys; track accessibility) {
+                      @for (accessibility of allAccessebiltiys; track accessibility) {
                         <div class="ml-6">
                           <input
                             id="accessibilityCheckbox{{ accessibility.accessibilityName }}"
@@ -287,7 +287,8 @@
         <button
           type="button"
           class="w-full cursor-pointer rounded-2xl bg-red-500 p-5 text-white hover:bg-red-600"
-          (click)="deleteEvent()"
+          (click)="openDeleteDialog()"
+          [attr.aria-label]="('create-event.delete' | translate)"
         >
           {{ 'create-event.delete' | translate }}
         </button>
@@ -299,4 +300,15 @@
       <app-loading-spinner />
     </div>
   }
+
+  <app-confirm-dialog
+    [opened]="deleteDialogOpen()"
+    (openedChange)="deleteDialogOpen.set($event)"
+    [title]="deleteDialogTitle()"
+    [message]="deleteDialogMessage()"
+    [confirmLabel]="deleteConfirmLabel()"
+    [cancelLabel]="deleteCancelLabel()"
+    (confirmed)="confirmDeleteEvent()"
+    (cancelled)="cancelDeleteDialog()"
+  />
 </div>

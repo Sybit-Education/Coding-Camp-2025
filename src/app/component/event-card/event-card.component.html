@@ -1,38 +1,42 @@
-<div
+<a   
   [routerLink]="['/event', event?.id?.id]"
-  [queryParams]="{ filterQuery: filterQuery ? filterQuery : null }"
-  class="justify-top card flex h-full flex-col overflow-hidden"
->
-  <!-- Bildbereich: feste, vorhersagbare Höhe -->
-  <div class="relative h-40 w-full overflow-hidden bg-gray-100">
+  class="card">
+<div
+  class="justify-top card aspect-[1/1]"
+  [attr.aria-label]="ariaLabel"
+  role="article"
+  [attr.aria-labelledby]="titleId"> 
+  <div class="relative h-[50%] w-full overflow-hidden bg-gray-100">
     <div class="pointer-events-none absolute top-2 left-2 z-10">
-      <app-event-type-pill class="text-xs" [event]="event"></app-event-type-pill>
+      <app-event-type-pill aria-hidden="true" class="text-xs" [event]="event" [disabled]="true"></app-event-type-pill>
     </div>
     @if (event?.['isPast']) {
-      <ul class="pill-list pointer-events-none absolute top-2 right-2 z-10">
+      <ul aria-hidden="true" class="pill-list pointer-events-none absolute top-2 right-2 z-10">
         <li class="border-0 bg-gray-700 text-xs text-white">
           {{ 'EVENTS.PAST_EVENT' | translate }}
         </li>
       </ul>
     }
     @if (mediaUrl) {
-      <img [src]="mediaUrl" [alt]="event?.name || 'Event Bild'" class="h-full w-full object-cover" [attr.loading]="'lazy'" />
+      <img
+        [src]="mediaUrl"
+        [alt]="event?.name ? ('event-card.image-alt' | translate: { name: event?.name }) : ('event-card.placeholder-alt' | translate)"
+        class="h-full w-full object-cover"
+        [attr.loading]="'lazy'"
+      />
     } @else {
       <div class="flex h-full w-full items-center justify-center bg-gray-100">
         <img
           src="/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg"
-          alt="1200 Jahre Radolfzell Logo"
+          [alt]="'event-card.logo-alt' | translate"
           class="h-3/4 w-3/4 object-contain opacity-30"
         />
       </div>
     }
   </div>
-
-  <!-- Contentbereich: flex-1 stellt sicher, dass Footer immer unten bleibt -->
-  <div class="flex w-full flex-1 flex-col pr-4 pl-4 text-left">
-    <!-- Titel: 2 Zeilen begrenzt -->
-    <div class="pt-1">
-      <h3 class="line-clamp-2 text-base leading-tight font-semibold text-gray-800">
+  <div class="h-[50%] w-full pr-4 pl-4 text-left">
+    <div class="h-[40%] pt-1">
+      <h3 class="line-clamp-2 truncate text-base leading-tight font-semibold text-gray-800" [id]="titleId">
         {{ event?.name || 'Event Name' }}
       </h3>
     </div>
@@ -63,3 +67,4 @@
     class="absolute top-2 right-2 rounded-full bg-white shadow-md transition-colors"
   ></app-favorite-button>
 </div>
+</a>

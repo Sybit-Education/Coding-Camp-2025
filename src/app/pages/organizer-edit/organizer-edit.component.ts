@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, signal, OnInit, computed } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import type { Organizer } from '../../models/organizer.interface'
@@ -8,10 +8,13 @@ import { RecordId, StringRecordId } from 'surrealdb'
 import { OrganizerService } from '@app/services/organizer.service'
 import { EventService } from '@app/services/event.service'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
+import { ConfirmDialogComponent } from '@app/component/confirm-dialog/confirm-dialog.component'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { LiveAnnouncer } from '@angular/cdk/a11y'
 
 @Component({
   selector: 'app-organizer-edit',
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, ConfirmDialogComponent, TranslateModule],
   templateUrl: './organizer-edit.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -21,12 +24,25 @@ export class OrganizerEditComponent implements OnInit {
   private readonly router = inject(Router)
   private readonly eventService = inject(EventService)
   private readonly markForCheck = injectMarkForCheck()
+  private readonly translate = inject(TranslateService)
+  private readonly liveAnnouncer = inject(LiveAnnouncer)
 
   protected readonly isEditMode = signal<boolean>(false)
   protected readonly loading = signal<boolean>(true)
   protected readonly saving = signal<boolean>(false)
   protected readonly linkedEventsCount = signal<number>(0)
   protected organizerId: RecordId<'organizer'> | undefined = undefined
+  protected readonly deleteDialogOpen = signal(false)
+  protected readonly deleteDialogTitle = computed(() => this.translate.instant('ADMIN.ORGANIZERS.DELETE_CONFIRM_TITLE'))
+  protected readonly deleteDialogMessage = computed(() => {
+    const nameValue = this.form.controls.name.value?.trim()
+    if (nameValue) {
+      return this.translate.instant('ADMIN.ORGANIZERS.DELETE_CONFIRM_MESSAGE', { name: nameValue })
+    }
+    return this.translate.instant('ADMIN.ORGANIZERS.DELETE_CONFIRM_MESSAGE_DEFAULT')
+  })
+  protected readonly deleteConfirmLabel = computed(() => this.translate.instant('COMMON.DELETE'))
+  protected readonly deleteCancelLabel = computed(() => this.translate.instant('COMMON.CANCEL'))
 
   protected readonly form = new FormGroup({
     name: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
@@ -90,20 +106,36 @@ export class OrganizerEditComponent implements OnInit {
     }
   }
 
-  protected async delete() {
+  protected openDeleteDialog() {
     if (!this.isEditMode() || !this.organizerId) return
     if (this.linkedEventsCount() > 0) {
-      alert('Veranstalter kann nicht gelöscht werden, solange Events zugeordnet sind.')
+      this.liveAnnouncer.announce(this.translate.instant('ADMIN.ORGANIZERS.DELETE_FORBIDDEN'), 'assertive')
       return
     }
-    if (!confirm('Diesen Veranstalter wirklich löschen?')) return
+    this.deleteDialogOpen.set(true)
+  }
 
+  protected cancelDeleteDialog() {
+    this.deleteDialogOpen.set(false)
+  }
+
+  protected async confirmDelete() {
+    if (!this.organizerId) return
     try {
       await this.organizerService.delete(this.organizerId)
+      this.liveAnnouncer.announce(
+        this.translate.instant('ADMIN.ORGANIZERS.DELETE_SUCCESS', { name: this.form.controls.name.value ?? '' }),
+        'assertive',
+      )
       await this.router.navigate(['/admin/organizers'])
     } catch (err) {
       console.error('[OrganizerEdit] Delete failed:', err)
-      alert('Löschen ist fehlgeschlagen.')
+      this.liveAnnouncer.announce(
+        this.translate.instant('ADMIN.ORGANIZERS.DELETE_ERROR', { name: this.form.controls.name.value ?? '' }),
+        'assertive',
+      )
+    } finally {
+      this.cancelDeleteDialog()
     }
   }
 

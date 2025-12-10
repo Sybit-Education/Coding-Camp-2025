@@ -113,9 +113,9 @@ export class KategorieComponent implements OnInit {
       ])
 
       let topicsSorted = topics
-      const highlightTopic = topics.find(topic => topic.name === 'Highlights')
+      const highlightTopic = topics.find((topic) => this.topicService.isTopicHighlight(topic))
       if (highlightTopic) {
-        topicsSorted = [highlightTopic, ...topics.filter(topic => topic.id !== highlightTopic.id)]
+        topicsSorted = [highlightTopic, ...topics.filter((topic) => topic.id !== highlightTopic.id)]
       }
 
       this.categories = [...typeDB, ...topicsSorted]
@@ -340,6 +340,11 @@ export class KategorieComponent implements OnInit {
 
     const queryString = new URLSearchParams(params).toString()
     this.filterQuery = queryString ? `${queryString}` : null
+    window.history.replaceState(
+      {},
+      '',
+      `${this.router.url.split('?')[0]}${this.filterQuery ? '?filterQuery=' + encodeURIComponent(this.filterQuery) : ''}`,
+    )
   }
 
   private resolveFilterQuery(queryParams: URLSearchParams) {

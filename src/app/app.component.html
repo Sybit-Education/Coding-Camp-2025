@@ -1,25 +1,39 @@
 <app-snack-bar></app-snack-bar>
 <div class="app-container bg-[#fffff]/90" [class.carousel-layout]="isCarouselPage">
-  <app-header></app-header>
+  <header>
+    <app-header></app-header>
+  </header>
 
-  <main class="relative container mx-auto min-h-screen max-w-5xl px-2 pt-[240px] pb-8">
+  <main
+    id="main-content"
+    role="main"
+    [attr.aria-label]="'COMMON.MAIN_CONTENT' | translate"
+    class="relative container mx-auto min-h-screen max-w-5xl px-2 pt-[240px] pb-8"
+  >
     <router-outlet />
   </main>
 
-  <app-footer></app-footer>
+  <footer>
+    <app-footer></app-footer>
+  </footer>
   <app-bottom-nav></app-bottom-nav>
-
+  <app-pwa-install-banner></app-pwa-install-banner>
+  
   <!-- Update-Benachrichtigung -->
   @if (updateAvailable) {
-    <div class="fixed right-0 bottom-20 left-0 mx-auto w-11/12 max-w-md rounded-lg bg-blue-100 p-4 shadow-lg">
+    <div
+      class="fixed right-0 bottom-20 left-0 mx-auto w-11/12 max-w-md rounded-lg bg-blue-100 p-4 shadow-lg"
+      role="status"
+      aria-live="polite"
+    >
       <div class="flex items-center justify-between">
-        <p class="text-sm text-blue-800">Eine neue Version ist verfügbar</p>
+        <p class="text-sm text-blue-800">{{ 'UPDATE.AVAILABLE_MESSAGE' | translate }}</p>
         <button
           (click)="updateApp()"
           class="rounded bg-blue-600 px-4 py-2 text-xs font-bold text-white hover:bg-blue-700"
-          aria-label="App aktualisieren"
+          [attr.aria-label]="'UPDATE.ACTION_ARIA' | translate"
         >
-          Aktualisieren
+          {{ 'UPDATE.ACTION' | translate }}
         </button>
       </div>
     </div>
