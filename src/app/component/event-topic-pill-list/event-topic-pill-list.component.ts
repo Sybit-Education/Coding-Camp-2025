@@ -21,8 +21,10 @@ interface Pill {
 })
 export class EventTopicPillListComponent implements OnChanges {
   @Input() event: Event | null = null
+  @Input() eventCard? = false 
 
   pills: Pill[] = []
+  fontsize = '20px'
 
   accessibility = false
   accessibilityLable = ''
@@ -36,6 +38,7 @@ export class EventTopicPillListComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['event']) {
       this.buildPills()
+      this.fontsize = this.eventCard ? '0.75rem' : ''
     }
   }
 

@@ -4,7 +4,7 @@
   <!-- Horizontaler Scroll-Container für Events -->
   @if ((sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL) {
     <div class="scrollbar-hide card-snap mb-5 w-full snap-x snap-mandatory overflow-x-scroll scroll-smooth">
-      <div class="event-row flex min-w-max gap-4 px-2">
+      <div class="event-row flex min-w-max items-stretch gap-4 px-2">
         @for (event of events; track event.id?.id) {
           <app-event-card
             class="relative w-[calc(100vw-6rem)] max-w-[320px] snap-center"

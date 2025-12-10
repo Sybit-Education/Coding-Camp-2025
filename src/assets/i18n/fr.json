@@ -237,7 +237,7 @@
   },
   "NAV": {
     "BOTTOM": "Navigation inférieure",
-    "FOOTER": "Navigation du pied de page",
+    "FOOTER": "Navigation au pied de page - informations juridiques",
     "instagram": "Instagram"
   },
   "SEARCH": {
@@ -392,6 +392,16 @@
   },
   "share": {
     "copy-notification": "Le lien a été copié dans le presse-papiers."
+  },
+  "PWA": {
+    "INSTALL": {
+      "IOS_TITLE": "Installer l'application",
+      "IOS_DESC": "Ouvrez le menu de partage et sélectionnez 'Ajouter à l'écran d'accueil'.",
+      "ANDROID_TITLE": "Installer l'application",
+      "DESKTOP_TITLE": "Installer l'application Web",
+      "BUTTON": "Installer",
+      "CLOSE": "Fermer"
+    }
   },
   "upload-image": {
     "image-here": "Glisser l'image ici"

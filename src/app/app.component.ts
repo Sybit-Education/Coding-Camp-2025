@@ -10,10 +10,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { BottomNavComponent } from './component/bottom-nav/bottom-nav.component'
 import { UpdateService } from './pwa/update.service'
 import { SnackBarComponent } from './component/snack-bar/snack-bar.component'
+import { PwaInstallBannerComponent } from './component/pwa-install-banner/pwa-install-banner.component'
 
 @Component({
   selector: 'app-root',
-  imports: [TranslateModule, RouterOutlet, HeaderComponent, FooterComponent, BottomNavComponent, SnackBarComponent],
+  imports: [TranslateModule, RouterOutlet, HeaderComponent, FooterComponent, BottomNavComponent, SnackBarComponent, PwaInstallBannerComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -8,6 +8,7 @@
         'background-color': pill.color || '#F3F4F6',
         'color': pill.textColor,
         'border-color': pill.color ? 'transparent' : '#E5E7EB',
+        'font-size': fontsize,
       }"
     >
       <a [routerLink]="['/kategorie', pill.slug]" class="max-w-[12rem] truncate focus-visible:outline-none">{{ pill.label }}</a>
@@ -23,6 +24,7 @@
           'background-color': accessibilityColor || '#F3F4F6',
           'color': accessibilityTextColor,
           'border-color': accessibilityColor ? 'transparent' : '#E5E7EB',
+          'font-size': fontsize,
         }"
       >
         <span class="max-w-[12rem] truncate">{{'COMMON.ACCESSIBILITY.WHEELCHAIR' | translate}}</span>
@@ -37,6 +39,7 @@
           'background-color': accessibilityColor || '#F3F4F6',
           'color': accessibilityTextColor,
           'border-color': accessibilityColor ? 'transparent' : '#E5E7EB',
+          'font-size': fontsize,
         }"
       >
         <span class="max-w-[12rem] truncate">{{'COMMON.ACCESSIBILITY.SEEING' | translate}}</span>
@@ -51,6 +54,7 @@
           'background-color': accessibilityColor || '#F3F4F6',
           'color': accessibilityTextColor,
           'border-color': accessibilityColor ? 'transparent' : '#E5E7EB',
+          'font-size': fontsize,
         }"
       >
         <span class="max-w-[12rem] truncate">{{'COMMON.ACCESSIBILITY.HEARING' | translate}}</span>
