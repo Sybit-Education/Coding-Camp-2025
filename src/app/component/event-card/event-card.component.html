@@ -1,11 +1,6 @@
 <a [routerLink]="['/event', event?.id?.id]" class="card">
-  <div
-    class="justify-top card aspect-[1/1] h-[380px]"
-    [attr.aria-label]="ariaLabel"
-    role="article"
-    [attr.aria-labelledby]="titleId"
-  >
-    <div class="relative h-[50%] w-full overflow-hidden bg-gray-100">
+  <div class="justify-top card aspect-[1/1]" [attr.aria-label]="ariaLabel" role="article" [attr.aria-labelledby]="titleId">
+    <div class="relative lg:h-[40%] h-[50%] w-full overflow-hidden bg-gray-100">
       <div class="pointer-events-none absolute top-2 left-2 z-10">
         <app-event-type-pill aria-hidden="true" class="text-xs" [event]="event" [disabled]="true"></app-event-type-pill>
       </div>
@@ -35,18 +30,14 @@
         </div>
       }
     </div>
-    <div class="h-[50%] w-full pr-4 pl-4 text-left">
-      <div class="h-[40%] pt-1">
+    <div class="lg:h-[60%] h-[50%] w-full pr-4 pl-4 text-left">
+      <div class="h-auto pt-1 lg:h-[25%]">
         <h3 class="line-clamp-2 truncate text-base leading-tight font-semibold text-gray-800" [id]="titleId">
           {{ event?.name || 'Event Name' }}
         </h3>
       </div>
 
-      <div class="h-auto min-h-8 overflow-hidden">
-        <app-event-topic-pill-list [event]="event" [eventCard]="true" />
-      </div>
-
-      <div class="mt-auto pb-2">
+      <div class="mt-auto pt-1 pb-3">
         <div class="mb-1 flex items-center text-gray-700">
           <app-icon name="calendar" class="mr-2 h-4 w-4" aria-hidden="true"></app-icon>
           <span class="truncate text-sm">
@@ -57,6 +48,9 @@
           <app-icon name="location" class="mr-2 h-4 w-4" aria-hidden="true"></app-icon>
           <span class="truncate text-sm">{{ location?.name || 'Ort wird bekannt gegeben' }}</span>
         </div>
+      </div>
+      <div class="h-auto overflow-hidden lg:h-[45%]">
+        <app-event-topic-pill-list [event]="event" [eventCard]="true" />
       </div>
     </div>
 
