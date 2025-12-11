@@ -150,6 +150,7 @@
   "COMMON": {
     "BACK": "Zurück",
     "CANCEL": "Abbrechen",
+    "CLOSE": "Schließen",
     "CONFIRM": "Bestätigen",
     "DELETE": "Löschen",
     "EXTERNAL_LINK": "Externer Link, öffnet in einem neuen Tab",
@@ -281,6 +282,7 @@
     "deleteSuccess": "Event wurde gelöscht.",
     "delete_confirm": "Soll dieses Event wirklich gelöscht werden? Diese Aktion kann nicht rückgängig gemacht werden.",
     "description": "Eventbeschreibung",
+    "descriptionPlaceholder": "Beschreibung eingeben ...",
     "enddate": "Enddatum",
     "endtime": "Endzeit",
     "error": {
@@ -316,7 +318,9 @@
     "starttime": "Startzeit",
     "timespan": "Zeitspanne",
     "topics": "Themen des Events",
-    "updateevent": "Aktualisieren"
+    "updateevent": "Aktualisieren",
+    "title-create": "Event erstellen",
+    "title-edit": "Event bearbeiten"
   },
   "dev": {
     "altpicture": "Gruppenfoto aller Teilnehmer des Coding Camps",
@@ -336,7 +340,9 @@
     "show-more": "Weitere Veranstaltungen ...",
     "image-alt": "Bild: {{name}}",
     "placeholder-alt": "Platzhalterbild für Veranstaltung",
-    "logo-alt": "1200 Jahre Radolfzell Logo"
+    "logo-alt": "1200 Jahre Radolfzell Logo",
+    "name-fallback": "Veranstaltung",
+    "location-fallback": "Ort wird bekannt gegeben"
   },
   "event-detail": {
     "adress": "Adresse",
@@ -365,7 +371,12 @@
     "image-alt": "Bild der Veranstaltung: {{name}}",
     "placeholder-alt": "Veranstaltungsbild",
     "logo-alt": "1200 Jahre Radolfzell Logo",
-    "main-info": "Rahmendaten"
+    "main-info": "Rahmendaten",
+    "open-fullscreen-aria": "Bild im Vollbild anzeigen",
+    "previous-image-aria": "Vorheriges Bild",
+    "next-image-aria": "Nächstes Bild",
+    "close-fullscreen-aria": "Vollbild schließen",
+    "fullscreen-opened": "Vollbild geöffnet"
   },
   "footer": {
     "accessibility": "Barrierefreiheit",
@@ -407,7 +418,25 @@
       "CLOSE": "Schließen"
     }
   },
+  "language-switcher": {
+    "label": "Sprache auswählen"
+  },
+  "custom-dropdown": {
+    "remove": "Auswahl entfernen: {{name}}",
+    "options": "Optionen"
+  },
+  "map": {
+    "label": "Karte",
+    "description": "Interaktive Karte. Du kannst mit Maus oder Tastatur (Pfeile zum Verschieben, Plus/Minus zum Zoomen) navigieren. Die Adresse ist zusätzlich als Text verfügbar."
+  },
   "upload-image": {
-    "image-here": "Bild hierher ziehen"
+    "image-here": "Bild hierher ziehen",
+    "dropzone": "Bild hier ablegen oder klicken zum Auswählen",
+    "formats": "JPG, PNG - Max. 5 MB pro Bild",
+    "preview-alt": "Bild-Vorschau {{index}}",
+    "remove-aria": "Bild {{index}} entfernen",
+    "edit-aria": "Bildinformationen für Bild {{index}} bearbeiten",
+    "copyright-label": "Copyright",
+    "creator-label": "Fotograf"
   }
 }

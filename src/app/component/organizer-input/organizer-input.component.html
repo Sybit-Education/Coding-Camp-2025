@@ -1,4 +1,5 @@
 <div>
+  <label class="sr-only" for="organizer">{{ 'create-event.organizer' | translate }}</label>
   <select
     id="organizer"
     name="organizer"
@@ -17,7 +18,7 @@
   </select>
   <button
     type="button"
-    class="mt-2 w-full cursor-pointer rounded-2xl bg-[var(--colors-light-blue)] p-2 text-white"
+    class="mt-2 w-full cursor-pointer rounded-2xl bg-[var(--colors-light-blue)] p-2 text-white focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
     (click)="showNewOrganizerForm()"
   >
     {{ 'create-event.neworganizer' | translate }}
@@ -40,11 +41,25 @@
     </p>
     <p>
       <label for="organizerphone">{{ 'create-event.neworganizerphone' | translate }}</label>
-      <input id="organizerphone" name="organizerphone" type="tel" [(ngModel)]="organizerphone" class="p-[0.75rem 1rem] w-full" />
+      <input
+        id="organizerphone"
+        name="organizerphone"
+        type="tel"
+        [(ngModel)]="organizerphone"
+        autocomplete="tel"
+        class="p-[0.75rem 1rem] w-full"
+      />
     </p>
     <p>
       <label for="organizermail">{{ 'create-event.neworganizermail' | translate }}</label>
-      <input id="organizermail" name="organizermail" type="email" [(ngModel)]="organizermail" class="p-[0.75rem 1rem] w-full" />
+      <input
+        id="organizermail"
+        name="organizermail"
+        type="email"
+        [(ngModel)]="organizermail"
+        autocomplete="email"
+        class="p-[0.75rem 1rem] w-full"
+      />
     </p>
     <div class="mt-4 flex justify-end space-x-2">
       <button
@@ -59,7 +74,7 @@
         class="cursor-pointer rounded-lg bg-[var(--colors-light-blue)] px-4 py-2 text-sm font-medium text-white hover:bg-blue-800"
         (click)="saveOrganizer()"
       >
-        Erstellen
+        {{ 'create-event.createevent' | translate }}
       </button>
     </div>
   </div>

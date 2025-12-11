@@ -1,7 +1,10 @@
-@if (images.length > 0) {
+@let imgs = images();
+@let name = eventName();
+
+@if (imgs.length > 0) {
   <div class="relative h-full max-h-[90vh] rounded-t-2xl" [class.w-full]="!isFullscreen">
     <!-- Bilder -->
-    @for (item of images; track $index) {
+    @for (item of imgs; track $index) {
       @if ($index === selectedImageIndex) {
         <div class="flex h-full w-full items-center justify-center rounded-t-2xl">
           <img
@@ -11,8 +14,8 @@
             [class.h-[350px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL"
             [src]="item.url"
             [alt]="
-              eventName
-                ? ('event-detail.image-alt' | translate: { name: eventName })
+              name
+                ? ('event-detail.image-alt' | translate: { name })
                 : ('event-detail.placeholder-alt' | translate)
             "
           />
@@ -29,9 +32,10 @@
           }
           @if (!isFullscreen) {
             <button
+              type="button"
               (click)="openFullscreen()"
               class="pointer-events-auto absolute right-0 bottom-0 z-10 m-4 flex cursor-pointer items-center justify-center rounded-full bg-black/50 p-2 text-white hover:scale-125 focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
-              aria-label="Bild im Vollbild anzeigen"
+              [attr.aria-label]="'event-detail.open-fullscreen-aria' | translate"
             >
               <app-icon name="pan_zoom" class="h-6 w-6" aria-hidden="true"></app-icon>
             </button>
@@ -40,14 +44,15 @@
       }
     }
 
-    @if (images.length > 1) {
+    @if (imgs.length > 1) {
       <!-- Buttons über dem Bild -->
       <div class="pointer-events-none absolute inset-0 grid grid-cols-2 items-center p-4">
         <div class="flex items-center justify-start">
           <button
+            type="button"
             class="pointer-events-auto cursor-pointer rounded-full bg-black/50 p-2 text-5xl text-white hover:scale-125 focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
-            (click)="selectedImageIndex = (selectedImageIndex - 1 + images.length) % images.length"
-            aria-label="Vorheriges Bild"
+            (click)="selectedImageIndex = (selectedImageIndex - 1 + imgs.length) % imgs.length"
+            [attr.aria-label]="'event-detail.previous-image-aria' | translate"
           >
             <svg
               class="h-6 w-6"
@@ -64,9 +69,10 @@
         </div>
         <div class="flex items-center justify-end">
           <button
+            type="button"
             class="pointer-events-auto cursor-pointer rounded-full bg-black/50 p-2 text-5xl text-white hover:scale-125 focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
-            (click)="selectedImageIndex = (selectedImageIndex + 1) % images.length"
-            aria-label="Nächstes Bild"
+            (click)="selectedImageIndex = (selectedImageIndex + 1) % imgs.length"
+            [attr.aria-label]="'event-detail.next-image-aria' | translate"
           >
             <svg
               class="h-6 w-6"
@@ -94,7 +100,7 @@
     <img
       class="w-full rounded-t-2xl object-contain opacity-30"
       src="/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg"
-      alt="1200 Jahre Radolfzell Logo"
+      [alt]="'event-detail.logo-alt' | translate"
     />
   </div>
 }
@@ -109,10 +115,10 @@
     role="dialog"
     aria-modal="true"
   >
-    @if (images.length > 0) {
+    @if (imgs.length > 0) {
       <div class="relative h-full max-h-[90vh] w-[90vw]">
         <!-- Bilder -->
-        @for (item of images; track $index) {
+        @for (item of imgs; track $index) {
           @if ($index === selectedImageIndex) {
             <div class="flex h-full w-full items-center justify-center">
               <div class="rounded-2xl">
@@ -120,8 +126,8 @@
                   class="animate-fadeIn rounded-2xl object-contain opacity-0"
                   [src]="item.url"
                   [alt]="
-                    eventName
-                      ? ('event-detail.image-alt' | translate: { name: eventName })
+                    name
+                      ? ('event-detail.image-alt' | translate: { name })
                       : ('event-detail.placeholder-alt' | translate)
                   "
                 />
@@ -137,28 +143,19 @@
                   </div>
                 }
               </div>
-              @if (!isFullscreen) {
-                <button
-                  type="button"
-                  (click)="openFullscreen()"
-                  class="pointer-events-auto absolute right-0 bottom-0 z-10 m-4 flex cursor-pointer items-center justify-center rounded-full bg-black/50 p-2 text-white hover:scale-125 focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
-                  aria-label="Bild im Vollbild anzeigen"
-                >
-                  <app-icon name="pan_zoom" class="h-6 w-6" aria-hidden="true"></app-icon>
-                </button>
-              }
             </div>
           }
         }
 
-        @if (images.length > 1) {
+        @if (imgs.length > 1) {
           <!-- Buttons über dem Bild -->
           <div class="pointer-events-none absolute inset-0 grid grid-cols-2 items-center p-4">
             <div class="flex items-center justify-start">
               <button
+                type="button"
                 class="pointer-events-auto cursor-pointer rounded-full bg-black/50 p-2 text-5xl text-white hover:scale-125 focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
-                (click)="selectedImageIndex = (selectedImageIndex - 1 + images.length) % images.length"
-                aria-label="Vorheriges Bild"
+                (click)="selectedImageIndex = (selectedImageIndex - 1 + imgs.length) % imgs.length"
+                [attr.aria-label]="'event-detail.previous-image-aria' | translate"
               >
                 <svg
                   class="h-6 w-6"
@@ -169,21 +166,16 @@
                   fill="none"
                   viewBox="0 0 24 24"
                 >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m15 19-7-7 7-7"
-                  />
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19-7-7 7-7" />
                 </svg>
               </button>
             </div>
             <div class="flex items-center justify-end">
               <button
+                type="button"
                 class="pointer-events-auto cursor-pointer rounded-full bg-black/50 p-2 text-5xl text-white hover:scale-125 focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
-                (click)="selectedImageIndex = (selectedImageIndex + 1) % images.length"
-                aria-label="Nächstes Bild"
+                (click)="selectedImageIndex = (selectedImageIndex + 1) % imgs.length"
+                [attr.aria-label]="'event-detail.next-image-aria' | translate"
               >
                 <svg
                   class="h-6 w-6"
@@ -216,9 +208,10 @@
       </div>
     }
     <button
+      type="button"
       class="absolute top-4 right-4 cursor-pointer text-2xl text-white hover:scale-125 focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
       (click)="closeFullscreen()"
-      aria-label="Vollbild schließen"
+      [attr.aria-label]="'event-detail.close-fullscreen-aria' | translate"
     >
       ✕
     </button>

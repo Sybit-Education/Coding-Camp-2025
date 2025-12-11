@@ -43,7 +43,12 @@
     </a>
   </nav>
 
-  <a [routerLink]="['/team']" routerLinkActive="router-link-active" ariaCurrentWhenActive="page">
+  <a
+    [routerLink]="['/team']"
+    routerLinkActive="router-link-active"
+    ariaCurrentWhenActive="page"
+    class="rounded-lg focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
+  >
     <div id="sponsor" class="m-1 flex flex-col items-end rounded-lg bg-white/10 p-3 shadow-sm">
       <span class="mb-1 text-center text-sm text-gray-600">{{ 'footer.sponsoring' | translate }}</span>
       <img src="sybit-logo.svg" alt="SYBIT Sponsoring Logo" class="h-6 max-w-[120px] object-contain" />

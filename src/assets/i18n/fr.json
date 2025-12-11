@@ -151,6 +151,7 @@
   "COMMON": {
     "BACK": "Retour",
     "CANCEL": "Annuler",
+    "CLOSE": "Fermer",
     "CONFIRM": "Confirmer",
     "DELETE": "Supprimer",
     "EXTERNAL_LINK": "Lien externe, s'ouvre dans un nouvel onglet",
@@ -290,6 +291,7 @@
     "deleteSuccess": "Événement supprimé.",
     "delete_confirm": "Voulez-vous vraiment supprimer cet événement ? Cette action est irréversible.",
     "description": "Description de l'événement",
+    "descriptionPlaceholder": "Saisir la description ...",
     "enddate": "Date de fin",
     "endtime": "Heure de fin",
     "error": {
@@ -325,7 +327,9 @@
     "starttime": "Heure de début",
     "timespan": "Période",
     "topics": "Thèmes de l'événement",
-    "updateevent": "Actualiser"
+    "updateevent": "Actualiser",
+    "title-create": "Créer un événement",
+    "title-edit": "Modifier l’événement"
   },
   "dev": {
     "altpicture": "Photo de groupe de tous les participants au Coding Camp",
@@ -345,7 +349,9 @@
     "show-more": "Afficher plus d'événements",
     "image-alt": "Image : {{name}}",
     "placeholder-alt": "Image de remplacement pour l’événement",
-    "logo-alt": "Logo Radolfzell 1200 ans"
+    "logo-alt": "Logo Radolfzell 1200 ans",
+    "name-fallback": "Événement",
+    "location-fallback": "Lieu à annoncer"
   },
   "event-detail": {
     "adress": "Adresse",
@@ -374,7 +380,12 @@
     "image-alt": "Image de l’événement : {{name}}",
     "placeholder-alt": "Image de l’événement",
     "logo-alt": "Logo Radolfzell 1200 ans",
-    "main-info": "données de référence"
+    "main-info": "données de référence",
+    "open-fullscreen-aria": "Ouvrir l’image en plein écran",
+    "previous-image-aria": "Image précédente",
+    "next-image-aria": "Image suivante",
+    "close-fullscreen-aria": "Fermer le plein écran",
+    "fullscreen-opened": "Plein écran ouvert"
   },
   "footer": {
     "accessibility": "Accessibilité",
@@ -403,7 +414,25 @@
       "CLOSE": "Fermer"
     }
   },
+  "language-switcher": {
+    "label": "Choisir la langue"
+  },
+  "custom-dropdown": {
+    "remove": "Retirer la sélection : {{name}}",
+    "options": "Options"
+  },
+  "map": {
+    "label": "Carte",
+    "description": "Carte interactive. Vous pouvez naviguer avec la souris ou le clavier (flèches pour déplacer, plus/minus pour zoomer). L’adresse est aussi disponible en texte."
+  },
   "upload-image": {
-    "image-here": "Glisser l'image ici"
+    "image-here": "Glisser l'image ici",
+    "dropzone": "Déposez l’image ici ou cliquez pour sélectionner",
+    "formats": "JPG, PNG - Max. 5 Mo par image",
+    "preview-alt": "Aperçu de l’image {{index}}",
+    "remove-aria": "Supprimer l’image {{index}}",
+    "edit-aria": "Modifier les informations de l’image {{index}}",
+    "copyright-label": "Copyright",
+    "creator-label": "Photographe"
   }
 }

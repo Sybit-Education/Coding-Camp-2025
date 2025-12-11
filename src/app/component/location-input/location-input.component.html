@@ -1,4 +1,5 @@
 <div>
+  <label class="sr-only" for="location">{{ 'create-event.location' | translate }}</label>
   <select
     id="location"
     name="location"
@@ -6,6 +7,8 @@
     (ngModelChange)="setLocation($event)"
     class="p-[0.75rem 1rem] w-full cursor-pointer"
     [class]="errorLocation ? 'error' : ''"
+    [attr.aria-invalid]="errorLocation ? true : null"
+    [attr.aria-describedby]="errorLocation ? 'location-error' : null"
   >
     <option [ngValue]="null">
       {{ 'create-event.location' | translate }}
@@ -18,14 +21,14 @@
   </select>
   <button
     type="button"
-    class="mt-2 w-full cursor-pointer rounded-2xl bg-[var(--colors-light-blue)] p-2 text-white"
+    class="mt-2 w-full cursor-pointer rounded-2xl bg-[var(--colors-light-blue)] p-2 text-white focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
     (click)="showNewLocationForm()"
   >
     {{ 'create-event.newlocation' | translate }}
   </button>
 
   @if (errorLocation) {
-    <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+    <p id="location-error" role="alert" class="mt-2 text-sm text-red-600 dark:text-red-500">
       {{ 'create-event.error.location' | translate }}
     </p>
   }
@@ -50,6 +53,7 @@
       type="text"
       [(ngModel)]="address"
       placeholder="{{ 'create-event.newlocationaddressexample' | translate }}"
+      autocomplete="street-address"
       class="p-[0.75rem 1rem] w-full"
     />
     <div class="grid grid-cols-2 gap-[1rem]">
@@ -60,7 +64,8 @@
           name="plz"
           type="number"
           [(ngModel)]="plz"
-          placeholder="Postleitzahl"
+          placeholder="{{ 'create-event.newlocationplz' | translate }}"
+          autocomplete="postal-code"
           class="p-[0.75rem 1rem] w-full"
         />
       </div>
@@ -72,7 +77,8 @@
           type="text"
           [(ngModel)]="city"
           required
-          placeholder="Stadt- oder Ortsname"
+          placeholder="{{ 'create-event.newlocationcity' | translate }}"
+          autocomplete="address-level2"
           class="p-[0.75rem 1rem] w-full"
         />
       </div>
@@ -98,7 +104,7 @@
         class="cursor-pointer rounded-lg bg-[var(--colors-light-blue)] px-4 py-2 text-sm font-medium text-white hover:bg-blue-800"
         (click)="saveLocation()"
       >
-        Erstellen
+        {{ 'create-event.createevent' | translate }}
       </button>
     </div>
   </div>

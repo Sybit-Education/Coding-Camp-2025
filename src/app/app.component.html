@@ -1,5 +1,5 @@
 <app-snack-bar></app-snack-bar>
-<div class="app-container bg-[#fffff]/90" [class.carousel-layout]="isCarouselPage">
+<div class="app-container bg-[#ffffff]/90" [class.carousel-layout]="isCarouselPage">
   <header>
     <app-header></app-header>
   </header>
@@ -8,6 +8,7 @@
     id="main-content"
     role="main"
     [attr.aria-label]="'COMMON.MAIN_CONTENT' | translate"
+    tabindex="-1"
     class="relative container mx-auto min-h-screen max-w-5xl px-2 pt-[240px] pb-8"
   >
     <router-outlet />
