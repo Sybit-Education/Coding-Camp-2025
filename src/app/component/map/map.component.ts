@@ -1,20 +1,14 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnDestroy,
-  NgZone,
-  Output,
-  EventEmitter,
-  inject,
-} from '@angular/core'
+import { AfterViewInit, ChangeDetectionStrategy, Component, NgZone, OnDestroy, inject, input, output } from '@angular/core'
+import { TranslateModule } from '@ngx-translate/core'
 
 // Lazy-Loading für Leaflet
 import type { Map, MapOptions, Marker } from 'leaflet'
 
+let mapIdCounter = 0
+
 @Component({
   selector: 'app-map',
+  imports: [TranslateModule],
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,14 +19,17 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private leafletLoaded = false
   private marker?: Marker
 
-  @Output() coordinatesChange = new EventEmitter<[number, number]>()
+  readonly coordinatesChange = output<[number, number]>()
   private clickHandler?: (e: unknown) => void
 
-  @Input() coordinates!: [number, number] | null
-  @Input() addLocation = false
+  readonly coordinates = input<[number, number] | null>(null)
+  readonly addLocation = input<boolean>(false)
 
   // Optional: emit selected location (wird beim Klick und beim Drag emitted)
-  @Output() locationSelected = new EventEmitter<[number, number]>()
+  readonly locationSelected = output<[number, number]>()
+
+  protected readonly mapId = `map-${mapIdCounter++}`
+  protected readonly descriptionId = `map-desc-${mapIdCounter}`
 
   private readonly ngZone: NgZone = inject(NgZone)
 
@@ -51,7 +48,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
           this.L = (Lmod as unknown as { default?: typeof import('leaflet') }).default ?? Lmod
           this.leafletLoaded = true
           requestAnimationFrame(() => {
-            if (this.addLocation) {
+            if (this.addLocation()) {
               this.initializeMapForAddLocation()
             } else {
               this.initializeMapForShowLocation()
@@ -80,9 +77,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private initializeMapForShowLocation(): void {
     if (!this.L || !this.leafletLoaded) return
     try {
-      this.map = this.L.map('map', {
+      const coords = this.coordinates()
+      this.map = this.L.map(this.mapId, {
         ...this.getCommonMapOptions(),
-        center: [this.coordinates ? this.coordinates[1] : 47.75, this.coordinates ? this.coordinates[0] : 8.97],
+        center: [coords ? coords[1] : 47.75, coords ? coords[0] : 8.97],
         zoom: 18,
       })
 
@@ -95,9 +93,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         shadowSize: [41, 41],
       })
 
-      if (this.coordinates) {
+      if (coords) {
         // Leaflet erwartet [lat, lng], wir haben [lng, lat]
-        this.marker = this.L.marker([this.coordinates[1], this.coordinates[0]], {
+        this.marker = this.L.marker([coords[1], coords[0]], {
           icon: greenIcon,
           draggable: true, // Marker ist verschiebbar
         }).addTo(this.map)
@@ -172,12 +170,13 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private initializeMapForAddLocation(): void {
     if (!this.L || !this.leafletLoaded) return
     try {
+      const coords = this.coordinates()
       // Center falls keine Koordinaten übergeben wurden
       // Leaflet erwartet [lat, lng], wir haben [lng, lat]
-      const lat = this.coordinates ? this.coordinates[1] : 47.75
-      const lng = this.coordinates ? this.coordinates[0] : 8.97
+      const lat = coords ? coords[1] : 47.75
+      const lng = coords ? coords[0] : 8.97
 
-      this.map = this.L.map('map', {
+      this.map = this.L.map(this.mapId, {
         ...this.getCommonMapOptions(),
         center: [lat, lng],
         zoom: 12,
@@ -206,7 +205,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       })
 
       // Wenn wir bereits Koordinaten haben, setze den Marker sofort
-      if (this.coordinates) {
+      if (coords) {
         this.marker = this.L.marker([lat, lng], {
           icon,
           draggable: true,
@@ -266,6 +265,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       minZoom: 12,
       maxZoom: 19,
       scrollWheelZoom: true,
+      keyboard: true,
       preferCanvas: true,
       fadeAnimation: false,
       markerZoomAnimation: false,
