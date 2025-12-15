@@ -52,11 +52,29 @@ const landscapeSizes = sizes.map((s) => ({ w: s.h, h: s.w }))
     })
     .join('\n')
 
+  const landscapeLinks = landscapeSizes
+    .map((s) => {
+      return `    <link rel="apple-touch-startup-image" href="/apple-splash/apple-splash-landscape-${s.w}x${s.h}.png" media="(orientation: landscape) and (device-width: ${s.w / 3}px) and (device-height: ${s.h / 3}px) and (-webkit-device-pixel-ratio: 3)" />`
+    })
+    .join('\n')
+
+  const darkLandscapeLinks = landscapeSizes
+    .map((s) => {
+      return `    <link rel="apple-touch-startup-image" href="/apple-splash/apple-splash-dark-landscape-${s.w}x${s.h}.png" media="(prefers-color-scheme: dark) and (orientation: landscape) and (device-width: ${s.w / 3}px) and (device-height: ${s.h / 3}px) and (-webkit-device-pixel-ratio: 3)" />`
+    })
+    .join('\n')
+
   const newBlock = `${startMarker}
 ${splashLinks}
 
   <!-- Dark Mode Splash Screens -->
-${darkLinks}`
+${darkLinks}
+
+  <!-- Landscape Splash Screens -->
+${landscapeLinks}
+
+  <!-- Dark Mode Landscape Splash Screens -->
+${darkLandscapeLinks}`
 
   indexHtml = indexHtml.replace(
     /<!-- iOS Splash Screens -->[\s\S]*?<\/head>/,
