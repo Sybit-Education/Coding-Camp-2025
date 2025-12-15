@@ -18,6 +18,7 @@ function registerIcons(registry: IconRegistryService) {
 
   register('chevron-right', '/svg/chevron-right.svg')
   register('share', '/svg/share.svg')
+  register('ios-share', '/svg/ios-share.svg')
   register('cal-share', '/svg/cal-share.svg')
   register('event_upcoming', '/svg/event_upcoming.svg')
   register('pan_zoom', '/svg/pan_zoom.svg')
