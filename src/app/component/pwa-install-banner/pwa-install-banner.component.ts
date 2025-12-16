@@ -13,8 +13,8 @@ import { IconComponent } from "../icon/icon.component";
 export class PwaInstallBannerComponent {
   private readonly pwa = inject(PwaInstallService)
 
-  protected readonly show = this.pwa.showBanner.asReadonly()
-  protected readonly platform = computed(() => this.pwa.platform)
+  protected readonly show = this.pwa.showBanner
+  protected readonly platform = this.pwa.platform
   protected readonly closing = signal(false)
 
   protected install() {
