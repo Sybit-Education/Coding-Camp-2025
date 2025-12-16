@@ -150,6 +150,7 @@
   "COMMON": {
     "BACK": "Back",
     "CANCEL": "Cancel",
+    "CLOSE": "Close",
     "CONFIRM": "Confirm",
     "DELETE": "Delete",
     "EXTERNAL_LINK": "External link, opens in a new tab",
@@ -306,6 +307,7 @@
     "deleteSuccess": "Event deleted.",
     "delete_confirm": "Are you sure you want to delete this event? This cannot be undone.",
     "description": "Event description",
+    "descriptionPlaceholder": "Enter description ...",
     "enddate": "End date",
     "endtime": "End time",
     "error": {
@@ -341,7 +343,9 @@
     "starttime": "Start time",
     "timespan": "Time span",
     "topics": "Topics of the Event",
-    "updateevent": "Update"
+    "updateevent": "Update",
+    "title-create": "Create event",
+    "title-edit": "Edit event"
   },
   "dev": {
     "altpicture": "Group photo of all participants of the coding camp",
@@ -361,7 +365,9 @@
     "show-more": "Show more events",
     "image-alt": "Image: {{name}}",
     "placeholder-alt": "Placeholder image for event",
-    "logo-alt": "1200 years Radolfzell logo"
+    "logo-alt": "1200 years Radolfzell logo",
+    "name-fallback": "Event",
+    "location-fallback": "Location to be announced"
   },
   "event-detail": {
     "adress": "Address",
@@ -390,7 +396,12 @@
     "image-alt": "Event image: {{name}}",
     "placeholder-alt": "Event image",
     "logo-alt": "1200 years Radolfzell logo",
-    "main-info": "key data"
+    "main-info": "key data",
+    "open-fullscreen-aria": "Open image fullscreen",
+    "previous-image-aria": "Previous image",
+    "next-image-aria": "Next image",
+    "close-fullscreen-aria": "Close fullscreen",
+    "fullscreen-opened": "Fullscreen opened"
   },
   "login": {
     "login": "Login",
@@ -410,7 +421,25 @@
       "CLOSE": "Close"
     }
   },
+  "language-switcher": {
+    "label": "Select language"
+  },
+  "custom-dropdown": {
+    "remove": "Remove selection: {{name}}",
+    "options": "Options"
+  },
+  "map": {
+    "label": "Map",
+    "description": "Interactive map. You can navigate with mouse or keyboard (arrow keys to pan, plus/minus to zoom). The address is also available as text."
+  },
   "upload-image": {
-    "image-here": "Drag image here"
+    "image-here": "Drag image here",
+    "dropzone": "Drop image here or click to select",
+    "formats": "JPG, PNG - Max. 5 MB per image",
+    "preview-alt": "Image preview {{index}}",
+    "remove-aria": "Remove image {{index}}",
+    "edit-aria": "Edit information for image {{index}}",
+    "copyright-label": "Copyright",
+    "creator-label": "Photographer"
   }
 }

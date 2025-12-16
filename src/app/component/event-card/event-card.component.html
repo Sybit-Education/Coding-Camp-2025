@@ -1,63 +1,64 @@
-<a   
-  [routerLink]="['/event', event?.id?.id]"
-  [queryParams]="{ filterQuery: filterQuery ? filterQuery : null }"
-  class="card">
-<div
-  class="justify-top card aspect-[1/1]"
-  [attr.aria-label]="ariaLabel"
+<article
+  class="card justify-top relative aspect-[1/1]"
   role="article"
-  [attr.aria-labelledby]="titleId"> 
-  <div class="relative h-[50%] w-full overflow-hidden bg-gray-100">
-    <div class="pointer-events-none absolute top-2 left-2 z-10">
-      <app-event-type-pill aria-hidden="true" class="text-xs" [event]="event" [disabled]="true"></app-event-type-pill>
-    </div>
-    @if (event?.['isPast']) {
-      <ul aria-hidden="true" class="pill-list pointer-events-none absolute top-2 right-2 z-10">
-        <li class="border-0 bg-gray-700 text-xs text-white">
-          {{ 'EVENTS.PAST_EVENT' | translate }}
-        </li>
-      </ul>
-    }
-    @if (mediaUrl) {
-      <img
-        [src]="mediaUrl"
-        [alt]="event?.name ? ('event-card.image-alt' | translate: { name: event?.name }) : ('event-card.placeholder-alt' | translate)"
-        class="h-full w-full object-cover"
-        [attr.loading]="'lazy'"
-      />
-    } @else {
-      <div class="flex h-full w-full items-center justify-center bg-gray-100">
+  [attr.aria-label]="ariaLabel"
+  [attr.aria-labelledby]="titleId"
+>
+  <a
+    [routerLink]="['/event', event?.id?.id]"
+    class="flex h-full w-full flex-col rounded-2xl focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
+  >
+    <div class="relative h-[50%] w-full overflow-hidden bg-gray-100">
+      <div class="pointer-events-none absolute top-2 left-2 z-10">
+        <app-event-type-pill aria-hidden="true" class="text-xs" [event]="event" [disabled]="true"></app-event-type-pill>
+      </div>
+      @if (event?.['isPast']) {
+        <ul aria-hidden="true" class="pill-list pointer-events-none absolute top-2 right-2 z-10">
+          <li class="border-0 bg-gray-700 text-xs text-white">
+            {{ 'EVENTS.PAST_EVENT' | translate }}
+          </li>
+        </ul>
+      }
+      @if (mediaUrl) {
         <img
-          src="/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg"
-          [alt]="'event-card.logo-alt' | translate"
-          class="h-3/4 w-3/4 object-contain opacity-30"
+          [src]="mediaUrl"
+          [alt]="event?.name ? ('event-card.image-alt' | translate: { name: event?.name }) : ('event-card.placeholder-alt' | translate)"
+          class="h-full w-full object-cover"
+          [attr.loading]="'lazy'"
         />
-      </div>
-    }
-  </div>
-  <div class="h-[50%] w-full pr-4 pl-4 text-left">
-    <div class="h-[40%] pt-1">
-      <h3 class="line-clamp-2 truncate text-base leading-tight font-semibold text-gray-800" [id]="titleId">
-        {{ event?.name || 'Event Name' }}
-      </h3>
+      } @else {
+        <div class="flex h-full w-full items-center justify-center bg-gray-100">
+          <img
+            src="/Logo_Radolfzell1200_Geschtern.Heit.Morge.jpg"
+            [alt]="'event-card.logo-alt' | translate"
+            class="h-3/4 w-3/4 object-contain opacity-30"
+          />
+        </div>
+      }
     </div>
-    <div class="h-[60%] w-full pb-2">
-      <div class="flex h-[35%] text-gray-700">
-        <app-icon name="calendar" class="mr-2 h-4 w-4" aria-hidden="true"></app-icon>
-        <span class="truncate text-sm">
-          {{ event?.date_start || null | dateTimeRange: event?.date_end || null }}
-        </span>
+    <div class="h-[50%] w-full pr-4 pl-4 text-left">
+      <div class="h-[40%] pt-1">
+        <h3 class="line-clamp-2 truncate text-base leading-tight font-semibold text-gray-800" [id]="titleId">
+          {{ event?.name || ('event-card.name-fallback' | translate) }}
+        </h3>
       </div>
-      <div class="flex h-[65%] text-gray-700">
-        <app-icon name="location" class="mr-2 h-4 w-4" aria-hidden="true"></app-icon>
-        <span class="truncate text-sm">{{ location?.name || 'Ort wird bekannt gegeben' }}</span>
+      <div class="h-[60%] w-full pb-2">
+        <div class="flex h-[35%] text-gray-700">
+          <app-icon name="calendar" class="mr-2 h-4 w-4" aria-hidden="true"></app-icon>
+          <span class="truncate text-sm">
+            {{ event?.date_start || null | dateTimeRange: event?.date_end || null }}
+          </span>
+        </div>
+        <div class="flex h-[65%] text-gray-700">
+          <app-icon name="location" class="mr-2 h-4 w-4" aria-hidden="true"></app-icon>
+          <span class="truncate text-sm">{{ location?.name || ('event-card.location-fallback' | translate) }}</span>
+        </div>
       </div>
     </div>
-  </div>
+  </a>
   <app-favorite-button
     [eventId]="event?.id"
     [isSmall]="true"
     class="absolute top-2 right-2 rounded-full bg-white shadow-md transition-colors"
   ></app-favorite-button>
-</div>
-</a>
+</article>
