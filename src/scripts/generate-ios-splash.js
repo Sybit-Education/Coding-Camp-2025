@@ -42,25 +42,25 @@ const landscapeSizes = sizes.map((s) => ({ w: s.h, h: s.w }))
 
   const splashLinks = sizes
     .map((s) => {
-      return `    <link rel="apple-touch-startup-image" href="/apple-splash/apple-splash-${s.w}x${s.h}.png" media="(device-width: ${s.w / 3}px) and (device-height: ${s.h / 3}px) and (-webkit-device-pixel-ratio: 3)" />`
+      return `    <link rel="apple-touch-startup-image" href="/apple-splash/apple-splash-${s.w}x${s.h}.png" media="(device-width: ${Math.round(s.w / 3)}px) and (device-height: ${Math.round(s.h / 3)}px) and (-webkit-device-pixel-ratio: 3)" />`
     })
     .join('\n')
 
   const darkLinks = sizes
     .map((s) => {
-      return `    <link rel=\"apple-touch-startup-image\" href=\"/apple-splash/apple-splash-dark-${s.w}x${s.h}.png\" media=\"(prefers-color-scheme: dark) and (device-width: ${s.w / 3}px) and (device-height: ${s.h / 3}px) and (-webkit-device-pixel-ratio: 3)\" />`
+      return `    <link rel=\"apple-touch-startup-image\" href=\"/apple-splash/apple-splash-dark-${s.w}x${s.h}.png\" media=\"(prefers-color-scheme: dark) and (device-width: ${Math.round(s.w / 3)}px) and (device-height: ${Math.round(s.h / 3)}px) and (-webkit-device-pixel-ratio: 3)\" />`
     })
     .join('\n')
 
   const landscapeLinks = landscapeSizes
     .map((s) => {
-      return `    <link rel="apple-touch-startup-image" href="/apple-splash/apple-splash-landscape-${s.w}x${s.h}.png" media="(orientation: landscape) and (device-width: ${s.w / 3}px) and (device-height: ${s.h / 3}px) and (-webkit-device-pixel-ratio: 3)" />`
+      return `    <link rel="apple-touch-startup-image" href="/apple-splash/apple-splash-landscape-${s.w}x${s.h}.png" media="(orientation: landscape) and (device-width: ${Math.round(s.w / 3)}px) and (device-height: ${Math.round(s.h / 3)}px) and (-webkit-device-pixel-ratio: 3)" />`
     })
     .join('\n')
 
   const darkLandscapeLinks = landscapeSizes
     .map((s) => {
-      return `    <link rel="apple-touch-startup-image" href="/apple-splash/apple-splash-dark-landscape-${s.w}x${s.h}.png" media="(prefers-color-scheme: dark) and (orientation: landscape) and (device-width: ${s.w / 3}px) and (device-height: ${s.h / 3}px) and (-webkit-device-pixel-ratio: 3)" />`
+      return `    <link rel="apple-touch-startup-image" href="/apple-splash/apple-splash-dark-landscape-${s.w}x${s.h}.png" media="(prefers-color-scheme: dark) and (orientation: landscape) and (device-width: ${Math.round(s.w / 3)}px) and (device-height: ${Math.round(s.h / 3)}px) and (-webkit-device-pixel-ratio: 3)" />`
     })
     .join('\n')
 
