@@ -2,7 +2,7 @@
   "name": "1200 Jahre Radolfzell",
   "short_name": "1200 Radolfzell",
   "theme_color": "#c70d56",
-  "background_color": "#fafafa",
+  "background_color": "#c70d56",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
