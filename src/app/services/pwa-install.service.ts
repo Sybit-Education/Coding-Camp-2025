@@ -10,13 +10,14 @@ interface BeforeInstallPromptEvent extends Event {
 @Injectable({ providedIn: 'root' })
 export class PwaInstallService {
   readonly showBanner = signal(false);
-  readonly platform = signal<Platform>(this.detectPlatform());
+  readonly platform = signal<Platform | null>(null);
   
   private deferredPrompt: BeforeInstallPromptEvent | null = null;
   private readonly PROMPT_COOLDOWN_MS = 30 * 24 * 60 * 60 * 1000; // 30 Tage
   private readonly STORAGE_KEY_DISMISS = 'pwa-install-dismissed-at';
 
   constructor() {
+    this.platform.set(this.detectPlatform());
     this.checkInstallStatus();
     this.listenForInstallPrompt();
   }
