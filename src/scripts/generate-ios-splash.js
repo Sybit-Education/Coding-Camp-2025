@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Auto‑Generate Apple Splash Screens
+ * Auto-Generate Apple Splash Screens
  * ----------------------------------
  * This script generates all required iOS splash screens
  * from a single square source image.
