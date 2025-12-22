@@ -229,6 +229,10 @@
     "categories": "Catégories",
     "main-content": "Aller au contenu principal",
     "highlights": "Points forts actuels",
+    "all-events": "Tous les événements",
+    "all-highlights": "Tous les points forts",
+    "show-all-events": "Afficher tous les événements",
+    "show-all-highlights": "Afficher tous les points forts",
     "tags": {
       "aria-lable-event-heading": "events-heading",
       "aria-lable-catagories-heading": "categories-heading",

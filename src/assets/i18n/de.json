@@ -263,7 +263,7 @@
     "date-to": "Zeitraum bis"
   },
   "bottom-nav": {
-    "all-events": "Alle Events",
+    "all-events": "Alle Veranstaltungen",
     "create-event": "Event erstellen",
     "favorites": "Favoriten",
     "home": "Home",
@@ -390,6 +390,10 @@
     "categories": "Kategorien",
     "main-content": "Zum Hauptinhalt springen",
     "highlights": "Aktuelle Highlights",
+    "all-events": "Alle Veranstaltungen",
+    "all-highlights": "Alle Highlights",
+    "show-all-events": "Alle Veranstaltungen anzeigen",
+    "show-all-highlights": "Alle Highlights anzeigen",
     "tags": {
       "aria-lable-event-heading": "events-heading",
       "aria-lable-catagories-heading": "categories-heading",
