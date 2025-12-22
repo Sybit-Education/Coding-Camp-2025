@@ -168,6 +168,9 @@
   },
   "EVENTS": {
     "DATE": "Datum",
+    "CARD_ARIA": "Veranstaltung: {{name}} am {{date}}",
+    "CARD_ARIA_FALLBACK": "Mehr Veranstaltungen anzeigen",
+    "LOADING_STATUS": "Lade Veranstaltungen... ({{count}} Veranstaltungen verfügbar)",
     "LOCATION": "Ort",
     "NO_EVENTS": "Keine Veranstaltungen gefunden",
     "NO_EVENTS_FOUND_IN_CATEGORY": "Keine Veranstaltungen in dieser Kategorie gefunden.",

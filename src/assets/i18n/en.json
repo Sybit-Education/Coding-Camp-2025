@@ -178,6 +178,9 @@
   },
   "EVENTS": {
     "DATE": "Date",
+    "CARD_ARIA": "Event: {{name}} on {{date}}",
+    "CARD_ARIA_FALLBACK": "Show more events",
+    "LOADING_STATUS": "Loading events... ({{count}} events available)",
     "LOCATION": "Location",
     "NO_EVENTS": "No events found",
     "NO_EVENTS_FOUND_IN_CATEGORY": "No events found in this category.",
