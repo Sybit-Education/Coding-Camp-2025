@@ -1,3 +1,41 @@
 :host {
   @apply block;
 }
+
+
+.animate-ios-hint {
+  animation: ios-hint 1.6s ease-in-out infinite;
+}
+
+/* iOS-style slide-up enter animation */
+@keyframes ios-slide-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* iOS-style closing animation */
+@keyframes ios-dismiss {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+}
+
+/**** Utility classes applied via HTML bindings ****/
+.banner-enter {
+  animation: ios-slide-up 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.banner-exit {
+  animation: ios-dismiss 0.3s ease-in forwards;
+}
