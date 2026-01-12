@@ -4,7 +4,6 @@
   </h1>
   <!-- Skip-Link für Screenreader -->
   <a
-    a
     [routerLink]="[]"
     fragment="main-content"
     class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2"
@@ -22,10 +21,7 @@
           routerLink="/event"
           class="mt-8 mb-4 inline-flex cursor-pointer items-center text-[16px] text-[#3b4ea3]"
         >
-          <span class="mr-2"
-            >Alle Veranstaltungen
-            <!--{{ label }}--></span
-          >
+          <span class="mr-2">{{ 'home.show-all-events' | translate }}</span>
           <app-icon name="arrow_forward" class="h-6 w-6" aria-hidden="true"></app-icon>
         </button>
       </div>
@@ -44,10 +40,7 @@
           routerLink="/kategorie/highlights"
           class="mt-8 mb-4 inline-flex cursor-pointer items-center text-[16px] text-[#3b4ea3]"
         >
-          <span class="mr-2"
-            >Alle Highlights
-            <!--{{ label }}--></span
-          >
+          <span class="mr-2">{{ 'home.show-all-highlights' | translate }}</span>
           <app-icon name="arrow_forward" class="h-6 w-6" aria-hidden="true"></app-icon>
         </button>
       </div>

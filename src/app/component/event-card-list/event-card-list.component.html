@@ -1,5 +1,7 @@
 @if (this.events.length === 0) {
-  <div class="mb-4 rounded bg-yellow-100 p-4">Lade Events... ({{ events.length }} Events verfügbar)</div>
+  <div class="mb-4 rounded bg-yellow-100 p-4">
+    {{ 'EVENTS.LOADING_STATUS' | translate: { count: this.events.length } }}
+  </div>
 } @else if (this.events.length > 0) {
   <!-- Horizontaler Scroll-Container für Events -->
   @if ((sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL) {
@@ -11,8 +13,8 @@
             [event]="event"
             [attr.aria-label]="
               event.name
-                ? 'Veranstaltung: ' + event.name + ' am ' + (event.date_start | date: 'dd.MM.yyyy')
-                : 'Mehr Veranstaltungen anzeigen'
+                ? ('EVENTS.CARD_ARIA' | translate: { name: event.name, date: (event.date_start | date: 'dd.MM.yyyy') })
+                : ('EVENTS.CARD_ARIA_FALLBACK' | translate)
             "
           ></app-event-card>
         }
