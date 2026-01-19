@@ -2,6 +2,23 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.14.
 
+## 🚀 Server-Side Rendering (SSR)
+
+This project uses **Angular Server-Side Rendering (SSR)** for improved performance and SEO.
+
+**Quick Start:**
+
+```bash
+# Development with SSR
+npm run build:ssr
+npm run serve:ssr
+
+# Production Docker deployment
+docker-compose -f docker-compose.ssr.yml up -d
+```
+
+📖 **For detailed SSR setup, deployment, and migration instructions, see [SSR-SETUP.md](./SSR-SETUP.md)**
+
 ## Development server
 
 To start a local development server, run:
@@ -11,6 +28,8 @@ ng serve
 ```
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+
+For SSR development, see the [SSR Setup Guide](./SSR-SETUP.md).
 
 ## Code scaffolding
 
