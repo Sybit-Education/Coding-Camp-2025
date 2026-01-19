@@ -20,7 +20,7 @@
             "outputPath": "dist/1200-jahre-radolfzell",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -48,6 +48,11 @@
               "scripts": true,
               "styles": true,
               "fonts": true
+            },
+            "server": "src/main.server.ts",
+            "outputMode": "server",
+            "ssr": {
+              "entry": "src/server.ts"
             }
           },
           "configurations": {

@@ -1,4 +1,4 @@
-import { bootstrapApplication } from '@angular/platform-browser'
+import { bootstrapApplication, provideClientHydration, withEventReplay } from '@angular/platform-browser'
 import { AppComponent } from './app/app.component'
 import { SurrealdbService } from './app/services/surrealdb.service'
 import {
@@ -7,9 +7,10 @@ import {
   isDevMode,
   LOCALE_ID,
   enableProdMode,
-  provideZonelessChangeDetection,
   ApplicationConfig,
+  PLATFORM_ID,
 } from '@angular/core'
+import { isPlatformBrowser } from '@angular/common'
 import { provideServiceWorker } from '@angular/service-worker'
 import { appConfig } from './app/app.config'
 import localeDe from '@angular/common/locales/de'
@@ -43,45 +44,52 @@ registerLocaleData(localeFr)
 // Erweitere die App-Konfiguration mit zusätzlichen Providern
 const bootstrapConfig: ApplicationConfig = {
   providers: [
-    // Aktiviere zoneless Change Detection als ersten Provider
-    // Wichtig: Dies muss vor allen anderen Providern stehen
-    provideZonelessChangeDetection(),
-    // Füge die restlichen Provider hinzu
+    // Füge die Provider hinzu
     ...appConfig.providers,
     // Das LOCALE_ID wird für Angular-interne Formatierungen verwendet
     // Die Standardsprache ist Deutsch, kann aber durch die Sprachumschaltung geändert werden
     {
       provide: LOCALE_ID,
       useFactory: () => {
-        const savedLang = localStorage.getItem('selectedLanguage')
-        switch (savedLang) {
-          case 'en':
-            return 'en-GB'
-          case 'fr':
-            return 'fr-FR'
-          default:
-            return 'de-DE'
+        const platformId = inject(PLATFORM_ID)
+        if (isPlatformBrowser(platformId)) {
+          const savedLang = localStorage.getItem('selectedLanguage')
+          switch (savedLang) {
+            case 'en':
+              return 'en-GB'
+            case 'fr':
+              return 'fr-FR'
+            default:
+              return 'de-DE'
+          }
         }
+        // Default locale for SSR
+        return 'de-DE'
       },
     },
     provideAppInitializer(async () => {
-      const surrealdb = inject(SurrealdbService)
-      const loginService = inject(LoginService)
-      const topicService = inject(TopicService)
-      const eventService = inject(EventService)
-      const favoriteService = inject(FavoriteService)
+      const platformId = inject(PLATFORM_ID)
+      
+      // Only initialize browser-specific services on the browser
+      if (isPlatformBrowser(platformId)) {
+        const surrealdb = inject(SurrealdbService)
+        const loginService = inject(LoginService)
+        const topicService = inject(TopicService)
+        const eventService = inject(EventService)
+        const favoriteService = inject(FavoriteService)
 
-      inject(LocationService)
-      inject(OrganizerService)
-      inject(MediaService)
-      inject(NetworkService)
+        inject(LocationService)
+        inject(OrganizerService)
+        inject(MediaService)
+        inject(NetworkService)
 
-      await eventService.initializeData()
-      await topicService.initializeData()
-      await favoriteService.initializeData()
-      await loginService.checkInitialLoginState()
+        await eventService.initializeData()
+        await topicService.initializeData()
+        await favoriteService.initializeData()
+        await loginService.checkInitialLoginState()
 
-      return await surrealdb.initialize()
+        return await surrealdb.initialize()
+      }
     }),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
@@ -93,7 +101,7 @@ const bootstrapConfig: ApplicationConfig = {
         scrollPositionRestoration: 'top',
         anchorScrolling: 'enabled',
       }),
-    ),
+    ), provideClientHydration(withEventReplay()),
   ],
 }
 
