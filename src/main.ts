@@ -7,6 +7,7 @@ import {
   isDevMode,
   LOCALE_ID,
   enableProdMode,
+  provideZonelessChangeDetection,
   ApplicationConfig,
   PLATFORM_ID,
 } from '@angular/core'
@@ -44,7 +45,10 @@ registerLocaleData(localeFr)
 // Erweitere die App-Konfiguration mit zusätzlichen Providern
 const bootstrapConfig: ApplicationConfig = {
   providers: [
-    // Füge die Provider hinzu
+    // Aktiviere zoneless Change Detection als ersten Provider
+    // Wichtig: Dies muss vor allen anderen Providern stehen
+    provideZonelessChangeDetection(),
+    // Füge die restlichen Provider hinzu
     ...appConfig.providers,
     // Das LOCALE_ID wird für Angular-interne Formatierungen verwendet
     // Die Standardsprache ist Deutsch, kann aber durch die Sprachumschaltung geändert werden
