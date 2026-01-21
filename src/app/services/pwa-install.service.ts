@@ -152,11 +152,11 @@ export class PwaInstallService {
    * Prüft Touch-Fähigkeit
    */
   private isTouchCapable(): boolean {
+    const msNav = navigator as { msMaxTouchPoints?: number }
     return (
       'ontouchstart' in window ||
       (navigator.maxTouchPoints !== undefined && navigator.maxTouchPoints > 2) ||
-      ((navigator as { msMaxTouchPoints?: number }).msMaxTouchPoints !== undefined &&
-        (navigator as { msMaxTouchPoints?: number }).msMaxTouchPoints > 2)
+      (msNav.msMaxTouchPoints !== undefined && msNav.msMaxTouchPoints > 2)
     )
   }
 
