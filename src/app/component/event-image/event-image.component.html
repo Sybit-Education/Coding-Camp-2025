@@ -13,11 +13,7 @@
             [class.h-[500px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.LARGE"
             [class.h-[350px]]="(sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL"
             [src]="item.url"
-            [alt]="
-              name
-                ? ('event-detail.image-alt' | translate: { name })
-                : ('event-detail.placeholder-alt' | translate)
-            "
+            [alt]="name ? ('event-detail.image-alt' | translate: { name }) : ('event-detail.placeholder-alt' | translate)"
           />
           @if (item.copyright || item.creator) {
             <div class="absolute bottom-0 left-0 rounded-tr-xl bg-black px-3 py-1 opacity-75">
@@ -125,11 +121,7 @@
                 <img
                   class="animate-fadeIn rounded-2xl object-contain opacity-0"
                   [src]="item.url"
-                  [alt]="
-                    name
-                      ? ('event-detail.image-alt' | translate: { name })
-                      : ('event-detail.placeholder-alt' | translate)
-                  "
+                  [alt]="name ? ('event-detail.image-alt' | translate: { name }) : ('event-detail.placeholder-alt' | translate)"
                 />
                 @if (item.copyright || item.creator) {
                   <div class="absolute flex h-8 -translate-y-8 items-center rounded-md bg-black px-2 opacity-75">
@@ -166,7 +158,13 @@
                   fill="none"
                   viewBox="0 0 24 24"
                 >
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19-7-7 7-7" />
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m15 19-7-7 7-7"
+                  />
                 </svg>
               </button>
             </div>

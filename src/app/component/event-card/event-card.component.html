@@ -22,7 +22,9 @@
       @if (mediaUrl) {
         <img
           [src]="mediaUrl"
-          [alt]="event?.name ? ('event-card.image-alt' | translate: { name: event?.name }) : ('event-card.placeholder-alt' | translate)"
+          [alt]="
+            event?.name ? ('event-card.image-alt' | translate: { name: event?.name }) : ('event-card.placeholder-alt' | translate)
+          "
           class="h-full w-full object-cover"
           [attr.loading]="'lazy'"
         />

@@ -275,10 +275,7 @@
       }
     </div>
     <div class="my-8 flex grid w-full flex-col gap-[3rem] sm:grid-cols-[1fr] md:grid-cols-[1fr_1fr] lg:grid-cols-[1fr_1fr_1fr]">
-	      <button
-	        type="submit"
-	        class="w-full cursor-pointer rounded-2xl bg-blue-600 p-5 text-white hover:bg-blue-700"
-	      >
+      <button type="submit" class="w-full cursor-pointer rounded-2xl bg-blue-600 p-5 text-white hover:bg-blue-700">
         {{ (eventId ? 'create-event.updateevent' : 'create-event.createevent') | translate }}
       </button>
 
@@ -296,7 +293,7 @@
           type="button"
           class="w-full cursor-pointer rounded-2xl bg-red-500 p-5 text-white hover:bg-red-600"
           (click)="openDeleteDialog()"
-          [attr.aria-label]="('create-event.delete' | translate)"
+          [attr.aria-label]="'create-event.delete' | translate"
         >
           {{ 'create-event.delete' | translate }}
         </button>

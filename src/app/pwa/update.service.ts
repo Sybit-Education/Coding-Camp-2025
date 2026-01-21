@@ -13,15 +13,15 @@ export class UpdateService {
 
   constructor() {
     if (this.swUpdate.isEnabled) {
-      setInterval(() => this.swUpdate.checkForUpdate(), 30000);
+      setInterval(() => this.swUpdate.checkForUpdate(), 30000)
       // Abonniere Update-Events
       this.swUpdate.versionUpdates.pipe(filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY')).subscribe(() => {
-        console.info('Neue Version verfügbar');
+        console.info('Neue Version verfügbar')
         // Silent reload for minor updates
         this.swUpdate.activateUpdate().then(() => {
-          console.info('Update silently applied');
-          window.location.reload();
-        });
+          console.info('Update silently applied')
+          window.location.reload()
+        })
         this.updateAvailableSubject.next(true)
       })
     }

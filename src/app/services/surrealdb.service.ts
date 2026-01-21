@@ -5,7 +5,7 @@ import { environment } from '../../environments/environment'
 import { Event as AppEvent } from '../models/event.interface'
 import { DataCacheService } from './data-cache.service'
 
-type CacheOptions = {
+interface CacheOptions {
   bypassCache?: boolean
 }
 
@@ -129,12 +129,7 @@ export class SurrealdbService extends Surreal {
   async getAll<T extends Record<string, unknown>>(table: string, options?: CacheOptions): Promise<T[]> {
     // Stelle sicher, dass die Verbindung initialisiert ist
     await this.initialize()
-    return await this.fetchCached(
-      this.tableKey(table),
-      this.defaultTtlMs,
-      async () => await super.select<T>(table),
-      options,
-    )
+    return await this.fetchCached(this.tableKey(table), this.defaultTtlMs, async () => await super.select<T>(table), options)
   }
 
   // 3) Einfügen und die neuen Datensätze zurückbekommen
@@ -215,14 +210,10 @@ export class SurrealdbService extends Surreal {
       LIMIT 30;`
 
     try {
-      const result = await this.fetchCached(
-        this.queryKey(ftsSql, { q }),
-        this.searchTtlMs,
-        async () => {
-          const queryResult = (await super.query(ftsSql, { 'q': q }))[0] as AppEvent[]
-          return Array.isArray(queryResult) ? queryResult : []
-        },
-      )
+      const result = await this.fetchCached(this.queryKey(ftsSql, { q }), this.searchTtlMs, async () => {
+        const queryResult = (await super.query(ftsSql, { 'q': q }))[0] as AppEvent[]
+        return Array.isArray(queryResult) ? queryResult : []
+      })
       return result
     } catch (err) {
       console.warn('[SurrealdbService] FTS query failed, will fallback', err)
@@ -231,12 +222,7 @@ export class SurrealdbService extends Surreal {
     return []
   }
 
-  private async fetchCached<T>(
-    key: string,
-    ttlMs: number,
-    fetcher: () => Promise<T>,
-    options?: CacheOptions,
-  ): Promise<T> {
+  private async fetchCached<T>(key: string, ttlMs: number, fetcher: () => Promise<T>, options?: CacheOptions): Promise<T> {
     if (this.shouldBypassCache(options)) {
       return await fetcher()
     }

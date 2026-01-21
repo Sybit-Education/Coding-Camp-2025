@@ -9,7 +9,7 @@
       role="status"
       aria-live="polite"
     >
-      {{ 'ADMIN.ORGANIZERS.LINKED_WARNING' | translate : { count: linkedEventsCount() } }}
+      {{ 'ADMIN.ORGANIZERS.LINKED_WARNING' | translate: { count: linkedEventsCount() } }}
     </div>
   }
 
@@ -63,7 +63,7 @@
           (click)="openDeleteDialog()"
           [disabled]="linkedEventsCount() > 0"
           [attr.aria-disabled]="linkedEventsCount() > 0"
-          [attr.aria-label]="('ADMIN.ORGANIZERS.DELETE_BUTTON_ARIA' | translate : { name: form.controls.name.value })"
+          [attr.aria-label]="'ADMIN.ORGANIZERS.DELETE_BUTTON_ARIA' | translate: { name: form.controls.name.value }"
           title="{{ linkedEventsCount() > 0 ? ('ADMIN.ORGANIZERS.DELETE_FORBIDDEN' | translate) : null }}"
         >
           {{ 'ADMIN.ORGANIZERS.DELETE' | translate }}
