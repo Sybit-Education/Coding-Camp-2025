@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
-import { CommonModule } from '@angular/common'
+
 import { RouterModule } from '@angular/router'
 import { Meta, Title } from '@angular/platform-browser'
 
 @Component({
   selector: 'app-placeholder',
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './placeholder.component.html',
 })

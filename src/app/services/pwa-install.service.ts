@@ -1,25 +1,25 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core'
 
-type Platform = 'ios' | 'android' | 'desktop';
+type Platform = 'ios' | 'android' | 'desktop'
 
 interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+  prompt: () => Promise<void>
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
 }
 
 @Injectable({ providedIn: 'root' })
 export class PwaInstallService {
-  readonly showBanner = signal(false);
-  readonly platform = signal<Platform | null>(null);
-  
-  private deferredPrompt: BeforeInstallPromptEvent | null = null;
-  private readonly PROMPT_COOLDOWN_MS = 30 * 24 * 60 * 60 * 1000; // 30 Tage
-  private readonly STORAGE_KEY_DISMISS = 'pwa-install-dismissed-at';
+  readonly showBanner = signal(false)
+  readonly platform = signal<Platform | null>(null)
+
+  private deferredPrompt: BeforeInstallPromptEvent | null = null
+  private readonly PROMPT_COOLDOWN_MS = 30 * 24 * 60 * 60 * 1000 // 30 Tage
+  private readonly STORAGE_KEY_DISMISS = 'pwa-install-dismissed-at'
 
   constructor() {
-    this.platform.set(this.detectPlatform());
-    this.checkInstallStatus();
-    this.listenForInstallPrompt();
+    this.platform.set(this.detectPlatform())
+    this.checkInstallStatus()
+    this.listenForInstallPrompt()
   }
 
   /**
@@ -28,20 +28,20 @@ export class PwaInstallService {
   private checkInstallStatus(): void {
     // 1. Bereits als installierte App running?
     if (this.isInstalledAsApp()) {
-      this.showBanner.set(false);
-      return;
+      this.showBanner.set(false)
+      return
     }
 
     // 2. Cooldown noch aktiv?
     if (!this.shouldShowPrompt()) {
-      this.showBanner.set(false);
-      return;
+      this.showBanner.set(false)
+      return
     }
 
     // 3. Android/Desktop: nur zeigen wenn beforeinstallprompt Event kommt
     // iOS: wird später in listenForInstallPrompt gezeigt
     if (this.platform() === 'ios') {
-      this.showBanner.set(!this.isInstalledAsApp());
+      this.showBanner.set(!this.isInstalledAsApp())
     }
   }
 
@@ -50,21 +50,21 @@ export class PwaInstallService {
    */
   private listenForInstallPrompt(): void {
     window.addEventListener('beforeinstallprompt', (event: Event) => {
-      event.preventDefault();
-      this.deferredPrompt = event as BeforeInstallPromptEvent;
+      event.preventDefault()
+      this.deferredPrompt = event as BeforeInstallPromptEvent
 
       // Nur anzeigen wenn Cooldown nicht aktiv ist
       if (this.shouldShowPrompt()) {
-        this.showBanner.set(true);
+        this.showBanner.set(true)
       }
-    });
+    })
 
     // Cleanup wenn App installiert wird
     window.addEventListener('appinstalled', () => {
-      this.deferredPrompt = null;
-      this.showBanner.set(false);
-      localStorage.removeItem(this.STORAGE_KEY_DISMISS);
-    });
+      this.deferredPrompt = null
+      this.showBanner.set(false)
+      localStorage.removeItem(this.STORAGE_KEY_DISMISS)
+    })
   }
 
   /**
@@ -72,16 +72,16 @@ export class PwaInstallService {
    */
   private shouldShowPrompt(): boolean {
     try {
-      const stored = localStorage.getItem(this.STORAGE_KEY_DISMISS);
+      const stored = localStorage.getItem(this.STORAGE_KEY_DISMISS)
       if (!stored) {
-        return true; // Noch nie dismissed
+        return true // Noch nie dismissed
       }
 
-      const dismissedAt = parseInt(stored, 10);
-      const now = Date.now();
-      return now - dismissedAt > this.PROMPT_COOLDOWN_MS;
+      const dismissedAt = parseInt(stored, 10)
+      const now = Date.now()
+      return now - dismissedAt > this.PROMPT_COOLDOWN_MS
     } catch {
-      return true; // LocalStorage nicht verfügbar → zeige prompt
+      return true // LocalStorage nicht verfügbar → zeige prompt
     }
   }
 
@@ -90,34 +90,34 @@ export class PwaInstallService {
    */
   private isInstalledAsApp(): boolean {
     return (
-      (window.navigator as any).standalone === true ||
+      (window.navigator as { standalone?: boolean }).standalone === true ||
       window.matchMedia('(display-mode: standalone)').matches ||
       window.matchMedia('(display-mode: fullscreen)').matches
-    );
+    )
   }
 
   /**
    * Zuverlässige Platform-Erkennung
    */
   private detectPlatform(): Platform {
-    const ua = window.navigator.userAgent.toLowerCase();
+    const ua = window.navigator.userAgent.toLowerCase()
 
     // Android - sehr zuverlässig
     if (/android/.test(ua)) {
-      return 'android';
+      return 'android'
     }
 
     // iPhone/iPod - direkt
     if (/iphone|ipod/.test(ua)) {
-      return 'ios';
+      return 'ios'
     }
 
     // iPad - komplexe Erkennung (iPadOS 13+ Workaround)
     if (this.detectIPadOS(ua)) {
-      return 'ios';
+      return 'ios'
     }
 
-    return 'desktop';
+    return 'desktop'
   }
 
   /**
@@ -127,43 +127,44 @@ export class PwaInstallService {
   private detectIPadOS(ua: string): boolean {
     // Explizites iPad im User-Agent
     if (/ipad/.test(ua)) {
-      return true;
+      return true
     }
 
     // iPadOS 13+ meldet sich als macOS Safari
     // Aber kombiniert mit mehreren Indikatoren = iPad
-    const isMacOSSafari = /mac os x/.test(ua) && /version\/\d+\./.test(ua);
+    const isMacOSSafari = /mac os x/.test(ua) && /version\/\d+\./.test(ua)
     if (!isMacOSSafari) {
-      return false;
+      return false
     }
 
     // Zusätzliche Checks für iPad vs. Desktop Mac
     if (!this.isTouchCapable() || !this.isWebKit(ua)) {
-      return false;
+      return false
     }
 
     // iPad-spezifisches Screen-Verhältnis
     // iPad typischerweise: 1:1 bis 2:3 (kein Ultra-Widescreen)
-    const screenRatio = window.innerWidth / window.innerHeight;
-    return screenRatio > 0.4 && screenRatio < 2.5;
+    const screenRatio = window.innerWidth / window.innerHeight
+    return screenRatio > 0.4 && screenRatio < 2.5
   }
 
   /**
    * Prüft Touch-Fähigkeit
    */
   private isTouchCapable(): boolean {
+    const msNav = navigator as { msMaxTouchPoints?: number }
     return (
-      ('ontouchstart' in window) ||
+      'ontouchstart' in window ||
       (navigator.maxTouchPoints !== undefined && navigator.maxTouchPoints > 2) ||
-      ((navigator as any).msMaxTouchPoints !== undefined && (navigator as any).msMaxTouchPoints > 2)
-    );
+      (msNav.msMaxTouchPoints !== undefined && msNav.msMaxTouchPoints > 2)
+    )
   }
 
   /**
    * Prüft ob WebKit Browser (Safari)
    */
   private isWebKit(ua: string): boolean {
-    return /webkit/.test(ua) && !/chrome|firefox|edge/.test(ua);
+    return /webkit/.test(ua) && !/chrome|firefox|edge/.test(ua)
   }
 
   /**
@@ -172,39 +173,39 @@ export class PwaInstallService {
    * - iOS: wird durch UI-Component angeleitet (Share → Add to Home)
    */
   async install(): Promise<void> {
-    const currentPlatform = this.platform();
+    const currentPlatform = this.platform()
 
     // iOS: Kann nicht direkt installiert werden
     if (currentPlatform === 'ios') {
-      this.recordDismissal();
-      return;
+      this.recordDismissal()
+      return
     }
 
     // Android/Desktop: Trigger beforeinstallprompt
     if (!this.deferredPrompt) {
-      console.warn('beforeinstallprompt Event nicht verfügbar');
-      return;
+      console.warn('beforeinstallprompt Event nicht verfügbar')
+      return
     }
 
     try {
       // Zeige natives Browser Prompt
-      await this.deferredPrompt.prompt();
+      await this.deferredPrompt.prompt()
 
       // Warte auf User-Entscheidung
-      const { outcome } = await this.deferredPrompt.userChoice;
+      const { outcome } = await this.deferredPrompt.userChoice
 
       if (outcome === 'accepted') {
-        console.log('✅ App wurde installiert');
+        console.log('✅ App wurde installiert')
       } else {
-        console.log('⚠️ Installation abgelehnt');
+        console.log('⚠️ Installation abgelehnt')
       }
 
-      this.recordDismissal();
-      this.deferredPrompt = null;
-      this.showBanner.set(false);
+      this.recordDismissal()
+      this.deferredPrompt = null
+      this.showBanner.set(false)
     } catch (error) {
-      console.error('Installation fehlgeschlagen:', error);
-      this.recordDismissal();
+      console.error('Installation fehlgeschlagen:', error)
+      this.recordDismissal()
     }
   }
 
@@ -213,8 +214,8 @@ export class PwaInstallService {
    * Speichere Zeitstempel für 30-Tage Cooldown
    */
   dismiss(): void {
-    this.recordDismissal();
-    this.showBanner.set(false);
+    this.recordDismissal()
+    this.showBanner.set(false)
   }
 
   /**
@@ -222,9 +223,9 @@ export class PwaInstallService {
    */
   private recordDismissal(): void {
     try {
-      localStorage.setItem(this.STORAGE_KEY_DISMISS, Date.now().toString());
+      localStorage.setItem(this.STORAGE_KEY_DISMISS, Date.now().toString())
     } catch (error) {
-      console.warn('localStorage nicht verfügbar:', error);
+      console.warn('localStorage nicht verfügbar:', error)
     }
   }
 
@@ -232,10 +233,10 @@ export class PwaInstallService {
    * Debug: Cooldown reset (nur für Entwicklung)
    */
   debugResetCooldown(): void {
-    localStorage.removeItem(this.STORAGE_KEY_DISMISS);
+    localStorage.removeItem(this.STORAGE_KEY_DISMISS)
     if (this.platform() !== 'ios') {
-      this.showBanner.set(!!this.deferredPrompt);
+      this.showBanner.set(!!this.deferredPrompt)
     }
-    console.log('✅ PWA Cooldown zurückgesetzt');
+    console.log('✅ PWA Cooldown zurückgesetzt')
   }
 }

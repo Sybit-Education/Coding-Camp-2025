@@ -5,7 +5,7 @@ ARG ENV=production
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package*.json .npmrc ./
 RUN npm ci
 
 # Angular CLI (falls nicht im devDependencies)

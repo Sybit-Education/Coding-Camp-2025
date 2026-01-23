@@ -1,33 +1,33 @@
 import { Injectable } from '@angular/core'
 
-type CacheEntry<T> = {
+interface CacheEntry<T> {
   value: T
   expiresAt: number
 }
 
 @Injectable({ providedIn: 'root' })
 export class DataCacheService {
-/**
- * Lightweight in-memory TTL cache used by {@link SurrealdbService}.
- *
- * Warum existiert dieser Service?
- * - Der SurrealDB-Service braucht ein kleines Cache-Overlay, um doppelte SELECT/QUERY-Requests
- *   im öffentlichen Bereich zu reduzieren (Kategorie-/Detailseiten, Volltextsuche).
- * - Für Admin-/Schreiboperationen wird der Cache entweder komplett invalidiert (Login, Mutationen)
- *   oder bewusst umgangen (SurrealdbService prüft die aktuelle Route). Dadurch sehen Admins immer
- *   Live-Daten.
- * - Der Cache bleibt bewusst in einem eigenen Service, damit:
- *   1. die Logik testbar und wiederverwendbar bleibt,
- *   2. keine Angular-spezifischen Abhängigkeiten (Router, environment) in diesen Store wandern,
- *   3. wir bei Bedarf eine andere Persistenzstrategie hinterlegen könnten, ohne den Surreal-Service
- *      anzupassen.
- *
- * Architektur:
- * - `store`: Map-Key → { value, expiresAt } für schnelle TTL-Lookups.
- * - `inFlight`: Promise-Dedupe, damit parallele `getOrFetch`-Aufrufe dieselbe Anfrage teilen.
- * - Keine Persistenz (IndexedDB/localStorage), damit Logout/Sitzungswechsel garantiert frische Daten
- *   liefert und der Service SSR-/Node-Tests nicht blockiert.
- */
+  /**
+   * Lightweight in-memory TTL cache used by {@link SurrealdbService}.
+   *
+   * Warum existiert dieser Service?
+   * - Der SurrealDB-Service braucht ein kleines Cache-Overlay, um doppelte SELECT/QUERY-Requests
+   *   im öffentlichen Bereich zu reduzieren (Kategorie-/Detailseiten, Volltextsuche).
+   * - Für Admin-/Schreiboperationen wird der Cache entweder komplett invalidiert (Login, Mutationen)
+   *   oder bewusst umgangen (SurrealdbService prüft die aktuelle Route). Dadurch sehen Admins immer
+   *   Live-Daten.
+   * - Der Cache bleibt bewusst in einem eigenen Service, damit:
+   *   1. die Logik testbar und wiederverwendbar bleibt,
+   *   2. keine Angular-spezifischen Abhängigkeiten (Router, environment) in diesen Store wandern,
+   *   3. wir bei Bedarf eine andere Persistenzstrategie hinterlegen könnten, ohne den Surreal-Service
+   *      anzupassen.
+   *
+   * Architektur:
+   * - `store`: Map-Key → { value, expiresAt } für schnelle TTL-Lookups.
+   * - `inFlight`: Promise-Dedupe, damit parallele `getOrFetch`-Aufrufe dieselbe Anfrage teilen.
+   * - Keine Persistenz (IndexedDB/localStorage), damit Logout/Sitzungswechsel garantiert frische Daten
+   *   liefert und der Service SSR-/Node-Tests nicht blockiert.
+   */
   private readonly store = new Map<string, CacheEntry<unknown>>()
   private readonly inFlight = new Map<string, Promise<unknown>>()
 

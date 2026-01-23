@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core'
-import { CommonModule } from '@angular/common'
+
 import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
 import { Location } from '../../models/location.interface'
@@ -11,7 +11,7 @@ import { MapComponent } from '../map/map.component'
 
 @Component({
   selector: 'app-location-input',
-  imports: [CommonModule, FormsModule, TranslateModule, MapComponent],
+  imports: [FormsModule, TranslateModule, MapComponent],
   templateUrl: './location-input.component.html',
   styleUrls: ['./location-input.component.scss'],
 })

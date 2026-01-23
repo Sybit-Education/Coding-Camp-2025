@@ -133,9 +133,9 @@
           <ng-template let-row="row" ngx-datatable-cell-template>
             <button
               type="button"
-              class="text-left font-medium text-blue-600 hover:text-blue-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              class="text-left font-medium text-blue-600 hover:text-blue-800 hover:underline focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
               (click)="editOrganizer(row.originalId)"
-              [attr.aria-label]="('ADMIN.ORGANIZERS.EDIT_LINK_ARIA' | translate : { name: row.name })"
+              [attr.aria-label]="'ADMIN.ORGANIZERS.EDIT_LINK_ARIA' | translate: { name: row.name }"
             >
               {{ row.name }}
             </button>
@@ -168,8 +168,8 @@
               <button
                 type="button"
                 (click)="editOrganizer(row.originalId)"
-                class="p-1 text-blue-600 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-                [attr.aria-label]="('ADMIN.ORGANIZERS.EDIT_BUTTON_ARIA' | translate : { name: row.name })"
+                class="p-1 text-blue-600 hover:text-blue-800 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+                [attr.aria-label]="'ADMIN.ORGANIZERS.EDIT_BUTTON_ARIA' | translate: { name: row.name }"
                 title="{{ 'ADMIN.EVENTS.EDIT' | translate }}"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -184,11 +184,13 @@
               <button
                 type="button"
                 (click)="requestOrganizerDeletion(row)"
-                class="p-1 text-red-600 hover:text-red-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 disabled:cursor-not-allowed disabled:text-red-300"
+                class="p-1 text-red-600 hover:text-red-800 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:text-red-300"
                 [disabled]="row.eventCount > 0"
                 [attr.aria-disabled]="row.eventCount > 0"
-                [attr.aria-label]="('ADMIN.ORGANIZERS.DELETE_BUTTON_ARIA' | translate : { name: row.name })"
-                title="{{ row.eventCount > 0 ? ('ADMIN.ORGANIZERS.DELETE_FORBIDDEN' | translate) : ('ADMIN.EVENTS.DELETE' | translate) }}"
+                [attr.aria-label]="'ADMIN.ORGANIZERS.DELETE_BUTTON_ARIA' | translate: { name: row.name }"
+                title="{{
+                  row.eventCount > 0 ? ('ADMIN.ORGANIZERS.DELETE_FORBIDDEN' | translate) : ('ADMIN.EVENTS.DELETE' | translate)
+                }}"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
