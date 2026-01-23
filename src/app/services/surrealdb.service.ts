@@ -1,7 +1,13 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
+import { Router } from '@angular/router'
 import Surreal, { RecordId, StringRecordId, Token } from 'surrealdb'
 import { environment } from '../../environments/environment'
 import { Event as AppEvent } from '../models/event.interface'
+import { DataCacheService } from './data-cache.service'
+
+interface CacheOptions {
+  bypassCache?: boolean
+}
 
 @Injectable({
   providedIn: 'root',
@@ -9,9 +15,49 @@ import { Event as AppEvent } from '../models/event.interface'
 export class SurrealdbService extends Surreal {
   private connectionInitialized = false
   private connectionPromise: Promise<void> | null = null
+  private readonly cache = inject(DataCacheService)
+  private readonly router = inject(Router, { optional: true })
+  private readonly defaultTtlMs = 60_000
+  private readonly searchTtlMs = 10_000
 
   constructor() {
     super()
+  }
+
+  private recordIdToString(recordId: RecordId<string> | StringRecordId): string {
+    const asString = (recordId as unknown as { toString?: () => string })?.toString?.()
+    if (typeof asString === 'string') {
+      return asString
+    }
+    const tb = (recordId as { tb?: string })?.tb
+    const id = (recordId as { id?: unknown })?.id
+    if (tb && id !== undefined) {
+      return `${tb}:${id}`
+    }
+    return String(recordId)
+  }
+
+  private tableKey(table: string): string {
+    return `table:${table}`
+  }
+
+  private recordKey(recordId: RecordId<string> | StringRecordId): string {
+    return `record:${this.recordIdToString(recordId)}`
+  }
+
+  private queryKey(sql: string, params?: Record<string, unknown>): string {
+    const serialized =
+      params === undefined
+        ? ''
+        : `:${JSON.stringify(
+            Object.keys(params)
+              .sort()
+              .reduce<Record<string, unknown>>((acc, key) => {
+                acc[key] = params[key]
+                return acc
+              }, {}),
+          )}`
+    return `query:${sql}${serialized}`
   }
 
   async initialize() {
@@ -55,6 +101,7 @@ export class SurrealdbService extends Surreal {
         password: password,
       },
     })
+    this.cache.clear()
     return jwtToken
   }
 
@@ -64,25 +111,35 @@ export class SurrealdbService extends Surreal {
     return await super.authenticate(token)
   }
 
-  async getByRecordId<T extends Record<string, unknown>>(recordId: RecordId<string> | StringRecordId): Promise<T> {
+  async getByRecordId<T extends Record<string, unknown>>(
+    recordId: RecordId<string> | StringRecordId,
+    options?: CacheOptions,
+  ): Promise<T> {
     // Stelle sicher, dass die Verbindung initialisiert ist
     await this.initialize()
-    const result = await super.select<T>(recordId)
-    return result as T
+    return await this.fetchCached(
+      this.recordKey(recordId),
+      this.defaultTtlMs,
+      async () => (await super.select<T>(recordId)) as T,
+      options,
+    )
   }
 
   // 2) Alle Einträge einer Tabelle holen
-  async getAll<T extends Record<string, unknown>>(table: string): Promise<T[]> {
+  async getAll<T extends Record<string, unknown>>(table: string, options?: CacheOptions): Promise<T[]> {
     // Stelle sicher, dass die Verbindung initialisiert ist
     await this.initialize()
-    return await super.select<T>(table)
+    return await this.fetchCached(this.tableKey(table), this.defaultTtlMs, async () => await super.select<T>(table), options)
   }
 
   // 3) Einfügen und die neuen Datensätze zurückbekommen
   async post<T extends Record<string, unknown>>(table: string, payload?: T | T[]): Promise<T[]> {
     // Stelle sicher, dass die Verbindung initialisiert ist
     await this.initialize()
-    return await super.insert<T>(table, payload)
+    const result = await super.insert<T>(table, payload)
+    this.cache.invalidate(this.tableKey(table))
+    this.cache.invalidatePrefix('query:')
+    return result
   }
 
   async postUpdate<T extends Record<string, unknown>>(id: RecordId<string> | StringRecordId, payload?: T): Promise<T> {
@@ -90,6 +147,13 @@ export class SurrealdbService extends Surreal {
       // Stelle sicher, dass die Verbindung initialisiert ist
       await this.initialize()
       const updatedRecord = await super.update<T>(id, payload)
+
+      const table = (id as { tb?: string })?.tb
+      this.cache.invalidate(this.recordKey(id))
+      if (table) {
+        this.cache.invalidate(this.tableKey(table))
+      }
+      this.cache.invalidatePrefix('query:')
 
       return updatedRecord
     } catch (error) {
@@ -102,6 +166,13 @@ export class SurrealdbService extends Surreal {
     // Stelle sicher, dass die Verbindung initialisiert ist
     await this.initialize()
     await super.delete(recordId)
+
+    const table = (recordId as { tb?: string })?.tb
+    this.cache.invalidate(this.recordKey(recordId))
+    if (table) {
+      this.cache.invalidate(this.tableKey(table))
+    }
+    this.cache.invalidatePrefix('query:')
   }
 
   async fulltextSearchEvents(searchTerm: string): Promise<AppEvent[]> {
@@ -139,14 +210,36 @@ export class SurrealdbService extends Surreal {
       LIMIT 30;`
 
     try {
-      const result = (await super.query(ftsSql, { 'q': q }))[0] as AppEvent[] // Index 0, da nur eine, erste Query im Batch
-
-      if (result.length > 0) {
-        return result
-      }
+      const result = await this.fetchCached(this.queryKey(ftsSql, { q }), this.searchTtlMs, async () => {
+        const queryResult = (await super.query(ftsSql, { 'q': q }))[0] as AppEvent[]
+        return Array.isArray(queryResult) ? queryResult : []
+      })
+      return result
     } catch (err) {
       console.warn('[SurrealdbService] FTS query failed, will fallback', err)
+      return []
     }
     return []
+  }
+
+  private async fetchCached<T>(key: string, ttlMs: number, fetcher: () => Promise<T>, options?: CacheOptions): Promise<T> {
+    if (this.shouldBypassCache(options)) {
+      return await fetcher()
+    }
+    return await this.cache.getOrFetch<T>(key, fetcher, ttlMs)
+  }
+
+  private shouldBypassCache(options?: CacheOptions): boolean {
+    if (options?.bypassCache) {
+      return true
+    }
+    const url = this.router?.url
+    if (typeof url === 'string' && url.startsWith('/admin')) {
+      return true
+    }
+    if (typeof window !== 'undefined' && typeof window.location?.pathname === 'string') {
+      return window.location.pathname.startsWith('/admin')
+    }
+    return false
   }
 }

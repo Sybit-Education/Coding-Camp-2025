@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core'
-import { CommonModule } from '@angular/common'
+
 import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
 import { Organizer } from '../../models/organizer.interface'
@@ -9,7 +9,7 @@ import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 
 @Component({
   selector: 'app-organizer-input',
-  imports: [CommonModule, FormsModule, TranslateModule],
+  imports: [FormsModule, TranslateModule],
   templateUrl: './organizer-input.component.html',
   styleUrls: ['./organizer-input.component.scss'],
 })

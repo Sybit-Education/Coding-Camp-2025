@@ -1,38 +1,96 @@
-<article>
-  <h1>{{ 'dev.headline' | translate }}</h1>
-  <img src="/sybit-coding-camp-2025-team.jpg" alt="{{ 'dev.altpicture' | translate }}" class="rounded-2xl" />
-  <p class="my-5">
-    {{ 'dev.text1' | translate }} &dash;
-    {{ 'dev.text2' | translate }}
-  </p>
-  <p class="my-5">
-    {{ 'dev.text3' | translate }}
-  </p>
+<article class="mx-auto max-w-5xl">
+  <h1 class="text-left">{{ 'dev.headline' | translate }}</h1>
 
-  <h2>{{ 'dev.patrticptants' | translate }}</h2>
-  <p>
-    {{ 'dev.patrticptantslist' | translate }}
-  </p>
+  <img
+    src="/sybit-coding-camp-2025-team.jpg"
+    alt="{{ 'dev.altpicture' | translate }}"
+    class="mb-8 w-full rounded-2xl shadow-lg"
+  />
 
-  <h2>{{ 'dev.coaches' | translate }}</h2>
-  <p>
-    {{ 'dev.coacheslist' | translate }}
-  </p>
-  <hr class="my-8" />
+  <div [class.grid-cols-2]="(this.sharedStateService.getSizeOfScreen() | async) !== screenSize.SMALL" class="mb-12 grid gap-6">
+    <!-- Intro Text -->
+    <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-xl">
+      <p class="mt-0">
+        {{ 'dev.text1' | translate }} &dash;
+        {{ 'dev.text2' | translate }}
+      </p>
+      <p class="mb-0">
+        {{ 'dev.text3' | translate }}
+      </p>
+    </div>
 
-  <h2>{{ 'dev.coding-camp-title' | translate }}</h2>
-  <p>
-    {{ 'dev.coding-camp-text' | translate }}
-  </p>
-  <p>
-    <a href="https://www.sybit.education" target="_blank" class="link">Website Nachwuchskräfte SYBIT</a>
-  </p>
+    <!-- Team Section -->
+    <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-xl">
+      <h2 class="mt-0">{{ 'dev.patrticptants' | translate }}</h2>
+      <p class="mb-6">
+        {{ 'dev.patrticptantslist' | translate }}
+      </p>
 
-  <h2>SYBIT GmbH</h2>
-  <p>
-    {{ 'dev.sybit' | translate }}
-  </p>
-  <p>
-    <a href="https://www.sybit.com" target="_blank" rel="noopener noreferrer" class="link">SYBIT GmbH</a>
-  </p>
+      <h2>{{ 'dev.coaches' | translate }}</h2>
+      <p class="mb-0">
+        {{ 'dev.coacheslist' | translate }}
+      </p>
+    </div>
+  </div>
+  <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-xl">
+    Nach dem Coding Camp wurde das Projekt, in Austausch mit der Stadt Radolfzell weitergeführt. <br /><br />Weiterentwickelt
+    wurde das Projekt von Stephan Strittmatter, Elias Frank sowie Yannik Schwarz, die von Celina Schlott (im Thema UI/UX) und
+    Agwad Alsayed (im Bereich Barrierefreiheit) unterstützt wurden. <br /><br />Nach über fünf Wochen Vorbereitung, einer Woche
+    Coding Camp, vier Monaten Weiterentwicklung sowie regelmäßigen Abstimmungen mit der Stadt Radolfzell, konnte das Projekt im
+    Dezember 2025 endlich an den Start gehen.
+  </div>
+
+  <hr class="my-10 border-gray-300" />
+
+  <!-- Coding Camp Section -->
+  <div class="mb-8 rounded-xl border border-gray-100 bg-gradient-to-br from-[#000057] to-[#c300ff] p-8">
+    <h2 class="mt-0 text-white">{{ 'dev.coding-camp-title' | translate }}</h2>
+    <p class="text-white">
+      {{ 'dev.coding-camp-text' | translate }}
+    </p>
+    <a
+      href="https://www.sybit.education"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center gap-1 text-[#c9ff29]"
+      [attr.aria-label]="'Website Nachwuchskräfte SYBIT (' + ('COMMON.EXTERNAL_LINK' | translate) + ')'"
+    >
+      Website Nachwuchskräfte SYBIT
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+        ></path>
+      </svg>
+      <span class="sr-only">({{ 'COMMON.EXTERNAL_LINK' | translate }})</span>
+    </a>
+  </div>
+
+  <!-- SYBIT Section -->
+  <div class="rounded-xl border border-gray-100 bg-gradient-to-bl from-[#c300ff] to-[#000057] p-8">
+    <h2 class="mt-0 text-white">SYBIT GmbH</h2>
+    <p class="text-white">
+      {{ 'dev.sybit' | translate }}
+    </p>
+    <a
+      href="https://www.sybit.com"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center gap-1 text-[#c9ff29]"
+      [attr.aria-label]="'SYBIT GmbH (' + ('COMMON.EXTERNAL_LINK' | translate) + ')'"
+    >
+      SYBIT GmbH
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+        ></path>
+      </svg>
+      <span class="sr-only">({{ 'COMMON.EXTERNAL_LINK' | translate }})</span>
+    </a>
+  </div>
 </article>
