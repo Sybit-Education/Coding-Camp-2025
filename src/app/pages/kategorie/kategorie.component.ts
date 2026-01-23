@@ -67,9 +67,6 @@ export class KategorieComponent implements OnInit {
   locations: AppLocation[] = []
   selectedLocation: AppLocation | null = null
   selectedLocationIds: RecordIdValue[] = []
-  selectedPrices: number[] = []
-  selectedDateStart: Date | null = null
-  selectedDateEnd: Date | null = null
 
   name: string | null = null
   slug: string | null = null
@@ -78,8 +75,6 @@ export class KategorieComponent implements OnInit {
 
   locationsForFilter: FilterItem[] = []
   preselectedLocations: FilterItem[] = [] //Nur für vorselektierte Locations
-  pricesForFilter: FilterItem[] = []
-  preselectedPrices: FilterItem[] = [] //Nur für vorselektierte Preise
   filterQuery: string | null = null
 
   loading = true
@@ -101,7 +96,6 @@ export class KategorieComponent implements OnInit {
     this.route.queryParamMap.subscribe((params) => {
       const filterQueryParam = params.get('filterQuery')
       if (filterQueryParam) {
-        console.log('Found filterQuery param:', filterQueryParam)
         this.receivedFilters = new URLSearchParams(decodeURIComponent(filterQueryParam))
       }
     })
@@ -118,7 +112,13 @@ export class KategorieComponent implements OnInit {
         this.eventService.getAllEventTypes(),
       ])
 
-      this.categories = [...topics, ...typeDB]
+      let topicsSorted = topics
+      const highlightTopic = topics.find((topic) => this.topicService.isTopicHighlight(topic))
+      if (highlightTopic) {
+        topicsSorted = [highlightTopic, ...topics.filter((topic) => topic.id !== highlightTopic.id)]
+      }
+
+      this.categories = [...typeDB, ...topicsSorted]
       this.allEvents = allEvents
 
       const categoryId = this.getCategoryIdFromSlug(topics, typeDB)
@@ -136,8 +136,11 @@ export class KategorieComponent implements OnInit {
         }
         this.name = matchedTopic?.name || matchedType?.name || null
         this.description = matchedTopic?.description || matchedType?.description || null
+        if (this.slug === 'highlights') {
+          this.name = this.translate.instant('home.all-highlights')
+        }
       } else {
-        this.name = this.translate.instant('bottom-nav.all-events')
+        this.name = this.translate.instant('home.all-events')
       }
 
       await this.performSearch(this.searchTerm)
@@ -168,7 +171,6 @@ export class KategorieComponent implements OnInit {
 
   // --------------------------------- Search & Filtering ---------------------------------
   onSearchChange(term: string) {
-    console.log('Received search term:', term)
     this.searchTerm = (term ?? '').trim()
     if (this.searchDebounce) {
       window.clearTimeout(this.searchDebounce)
@@ -193,7 +195,7 @@ export class KategorieComponent implements OnInit {
     try {
       let candidateEvents: AppEvent[]
 
-      if (searchTerm) {
+      if (searchTerm.length > 1) {
         // Get search results from the fulltext index and apply the same base filters
         const searchResults = await this.surreal.fulltextSearchEvents(searchTerm)
         candidateEvents = this.applyBaseFilters(searchResults)
@@ -341,6 +343,11 @@ export class KategorieComponent implements OnInit {
 
     const queryString = new URLSearchParams(params).toString()
     this.filterQuery = queryString ? `${queryString}` : null
+    window.history.replaceState(
+      {},
+      '',
+      `${this.router.url.split('?')[0]}${this.filterQuery ? '?filterQuery=' + encodeURIComponent(this.filterQuery) : ''}`,
+    )
   }
 
   private resolveFilterQuery(queryParams: URLSearchParams) {
@@ -353,7 +360,6 @@ export class KategorieComponent implements OnInit {
     const categories = queryParams.get('categories')
     if (categories) {
       this.categoryIds = categories.split(',').map((id) => id as RecordIdValue)
-      console.log('Resolved category IDs from filter query:', this.categoryIds)
     }
 
     const locations = queryParams.get('locations')
@@ -362,9 +368,8 @@ export class KategorieComponent implements OnInit {
       this.preselectedLocations = this.locationsForFilter.filter((loc) =>
         this.selectedLocationIds.includes(loc.id as RecordIdValue),
       )
-      console.log('Locations for Filter:', this.locationsForFilter)
-      console.log('Selected Locations:', this.selectedLocationIds)
-      console.log('preselectedLocations:', this.preselectedLocations)
     }
+
+    void this.performSearch(this.searchTerm)
   }
 }

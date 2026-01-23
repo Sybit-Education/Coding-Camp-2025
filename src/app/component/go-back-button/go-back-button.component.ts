@@ -16,12 +16,6 @@ export class GoBackComponent {
   @Input() goBackParams?: string | null = null
 
   goBack(): void {
-    if (this.goBackParams) {
-      console.log('Navigating back with filterQuery:', this.goBackParams)
-      this.router.navigate(['/event'], { queryParams: { filterQuery: this.goBackParams } })
-      return
-    }
-
     this.location.back()
   }
 }

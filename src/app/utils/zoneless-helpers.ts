@@ -1,4 +1,5 @@
-import { afterNextRender, ChangeDetectorRef, inject, signal } from '@angular/core'
+import { afterNextRender, ChangeDetectorRef, inject, signal, PLATFORM_ID } from '@angular/core'
+import { isPlatformBrowser } from '@angular/common'
 import { toSignal } from '@angular/core/rxjs-interop'
 import { Observable } from 'rxjs'
 
@@ -28,12 +29,13 @@ export function injectMarkForCheck(): () => void {
 /**
  * Hilfsfunktion für die Initialisierung von DOM-Elementen nach dem Rendering
  * Besonders nützlich für Third-Party-Bibliotheken wie Charts, Maps, etc.
+ * Nur auf dem Browser ausführen, nicht auf dem Server.
  *
  * @example
  * ```ts
  * export class ChartComponent {
  *   constructor() {
- *     afterNextRender(() => {
+ *     initAfterRender(() => {
  *       // Chart initialisieren
  *       this.initChart();
  *     });
@@ -46,9 +48,13 @@ export function injectMarkForCheck(): () => void {
  * ```
  */
 export function initAfterRender(callback: () => void): void {
-  afterNextRender(() => {
-    callback()
-  })
+  const platformId = inject(PLATFORM_ID)
+  
+  if (isPlatformBrowser(platformId)) {
+    afterNextRender(() => {
+      callback()
+    })
+  }
 }
 
 /**

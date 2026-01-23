@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core'
-
-import { Router, RouterModule } from '@angular/router'
+import { ChangeDetectionStrategy, Component } from '@angular/core'
+import { RouterModule } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
+
 import { IconComponent } from '@app/component/icon/icon.component'
 
 interface MoreMenuItem {
@@ -26,30 +26,7 @@ interface MoreMenuItem {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MoreComponent {
-  private readonly router: Router = inject(Router)
-
-  /**
-   * Navigiert zu einer bestimmten Route
-   * @param route Die Zielroute
-   */
-  navigateTo(route: string): void {
-    this.router.navigate([route])
-    // Ankündigung für Screenreader
-    this.announceNavigation(route)
-  }
-
-  /**
-   * Kündigt die Navigation für Screenreader an
-   * @param route Die Zielroute
-   */
-  private announceNavigation(route: string): void {
-    const menuItem = this.menuItems.find((item) => item.route === route)
-    if (menuItem) {
-      // In einer vollständigen Implementierung würde hier LiveAnnouncer verwendet werden
-      console.log(`Navigiere zu: ${menuItem.title}`)
-    }
-  }
-  menuItems: MoreMenuItem[] = [
+  protected readonly menuItems: MoreMenuItem[] = [
     {
       title: 'Das Team',
       route: '/team',
@@ -75,4 +52,8 @@ export class MoreComponent {
       icon: 'key',
     },
   ]
+
+  protected isExternal(item: MoreMenuItem): boolean {
+    return item.route.startsWith('http')
+  }
 }

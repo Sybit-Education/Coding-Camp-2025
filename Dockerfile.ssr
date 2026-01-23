@@ -1,0 +1,68 @@
+# ============================================================================
+# Multi-Stage Dockerfile for Angular SSR Application
+# ============================================================================
+# This Dockerfile creates an optimized production build with Server-Side Rendering
+# Stage 1: Build the Angular application
+# Stage 2: Run the Node.js SSR server
+# ============================================================================
+
+# -----------------------------------------------------------------------
+# Stage 1: Build Stage
+# -----------------------------------------------------------------------
+FROM node:lts-bookworm-slim AS build-stage
+
+# Set build arguments (Angular configuration: production|staging|...)
+ARG ENV=production
+
+WORKDIR /app
+
+# Copy package files and install dependencies
+COPY package*.json ./
+RUN npm ci --legacy-peer-deps
+
+# Copy all source files
+COPY . .
+
+# Build the Angular application with SSR
+# This creates both browser and server bundles in dist/1200-jahre-radolfzell
+RUN npm run build:ssr -- --configuration=${ENV}
+
+# -----------------------------------------------------------------------
+# Stage 2: Production Stage - Node.js SSR Server
+# -----------------------------------------------------------------------
+FROM node:lts-bookworm-slim AS production-stage
+
+# Install dumb-init for proper signal handling
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    dumb-init \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy only the production dependencies from package.json
+COPY package*.json ./
+RUN npm ci --only=production --legacy-peer-deps && npm cache clean --force
+
+# Copy the built application from build stage
+# The SSR build creates these directories:
+# - dist/1200-jahre-radolfzell/browser/  (static browser files)
+# - dist/1200-jahre-radolfzell/server/   (SSR server files)
+COPY --from=build-stage /app/dist/1200-jahre-radolfzell ./dist/1200-jahre-radolfzell
+
+# Set environment variables
+ENV NODE_ENV=production
+ENV PORT=4000
+
+# Expose the port the app runs on
+EXPOSE 4000
+
+# Health check for Docker/Kubernetes
+# The Node.js server should respond on /healthz or similar endpoint
+HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:4000/', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)}).on('error', () => process.exit(1))"
+
+# Use dumb-init to handle signals properly
+ENTRYPOINT ["dumb-init", "--"]
+
+# Start the SSR server
+CMD ["node", "dist/1200-jahre-radolfzell/server/server.mjs"]

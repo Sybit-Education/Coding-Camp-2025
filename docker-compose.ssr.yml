@@ -1,0 +1,62 @@
+# ============================================================================
+# Docker Compose Configuration for Angular SSR Application
+# ============================================================================
+# This docker-compose file is configured for deployment with Traefik
+# ============================================================================
+
+services:
+  1200-jahre-radolfzell-ssr:
+    # Use the SSR Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile.ssr
+      args:
+        ENV: production
+    
+    # Use the pre-built image from GitHub Container Registry
+    # Uncomment the following line when using the pre-built image:
+    # image: ghcr.io/sybit-education/coding-camp-2025-ssr:main
+    
+    container_name: 1200-jahre-radolfzell-ssr
+    restart: unless-stopped
+    
+    # Environment variables for the Node.js SSR server
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+    
+    # Traefik network
+    networks:
+      - traefik_net
+    
+    # Traefik labels for automatic routing and HTTPS
+    labels:
+      # Watchtower: Enable automatic updates
+      com.centurylinklabs.watchtower.enable: "true"
+      
+      # Portainer: Access control
+      io.portainer.accesscontrol.teams: azubis
+      
+      # Traefik: Enable this container for Traefik
+      traefik.enable: "true"
+      
+      # Traefik: HTTP Router configuration
+      traefik.http.routers.1200-jahre-radolfzell-ssr.entrypoints: web-secure
+      traefik.http.routers.1200-jahre-radolfzell-ssr.rule: Host(`1200-jahre-radolfzell.sybit.education`)
+      traefik.http.routers.1200-jahre-radolfzell-ssr.tls: "true"
+      
+      # Traefik: Middleware (security headers)
+      traefik.http.routers.1200-jahre-radolfzell-ssr.middlewares: secHeaders@file
+      
+      # Traefik: Service configuration (Node.js runs on port 4000)
+      traefik.http.services.1200-jahre-radolfzell-ssr.loadbalancer.server.port: "4000"
+      traefik.http.services.1200-jahre-radolfzell-ssr.loadbalancer.server.scheme: http
+      
+      # Traefik: Health check configuration
+      traefik.http.services.1200-jahre-radolfzell-ssr.loadbalancer.healthcheck.path: /
+      traefik.http.services.1200-jahre-radolfzell-ssr.loadbalancer.healthcheck.interval: 30s
+      traefik.http.services.1200-jahre-radolfzell-ssr.loadbalancer.healthcheck.timeout: 5s
+
+networks:
+  traefik_net:
+    external: true

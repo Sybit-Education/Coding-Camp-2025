@@ -20,7 +20,8 @@
             "outputPath": "dist/1200-jahre-radolfzell",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [],
+            // See ZONELESS-SSR-CLARIFICATION.md: zone.js is still required as an SSR polyfill even with zoneless change detection.
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -48,6 +49,12 @@
               "scripts": true,
               "styles": true,
               "fonts": true
+            },
+            "server": "src/main.server.ts",
+            "prerender": false,
+            "outputMode": "server",
+            "ssr": {
+              "entry": "src/server.ts"
             }
           },
           "configurations": {

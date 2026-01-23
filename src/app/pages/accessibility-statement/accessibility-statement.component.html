@@ -1,0 +1,137 @@
+<section aria-labelledby="a11y-title" class="space-y-10">
+  <header class="space-y-4">
+    <h1 id="a11y-title" class="text-2xl font-semibold">
+      {{ 'ACCESSIBILITY.TITLE' | translate }}
+    </h1>
+    <p class="text-gray-700">
+      {{ 'ACCESSIBILITY.INTRO' | translate }}
+    </p>
+    <p class="text-gray-600">
+      {{ 'ACCESSIBILITY.STATEMENT_SCOPE' | translate }}
+    </p>
+  </header>
+
+  <section aria-labelledby="legal-basis" class="space-y-3">
+    <h2 id="legal-basis" class="text-xl font-semibold">
+      {{ 'ACCESSIBILITY.LEGAL_BASIS.TITLE' | translate }}
+    </h2>
+    <p>{{ 'ACCESSIBILITY.LEGAL_BASIS.TEXT' | translate }}</p>
+    <ul class="list-disc space-y-2 pl-5">
+      <li>{{ 'ACCESSIBILITY.LEGAL_BASIS.POINTS.EU_DIRECTIVE' | translate }}</li>
+      <li>{{ 'ACCESSIBILITY.LEGAL_BASIS.POINTS.WCAG' | translate }}</li>
+      <li>{{ 'ACCESSIBILITY.LEGAL_BASIS.POINTS.LBGG' | translate }}</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="status" class="space-y-3">
+    <h2 id="status" class="text-xl font-semibold">
+      {{ 'ACCESSIBILITY.STATUS.TITLE' | translate }}
+    </h2>
+    <p>{{ 'ACCESSIBILITY.STATUS.TEXT' | translate }}</p>
+    <ul class="list-disc space-y-2 pl-5">
+      <li>{{ 'ACCESSIBILITY.STATUS.POINTS.SELF_ASSESSMENT' | translate }}</li>
+      <li>{{ 'ACCESSIBILITY.STATUS.POINTS.CONTINUOUS_IMPROVEMENT' | translate }}</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="non-accessible" class="space-y-3">
+    <h2 id="non-accessible" class="text-xl font-semibold">
+      {{ 'ACCESSIBILITY.NON_ACCESSIBLE.TITLE' | translate }}
+    </h2>
+    <p>{{ 'ACCESSIBILITY.NON_ACCESSIBLE.INTRO' | translate }}</p>
+    <ul class="list-disc space-y-2 pl-5">
+      <li>{{ 'ACCESSIBILITY.NON_ACCESSIBLE.ITEMS.ALT_TEXTS' | translate }}</li>
+      <li>{{ 'ACCESSIBILITY.NON_ACCESSIBLE.ITEMS.MAPS' | translate }}</li>
+      <li>{{ 'ACCESSIBILITY.NON_ACCESSIBLE.ITEMS.IFRAMES' | translate }}</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="statement-meta" class="space-y-3">
+    <h2 id="statement-meta" class="text-xl font-semibold">
+      {{ 'ACCESSIBILITY.STATEMENT.TITLE' | translate }}
+    </h2>
+    <p>{{ 'ACCESSIBILITY.STATEMENT.CREATED' | translate }}</p>
+    <p>{{ 'ACCESSIBILITY.STATEMENT.METHOD' | translate }}</p>
+  </section>
+
+  <section aria-labelledby="contact" class="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+    <h2 id="contact" class="text-xl font-semibold">
+      {{ 'ACCESSIBILITY.CONTACT.TITLE' | translate }}
+    </h2>
+    <p>{{ 'ACCESSIBILITY.CONTACT.INTRO' | translate }}</p>
+    <div class="space-y-1">
+      <p class="font-semibold">{{ 'ACCESSIBILITY.CONTACT.ORGANISATION' | translate }}</p>
+      <p>{{ 'ACCESSIBILITY.CONTACT.DEPARTMENT' | translate }}</p>
+      <p>{{ 'ACCESSIBILITY.CONTACT.ADDRESS' | translate }}</p>
+    </div>
+    <div class="space-y-2">
+      <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+        <span class="font-medium">{{ 'ACCESSIBILITY.CONTACT.EMAIL_LABEL' | translate }}:</span>
+        <a
+          class="text-primary underline underline-offset-2"
+          [href]="'mailto:' + ('ACCESSIBILITY.CONTACT.EMAIL' | translate)"
+          [attr.aria-label]="'ACCESSIBILITY.CONTACT.EMAIL_ARIA' | translate"
+        >
+          {{ 'ACCESSIBILITY.CONTACT.EMAIL' | translate }}
+        </a>
+      </div>
+      <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+        <span class="font-medium">{{ 'ACCESSIBILITY.CONTACT.PHONE_LABEL' | translate }}:</span>
+        <a
+          class="text-primary underline underline-offset-2"
+          [href]="'tel:' + ('ACCESSIBILITY.CONTACT.TEL_PRIMARY' | translate)"
+          [attr.aria-label]="
+            ('ACCESSIBILITY.CONTACT.PHONE_LABEL' | translate) + ' ' + ('ACCESSIBILITY.CONTACT.PHONE_PRIMARY' | translate)
+          "
+        >
+          {{ 'ACCESSIBILITY.CONTACT.PHONE_PRIMARY' | translate }}
+        </a>
+      </div>
+      <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+        <span class="font-medium">{{ 'ACCESSIBILITY.CONTACT.PHONE_LABEL' | translate }}:</span>
+        <a
+          class="text-primary underline underline-offset-2"
+          [href]="'tel:' + ('ACCESSIBILITY.CONTACT.TEL_SECONDARY' | translate)"
+          [attr.aria-label]="
+            ('ACCESSIBILITY.CONTACT.PHONE_LABEL' | translate) + ' ' + ('ACCESSIBILITY.CONTACT.PHONE_SECONDARY' | translate)
+          "
+        >
+          {{ 'ACCESSIBILITY.CONTACT.PHONE_SECONDARY' | translate }}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="enforcement" class="space-y-3 rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+    <h2 id="enforcement" class="text-xl font-semibold">
+      {{ 'ACCESSIBILITY.ENFORCEMENT.TITLE' | translate }}
+    </h2>
+    <p>{{ 'ACCESSIBILITY.ENFORCEMENT.INTRO' | translate }}</p>
+    <p class="font-semibold">{{ 'ACCESSIBILITY.ENFORCEMENT.BODY' | translate }}</p>
+    <p>{{ 'ACCESSIBILITY.ENFORCEMENT.ORG' | translate }}</p>
+    <p>{{ 'ACCESSIBILITY.ENFORCEMENT.ADDRESS' | translate }}</p>
+    <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+      <span class="font-medium">{{ 'ACCESSIBILITY.ENFORCEMENT.EMAIL_LABEL' | translate }}:</span>
+      <a
+        class="text-primary underline underline-offset-2"
+        [href]="'mailto:' + ('ACCESSIBILITY.ENFORCEMENT.EMAIL' | translate)"
+        [attr.aria-label]="'ACCESSIBILITY.ENFORCEMENT.EMAIL_ARIA' | translate"
+      >
+        {{ 'ACCESSIBILITY.ENFORCEMENT.EMAIL' | translate }}
+      </a>
+    </div>
+    <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+      <span class="font-medium">{{ 'ACCESSIBILITY.ENFORCEMENT.PHONE_LABEL' | translate }}:</span>
+      <a
+        class="text-primary underline underline-offset-2"
+        [href]="'tel:' + ('ACCESSIBILITY.ENFORCEMENT.TEL' | translate)"
+        [attr.aria-label]="
+          ('ACCESSIBILITY.ENFORCEMENT.PHONE_LABEL' | translate) + ' ' + ('ACCESSIBILITY.ENFORCEMENT.PHONE' | translate)
+        "
+      >
+        {{ 'ACCESSIBILITY.ENFORCEMENT.PHONE' | translate }}
+      </a>
+    </div>
+    <p>{{ 'ACCESSIBILITY.ENFORCEMENT.NOTE' | translate }}</p>
+  </section>
+</section>
