@@ -20,6 +20,7 @@
             "outputPath": "dist/1200-jahre-radolfzell",
             "index": "src/index.html",
             "browser": "src/main.ts",
+            // See ZONELESS-SSR-CLARIFICATION.md: zone.js is still required as an SSR polyfill even with zoneless change detection.
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
