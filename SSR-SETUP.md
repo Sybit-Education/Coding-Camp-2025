@@ -194,6 +194,82 @@ docker-compose -f docker-compose.ssr.yml down
 
 ---
 
+## CI/CD Pipeline - Automatische Docker Image Builds
+
+### GitHub Actions Workflow
+
+Die GitHub Actions Pipeline baut und veröffentlicht **beide Varianten** automatisch:
+
+#### Automatische Builds
+
+Bei jedem Push auf `main` oder bei Tags (`v*.*.*`):
+
+1. **Static Variant** → `ghcr.io/sybit-education/coding-camp-2025:main`
+2. **SSR Variant** → `ghcr.io/sybit-education/coding-camp-2025-ssr:main`
+
+#### Verfügbare Images
+
+```bash
+# Static variant (nginx)
+docker pull ghcr.io/sybit-education/coding-camp-2025:main
+docker pull ghcr.io/sybit-education/coding-camp-2025:latest
+docker pull ghcr.io/sybit-education/coding-camp-2025:v1.0.0  # bei Tags
+
+# SSR variant (Node.js)
+docker pull ghcr.io/sybit-education/coding-camp-2025-ssr:main
+docker pull ghcr.io/sybit-education/coding-camp-2025-ssr:latest
+docker pull ghcr.io/sybit-education/coding-camp-2025-ssr:v1.0.0  # bei Tags
+```
+
+#### Image Tags
+
+| Branch/Tag | Static Image | SSR Image |
+|------------|--------------|-----------|
+| `main` | `:main`, `:latest` | `-ssr:main`, `-ssr:latest` |
+| `v1.0.0` | `:v1.0.0` | `-ssr:v1.0.0` |
+| PR #123 | Nur Build-Test | Nur Build-Test |
+
+#### Pipeline-Features
+
+✅ **Multi-Stage Builds** - Optimierte Layer-Caching  
+✅ **Image Signing** - Mit Cosign signiert  
+✅ **Security Scanning** - CodeQL in separatem Workflow  
+✅ **Parallele Builds** - Beide Varianten gleichzeitig  
+✅ **Cache-Optimierung** - Separate Caches für static/SSR  
+
+#### Deployment mit CI/CD Images
+
+**docker-compose.ssr.yml anpassen:**
+
+```yaml
+services:
+  1200-jahre-radolfzell-ssr:
+    # Verwende das automatisch gebaute SSR-Image
+    image: ghcr.io/sybit-education/coding-camp-2025-ssr:main
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+    labels:
+      # Traefik configuration...
+      traefik.http.services.1200-jahre-radolfzell-ssr.loadbalancer.server.port: "4000"
+```
+
+**Update auf neueste Version:**
+
+```bash
+# Pull neuestes Image
+docker-compose -f docker-compose.ssr.yml pull
+
+# Container neu starten
+docker-compose -f docker-compose.ssr.yml up -d
+
+# Logs prüfen
+docker-compose -f docker-compose.ssr.yml logs -f
+```
+
+---
+
 ## Traefik Integration
 
 ### Wichtige Unterschiede zu statischer Nginx-Lösung
