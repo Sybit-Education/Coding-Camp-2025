@@ -55,7 +55,13 @@ if (isMainModule(import.meta.url) || process.env['pm_id']) {
   const port = process.env['PORT'] || 4000;
   app.listen(port, (error) => {
     if (error) {
-      throw error;
+      const message =
+        error instanceof Error
+          ? error.message
+          : typeof error === 'string'
+            ? error
+            : JSON.stringify(error);
+      throw new Error(`Failed to start server on port ${port}: ${message}`);
     }
 
     console.log(`Node Express server listening on http://localhost:${port}`);

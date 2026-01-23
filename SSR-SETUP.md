@@ -511,12 +511,16 @@ npm install zone.js --save --legacy-peer-deps
 }
 ```
 
-#### b) Zoneless entfernen (wenn vorhanden)
+#### b) Keep Zoneless Change Detection
+
+**Important**: Do NOT remove `provideZonelessChangeDetection()`. The app should run zoneless at runtime.
 
 ```typescript
-// main.ts - ENTFERNEN:
-provideZonelessChangeDetection()
+// main.ts - KEEP THIS:
+provideZonelessChangeDetection()  // ✅ App runs zoneless!
 ```
+
+Zone.js is only needed for the build process (route extraction), not at runtime. See `docs/ZONELESS-SSR-CLARIFICATION.md` for details.
 
 ### 3. Docker-Umgebung
 
