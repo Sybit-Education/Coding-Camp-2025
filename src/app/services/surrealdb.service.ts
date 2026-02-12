@@ -1,19 +1,20 @@
-import { Injectable, inject } from '@angular/core'
+import { Injectable, inject, signal, Signal } from '@angular/core'
 import { Router } from '@angular/router'
-import Surreal, { RecordId, StringRecordId, Token } from 'surrealdb'
+import Surreal, { RecordId, StringRecordId, Token, Uuid } from 'surrealdb'
 import { environment } from '../../environments/environment'
 import { Event as AppEvent } from '../models/event.interface'
 import { DataCacheService } from './data-cache.service'
-import { Observable, Subject } from 'rxjs'
 
 interface CacheOptions {
   bypassCache?: boolean
 }
 
-interface LiveQueryUpdate<T> {
+export interface LiveQueryUpdate<T> {
   action: 'CREATE' | 'UPDATE' | 'DELETE' | 'CLOSE'
   result?: T
 }
+
+type LiveQueryCallback<T> = (update: LiveQueryUpdate<T>) => void
 
 @Injectable({
   providedIn: 'root',
@@ -26,8 +27,9 @@ export class SurrealdbService extends Surreal {
   private readonly defaultTtlMs = 60_000
   private readonly searchTtlMs = 10_000
   
-  // Live Query Management
-  private readonly liveQueryMap = new Map<string, Subject<LiveQueryUpdate<unknown>>>()
+  // Live Query Management with callbacks instead of RxJS
+  private readonly liveQueryCallbacks = new Map<string, Set<LiveQueryCallback<unknown>>>()
+  private readonly liveQueryUuids = new Map<string, Uuid>()
 
   constructor() {
     super()
@@ -232,60 +234,98 @@ export class SurrealdbService extends Surreal {
   }
 
   /**
-   * Live Query Support - Returns an Observable that emits updates in real-time
+   * Live Query Support - Returns a signal that emits updates in real-time
    * @param table The table or query to watch for changes
    * @param diff If true, returns only the changes (default: false)
-   * @returns Observable that emits CREATE, UPDATE, DELETE, or CLOSE events
+   * @returns Signal containing the latest update and an unsubscribe function
    */
   liveQuery<T extends Record<string, unknown>>(
     table: string,
     diff = false
-  ): Observable<LiveQueryUpdate<T>> {
-    const subject = new Subject<LiveQueryUpdate<T>>()
+  ): { 
+    updates: Signal<LiveQueryUpdate<T> | null>
+    unsubscribe: () => Promise<void>
+  } {
     const queryKey = `live:${table}:${diff}`
-
-    // Check if we already have a live query for this
-    if (this.liveQueryMap.has(queryKey)) {
-      return this.liveQueryMap.get(queryKey) as Observable<LiveQueryUpdate<T>>
+    const updateSignal = signal<LiveQueryUpdate<T> | null>(null)
+    
+    const callback: LiveQueryCallback<T> = (update) => {
+      updateSignal.set(update)
     }
-
-    this.liveQueryMap.set(queryKey, subject as Subject<LiveQueryUpdate<unknown>>)
-
-    // Initialize the live query
-    void this.initialize()
-      .then(async () => {
-        try {
-          const queryUuid = await super.live<T>(
-            table,
-            (action, result) => {
-              subject.next({ 
-                action: action as 'CREATE' | 'UPDATE' | 'DELETE',
-                result: result as T
-              })
-            },
-            diff
-          )
-
-          // Handle cleanup when observable is unsubscribed
-          return () => {
-            void super.kill(queryUuid).catch((err) => {
+    
+    // Store callback
+    if (!this.liveQueryCallbacks.has(queryKey)) {
+      this.liveQueryCallbacks.set(queryKey, new Set())
+    }
+    this.liveQueryCallbacks.get(queryKey)!.add(callback as LiveQueryCallback<unknown>)
+    
+    // Initialize the live query if not already running
+    if (!this.liveQueryUuids.has(queryKey)) {
+      void this.initializeLiveQuery<T>(queryKey, table, diff)
+    }
+    
+    const unsubscribe = async () => {
+      const callbacks = this.liveQueryCallbacks.get(queryKey)
+      if (callbacks) {
+        callbacks.delete(callback as LiveQueryCallback<unknown>)
+        
+        // If no more callbacks, clean up the live query
+        if (callbacks.size === 0) {
+          const uuid = this.liveQueryUuids.get(queryKey)
+          if (uuid) {
+            try {
+              await super.kill(uuid)
+            } catch (err) {
               console.warn('Failed to kill live query:', err)
-            })
-            this.liveQueryMap.delete(queryKey)
-            subject.complete()
+            }
+            this.liveQueryUuids.delete(queryKey)
+            this.liveQueryCallbacks.delete(queryKey)
           }
-        } catch (error) {
-          console.error('Failed to create live query:', error)
-          subject.error(error)
-          return undefined
         }
-      })
-      .catch((error) => {
-        console.error('Failed to initialize connection for live query:', error)
-        subject.error(error)
-      })
-
-    return subject.asObservable()
+      }
+    }
+    
+    return {
+      updates: updateSignal.asReadonly(),
+      unsubscribe
+    }
+  }
+  
+  /**
+   * Initialize a live query connection
+   */
+  private async initializeLiveQuery<T extends Record<string, unknown>>(
+    queryKey: string,
+    table: string,
+    diff: boolean
+  ): Promise<void> {
+    try {
+      await this.initialize()
+      
+      const queryUuid = await super.live<T>(
+        table,
+        (action, result) => {
+          const update: LiveQueryUpdate<T> = { 
+            action: action as 'CREATE' | 'UPDATE' | 'DELETE',
+            result: result as T
+          }
+          
+          // Notify all callbacks for this query
+          const callbacks = this.liveQueryCallbacks.get(queryKey)
+          if (callbacks) {
+            callbacks.forEach(callback => {
+              (callback as LiveQueryCallback<T>)(update)
+            })
+          }
+        },
+        diff
+      )
+      
+      this.liveQueryUuids.set(queryKey, queryUuid)
+    } catch (error) {
+      console.error('Failed to create live query:', error)
+      throw error
+    }
   }
 
   /**
@@ -293,10 +333,15 @@ export class SurrealdbService extends Surreal {
    */
   async disconnect(): Promise<void> {
     // Close all live queries
-    for (const subject of this.liveQueryMap.values()) {
-      subject.complete()
+    for (const [queryKey, uuid] of this.liveQueryUuids.entries()) {
+      try {
+        await super.kill(uuid)
+      } catch (err) {
+        console.warn(`Failed to kill live query ${queryKey}:`, err)
+      }
     }
-    this.liveQueryMap.clear()
+    this.liveQueryUuids.clear()
+    this.liveQueryCallbacks.clear()
 
     // Close connection
     if (this.connectionInitialized) {
