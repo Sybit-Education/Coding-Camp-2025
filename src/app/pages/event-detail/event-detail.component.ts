@@ -80,6 +80,13 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   private readonly markForCheck = injectMarkForCheck()
   readonly sharedStateService = inject(SharedStateService)
 
+  constructor() {
+    // Effect für Login-Status - Muss im Constructor sein (Injection Context)
+    effect(() => {
+      this.isLoggedIn = this.loginservice.isLoggedInState()
+    })
+  }
+
   ngOnInit(): void {
     this.subscriptions.add(
       this.route.paramMap.subscribe((params) => {
@@ -102,11 +109,6 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
         this.goBackParams = filterQueryParam || null
       }),
     )
-
-    // Effect für Login-Status - OHNE RxJS
-    effect(() => {
-      this.isLoggedIn = this.loginservice.isLoggedInState()
-    })
   }
 
   ngOnDestroy(): void {
