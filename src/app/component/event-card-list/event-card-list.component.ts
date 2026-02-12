@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, input, signal, computed, effect, output, ChangeDetectionStrategy } from '@angular/core'
+import { Component, inject, input, signal, effect, output, ChangeDetectionStrategy } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { ScreenSize } from '@app/models/screenSize.enum'
 
