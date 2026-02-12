@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core'
-import { Subject } from 'rxjs'
+import { Injectable, signal } from '@angular/core'
 
 export type SnackBarType = 'success' | 'error' | 'warning' | 'info'
 
@@ -13,11 +12,12 @@ export interface SnackBarData {
   providedIn: 'root',
 })
 export class SnackBarService {
-  private readonly snackBarSubject = new Subject<SnackBarData | null>()
-  snackBar$ = this.snackBarSubject.asObservable()
+  // Signal-basiert OHNE RxJS
+  private readonly snackBarSignal = signal<SnackBarData | null>(null)
+  readonly snackBar = this.snackBarSignal.asReadonly()
 
   showMessage(message: string, type: SnackBarType = 'info', duration = 5000): void {
-    this.snackBarSubject.next({ message, type, duration })
+    this.snackBarSignal.set({ message, type, duration })
   }
 
   showSuccess(message: string, duration = 5000): void {
@@ -37,6 +37,6 @@ export class SnackBarService {
   }
 
   clear(): void {
-    this.snackBarSubject.next(null)
+    this.snackBarSignal.set(null)
   }
 }

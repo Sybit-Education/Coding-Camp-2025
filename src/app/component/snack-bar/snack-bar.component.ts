@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core'
+import { Component, inject, signal, effect, DestroyRef } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { TranslateModule } from '@ngx-translate/core'
 import { SnackBarService, SnackBarType } from '../../services/snack-bar.service'
@@ -32,22 +32,40 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 })
 export class SnackBarComponent {
   private readonly snackBarService = inject(SnackBarService)
+  private readonly destroyRef = inject(DestroyRef)
 
   visible = signal(false)
   message = signal('')
   type = signal<SnackBarType>('info')
 
+  private timeoutId: number | null = null
+
   constructor() {
-    this.snackBarService.snackBar$.subscribe((data) => {
+    // Effect to react to snackBar signal changes - NO RxJS
+    effect(() => {
+      const data = this.snackBarService.snackBar()
       if (data) {
         this.message.set(data.message)
         this.type.set(data.type)
         this.visible.set(true)
 
+        // Clear previous timeout if exists
+        if (this.timeoutId !== null) {
+          window.clearTimeout(this.timeoutId)
+        }
+
         // Auto-hide after timeout
-        setTimeout(() => {
+        this.timeoutId = window.setTimeout(() => {
           this.visible.set(false)
+          this.timeoutId = null
         }, data.duration || 5000)
+      }
+    })
+
+    // Cleanup timeout on destroy
+    this.destroyRef.onDestroy(() => {
+      if (this.timeoutId !== null) {
+        window.clearTimeout(this.timeoutId)
       }
     })
   }

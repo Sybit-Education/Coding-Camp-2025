@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, signal, effect, inject, DestroyRef, computed } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { Event, EventType } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
 import { DateTimeRangePipe } from '../../services/date.pipe'
@@ -76,14 +75,14 @@ export class EventCardComponent {
       }
     })
 
-    // Subscribe to saved events changes
-    this.localStorageService.savedEvents$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        const ev = this.event()
-        const id = (ev?.id as unknown as string) ?? null
-        this.isSaved.set(id ? this.localStorageService.isEventSaved(id) : false)
-      })
+    // Effect to react to saved events changes - OHNE RxJS
+    effect(() => {
+      // Trigger on saved events signal change
+      this.localStorageService.savedEventsSignal()
+      const ev = this.event()
+      const id = (ev?.id as unknown as string) ?? null
+      this.isSaved.set(id ? this.localStorageService.isEventSaved(id) : false)
+    })
   }
 
   private resetResolved(): void {

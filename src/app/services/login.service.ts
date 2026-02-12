@@ -1,11 +1,9 @@
 import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router'
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { CookieService } from 'ngx-cookie-service'
-import { BehaviorSubject } from 'rxjs'
 import { Login } from '../models/login.module'
 import { SurrealdbService } from './surrealdb.service'
 import { Injectable, inject, signal } from '@angular/core'
-import { toSignal } from '@angular/core/rxjs-interop'
 
 @Injectable({
   providedIn: 'root',
@@ -16,17 +14,8 @@ export class LoginService implements CanActivate {
   private readonly cookieService = inject(CookieService)
   private readonly surrealDBService = inject(SurrealdbService)
 
-  // Signal für reaktiven State
+  // Signal für reaktiven State - OHNE RxJS
   readonly isLoggedInState = signal<boolean>(false)
-
-  // BehaviorSubject für Abwärtskompatibilität
-  private readonly isLoggedInSubject = new BehaviorSubject<boolean>(false)
-  isLoggedIn$ = this.isLoggedInSubject.asObservable()
-
-  // Signal aus Observable für Komponenten
-  readonly isLoggedInSignal = toSignal(this.isLoggedIn$, {
-    initialValue: false,
-  })
 
   private redirect!: unknown[]
   private readonly decoder = new JwtHelperService()
@@ -35,12 +24,10 @@ export class LoginService implements CanActivate {
     try {
       const loggedIn = await this.checkLoginStatus()
       this.isLoggedInState.set(loggedIn)
-      this.isLoggedInSubject.next(loggedIn)
     } catch (error) {
       console.error('Login state check failed:', error)
       this.setToken('')
       this.isLoggedInState.set(false)
-      this.isLoggedInSubject.next(false)
     }
   }
 
@@ -82,10 +69,7 @@ export class LoginService implements CanActivate {
   async setToken(token: string) {
     this.cookieService.set('token', token)
     const loggedIn = await this.checkLoginStatus()
-
-    // Beide State-Mechanismen aktualisieren
     this.isLoggedInState.set(loggedIn)
-    this.isLoggedInSubject.next(loggedIn)
   }
 
   async login(loginParams: Login): Promise<boolean> {
@@ -98,7 +82,6 @@ export class LoginService implements CanActivate {
     return true
   }
 
-  // Methode für Abwärtskompatibilität
   async isLoggedIn(): Promise<boolean> {
     return this.checkLoginStatus()
   }

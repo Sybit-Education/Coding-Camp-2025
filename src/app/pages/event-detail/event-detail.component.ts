@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, effect } from '@angular/core'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { Subscription } from 'rxjs'
 import { MapComponent } from '../../component/map/map.component'
@@ -103,12 +103,10 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       }),
     )
 
-    // Subscription für Login-Status
-    this.subscriptions.add(
-      this.loginservice.isLoggedIn$.subscribe((isLoggedIn) => {
-        this.isLoggedIn = isLoggedIn
-      }),
-    )
+    // Effect für Login-Status - OHNE RxJS
+    effect(() => {
+      this.isLoggedIn = this.loginservice.isLoggedInState()
+    })
   }
 
   ngOnDestroy(): void {

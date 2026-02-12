@@ -1,5 +1,4 @@
 import { Component, input, signal, computed, effect, inject, ChangeDetectionStrategy, DestroyRef } from '@angular/core'
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FavoriteService } from '../../services/favorite.service'
 import { TranslateModule } from '@ngx-translate/core'
 import { IconComponent } from '../icon/icon.component'
@@ -19,7 +18,6 @@ export class FavoriteButtonComponent {
 
   // Services
   private readonly favoriteService = inject(FavoriteService)
-  private readonly destroyRef = inject(DestroyRef)
 
   // Local state as signal
   protected readonly isFavorite = signal(false)
@@ -33,25 +31,25 @@ export class FavoriteButtonComponent {
       }
     })
 
-    // Subscribe to favorite changes
-    this.favoriteService.favoriteEvents$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        const id = this.eventId()
-        if (id) {
-          this.updateFavoriteStatus(id)
-        }
-      })
+    // Effect to react to favorite events changes - OHNE RxJS
+    effect(() => {
+      // Trigger on favorite events change
+      this.favoriteService.favoriteEvents()
+      const id = this.eventId()
+      if (id) {
+        this.updateFavoriteStatus(id)
+      }
+    })
 
-    // Subscribe to localStorage changes
-    this.favoriteService.localStorageService.savedEvents$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        const id = this.eventId()
-        if (id) {
-          this.updateFavoriteStatus(id)
-        }
-      })
+    // Effect to react to localStorage changes - OHNE RxJS
+    effect(() => {
+      // Trigger on saved events signal change
+      this.favoriteService.localStorageService.savedEventsSignal()
+      const id = this.eventId()
+      if (id) {
+        this.updateFavoriteStatus(id)
+      }
+    })
   }
 
   private updateFavoriteStatus(eventId: RecordId<'event'>): void {
