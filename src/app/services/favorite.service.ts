@@ -1,4 +1,4 @@
-import { Injectable, inject, signal, effect } from '@angular/core'
+import { Injectable, inject, signal } from '@angular/core'
 import { Event } from '../models/event.interface'
 import { LocalStorageService } from './local-storage.service'
 import { EventService } from './event.service'
