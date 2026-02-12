@@ -1,4 +1,4 @@
-import { Component, input, signal, effect, inject, ChangeDetectionStrategy, DestroyRef } from '@angular/core'
+import { Component, input, signal, effect, inject, ChangeDetectionStrategy } from '@angular/core'
 import { FavoriteService } from '../../services/favorite.service'
 import { TranslateModule } from '@ngx-translate/core'
 import { IconComponent } from '../icon/icon.component'
