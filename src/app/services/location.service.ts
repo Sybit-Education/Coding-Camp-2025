@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core'
+import { inject, Injectable } from '@angular/core'
 import { SurrealdbService } from './surrealdb.service'
 import { Location } from '../models/location.interface'
 import { RecordId, StringRecordId } from 'surrealdb'
