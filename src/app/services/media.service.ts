@@ -51,7 +51,7 @@ export class MediaService {
 
   async getFirstMediaUrl(mediaArray: RecordId<'media'>[] | undefined): Promise<string | null> {
     if (!mediaArray || mediaArray.length === 0) return null
-    return await this.getMediaUrl(mediaArray[0])
+    return this.getMediaUrl(mediaArray[0])
   }
 
   async getMediaById(mediaId: RecordId<'media'>): Promise<Media> {

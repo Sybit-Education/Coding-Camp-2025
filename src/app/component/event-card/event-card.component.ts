@@ -62,13 +62,17 @@ export class EventCardComponent {
 
   constructor() {
     // Effect to handle event changes
+    // PERFORMANCE FIX: Only update saved status and trigger initialization once
     effect(() => {
       const ev = this.event()
       if (ev?.id) {
         this.resetResolved()
         const id = ev.id as unknown as string
         this.isSaved.set(this.localStorageService.isEventSaved(id))
-        void this.initializeEventDetails(ev)
+        // Use queueMicrotask to avoid blocking the main thread
+        queueMicrotask(() => {
+          void this.initializeEventDetails(ev)
+        })
       } else {
         this.resetResolved()
         this.isSaved.set(false)

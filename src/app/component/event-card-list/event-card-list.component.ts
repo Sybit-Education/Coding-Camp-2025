@@ -50,18 +50,22 @@ export class EventCardListComponent {
   } | null = null
 
   constructor() {
-    // Effect to load events when inputs change
-    effect(async () => {
+    // Effect to trigger data loading when inputs change
+    // PERFORMANCE FIX: Don't use async in effects, use queueMicrotask instead
+    effect(() => {
       const loc = this.location()
       const currentId = this.currentEventId()
 
-      if (loc && currentId) {
-        await this.loadEventsFromLocation(loc, currentId)
-      } else if (!loc && !currentId) {
-        await this.setUpcomingEvents()
-      } else {
-        this.error.set(true)
-      }
+      // Queue the async work to avoid blocking the effect
+      queueMicrotask(() => {
+        if (loc && currentId) {
+          void this.loadEventsFromLocation(loc, currentId)
+        } else if (!loc && !currentId) {
+          void this.setUpcomingEvents()
+        } else {
+          this.error.set(true)
+        }
+      })
     })
   }
 
