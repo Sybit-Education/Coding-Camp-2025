@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, effect } from '@angular/core'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { Subscription } from 'rxjs'
 import { MapComponent } from '../../component/map/map.component'
@@ -80,6 +80,13 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   private readonly markForCheck = injectMarkForCheck()
   readonly sharedStateService = inject(SharedStateService)
 
+  constructor() {
+    // Effect für Login-Status - Muss im Constructor sein (Injection Context)
+    effect(() => {
+      this.isLoggedIn = this.loginservice.isLoggedInState()
+    })
+  }
+
   ngOnInit(): void {
     this.subscriptions.add(
       this.route.paramMap.subscribe((params) => {
@@ -100,13 +107,6 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
       this.route.queryParamMap.subscribe((params) => {
         const filterQueryParam = params.get('filterQuery')
         this.goBackParams = filterQueryParam || null
-      }),
-    )
-
-    // Subscription für Login-Status
-    this.subscriptions.add(
-      this.loginservice.isLoggedIn$.subscribe((isLoggedIn) => {
-        this.isLoggedIn = isLoggedIn
       }),
     )
   }

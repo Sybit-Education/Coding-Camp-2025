@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, OnDestroy, OnChanges, SimpleChanges, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, input, signal, effect, inject, DestroyRef, computed } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
-import { Subscription } from 'rxjs'
 import { Event, EventType } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
 import { DateTimeRangePipe } from '../../services/date.pipe'
@@ -10,7 +9,6 @@ import { LocationService } from '../../services/location.service'
 import { LocalStorageService } from '../../services/local-storage.service'
 import { MediaService } from '../../services/media.service'
 import { TranslateModule } from '@ngx-translate/core'
-import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { MatIconModule } from '@angular/material/icon'
 import { IconComponent } from '@app/component/icon/icon.component'
 import { EventTypePillComponent } from '@app/component/event-type-pill/event-type-pill.component'
@@ -31,114 +29,107 @@ import { FavoriteButtonComponent } from '../favorite-button/favorite-button.comp
   templateUrl: './event-card.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EventCardComponent implements OnInit, OnDestroy, OnChanges {
-  @Input() event: Event | null = null
+export class EventCardComponent {
+  // Signal-based Input
+  readonly event = input<Event | null>(null)
 
-  location: Location | null = null
-  eventType: EventType | null = null
-  isSaved = false
-  mediaUrl: string | null = null
-
-  get titleId(): string {
-    const id = this.event?.id?.id ?? this.event?.id ?? 'event'
-    return `event-card-title-${id}`
-  }
-
-  get ariaLabel(): string {
-    const name = this.event?.name || ''
-    const loc = this.location?.name ? ', ' + this.location.name : ''
-    return name + loc
-  }
-
-  private readonly subscriptions = new Subscription()
+  // Services
   private readonly surrealDBService = inject(SurrealdbService)
   private readonly locationService = inject(LocationService)
   private readonly localStorageService = inject(LocalStorageService)
   private readonly mediaService = inject(MediaService)
-  private readonly markForCheck = injectMarkForCheck()
+  private readonly destroyRef = inject(DestroyRef)
 
-  ngOnInit() {
-    if (this.event?.id) {
-      this.initializeSavedState()
-      this.initializeEventDetails()
-    }
-  }
+  // Local state as signals
+  protected readonly location = signal<Location | null>(null)
+  protected readonly eventType = signal<EventType | null>(null)
+  protected readonly isSaved = signal(false)
+  protected readonly mediaUrl = signal<string | null>(null)
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if ('event' in changes) {
-      // Vorherige aufgelöste Daten leeren, um "altes Bild" zu vermeiden
-      this.resetResolved()
+  // Computed properties
+  protected readonly titleId = computed(() => {
+    const ev = this.event()
+    const id = ev?.id?.id ?? ev?.id ?? 'event'
+    return `event-card-title-${id}`
+  })
 
-      if (this.event?.id) {
-        const id = this.event.id as unknown as string
-        this.isSaved = this.localStorageService.isEventSaved(id)
-        void this.initializeEventDetails()
+  protected readonly ariaLabel = computed(() => {
+    const ev = this.event()
+    const name = ev?.name || ''
+    const loc = this.location()?.name ? ', ' + this.location()?.name : ''
+    return name + loc
+  })
+
+  constructor() {
+    // Effect to handle event changes
+    // PERFORMANCE FIX: Only update saved status and trigger initialization once
+    effect(() => {
+      const ev = this.event()
+      if (ev?.id) {
+        this.resetResolved()
+        const id = ev.id as unknown as string
+        this.isSaved.set(this.localStorageService.isEventSaved(id))
+        // Use queueMicrotask to avoid blocking the main thread
+        queueMicrotask(() => {
+          void this.initializeEventDetails(ev)
+        })
       } else {
-        this.isSaved = false
+        this.resetResolved()
+        this.isSaved.set(false)
       }
-    }
+    })
+
+    // Effect to react to saved events changes - OHNE RxJS
+    // This ensures the saved status updates when favorites are toggled
+    effect(() => {
+      this.localStorageService.savedEventsSignal()
+      const ev = this.event()
+      const id = (ev?.id as unknown as string) ?? null
+      this.isSaved.set(id ? this.localStorageService.isEventSaved(id) : false)
+    })
   }
 
   private resetResolved(): void {
-    this.location = null
-    this.eventType = null
-    this.mediaUrl = null
-    this.markForCheck()
+    this.location.set(null)
+    this.eventType.set(null)
+    this.mediaUrl.set(null)
   }
 
-  private initializeSavedState(): void {
-    const currentId = (this.event?.id as unknown as string) ?? null
-    this.isSaved = currentId ? this.localStorageService.isEventSaved(currentId) : false
-
-    // Subscription auf Saved-Events; nutzt jeweils den aktuellen this.event-Wert
-    this.subscriptions.add(
-      this.localStorageService.savedEvents$.subscribe(() => {
-        const id = (this.event?.id as unknown as string) ?? null
-        this.isSaved = id ? this.localStorageService.isEventSaved(id) : false
-        this.markForCheck()
-      }),
-    )
-  }
-
-  private async initializeEventDetails(): Promise<void> {
-    if (!this.event) return
-
+  private async initializeEventDetails(event: Event): Promise<void> {
     try {
       // Verwende Promise.all für parallele Ausführung
-      const [location, eventType, mediaUrl] = await Promise.all([this.loadLocation(), this.loadEventType(), this.loadMedia()])
+      const [location, eventType, mediaUrl] = await Promise.all([
+        this.loadLocation(event),
+        this.loadEventType(event),
+        this.loadMedia(event),
+      ])
 
-      // Batch-Update der Komponenten-Properties für weniger Change Detection Zyklen
-      setTimeout(() => {
-        this.location = location
-        this.eventType = eventType
-        this.mediaUrl = mediaUrl
-
-        // Change Detection auslösen, da wir OnPush verwenden
-        this.markForCheck()
-      }, 0)
+      // Update signals
+      this.location.set(location)
+      this.eventType.set(eventType)
+      this.mediaUrl.set(mediaUrl)
     } catch (error) {
       console.error('Fehler beim Laden der Event-Details:', error)
-      this.mediaUrl = null
-      this.markForCheck() // Auch bei Fehlern Change Detection auslösen
+      this.mediaUrl.set(null)
     }
   }
 
-  private async loadLocation(): Promise<Location | null> {
-    if (!this.event?.location) return null
+  private async loadLocation(event: Event): Promise<Location | null> {
+    if (!event?.location) return null
 
     try {
-      return await this.locationService.getLocationByID(this.event.location)
+      return await this.locationService.getLocationByID(event.location)
     } catch (error) {
       console.warn('Fehler beim Laden der Location:', error)
       return null
     }
   }
 
-  private async loadEventType(): Promise<EventType | null> {
-    if (!this.event?.event_type) return null
+  private async loadEventType(event: Event): Promise<EventType | null> {
+    if (!event?.event_type) return null
 
     try {
-      const typeRecord = this.event.event_type
+      const typeRecord = event.event_type
       const result = await this.surrealDBService.getByRecordId<{
         name: string
       }>(typeRecord)
@@ -149,18 +140,8 @@ export class EventCardComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  private async loadMedia(): Promise<string | null> {
-    if (!this.event?.media || this.event.media.length === 0) return null
-    return await this.mediaService.getFirstMediaUrl(this.event.media)
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe()
-
-    // Referenzen freigeben
-    this.event = null
-    this.location = null
-    this.eventType = null
-    this.mediaUrl = null
+  private async loadMedia(event: Event): Promise<string | null> {
+    if (!event?.media || event.media.length === 0) return null
+    return await this.mediaService.getFirstMediaUrl(event.media)
   }
 }

@@ -1,17 +1,17 @@
 <ul class="pill-list">
-  @if (pill) {
+  @if (pill(); as pillData) {
     <li
-      [title]="pill.label"
-      [attr.aria-label]="'Kategorie: ' + pill.label"
+      [title]="pillData.label"
+      [attr.aria-label]="'Kategorie: ' + pillData.label"
       class="focus-within:ring-2 focus-within:ring-sky-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-900"
       [ngStyle]="{
-        'background-color': pill.color || '#F3F4F6',
-        'color': pill.textColor,
-        'border-color': pill.color ? 'transparent' : '#E5E7EB',
+        'background-color': pillData.color || '#F3F4F6',
+        'color': pillData.textColor,
+        'border-color': pillData.color ? 'transparent' : '#E5E7EB',
       }"
     >
-      <a [routerLink]="disabled ? null : ['/kategorie', pill.slug]" class="max-w-[12rem] truncate focus-visible:outline-none">{{
-        pill.label
+      <a [routerLink]="disabled() ? null : ['/kategorie', pillData.slug]" class="max-w-[12rem] truncate focus-visible:outline-none">{{
+        pillData.label
       }}</a>
     </li>
   }
