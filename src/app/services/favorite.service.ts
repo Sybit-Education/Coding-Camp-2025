@@ -20,14 +20,10 @@ export class FavoriteService {
   readonly favoriteEvents = this.favoriteEventsState.asReadonly()
 
   constructor() {
-    // Effect um auf Änderungen an gespeicherten Events zu reagieren
-    effect(() => {
-      // Trigger reload when saved events change
-      const savedIds = this.localStorageService.savedEventsSignal()
-      if (savedIds.length > 0 || this.favoriteEventsState().length > 0) {
-        void this.loadFavoriteEvents()
-      }
-    })
+    // REMOVED: Effect that auto-reloads favorites on every savedEventsSignal change
+    // This was causing performance issues because it triggered expensive DB queries
+    // on every interaction. Favorites are now loaded explicitly via loadFavoriteEvents()
+    // or initializeData() when needed.
   }
 
   async initializeData(): Promise<void> {

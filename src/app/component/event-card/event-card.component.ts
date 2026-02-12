@@ -76,8 +76,8 @@ export class EventCardComponent {
     })
 
     // Effect to react to saved events changes - OHNE RxJS
+    // This ensures the saved status updates when favorites are toggled
     effect(() => {
-      // Trigger on saved events signal change
       this.localStorageService.savedEventsSignal()
       const ev = this.event()
       const id = (ev?.id as unknown as string) ?? null

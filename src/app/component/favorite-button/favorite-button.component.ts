@@ -31,16 +31,6 @@ export class FavoriteButtonComponent {
       }
     })
 
-    // Effect to react to favorite events changes - OHNE RxJS
-    effect(() => {
-      // Trigger on favorite events change
-      this.favoriteService.favoriteEvents()
-      const id = this.eventId()
-      if (id) {
-        this.updateFavoriteStatus(id)
-      }
-    })
-
     // Effect to react to localStorage changes - OHNE RxJS
     effect(() => {
       // Trigger on saved events signal change
