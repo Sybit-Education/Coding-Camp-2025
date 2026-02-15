@@ -49,9 +49,9 @@ export class HomeComponent implements OnInit {
     try {
       const [topics, eventTypes] = await Promise.all([this.topicService.getAllTopics(), this.eventService.getAllEventTypes()])
 
-      const higlghtTopic = topics.find((topic) => this.topicService.isTopicHighlight(topic))
-      if (higlghtTopic) {
-        this.topics = [higlghtTopic, ...topics.filter((topic) => topic.id !== higlghtTopic.id)]
+      const highlightTopic = topics.find((topic) => this.topicService.isTopicHighlight(topic))
+      if (highlightTopic) {
+        this.topics = [highlightTopic, ...topics.filter((topic) => topic.id !== highlightTopic.id)]
       } else {
         this.topics = topics
       }

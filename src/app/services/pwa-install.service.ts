@@ -1,4 +1,5 @@
-import { Injectable, signal } from '@angular/core'
+import { Injectable, signal, PLATFORM_ID, inject } from '@angular/core'
+import { isPlatformBrowser } from '@angular/common'
 
 type Platform = 'ios' | 'android' | 'desktop'
 
@@ -15,11 +16,16 @@ export class PwaInstallService {
   private deferredPrompt: BeforeInstallPromptEvent | null = null
   private readonly PROMPT_COOLDOWN_MS = 30 * 24 * 60 * 60 * 1000 // 30 Tage
   private readonly STORAGE_KEY_DISMISS = 'pwa-install-dismissed-at'
+  private readonly platformId = inject(PLATFORM_ID)
+  private readonly isBrowser = isPlatformBrowser(this.platformId)
 
   constructor() {
-    this.platform.set(this.detectPlatform())
-    this.checkInstallStatus()
-    this.listenForInstallPrompt()
+    // Only initialize in browser
+    if (this.isBrowser) {
+      this.platform.set(this.detectPlatform())
+      this.checkInstallStatus()
+      this.listenForInstallPrompt()
+    }
   }
 
   /**
@@ -173,6 +179,8 @@ export class PwaInstallService {
    * - iOS: wird durch UI-Component angeleitet (Share → Add to Home)
    */
   async install(): Promise<void> {
+    if (!this.isBrowser) return
+    
     const currentPlatform = this.platform()
 
     // iOS: Kann nicht direkt installiert werden
@@ -214,6 +222,7 @@ export class PwaInstallService {
    * Speichere Zeitstempel für 30-Tage Cooldown
    */
   dismiss(): void {
+    if (!this.isBrowser) return
     this.recordDismissal()
     this.showBanner.set(false)
   }

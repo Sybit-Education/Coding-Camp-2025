@@ -30,7 +30,7 @@ export interface Event extends Record<string, unknown> {
   location?: RecordId<'location'>
   topic?: RecordId<'topic'>[]
   media: RecordId<'media'>[]
-  weehlchair?: boolean
+  wheelchair?: boolean
   seeing?: boolean
   hearing?: boolean
 }

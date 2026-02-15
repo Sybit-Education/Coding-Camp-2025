@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
+import { Location } from '@angular/common'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { EventCardComponent } from '../../component/event-card/event-card.component'
 
@@ -51,6 +52,7 @@ interface EventWithResolvedLocation extends AppEvent {
 export class KategorieComponent implements OnInit {
   private readonly route = inject(ActivatedRoute)
   private readonly router = inject(Router)
+  private readonly location = inject(Location)
   private readonly markForCheck = injectMarkForCheck()
 
   private readonly eventService: EventService = inject(EventService)
@@ -343,11 +345,11 @@ export class KategorieComponent implements OnInit {
 
     const queryString = new URLSearchParams(params).toString()
     this.filterQuery = queryString ? `${queryString}` : null
-    window.history.replaceState(
-      {},
-      '',
-      `${this.router.url.split('?')[0]}${this.filterQuery ? '?filterQuery=' + encodeURIComponent(this.filterQuery) : ''}`,
-    )
+    
+    // Use Angular's Location service instead of window.history for SSR compatibility
+    const baseUrl = this.router.url.split('?')[0]
+    const newUrl = this.filterQuery ? `${baseUrl}?filterQuery=${encodeURIComponent(this.filterQuery)}` : baseUrl
+    this.location.replaceState(newUrl)
   }
 
   private resolveFilterQuery(queryParams: URLSearchParams) {

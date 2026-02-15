@@ -225,7 +225,7 @@ export class EventCreateComponent implements OnInit {
       }
 
       // Barrierefreiheiten
-      if (event.weehlchair) {
+      if (event.wheelchair) {
         this.selectedAccessibiltiys.push(this.allAccessebiltiys[0]) // Rollstuhlgerecht
       }
       if (event.seeing) {
@@ -392,7 +392,7 @@ export class EventCreateComponent implements OnInit {
         media: finalMediaIds,
         age: this.age ?? undefined,
         restriction: this.restriction || undefined,
-        weehlchair: this.selectedAccessibiltiys.some((a) => a.accessibilityName === this.accessibilityWheelchair) || false,
+        wheelchair: this.selectedAccessibiltiys.some((a) => a.accessibilityName === this.accessibilityWheelchair) || false,
         seeing: this.selectedAccessibiltiys.some((a) => a.accessibilityName === this.accessibilitySeeing) || false,
         hearing: this.selectedAccessibiltiys.some((a) => a.accessibilityName === this.accessibilityHearing) || false,
       }

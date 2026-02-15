@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, PLATFORM_ID } from '@angular/core'
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router'
+import { isPlatformBrowser, DOCUMENT } from '@angular/common'
 import { LiveAnnouncer } from '@angular/cdk/a11y'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
@@ -37,6 +38,9 @@ export class AppComponent implements OnInit {
   private readonly liveAnnouncer = inject(LiveAnnouncer)
   private readonly translate = inject(TranslateService)
   private readonly destroyRef = inject(DestroyRef)
+  private readonly platformId = inject(PLATFORM_ID)
+  private readonly document = inject(DOCUMENT)
+  private readonly isBrowser = isPlatformBrowser(this.platformId)
 
   constructor() {
     this.updateService.updateAvailable$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((available) => {
@@ -53,25 +57,30 @@ export class AppComponent implements OnInit {
       .subscribe((event: NavigationEnd) => {
         this.isCarouselPage = event.urlAfterRedirects === '/'
 
-        // Fokus auf den Hauptinhalt setzen, ohne bestehende Fokusquelle zu verdrängen
-        requestAnimationFrame(() => {
-          const activeElement = document.activeElement
-          const shouldMoveFocus = !activeElement || activeElement === document.body || activeElement === document.documentElement
-          if (!shouldMoveFocus) {
-            return
-          }
+        // Only run focus management in browser
+        if (this.isBrowser) {
+          // Fokus auf den Hauptinhalt setzen, ohne bestehende Fokusquelle zu verdrängen
+          requestAnimationFrame(() => {
+            const activeElement = this.document.activeElement
+            const shouldMoveFocus = !activeElement || activeElement === this.document.body || activeElement === this.document.documentElement
+            if (!shouldMoveFocus) {
+              return
+            }
 
-          const main = document.getElementById('main-content')
-          main?.focus()
-        })
+            const main = this.document.getElementById('main-content')
+            main?.focus()
+          })
+        }
 
         // Screenreader informieren
         this.liveAnnouncer.clear()
         this.liveAnnouncer.announce(this.translate.instant('COMMON.PAGE_UPDATED'), 'polite')
       })
 
-    // Prüfe auf Updates beim Start
-    this.updateService.checkForUpdate()
+    // Prüfe auf Updates beim Start (only in browser)
+    if (this.isBrowser) {
+      this.updateService.checkForUpdate()
+    }
   }
 
   updateApp(): void {
