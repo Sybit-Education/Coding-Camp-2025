@@ -256,19 +256,6 @@ export class AdminLocationOverviewComponent implements OnInit {
       this.cancelLocationDeletion()
     }
   }
-  async deleteLocation(locationId: RecordId) {
-    if (confirm('Möchten Sie diesen Ort wirklich löschen?')) {
-      try {
-        // Verwende direkt den Location-Service zum Löschen
-        await this.locationService.delete(locationId as RecordId<'location'>)
-      } catch (deleteError) {
-        console.error('Fehler beim Löschen:', deleteError)
-      }
-
-      // Refresh the locations list
-      await this.loadLocations()
-    }
-  }
 
   private buildLocationEventCounts(events: Event[]): Map<string, number> {
     const counts = new Map<string, number>()
