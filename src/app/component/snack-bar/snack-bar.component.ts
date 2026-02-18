@@ -59,6 +59,13 @@ export class SnackBarComponent {
           this.visible.set(false)
           this.timeoutId = null
         }, data.duration || 5000)
+      } else {
+        // Hide snackbar and clear any pending timeout when cleared
+        this.visible.set(false)
+        if (this.timeoutId !== null) {
+          window.clearTimeout(this.timeoutId)
+          this.timeoutId = null
+        }
       }
     })
 
