@@ -6,7 +6,6 @@ import {
   signal,
   effect,
   inject,
-  computed,
 } from '@angular/core'
 import { SafeHtml } from '@angular/platform-browser'
 import { IconRegistryService } from '../../services/icon-registry.service'
