@@ -286,8 +286,8 @@ export class SurrealdbService extends Surreal {
               console.warn('Failed to kill live query:', err)
             }
             this.liveQueryUuids.delete(queryKey)
-            this.liveQueryCallbacks.delete(queryKey)
           }
+          this.liveQueryCallbacks.delete(queryKey)
         }
       }
     }
