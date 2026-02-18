@@ -66,10 +66,18 @@ export class SnackBarComponent {
     this.destroyRef.onDestroy(() => {
       if (this.timeoutId !== null) {
         window.clearTimeout(this.timeoutId)
+        this.timeoutId = null
       }
     })
   }
 
+  close(): void {
+    if (this.timeoutId !== null) {
+      window.clearTimeout(this.timeoutId)
+      this.timeoutId = null
+    }
+    this.visible.set(false)
+  }
   getTypeClass(): string {
     switch (this.type()) {
       case 'success':
