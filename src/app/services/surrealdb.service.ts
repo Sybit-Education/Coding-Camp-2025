@@ -261,7 +261,14 @@ export class SurrealdbService extends Surreal {
     
     // Initialize the live query if not already running
     if (!this.liveQueryUuids.has(queryKey)) {
-      void this.initializeLiveQuery<T>(queryKey, table, diff)
+      void this.initializeLiveQuery<T>(queryKey, table, diff).catch((err) => {
+        console.error('Failed to initialize live query:', err)
+        // Notify listeners that the live query has closed due to an error
+        updateSignal.set({ action: 'CLOSE' })
+        // Clean up any state associated with this live query key
+        this.liveQueryCallbacks.delete(queryKey)
+        this.liveQueryUuids.delete(queryKey)
+      })
     }
     
     const unsubscribe = async () => {
