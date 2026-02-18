@@ -35,7 +35,11 @@ export class SurrealdbService extends Surreal {
     super()
   }
 
-  private recordIdToString(recordId: RecordId<string> | StringRecordId): string {
+  /**
+   * Convert a RecordId to a string representation.
+   * Public method to be used by components for consistent RecordId handling.
+   */
+  recordIdToString(recordId: RecordId<string> | StringRecordId): string {
     const asString = (recordId as unknown as { toString?: () => string })?.toString?.()
     if (typeof asString === 'string') {
       return asString
@@ -312,9 +316,19 @@ export class SurrealdbService extends Surreal {
       const queryUuid = await super.live<T>(
         table,
         (action, result) => {
-          const update: LiveQueryUpdate<T> = { 
-            action: action as 'CREATE' | 'UPDATE' | 'DELETE',
-            result: result as T
+          // Handle all possible actions including CLOSE
+          let update: LiveQueryUpdate<T>
+          
+          if (action === 'CLOSE') {
+            update = { action: 'CLOSE' }
+            // Clean up on CLOSE
+            this.liveQueryCallbacks.delete(queryKey)
+            this.liveQueryUuids.delete(queryKey)
+          } else {
+            update = { 
+              action: action as 'CREATE' | 'UPDATE' | 'DELETE',
+              result: result as T
+            }
           }
           
           // Notify all callbacks for this query
@@ -331,6 +345,17 @@ export class SurrealdbService extends Surreal {
       this.liveQueryUuids.set(queryKey, queryUuid)
     } catch (error) {
       console.error('Failed to create live query:', error)
+      // Notify listeners of failure via CLOSE event
+      const update: LiveQueryUpdate<T> = { action: 'CLOSE' }
+      const callbacks = this.liveQueryCallbacks.get(queryKey)
+      if (callbacks) {
+        callbacks.forEach(callback => {
+          (callback as LiveQueryCallback<T>)(update)
+        })
+      }
+      // Clean up
+      this.liveQueryCallbacks.delete(queryKey)
+      this.liveQueryUuids.delete(queryKey)
       throw error
     }
   }

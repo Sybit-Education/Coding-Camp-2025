@@ -85,6 +85,7 @@ export class SnackBarComponent {
     }
     this.visible.set(false)
   }
+
   getTypeClass(): string {
     switch (this.type()) {
       case 'success':
@@ -111,9 +112,5 @@ export class SnackBarComponent {
       default:
         return 'M8 16A8 8 0 108 0a8 8 0 000 16zm1-11a1 1 0 10-2 0v4a1 1 0 102 0V5zm-1 9a1 1 0 100-2 1 1 0 000 2z'
     }
-  }
-
-  close(): void {
-    this.visible.set(false)
   }
 }

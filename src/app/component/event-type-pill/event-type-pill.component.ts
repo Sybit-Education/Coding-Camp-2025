@@ -28,6 +28,9 @@ export class EventTypePillComponent {
 
   // Local state
   protected readonly pill = signal<Pill | null>(null)
+  
+  // Version counter to prevent race conditions
+  private buildVersion = 0
 
   constructor() {
     // Effect to rebuild pill when event changes
@@ -47,7 +50,16 @@ export class EventTypePillComponent {
       return
     }
 
+    // Increment version to invalidate any in-flight requests
+    const currentVersion = ++this.buildVersion
+
     const allEventType = await this.eventService.getAllEventTypes()
+    
+    // Check if this is still the latest request
+    if (currentVersion !== this.buildVersion) {
+      return // Ignore stale response
+    }
+
     const eventType = allEventType.find((et) => et.id.id === event.event_type?.id)
 
     if (!eventType?.name) {

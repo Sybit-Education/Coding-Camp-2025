@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, signal, effect, inject, DestroyRef, computed } from '@angular/core'
+import { ChangeDetectionStrategy, Component, input, signal, effect, inject, computed } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { Event, EventType } from '../../models/event.interface'
@@ -38,7 +38,6 @@ export class EventCardComponent {
   private readonly locationService = inject(LocationService)
   private readonly localStorageService = inject(LocalStorageService)
   private readonly mediaService = inject(MediaService)
-  private readonly destroyRef = inject(DestroyRef)
 
   // Local state as signals
   protected readonly location = signal<Location | null>(null)
@@ -67,7 +66,7 @@ export class EventCardComponent {
       const ev = this.event()
       if (ev?.id) {
         this.resetResolved()
-        const id = ev.id as unknown as string
+        const id = this.surrealDBService.recordIdToString(ev.id)
         this.isSaved.set(this.localStorageService.isEventSaved(id))
         // Use queueMicrotask to avoid blocking the main thread
         queueMicrotask(() => {
@@ -84,7 +83,7 @@ export class EventCardComponent {
     effect(() => {
       this.localStorageService.savedEventsSignal()
       const ev = this.event()
-      const id = (ev?.id as unknown as string) ?? null
+      const id = ev?.id ? this.surrealDBService.recordIdToString(ev.id) : null
       this.isSaved.set(id ? this.localStorageService.isEventSaved(id) : false)
     })
   }

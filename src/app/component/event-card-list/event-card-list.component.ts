@@ -52,12 +52,18 @@ export class EventCardListComponent {
   constructor() {
     // Effect to trigger data loading when inputs change
     // PERFORMANCE FIX: Don't use async in effects, use queueMicrotask instead
+    // Re-read signals inside microtask to avoid stale values
     effect(() => {
-      const loc = this.location()
-      const currentId = this.currentEventId()
+      // Trigger the effect when inputs change
+      this.location()
+      this.currentEventId()
 
       // Queue the async work to avoid blocking the effect
       queueMicrotask(() => {
+        // Re-read the signals to get current values
+        const loc = this.location()
+        const currentId = this.currentEventId()
+        
         if (loc && currentId) {
           void this.loadEventsFromLocation(loc, currentId)
         } else if (!loc && !currentId) {

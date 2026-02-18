@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject, effect, signal } from '@angular/core'
 
 import { Event } from '../../models/event.interface'
-import { Router, RouterLink } from '@angular/router'
+import { RouterLink } from '@angular/router'
 import { FavoriteService } from '../../services/favorite.service'
 import { EventCardComponent } from '../../component/event-card/event-card.component'
 import { TranslateModule } from '@ngx-translate/core'
@@ -29,7 +29,6 @@ export class FavouritesComponent implements OnInit {
   protected readonly loading = signal(true)
 
   private readonly favoriteService = inject(FavoriteService)
-  private readonly router = inject(Router)
 
   constructor() {
     // Effect um auf Änderungen zu reagieren
