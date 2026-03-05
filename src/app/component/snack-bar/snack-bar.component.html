@@ -1,38 +1,39 @@
-<div
-  *ngIf="visible()"
-  [@snackBarState]="visible() ? 'visible' : 'void'"
-  class="fixed top-20 right-5 z-50 mb-4 flex w-full max-w-md items-center rounded-lg border p-4 shadow"
-  [ngClass]="getTypeClass()"
-  role="alert"
->
-  <div class="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg">
-    <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-      <path [attr.d]="getIcon()" />
-    </svg>
-    <span class="sr-only">{{ type() }} icon</span>
-  </div>
-  <div class="ml-3 text-sm font-normal">{{ message() }}</div>
-  <button
-    type="button"
-    class="-mx-1.5 -my-1.5 ml-auto inline-flex h-8 w-8 rounded-lg p-1.5 hover:bg-gray-200 focus:ring-2 focus:ring-gray-300"
-    [ngClass]="{
-      'hover:bg-green-200': type() === 'success',
-      'hover:bg-red-200': type() === 'error',
-      'hover:bg-yellow-200': type() === 'warning',
-      'hover:bg-blue-200': type() === 'info',
-    }"
-    (click)="close()"
-    aria-label="Close"
+@if (visible()) {
+  <div
+    [@snackBarState]="visible() ? 'visible' : 'void'"
+    class="fixed top-20 right-5 z-50 mb-4 flex w-full max-w-md items-center rounded-lg border p-4 shadow"
+    [ngClass]="getTypeClass()"
+    role="alert"
   >
-    <span class="sr-only">Close</span>
-    <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-      <path
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-      />
-    </svg>
-  </button>
-</div>
+    <div class="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg">
+      <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+        <path [attr.d]="getIcon()" />
+      </svg>
+      <span class="sr-only">{{ type() }} icon</span>
+    </div>
+    <div class="ml-3 text-sm font-normal">{{ message() }}</div>
+    <button
+      type="button"
+      class="-mx-1.5 -my-1.5 ml-auto inline-flex h-8 w-8 rounded-lg p-1.5 hover:bg-gray-200 focus:ring-2 focus:ring-gray-300"
+      [ngClass]="{
+        'hover:bg-green-200': type() === 'success',
+        'hover:bg-red-200': type() === 'error',
+        'hover:bg-yellow-200': type() === 'warning',
+        'hover:bg-blue-200': type() === 'info',
+      }"
+      (click)="close()"
+      [attr.aria-label]="'COMMON.CLOSE' | translate"
+    >
+      <span class="sr-only">{{ 'COMMON.CLOSE' | translate }}</span>
+      <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+        />
+      </svg>
+    </button>
+  </div>
+}

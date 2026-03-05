@@ -1,7 +1,7 @@
 -- Optimaler Setup für deutsche Volltextsuche
 DEFINE ANALYZER OVERWRITE autocomplete_de 
     TOKENIZERS blank, class 
-    FILTERS lowercase, ascii, edgengram(2,10);
+    FILTERS lowercase, ascii, edgengram(2,20);
 
 DEFINE ANALYZER OVERWRITE stemming_de 
     TOKENIZERS blank, class, punct 

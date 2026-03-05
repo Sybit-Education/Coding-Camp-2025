@@ -78,7 +78,7 @@ export class FavoriteService {
           if (event) {
             events.push(event)
           } else {
-            console.info(`Event with ID ${id} not found`)
+            console.error(`Event with ID ${id} not found`)
           }
         } catch (err) {
           console.error(`Error loading event with ID ${id}:`, err)
@@ -92,7 +92,6 @@ export class FavoriteService {
         return dateA.getTime() - dateB.getTime()
       })
 
-      console.log(`Loaded and sorted ${sortedEvents.length} favorite events`)
       this.favoriteEventsSubject.next(sortedEvents)
     } catch (error) {
       console.error('Fehler beim Laden der Favoriten:', error)

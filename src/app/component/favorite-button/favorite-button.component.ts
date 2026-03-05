@@ -2,16 +2,18 @@ import { Component, Input, OnInit, OnDestroy, inject } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { FavoriteService } from '../../services/favorite.service'
 import { TranslateModule } from '@ngx-translate/core'
+import { IconComponent } from '../icon/icon.component'
 
 import { RecordId } from 'surrealdb'
 
 @Component({
   selector: 'app-favorite-button',
-  imports: [TranslateModule],
+  imports: [TranslateModule, IconComponent],
   templateUrl: './favorite-button.component.html',
 })
 export class FavoriteButtonComponent implements OnInit, OnDestroy {
   @Input() eventId: RecordId<'event'> | undefined
+  @Input() isSmall = false
 
   isFavorite = false
   private subscription?: Subscription

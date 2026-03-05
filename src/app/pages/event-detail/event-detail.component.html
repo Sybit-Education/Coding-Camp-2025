@@ -1,17 +1,26 @@
 <app-go-back-button [goBackParams]="goBackParams ? goBackParams : null"> </app-go-back-button>
 <div>
   <!-- Skip-Link für Screenreader -->
-  <a href="#event-content" class="sr-only mt-2 focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2">
+  <a
+    [routerLink]="[]"
+    fragment="event-content"
+    class="sr-only mt-2 focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2"
+  >
     {{ 'event-detail.skip-to-content' | translate }}
   </a>
 
   @if (event) {
     <article class="flex flex-col p-2">
-      <section id="event-content" class="info-card rounded-2xl bg-gray-100 shadow-2xl">
+      <section
+        id="event-content"
+        class="info-card rounded-2xl bg-gray-100 shadow-2xl"
+        role="region"
+        [attr.aria-label]="'event-detail.main-info' | translate"
+      >
         <!-- Back-Button in der oberen linken Ecke -->
         <div class="relative">
           <div class="pointer-events-none absolute top-2 left-2 z-10">
-            <app-event-type-pill class="text-xs" [event]="event"></app-event-type-pill>
+            <app-event-type-pill class="text-xs" [event]="event" [disabled]="true"></app-event-type-pill>
           </div>
           <app-event-image
             [images]="mediaList"
@@ -35,7 +44,7 @@
                 <app-share [event]="event" [location]="location" class="p-1"></app-share>
                 @if (isLoggedIn) {
                   <button
-                    class="hover*:bg-blue-600 cursor-pointer rounded-full bg-blue-500 px-4 py-2 font-bold text-white"
+                    class="hover*:bg-blue-600 cursor-pointer rounded-full bg-blue-500 px-4 py-2 font-bold text-white focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
                     (click)="editEvent()"
                   >
                     {{ 'event-detail.edit' | translate }}
@@ -62,7 +71,7 @@
             </div>
             @if (isLoggedIn) {
               <button
-                class="hover*:bg-blue-600 cursor-pointer rounded-full bg-blue-500 px-4 py-2 font-bold text-white"
+                class="hover*:bg-blue-600 cursor-pointer rounded-full bg-blue-500 px-4 py-2 font-bold text-white focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
                 (click)="editEvent()"
               >
                 {{ 'event-detail.edit' | translate }}
@@ -72,10 +81,10 @@
         }
         <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
         <div class="flex justify-between">
-          <div class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl">
+          <div class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl lg:grid-cols-2">
             <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
-              <div class="flex items-center justify-center">
-                <div class="flex items-center justify-center" aria-hidden="true">
+              <div class="mt-3 flex items-start justify-center">
+                <div class="flex items-start justify-center" aria-hidden="true">
                   <app-icon name="calendar" class="h-8 w-8" aria-hidden="true"></app-icon>
                 </div>
               </div>
@@ -89,7 +98,7 @@
               </div>
             </div>
             <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
-              <div class="flex items-center justify-center">
+              <div class="mt-3 flex items-start justify-center">
                 <div class="flex items-center justify-center" aria-hidden="true">
                   <app-icon name="location" class="h-8 w-8" aria-hidden="true"></app-icon>
                 </div>
@@ -100,13 +109,12 @@
                 </h3>
                 <p class="mb-0">{{ location?.name || 'Ort wird bekannt gegeben' }}</p>
                 @if (location?.street) {
-                  <p class="mb-0">{{ location?.street }}</p>
-                  <p class="mb-0">{{ location?.zip_code }} {{ location?.city }}</p>
+                  <p class="mb-0">{{ location?.street }}, {{ location?.zip_code }} {{ location?.city }}</p>
                 }
               </div>
             </div>
             <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
-              <div class="flex items-center justify-center">
+              <div class="mt-3 flex items-start justify-center">
                 <div class="flex items-center justify-center" aria-hidden="true">
                   <app-icon name="money_bag" class="h-8 w-8" aria-hidden="true"></app-icon>
                 </div>
@@ -126,7 +134,7 @@
             </div>
             @if (organizer) {
               <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
-                <div class="flex items-center justify-center">
+                <div class="mt-3 flex items-start justify-center">
                   <div class="flex items-center justify-center" aria-hidden="true">
                     <app-icon name="person" class="h-8 w-8" aria-hidden="true"></app-icon>
                   </div>
@@ -144,14 +152,20 @@
       </section>
 
       @if (event.description) {
-        <section class="desc mt-10 rounded-2xl" aria-labelledby="description-heading">
+        <section class="desc mt-10 rounded-2xl" aria-labelledby="description-heading" role="region">
           <h2 id="description-heading">
             {{ 'event-detail.description' | translate }}
           </h2>
           <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
-          <p [innerHTML]="event.description" class="hyphens-auto">
-            {{ event.description }}
-          </p>
+          @if ((this.sharedStateService.getSizeOfScreen() | async) === screenSize.SMALL) {
+            <p [innerHTML]="event.description" class="text-base hyphens-auto">
+              {{ event.description }}
+            </p>
+          } @else {
+            <p [innerHTML]="event.description" class="text-lg hyphens-auto">
+              {{ event.description }}
+            </p>
+          }
           @if (event.more_infos_link) {
             <h3>{{ 'event-detail.more_information' | translate }}</h3>
             <p>
@@ -181,14 +195,18 @@
             </div>
           </div>
           <div class="flex w-full justify-center py-8">
-            <button class="h-12 cursor-pointer rounded-md bg-green-400 px-4 shadow hover:opacity-90" (click)="startRoute()">
+            <button
+              class="h-12 cursor-pointer rounded-md bg-green-400 px-4 shadow hover:opacity-90 focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
+              (click)="startRoute()"
+              [attr.aria-label]="'event-detail.start-route' | translate"
+            >
               <app-icon name="location" class="h-4 w-4" aria-hidden="true"></app-icon> Route starten
             </button>
           </div>
         </section>
       }
-      @if (location?.id && eventsFound) {
-        <section>
+      @if (location?.id) {
+        <section role="region" [attr.aria-label]="'event-detail.next-events' | translate">
           <h2>{{ 'event-detail.next-events' | translate }}</h2>
           <div class="mx-auto my-4 w-[100%] border-t border-blue-900"></div>
           <app-event-card-list [location]="location!" [currentEventId]="event.id" (eventsFound)="eventsFound = $event" />
@@ -201,8 +219,8 @@
           </h2>
           <div class="mx-auto mt-4 w-[100%] border-t border-blue-900"></div>
           <div class="flex justify-between">
-            <div class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl">
-              <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+            <div class="grid w-full grid-cols-1 gap-4 rounded-2xl p-4 text-right text-3xl" role="list">
+              <div class="ml-6 grid grid-cols-[auto_3fr] gap-12" role="listitem">
                 <div class="flex items-center justify-center">
                   <div class="flex items-center justify-center" aria-hidden="true">
                     <app-icon name="person" class="h-8 w-8" aria-hidden="true"></app-icon>
@@ -216,7 +234,7 @@
                 </div>
               </div>
               @if (organizer.email) {
-                <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+                <div class="ml-6 grid grid-cols-[auto_3fr] gap-12" role="listitem">
                   <div class="flex items-center justify-center">
                     <div class="flex items-center justify-center" aria-hidden="true">
                       <app-icon name="mail" class="h-8 w-8" aria-hidden="true"></app-icon>
@@ -235,7 +253,7 @@
                 </div>
               }
               @if (organizer.phonenumber) {
-                <div class="ml-6 grid grid-cols-[auto_3fr] gap-12">
+                <div class="ml-6 grid grid-cols-[auto_3fr] gap-12" role="listitem">
                   <div class="flex items-center justify-center">
                     <div class="flex items-center justify-center" aria-hidden="true">
                       <app-icon name="call" class="h-8 w-8" aria-hidden="true"></app-icon>

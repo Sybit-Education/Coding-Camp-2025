@@ -63,4 +63,14 @@ export class TopicService {
     const result: Topic[] = await this.surrealdb.post<Topic>('topic', topic)
     return result[0]
   }
+
+  isTopicHighlight(topic: Topic): boolean {
+    if (topic.name === 'Highlights') return true
+    return false
+  }
+
+  isTopicAccessibility(topic: Topic): boolean {
+    if (topic.name === 'Barrierefrei') return true
+    return false
+  }
 }

@@ -1,4 +1,5 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core'
+import { A11yModule } from '@angular/cdk/a11y'
 import { provideRouter, withComponentInputBinding, withPreloading, PreloadAllModules, withViewTransitions } from '@angular/router'
 import { provideHttpClient, HttpClient, withInterceptorsFromDi, withFetch } from '@angular/common/http'
 import { TranslateLoader, TranslateModule, Translation } from '@ngx-translate/core'
@@ -31,6 +32,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
     provideAppIcons(),
     importProvidersFrom(
+      A11yModule,
       TranslateModule.forRoot({
         loader: {
           provide: TranslateLoader,

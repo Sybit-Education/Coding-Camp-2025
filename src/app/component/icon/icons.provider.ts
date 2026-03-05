@@ -29,10 +29,12 @@ function registerIcons(registry: IconRegistryService) {
   // Navigation Bar
   register('home', '/svg/home.svg')
   register('favourites', '/svg/favourites.svg')
+  register('favourite_filled', '/svg/favourite_filled.svg')
   register('star', '/svg/star.svg')
   register('search', '/svg/search.svg')
   register('view_cozy', '/svg/view_cozy.svg')
   register('more', '/svg/more.svg')
+  register('add', '/svg/add.svg')
   register('create_event', '/svg/add.svg')
 
   // More-Menü Icons

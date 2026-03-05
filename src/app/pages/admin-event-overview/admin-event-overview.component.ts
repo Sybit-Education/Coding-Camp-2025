@@ -1,7 +1,16 @@
-import { Component, inject, signal, OnInit, ViewEncapsulation, ChangeDetectionStrategy, DestroyRef } from '@angular/core'
-import { CommonModule } from '@angular/common'
+import {
+  Component,
+  inject,
+  signal,
+  OnInit,
+  ViewEncapsulation,
+  ChangeDetectionStrategy,
+  DestroyRef,
+  computed,
+} from '@angular/core'
+
 import { RouterModule, Router, NavigationEnd } from '@angular/router'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { Event } from '../../models/event.interface'
 import { EventService } from '../../services/event.service'
 import { OrganizerService } from '../../services/organizer.service'
@@ -12,10 +21,12 @@ import { RecordId } from 'surrealdb'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { filter } from 'rxjs/operators'
 import { MediaService } from '@app/services/media.service'
+import { ConfirmDialogComponent } from '@app/component/confirm-dialog/confirm-dialog.component'
+import { LiveAnnouncer } from '@angular/cdk/a11y'
 
 @Component({
   selector: 'app-admin-event-overview',
-  imports: [CommonModule, RouterModule, TranslateModule, NgxDatatableModule, FormsModule],
+  imports: [RouterModule, TranslateModule, NgxDatatableModule, FormsModule, ConfirmDialogComponent],
   templateUrl: './admin-event-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -26,6 +37,8 @@ export class AdminEventOverviewComponent implements OnInit {
   private readonly mediaService = inject(MediaService)
   private readonly router = inject(Router)
   private readonly destroyRef = inject(DestroyRef)
+  private readonly liveAnnouncer = inject(LiveAnnouncer)
+  private readonly translate = inject(TranslateService)
 
   // Loading state
   isLoading = signal(true)
@@ -78,6 +91,19 @@ export class AdminEventOverviewComponent implements OnInit {
 
   // Filter value
   filterValue = ''
+  // Delete dialog state
+  protected readonly deleteDialogOpen = signal(false)
+  private readonly deleteContext = signal<{ id: RecordId<'event'>; name: string } | null>(null)
+  protected readonly deleteDialogTitle = computed(() => this.translate.instant('ADMIN.EVENTS.DELETE_CONFIRM_TITLE'))
+  protected readonly deleteDialogMessage = computed(() => {
+    const context = this.deleteContext()
+    if (!context) {
+      return this.translate.instant('ADMIN.EVENTS.DELETE_CONFIRM_MESSAGE_DEFAULT')
+    }
+    return this.translate.instant('ADMIN.EVENTS.DELETE_CONFIRM_MESSAGE', { name: context.name })
+  })
+  protected readonly deleteConfirmLabel = computed(() => this.translate.instant('COMMON.DELETE'))
+  protected readonly deleteCancelLabel = computed(() => this.translate.instant('COMMON.CANCEL'))
 
   ngOnInit(): void {
     // Zuerst alle Veranstalter laden, dann erst die Events
@@ -255,6 +281,14 @@ export class AdminEventOverviewComponent implements OnInit {
 
     // Update rows
     this.rows.set(sortedTemp)
+
+    const query = this.filterValue.trim()
+    const announceKey = query ? 'ADMIN.EVENTS.SEARCH_STATUS_FILTERED' : 'ADMIN.EVENTS.SEARCH_STATUS_ALL'
+    const message = this.translate.instant(announceKey, {
+      count: sortedTemp.length,
+      query,
+    })
+    this.liveAnnouncer.announce(message, 'polite')
   }
 
   // Get the first image URL from an event
@@ -266,43 +300,33 @@ export class AdminEventOverviewComponent implements OnInit {
     return null
   }
 
-  // Delete event
-  async deleteEvent(eventId: RecordId) {
-    if (confirm('Möchten Sie diese Veranstaltung wirklich löschen?')) {
-      try {
-        // Verwende direkt den Event-Service zum Löschen
-        this.eventService.delete(eventId)
-      } catch (deleteError) {
-        console.error('Fehler beim Löschen:', deleteError)
-      }
+  protected requestEventDeletion(row: Record<string, unknown>) {
+    if (!row?.['originalId']) return
+    this.deleteContext.set({
+      id: row['originalId'] as RecordId<'event'>,
+      name: String(row['name'] ?? ''),
+    })
+    this.deleteDialogOpen.set(true)
+  }
 
-      // Refresh the events list
-      const updatedEvents = await this.eventService.getAllEvents()
+  protected cancelEventDeletion() {
+    this.deleteDialogOpen.set(false)
+    this.deleteContext.set(null)
+  }
 
-      // Sort and update the events signal
-      const sortedEvents = [...updatedEvents].sort((a, b) => {
-        const dateA = new Date(a.date_start)
-        const dateB = new Date(b.date_start)
-        return dateA.getTime() - dateB.getTime()
-      })
+  protected async confirmEventDeletion() {
+    const context = this.deleteContext()
+    if (!context) return
 
-      // Transform data for the table
-      const tableData = sortedEvents.map((event) => {
-        return {
-          ...event,
-          date_display: this.formatDate(event.date_start), // Formatiertes Datum für die Anzeige
-          date_start: new Date(event.date_start).getTime(), // Timestamp für die Sortierung
-          organizer: this.getOrganizerName(event),
-          originalId: event.id,
-          thumbnail: this.getFirstImageUrl(event), // Get first image for thumbnail
-        }
-      })
-
-      this.events.set(sortedEvents)
-      this.temp.set([...tableData])
-
-      // Wende die aktuelle Sortierung auf die neuen Daten an
-      this.rows.set(this.sortData(tableData, this.currentSorts()))
+    try {
+      await this.eventService.delete(context.id)
+      this.liveAnnouncer.announce(this.translate.instant('ADMIN.EVENTS.DELETE_SUCCESS', { name: context.name }), 'assertive')
+      await this.loadOrganizersAndEvents()
+    } catch (error) {
+      console.error('Fehler beim Löschen:', error)
+      this.liveAnnouncer.announce(this.translate.instant('ADMIN.EVENTS.DELETE_ERROR', { name: context.name }), 'assertive')
+    } finally {
+      this.cancelEventDeletion()
     }
   }
 }

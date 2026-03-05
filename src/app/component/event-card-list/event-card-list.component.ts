@@ -10,6 +10,8 @@ import { Event } from '@app/models/event.interface'
 import { EventService } from '@app/services/event.service'
 import { Location } from '@app/models/location.interface'
 import { RecordId } from 'surrealdb'
+import { Topic } from '@app/models/topic.interface'
+import { TopicService } from '@app/services/topic.service'
 
 @Component({
   selector: 'app-event-card-list',
@@ -20,15 +22,18 @@ export class EventCardListComponent implements OnInit {
   @Input() location?: Location
   @Input() currentEventId?: RecordId<'event'>
   @Input() limit?: number = 3
+  @Input() highlightEvents = false
 
   @Output() eventsFound = new EventEmitter<boolean>(false)
 
   events: Event[] = []
+  topics: Topic[] = []
   error = false
 
   readonly sharedStateService = inject(SharedStateService)
   readonly eventService = inject(EventService)
   private readonly cdRef = inject(ChangeDetectorRef)
+  private readonly topicService = inject(TopicService)
 
   screenSize = ScreenSize
 
@@ -77,7 +82,7 @@ export class EventCardListComponent implements OnInit {
     const now = new Date()
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
-    const result = events
+    let result = events
       .filter((event) => {
         const eventStartDate = new Date(event.date_start)
         const eventStartDay = new Date(eventStartDate.getFullYear(), eventStartDate.getMonth(), eventStartDate.getDate())
@@ -93,6 +98,22 @@ export class EventCardListComponent implements OnInit {
         return endOfStartDay > now
       })
       .sort((a, b) => new Date(a.date_start).getTime() - new Date(b.date_start).getTime())
+
+    if (this.highlightEvents) {
+      this.topics = await this.topicService.getAllTopics()
+      const highlightTopic = this.topics.find((topic) => this.topicService.isTopicHighlight(topic))
+
+      result = result.filter((event) => {
+        const highlightId = highlightTopic?.id?.id
+        if (!highlightId) return false
+
+        const topics = event.topic ?? []
+        return topics.some((topicRef) => {
+          const topicRefId = topicRef?.id ?? topicRef
+          return topicRefId === highlightId
+        })
+      })
+    }
 
     this.cachedEvents = {
       input: events,

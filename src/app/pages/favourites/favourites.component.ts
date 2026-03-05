@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
 
 import { Event } from '../../models/event.interface'
-import { Router } from '@angular/router'
+import { Router, RouterLink } from '@angular/router'
 import { FavoriteService } from '../../services/favorite.service'
 import { Subscription } from 'rxjs'
 import { distinctUntilChanged } from 'rxjs/operators'
@@ -12,7 +12,7 @@ import { GoBackComponent } from '@app/component/go-back-button/go-back-button.co
 
 @Component({
   selector: 'app-favourites',
-  imports: [EventCardComponent, TranslateModule, GoBackComponent],
+  imports: [EventCardComponent, TranslateModule, GoBackComponent, RouterLink],
   templateUrl: './favourites.component.html',
   styles: [
     `
@@ -26,7 +26,7 @@ import { GoBackComponent } from '@app/component/go-back-button/go-back-button.co
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FavouritesComponent implements OnInit, OnDestroy {
+export class FavouritesComponent implements OnInit {
   favouriteEvents: Event[] = []
   loading = true
 
@@ -62,32 +62,5 @@ export class FavouritesComponent implements OnInit, OnDestroy {
     requestAnimationFrame(() => {
       this.favoriteService.loadFavoriteEvents()
     })
-  }
-
-  navigateToEvent(event: Event): void {
-    if (event.id) {
-      const eventId = event.id.toString()
-      // Für die Navigation müssen wir das "event:" Präfix entfernen, da die Route es nicht erwartet
-      const routeId = eventId.replace(/^event:/, '')
-      this.router.navigate(['/event', routeId])
-    }
-  }
-
-  navigateToHome(): void {
-    this.router.navigate(['/'])
-  }
-
-  removeFavourite(event: MouseEvent, favouriteEvent: Event): void {
-    event.stopPropagation() // Verhindert Navigation zum Event
-
-    if (favouriteEvent.id) {
-      const eventId = favouriteEvent.id.toString()
-      this.favoriteService.removeFromFavorites(eventId)
-    }
-  }
-
-  ngOnDestroy(): void {
-    // Alle Subscriptions beenden
-    this.subscriptions.unsubscribe()
   }
 }

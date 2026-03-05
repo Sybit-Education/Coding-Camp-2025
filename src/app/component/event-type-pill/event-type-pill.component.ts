@@ -20,6 +20,7 @@ interface Pill {
 })
 export class EventTypePillComponent implements OnChanges {
   @Input() event: Event | null = null
+  @Input() disabled = false
 
   pill: Pill | null = null
 

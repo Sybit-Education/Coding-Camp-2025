@@ -4,7 +4,7 @@
   eine magenta Wellenform (#c70d56) als gestalterisches Element
   und markiert den aktiven Link mit Gelb (#3b4ea3).
 -->
-<nav class="fixed inset-x-0 bottom-3 z-500 flex justify-center px-4">
+<nav class="fixed inset-x-0 bottom-3 z-500 flex justify-center px-4" aria-label="{{ 'NAV.BOTTOM' | translate }}">
   <div
     class="relative flex w-full max-w-md items-center justify-around overflow-hidden rounded-3xl border border-[#fbd2bc]/50 bg-[#fbd2bc]/90 px-1 shadow-xl backdrop-blur-xl"
   >
@@ -21,9 +21,10 @@
       <span class="flex-1">
         <a
           routerLink="/"
+          ariaCurrentWhenActive="page"
           [routerLinkActiveOptions]="{ exact: true }"
           routerLinkActive="text-[#c70d56] bg-[#ffffff40] rounded-xl scale-110"
-          class="relative flex transform flex-col items-center justify-center p-0.5 p-1 pt-2 text-[#3b4ea3] transition hover:text-[#c70d56]"
+          class="relative flex transform flex-col items-center justify-center p-0.5 p-1 pt-2 text-[#3b4ea3] transition hover:text-[#c70d56] focus-visible:ring-2 focus-visible:ring-[#c70d56] focus-visible:outline-none"
         >
           <app-icon name="home" class="h-6 w-6" aria-hidden="true"></app-icon>
           <span class="m-1 text-xs font-medium tracking-wide">{{ 'bottom-nav.home' | translate }}</span>
@@ -33,8 +34,9 @@
       <span class="flex-1">
         <a
           routerLink="/favourites"
+          ariaCurrentWhenActive="page"
           routerLinkActive="text-[#c70d56] bg-[#ffffff40] rounded-xl scale-110"
-          class="relative flex transform flex-col items-center justify-center p-0.5 p-1 pt-2 text-[#3b4ea3] transition hover:text-[#c70d56]"
+          class="relative flex transform flex-col items-center justify-center p-0.5 p-1 pt-2 text-[#3b4ea3] transition hover:text-[#c70d56] focus-visible:ring-2 focus-visible:ring-[#c70d56] focus-visible:outline-none"
         >
           <app-icon name="favourites" class="h-6 w-6" aria-hidden="true"></app-icon>
           <span class="m-1 text-xs font-medium tracking-wide">{{ 'bottom-nav.favorites' | translate }}</span>
@@ -44,8 +46,9 @@
       <span class="flex-1">
         <a
           routerLink="/event"
+          ariaCurrentWhenActive="page"
           routerLinkActive="text-[#c70d56] bg-[#ffffff40] rounded-xl scale-110"
-          class="relative flex transform flex-col items-center justify-center p-0.5 p-1 pt-2 text-[#3b4ea3] transition hover:text-[#c70d56]"
+          class="relative flex transform flex-col items-center justify-center p-0.5 p-1 pt-2 text-[#3b4ea3] transition hover:text-[#c70d56] focus-visible:ring-2 focus-visible:ring-[#c70d56] focus-visible:outline-none"
         >
           <app-icon name="view_cozy" class="h-6 w-6" aria-hidden="true"></app-icon>
           <span class="m-1 text-xs font-medium tracking-wide">{{ 'bottom-nav.all-events' | translate }}</span>
@@ -56,8 +59,9 @@
         <span class="flex-1">
           <a
             routerLink="/admin/create"
+            ariaCurrentWhenActive="page"
             routerLinkActive="text-[#c70d56] bg-[#ffffff40] rounded-xl scale-110"
-            class="relative flex transform flex-col items-center justify-center p-0.5 p-1 pt-2 text-[#3b4ea3] transition hover:text-[#c70d56]"
+            class="relative flex transform flex-col items-center justify-center p-0.5 p-1 pt-2 text-[#3b4ea3] transition hover:text-[#c70d56] focus-visible:ring-2 focus-visible:ring-[#c70d56] focus-visible:outline-none"
           >
             <app-icon name="create_event" class="h-6 w-6" aria-hidden="true"></app-icon>
             <span class="m-1 text-xs font-medium tracking-wide">{{ 'bottom-nav.create-event' | translate }}</span>
@@ -68,8 +72,9 @@
       <span class="flex-1">
         <a
           routerLink="/more"
+          ariaCurrentWhenActive="page"
           routerLinkActive="text-[#c70d56] bg-[#ffffff40] rounded-xl scale-110"
-          class="relative flex transform flex-col items-center justify-center p-0.5 p-1 pt-2 text-[#3b4ea3] transition hover:text-[#c70d56]"
+          class="relative flex transform flex-col items-center justify-center p-0.5 p-1 pt-2 text-[#3b4ea3] transition hover:text-[#c70d56] focus-visible:ring-2 focus-visible:ring-[#c70d56] focus-visible:outline-none"
         >
           <app-icon name="more" class="h-6 w-6" aria-hidden="true"></app-icon>
 

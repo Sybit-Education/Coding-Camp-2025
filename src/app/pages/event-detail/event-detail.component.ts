@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs'
 import { MapComponent } from '../../component/map/map.component'
 import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { EventService } from '../../services/event.service'
 import { CommonModule, DOCUMENT } from '@angular/common'
 import { Organizer } from '../../models/organizer.interface'
@@ -47,6 +47,7 @@ import { SeoService } from '@app/services/seo.service'
     EventTopicPillListComponent,
     GoBackComponent,
     EventCardListComponent,
+    RouterLink,
   ],
   styleUrl: './event-detail.component.scss',
   templateUrl: './event-detail.component.html',
@@ -83,25 +84,28 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
   readonly sharedStateService = inject(SharedStateService)
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      this.eventId = params.get('id') || ''
-    })
+    this.subscriptions.add(
+      this.route.paramMap.subscribe((params) => {
+        this.eventId = params.get('id') || ''
 
-    this.route.queryParamMap.subscribe((params) => {
-      const filterQueryParam = params.get('filterQuery')
-      this.goBackParams = filterQueryParam || null
+        if (!this.eventId) {
+          this.error = 'Event ID nicht gefunden'
+          this.announceError('Event ID nicht gefunden')
+          return
+        }
 
-      console.log('Query Params:', filterQueryParam)
-    })
-    if (this.eventId) {
-      const recordID = new StringRecordId('event:' + this.eventId)
-      this.loadEvent(recordID)
-    } else {
-      this.error = 'Event ID nicht gefunden'
-      this.announceError('Event ID nicht gefunden')
-    }
+        const recordID = new StringRecordId('event:' + this.eventId)
+        this.loadEvent(recordID)
+      }),
+    )
 
-    console.log('Go back params:', this.goBackParams)
+    this.subscriptions.add(
+      this.route.queryParamMap.subscribe((params) => {
+        const filterQueryParam = params.get('filterQuery')
+        this.goBackParams = filterQueryParam || null
+      }),
+    )
+
     // Subscription für Login-Status
     this.subscriptions.add(
       this.loginservice.isLoggedIn$.subscribe((isLoggedIn) => {

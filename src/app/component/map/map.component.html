@@ -1,1 +1,9 @@
-<div class="z-0 h-full w-full rounded-2xl" id="map"></div>
+<div
+  class="relative z-0 h-full w-full rounded-2xl"
+  role="region"
+  [attr.aria-label]="'map.label' | translate"
+  [attr.aria-describedby]="descriptionId"
+>
+  <div class="h-full w-full rounded-2xl" [id]="mapId" tabindex="0"></div>
+  <p class="sr-only" [id]="descriptionId">{{ 'map.description' | translate }}</p>
+</div>

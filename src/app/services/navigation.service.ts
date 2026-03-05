@@ -1,4 +1,5 @@
-import { Injectable, inject } from '@angular/core'
+import { Injectable, inject, PLATFORM_ID } from '@angular/core'
+import { isPlatformBrowser } from '@angular/common'
 import { Router, NavigationExtras } from '@angular/router'
 import { injectMarkForCheck } from '../utils/zoneless-helpers'
 
@@ -12,13 +13,15 @@ import { injectMarkForCheck } from '../utils/zoneless-helpers'
 export class NavigationService {
   private readonly router = inject(Router)
   private readonly markForCheck = injectMarkForCheck()
+  private readonly platformId = inject(PLATFORM_ID)
+  private readonly isBrowser = isPlatformBrowser(this.platformId)
 
   /**
    * Navigiert zu einer Route und löst Change Detection aus
    * @param commands Die Routing-Befehle (Route-Pfad)
    * @param extras Zusätzliche Routing-Optionen
    */
-  async navigateTo(commands: unknown[], extras?: NavigationExtras): Promise<boolean> {
+  async navigateTo(commands: Parameters<Router['navigate']>[0], extras?: NavigationExtras): Promise<boolean> {
     const result = await this.router.navigate(commands, extras)
 
     // Stelle sicher, dass Change Detection ausgelöst wird
@@ -31,7 +34,9 @@ export class NavigationService {
    * Navigiert zurück in der Browser-Historie
    */
   goBack(): void {
-    window.history.back()
+    if (this.isBrowser) {
+      window.history.back()
+    }
     this.markForCheck()
   }
 }

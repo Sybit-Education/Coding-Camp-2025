@@ -1,14 +1,16 @@
 <div class="relative">
   <!-- Calendar Button -->
   <button
+    id="calendar-menu-button"
     type="button"
     (click)="toggleCalendarOptions()"
-    class="action-button"
+    class="action-button h-12 w-12 focus-visible:ring-2 focus-visible:ring-[#3b4ea3] focus-visible:outline-none"
     aria-label="{{ 'SHARE.ADD_TO_CALENDAR' | translate }}"
-    aria-expanded="{{ showCalendarOptions() }}"
+    [attr.aria-expanded]="showCalendarOptions()"
+    [attr.aria-controls]="'calendar-menu'"
     aria-haspopup="true"
   >
-    <app-icon name="event_upcoming" aria-hidden="true"></app-icon>
+    <app-icon name="event_upcoming" class="h-8 w-8" aria-hidden="true"></app-icon>
   </button>
 
   <!-- Calendar Options Dropdown -->
@@ -17,6 +19,7 @@
       class="ring-opacity-5 absolute top-16 right-0 z-10 w-64 rounded-md bg-white p-2 shadow-lg ring-1 ring-black"
       role="menu"
       aria-labelledby="calendar-menu-button"
+      id="calendar-menu"
     >
       <div class="py-1">
         <button

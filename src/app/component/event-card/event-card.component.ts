@@ -14,21 +14,41 @@ import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { MatIconModule } from '@angular/material/icon'
 import { IconComponent } from '@app/component/icon/icon.component'
 import { EventTypePillComponent } from '@app/component/event-type-pill/event-type-pill.component'
+import { FavoriteButtonComponent } from '../favorite-button/favorite-button.component'
 
 @Component({
   selector: 'app-event-card',
-  imports: [CommonModule, DateTimeRangePipe, TranslateModule, RouterModule, MatIconModule, IconComponent, EventTypePillComponent],
+  imports: [
+    CommonModule,
+    DateTimeRangePipe,
+    TranslateModule,
+    RouterModule,
+    MatIconModule,
+    IconComponent,
+    EventTypePillComponent,
+    FavoriteButtonComponent,
+  ],
   templateUrl: './event-card.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventCardComponent implements OnInit, OnDestroy, OnChanges {
   @Input() event: Event | null = null
-  @Input() filterQuery?: string | null = null
 
   location: Location | null = null
   eventType: EventType | null = null
   isSaved = false
   mediaUrl: string | null = null
+
+  get titleId(): string {
+    const id = this.event?.id?.id ?? this.event?.id ?? 'event'
+    return `event-card-title-${id}`
+  }
+
+  get ariaLabel(): string {
+    const name = this.event?.name || ''
+    const loc = this.location?.name ? ', ' + this.location.name : ''
+    return name + loc
+  }
 
   private readonly subscriptions = new Subscription()
   private readonly surrealDBService = inject(SurrealdbService)

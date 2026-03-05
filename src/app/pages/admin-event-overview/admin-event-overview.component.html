@@ -42,6 +42,7 @@
         [routerLink]="['/admin/']"
         routerLinkActive="border-blue-600 text-blue-600"
         [routerLinkActiveOptions]="{ exact: true }"
+        ariaCurrentWhenActive="page"
         class="border-b-2 border-transparent px-1 py-2 text-xl font-bold whitespace-nowrap text-blue-600 hover:border-gray-300 hover:text-blue-800"
       >
         {{ 'ADMIN.EVENTS.TITLE' | translate }}
@@ -50,6 +51,7 @@
         [routerLink]="['/admin/locations']"
         routerLinkActive="border-blue-600 text-blue-600"
         [routerLinkActiveOptions]="{ exact: true }"
+        ariaCurrentWhenActive="page"
         class="border-b-2 border-transparent px-1 py-2 text-xl font-medium whitespace-nowrap text-gray-600 hover:border-gray-300 hover:text-blue-800"
       >
         {{ 'ADMIN.LOCATIONS.TITLE' | translate }}
@@ -58,6 +60,7 @@
         [routerLink]="['/admin/organizers']"
         routerLinkActive="border-blue-600 text-blue-600"
         [routerLinkActiveOptions]="{ exact: true }"
+        ariaCurrentWhenActive="page"
         class="border-b-2 border-transparent px-1 py-2 text-xl font-medium whitespace-nowrap text-gray-600 hover:border-gray-300 hover:text-blue-800"
       >
         Veranstalter
@@ -66,7 +69,7 @@
   </div>
 
   @if (isLoading()) {
-    <div class="flex items-center justify-center py-12">
+    <div class="flex items-center justify-center py-12" role="status" aria-live="polite" aria-busy="true">
       <div class="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"></div>
       <span class="ml-3">{{ 'COMMON.LOADING' | translate }}</span>
     </div>
@@ -133,13 +136,14 @@
         <!-- Name Column Template -->
         <ngx-datatable-column name="Name" prop="name" [flexGrow]="3">
           <ng-template let-row="row" ngx-datatable-cell-template>
-            <a
-              href="javascript:void(0)"
+            <button
+              type="button"
+              class="text-left font-medium text-blue-600 hover:text-blue-800 hover:underline focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
               (click)="editEvent(row.originalId)"
-              class="text-blue-600 hover:text-blue-800 hover:underline"
+              [attr.aria-label]="'ADMIN.EVENTS.EDIT_LINK_ARIA' | translate: { name: row.name }"
             >
               {{ row.name }}
-            </a>
+            </button>
           </ng-template>
         </ngx-datatable-column>
 
@@ -156,7 +160,8 @@
             <div class="flex space-x-2">
               <button
                 (click)="previewEvent(row.originalId)"
-                class="p-1 text-green-600 hover:text-green-800 focus:outline-none"
+                class="p-1 text-green-600 hover:text-green-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
+                [attr.aria-label]="'ADMIN.EVENTS.PREVIEW_ARIA' | translate: { name: row.name }"
                 title="{{ 'ADMIN.EVENTS.PREVIEW' | translate }}"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -171,7 +176,8 @@
               </button>
               <button
                 (click)="editEvent(row.originalId)"
-                class="p-1 text-blue-600 hover:text-blue-800 focus:outline-none"
+                class="p-1 text-blue-600 hover:text-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                [attr.aria-label]="'ADMIN.EVENTS.EDIT_BUTTON_ARIA' | translate: { name: row.name }"
                 title="{{ 'ADMIN.EVENTS.EDIT' | translate }}"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -184,8 +190,10 @@
                 </svg>
               </button>
               <button
-                (click)="deleteEvent(row.originalId)"
-                class="p-1 text-red-600 hover:text-red-800 focus:outline-none"
+                type="button"
+                (click)="requestEventDeletion(row)"
+                class="p-1 text-red-600 hover:text-red-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                [attr.aria-label]="'ADMIN.EVENTS.DELETE_BUTTON_ARIA' | translate: { name: row.name }"
                 title="{{ 'ADMIN.EVENTS.DELETE' | translate }}"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -203,4 +211,15 @@
       </ngx-datatable>
     </div>
   }
+
+  <app-confirm-dialog
+    [opened]="deleteDialogOpen()"
+    (openedChange)="deleteDialogOpen.set($event)"
+    [title]="deleteDialogTitle()"
+    [message]="deleteDialogMessage()"
+    [confirmLabel]="deleteConfirmLabel()"
+    [cancelLabel]="deleteCancelLabel()"
+    (confirmed)="confirmEventDeletion()"
+    (cancelled)="cancelEventDeletion()"
+  />
 </div>

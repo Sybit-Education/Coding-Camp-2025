@@ -1,4 +1,5 @@
-import { Injectable, signal } from '@angular/core'
+import { Injectable, signal, PLATFORM_ID, inject } from '@angular/core'
+import { isPlatformBrowser } from '@angular/common'
 import { BehaviorSubject } from 'rxjs'
 import { Event } from '../models/event.interface'
 
@@ -7,6 +8,8 @@ import { Event } from '../models/event.interface'
 })
 export class LocalStorageService {
   private readonly SAVED_EVENTS_KEY = 'saved_events'
+  private readonly platformId = inject(PLATFORM_ID)
+  private readonly isBrowser = isPlatformBrowser(this.platformId)
 
   // Signal für reaktiven State
   readonly savedEventsSignal = signal<string[]>(this.getSavedEventIds())
@@ -43,13 +46,18 @@ export class LocalStorageService {
   }
 
   getSavedEventIds(): string[] {
+    if (!this.isBrowser) {
+      return []
+    }
     const savedEvents = localStorage.getItem(this.SAVED_EVENTS_KEY)
     const ids = savedEvents ? JSON.parse(savedEvents) : []
     return ids
   }
 
   private setSavedEventIds(eventIds: string[]): void {
-    localStorage.setItem(this.SAVED_EVENTS_KEY, JSON.stringify(eventIds))
+    if (this.isBrowser) {
+      localStorage.setItem(this.SAVED_EVENTS_KEY, JSON.stringify(eventIds))
+    }
   }
 
   filterSavedEvents(events: Event[]): Event[] {
