@@ -42,3 +42,6 @@ testem.log
 Thumbs.db
 .aider*
 *:Zone.Identifier
+
+# ESLint reports
+eslint-report.json

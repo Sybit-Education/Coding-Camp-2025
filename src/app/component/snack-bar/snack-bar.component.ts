@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core'
+import { Component, inject, signal, effect, DestroyRef } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { TranslateModule } from '@ngx-translate/core'
 import { SnackBarService, SnackBarType } from '../../services/snack-bar.service'
@@ -32,24 +32,58 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 })
 export class SnackBarComponent {
   private readonly snackBarService = inject(SnackBarService)
+  private readonly destroyRef = inject(DestroyRef)
 
   visible = signal(false)
   message = signal('')
   type = signal<SnackBarType>('info')
 
+  private timeoutId: number | null = null
+
   constructor() {
-    this.snackBarService.snackBar$.subscribe((data) => {
+    // Effect to react to snackBar signal changes - NO RxJS
+    effect(() => {
+      const data = this.snackBarService.snackBar()
       if (data) {
         this.message.set(data.message)
         this.type.set(data.type)
         this.visible.set(true)
 
+        // Clear previous timeout if exists
+        if (this.timeoutId !== null) {
+          window.clearTimeout(this.timeoutId)
+        }
+
         // Auto-hide after timeout
-        setTimeout(() => {
+        this.timeoutId = window.setTimeout(() => {
           this.visible.set(false)
+          this.timeoutId = null
         }, data.duration || 5000)
+      } else {
+        // Hide snackbar and clear any pending timeout when cleared
+        this.visible.set(false)
+        if (this.timeoutId !== null) {
+          window.clearTimeout(this.timeoutId)
+          this.timeoutId = null
+        }
       }
     })
+
+    // Cleanup timeout on destroy
+    this.destroyRef.onDestroy(() => {
+      if (this.timeoutId !== null) {
+        window.clearTimeout(this.timeoutId)
+        this.timeoutId = null
+      }
+    })
+  }
+
+  close(): void {
+    if (this.timeoutId !== null) {
+      window.clearTimeout(this.timeoutId)
+      this.timeoutId = null
+    }
+    this.visible.set(false)
   }
 
   getTypeClass(): string {
@@ -78,9 +112,5 @@ export class SnackBarComponent {
       default:
         return 'M8 16A8 8 0 108 0a8 8 0 000 16zm1-11a1 1 0 10-2 0v4a1 1 0 102 0V5zm-1 9a1 1 0 100-2 1 1 0 000 2z'
     }
-  }
-
-  close(): void {
-    this.visible.set(false)
   }
 }

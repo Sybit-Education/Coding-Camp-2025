@@ -1,25 +1,25 @@
-@if (eventId) {
+@if (eventId()) {
   <div class="relative">
     <button
       (click)="toggleFavorite($event)"
       class="action-button"
-      [class.w-10]="isSmall"
-      [class.h-10]="isSmall"
-      [class.w-12]="!isSmall"
-      [class.h-12]="!isSmall"
-      [attr.aria-label]="(isFavorite ? 'FAVORITES.REMOVE' : 'FAVORITES.ADD') | translate"
-      [title]="(isFavorite ? 'FAVORITES.REMOVE' : 'FAVORITES.ADD') | translate"
+      [class.w-10]="isSmall()"
+      [class.h-10]="isSmall()"
+      [class.w-12]="!isSmall()"
+      [class.h-12]="!isSmall()"
+      [attr.aria-label]="(isFavorite() ? 'FAVORITES.REMOVE' : 'FAVORITES.ADD') | translate"
+      [title]="(isFavorite() ? 'FAVORITES.REMOVE' : 'FAVORITES.ADD') | translate"
     >
       <!-- Solid star when favorited -->
-      @if (isFavorite) {
+      @if (isFavorite()) {
         <div class="mb-1 flex items-center justify-center text-yellow-500 transition-colors hover:text-yellow-700">
           <app-icon
             name="favourite_filled"
             aria-hidden="true"
-            [class.h-6]="isSmall"
-            [class.w-6]="isSmall"
-            [class.h-8]="!isSmall"
-            [class.w-8]="!isSmall"
+            [class.h-6]="isSmall()"
+            [class.w-6]="isSmall()"
+            [class.h-8]="!isSmall()"
+            [class.w-8]="!isSmall()"
           ></app-icon>
         </div>
       } @else {
@@ -27,10 +27,10 @@
         <div class="mb-1 flex items-center justify-center text-black transition-colors hover:text-yellow-700">
           <app-icon
             name="favourites"
-            [class.h-6]="isSmall"
-            [class.w-6]="isSmall"
-            [class.h-8]="!isSmall"
-            [class.w-8]="!isSmall"
+            [class.h-6]="isSmall()"
+            [class.w-6]="isSmall()"
+            [class.h-8]="!isSmall()"
+            [class.w-8]="!isSmall()"
             aria-hidden="true"
           ></app-icon>
         </div>

@@ -4,7 +4,7 @@ import type { Config } from 'tailwindcss'
 
 const config: Config = {
   content: [
-    "./src/**/*.{html,ts,scss, css}" // alle Angular-Komponenten und Templates
+    "./src/**/*.{html,ts}" // Optimiert: nur html und ts, scss/css ausgeschlossen
   ],
   theme: {
     extend: {

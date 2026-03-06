@@ -1,5 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, inject } from '@angular/core'
-import { Subscription } from 'rxjs'
+import { Component, input, signal, effect, inject, ChangeDetectionStrategy } from '@angular/core'
 import { FavoriteService } from '../../services/favorite.service'
 import { TranslateModule } from '@ngx-translate/core'
 import { IconComponent } from '../icon/icon.component'
@@ -10,57 +9,49 @@ import { RecordId } from 'surrealdb'
   selector: 'app-favorite-button',
   imports: [TranslateModule, IconComponent],
   templateUrl: './favorite-button.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FavoriteButtonComponent implements OnInit, OnDestroy {
-  @Input() eventId: RecordId<'event'> | undefined
-  @Input() isSmall = false
+export class FavoriteButtonComponent {
+  // Signal-based Inputs
+  readonly eventId = input<RecordId<'event'>>()
+  readonly isSmall = input<boolean>(false)
 
-  isFavorite = false
-  private subscription?: Subscription
-
+  // Services
   private readonly favoriteService = inject(FavoriteService)
 
-  ngOnInit(): void {
-    if (this.eventId) {
-      // Initialer Status
-      this.updateFavoriteStatus()
+  // Local state as signal
+  protected readonly isFavorite = signal(false)
 
-      // Subscribe to changes in saved events
-      this.subscription = this.favoriteService.favoriteEvents$.subscribe(() => {
-        this.updateFavoriteStatus()
-      })
+  constructor() {
+    // Effect to update favorite status when eventId changes
+    effect(() => {
+      const id = this.eventId()
+      if (id) {
+        this.updateFavoriteStatus(id)
+      }
+    })
 
-      // Subscribe to localStorage changes directly
-      this.subscription.add(
-        this.favoriteService.localStorageService.savedEvents$.subscribe(() => {
-          this.updateFavoriteStatus()
-        }),
-      )
-    } else {
-      console.warn('FavoriteButton initialized without eventId')
-    }
+    // Effect to react to localStorage changes - OHNE RxJS
+    effect(() => {
+      // Trigger on saved events signal change
+      this.favoriteService.localStorageService.savedEventsSignal()
+      const id = this.eventId()
+      if (id) {
+        this.updateFavoriteStatus(id)
+      }
+    })
   }
 
-  private updateFavoriteStatus(): void {
-    if (this.eventId) {
-      const currentStatus = this.favoriteService.isEventFavorite(this.eventId.toString())
-      this.isFavorite = currentStatus
-    }
+  private updateFavoriteStatus(eventId: RecordId<'event'>): void {
+    const currentStatus = this.favoriteService.isEventFavorite(eventId.toString())
+    this.isFavorite.set(currentStatus)
   }
 
-  toggleFavorite(event: Event): void {
+  protected toggleFavorite(event: Event): void {
     event.stopPropagation() // Verhindert, dass das Event-Klick-Event ausgelöst wird
 
-    if (!this.eventId) return
-    this.favoriteService.toggleFavorite(this.eventId.toString())
-
-    // Der Status wird durch die Subscription aktualisiert
-    // Wir setzen ihn nicht direkt, um Inkonsistenzen zu vermeiden
-  }
-
-  ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe()
-    }
+    const id = this.eventId()
+    if (!id) return
+    this.favoriteService.toggleFavorite(id.toString())
   }
 }

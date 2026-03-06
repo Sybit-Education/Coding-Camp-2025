@@ -7,7 +7,7 @@
     {{ 'FAVORITES.LOCAL_STORAGE_NOTICE' | translate }}
   </p>
 
-  @if (loading) {
+  @if (loading()) {
     <div class="py-8 text-center" role="status" aria-live="polite" aria-busy="true">
       <div class="flex items-center justify-center">
         <svg class="h-8 w-8 animate-spin text-[#3b4ea3]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -23,7 +23,7 @@
     </div>
   }
 
-  @if (!loading && favouriteEvents.length === 0) {
+  @if (!loading() && favouriteEvents().length === 0) {
     <div class="py-8 text-center">
       <div class="mb-4">
         <svg
@@ -56,9 +56,9 @@
     </div>
   }
 
-  @if (!loading && favouriteEvents.length > 0) {
+  @if (!loading() && favouriteEvents().length > 0) {
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-      @for (event of favouriteEvents; track event) {
+      @for (event of favouriteEvents(); track event) {
         <div class="relative">
           <app-event-card [event]="event"></app-event-card>
         </div>
