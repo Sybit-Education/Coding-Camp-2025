@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, Component, computed, inject, signal, OnInit } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { NgxDatatableModule, SortEvent, SortDirection } from '@swimlane/ngx-datatable'
@@ -14,7 +13,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y'
 
 @Component({
   selector: 'app-admin-organizer-overview',
-  imports: [CommonModule, RouterModule, TranslateModule, NgxDatatableModule, FormsModule, ConfirmDialogComponent],
+  imports: [RouterModule, TranslateModule, NgxDatatableModule, FormsModule, ConfirmDialogComponent],
   templateUrl: './admin-organizer-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -55,10 +54,7 @@ export class AdminOrganizerOverviewComponent implements OnInit {
   protected async refresh() {
     this.isLoading.set(true)
     try {
-      const [list, events] = await Promise.all([
-        this.organizerService.getAllOrganizers(),
-        this.eventService.getAllEvents(),
-      ])
+      const [list, events] = await Promise.all([this.organizerService.getAllOrganizers(), this.eventService.getAllEvents()])
 
       const eventCounts = this.buildOrganizerEventCounts(events ?? [])
       this.organizerEventCounts.set(eventCounts)
@@ -120,17 +116,11 @@ export class AdminOrganizerOverviewComponent implements OnInit {
 
     try {
       await this.organizerService.delete(context.id)
-      this.liveAnnouncer.announce(
-        this.translate.instant('ADMIN.ORGANIZERS.DELETE_SUCCESS', { name: context.name }),
-        'assertive',
-      )
+      this.liveAnnouncer.announce(this.translate.instant('ADMIN.ORGANIZERS.DELETE_SUCCESS', { name: context.name }), 'assertive')
       await this.refresh()
     } catch (err) {
       console.error('[OrganizerOverview] Delete failed:', err)
-      this.liveAnnouncer.announce(
-        this.translate.instant('ADMIN.ORGANIZERS.DELETE_ERROR', { name: context.name }),
-        'assertive',
-      )
+      this.liveAnnouncer.announce(this.translate.instant('ADMIN.ORGANIZERS.DELETE_ERROR', { name: context.name }), 'assertive')
     } finally {
       this.cancelOrganizerDeletion()
     }

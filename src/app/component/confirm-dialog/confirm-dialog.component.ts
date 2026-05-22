@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import {
   ChangeDetectionStrategy,
   Component,
@@ -18,7 +17,7 @@ let dialogIdCounter = 0
 
 @Component({
   selector: 'app-confirm-dialog',
-  imports: [CommonModule, CdkTrapFocus],
+  imports: [CdkTrapFocus],
   templateUrl: './confirm-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

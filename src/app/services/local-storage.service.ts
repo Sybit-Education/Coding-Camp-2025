@@ -1,5 +1,4 @@
 import { Injectable, signal } from '@angular/core'
-import { BehaviorSubject } from 'rxjs'
 import { Event } from '../models/event.interface'
 
 @Injectable({
@@ -8,23 +7,15 @@ import { Event } from '../models/event.interface'
 export class LocalStorageService {
   private readonly SAVED_EVENTS_KEY = 'saved_events'
 
-  // Signal für reaktiven State
+  // Signal für reaktiven State - OHNE RxJS
   readonly savedEventsSignal = signal<string[]>(this.getSavedEventIds())
-
-  // BehaviorSubject für Abwärtskompatibilität
-  private readonly savedEventsSubject = new BehaviorSubject<string[]>(this.getSavedEventIds())
-
-  savedEvents$ = this.savedEventsSubject.asObservable()
 
   saveEvent(eventId: string | undefined): void {
     const savedIds = this.getSavedEventIds()
     if (eventId && !savedIds.includes(eventId)) {
       savedIds.push(eventId)
       this.setSavedEventIds(savedIds)
-
-      // Beide State-Mechanismen aktualisieren
       this.savedEventsSignal.set(savedIds)
-      this.savedEventsSubject.next(savedIds)
     }
   }
 
@@ -32,10 +23,7 @@ export class LocalStorageService {
     const savedIds = this.getSavedEventIds()
     const filteredIds = savedIds.filter((id) => id !== eventId)
     this.setSavedEventIds(filteredIds)
-
-    // Beide State-Mechanismen aktualisieren
     this.savedEventsSignal.set(filteredIds)
-    this.savedEventsSubject.next(filteredIds)
   }
 
   isEventSaved(eventId: string | undefined): boolean {

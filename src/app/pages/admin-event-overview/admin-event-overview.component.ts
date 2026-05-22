@@ -1,5 +1,14 @@
-import { Component, inject, signal, OnInit, ViewEncapsulation, ChangeDetectionStrategy, DestroyRef, computed } from '@angular/core'
-import { CommonModule } from '@angular/common'
+import {
+  Component,
+  inject,
+  signal,
+  OnInit,
+  ViewEncapsulation,
+  ChangeDetectionStrategy,
+  DestroyRef,
+  computed,
+} from '@angular/core'
+
 import { RouterModule, Router, NavigationEnd } from '@angular/router'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { Event } from '../../models/event.interface'
@@ -17,7 +26,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y'
 
 @Component({
   selector: 'app-admin-event-overview',
-  imports: [CommonModule, RouterModule, TranslateModule, NgxDatatableModule, FormsModule, ConfirmDialogComponent],
+  imports: [RouterModule, TranslateModule, NgxDatatableModule, FormsModule, ConfirmDialogComponent],
   templateUrl: './admin-event-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -311,17 +320,11 @@ export class AdminEventOverviewComponent implements OnInit {
 
     try {
       await this.eventService.delete(context.id)
-      this.liveAnnouncer.announce(
-        this.translate.instant('ADMIN.EVENTS.DELETE_SUCCESS', { name: context.name }),
-        'assertive',
-      )
+      this.liveAnnouncer.announce(this.translate.instant('ADMIN.EVENTS.DELETE_SUCCESS', { name: context.name }), 'assertive')
       await this.loadOrganizersAndEvents()
     } catch (error) {
       console.error('Fehler beim Löschen:', error)
-      this.liveAnnouncer.announce(
-        this.translate.instant('ADMIN.EVENTS.DELETE_ERROR', { name: context.name }),
-        'assertive',
-      )
+      this.liveAnnouncer.announce(this.translate.instant('ADMIN.EVENTS.DELETE_ERROR', { name: context.name }), 'assertive')
     } finally {
       this.cancelEventDeletion()
     }

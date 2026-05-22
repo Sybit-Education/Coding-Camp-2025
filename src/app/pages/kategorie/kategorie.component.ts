@@ -31,7 +31,6 @@ interface EventWithResolvedLocation extends AppEvent {
 
 @Component({
   selector: 'app-kategorie',
-  standalone: true,
   imports: [
     TranslateModule,
     EventCardComponent,
@@ -136,8 +135,11 @@ export class KategorieComponent implements OnInit {
         }
         this.name = matchedTopic?.name || matchedType?.name || null
         this.description = matchedTopic?.description || matchedType?.description || null
+        if (this.slug === 'highlights') {
+          this.name = this.translate.instant('home.all-highlights')
+        }
       } else {
-        this.name = this.translate.instant('bottom-nav.all-events')
+        this.name = this.translate.instant('home.all-events')
       }
 
       await this.performSearch(this.searchTerm)

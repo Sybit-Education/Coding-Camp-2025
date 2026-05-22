@@ -1,5 +1,14 @@
-import { Component, inject, signal, OnInit, ViewEncapsulation, ChangeDetectionStrategy, DestroyRef, computed } from '@angular/core'
-import { CommonModule } from '@angular/common'
+import {
+  Component,
+  inject,
+  signal,
+  OnInit,
+  ViewEncapsulation,
+  ChangeDetectionStrategy,
+  DestroyRef,
+  computed,
+} from '@angular/core'
+
 import { RouterModule, Router, NavigationEnd } from '@angular/router'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { Location } from '../../models/location.interface'
@@ -16,7 +25,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y'
 
 @Component({
   selector: 'app-admin-location-overview',
-  imports: [CommonModule, RouterModule, TranslateModule, NgxDatatableModule, FormsModule, ConfirmDialogComponent],
+  imports: [RouterModule, TranslateModule, NgxDatatableModule, FormsModule, ConfirmDialogComponent],
   templateUrl: './admin-location-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -218,7 +227,7 @@ export class AdminLocationOverviewComponent implements OnInit {
   }
 
   // Delete location
-  protected requestLocationDeletion(row: Record<string, unknown>) {  
+  protected requestLocationDeletion(row: Record<string, unknown>) {
     if (!row?.['originalId']) return
     this.deleteContext.set({
       id: row['originalId'] as RecordId<'location'>,
@@ -238,17 +247,11 @@ export class AdminLocationOverviewComponent implements OnInit {
 
     try {
       await this.locationService.delete(context.id)
-      this.liveAnnouncer.announce(
-        this.translate.instant('ADMIN.LOCATIONS.DELETE_SUCCESS', { name: context.name }),
-        'assertive',
-      )
+      this.liveAnnouncer.announce(this.translate.instant('ADMIN.LOCATIONS.DELETE_SUCCESS', { name: context.name }), 'assertive')
       await this.loadLocations()
     } catch (deleteError) {
       console.error('Fehler beim Löschen:', deleteError)
-      this.liveAnnouncer.announce(
-        this.translate.instant('ADMIN.LOCATIONS.DELETE_ERROR', { name: context.name }),
-        'assertive',
-      )
+      this.liveAnnouncer.announce(this.translate.instant('ADMIN.LOCATIONS.DELETE_ERROR', { name: context.name }), 'assertive')
     } finally {
       this.cancelLocationDeletion()
     }
@@ -266,7 +269,7 @@ export class AdminLocationOverviewComponent implements OnInit {
       await this.loadLocations()
     }
   }
-  
+
   private buildLocationEventCounts(events: Event[]): Map<string, number> {
     const counts = new Map<string, number>()
     for (const event of events ?? []) {

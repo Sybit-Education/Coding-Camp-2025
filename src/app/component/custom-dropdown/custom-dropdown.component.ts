@@ -1,5 +1,16 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, OnInit, computed, inject, input, output, signal } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  computed,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core'
 import { FilterItem } from '@app/models/filterItem.interface'
 import { IconComponent } from '../icon/icon.component'
 import { SearchComponent } from '../search/search.component'
@@ -41,10 +52,7 @@ export class CustomDropdownComponent implements OnInit {
   ngOnInit() {
     const defaults = this.defaultItems()
     const preselected = this.preselectedItems()
-    const initialSelected = [
-      ...defaults,
-      ...preselected.filter((item) => !defaults.some((d) => d.id === item.id)),
-    ]
+    const initialSelected = [...defaults, ...preselected.filter((item) => !defaults.some((d) => d.id === item.id))]
 
     this.selectedItems.set(initialSelected)
     this.availableItems.set(this.items().filter((item) => !initialSelected.some((sel) => sel.id === item.id)))

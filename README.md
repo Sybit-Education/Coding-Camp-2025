@@ -1,6 +1,6 @@
 # Coding Camp 2025 - 1200 Jahre Radolfzell
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.14.
+This project uses [Angular](https://angular.dev) version 21.1.0 with [Angular CLI](https://github.com/angular/angular-cli) version 21.1.0.
 
 ## Development server
 

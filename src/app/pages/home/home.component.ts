@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
-import { CommonModule } from '@angular/common'
+
 import { RouterModule, Router } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 
@@ -21,7 +21,7 @@ import { IconComponent } from '@app/component/icon/icon.component'
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, TranslateModule, RouterModule, KategorieCardComponent, IconComponent, EventCardListComponent],
+  imports: [TranslateModule, RouterModule, KategorieCardComponent, IconComponent, EventCardListComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

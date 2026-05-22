@@ -70,7 +70,7 @@
         <a
           class="text-primary underline underline-offset-2"
           [href]="'mailto:' + ('ACCESSIBILITY.CONTACT.EMAIL' | translate)"
-          [attr.aria-label]="('ACCESSIBILITY.CONTACT.EMAIL_ARIA' | translate)"
+          [attr.aria-label]="'ACCESSIBILITY.CONTACT.EMAIL_ARIA' | translate"
         >
           {{ 'ACCESSIBILITY.CONTACT.EMAIL' | translate }}
         </a>
@@ -80,7 +80,9 @@
         <a
           class="text-primary underline underline-offset-2"
           [href]="'tel:' + ('ACCESSIBILITY.CONTACT.TEL_PRIMARY' | translate)"
-          [attr.aria-label]="('ACCESSIBILITY.CONTACT.PHONE_LABEL' | translate) + ' ' + ('ACCESSIBILITY.CONTACT.PHONE_PRIMARY' | translate)"
+          [attr.aria-label]="
+            ('ACCESSIBILITY.CONTACT.PHONE_LABEL' | translate) + ' ' + ('ACCESSIBILITY.CONTACT.PHONE_PRIMARY' | translate)
+          "
         >
           {{ 'ACCESSIBILITY.CONTACT.PHONE_PRIMARY' | translate }}
         </a>
@@ -90,7 +92,9 @@
         <a
           class="text-primary underline underline-offset-2"
           [href]="'tel:' + ('ACCESSIBILITY.CONTACT.TEL_SECONDARY' | translate)"
-          [attr.aria-label]="('ACCESSIBILITY.CONTACT.PHONE_LABEL' | translate) + ' ' + ('ACCESSIBILITY.CONTACT.PHONE_SECONDARY' | translate)"
+          [attr.aria-label]="
+            ('ACCESSIBILITY.CONTACT.PHONE_LABEL' | translate) + ' ' + ('ACCESSIBILITY.CONTACT.PHONE_SECONDARY' | translate)
+          "
         >
           {{ 'ACCESSIBILITY.CONTACT.PHONE_SECONDARY' | translate }}
         </a>
@@ -111,7 +115,7 @@
       <a
         class="text-primary underline underline-offset-2"
         [href]="'mailto:' + ('ACCESSIBILITY.ENFORCEMENT.EMAIL' | translate)"
-        [attr.aria-label]="('ACCESSIBILITY.ENFORCEMENT.EMAIL_ARIA' | translate)"
+        [attr.aria-label]="'ACCESSIBILITY.ENFORCEMENT.EMAIL_ARIA' | translate"
       >
         {{ 'ACCESSIBILITY.ENFORCEMENT.EMAIL' | translate }}
       </a>
@@ -121,7 +125,9 @@
       <a
         class="text-primary underline underline-offset-2"
         [href]="'tel:' + ('ACCESSIBILITY.ENFORCEMENT.TEL' | translate)"
-        [attr.aria-label]="('ACCESSIBILITY.ENFORCEMENT.PHONE_LABEL' | translate) + ' ' + ('ACCESSIBILITY.ENFORCEMENT.PHONE' | translate)"
+        [attr.aria-label]="
+          ('ACCESSIBILITY.ENFORCEMENT.PHONE_LABEL' | translate) + ' ' + ('ACCESSIBILITY.ENFORCEMENT.PHONE' | translate)
+        "
       >
         {{ 'ACCESSIBILITY.ENFORCEMENT.PHONE' | translate }}
       </a>

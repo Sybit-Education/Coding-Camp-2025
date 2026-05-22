@@ -14,7 +14,15 @@ import { PwaInstallBannerComponent } from './component/pwa-install-banner/pwa-in
 
 @Component({
   selector: 'app-root',
-  imports: [TranslateModule, RouterOutlet, HeaderComponent, FooterComponent, BottomNavComponent, SnackBarComponent, PwaInstallBannerComponent],
+  imports: [
+    TranslateModule,
+    RouterOutlet,
+    HeaderComponent,
+    FooterComponent,
+    BottomNavComponent,
+    SnackBarComponent,
+    PwaInstallBannerComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -178,6 +178,9 @@
   },
   "EVENTS": {
     "DATE": "Date",
+    "CARD_ARIA": "Event: {{name}} on {{date}}",
+    "CARD_ARIA_FALLBACK": "Show more events",
+    "LOADING_STATUS": "Loading events... ({{count}} events available)",
     "LOCATION": "Location",
     "NO_EVENTS": "No events found",
     "NO_EVENTS_FOUND_IN_CATEGORY": "No events found in this category.",
@@ -228,6 +231,10 @@
     "categories": "Categories",
     "main-content": "Skip to main part",
     "highlights": "Current Highlights",
+    "all-events": "All Events",
+    "all-highlights": "All Highlights",
+    "show-all-events": "Show all events",
+    "show-all-highlights": "Show all highlights",
     "tags": {
       "aria-lable-event-heading": "events-heading",
       "aria-lable-catagories-heading": "categories-heading",

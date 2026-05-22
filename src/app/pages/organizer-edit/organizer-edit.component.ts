@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, Component, inject, signal, OnInit, computed } from '@angular/core'
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
@@ -14,7 +13,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y'
 
 @Component({
   selector: 'app-organizer-edit',
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, ConfirmDialogComponent, TranslateModule],
+  imports: [ReactiveFormsModule, RouterModule, ConfirmDialogComponent, TranslateModule],
   templateUrl: './organizer-edit.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -1,7 +1,7 @@
-import { Component, ChangeDetectionStrategy, inject, computed, signal } from '@angular/core'
+import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core'
 import { PwaInstallService } from '../../services/pwa-install.service'
 import { TranslateModule } from '@ngx-translate/core'
-import { IconComponent } from "../icon/icon.component";
+import { IconComponent } from '../icon/icon.component'
 
 @Component({
   selector: 'app-pwa-install-banner',
@@ -13,8 +13,8 @@ import { IconComponent } from "../icon/icon.component";
 export class PwaInstallBannerComponent {
   private readonly pwa = inject(PwaInstallService)
 
-  protected readonly show = this.pwa.showBanner.asReadonly()
-  protected readonly platform = computed(() => this.pwa.platform)
+  protected readonly show = this.pwa.showBanner
+  protected readonly platform = this.pwa.platform
   protected readonly closing = signal(false)
 
   protected install() {

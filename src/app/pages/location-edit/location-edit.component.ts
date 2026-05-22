@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, signal, ChangeDetectionStrategy, computed } from '@angular/core'
-import { CommonModule } from '@angular/common'
+
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
@@ -19,7 +19,6 @@ import { LiveAnnouncer } from '@angular/cdk/a11y'
 @Component({
   selector: 'app-location-edit',
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     TranslateModule,
     RouterModule,

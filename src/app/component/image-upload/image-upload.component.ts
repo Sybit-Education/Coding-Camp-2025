@@ -9,7 +9,7 @@ import {
   ViewChild,
   inject,
 } from '@angular/core'
-import { CommonModule } from '@angular/common'
+
 import { RecordId, StringRecordId } from 'surrealdb'
 import { MediaService } from '../../services/media.service'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
@@ -33,7 +33,7 @@ export interface CombinetPicture {
 
 @Component({
   selector: 'app-image-upload',
-  imports: [CommonModule, TranslateModule, FormsModule, LoadingSpinnerComponent, DragDropModule],
+  imports: [TranslateModule, FormsModule, LoadingSpinnerComponent, DragDropModule],
   templateUrl: './image-upload.component.html',
   styleUrl: './image-upload.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

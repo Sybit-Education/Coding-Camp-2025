@@ -21,7 +21,7 @@ import { EventService } from '../../services/event.service'
 import { LocationService } from '../../services/location.service'
 import { OrganizerService } from '../../services/organizer.service'
 import { TopicService } from '../../services/topic.service'
-import { CommonModule } from '@angular/common'
+
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { sanitizeQuillContent } from '../../utils/quill-sanitizer'
 import { Media } from '@app/models/media.interface'
@@ -40,7 +40,6 @@ interface AccessibilityType {
   imports: [
     FormsModule,
     TranslateModule,
-    CommonModule,
     QuillEditorComponent,
     LocationInputComponent,
     OrganizerInputComponent,
@@ -132,9 +131,7 @@ export class EventCreateComponent implements OnInit {
 
   isSaving = false
   protected readonly deleteDialogOpen = signal(false)
-  protected readonly deleteDialogTitle = computed(() =>
-    this.translate.instant('create-event.deleteConfirmTitle'),
-  )
+  protected readonly deleteDialogTitle = computed(() => this.translate.instant('create-event.deleteConfirmTitle'))
   protected readonly deleteDialogMessage = computed(() =>
     this.translate.instant('create-event.deleteConfirmMessage', {
       name: this.eventName || this.translate.instant('create-event.deleteConfirmFallback'),

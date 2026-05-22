@@ -1,13 +1,20 @@
-import { Injectable, inject } from '@angular/core'
+import { Injectable, inject, signal, Signal } from '@angular/core'
 import { Router } from '@angular/router'
-import Surreal, { RecordId, StringRecordId, Token } from 'surrealdb'
+import Surreal, { RecordId, StringRecordId, Token, Uuid } from 'surrealdb'
 import { environment } from '../../environments/environment'
 import { Event as AppEvent } from '../models/event.interface'
 import { DataCacheService } from './data-cache.service'
 
-type CacheOptions = {
+interface CacheOptions {
   bypassCache?: boolean
 }
+
+export interface LiveQueryUpdate<T> {
+  action: 'CREATE' | 'UPDATE' | 'DELETE' | 'CLOSE'
+  result?: T
+}
+
+type LiveQueryCallback<T> = (update: LiveQueryUpdate<T>) => void
 
 @Injectable({
   providedIn: 'root',
@@ -19,12 +26,20 @@ export class SurrealdbService extends Surreal {
   private readonly router = inject(Router, { optional: true })
   private readonly defaultTtlMs = 60_000
   private readonly searchTtlMs = 10_000
+  
+  // Live Query Management with callbacks instead of RxJS
+  private readonly liveQueryCallbacks = new Map<string, Set<LiveQueryCallback<unknown>>>()
+  private readonly liveQueryUuids = new Map<string, Uuid>()
 
   constructor() {
     super()
   }
 
-  private recordIdToString(recordId: RecordId<string> | StringRecordId): string {
+  /**
+   * Convert a RecordId to a string representation.
+   * Public method to be used by components for consistent RecordId handling.
+   */
+  recordIdToString(recordId: RecordId<string> | StringRecordId): string {
     const asString = (recordId as unknown as { toString?: () => string })?.toString?.()
     if (typeof asString === 'string') {
       return asString
@@ -129,12 +144,7 @@ export class SurrealdbService extends Surreal {
   async getAll<T extends Record<string, unknown>>(table: string, options?: CacheOptions): Promise<T[]> {
     // Stelle sicher, dass die Verbindung initialisiert ist
     await this.initialize()
-    return await this.fetchCached(
-      this.tableKey(table),
-      this.defaultTtlMs,
-      async () => await super.select<T>(table),
-      options,
-    )
+    return await this.fetchCached(this.tableKey(table), this.defaultTtlMs, async () => await super.select<T>(table), options)
   }
 
   // 3) Einfügen und die neuen Datensätze zurückbekommen
@@ -215,14 +225,10 @@ export class SurrealdbService extends Surreal {
       LIMIT 30;`
 
     try {
-      const result = await this.fetchCached(
-        this.queryKey(ftsSql, { q }),
-        this.searchTtlMs,
-        async () => {
-          const queryResult = (await super.query(ftsSql, { 'q': q }))[0] as AppEvent[]
-          return Array.isArray(queryResult) ? queryResult : []
-        },
-      )
+      const result = await this.fetchCached(this.queryKey(ftsSql, { q }), this.searchTtlMs, async () => {
+        const queryResult = (await super.query(ftsSql, { 'q': q }))[0] as AppEvent[]
+        return Array.isArray(queryResult) ? queryResult : []
+      })
       return result
     } catch (err) {
       console.warn('[SurrealdbService] FTS query failed, will fallback', err)
@@ -231,12 +237,153 @@ export class SurrealdbService extends Surreal {
     return []
   }
 
-  private async fetchCached<T>(
-    key: string,
-    ttlMs: number,
-    fetcher: () => Promise<T>,
-    options?: CacheOptions,
-  ): Promise<T> {
+  /**
+   * Live Query Support - Returns a signal that emits updates in real-time
+   * @param table The table or query to watch for changes
+   * @param diff If true, returns only the changes (default: false)
+   * @returns Signal containing the latest update and an unsubscribe function
+   */
+  liveQuery<T extends Record<string, unknown>>(
+    table: string,
+    diff = false
+  ): { 
+    updates: Signal<LiveQueryUpdate<T> | null>
+    unsubscribe: () => Promise<void>
+  } {
+    const queryKey = `live:${table}:${diff}`
+    const updateSignal = signal<LiveQueryUpdate<T> | null>(null)
+    
+    const callback: LiveQueryCallback<T> = (update) => {
+      updateSignal.set(update)
+    }
+    
+    // Store callback
+    if (!this.liveQueryCallbacks.has(queryKey)) {
+      this.liveQueryCallbacks.set(queryKey, new Set())
+    }
+    this.liveQueryCallbacks.get(queryKey)!.add(callback as LiveQueryCallback<unknown>)
+    
+    // Initialize the live query if not already running
+    if (!this.liveQueryUuids.has(queryKey)) {
+      void this.initializeLiveQuery<T>(queryKey, table, diff).catch((err) => {
+        console.error('Failed to initialize live query:', err)
+        // Notify listeners that the live query has closed due to an error
+        updateSignal.set({ action: 'CLOSE' })
+        // Clean up any state associated with this live query key
+        this.liveQueryCallbacks.delete(queryKey)
+        this.liveQueryUuids.delete(queryKey)
+      })
+    }
+    
+    const unsubscribe = async () => {
+      const callbacks = this.liveQueryCallbacks.get(queryKey)
+      if (callbacks) {
+        callbacks.delete(callback as LiveQueryCallback<unknown>)
+        
+        // If no more callbacks, clean up the live query
+        if (callbacks.size === 0) {
+          const uuid = this.liveQueryUuids.get(queryKey)
+          if (uuid) {
+            try {
+              await super.kill(uuid)
+            } catch (err) {
+              console.warn('Failed to kill live query:', err)
+            }
+            this.liveQueryUuids.delete(queryKey)
+          }
+          this.liveQueryCallbacks.delete(queryKey)
+        }
+      }
+    }
+    
+    return {
+      updates: updateSignal.asReadonly(),
+      unsubscribe
+    }
+  }
+  
+  /**
+   * Initialize a live query connection
+   */
+  private async initializeLiveQuery<T extends Record<string, unknown>>(
+    queryKey: string,
+    table: string,
+    diff: boolean
+  ): Promise<void> {
+    try {
+      await this.initialize()
+      
+      const queryUuid = await super.live<T>(
+        table,
+        (action, result) => {
+          // Handle all possible actions including CLOSE
+          let update: LiveQueryUpdate<T>
+          
+          if (action === 'CLOSE') {
+            update = { action: 'CLOSE' }
+            // Clean up on CLOSE
+            this.liveQueryCallbacks.delete(queryKey)
+            this.liveQueryUuids.delete(queryKey)
+          } else {
+            update = { 
+              action: action as 'CREATE' | 'UPDATE' | 'DELETE',
+              result: result as T
+            }
+          }
+          
+          // Notify all callbacks for this query
+          const callbacks = this.liveQueryCallbacks.get(queryKey)
+          if (callbacks) {
+            callbacks.forEach(callback => {
+              (callback as LiveQueryCallback<T>)(update)
+            })
+          }
+        },
+        diff
+      )
+      
+      this.liveQueryUuids.set(queryKey, queryUuid)
+    } catch (error) {
+      console.error('Failed to create live query:', error)
+      // Notify listeners of failure via CLOSE event
+      const update: LiveQueryUpdate<T> = { action: 'CLOSE' }
+      const callbacks = this.liveQueryCallbacks.get(queryKey)
+      if (callbacks) {
+        callbacks.forEach(callback => {
+          (callback as LiveQueryCallback<T>)(update)
+        })
+      }
+      // Clean up
+      this.liveQueryCallbacks.delete(queryKey)
+      this.liveQueryUuids.delete(queryKey)
+      throw error
+    }
+  }
+
+  /**
+   * Disconnect and cleanup all live queries
+   */
+  async disconnect(): Promise<void> {
+    // Close all live queries
+    for (const [queryKey, uuid] of this.liveQueryUuids.entries()) {
+      try {
+        await super.kill(uuid)
+      } catch (err) {
+        console.warn(`Failed to kill live query ${queryKey}:`, err)
+      }
+    }
+    this.liveQueryUuids.clear()
+    this.liveQueryCallbacks.clear()
+
+    // Close connection
+    if (this.connectionInitialized) {
+      await this.close()
+      this.connectionInitialized = false
+      this.connectionPromise = null
+    }
+  }
+
+  private async fetchCached<T>(key: string, ttlMs: number, fetcher: () => Promise<T>, options?: CacheOptions): Promise<T> {
     if (this.shouldBypassCache(options)) {
       return await fetcher()
     }
