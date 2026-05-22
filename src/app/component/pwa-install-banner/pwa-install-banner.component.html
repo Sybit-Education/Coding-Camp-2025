@@ -1,6 +1,8 @@
 @if (show()) {
   <div
-    class="fixed right-0 bottom-24 left-0 z-[9999] m-4 flex items-center justify-between rounded-2xl bg-[#3b4ea3] p-2 text-white shadow-2xl backdrop-blur-xl transition-all duration-500 hover:opacity-100 md:top-4 md:bottom-auto md:mx-20 md:shadow-lg"
+    class="fixed right-auto bottom-[calc(env(safe-area-inset-bottom)+24px+90px)] left-1/2 z-[9999] flex w-[calc(100%-2rem)] max-w-3xl -translate-x-1/2 items-center justify-between rounded-2xl bg-gradient-to-b from-[#c70d56] to-[#ff6584] p-2 text-white shadow-2xl backdrop-blur-2xl transition-all duration-500 hover:opacity-100 active:scale-95 md:top-4 md:bottom-auto md:shadow-lg dark:bg-black"
+    [class.banner-enter]="!closing()"
+    [class.banner-exit]="closing()"
     [class.opacity-0]="closing()"
     [class.translate-y-6]="closing()"
     [class.md\:-translate-y-6]="closing()"
@@ -10,7 +12,7 @@
     @switch (platform()) {
       @case ('ios') {
         <div class="flex items-center gap-3">
-          <app-icon name="share" class="h-6 w-6" />
+          <app-icon name="ios-share" class="h-6 w-6" />
           <div>
             <span class="text-lg font-semibold">{{ 'PWA.INSTALL.IOS_TITLE' | translate }}</span>
             <p class="text-sm">{{ 'PWA.INSTALL.IOS_DESC' | translate }}</p>

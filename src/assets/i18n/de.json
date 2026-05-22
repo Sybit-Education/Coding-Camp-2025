@@ -266,8 +266,8 @@
     "date-to": "Zeitraum bis"
   },
   "bottom-nav": {
-    "all-events": "Alle Veranstaltungen",
-    "create-event": "Event erstellen",
+    "all-events": "Veranstaltungen",
+    "create-event": "Erstellen",
     "favorites": "Favoriten",
     "home": "Home",
     "more": "Mehr"
