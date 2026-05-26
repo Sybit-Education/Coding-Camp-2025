@@ -1,43 +1,32 @@
-# TODOs für das Angular 19 Projekt
+# TODOs für das Angular‑20 Projekt
 
-Basierend auf den Anforderungen in `agents.md` fehlen noch folgende Komponenten oder Implementierungen:
+Basierend auf den Vorgaben aus `AGENTS.md` sind folgende Punkte offen:
 
-## Internationalisierung (I18n)
-- [x] `ngx-translate` ist installiert und konfiguriert
-- [x] Übersetzungsdateien im `locale/` Verzeichnis vorhanden
-- [x] Verwendung von `TranslateService` in den Komponenten
-- [x] Build-Konfigurationen für mehrere Sprachen (de, en)
+## Angular 20 Konformität
+- [x] `standalone: true` aus allen Komponenten entfernen (z. B. `src/app/pages/admin-event-overview/admin-event-overview.component.ts`, `src/app/component/organizer-input/organizer-input.component.ts`)
+- [ ] Inputs/Outputs/Models komplett auf `input()/output()/model()` umstellen und `EventEmitter` ersetzen (z. B. Organizer-/Location-Input, Image-Upload)
+- [ ] Alle `*ngIf`, `*ngFor`, `*ngTemplateOutlet`, `ngClass` etc. auf native Control-Flow-Syntax und Signal-basierte Bindings migrieren (z. B. Organizer-Edit, Image-Upload, Snack-Bar)
+- [ ] Jede `@for`-Schleife mit stabilem `track`-Ausdruck (IDs) versehen
+- [ ] Zustandsverwaltung in Komponenten (Organizer-/Location-Input, Home, Kategorie, Admin*-Übersichten) auf `signal/computed/effect` + OnPush + DestroyRef umstellen
 
-## Barrierefreiheit (A11y)
-- [ ] Keine Skip-Links für Tastaturnavigation
-- [ ] Unzureichende ARIA-Attribute in den Komponenten
-- [ ] Kein explizites Fokus-Management implementiert
-- [ ] Keine Verwendung von `LiveAnnouncer` oder `cdkTrapFocus` aus Angular CDK
+## Internationalisierung
+- [ ] Von `ngx-translate` auf `provideI18n`/`I18nService` wechseln und alle Hardcoded-Strings (Route-Titel, Buttons, Confirm/Alert-Texte, aria-labels) nach `assets/i18n` auslagern
+- [ ] Systemweite Alerts/Bestätigungen durch übersetzte, a11y-konforme Dialoge ersetzen
 
-## State Management
-- [ ] Kein klares State Management (NgRx, ComponentStore oder Signals)
-- [ ] Keine zoneless Change Detection implementiert
+## Tailwind & Styling
+- [x] Tailwind Utility-First strikt anwenden und Custom-SCSS (z. B. `.card`, `.action-button`, `.tailwind-table` in `src/styles.scss` sowie component-spezifische `.scss`) abbauen bzw. in `@layer components` überführen
 
-## Codequalität & Tests
-- [ ] Keine ESLint-Regeln für i18n konfiguriert
-- [ ] Unzureichende Unit-Tests
-- [ ] Keine E2E-Tests mit Cypress
+## Accessibility
+- [x] Interaktive Elemente mit validen Semantik-Elementen (Buttons statt `href="javascript:void(0)"`) und übersetzten ARIA-Labels versehen
+- [x] Live-Regionen/`LiveAnnouncer` für Statusmeldungen, Fokus-Management nach Dialogen und keine nativen `confirm/alert` Dialoge mehr
 
-## Projektstruktur
-- [ ] Keine klare Feature-basierte Architektur / Domain-Driven Design
-- [ ] Unvollständige Ordnerstruktur (z.B. fehlendes `locale/` Verzeichnis)
+## SurrealDB & Datenfluss
+- [ ] `SurrealdbService` um `signal`-basierte Verbindung, `liveQuery`, Disconnect-Handling und Auth-Flüsse erweitern
+- [ ] Admin-Listen auf Live-Queries mit `DestroyRef`-Cleanup umstellen statt manueller Reloads
 
-## Performance & Optimierungen
-- [ ] Keine explizite Verwendung von `OnPush` Change Detection
-- [ ] Keine Vorbereitung für Server-Side Rendering (SSR)
+## Routing & Struktur
+- [ ] Doppelte Route-Konfigurationen in `src/app/app.routes.ts` entfernen und Seitentitel dynamisch per i18n setzen
 
-## SurrealDB Integration
-- [ ] Live-Query-Funktionalität nicht vollständigy implementiert
-- [ ] Authentifizierung über SurrealDB nicht implementiert
-
-## Nächste Schritte
-1. Internationalisierung implementieren (höchste Priorität)
-2. Barrierefreiheit verbessern
-3. State Management einführen
-4. Tests hinzufügen
-5. Projektstruktur optimieren
+## Tests & Qualität
+- [ ] Signal-/Control-Flow-Refactorings mit Unit-Tests absichern (besonders Form-/Listen-Komponenten)
+- [ ] Accessibility-/i18n-Linting aktivieren (wie in AGENTS gefordert) und fehlende Regeln ergänzen

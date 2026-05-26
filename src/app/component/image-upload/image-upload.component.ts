@@ -9,7 +9,7 @@ import {
   ViewChild,
   inject,
 } from '@angular/core'
-import { CommonModule } from '@angular/common'
+
 import { RecordId, StringRecordId } from 'surrealdb'
 import { MediaService } from '../../services/media.service'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
@@ -33,7 +33,7 @@ export interface CombinetPicture {
 
 @Component({
   selector: 'app-image-upload',
-  imports: [CommonModule, TranslateModule, FormsModule, LoadingSpinnerComponent, DragDropModule],
+  imports: [TranslateModule, FormsModule, LoadingSpinnerComponent, DragDropModule],
   templateUrl: './image-upload.component.html',
   styleUrl: './image-upload.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -128,7 +128,6 @@ export class ImageUploadComponent implements OnInit, OnChanges {
         continue
       }
       const maxFileSize = 5 * 1024 * 1024
-      console.log('File size before compress', file.size / 1024 / 1024)
       if (file.size > maxFileSize) {
         this.snackBarService.showError(`Datei zu groß (max. 5 MB): ${file.name}`)
         continue
@@ -153,7 +152,6 @@ export class ImageUploadComponent implements OnInit, OnChanges {
 
       const compressedBlob = await imageCompression(file, options)
 
-      console.log('File size after compress', compressedBlob.size / 1024 / 1024)
       const reader = new FileReader()
       reader.onload = () => {
         if (typeof reader.result === 'string') {
@@ -254,8 +252,6 @@ export class ImageUploadComponent implements OnInit, OnChanges {
 
   async uploadImages(): Promise<Media[]> {
     const collected: Media[] = []
-
-    console.log('Preview Länge:', this.previews.length)
 
     try {
       // 1) Früher Exit: keine Previews, aber vorhandene Bilder
@@ -376,7 +372,6 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       }
 
       // 4) Einmalig zurückgeben
-      console.log('Hochgeladene und existierende Medien:', collected)
       return collected
     } catch (error) {
       console.error('Fehler beim Hochladen der Bilder:', error)

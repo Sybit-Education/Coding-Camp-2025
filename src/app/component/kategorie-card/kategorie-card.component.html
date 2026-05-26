@@ -1,25 +1,31 @@
 <a
-  [routerLink]="filterOption ? null : ['/kategorie', slug]"
+  [routerLink]="filterOption() ? null : ['/kategorie', slug()]"
+  [attr.aria-label]="text()"
+  [attr.role]="filterOption() ? 'button' : null"
+  [attr.aria-pressed]="filterOption() ? (selected() ? 'true' : 'false') : null"
+  [attr.tabindex]="filterOption() ? 0 : null"
   class="card justify-center"
-  [ngClass]="filterOption ? 'aspect-[11/3] border-gray-400' : 'aspect-[4/3]'"
-  [class.bg-white]="!selected"
+  [ngClass]="filterOption() ? 'aspect-[11/3] border-gray-400' : 'aspect-[4/3]'"
+  [class.bg-white]="!selected()"
   [ngStyle]="{
-    'background-color': selected ? categoryColor() : '',
-    'color': selected ? getcomputeTextColor(categoryColor()) : 'black',
+    'background-color': selected() ? categoryColor() : '',
+    'color': selected() ? getcomputeTextColor(categoryColor()) : 'black',
   }"
-  (click)="filterOption ? addCategoryToFilter() : null"
+  (click)="addCategoryToFilter()"
+  (keydown.enter)="handleFilterKey($event)"
+  (keydown.space)="handleFilterKey($event)"
 >
   <div class="align-middle">
     <p
       class="items-center justify-center text-center transition-transform duration-300"
-      [ngClass]="filterOption ? 'm-0 text-sm' : 'font-semibold'"
+      [ngClass]="filterOption() ? 'm-0 text-sm' : 'font-semibold'"
     >
-      {{ text }}
+      {{ text() }}
     </p>
     <div
       class="h-1 w-auto max-w-full rounded transition-transform duration-300"
-      [ngClass]="filterOption ? 'scale-x-110' : 'scale-x-150'"
-      [ngStyle]="{ 'background-color': categoryColor() }"
+      [ngClass]="filterOption() ? 'scale-x-110' : 'scale-x-150'"
+      [style.background-color]="categoryColor()"
     ></div>
   </div>
 </a>

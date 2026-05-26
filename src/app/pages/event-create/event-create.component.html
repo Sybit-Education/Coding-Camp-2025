@@ -1,11 +1,11 @@
 <app-go-back-button class="mb-4 flex px-6"></app-go-back-button>
 <div class="flex px-6">
   <span class="ml-2 text-left text-2xl font-bold text-gray-800">
-    {{ isEditMode() ? 'Event bearbeiten' : 'Event erstellen' }}
+    {{ isEditMode() ? ('create-event.title-edit' | translate) : ('create-event.title-create' | translate) }}
   </span>
 </div>
 <div class="flex flex-col items-center justify-center rounded-2xl p-5">
-  <form class="rounded-2xl bg-white p-6 shadow-2xl">
+  <form class="rounded-2xl bg-white p-6 shadow-2xl" (ngSubmit)="saveEvent()" autocomplete="on">
     <!-- Event Name -->
     <div>
       <label for="eventName" class="required">{{ 'create-event.eventname' | translate }}</label>
@@ -17,10 +17,12 @@
         [(ngModel)]="eventName"
         class="w-full"
         [class]="this.errorName ? 'error' : ''"
+        [attr.aria-invalid]="this.errorName ? true : null"
+        [attr.aria-describedby]="this.errorName ? 'eventName-error' : null"
         required="true"
       />
       @if (this.errorName) {
-        <p class="error mt-2 text-sm">
+        <p id="eventName-error" role="alert" class="error mt-2 text-sm">
           {{ 'create-event.error.name' | translate }}
         </p>
       }
@@ -39,10 +41,12 @@
             name="dateStart"
             class="w-full"
             [class]="this.errorDate ? 'error' : ''"
+            [attr.aria-invalid]="this.errorDate ? true : null"
+            [attr.aria-describedby]="this.errorDate ? 'dateStart-error' : null"
             required="true"
           />
           @if (this.errorDate) {
-            <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+            <p id="dateStart-error" role="alert" class="mt-2 text-sm text-red-600 dark:text-red-500">
               {{ 'create-event.error.date' | translate }}
             </p>
           }
@@ -65,10 +69,12 @@
             name="timeStart"
             class="w-full"
             [class]="this.errorTime ? 'error' : ''"
+            [attr.aria-invalid]="this.errorTime ? true : null"
+            [attr.aria-describedby]="this.errorTime ? 'timeStart-error' : null"
             required="true"
           />
           @if (this.errorTime) {
-            <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+            <p id="timeStart-error" role="alert" class="mt-2 text-sm text-red-600 dark:text-red-500">
               {{ 'create-event.error.time' | translate }}
             </p>
           }
@@ -116,7 +122,7 @@
         [maxLength]="5000"
         [styles]="{ minHeight: '250px' }"
         [(ngModel)]="description"
-        [placeholder]="'Beschreibung eingeben...'"
+        [placeholder]="'create-event.descriptionPlaceholder' | translate"
         [format]="'html'"
         [modules]="{
           toolbar: [['bold', 'italic', 'underline'], [{ 'list': 'ordered' }, { 'list': 'bullet' }], ['link']],
@@ -138,6 +144,7 @@
         </h3>
         <!-- Event-Typ -->
         <div>
+          <label for="eventType" class="required">{{ 'create-event.eventtype' | translate }}</label>
           <select
             id="eventType"
             name="eventType"
@@ -145,6 +152,8 @@
             (ngModelChange)="setSelectedEventType($event)"
             class="border-Gray-600 w-full cursor-pointer rounded-[6px] border-2"
             [class]="this.errorTheme ? 'error' : ''"
+            [attr.aria-invalid]="this.errorTheme ? true : null"
+            [attr.aria-describedby]="this.errorTheme ? 'eventType-error' : null"
           >
             <option [ngValue]="null">
               {{ 'create-event.topics' | translate }}
@@ -158,7 +167,7 @@
         </div>
 
         @if (errorTheme) {
-          <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+          <p id="eventType-error" role="alert" class="mt-2 text-sm text-red-600 dark:text-red-500">
             {{ 'create-event.error.theme' | translate }}
           </p>
         }
@@ -176,9 +185,33 @@
                     (change)="toggleTopicSelection($event, topic)"
                     class="h-4 w-4 cursor-pointer"
                   />
+
                   <label for="checkbox{{ topic.id }}" class="ms-2 w-full cursor-pointer text-gray-900 dark:text-gray-700">
                     {{ topic.name }}
                   </label>
+                  @if (accessibility && topicService.isTopicAccessibility(topic)) {
+                    <div>
+                      @for (accessibility of allAccessebiltiys; track accessibility) {
+                        <div class="ml-6">
+                          <input
+                            id="accessibilityCheckbox{{ accessibility.accessibilityName }}"
+                            name="accessibilitysCheckbox{{ accessibility.accessibilityName }}"
+                            type="checkbox"
+                            [value]="accessibility.accessibilityName"
+                            [checked]="selectedAccessibiltiys.includes(accessibility)"
+                            (change)="toggleAccessibilitySelection($event, accessibility)"
+                            class="h-4 w-4 cursor-pointer"
+                          />
+                          <label
+                            for="accessibilityCheckbox{{ accessibility.accessibilityName }}"
+                            class="ms-2 w-full cursor-pointer text-gray-900 dark:text-gray-700"
+                          >
+                            {{ accessibility.accessibilityName }}
+                          </label>
+                        </div>
+                      }
+                    </div>
+                  }
                 </div>
               </li>
             }
@@ -235,18 +268,14 @@
       <!-- Button: Event erstellen -->
       @if (this.errorDate || this.errorName || this.errorTime) {
         <div>
-          <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+          <p role="alert" class="mt-2 text-sm text-red-600 dark:text-red-500">
             {{ 'create-event.error.general' | translate }}
           </p>
         </div>
       }
     </div>
     <div class="my-8 flex grid w-full flex-col gap-[3rem] sm:grid-cols-[1fr] md:grid-cols-[1fr_1fr] lg:grid-cols-[1fr_1fr_1fr]">
-      <button
-        type="submit"
-        class="w-full cursor-pointer rounded-2xl bg-blue-600 p-5 text-white hover:bg-blue-700"
-        (click)="saveEvent()"
-      >
+      <button type="submit" class="w-full cursor-pointer rounded-2xl bg-blue-600 p-5 text-white hover:bg-blue-700">
         {{ (eventId ? 'create-event.updateevent' : 'create-event.createevent') | translate }}
       </button>
 
@@ -263,7 +292,8 @@
         <button
           type="button"
           class="w-full cursor-pointer rounded-2xl bg-red-500 p-5 text-white hover:bg-red-600"
-          (click)="deleteEvent()"
+          (click)="openDeleteDialog()"
+          [attr.aria-label]="'create-event.delete' | translate"
         >
           {{ 'create-event.delete' | translate }}
         </button>
@@ -275,4 +305,15 @@
       <app-loading-spinner />
     </div>
   }
+
+  <app-confirm-dialog
+    [opened]="deleteDialogOpen()"
+    (openedChange)="deleteDialogOpen.set($event)"
+    [title]="deleteDialogTitle()"
+    [message]="deleteDialogMessage()"
+    [confirmLabel]="deleteConfirmLabel()"
+    [cancelLabel]="deleteCancelLabel()"
+    (confirmed)="confirmDeleteEvent()"
+    (cancelled)="cancelDeleteDialog()"
+  />
 </div>

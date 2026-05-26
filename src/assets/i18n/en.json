@@ -1,11 +1,170 @@
 {
+  "ABOUT": {
+    "CONTENT": "The city of Radolfzell on Lake Constance celebrates its 1200th anniversary",
+    "TITLE": "About us"
+  },
+  "ACCESSIBILITY": {
+    "CONTACT": {
+      "ADDRESS": "Marktplatz 2, 78315 Radolfzell, Germany",
+      "DEPARTMENT": "Press office and public relations",
+      "EMAIL": "pressestelle@radolfzell.de",
+      "EMAIL_ARIA": "Send an email to the press office of the City of Radolfzell",
+      "EMAIL_LABEL": "Email",
+      "INTRO": "Report barriers or request accessible information. We respond within the deadline set out in § 8 sentence 1 L-BGG-DVO.",
+      "ORGANISATION": "City of Radolfzell am Bodensee",
+      "PHONE_LABEL": "Phone",
+      "PHONE_PRIMARY": "+49 7732 81-110",
+      "PHONE_SECONDARY": "+49 7732 81-109",
+      "TEL_PRIMARY": "+49773281110",
+      "TEL_SECONDARY": "+49773281109",
+      "TITLE": "Feedback and contact"
+    },
+    "ENFORCEMENT": {
+      "ADDRESS": "Else-Josenhans-Straße 6, 70173 Stuttgart, Germany",
+      "BODY": "State Commissioner for People with Disabilities",
+      "EMAIL": "poststelle@bfbmb.bwl.de",
+      "EMAIL_ARIA": "Send an email to the State Commissioner for People with Disabilities",
+      "EMAIL_LABEL": "Email",
+      "INTRO": "If you do not receive a reply or are not satisfied, you may contact the following ombuds office:",
+      "NOTE": "Notice: There is a right of class action under § 12 (1) sentence 1 no. 4 L-BGG.",
+      "ORG": "Ministry of Social Affairs, Health and Integration Baden-Württemberg",
+      "PHONE": "+49 711 279-3360",
+      "PHONE_LABEL": "Phone",
+      "TEL": "+497112793360",
+      "TITLE": "Enforcement procedure"
+    },
+    "INTRO": "We aim to meet WCAG 2.1 AA / WCAG 2.2 AA, BITV 2.0 and § 10(1) L-BGG (Baden-Württemberg).",
+    "LEGAL_BASIS": {
+      "POINTS": {
+        "EU_DIRECTIVE": "Directive (EU) 2016/2102 on the accessibility of the websites and mobile applications of public sector bodies",
+        "LBGG": "Section 10 (1) of the State Equal Opportunities Act (L-BGG) Baden-Württemberg and the German Barrier-free Information Technology Ordinance (BITV 2.0)",
+        "WCAG": "Web Content Accessibility Guidelines (WCAG) 2.1 and 2.2, conformance level AA"
+      },
+      "TEXT": "The following standards and regulations apply:",
+      "TITLE": "Legal basis"
+    },
+    "NON_ACCESSIBLE": {
+      "INTRO": "The following content is not yet fully accessible:",
+      "ITEMS": {
+        "ALT_TEXTS": "Some images, graphics and icons still lack meaningful alternative text.",
+        "IFRAMES": "Embedded external services (iFrames/links) may not be fully accessible beyond our control.",
+        "MAPS": "Interactive maps and geodata are currently not fully accessible."
+      },
+      "TITLE": "Non-accessible content"
+    },
+    "STATEMENT": {
+      "CREATED": "Created on: 26/11/2025",
+      "METHOD": "Method: self-assessment based on WCAG 2.1/2.2 AA, BITV 2.0 and L-BGG, complemented by manual reviews.",
+      "TITLE": "Creation of this statement"
+    },
+    "STATEMENT_SCOPE": "This statement applies to the Coding Camp 2025 web application.",
+    "STATUS": {
+      "POINTS": {
+        "CONTINUOUS_IMPROVEMENT": "Ongoing remediation and prioritisation of reported and identified issues in the product backlog.",
+        "SELF_ASSESSMENT": "Assessment: self-evaluation using internal WCAG checklists (status: 26/11/2025)."
+      },
+      "TEXT": "This web application is partially compliant with the requirements listed above.",
+      "TITLE": "Compliance status"
+    },
+    "TITLE": "Accessibility statement"
+  },
+  "ADMIN": {
+    "EVENTS": {
+      "CONFIRM_DELETE": "Delete event \"{{name}}\"?",
+      "CREATE_NEW": "New Event ...",
+      "DELETE": "Delete",
+      "DELETE_BUTTON_ARIA": "Delete event {{name}}",
+      "DELETE_CONFIRM_MESSAGE": "Do you really want to delete \"{{name}}\"?",
+      "DELETE_CONFIRM_MESSAGE_DEFAULT": "Do you really want to delete this event?",
+      "DELETE_CONFIRM_TITLE": "Delete event",
+      "DELETE_ERROR": "Event {{name}} could not be deleted.",
+      "DELETE_SUCCESS": "Event {{name}} has been deleted.",
+      "EDIT": "Edit ...",
+      "EDIT_BUTTON_ARIA": "Edit event {{name}}",
+      "EDIT_LINK_ARIA": "Edit event {{name}}",
+      "NO_EVENTS": "No events found.",
+      "PREVIEW_ARIA": "Open preview for event {{name}}",
+      "SEARCH": "Search ...",
+      "SEARCH_STATUS_ALL": "{{count}} events in total",
+      "SEARCH_STATUS_FILTERED": "{{count}} results for \"{{query}}\"",
+      "TITLE": "Events"
+    },
+    "LOCATIONS": {
+      "CONFIRM_DELETE": "Delete location \"{{name}}\"?",
+      "CREATE_NEW": "New location ...",
+      "DELETE": "Delete",
+      "DELETE_BUTTON_ARIA": "Delete location {{name}}",
+      "DELETE_CONFIRM_MESSAGE": "Do you really want to delete \"{{name}}\"?",
+      "DELETE_CONFIRM_MESSAGE_DEFAULT": "Do you really want to delete this location?",
+      "DELETE_CONFIRM_TITLE": "Delete location",
+      "DELETE_ERROR": "Location {{name}} could not be deleted.",
+      "DELETE_FALLBACK": "this location",
+      "DELETE_FORBIDDEN": "Locations linked to events cannot be deleted.",
+      "DELETE_SUCCESS": "Location {{name}} has been deleted.",
+      "EDIT": "Edit",
+      "EDIT_BUTTON_ARIA": "Edit location {{name}}",
+      "EDIT_LINK_ARIA": "Edit location {{name}}",
+      "FORM": {
+        "CITY": "City",
+        "DELETE_CONFIRM": "Do you really want to delete this location?",
+        "DELETE_ERROR": "The location could not be deleted.",
+        "IMAGES": "Images",
+        "LINKED_WARNING": "This location is linked to {{count}} event(s) and cannot be deleted.",
+        "LOAD_ERROR": "The location could not be loaded.",
+        "NAME": "Name",
+        "NAME_REQUIRED": "Please enter a name.",
+        "SAVE_ERROR": "The location could not be saved.",
+        "STREET": "Street",
+        "TITLE_CREATE": "Create location",
+        "TITLE_EDIT": "Edit location",
+        "ZIP": "ZIP"
+      },
+      "NO_LOCATIONS": "No locations found",
+      "PREVIEW": "Preview",
+      "SEARCH": "Search locations...",
+      "SEARCH_STATUS_ALL": "Showing all {count} locations.",
+      "SEARCH_STATUS_FILTERED": "Filtered {count} locations for \"{query}\".",
+      "TITLE": "Locations"
+    },
+    "ORGANIZERS": {
+      "CONFIRM_DELETE": "Delete organizer \"{{name}}\"?",
+      "CREATE_TITLE": "Create organizer",
+      "DELETE": "Delete",
+      "DELETE_BUTTON_ARIA": "Delete organizer {{name}}",
+      "DELETE_CONFIRM_MESSAGE": "Do you really want to delete \"{{name}}\"?",
+      "DELETE_CONFIRM_MESSAGE_DEFAULT": "Do you really want to delete this organizer?",
+      "DELETE_CONFIRM_TITLE": "Delete organizer",
+      "DELETE_ERROR": "Organizer {{name}} could not be deleted.",
+      "DELETE_FORBIDDEN": "Organizers linked to events cannot be deleted.",
+      "DELETE_SUCCESS": "Organizer {{name}} has been deleted.",
+      "EDIT_BUTTON_ARIA": "Edit organizer {{name}}",
+      "EDIT_LINK_ARIA": "Edit organizer {{name}}",
+      "EDIT_TITLE": "Edit organizer",
+      "LINKED_WARNING": "This organizer is linked to {{count}} event(s) and cannot be deleted.",
+      "SEARCH_STATUS_ALL": "Showing all {count} organizers.",
+      "SEARCH_STATUS_FILTERED": "Filtered {count} organizers for \"{query}\".",
+      "TITLE": "Organizers"
+    },
+    "TITLE": "Administration"
+  },
   "COMMON": {
-    "SAVE": "Save",
-    "CANCEL": "Cancel",
     "BACK": "Back",
+    "CANCEL": "Cancel",
+    "CLOSE": "Close",
+    "CONFIRM": "Confirm",
+    "DELETE": "Delete",
+    "EXTERNAL_LINK": "External link, opens in a new tab",
+    "LOADING": "Loading ...",
+    "MAIN_CONTENT": "Main content",
     "NEXT": "Next",
     "SKIP_TO_MAIN": "Skip to main content",
-    "LOADING": "Loading ..."
+    "ACCESSIBILITY": {
+      "WHEELCHAIR": "Wheelchair accessible",
+      "SEEING": "Visually impaired accessible",
+      "HEARING": "Hearing impaired accessible"
+    },
+    "PAGE_UPDATED": "Page updated",
+    "SAVE": "Save"
   },
   "HEADER": {
     "TITLE": "1200 Years Radolfzell",
@@ -18,65 +177,97 @@
     "INTRO": "Discover the history and events around the anniversary"
   },
   "EVENTS": {
-    "TITLE": "Events",
-    "NO_EVENTS": "No events found",
-    "LOCATION": "Location",
     "DATE": "Date",
-    "SAVE_EVENT": "Save event",
-    "REMOVE_EVENT": "Remove event",
+    "CARD_ARIA": "Event: {{name}} on {{date}}",
+    "CARD_ARIA_FALLBACK": "Show more events",
+    "LOADING_STATUS": "Loading events... ({{count}} events available)",
+    "LOCATION": "Location",
+    "NO_EVENTS": "No events found",
+    "NO_EVENTS_FOUND_IN_CATEGORY": "No events found in this category.",
     "PAST_EVENT": "Past event",
     "PAST_PREFIX": "Past: ",
-    "NO_EVENTS_FOUND_IN_CATEGORY": "No events found in this category."
+    "REMOVE_EVENT": "Remove event",
+    "SAVE_EVENT": "Save event",
+    "TITLE": "Events"
   },
-  "ABOUT": {
-    "TITLE": "About us",
-    "CONTENT": "The city of Radolfzell on Lake Constance celebrates its 1200th anniversary"
+  "FAVORITES": {
+    "ADD": "Add to favorites",
+    "EMPTY": {
+      "BUTTON": "Go to overview",
+      "DESCRIPTION": "Add events to your favorites to see them here.",
+      "TITLE": "You haven't saved any favorites yet."
+    },
+    "LOADING": "Loading favorites...",
+    "LOCAL_STORAGE_NOTICE": "Note: Favorites are only stored locally on this device.",
+    "REMOVE": "Remove from favorites",
+    "TITLE": "My Favorites"
   },
   "FOOTER": {
     "COPYRIGHT": "© 2025 City of Radolfzell",
     "IMPRINT": "Imprint",
     "PRIVACY": "Privacy Policy"
   },
-  "bottom-nav": {
-    "home": "Home",
-    "favorites": "Favorites",
-    "all-events": "All Events",
-    "more": "More",
-    "create-event": "Create Event"
-  },
   "MORE": {
-    "TEAM": {
-      "TITLE": "The Team",
-      "DESCRIPTION": "Meet the team behind the 1200 Years Radolfzell app."
-    },
+    "ARIA-LABLE": "More options",
     "IMPRINT": {
-      "TITLE": "Imprint",
-      "DESCRIPTION": "Legal information and contact details."
-    },
-    "PRIVACY": {
-      "TITLE": "Privacy Policy",
-      "DESCRIPTION": "Information about data protection and data processing."
+      "DESCRIPTION": "Legal information and contact details.",
+      "TITLE": "Imprint"
     },
     "LOGIN": {
-      "TITLE": "Login",
-      "DESCRIPTION": "Internal data management of entries."
+      "DESCRIPTION": "Internal data management of entries.",
+      "TITLE": "Login"
     },
-    "ARIA-LABLE": "More options"
+    "PRIVACY": {
+      "DESCRIPTION": "Information about data protection and data processing.",
+      "TITLE": "Privacy Policy"
+    },
+    "TEAM": {
+      "DESCRIPTION": "Meet the team behind the 1200 Years Radolfzell app.",
+      "TITLE": "The Team"
+    }
   },
   "home": {
     "current": "Current Events",
     "categories": "Categories",
     "main-content": "Skip to main part",
+    "highlights": "Current Highlights",
+    "all-events": "All Events",
+    "all-highlights": "All Highlights",
+    "show-all-events": "Show all events",
+    "show-all-highlights": "Show all highlights",
     "tags": {
       "aria-lable-event-heading": "events-heading",
-      "aria-lable-catagories-heading": "categories-heading"
+      "aria-lable-catagories-heading": "categories-heading",
+      "aria-lable-highlights-heading": "highlights-heading"
     },
     "title": "1200 Years Radolfzell"
   },
+  "NAV": {
+    "BOTTOM": "Bottom navigation",
+    "FOOTER": "Footer navigation - legal information"
+  },
+  "SEARCH": {
+    "LABEL": "Search",
+    "PLACEHOLDER": "Search ...",
+    "SEARCHING": "Searching..."
+  },
+  "SHARE": {
+    "ADD_TO_CALENDAR": "Add to calendar",
+    "APPLE_CALENDAR": "Apple Calendar",
+    "DOWNLOAD_ICAL": "Download iCal file (.ics)",
+    "GOOGLE_CALENDAR": "Google Calendar",
+    "OUTLOOK_CALENDAR": "Outlook Calendar",
+    "SHARE": "Share"
+  },
+  "UPDATE": {
+    "ACTION": "Refresh",
+    "ACTION_ARIA": "Refresh the app",
+    "AVAILABLE_MESSAGE": "A new version is available"
+  },
   "all-categories": {
-    "all-locations": "All Locations",
     "all-categories": "All Categories",
     "all-events": "All Events",
+    "all-locations": "All Locations",
     "filter": "Filter",
     "prices": "Event Prices",
     "all-prices": "All Event Prices",
@@ -90,154 +281,172 @@
     "date-from": "Date from",
     "date-to": "Date to"
   },
+  "bottom-nav": {
+    "all-events": "All Events",
+    "create-event": "Create Event",
+    "favorites": "Favorites",
+    "home": "Home",
+    "more": "More"
+  },
   "category": {
-    "title": "Category"
+    "title": "Kategorie"
   },
   "i18y": {
     "to-main-content": "Skip to main content"
   },
   "footer": {
+    "accessibility": "Accessibility",
     "datenschutz": "Privacy Policy",
     "impressum": "Imprint",
-    "sponsoring": "Developed & sponsored by",
-    "instagram": "Instagram"
+    "instagram": "Instagram",
+    "sponsoring": "Developed & sponsored by"
   },
   "create-event": {
-    "eventname": "Name",
-    "organizer": "Select organizer...",
-    "neworganizer": "Create new organizer",
-    "neworganizername": "Name",
-    "neworganizerphone": "Phone number",
-    "neworganizermail": "e-mail",
-    "startdate": "Start date",
-    "starttime": "Start time",
+    "age": "Minimum age",
+    "ageexample": "e. g. 18",
+    "cancel": "Cancel",
+    "createevent": "Create",
+    "delete": "Delete",
+    "deleteConfirmFallback": "this event",
+    "deleteConfirmMessage": "Do you really want to delete \"{{name}}\"?",
+    "deleteConfirmTitle": "Delete event",
+    "deleteError": "Event could not be deleted.",
+    "deleteSuccess": "Event deleted.",
+    "delete_confirm": "Are you sure you want to delete this event? This cannot be undone.",
+    "description": "Event description",
+    "descriptionPlaceholder": "Enter description ...",
     "enddate": "End date",
     "endtime": "End time",
-    "timespan": "Time span",
+    "error": {
+      "date": "Please enter a start date.",
+      "general": "Please fill in all mandatory fields.",
+      "location": "Please select a location.",
+      "name": "Please enter an event name.",
+      "theme": "Please select a type of event.",
+      "time": "Please enter a start time."
+    },
+    "eventname": "Name",
+    "eventtype": "Type of event",
+    "hint": "Fields marked with * are mandatory.",
     "location": "Select location...",
+    "moreinfo": "More info",
+    "moreinfoexample": "https://...",
     "newlocation": "Create new location",
-    "newlocationname": "Location name",
     "newlocationaddress": "Address",
-    "newlocationplz": "Zip code",
+    "newlocationaddressexample": "Street and house number",
     "newlocationcity": "City",
-    "age": "Minimum age",
+    "newlocationname": "Location name",
+    "newlocationnameexample": "Name of the location",
+    "newlocationplz": "Zip code",
+    "neworganizer": "Create new organizer",
+    "neworganizermail": "e-mail",
+    "neworganizername": "Name",
+    "neworganizerphone": "Phone number",
+    "organizer": "Select organizer...",
     "price": "Price (€)",
     "restrictions": "Restrictions",
     "restrictionsexample": "e. g. stairs",
+    "startdate": "Start date",
+    "starttime": "Start time",
+    "timespan": "Time span",
     "topics": "Topics of the Event",
-    "eventtype": "Type of event",
-    "moreinfo": "More info",
-    "moreinfoexample": "https://...",
-    "createevent": "Create",
-    "newlocationnameexample": "Name of the location",
-    "newlocationaddressexample": "Street and house number",
-    "ageexample": "e. g. 18",
-    "description": "Event description",
-    "hint": "Fields marked with * are mandatory.",
     "updateevent": "Update",
-    "error": {
-      "name": "Please enter an event name.",
-      "date": "Please enter a start date.",
-      "time": "Please enter a start time.",
-      "location": "Please select a location.",
-      "theme": "Please select a type of event.",
-      "general": "Please fill in all mandatory fields."
-    },
-    "cancel": "Cancel",
-    "delete": "Delete ..."
+    "title-create": "Create event",
+    "title-edit": "Edit event"
   },
   "dev": {
-    "text1": "This website was developed as part of the SYBIT Coding Camp 2025 ",
-    "text2": "by young talents who took their first steps in professional software development with curiosity, discipline and creativity.our goal was not just to write code, but to create something meaningful that works, is useful and makes our ideas visible.",
-    "text3": "Special thanks go to all participants who worked on this project with passion, team spirit and perseverance. Every component, every line of code and every decision behind it reflects the learning process and the commitment of everyone involved.",
-    "patrticptants": "Participants",
-    "patrticptantslist": "Kaan Gel, Luisa Karsniqi, Sebastian Keller, Tomash Fedak, Leonard Röpcke, Jamal Blank, Adriano Mestre and Sasha (Oleksandr) Pavchak",
+    "altpicture": "Group photo of all participants of the coding camp",
     "coaches": "Coaches from SYBIT",
     "coacheslist": "Felix Klein, Max Eichelmann, Yannik Deschler, Yannik Schwarz, Max Buhl, Elias Frank, Noel Wölfle and Stephan Strittmatter",
-    "headline": "👨‍💻 Our developers",
-    "altpicture": "Group photo of all participants of the coding camp",
     "coding-camp-text": "The SYBIT Coding Camp has been held annually since 2015 in the first full week of the summer holidays as part of the Radolfzell holiday programme. Many former participants are now an integral part of the company and regularly attend the coding camp to be inspired and follow the current projects.",
+    "coding-camp-title": "SYBIT Coding Camp – A Success Story",
+    "headline": "👨‍💻 Our developers",
+    "patrticptants": "Participants",
+    "patrticptantslist": "Kaan Gel, Luisa Karsniqi, Sebastian Keller, Tomash Fedak, Leonard Röpcke, Jamal Blank, Adriano Mestre and Sasha (Oleksandr) Pavchak",
     "sybit": "SYBIT is Europe's leading full-service provider for customer experience (CX) with comprehensive expertise in business consulting, process consulting and solution consulting. As a strategic partner, SYBIT supports companies in designing customer-centric processes and implementing innovative solutions along the entire customer journey. With over 25 years of experience and as part of NTT Data Business Solutions, SYBIT is driving sustainable digital transformation. We create customer experience champions! ",
-    "coding-camp-title": "SYBIT Coding Camp – A Success Story"
-  },
-  "FAVORITES": {
-    "TITLE": "My Favorites",
-    "LOADING": "Loading favorites...",
-    "EMPTY": {
-      "TITLE": "You haven't saved any favorites yet.",
-      "DESCRIPTION": "Add events to your favorites to see them here.",
-      "BUTTON": "Go to overview"
-    },
-    "REMOVE": "Remove from favorites",
-    "ADD": "Add to favorites",
-    "LOCAL_STORAGE_NOTICE": "Note: Favorites are only stored locally on this device."
+    "text1": "This website was developed as part of the SYBIT Coding Camp 2025 ",
+    "text2": "by young talents who took their first steps in professional software development with curiosity, discipline and creativity.our goal was not just to write code, but to create something meaningful that works, is useful and makes our ideas visible.",
+    "text3": "Special thanks go to all participants who worked on this project with passion, team spirit and perseverance. Every component, every line of code and every decision behind it reflects the learning process and the commitment of everyone involved."
   },
   "event-card": {
-    "show-more": "Show more events"
+    "show-more": "Show more events",
+    "image-alt": "Image: {{name}}",
+    "placeholder-alt": "Placeholder image for event",
+    "logo-alt": "1200 years Radolfzell logo",
+    "name-fallback": "Event",
+    "location-fallback": "Location to be announced"
   },
   "event-detail": {
-    "skip-to-content": "Skip to event content",
-    "no-image": "No image available",
-    "when": "When?",
-    "where": "Where?",
-    "costs": "Price",
-    "free": "free",
-    "organizer": "Organizer",
-    "description": "Description",
-    "arrival": "Arrival",
     "adress": "Address",
-    "eventlocation": "Event location",
-    "name": "Name",
-    "email": "Email",
-    "phone": "Phone",
+    "arrival": "Arrival",
     "back": "Back",
+    "costs": "Price",
+    "description": "Description",
     "edit": "Edit",
+    "email": "Email",
+    "eventlocation": "Event location",
+    "free": "free",
+    "name": "Name",
     "next-events": "Further events at this location",
+    "no-image": "No image available",
+    "organizer": "Organizer",
+    "phone": "Phone",
+    "skip-to-content": "Skip to event content",
     "tags": {
       "description-heading": "description-heading",
       "directions-heading": "directions-heading",
       "contact-heading": "contact-heading"
     },
-    "more_information": "Further information"
+    "more_information": "Further information",
+    "when": "When?",
+    "where": "Where?",
+    "image-alt": "Event image: {{name}}",
+    "placeholder-alt": "Event image",
+    "logo-alt": "1200 years Radolfzell logo",
+    "main-info": "key data",
+    "open-fullscreen-aria": "Open image fullscreen",
+    "previous-image-aria": "Previous image",
+    "next-image-aria": "Next image",
+    "close-fullscreen-aria": "Close fullscreen",
+    "fullscreen-opened": "Fullscreen opened"
   },
   "login": {
-    "username": "Username / E-Mail",
+    "login": "Login",
     "password": "Password",
-    "login": "Login"
-  },
-  "upload-image": {
-    "image-here": "Drag image here"
-  },
-  "SHARE": {
-    "SHARE": "Share",
-    "ADD_TO_CALENDAR": "Add to calendar",
-    "DOWNLOAD_ICAL": "Download iCal file (.ics)",
-    "GOOGLE_CALENDAR": "Google Calendar",
-    "OUTLOOK_CALENDAR": "Outlook Calendar",
-    "APPLE_CALENDAR": "Apple Calendar"
+    "username": "Username / E-Mail"
   },
   "share": {
     "copy-notification": "Link was copied into clipboard."
   },
-  "ADMIN": {
-    "EVENTS": {
-      "TITLE": "Events",
-      "NO_EVENTS": "No events found.",
-      "EDIT": "Edit ...",
-      "DELETE": "Delete",
-      "SEARCH": "Search ...",
-      "CREATE_NEW": "New Event ..."
-    },
-    "LOCATIONS": {
-      "DELETE": "Delete",
-      "TITLE": "Locations",
-      "CREATE_NEW": "New Location ..."
-    },
-    "TITLE": "Administration"
+  "PWA": {
+    "INSTALL": {
+      "IOS_TITLE": "Install App",
+      "IOS_DESC": "Open the share menu and select 'Add to Home Screen'.",
+      "ANDROID_TITLE": "Install the app",
+      "DESKTOP_TITLE": "Install Web App",
+      "BUTTON": "Install",
+      "CLOSE": "Close"
+    }
   },
-  "SEARCH": {
-    "LABEL": "Search",
-    "PLACEHOLDER": "Search ...",
-    "SEARCHING": "Searching..."
+  "language-switcher": {
+    "label": "Select language"
+  },
+  "custom-dropdown": {
+    "remove": "Remove selection: {{name}}",
+    "options": "Options"
+  },
+  "map": {
+    "label": "Map",
+    "description": "Interactive map. You can navigate with mouse or keyboard (arrow keys to pan, plus/minus to zoom). The address is also available as text."
+  },
+  "upload-image": {
+    "image-here": "Drag image here",
+    "dropzone": "Drop image here or click to select",
+    "formats": "JPG, PNG - Max. 5 MB per image",
+    "preview-alt": "Image preview {{index}}",
+    "remove-aria": "Remove image {{index}}",
+    "edit-aria": "Edit information for image {{index}}",
+    "copyright-label": "Copyright",
+    "creator-label": "Photographer"
   }
 }

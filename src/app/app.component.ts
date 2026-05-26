@@ -1,16 +1,28 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit } from '@angular/core'
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router'
+import { LiveAnnouncer } from '@angular/cdk/a11y'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 import { HeaderComponent } from './component/header/header.component'
 import { FooterComponent } from './component/footer/footer.component'
 import { filter } from 'rxjs/operators'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { BottomNavComponent } from './component/bottom-nav/bottom-nav.component'
 import { UpdateService } from './pwa/update.service'
 import { SnackBarComponent } from './component/snack-bar/snack-bar.component'
+import { PwaInstallBannerComponent } from './component/pwa-install-banner/pwa-install-banner.component'
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent, FooterComponent, BottomNavComponent, SnackBarComponent],
+  imports: [
+    TranslateModule,
+    RouterOutlet,
+    HeaderComponent,
+    FooterComponent,
+    BottomNavComponent,
+    SnackBarComponent,
+    PwaInstallBannerComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,17 +34,41 @@ export class AppComponent implements OnInit {
 
   private readonly updateService = inject(UpdateService)
   private readonly router = inject(Router)
+  private readonly liveAnnouncer = inject(LiveAnnouncer)
+  private readonly translate = inject(TranslateService)
+  private readonly destroyRef = inject(DestroyRef)
 
   constructor() {
-    this.updateService.updateAvailable$.subscribe((available) => {
+    this.updateService.updateAvailable$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((available) => {
       this.updateAvailable = available
     })
   }
 
   ngOnInit() {
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
-      this.isCarouselPage = event.url === '/'
-    })
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((event: NavigationEnd) => {
+        this.isCarouselPage = event.urlAfterRedirects === '/'
+
+        // Fokus auf den Hauptinhalt setzen, ohne bestehende Fokusquelle zu verdrängen
+        requestAnimationFrame(() => {
+          const activeElement = document.activeElement
+          const shouldMoveFocus = !activeElement || activeElement === document.body || activeElement === document.documentElement
+          if (!shouldMoveFocus) {
+            return
+          }
+
+          const main = document.getElementById('main-content')
+          main?.focus()
+        })
+
+        // Screenreader informieren
+        this.liveAnnouncer.clear()
+        this.liveAnnouncer.announce(this.translate.instant('COMMON.PAGE_UPDATED'), 'polite')
+      })
 
     // Prüfe auf Updates beim Start
     this.updateService.checkForUpdate()

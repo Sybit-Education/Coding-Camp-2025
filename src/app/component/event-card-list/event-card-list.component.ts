@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, Input, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core'
+import { Component, inject, input, signal, effect, output, ChangeDetectionStrategy } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { ScreenSize } from '@app/models/screenSize.enum'
 
@@ -10,74 +10,99 @@ import { Event } from '@app/models/event.interface'
 import { EventService } from '@app/services/event.service'
 import { Location } from '@app/models/location.interface'
 import { RecordId } from 'surrealdb'
+import { Topic } from '@app/models/topic.interface'
+import { TopicService } from '@app/services/topic.service'
 
 @Component({
   selector: 'app-event-card-list',
   imports: [CommonModule, TranslateModule, RouterModule, EventCardComponent],
   templateUrl: './event-card-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EventCardListComponent implements OnInit {
-  @Input() location?: Location
-  @Input() currentEventId?: RecordId<'event'>
-  @Input() limit?: number = 3
+export class EventCardListComponent {
+  // Signal-based Inputs
+  readonly location = input<Location>()
+  readonly currentEventId = input<RecordId<'event'>>()
+  readonly limit = input<number>(3)
+  readonly highlightEvents = input<boolean>(false)
 
-  @Output() eventsFound = new EventEmitter<boolean>(false)
+  // Signal-based Output
+  readonly eventsFound = output<boolean>()
 
-  events: Event[] = []
-  error = false
-
+  // Services
   readonly sharedStateService = inject(SharedStateService)
-  readonly eventService = inject(EventService)
-  private readonly cdRef = inject(ChangeDetectorRef)
+  private readonly eventService = inject(EventService)
+  private readonly topicService = inject(TopicService)
 
-  screenSize = ScreenSize
+  // Local state
+  protected readonly events = signal<Event[]>([])
+  protected readonly topics = signal<Topic[]>([])
+  protected readonly error = signal(false)
 
-  ngOnInit(): void {
-    if (this.location && this.currentEventId) {
-      this.loadEventsFromLocation()
-    } else if (!this.location && !this.currentEventId) {
-      this.setUpcomingEvents()
-    } else {
-      this.error = true
-    }
-    this.cdRef.markForCheck()
-  }
+  // Constants
+  protected readonly screenSize = ScreenSize
 
-  private async loadEventsFromLocation() {
-    const result = await this.eventService.getAllEvents()
-    const now = Date.now()
-
-    this.events = result
-      .filter((event) => event.location?.id == this.location?.id?.id)
-      .filter((e) => new Date(e.date_start).getTime() > now)
-      .filter((e) => e.id?.id !== this.currentEventId!.id)
-      .sort((a, b) => new Date(a.date_start).getTime() - new Date(b.date_start).getTime())
-      .slice(0, this.limit)
-
-    this.eventsFound.emit(this.events.length > 0)
-
-    this.cdRef.markForCheck()
-  }
-
+  // Cache für setUpcomingEvents
   private cachedEvents: {
     input: Event[]
     output: Event[]
     timestamp: number
   } | null = null
 
+  constructor() {
+    // Effect to trigger data loading when inputs change
+    // PERFORMANCE FIX: Don't use async in effects, use queueMicrotask instead
+    // Re-read signals inside microtask to avoid stale values
+    effect(() => {
+      // Trigger the effect when inputs change
+      this.location()
+      this.currentEventId()
+
+      // Queue the async work to avoid blocking the effect
+      queueMicrotask(() => {
+        // Re-read the signals to get current values
+        const loc = this.location()
+        const currentId = this.currentEventId()
+        
+        if (loc && currentId) {
+          void this.loadEventsFromLocation(loc, currentId)
+        } else if (!loc && !currentId) {
+          void this.setUpcomingEvents()
+        } else {
+          this.error.set(true)
+        }
+      })
+    })
+  }
+
+  private async loadEventsFromLocation(location: Location, currentEventId: RecordId<'event'>) {
+    const result = await this.eventService.getAllEvents()
+    const now = Date.now()
+
+    const filteredEvents = result
+      .filter((event) => event.location?.id == location.id?.id)
+      .filter((e) => new Date(e.date_start).getTime() > now)
+      .filter((e) => e.id?.id !== currentEventId.id)
+      .sort((a, b) => new Date(a.date_start).getTime() - new Date(b.date_start).getTime())
+      .slice(0, this.limit())
+
+    this.events.set(filteredEvents)
+    this.eventsFound.emit(filteredEvents.length > 0)
+  }
+
   private async setUpcomingEvents() {
     const events = await this.eventService.getAllEvents()
 
     // Prüfe, ob wir ein gültiges Cache-Ergebnis haben (nicht älter als 5 Minuten)
     if (this.cachedEvents?.input === events && Date.now() - this.cachedEvents.timestamp < 300000) {
-      this.events = this.cachedEvents.output.slice(0, this.limit)
+      this.events.set(this.cachedEvents.output.slice(0, this.limit()))
       return
     }
 
     const now = new Date()
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
-    const result = events
+    let result = events
       .filter((event) => {
         const eventStartDate = new Date(event.date_start)
         const eventStartDay = new Date(eventStartDate.getFullYear(), eventStartDate.getMonth(), eventStartDate.getDate())
@@ -94,13 +119,29 @@ export class EventCardListComponent implements OnInit {
       })
       .sort((a, b) => new Date(a.date_start).getTime() - new Date(b.date_start).getTime())
 
+    if (this.highlightEvents()) {
+      const topics = await this.topicService.getAllTopics()
+      this.topics.set(topics)
+      const highlightTopic = topics.find((topic) => this.topicService.isTopicHighlight(topic))
+
+      result = result.filter((event) => {
+        const highlightId = highlightTopic?.id?.id
+        if (!highlightId) return false
+
+        const topicRefs = event.topic ?? []
+        return topicRefs.some((topicRef) => {
+          const topicRefId = topicRef?.id ?? topicRef
+          return topicRefId === highlightId
+        })
+      })
+    }
+
     this.cachedEvents = {
       input: events,
       output: result,
       timestamp: Date.now(),
     }
 
-    this.events = result.slice(0, this.limit)
-    this.cdRef.markForCheck()
+    this.events.set(result.slice(0, this.limit()))
   }
 }

@@ -18,6 +18,7 @@ function registerIcons(registry: IconRegistryService) {
 
   register('chevron-right', '/svg/chevron-right.svg')
   register('share', '/svg/share.svg')
+  register('ios-share', '/svg/ios-share.svg')
   register('cal-share', '/svg/cal-share.svg')
   register('event_upcoming', '/svg/event_upcoming.svg')
   register('pan_zoom', '/svg/pan_zoom.svg')
@@ -29,10 +30,12 @@ function registerIcons(registry: IconRegistryService) {
   // Navigation Bar
   register('home', '/svg/home.svg')
   register('favourites', '/svg/favourites.svg')
+  register('favourite_filled', '/svg/favourite_filled.svg')
   register('star', '/svg/star.svg')
   register('search', '/svg/search.svg')
   register('view_cozy', '/svg/view_cozy.svg')
   register('more', '/svg/more.svg')
+  register('add', '/svg/add.svg')
   register('create_event', '/svg/add.svg')
 
   // More-Menü Icons

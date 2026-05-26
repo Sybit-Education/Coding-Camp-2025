@@ -41,7 +41,7 @@ export class ShareComponent {
           this.copyToClipboard(url)
         })
     } else {
-      console.log('Web Share API nicht unterstützt, Fallback zur Zwischenablage')
+      console.info('Web Share API nicht unterstützt, Fallback zur Zwischenablage')
       // Fallback: In die Zwischenablage kopieren
       this.copyToClipboard(url)
     }
