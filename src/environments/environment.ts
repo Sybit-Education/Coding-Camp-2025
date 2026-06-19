@@ -1,6 +1,6 @@
 export const environment = {
   configName: 'local',
-  production: true,
+  production: false,
   surrealDbAddress: 'https://surrealdb.sybit.education',
   surrealDbNamespace: '1200.sybit.education',
   surrealDbDatabase: 'develop',
