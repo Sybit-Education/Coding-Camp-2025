@@ -2,6 +2,7 @@ DEFINE TABLE OVERWRITE event TYPE NORMAL SCHEMAFULL
 PERMISSIONS
         FOR create, select, update FULL,
         FOR delete WHERE $auth != NONE;
+
 DEFINE FIELD OVERWRITE id ON event;
 DEFINE FIELD OVERWRITE name ON event TYPE string;
 DEFINE FIELD OVERWRITE date_end ON event TYPE option<datetime>;
@@ -15,13 +16,13 @@ DEFINE FIELD OVERWRITE draft ON event TYPE option<bool>;
 DEFINE FIELD OVERWRITE weehlchair ON event TYPE option<bool> DEFAULT false;
 DEFINE FIELD OVERWRITE seeing ON event TYPE option<bool> DEFAULT false;
 DEFINE FIELD OVERWRITE hearing ON event TYPE option<bool> DEFAULT false;
-
-
 DEFINE FIELD OVERWRITE organizer ON event TYPE record<organizer>;
 DEFINE FIELD OVERWRITE event_type ON event TYPE option<record<event_type>>;
 DEFINE FIELD OVERWRITE location ON event TYPE option<record<location>>;
 DEFINE FIELD OVERWRITE topic ON event TYPE option<array<record<topic>>>;
+DEFINE FIELD OVERWRITE topic[*] ON event TYPE record<topic>;
 DEFINE FIELD OVERWRITE media ON event TYPE option<array<record<media>>>;
+DEFINE FIELD OVERWRITE media[*] ON event TYPE record<media>;
 
 
 DEFINE TABLE OVERWRITE topic TYPE NORMAL SCHEMAFULL
@@ -33,7 +34,7 @@ DEFINE FIELD OVERWRITE name ON topic TYPE string;
 DEFINE FIELD OVERWRITE color ON topic TYPE string;
 DEFINE FIELD OVERWRITE description ON topic TYPE option<string>;
 DEFINE FIELD OVERWRITE media ON topic TYPE option<record<media>>;
-
+DEFINE FIELD OVERWRITE slug ON topic TYPE string PERMISSIONS FULL;
 
 DEFINE TABLE OVERWRITE organizer TYPE NORMAL SCHEMAFULL
     PERMISSIONS
@@ -50,9 +51,11 @@ DEFINE TABLE OVERWRITE event_type TYPE NORMAL SCHEMAFULL
         FOR create, select FULL,
         FOR update, delete WHERE $auth != NONE;
 DEFINE FIELD OVERWRITE id ON event_type;
+DEFINE FIELD OVERWRITE color ON event_type TYPE string PERMISSIONS FULL;
 DEFINE FIELD OVERWRITE name ON event_type TYPE string;
 DEFINE FIELD OVERWRITE description ON event_type TYPE option<string>;
 DEFINE FIELD OVERWRITE media ON event_type TYPE option<record<media>>;
+DEFINE FIELD OVERWRITE slug ON event_type TYPE string PERMISSIONS FULL;
 
 
 DEFINE TABLE OVERWRITE location TYPE NORMAL SCHEMAFULL
@@ -66,16 +69,21 @@ DEFINE FIELD OVERWRITE city ON location TYPE option<string> DEFAULT Radolfzell;
 DEFINE FIELD OVERWRITE zip_code ON TABLE location TYPE option<string>;
 DEFINE FIELD OVERWRITE geo_point ON location TYPE option<point>;
 DEFINE FIELD OVERWRITE media ON location TYPE option<array<record<media>>>;
+DEFINE FIELD OVERWRITE media[*] ON location TYPE record<media>;
 
 
 DEFINE TABLE OVERWRITE media TYPE NORMAL SCHEMAFULL
     PERMISSIONS
         FOR create, select FULL,
         FOR update, delete WHERE $auth != NONE;
-DEFINE FIELD OVERWRITE id ON media;
-DEFINE FIELD OVERWRITE file ON media TYPE option<string>;
-DEFINE FIELD OVERWRITE fileName ON media TYPE option<string>;
-DEFINE FIELD OVERWRITE fileType ON media TYPE option<string>;
+
+DEFINE FIELD OVERWRITE copyright ON media TYPE option<string> PERMISSIONS FULL;
+DEFINE FIELD OVERWRITE creator ON media TYPE option<string> PERMISSIONS FULL;
+DEFINE FIELD OVERWRITE file ON media TYPE option<string> PERMISSIONS FULL;
+DEFINE FIELD OVERWRITE fileName ON media TYPE option<string> PERMISSIONS FULL;
+DEFINE FIELD OVERWRITE fileType ON media TYPE option<string> PERMISSIONS FULL;
+DEFINE FIELD OVERWRITE id ON media PERMISSIONS FULL;
+DEFINE FIELD OVERWRITE mainMedia ON media TYPE option<bool> DEFAULT false PERMISSIONS FULL;
 
 
 DEFINE TABLE OVERWRITE user TYPE NORMAL SCHEMAFULL

@@ -27,6 +27,7 @@ import { LoginService } from '@app/services/login.service'
 import { provideRouter, withInMemoryScrolling } from '@angular/router'
 import { routes } from '@app/app.routes'
 import { NetworkService } from '@app/services/network.service'
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async'
 
 console.log(`App is running in ${environment.configName || 'development'} mode.`)
 
@@ -43,6 +44,7 @@ registerLocaleData(localeFr)
 // Erweitere die App-Konfiguration mit zusätzlichen Providern
 const bootstrapConfig: ApplicationConfig = {
   providers: [
+    provideAnimationsAsync(),
     // Aktiviere zoneless Change Detection als ersten Provider
     // Wichtig: Dies muss vor allen anderen Providern stehen
     provideZonelessChangeDetection(),

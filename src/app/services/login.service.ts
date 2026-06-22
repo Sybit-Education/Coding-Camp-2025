@@ -78,7 +78,7 @@ export class LoginService implements CanActivate {
     if (!token) {
       return false
     }
-    await this.setToken(token)
+    await this.setToken(token.access)
     return true
   }
 
@@ -101,7 +101,8 @@ export class LoginService implements CanActivate {
 
     try {
       // Only try to authenticate with SurrealDB if token isn't expired
-      return await this.surrealDBService.authenticate(token)
+      await this.surrealDBService.authenticate(token)
+      return true
     } catch (error) {
       console.error('Authentication failed or token invalid/expired:', error)
       // Clear the token if authentication fails
