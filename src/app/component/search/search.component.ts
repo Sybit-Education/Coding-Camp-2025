@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, input, model } from '@angular/core'
 import { IconComponent } from '../icon/icon.component'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 import { CommonModule } from '@angular/common'
 
 let searchIdCounter = 0
 
 @Component({
   selector: 'app-search',
-  imports: [IconComponent, TranslateModule, CommonModule],
+  imports: [IconComponent, TranslatePipe, CommonModule],
   templateUrl: './search.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

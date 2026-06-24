@@ -10,9 +10,11 @@
         'border-color': pillData.color ? 'transparent' : '#E5E7EB',
       }"
     >
-      <a [routerLink]="disabled() ? null : ['/kategorie', pillData.slug]" class="max-w-[12rem] truncate focus-visible:outline-none">{{
-        pillData.label
-      }}</a>
+      <a
+        [routerLink]="disabled() ? null : ['/kategorie', pillData.slug]"
+        class="max-w-[12rem] truncate focus-visible:outline-none"
+        >{{ pillData.label }}</a
+      >
     </li>
   }
 </ul>

@@ -15,7 +15,7 @@ import { MediaService } from '../../services/media.service'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { Media, UploadMedia } from '../../models/media.interface'
 import { SnackBarService } from '../../services/snack-bar.service'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 import { FormsModule } from '@angular/forms'
 import imageCompression from 'browser-image-compression'
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component'
@@ -33,7 +33,7 @@ export interface CombinetPicture {
 
 @Component({
   selector: 'app-image-upload',
-  imports: [TranslateModule, FormsModule, LoadingSpinnerComponent, DragDropModule],
+  imports: [TranslatePipe, FormsModule, LoadingSpinnerComponent, DragDropModule],
   templateUrl: './image-upload.component.html',
   styleUrl: './image-upload.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

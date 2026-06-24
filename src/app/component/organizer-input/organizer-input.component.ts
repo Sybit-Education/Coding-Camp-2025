@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core'
+import { Component, EventEmitter, Input, Output, inject, ChangeDetectionStrategy } from '@angular/core'
 
 import { FormsModule } from '@angular/forms'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 import { Organizer } from '../../models/organizer.interface'
 import { OrganizerService } from '../../services/organizer.service'
 import { SnackBarService } from '../../services/snack-bar.service'
@@ -9,8 +9,9 @@ import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 
 @Component({
   selector: 'app-organizer-input',
-  imports: [FormsModule, TranslateModule],
+  imports: [FormsModule, TranslatePipe],
   templateUrl: './organizer-input.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./organizer-input.component.scss'],
 })
 export class OrganizerInputComponent {

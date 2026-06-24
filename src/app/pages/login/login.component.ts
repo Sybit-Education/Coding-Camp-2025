@@ -2,14 +2,15 @@ import { FormsModule } from '@angular/forms'
 
 import { Login } from '../../models/login.module'
 import { LoginService } from '../../services/login.service'
-import { Component, inject, OnInit } from '@angular/core'
-import { TranslateModule } from '@ngx-translate/core'
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core'
+import { TranslatePipe } from '@ngx-translate/core'
 import { SnackBarService } from '../../services/snack-bar.service'
 
 @Component({
   selector: 'app-page-login',
   templateUrl: './login.component.html',
-  imports: [FormsModule, TranslateModule],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [FormsModule, TranslatePipe],
 })
 export class LoginPageComponent implements OnInit {
   public loginParams: Login = { username: '', password: '' }

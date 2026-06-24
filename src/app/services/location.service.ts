@@ -8,7 +8,7 @@ import { RecordId, StringRecordId } from 'surrealdb'
 })
 export class LocationService {
   private readonly surrealdb: SurrealdbService = inject(SurrealdbService)
-  
+
   // Cache für Locations - verhindert redundante DB-Calls
   private readonly locationCache = new Map<string, Location>()
 
@@ -17,18 +17,18 @@ export class LocationService {
   async getLocationByID(id: RecordId<'location'> | StringRecordId): Promise<Location> {
     try {
       const idString = String(id)
-      
+
       // Prüfe Cache zuerst
       const cached = this.locationCache.get(idString)
       if (cached) {
         return cached
       }
-      
+
       const result = await this.surrealdb.getByRecordId<Location>(id)
-      
+
       // Speichere im Cache
       this.locationCache.set(idString, result)
-      
+
       return result
     } catch (error) {
       console.error('Fehler in LocationService.getLocationByID:', error)
