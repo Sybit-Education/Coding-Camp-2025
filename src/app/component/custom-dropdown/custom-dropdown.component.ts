@@ -14,13 +14,13 @@ import {
 import { FilterItem } from '@app/models/filterItem.interface'
 import { IconComponent } from '../icon/icon.component'
 import { SearchComponent } from '../search/search.component'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 
 let dropdownIdCounter = 0
 
 @Component({
   selector: 'app-custom-dropdown',
-  imports: [IconComponent, CommonModule, SearchComponent, TranslateModule],
+  imports: [IconComponent, CommonModule, SearchComponent, TranslatePipe],
   templateUrl: './custom-dropdown.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

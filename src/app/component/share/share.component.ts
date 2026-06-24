@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 import { IconComponent } from '@app/component/icon/icon.component'
 
 @Component({
   selector: 'app-share',
-  imports: [TranslateModule, IconComponent],
+  imports: [TranslatePipe, IconComponent],
   templateUrl: './share.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

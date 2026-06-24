@@ -3,14 +3,14 @@ import { ScreenSize } from '@app/models/screenSize.enum'
 import { SharedStateService } from '@app/services/shared-state.service'
 import { AsyncPipe } from '@angular/common'
 import { IconComponent } from '@app/component/icon/icon.component'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 import { MatIconModule } from '@angular/material/icon'
 import { A11yModule, LiveAnnouncer } from '@angular/cdk/a11y'
 import { I18nService } from '@app/services/translate.service'
 
 @Component({
   selector: 'app-event-image',
-  imports: [MatIconModule, AsyncPipe, IconComponent, TranslateModule, A11yModule],
+  imports: [MatIconModule, AsyncPipe, IconComponent, TranslatePipe, A11yModule],
   templateUrl: './event-image.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

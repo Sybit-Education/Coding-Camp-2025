@@ -1,13 +1,13 @@
 import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core'
 import { PwaInstallService } from '../../services/pwa-install.service'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 import { IconComponent } from '../icon/icon.component'
 
 @Component({
   selector: 'app-pwa-install-banner',
   templateUrl: './pwa-install-banner.component.html',
   styleUrls: ['./pwa-install-banner.component.scss'],
-  imports: [TranslateModule, IconComponent],
+  imports: [TranslatePipe, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PwaInstallBannerComponent {

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core'
 
 import { RouterModule } from '@angular/router'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 import { IconComponent } from '@app/component/icon/icon.component'
 import { LoginService } from '@app/services/login.service'
 import { CommonModule } from '@angular/common'
@@ -28,7 +28,7 @@ export interface BottomNavItem {
 @Component({
   selector: 'app-bottom-nav',
   // Die Komponente ist standalone und importiert alle benötigten Module selbst.
-  imports: [RouterModule, TranslateModule, IconComponent, CommonModule],
+  imports: [RouterModule, TranslatePipe, IconComponent, CommonModule],
   templateUrl: './bottom-nav.component.html',
   styleUrls: ['./bottom-nav.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

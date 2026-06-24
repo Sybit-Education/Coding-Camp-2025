@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router'
 import type { Event } from '@app/models/event.interface'
 import { TopicService } from '@app/services/topic.service'
 import { computeTextColor } from '@app/utils/color.utils'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 
 interface Pill {
   label: string
@@ -15,7 +15,7 @@ interface Pill {
 
 @Component({
   selector: 'app-event-topic-pill-list',
-  imports: [CommonModule, RouterModule, TranslateModule],
+  imports: [CommonModule, RouterModule, TranslatePipe],
   templateUrl: './event-topic-pill-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
