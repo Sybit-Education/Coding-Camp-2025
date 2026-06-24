@@ -1,4 +1,4 @@
-import { Component, inject, signal, effect, DestroyRef } from '@angular/core'
+import { Component, inject, signal, effect, DestroyRef, ChangeDetectionStrategy } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { TranslateModule } from '@ngx-translate/core'
 import { SnackBarService, SnackBarType } from '../../services/snack-bar.service'
@@ -9,6 +9,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
   imports: [CommonModule, TranslateModule],
   templateUrl: './snack-bar.component.html',
   styleUrls: ['./snack-bar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   animations: [
     trigger('snackBarState', [
       state(

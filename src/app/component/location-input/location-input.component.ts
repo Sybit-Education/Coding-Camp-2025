@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core'
+import { Component, EventEmitter, Input, Output, inject, ChangeDetectionStrategy } from '@angular/core'
 
 import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
@@ -13,6 +13,7 @@ import { MapComponent } from '../map/map.component'
   selector: 'app-location-input',
   imports: [FormsModule, TranslateModule, MapComponent],
   templateUrl: './location-input.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./location-input.component.scss'],
 })
 export class LocationInputComponent {

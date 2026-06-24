@@ -64,7 +64,7 @@
               <app-kategorie-card
                 [color]="categorie.color"
                 [text]="categorie.name"
-                [id]="categorie.id?.id?.toString()"
+                [id]="$safeNavigationMigration(categorie.id?.id?.toString())"
                 [filterOption]="true"
                 [selected]="categoryIds.includes(categorie.id!.id) ? true : false"
                 (categoryAdded)="setSelectedCategories($event)"

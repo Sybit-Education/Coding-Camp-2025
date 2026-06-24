@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core'
+import { Component, EventEmitter, Input, Output, inject, ChangeDetectionStrategy } from '@angular/core'
 
 import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
@@ -11,6 +11,7 @@ import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
   selector: 'app-organizer-input',
   imports: [FormsModule, TranslateModule],
   templateUrl: './organizer-input.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./organizer-input.component.scss'],
 })
 export class OrganizerInputComponent {
