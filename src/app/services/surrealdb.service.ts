@@ -1,6 +1,6 @@
 import { Injectable, inject, signal, Signal } from '@angular/core'
 import { Router } from '@angular/router'
-import { LiveMessage, LiveSubscription, RecordId, StringRecordId, Surreal, Table, Token, Tokens } from 'surrealdb'
+import { RecordId, StringRecordId, Surreal, Table, Token, Uuid } from 'surrealdb'
 import { environment } from '../../environments/environment'
 import { Event as AppEvent } from '../models/event.interface'
 import { DataCacheService } from './data-cache.service'
@@ -30,7 +30,7 @@ export class SurrealdbService extends Surreal {
   // Live Query Management with callbacks instead of RxJS
   private readonly liveQueryCallbacks = new Map<string, Set<LiveQueryCallback<unknown>>>()
 
-  private readonly liveQuerySubscriptions = new Map<string, LiveSubscription>()
+  private readonly liveQuerySubscriptions = new Map<string, Uuid>()
 
   constructor() {
     super()
@@ -130,7 +130,7 @@ export class SurrealdbService extends Surreal {
     }
   }
 
-  async login(username: string, password: string): Promise<Tokens> {
+  async login(username: string, password: string): Promise<Token> {
     const jwtToken = await super.signin({
       namespace: environment.surrealDbNamespace,
       database: environment.surrealDbDatabase,
@@ -146,7 +146,7 @@ export class SurrealdbService extends Surreal {
     return jwtToken
   }
 
-  override async authenticate(token: Token | Tokens): Promise<Tokens> {
+  override async authenticate(token: Token): Promise<true> {
     // Ensure connection is initialized before authentication
     await this.initialize()
 
@@ -186,7 +186,7 @@ export class SurrealdbService extends Surreal {
     // Stelle sicher, dass die Verbindung initialisiert ist
     await this.initialize()
 
-    const result = (await super.insert<T>(new Table(table), payload ?? {})) as T[]
+    const result = (await super.insert<T>(new Table(table), payload ?? ({} as T))) as T[]
 
     this.cache.invalidate(this.tableKey(table))
     this.cache.invalidatePrefix('query:')
@@ -199,9 +199,9 @@ export class SurrealdbService extends Surreal {
       // Stelle sicher, dass die Verbindung initialisiert ist
       await this.initialize()
 
-      const updatedRecord = (await super.update<T>(id).content(payload)) as T
+      const updatedRecord = (await super.merge<T>(id, payload)) as T
 
-      const table = id instanceof RecordId ? id.table.name : this.recordIdToString(id).split(':', 1)[0]
+      const table = this.getTableFromId(id)
 
       this.cache.invalidate(this.recordKey(id))
 
@@ -219,13 +219,20 @@ export class SurrealdbService extends Surreal {
     }
   }
 
+  private getTableFromId(id: RecordId<string> | StringRecordId): string {
+    // RecordId intern: { tb: string, id: ... }
+    const tb = (id as { tb?: string }).tb
+    if (tb) return tb
+    return this.recordIdToString(id).split(':')[0]
+  }
+
   async deleteRow(recordId: RecordId<string> | StringRecordId) {
     // Stelle sicher, dass die Verbindung initialisiert ist
     await this.initialize()
 
     await super.delete(recordId)
 
-    const table = recordId instanceof RecordId ? recordId.table.name : this.recordIdToString(recordId).split(':', 1)[0]
+    const table = this.getTableFromId(recordId)
 
     this.cache.invalidate(this.recordKey(recordId))
 
@@ -275,7 +282,7 @@ export class SurrealdbService extends Surreal {
 
     try {
       const result = await this.fetchCached(this.queryKey(ftsSql, { q }), this.searchTtlMs, async () => {
-        const queryResult = (await super.query<[AppEvent[]]>(ftsSql, { q }).collect())[0]
+        const queryResult = (await super.query<[AppEvent[]]>(ftsSql, { q }))[0]
 
         return Array.isArray(queryResult) ? queryResult : []
       })
@@ -345,7 +352,7 @@ export class SurrealdbService extends Surreal {
 
           if (subscription) {
             try {
-              await subscription.kill()
+              await super.kill(subscription)
             } catch (err) {
               console.warn('Failed to kill live query:', err)
             }
@@ -370,64 +377,50 @@ export class SurrealdbService extends Surreal {
   private async initializeLiveQuery<T extends Record<string, unknown>>(
     queryKey: string,
     table: string,
-    diff: boolean,
+    _diff: boolean,
   ): Promise<void> {
     try {
       await this.initialize()
 
-      const livePromise = super.live<T>(new Table(table))
-
-      const subscription = await (diff ? livePromise.diff() : livePromise)
-
-      // Während des Verbindungsaufbaus könnten
-      // bereits alle Listener entfernt worden sein.
-      if (!this.liveQueryCallbacks.has(queryKey)) {
-        await subscription.kill()
-        return
-      }
-
-      this.liveQuerySubscriptions.set(queryKey, subscription)
-
-      subscription.subscribe((message: LiveMessage) => {
-        // SDK v2 verwendet KILLED statt CLOSE.
+      const uuid = await super.live<T>(new Table(table), (action, value) => {
         let update: LiveQueryUpdate<T>
 
-        if (message.action === 'KILLED') {
-          update = {
-            action: 'CLOSE',
-          }
+        if (action === 'CLOSE') {
+          update = { action: 'CLOSE' }
         } else {
           update = {
-            action: message.action,
-            result: message.value as unknown as T,
+            action: action as 'CREATE' | 'UPDATE' | 'DELETE',
+            result: value as unknown as T,
           }
         }
 
-        // Notify all callbacks for this query
         const callbacks = this.liveQueryCallbacks.get(queryKey)
-
         if (callbacks) {
           callbacks.forEach((callback) => {
             ;(callback as LiveQueryCallback<T>)(update)
           })
         }
 
-        if (message.action === 'KILLED') {
+        if (action === 'CLOSE') {
           this.liveQueryCallbacks.delete(queryKey)
-
           this.liveQuerySubscriptions.delete(queryKey)
         }
       })
+
+      // Während des Verbindungsaufbaus könnten
+      // bereits alle Listener entfernt worden sein.
+      if (!this.liveQueryCallbacks.has(queryKey)) {
+        await super.kill(uuid)
+        return
+      }
+
+      this.liveQuerySubscriptions.set(queryKey, uuid)
     } catch (error) {
       console.error('Failed to create live query:', error)
 
       // Notify listeners of failure via CLOSE event
-      const update: LiveQueryUpdate<T> = {
-        action: 'CLOSE',
-      }
-
+      const update: LiveQueryUpdate<T> = { action: 'CLOSE' }
       const callbacks = this.liveQueryCallbacks.get(queryKey)
-
       if (callbacks) {
         callbacks.forEach((callback) => {
           ;(callback as LiveQueryCallback<T>)(update)
@@ -449,7 +442,7 @@ export class SurrealdbService extends Surreal {
     // Close all live queries
     for (const [queryKey, subscription] of this.liveQuerySubscriptions.entries()) {
       try {
-        await subscription.kill()
+        await super.kill(subscription)
       } catch (err) {
         console.warn(`Failed to kill live query ${queryKey}:`, err)
       }
