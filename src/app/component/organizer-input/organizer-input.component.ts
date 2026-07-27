@@ -11,7 +11,7 @@ import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
   selector: 'app-organizer-input',
   imports: [FormsModule, TranslatePipe],
   templateUrl: './organizer-input.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./organizer-input.component.scss'],
 })
 export class OrganizerInputComponent {

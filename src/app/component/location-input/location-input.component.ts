@@ -13,7 +13,7 @@ import { MapComponent } from '../map/map.component'
   selector: 'app-location-input',
   imports: [FormsModule, TranslatePipe, MapComponent],
   templateUrl: './location-input.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./location-input.component.scss'],
 })
 export class LocationInputComponent {

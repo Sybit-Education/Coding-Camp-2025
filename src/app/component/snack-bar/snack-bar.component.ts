@@ -9,7 +9,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
   imports: [CommonModule, TranslatePipe],
   templateUrl: './snack-bar.component.html',
   styleUrls: ['./snack-bar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('snackBarState', [
       state(

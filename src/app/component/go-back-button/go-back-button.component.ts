@@ -7,7 +7,7 @@ import { TranslatePipe } from '@ngx-translate/core'
 @Component({
   selector: 'app-go-back-button',
   imports: [TranslatePipe, RouterModule, IconComponent],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './go-back-button.component.html',
 })
 export class GoBackComponent {

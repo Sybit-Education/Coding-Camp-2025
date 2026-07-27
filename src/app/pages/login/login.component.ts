@@ -9,7 +9,7 @@ import { SnackBarService } from '../../services/snack-bar.service'
 @Component({
   selector: 'app-page-login',
   templateUrl: './login.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FormsModule, TranslatePipe],
 })
 export class LoginPageComponent implements OnInit {
