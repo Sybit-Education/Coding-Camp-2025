@@ -1,11 +1,10 @@
-import { Component, EventEmitter, Input, Output, inject, ChangeDetectionStrategy } from '@angular/core'
+import { Component, input, output, inject, signal, effect, ChangeDetectionStrategy } from '@angular/core'
 
 import { FormsModule } from '@angular/forms'
 import { TranslatePipe } from '@ngx-translate/core'
 import { Organizer } from '../../models/organizer.interface'
 import { OrganizerService } from '../../services/organizer.service'
 import { SnackBarService } from '../../services/snack-bar.service'
-import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 
 @Component({
   selector: 'app-organizer-input',
@@ -15,9 +14,12 @@ import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
   styleUrls: ['./organizer-input.component.scss'],
 })
 export class OrganizerInputComponent {
-  @Input() organizers: Organizer[] = []
-  @Input() selectedOrganizer: Organizer | null = null
-  @Output() organizerSelected = new EventEmitter<Organizer | null>()
+  readonly organizers = input<Organizer[]>([])
+  readonly selectedOrganizer = input<Organizer | null>(null)
+  readonly organizerSelected = output<Organizer | null>()
+
+  // Lokale, mutable Kopie der Organizer-Liste
+  protected organizerList = signal<Organizer[]>([])
 
   // Form fields
   organizername: string | null = null
@@ -28,13 +30,18 @@ export class OrganizerInputComponent {
   // Services
   private readonly organizerService = inject(OrganizerService)
   private readonly snackBarService = inject(SnackBarService)
-  private readonly markForCheck = injectMarkForCheck()
+
+  constructor() {
+    // Sync vom Input in die lokale Signal-Liste
+    effect(() => {
+      this.organizerList.set(this.organizers())
+    })
+  }
 
   /**
    * Setzt den ausgewählten Organizer und aktualisiert die Formularfelder
    */
   setOrganizer(organizer: Organizer | null) {
-    this.selectedOrganizer = organizer
     if (organizer) {
       this.organizername = organizer.name
       this.organizerphone = organizer.phonenumber ?? null
@@ -51,7 +58,6 @@ export class OrganizerInputComponent {
     this.organizername = null
     this.organizermail = null
     this.organizerphone = null
-    this.selectedOrganizer = null
     this.organizerSelected.emit(null)
   }
 
@@ -79,21 +85,22 @@ export class OrganizerInputComponent {
 
     try {
       const savedOrganizer = await this.organizerService.create(organizer)
-      this.selectedOrganizer = savedOrganizer
       this.newOrganizer = false // Formular schließen
       this.snackBarService.showSuccess('Veranstalter erfolgreich gespeichert')
       this.organizerSelected.emit(savedOrganizer)
 
-      // Füge den neuen Organizer zur Liste hinzu, wenn er noch nicht enthalten ist
-      if (!this.organizers.some((org) => org.id?.id === savedOrganizer.id?.id)) {
-        this.organizers.push(savedOrganizer)
-      }
+      // Füge den neuen Organizer zur lokalen Liste hinzu
+      this.organizerList.update((list) => {
+        if (list.some((org) => org.id?.id === savedOrganizer.id?.id)) {
+          return list
+        }
+        return [...list, savedOrganizer]
+      })
     } catch (error) {
       console.error('Fehler beim Speichern des Organizers:', error)
       this.snackBarService.showError(
         `Fehler beim Speichern des Veranstalters: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
       )
-      this.markForCheck()
     }
   }
 }

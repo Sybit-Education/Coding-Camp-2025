@@ -2,7 +2,7 @@
   <div
     [@snackBarState]="visible() ? 'visible' : 'void'"
     class="fixed top-20 right-5 z-50 mb-4 flex w-full max-w-md items-center rounded-lg border p-4 shadow"
-    [ngClass]="getTypeClass()"
+    [class]="getTypeClass()"
     role="alert"
   >
     <div class="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg">
@@ -15,12 +15,10 @@
     <button
       type="button"
       class="-mx-1.5 -my-1.5 ml-auto inline-flex h-8 w-8 rounded-lg p-1.5 hover:bg-gray-200 focus:ring-2 focus:ring-gray-300"
-      [ngClass]="{
-        'hover:bg-green-200': type() === 'success',
-        'hover:bg-red-200': type() === 'error',
-        'hover:bg-yellow-200': type() === 'warning',
-        'hover:bg-blue-200': type() === 'info',
-      }"
+      [class.hover:bg-green-200]="type() === 'success'"
+      [class.hover:bg-red-200]="type() === 'error'"
+      [class.hover:bg-yellow-200]="type() === 'warning'"
+      [class.hover:bg-blue-200]="type() === 'info'"
       (click)="close()"
       [attr.aria-label]="'COMMON.CLOSE' | translate"
     >

@@ -1,18 +1,7 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-  ViewChild,
-  inject,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, ViewChild, afterNextRender, inject, input, signal } from '@angular/core'
 
 import { RecordId, StringRecordId } from 'surrealdb'
 import { MediaService } from '../../services/media.service'
-import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { Media, UploadMedia } from '../../models/media.interface'
 import { SnackBarService } from '../../services/snack-bar.service'
 import { TranslatePipe } from '@ngx-translate/core'
@@ -38,12 +27,14 @@ export interface CombinetPicture {
   styleUrl: './image-upload.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ImageUploadComponent implements OnInit, OnChanges {
+export class ImageUploadComponent {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>
 
-  @Input() previews: string[] = []
-  @Input() eventName = ''
-  @Input() existingImages: Media[] = []
+  readonly eventName = input('')
+  readonly existingImages = input<Media[]>([])
+
+  // Lokaler State (kein Input, da nie vom Parent gesetzt)
+  protected previews = signal<string[]>([])
 
   isDragging = false
 
@@ -54,40 +45,37 @@ export class ImageUploadComponent implements OnInit, OnChanges {
   isUploading = false
 
   private readonly mediaService = inject(MediaService)
-  private readonly markForCheck = injectMarkForCheck()
   private readonly snackBarService = inject(SnackBarService)
 
-  ngOnInit(): void {
-    // Lade existierende Bilder, wenn vorhanden
-    this.loadExistingImagesIfPresent()
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    // Wenn sich existingImages ändert und Werte enthält, lade die Bilder
-    if (changes['existingImages']?.currentValue.length > 0) {
+  constructor() {
+    // Lade existierende Bilder nach erstem Render (wenn inputs gesetzt sind)
+    afterNextRender(() => {
       this.loadExistingImagesIfPresent()
-    }
+    })
   }
 
-  async loadExistingImagesIfPresent(): Promise<void> {
-    if (this.existingImages.length === 0) return
+  private async loadExistingImagesIfPresent(): Promise<void> {
+    const existing = this.existingImages()
+    if (existing.length === 0) return
 
-    if (this.previews.length === 0) {
-      for (const existing of this.existingImages) {
+    if (this.previews().length === 0) {
+      for (const existingImg of existing) {
         try {
-          const url = await this.mediaService.getMediaUrl(existing.id)
-          if (url && !this.previews.includes(url)) {
-            this.previews.push(url)
+          const url = await this.mediaService.getMediaUrl(existingImg.id)
+          if (url) {
+            this.previews.update((list) => {
+              if (list.includes(url)) return list
+              return [...list, url]
+            })
             this.pictureInfos.push({
-              copyright: existing.copyright || '',
-              creator: existing.creator || '',
+              copyright: existingImg.copyright || '',
+              creator: existingImg.creator || '',
             })
           }
         } catch (e) {
           console.error('Fehler beim holen media url', e)
         }
       }
-      this.markForCheck()
     }
   }
 
@@ -160,9 +148,8 @@ export class ImageUploadComponent implements OnInit, OnChanges {
             fileName: file.name,
             mimeType: (compressedBlob as Blob).type || file.type,
           }
-          this.previews.push(JSON.stringify(dataWithMetadata))
+          this.previews.update((list) => [...list, JSON.stringify(dataWithMetadata)])
           this.pictureInfos.push({ copyright: '', creator: '' })
-          this.markForCheck()
         }
       }
       reader.readAsDataURL(compressedBlob as Blob)
@@ -177,9 +164,8 @@ export class ImageUploadComponent implements OnInit, OnChanges {
             fileName: file.name,
             mimeType: file.type,
           }
-          this.previews.push(JSON.stringify(dataWithMetadata))
+          this.previews.update((list) => [...list, JSON.stringify(dataWithMetadata)])
           this.pictureInfos.push({ copyright: '', creator: '' })
-          this.markForCheck()
         }
       }
       reader.readAsDataURL(file)
@@ -188,10 +174,10 @@ export class ImageUploadComponent implements OnInit, OnChanges {
 
   async removeImage(index: number) {
     // Speichere das zu löschende Bild
-    const imageToRemove = this.previews[index]
+    const imageToRemove = this.previews()[index]
 
     // Entferne das Bild aus der Vorschau
-    this.previews.splice(index, 1)
+    this.previews.update((list) => list.filter((_, i) => i !== index))
     this.pictureInfos.splice(index, 1)
 
     try {
@@ -254,14 +240,16 @@ export class ImageUploadComponent implements OnInit, OnChanges {
     const collected: Media[] = []
 
     try {
+      const currentPreviews = this.previews()
+      const currentExisting = this.existingImages()
+
       // 1) Früher Exit: keine Previews, aber vorhandene Bilder
-      if (this.previews.length === 0 && this.existingImages.length > 0) {
-        const copy = [...this.existingImages]
-        return copy
+      if (currentPreviews.length === 0 && currentExisting.length > 0) {
+        return [...currentExisting]
       }
 
       // 2) Existierende Medien aus Preview-URLs einsammeln
-      for (const preview of this.previews) {
+      for (const preview of currentPreviews) {
         if (!preview.startsWith('http')) continue
 
         try {
@@ -276,7 +264,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
           }
 
           // Fallback: in existingImages passende URL suchen
-          for (const existing of this.existingImages) {
+          for (const existing of currentExisting) {
             const url = await this.mediaService.getMediaUrl(existing.id)
             if (url === preview) {
               const existingIdStr = this.idToString(existing.id)
@@ -292,7 +280,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
       }
 
       // 3) Neue Bilder (Base64/JSON) hochladen
-      const newImageEntries = this.previews.map((p, i) => ({ p, i })).filter((e) => !e.p.startsWith('http'))
+      const newImageEntries = currentPreviews.map((p, i) => ({ p, i })).filter((e) => !e.p.startsWith('http'))
 
       for (const { p: raw, i: originalIndex } of newImageEntries) {
         try {
@@ -315,7 +303,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
           } else {
             base64Payload = raw.split(',')[1]
             fileType = raw.split(';')[0].split('/')[1]
-            originalFileName = `${this.eventName.replace(/[^a-zA-Z0-9]/g, '_')}_${originalIndex}_${Date.now()}`
+            originalFileName = `${this.eventName().replace(/[^a-zA-Z0-9]/g, '_')}_${originalIndex}_${Date.now()}`
           }
 
           const info = this.pictureInfos[originalIndex] ?? {
@@ -324,7 +312,7 @@ export class ImageUploadComponent implements OnInit, OnChanges {
           }
 
           // b) generiere id
-          const sanitizedEventName = this.eventName.replace(/[^A-Za-z0-9_]/g, '_')
+          const sanitizedEventName = this.eventName().replace(/[^A-Za-z0-9_]/g, '_')
 
           const safeOriginalFileName = originalFileName.replace(/\.[^/.]+$/, '').replace(/[^A-Za-z0-9_]/g, '_')
 
@@ -398,13 +386,17 @@ export class ImageUploadComponent implements OnInit, OnChanges {
     if (!info) return
 
     try {
-      const previewData = this.previews[index]
+      const previewData = this.previews()[index]
 
       if (previewData.startsWith('{') && previewData.endsWith('}')) {
         const parsed = JSON.parse(previewData)
         parsed.copyright = info.copyright || ''
         parsed.creator = info.creator || ''
-        this.previews[index] = JSON.stringify(parsed)
+        this.previews.update((list) => {
+          const updated = [...list]
+          updated[index] = JSON.stringify(parsed)
+          return updated
+        })
       } else if (previewData.startsWith('http')) {
         const media = await this.mediaService.getMediaByUrl(previewData)
         media!.copyright = info.copyright ?? ''
@@ -412,7 +404,6 @@ export class ImageUploadComponent implements OnInit, OnChanges {
         this.mediaService.updateMedia(media!.id!, media!)
       }
 
-      this.markForCheck()
       this.closePictureSettings()
       this.snackBarService.showSuccess(`Bild erfolgreich aktualisiert!`)
     } catch (error) {
@@ -422,8 +413,12 @@ export class ImageUploadComponent implements OnInit, OnChanges {
   }
 
   dropPreview(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.previews, event.previousIndex, event.currentIndex)
-    moveItemInArray(this.pictureInfos, event.previousIndex, event.currentIndex)
+    const updated = [...this.previews()]
+    const updatedInfos = [...this.pictureInfos]
+    moveItemInArray(updated, event.previousIndex, event.currentIndex)
+    moveItemInArray(updatedInfos, event.previousIndex, event.currentIndex)
+    this.previews.set(updated)
+    this.pictureInfos = updatedInfos
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
