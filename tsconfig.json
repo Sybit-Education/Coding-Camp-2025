@@ -3,8 +3,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "ignoreDeprecations": "6.0",
-    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -25,12 +23,12 @@
       "dom"
     ],
     "paths": {
-      "@app/*": ["src/app/*"],
-      "@environments/*": ["src/environments/*"],
-      "@services/*": ["src/app/services/*"],
-      "@models/*": ["src/app/models/*"],
-      "@components/*": ["src/app/component/*"],
-      "@pwa/*": ["src/app/pwa/*"]
+      "@app/*": ["${configDir}/src/app/*"],
+      "@environments/*": ["${configDir}/src/environments/*"],
+      "@services/*": ["${configDir}/src/app/services/*"],
+      "@models/*": ["${configDir}/src/app/models/*"],
+      "@components/*": ["${configDir}/src/app/component/*"],
+      "@pwa/*": ["${configDir}/src/app/pwa/*"]
     }
   },
   "angularCompilerOptions": {
