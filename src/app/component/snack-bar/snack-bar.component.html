@@ -1,6 +1,7 @@
 @if (visible()) {
   <div
-    [@snackBarState]="visible() ? 'visible' : 'void'"
+    animate.enter="snack-bar-enter"
+    animate.leave="snack-bar-leave"
     class="fixed top-20 right-5 z-50 mb-4 flex w-full max-w-md items-center rounded-lg border p-4 shadow"
     [class]="getTypeClass()"
     role="alert"
