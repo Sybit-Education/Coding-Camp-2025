@@ -14,7 +14,7 @@ import { DateTimeRangePipe } from '../../services/date.pipe'
 import { RecordId, StringRecordId } from 'surrealdb'
 import { LoginService } from '../../services/login.service'
 import { TypeDB } from '../../models/typeDB.interface'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 import { FavoriteButtonComponent } from '../../component/favorite-button/favorite-button.component'
 import { ShareComponent } from '../../component/share/share.component'
 import { MediaService } from '@app/services/media.service'
@@ -34,7 +34,7 @@ import { SeoService } from '@app/services/seo.service'
   selector: 'app-event-detail-page',
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslatePipe,
     MapComponent,
     DateTimeRangePipe,
     FavoriteButtonComponent,
@@ -303,7 +303,6 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     const baseUrl = window.location.origin
     return `${baseUrl}/event/${id}`
   }
-
 
   /**
    * Fügt strukturierte Daten (Schema.org/JSON-LD) für Events hinzu,

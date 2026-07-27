@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core'
 import { RouterModule } from '@angular/router'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-all-event-button',
-  imports: [TranslateModule, RouterModule],
+  imports: [TranslatePipe, RouterModule],
   templateUrl: './all-event-button.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

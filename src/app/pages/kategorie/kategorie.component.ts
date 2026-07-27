@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { TranslatePipe, TranslateService } from '@ngx-translate/core'
 import { EventCardComponent } from '../../component/event-card/event-card.component'
 
 import { EventService } from '../../services/event.service'
@@ -32,7 +32,7 @@ interface EventWithResolvedLocation extends AppEvent {
 @Component({
   selector: 'app-kategorie',
   imports: [
-    TranslateModule,
+    TranslatePipe,
     EventCardComponent,
     CommonModule,
     GoBackComponent,

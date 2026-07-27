@@ -25,7 +25,7 @@ export class OrganizerService {
           }) as Organizer,
       )
     } catch (error) {
-      throw new Error(`Fehler beim Laden der Organizer: ${error}`)
+      throw new Error(`Fehler beim Laden der Organizer: ${error}`, { cause: error })
     }
   }
 

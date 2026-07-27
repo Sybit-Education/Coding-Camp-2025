@@ -16,7 +16,7 @@
     <!-- Navigationseinträge -->
     <div
       class="grid w-full items-center justify-between"
-      [ngClass]="this.loginService.isLoggedInState() ? 'grid-cols-[1fr_1fr_1fr_1.2fr_1fr]' : 'grid-cols-4'"
+      [class]="this.loginService.isLoggedInState() ? 'grid-cols-[1fr_1fr_1fr_1.2fr_1fr]' : 'grid-cols-4'"
     >
       <span class="flex-1">
         <a

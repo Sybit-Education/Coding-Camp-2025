@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, HostListener, inject, Input, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, HostListener, inject, input, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 import { I18nService } from '../../services/translate.service'
 // import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component'
 
@@ -48,7 +48,7 @@ interface LogoSet {
   imports: [
     CommonModule,
     RouterModule,
-    TranslateModule,
+    TranslatePipe,
     // LanguageSwitcherComponent
   ],
   templateUrl: './header.component.html',
@@ -67,7 +67,7 @@ export class HeaderComponent implements OnInit {
    * anzugeben. Alle Pfade sollten relativ zum „assets“‑Ordner angegeben
    * werden.
    */
-  @Input() logo: LogoSet = {
+  readonly logo = input<LogoSet>({
     full: {
       light: '/header/Radolfzell_1200Logo_Web_transparenter_Grund.png',
       dark: '/header/Radolfzell_1200Logo_Web_transparenter_Grund.png',
@@ -85,18 +85,18 @@ export class HeaderComponent implements OnInit {
       light: '/header/Radolfzell_1200Logo_Web_transparenter_Grund_small.png',
       dark: '/header/Radolfzell_1200Logo_Web_transparenter_Grund_small.png',
     },
-  }
+  })
 
   /**
    * Abstand in Pixeln, ab dem der Header schrumpft. Standard: 120px.
    */
-  @Input() shrinkThreshold = 20
+  readonly shrinkThreshold = input(20)
 
   /**
    * Steuerung, ob die Wellenform unter dem Header angezeigt wird. Kann
    * deaktiviert werden, falls der Header ohne Bögen erscheinen soll.
    */
-  @Input() showWave = true
+  readonly showWave = input(true)
 
   /**
    * Flag, ob der Header aktuell im verkleinerten Zustand dargestellt wird.
@@ -142,7 +142,7 @@ export class HeaderComponent implements OnInit {
    * Aktualisiert sowohl den Shrink‑Status als auch den aktuellen Logopfad.
    */
   private updateState(): void {
-    this.isShrunk = window.scrollY > this.shrinkThreshold
+    this.isShrunk = window.scrollY > this.shrinkThreshold()
     this.currentSrc = this.pickLogoForState()
   }
 
@@ -169,26 +169,28 @@ export class HeaderComponent implements OnInit {
 
     const choose = (src?: ThemeSrc) => (src ? (dark ? src.dark : src.light) : '')
 
+    const logo = this.logo()
+
     // Groß: immer Vollversion
     if (!this.isShrunk) {
-      return choose(this.logo.full)
+      return choose(logo.full)
     }
 
     // Klein: wähle zuerst die markOnly‑Variante, dann reduced2, reduced1
-    if (this.logo.markOnly && (w < 340 || (!this.logo.reduced1 && !this.logo.reduced2))) {
-      const candidate = choose(this.logo.markOnly)
+    if (logo.markOnly && (w < 340 || (!logo.reduced1 && !logo.reduced2))) {
+      const candidate = choose(logo.markOnly)
       if (candidate) return candidate
     }
-    if (this.logo.reduced2 && (w < 380 || !this.logo.reduced1)) {
-      const candidate = choose(this.logo.reduced2)
+    if (logo.reduced2 && (w < 380 || !logo.reduced1)) {
+      const candidate = choose(logo.reduced2)
       if (candidate) return candidate
     }
-    if (this.logo.reduced1) {
-      const candidate = choose(this.logo.reduced1)
+    if (logo.reduced1) {
+      const candidate = choose(logo.reduced1)
       if (candidate) return candidate
     }
 
     // Fallback: reduziertes Set oder Vollversion, falls keine Reduktion vorhanden
-    return choose(this.logo.reduced2) || choose(this.logo.reduced1) || choose(this.logo.full)
+    return choose(logo.reduced2) || choose(logo.reduced1) || choose(logo.full)
   }
 }

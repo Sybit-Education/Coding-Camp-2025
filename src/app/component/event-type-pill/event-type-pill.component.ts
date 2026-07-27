@@ -28,7 +28,7 @@ export class EventTypePillComponent {
 
   // Local state
   protected readonly pill = signal<Pill | null>(null)
-  
+
   // Version counter to prevent race conditions
   private buildVersion = 0
 
@@ -54,7 +54,7 @@ export class EventTypePillComponent {
     const currentVersion = ++this.buildVersion
 
     const allEventType = await this.eventService.getAllEventTypes()
-    
+
     // Check if this is still the latest request
     if (currentVersion !== this.buildVersion) {
       return // Ignore stale response

@@ -45,3 +45,5 @@ Thumbs.db
 
 # ESLint reports
 eslint-report.json
+.agents/
+.graphify/

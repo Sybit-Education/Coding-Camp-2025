@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
 
 import { RouterModule, Router } from '@angular/router'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 
 import { KategorieCardComponent } from '../../component/kategorie-card/kategorie-card.component'
 
@@ -21,7 +21,7 @@ import { IconComponent } from '@app/component/icon/icon.component'
 
 @Component({
   selector: 'app-home',
-  imports: [TranslateModule, RouterModule, KategorieCardComponent, IconComponent, EventCardListComponent],
+  imports: [TranslatePipe, RouterModule, KategorieCardComponent, IconComponent, EventCardListComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

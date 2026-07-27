@@ -1,25 +1,28 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core'
+import { Component, input, output, inject, signal, effect, ChangeDetectionStrategy } from '@angular/core'
 
 import { FormsModule } from '@angular/forms'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 import { Location } from '../../models/location.interface'
 import { LocationService } from '../../services/location.service'
 import { SnackBarService } from '../../services/snack-bar.service'
-import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { GeometryPoint } from 'surrealdb'
 import { MapComponent } from '../map/map.component'
 
 @Component({
   selector: 'app-location-input',
-  imports: [FormsModule, TranslateModule, MapComponent],
+  imports: [FormsModule, TranslatePipe, MapComponent],
   templateUrl: './location-input.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./location-input.component.scss'],
 })
 export class LocationInputComponent {
-  @Input() locations: Location[] = []
-  @Input() selectedLocation: Location | null = null
-  @Input() errorLocation = false
-  @Output() locationSelected = new EventEmitter<Location | null>()
+  readonly locations = input<Location[]>([])
+  readonly selectedLocation = input<Location | null>(null)
+  readonly errorLocation = input(false)
+  readonly locationSelected = output<Location | null>()
+
+  // Lokale, mutable Kopie der Locations-Liste
+  protected locationList = signal<Location[]>([])
 
   // Form fields
   locationName = ''
@@ -32,13 +35,18 @@ export class LocationInputComponent {
   // Services
   private readonly locationService = inject(LocationService)
   private readonly snackBarService = inject(SnackBarService)
-  private readonly markForCheck = injectMarkForCheck()
+
+  constructor() {
+    // Sync vom Input in die lokale Signal-Liste
+    effect(() => {
+      this.locationList.set(this.locations())
+    })
+  }
 
   /**
    * Setzt die ausgewählte Location und aktualisiert die Formularfelder
    */
   setLocation(location: Location | null) {
-    this.selectedLocation = location
     if (location) {
       this.locationName = location.name
       this.address = location.street ?? ''
@@ -57,7 +65,6 @@ export class LocationInputComponent {
     this.address = ''
     this.plz = ''
     this.city = ''
-    this.selectedLocation = null
     this.locationSelected.emit(null)
   }
 
@@ -87,21 +94,22 @@ export class LocationInputComponent {
 
     try {
       const savedLocation = await this.locationService.postLocation(location)
-      this.selectedLocation = savedLocation
       this.newLocation = false // Formular schließen
       this.snackBarService.showSuccess('Location erfolgreich gespeichert')
       this.locationSelected.emit(savedLocation)
 
-      // Füge die neue Location zur Liste hinzu, wenn sie noch nicht enthalten ist
-      if (!this.locations.some((loc) => loc.id?.id === savedLocation.id?.id)) {
-        this.locations.push(savedLocation)
-      }
+      // Füge die neue Location zur lokalen Liste hinzu
+      this.locationList.update((list) => {
+        if (list.some((loc) => loc.id?.id === savedLocation.id?.id)) {
+          return list
+        }
+        return [...list, savedLocation]
+      })
     } catch (error) {
       console.error('Fehler beim Speichern der Location:', error)
       this.snackBarService.showError(
         `Fehler beim Speichern der Location: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
       )
-      this.markForCheck()
     }
   }
 

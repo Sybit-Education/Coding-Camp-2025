@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, effect, input, inject } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import type { Event } from '@app/models/event.interface'
 import { TopicService } from '@app/services/topic.service'
 import { computeTextColor } from '@app/utils/color.utils'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 
 interface Pill {
   label: string
@@ -15,12 +15,12 @@ interface Pill {
 
 @Component({
   selector: 'app-event-topic-pill-list',
-  imports: [CommonModule, RouterModule, TranslateModule],
+  imports: [CommonModule, RouterModule, TranslatePipe],
   templateUrl: './event-topic-pill-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EventTopicPillListComponent implements OnChanges {
-  @Input() event: Event | null = null
+export class EventTopicPillListComponent {
+  readonly event = input<Event | null>(null)
 
   pills: Pill[] = []
 
@@ -31,25 +31,26 @@ export class EventTopicPillListComponent implements OnChanges {
   accessibilityTextColor = ''
 
   private readonly topicService = inject(TopicService)
-  private readonly cdr = inject(ChangeDetectorRef)
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['event']) {
-      this.buildPills()
-    }
+  constructor() {
+    effect(() => {
+      // Signal lesen – effect triggert bei Änderungen
+      this.event()
+      void this.buildPills()
+    })
   }
 
   private async buildPills(): Promise<void> {
-    if (!this.event?.topic || this.event.topic.length === 0) {
+    const event = this.event()
+    if (!event?.topic || event.topic.length === 0) {
       this.pills = []
-      this.cdr.markForCheck()
       return
     }
 
     const allTopics = await this.topicService.getAllTopics()
     const result: Pill[] = []
 
-    for (const t of this.event.topic) {
+    for (const t of event.topic) {
       const topic = allTopics.find((top) => top.id?.id === t.id)
       if (topic?.name) {
         if (this.topicService.isTopicAccessibility(topic)) {
@@ -72,6 +73,5 @@ export class EventTopicPillListComponent implements OnChanges {
     }
 
     this.pills = result
-    this.cdr.markForCheck()
   }
 }

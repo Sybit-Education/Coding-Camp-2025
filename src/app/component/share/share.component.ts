@@ -1,22 +1,22 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, input } from '@angular/core'
 import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 import { IconComponent } from '@app/component/icon/icon.component'
 
 @Component({
   selector: 'app-share',
-  imports: [TranslateModule, IconComponent],
+  imports: [TranslatePipe, IconComponent],
   templateUrl: './share.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShareComponent {
-  @Input() event: Event | null = null
-  @Input() location: Location | null = null
+  readonly event = input<Event | null>(null)
+  readonly location = input<Location | null>(null)
   showCopyMessage = false
 
   sharePage() {
-    if (!this.event?.id) {
+    if (!this.event()?.id) {
       console.error('Kein Event oder Event-ID vorhanden')
       return
     }
@@ -96,7 +96,7 @@ export class ShareComponent {
    * Generiert die Event-URL für die aktuelle Veranstaltung
    */
   private getEventUrl(): string {
-    const id = this.event?.id?.id ?? ''
+    const id = this.event()?.id?.id ?? ''
     if (!id) return ''
 
     const baseUrl = window.location.origin

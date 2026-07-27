@@ -3,14 +3,14 @@
   <select
     id="organizer"
     name="organizer"
-    [(ngModel)]="selectedOrganizer"
+    [ngModel]="selectedOrganizer()"
     (ngModelChange)="setOrganizer($event)"
     class="p-[0.75rem 1rem] w-full cursor-pointer"
   >
     <option [ngValue]="null">
       {{ 'create-event.organizer' | translate }}
     </option>
-    @for (organizer of organizers; track organizer) {
+    @for (organizer of organizerList(); track organizer) {
       <option [ngValue]="organizer">
         {{ organizer.name }}
       </option>
