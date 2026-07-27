@@ -1,5 +1,5 @@
 import { Location } from '@angular/common'
-import { Component, inject, Input, ChangeDetectionStrategy } from '@angular/core'
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { Router, RouterModule } from '@angular/router'
 import { IconComponent } from '@app/component/icon/icon.component'
 import { TranslatePipe } from '@ngx-translate/core'
@@ -14,7 +14,7 @@ export class GoBackComponent {
   private readonly location = inject(Location)
   private readonly router = inject(Router)
 
-  @Input() goBackParams?: string | null = null
+  readonly goBackParams = input<string | null | undefined>(undefined)
 
   goBack(): void {
     if (this.goBackParams) {

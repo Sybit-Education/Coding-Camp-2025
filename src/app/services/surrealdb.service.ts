@@ -324,7 +324,7 @@ export class SurrealdbService extends Surreal {
 
     // Initialize the live query if not already running
     if (!this.liveQuerySubscriptions.has(queryKey)) {
-      void this.initializeLiveQuery<T>(queryKey, table, diff).catch((err) => {
+      void this.initializeLiveQuery<T>(queryKey, table).catch((err) => {
         console.error('Failed to initialize live query:', err)
 
         // Notify listeners that the live query
@@ -374,11 +374,7 @@ export class SurrealdbService extends Surreal {
   /**
    * Initialize a live query connection
    */
-  private async initializeLiveQuery<T extends Record<string, unknown>>(
-    queryKey: string,
-    table: string,
-    _diff: boolean,
-  ): Promise<void> {
+  private async initializeLiveQuery<T extends Record<string, unknown>>(queryKey: string, table: string): Promise<void> {
     try {
       await this.initialize()
 
