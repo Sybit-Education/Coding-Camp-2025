@@ -14,7 +14,7 @@
     </li>
   }
   @if (accessibility) {
-    @if (event?.weehlchair) {
+    @if (event()?.weehlchair) {
       <li
         [routerLink]="['/kategorie', accessibilitySlug]"
         [title]="'COMMON.ACCESSIBILITY.WHEELCHAIR' | translate"
@@ -28,7 +28,7 @@
         <span class="max-w-[12rem] truncate">{{ 'COMMON.ACCESSIBILITY.WHEELCHAIR' | translate }}</span>
       </li>
     }
-    @if (event?.seeing) {
+    @if (event()?.seeing) {
       <li
         [routerLink]="['/kategorie', accessibilitySlug]"
         [title]="'COMMON.ACCESSIBILITY.SEEING' | translate"
@@ -42,7 +42,7 @@
         <span class="max-w-[12rem] truncate">{{ 'COMMON.ACCESSIBILITY.SEEING' | translate }}</span>
       </li>
     }
-    @if (event?.hearing) {
+    @if (event()?.hearing) {
       <li
         [routerLink]="['/kategorie', accessibilitySlug]"
         [title]="'COMMON.ACCESSIBILITY.HEARING' | translate"
