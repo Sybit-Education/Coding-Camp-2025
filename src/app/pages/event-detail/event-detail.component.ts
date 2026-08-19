@@ -238,13 +238,13 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
           typePromise,
         ])
 
-        if (mediaResults.length > 0) {
-          this.mediaList = mediaResults.map((m) => ({
-            url: m.url,
-            copyright: m.copyright,
-            creator: m.creator,
-          }))
-        }
+        // Immer setzen (auch leer), damit beim Event-Wechsel keine Bilder
+        // des vorherigen Events stehen bleiben
+        this.mediaList = mediaResults.map((m) => ({
+          url: m.url,
+          copyright: m.copyright,
+          creator: m.creator,
+        }))
 
         this.location = location
         this.organizer = organizer

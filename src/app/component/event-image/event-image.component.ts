@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, ViewChild, inject, input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, ViewChild, effect, inject, input } from '@angular/core'
 import { ScreenSize } from '@app/models/screenSize.enum'
 import { SharedStateService } from '@app/services/shared-state.service'
 import { AsyncPipe } from '@angular/common'
@@ -27,6 +27,15 @@ export class EventImageComponent {
   selectedImageIndex = 0
 
   isFullscreen = false
+
+  constructor() {
+    // Index zurücksetzen, wenn sich die Bilder ändern (z. B. Event-Wechsel),
+    // damit kein leerer Zustand entsteht, wenn das neue Event weniger Bilder hat
+    effect(() => {
+      this.images()
+      this.selectedImageIndex = 0
+    })
+  }
 
   openFullscreen() {
     this.isFullscreen = true
