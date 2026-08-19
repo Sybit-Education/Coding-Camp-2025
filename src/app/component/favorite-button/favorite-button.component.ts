@@ -1,13 +1,13 @@
 import { Component, input, signal, effect, inject, ChangeDetectionStrategy } from '@angular/core'
 import { FavoriteService } from '../../services/favorite.service'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 import { IconComponent } from '../icon/icon.component'
 
 import { RecordId } from 'surrealdb'
 
 @Component({
   selector: 'app-favorite-button',
-  imports: [TranslateModule, IconComponent],
+  imports: [TranslatePipe, IconComponent],
   templateUrl: './favorite-button.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

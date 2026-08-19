@@ -1,16 +1,16 @@
-import { ChangeDetectionStrategy, Component, ElementRef, ViewChild, inject, input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, ViewChild, effect, inject, input } from '@angular/core'
 import { ScreenSize } from '@app/models/screenSize.enum'
 import { SharedStateService } from '@app/services/shared-state.service'
 import { AsyncPipe } from '@angular/common'
 import { IconComponent } from '@app/component/icon/icon.component'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 import { MatIconModule } from '@angular/material/icon'
 import { A11yModule, LiveAnnouncer } from '@angular/cdk/a11y'
 import { I18nService } from '@app/services/translate.service'
 
 @Component({
   selector: 'app-event-image',
-  imports: [MatIconModule, AsyncPipe, IconComponent, TranslateModule, A11yModule],
+  imports: [MatIconModule, AsyncPipe, IconComponent, TranslatePipe, A11yModule],
   templateUrl: './event-image.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -27,6 +27,15 @@ export class EventImageComponent {
   selectedImageIndex = 0
 
   isFullscreen = false
+
+  constructor() {
+    // Index zurücksetzen, wenn sich die Bilder ändern (z. B. Event-Wechsel),
+    // damit kein leerer Zustand entsteht, wenn das neue Event weniger Bilder hat
+    effect(() => {
+      this.images()
+      this.selectedImageIndex = 0
+    })
+  }
 
   openFullscreen() {
     this.isFullscreen = true

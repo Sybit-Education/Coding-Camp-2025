@@ -95,7 +95,7 @@ export class EventService {
       const result = await this.surrealdb.query(surql`select *,location.* FROM event;`)
       return Array.isArray(result?.[0]) ? result[0] : []
     } catch (error) {
-      throw new Error(`Fehler beim Laden der Events mit Standortdetails: ${error}`)
+      throw new Error(`Fehler beim Laden der Events mit Standortdetails: ${error}`, { cause: error })
     }
   }
 

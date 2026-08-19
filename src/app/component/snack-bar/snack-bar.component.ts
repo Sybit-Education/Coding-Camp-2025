@@ -1,34 +1,14 @@
-import { Component, inject, signal, effect, DestroyRef } from '@angular/core'
+import { Component, inject, signal, effect, DestroyRef, ChangeDetectionStrategy } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 import { SnackBarService, SnackBarType } from '../../services/snack-bar.service'
-import { animate, state, style, transition, trigger } from '@angular/animations'
 
 @Component({
   selector: 'app-snack-bar',
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './snack-bar.component.html',
   styleUrls: ['./snack-bar.component.scss'],
-  animations: [
-    trigger('snackBarState', [
-      state(
-        'void',
-        style({
-          transform: 'translateX(100%)',
-          opacity: 0,
-        }),
-      ),
-      state(
-        'visible',
-        style({
-          transform: 'translateX(0)',
-          opacity: 1,
-        }),
-      ),
-      transition('void => visible', animate('200ms ease-out')),
-      transition('visible => void', animate('200ms ease-in')),
-    ]),
-  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SnackBarComponent {
   private readonly snackBarService = inject(SnackBarService)

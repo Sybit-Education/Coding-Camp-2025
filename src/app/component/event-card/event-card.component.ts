@@ -8,7 +8,7 @@ import { SurrealdbService } from '../../services/surrealdb.service'
 import { LocationService } from '../../services/location.service'
 import { LocalStorageService } from '../../services/local-storage.service'
 import { MediaService } from '../../services/media.service'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 import { MatIconModule } from '@angular/material/icon'
 import { IconComponent } from '@app/component/icon/icon.component'
 import { EventTypePillComponent } from '@app/component/event-type-pill/event-type-pill.component'
@@ -19,7 +19,7 @@ import { FavoriteButtonComponent } from '../favorite-button/favorite-button.comp
   imports: [
     CommonModule,
     DateTimeRangePipe,
-    TranslateModule,
+    TranslatePipe,
     RouterModule,
     MatIconModule,
     IconComponent,

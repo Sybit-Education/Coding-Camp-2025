@@ -23,7 +23,9 @@
         <img
           [src]="url"
           [alt]="
-            event()?.name ? ('event-card.image-alt' | translate: { name: event()?.name }) : ('event-card.placeholder-alt' | translate)
+            event()?.name
+              ? ('event-card.image-alt' | translate: { name: event()?.name })
+              : ('event-card.placeholder-alt' | translate)
           "
           class="h-full w-full object-cover"
           [attr.loading]="'lazy'"

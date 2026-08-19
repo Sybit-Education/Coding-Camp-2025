@@ -14,7 +14,7 @@ import { DateTimeRangePipe } from '../../services/date.pipe'
 import { RecordId, StringRecordId } from 'surrealdb'
 import { LoginService } from '../../services/login.service'
 import { TypeDB } from '../../models/typeDB.interface'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 import { FavoriteButtonComponent } from '../../component/favorite-button/favorite-button.component'
 import { ShareComponent } from '../../component/share/share.component'
 import { MediaService } from '@app/services/media.service'
@@ -34,7 +34,7 @@ import { SeoService } from '@app/services/seo.service'
   selector: 'app-event-detail-page',
   imports: [
     CommonModule,
-    TranslateModule,
+    TranslatePipe,
     MapComponent,
     DateTimeRangePipe,
     FavoriteButtonComponent,
@@ -238,13 +238,13 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
           typePromise,
         ])
 
-        if (mediaResults.length > 0) {
-          this.mediaList = mediaResults.map((m) => ({
-            url: m.url,
-            copyright: m.copyright,
-            creator: m.creator,
-          }))
-        }
+        // Immer setzen (auch leer), damit beim Event-Wechsel keine Bilder
+        // des vorherigen Events stehen bleiben
+        this.mediaList = mediaResults.map((m) => ({
+          url: m.url,
+          copyright: m.copyright,
+          creator: m.creator,
+        }))
 
         this.location = location
         this.organizer = organizer
@@ -303,7 +303,6 @@ export class EventDetailPageComponent implements OnInit, OnDestroy {
     const baseUrl = window.location.origin
     return `${baseUrl}/event/${id}`
   }
-
 
   /**
    * Fügt strukturierte Daten (Schema.org/JSON-LD) für Events hinzu,

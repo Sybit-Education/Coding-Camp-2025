@@ -2,7 +2,7 @@ import { Component, OnInit, inject, signal, ChangeDetectionStrategy, computed } 
 
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
-import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { TranslatePipe, TranslateService } from '@ngx-translate/core'
 import { Location } from '../../models/location.interface'
 import type { Event } from '../../models/event.interface'
 import { LocationService } from '../../services/location.service'
@@ -20,7 +20,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y'
   selector: 'app-location-edit',
   imports: [
     ReactiveFormsModule,
-    TranslateModule,
+    TranslatePipe,
     RouterModule,
     MatIconModule,
     MapComponent,

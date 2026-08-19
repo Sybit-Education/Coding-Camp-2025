@@ -10,3 +10,35 @@
 div {
   pointer-events: auto;
 }
+
+/* enter/leave animations — replacement for deprecated @angular/animations */
+
+.snack-bar-enter {
+  animation: snackBarEnter 200ms ease-out;
+}
+
+.snack-bar-leave {
+  animation: snackBarLeave 200ms ease-in;
+}
+
+@keyframes snackBarEnter {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes snackBarLeave {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}

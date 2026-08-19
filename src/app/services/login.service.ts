@@ -78,7 +78,7 @@ export class LoginService implements CanActivate {
     if (!token) {
       return false
     }
-    await this.setToken(token.access)
+    await this.setToken(token)
     return true
   }
 

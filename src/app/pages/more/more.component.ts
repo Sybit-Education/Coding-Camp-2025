@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, Component } from '@angular/core'
 import { RouterModule } from '@angular/router'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 
 import { IconComponent } from '@app/component/icon/icon.component'
 
@@ -14,7 +14,7 @@ interface MoreMenuItem {
 
 @Component({
   selector: 'app-more',
-  imports: [RouterModule, TranslateModule, CommonModule, IconComponent],
+  imports: [RouterModule, TranslatePipe, CommonModule, IconComponent],
   templateUrl: './more.component.html',
   styles: [
     `

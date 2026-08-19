@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit } from '@angular/core'
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router'
 import { LiveAnnouncer } from '@angular/cdk/a11y'
-import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { TranslatePipe, TranslateService } from '@ngx-translate/core'
 
 import { HeaderComponent } from './component/header/header.component'
 import { FooterComponent } from './component/footer/footer.component'
@@ -15,7 +15,7 @@ import { PwaInstallBannerComponent } from './component/pwa-install-banner/pwa-in
 @Component({
   selector: 'app-root',
   imports: [
-    TranslateModule,
+    TranslatePipe,
     RouterOutlet,
     HeaderComponent,
     FooterComponent,

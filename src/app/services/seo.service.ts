@@ -22,10 +22,7 @@ export class SeoService {
     this.title.setTitle(fullTitle)
 
     const finalUrl = url || (typeof window !== 'undefined' ? window.location.href : '')
-    const ogLocale = (typeof navigator !== 'undefined' && navigator.language ? navigator.language : 'de-DE').replace(
-      '-',
-      '_',
-    )
+    const ogLocale = (typeof navigator !== 'undefined' && navigator.language ? navigator.language : 'de-DE').replace('-', '_')
 
     const tags: MetaDefinition[] = [
       { name: 'description', content: description },

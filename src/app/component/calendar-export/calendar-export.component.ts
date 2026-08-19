@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, HostListener, input, inject, signal } from '@angular/core'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 import { Event } from '../../models/event.interface'
 import { Location } from '../../models/location.interface'
 import { CalendarExportService } from '../../services/calendar-export.service'
@@ -7,7 +7,7 @@ import { IconComponent } from '@app/component/icon/icon.component'
 
 @Component({
   selector: 'app-calendar-export',
-  imports: [TranslateModule, IconComponent],
+  imports: [TranslatePipe, IconComponent],
   templateUrl: './calendar-export.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

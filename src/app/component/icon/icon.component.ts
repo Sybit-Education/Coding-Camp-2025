@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  HostBinding,
-  input,
-  signal,
-  effect,
-  inject,
-} from '@angular/core'
+import { ChangeDetectionStrategy, Component, HostBinding, input, signal, effect, inject } from '@angular/core'
 import { SafeHtml } from '@angular/platform-browser'
 import { IconRegistryService } from '../../services/icon-registry.service'
 import { take } from 'rxjs'

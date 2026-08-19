@@ -4,15 +4,15 @@
       [title]="pillData.label"
       [attr.aria-label]="'Kategorie: ' + pillData.label"
       class="focus-within:ring-2 focus-within:ring-sky-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-900"
-      [ngStyle]="{
-        'background-color': pillData.color || '#F3F4F6',
-        'color': pillData.textColor,
-        'border-color': pillData.color ? 'transparent' : '#E5E7EB',
-      }"
+      [style.background-color]="pillData.color || '#F3F4F6'"
+      [style.color]="pillData.textColor"
+      [style.border-color]="pillData.color ? 'transparent' : '#E5E7EB'"
     >
-      <a [routerLink]="disabled() ? null : ['/kategorie', pillData.slug]" class="max-w-[12rem] truncate focus-visible:outline-none">{{
-        pillData.label
-      }}</a>
+      <a
+        [routerLink]="disabled() ? null : ['/kategorie', pillData.slug]"
+        class="max-w-[12rem] truncate focus-visible:outline-none"
+        >{{ pillData.label }}</a
+      >
     </li>
   }
 </ul>

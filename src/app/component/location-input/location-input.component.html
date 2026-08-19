@@ -3,17 +3,17 @@
   <select
     id="location"
     name="location"
-    [(ngModel)]="selectedLocation"
+    [ngModel]="selectedLocation()"
     (ngModelChange)="setLocation($event)"
     class="p-[0.75rem 1rem] w-full cursor-pointer"
-    [class]="errorLocation ? 'error' : ''"
-    [attr.aria-invalid]="errorLocation ? true : null"
-    [attr.aria-describedby]="errorLocation ? 'location-error' : null"
+    [class]="errorLocation() ? 'error' : ''"
+    [attr.aria-invalid]="errorLocation() ? true : null"
+    [attr.aria-describedby]="errorLocation() ? 'location-error' : null"
   >
     <option [ngValue]="null">
       {{ 'create-event.location' | translate }}
     </option>
-    @for (location of locations; track location) {
+    @for (location of locationList(); track location) {
       <option [ngValue]="location">
         {{ location.name }}
       </option>
@@ -27,7 +27,7 @@
     {{ 'create-event.newlocation' | translate }}
   </button>
 
-  @if (errorLocation) {
+  @if (errorLocation()) {
     <p id="location-error" role="alert" class="mt-2 text-sm text-red-600 dark:text-red-500">
       {{ 'create-event.error.location' | translate }}
     </p>

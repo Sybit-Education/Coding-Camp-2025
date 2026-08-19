@@ -98,7 +98,7 @@ export class I18nService {
    * Aktuelle Sprache abrufen
    */
   getCurrentLang(): string {
-    return this.translateService.currentLang
+    return this.translateService.currentLang() || 'de'
   }
 
   /**

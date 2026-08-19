@@ -12,20 +12,15 @@ Corporate‑Designs.
 <header
   class="fixed top-0 left-0 z-500 flex w-full flex-col justify-center overflow-hidden backdrop-blur-[6px] transition-all duration-1200"
   [attr.aria-label]="'HEADER.TITLE' | translate"
-  [ngClass]="{
-    'h-[70px] items-start bg-transparent pl-4': isShrunk,
-    'h-[240px] items-center bg-[#fbd2bc]/90': !isShrunk,
-  }"
+  [class]="isShrunk ? 'h-[70px] items-start bg-transparent pl-4' : 'h-[240px] items-center bg-[#fbd2bc]/90'"
 >
   <!-- Sprachumschalter oben rechts
   <app-language-switcher class="absolute top-1 right-4 z-20"></app-language-switcher> -->
   <!-- Logo-Container: richtet das Logo zentriert oder links aus -->
   <div
     class="relative z-10 flex w-full items-center transition-all duration-1200"
-    [ngClass]="{
-      'justify-start': isShrunk,
-      'justify-center': !isShrunk,
-    }"
+    [class.justify-start]="isShrunk"
+    [class.justify-center]="!isShrunk"
   >
     <a routerLink="/" routerLinkActive="" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">
       <img
@@ -34,21 +29,15 @@ Corporate‑Designs.
         rel="preload"
         fetchpriority="high"
         class="transition-all duration-50"
-        [ngClass]="{
-          'w-[100px]': isShrunk,
-          'w-[80%] max-w-[380px]': !isShrunk,
-        }"
+        [class]="isShrunk ? 'w-[100px]' : 'w-[80%] max-w-[380px]'"
       />
     </a>
   </div>
   <!-- Wellenform im Corporate-Magenta, optional -->
-  @if (showWave) {
+  @if (showWave()) {
     <svg
       class="absolute bottom-0 left-0 w-full"
-      [ngClass]="{
-        'h-[0px]': isShrunk,
-        'h-[220px]': !isShrunk,
-      }"
+      [class]="isShrunk ? 'h-[0px]' : 'h-[220px]'"
       viewBox="0 0 100 10"
       [attr.preserveAspectRatio]="'none'"
     >

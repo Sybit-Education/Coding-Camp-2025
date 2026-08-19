@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, signal, ViewChild, computed } from '@angular/core'
 import { SnackBarService } from '../../services/snack-bar.service'
 import { FormsModule } from '@angular/forms'
-import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { TranslatePipe, TranslateService } from '@ngx-translate/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { QuillEditorComponent } from 'ngx-quill'
 import { LocationInputComponent } from '../../component/location-input/location-input.component'
@@ -39,7 +39,7 @@ interface AccessibilityType {
   selector: 'app-event-create',
   imports: [
     FormsModule,
-    TranslateModule,
+    TranslatePipe,
     QuillEditorComponent,
     LocationInputComponent,
     OrganizerInputComponent,

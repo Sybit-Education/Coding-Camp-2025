@@ -29,7 +29,7 @@ export class FavoriteService {
   async initializeData(): Promise<void> {
     // Initialisiere mit leerem Array
     this.favoriteEventsState.set([])
-    
+
     // Lade Favoriten beim Start
     await this.loadFavoriteEvents()
   }

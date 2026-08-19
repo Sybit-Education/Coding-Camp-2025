@@ -8,12 +8,12 @@ import { OrganizerService } from '@app/services/organizer.service'
 import { EventService } from '@app/services/event.service'
 import { injectMarkForCheck } from '@app/utils/zoneless-helpers'
 import { ConfirmDialogComponent } from '@app/component/confirm-dialog/confirm-dialog.component'
-import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { TranslatePipe, TranslateService } from '@ngx-translate/core'
 import { LiveAnnouncer } from '@angular/cdk/a11y'
 
 @Component({
   selector: 'app-organizer-edit',
-  imports: [ReactiveFormsModule, RouterModule, ConfirmDialogComponent, TranslateModule],
+  imports: [ReactiveFormsModule, RouterModule, ConfirmDialogComponent, TranslatePipe],
   templateUrl: './organizer-edit.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

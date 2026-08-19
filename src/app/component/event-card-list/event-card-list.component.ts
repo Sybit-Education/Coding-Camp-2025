@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router'
 import { ScreenSize } from '@app/models/screenSize.enum'
 
 import { SharedStateService } from '@app/services/shared-state.service'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 import { EventCardComponent } from '../event-card/event-card.component'
 import { Event } from '@app/models/event.interface'
 import { EventService } from '@app/services/event.service'
@@ -15,7 +15,7 @@ import { TopicService } from '@app/services/topic.service'
 
 @Component({
   selector: 'app-event-card-list',
-  imports: [CommonModule, TranslateModule, RouterModule, EventCardComponent],
+  imports: [CommonModule, TranslatePipe, RouterModule, EventCardComponent],
   templateUrl: './event-card-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -63,7 +63,7 @@ export class EventCardListComponent {
         // Re-read the signals to get current values
         const loc = this.location()
         const currentId = this.currentEventId()
-        
+
         if (loc && currentId) {
           void this.loadEventsFromLocation(loc, currentId)
         } else if (!loc && !currentId) {

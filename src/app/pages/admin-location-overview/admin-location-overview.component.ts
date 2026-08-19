@@ -10,7 +10,7 @@ import {
 } from '@angular/core'
 
 import { RouterModule, Router, NavigationEnd } from '@angular/router'
-import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { TranslatePipe, TranslateService } from '@ngx-translate/core'
 import { Location } from '../../models/location.interface'
 import type { Event } from '../../models/event.interface'
 import { LocationService } from '../../services/location.service'
@@ -25,7 +25,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y'
 
 @Component({
   selector: 'app-admin-location-overview',
-  imports: [RouterModule, TranslateModule, NgxDatatableModule, FormsModule, ConfirmDialogComponent],
+  imports: [RouterModule, TranslatePipe, NgxDatatableModule, FormsModule, ConfirmDialogComponent],
   templateUrl: './admin-location-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

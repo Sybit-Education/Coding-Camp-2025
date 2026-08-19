@@ -45,14 +45,14 @@
     <app-loading-spinner />
   }
 </div>
-@if (previews.length) {
+@if (previews().length) {
   <div
-    class="scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent flex gap-2 overflow-x-auto p-2"
+    class="flex scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent gap-2 overflow-x-auto p-2"
     cdkDropList
     cdkDropListOrientation="horizontal"
     (cdkDropListDropped)="dropPreview($event)"
   >
-    @for (src of previews; track src; let i = $index) {
+    @for (src of previews(); track src; let i = $index) {
       <div class="relative overflow-hidden rounded-lg border-2 border-gray-500 align-top leading-none">
         <img
           [src]="getSrcForPreview(src)"

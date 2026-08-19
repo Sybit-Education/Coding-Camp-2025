@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, NgZone, OnDestroy, inject, input, output } from '@angular/core'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 
 // Lazy-Loading für Leaflet
 import type { Map, MapOptions, Marker } from 'leaflet'
@@ -8,7 +8,7 @@ let mapIdCounter = 0
 
 @Component({
   selector: 'app-map',
-  imports: [TranslateModule],
+  imports: [TranslatePipe],
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

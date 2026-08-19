@@ -4,12 +4,12 @@ import { Event } from '../../models/event.interface'
 import { RouterLink } from '@angular/router'
 import { FavoriteService } from '../../services/favorite.service'
 import { EventCardComponent } from '../../component/event-card/event-card.component'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslatePipe } from '@ngx-translate/core'
 import { GoBackComponent } from '@app/component/go-back-button/go-back-button.component'
 
 @Component({
   selector: 'app-favourites',
-  imports: [EventCardComponent, TranslateModule, GoBackComponent, RouterLink],
+  imports: [EventCardComponent, TranslatePipe, GoBackComponent, RouterLink],
   templateUrl: './favourites.component.html',
   styles: [
     `

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal, OnInit } 
 import { FormsModule } from '@angular/forms'
 import { NgxDatatableModule, SortEvent, SortDirection } from '@swimlane/ngx-datatable'
 import { Router, RouterModule } from '@angular/router'
-import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { TranslatePipe, TranslateService } from '@ngx-translate/core'
 import { OrganizerService } from '../../services/organizer.service'
 import { EventService } from '../../services/event.service'
 import type { Organizer } from '../../models/organizer.interface'
@@ -13,7 +13,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y'
 
 @Component({
   selector: 'app-admin-organizer-overview',
-  imports: [RouterModule, TranslateModule, NgxDatatableModule, FormsModule, ConfirmDialogComponent],
+  imports: [RouterModule, TranslatePipe, NgxDatatableModule, FormsModule, ConfirmDialogComponent],
   templateUrl: './admin-organizer-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
