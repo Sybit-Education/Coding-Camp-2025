@@ -24,7 +24,7 @@
     "@angular/forms": "^22.0.2",
     "@angular/material": "^22.0.2",
     "@angular/platform-browser": "^22.0.2",
-    "@angular/router": "^22.2.0",
+    "@angular/router": "^22.2.1",
     "@angular/service-worker": "^22.0.2",
     "@auth0/angular-jwt": "^5.2.0",
     "@ng-icons/core": "^33.3.0",
